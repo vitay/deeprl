@@ -39,20 +39,13 @@ $endfor$
 
 <body class="markdown-body">
 
-$if(toc)$
-<nav id="TOC" class ="toc">
-<h2>$title$</h2>
-$toc$
-</nav>
-$endif$
-
 <header>
 <h1 class="title">$title$</h1>
 $if(subtitle)$
 <p class="subtitle">$subtitle$</p>
 $endif$
 $for(author)$
-<p class="author">$author$</p>
+<p class="author">$author$ - $email$</p>
 $endfor$
 $if(date)$
 <p class="date">$date$</p>
@@ -63,8 +56,20 @@ $endif$
 $if(abstract)$
 <p class="abstract">$abstract$</p>
 $endif$
+
+$if(toc)$
+<nav id="TOC" class ="toc">
+<h2>$title$</h2>
+<p class="author">$author$</p>
+$toc$
+</nav>
+$endif$
+
 $body$
+
 <article>
+
+
 
 </body>
 </html>

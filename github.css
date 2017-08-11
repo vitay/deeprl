@@ -14,7 +14,7 @@
   font-size: 16px;
   line-height: 1.5;
   word-wrap: break-word;
-  width: 50%;
+  width: 55%;
   text-align: justify;
   margin: 0 auto;
   /*overflow:hidden;*/
@@ -22,20 +22,29 @@
 
 
 .markdown-body .toc {
-  position:fixed;
+  position: fixed;
   max-height: 100%;
   overflow-y: scroll;
   width: 20%;
   left: 1em;
+  top: 0em;
   padding-right: 1em;
+  font-size: 90%;
 } 
 
 .markdown-body .toc h2 {
   text-align: left;
 } 
+.markdown-body .toc .author {
+  text-align: left;
+} 
 
 #TOC::-webkit-scrollbar { 
     display: none; 
+}
+
+.markdown-body .toc-section-number{
+  padding-right: 0.5em;
 }
 
 .markdown-body article {
@@ -208,6 +217,10 @@
   border-style: none;
 }
 
+.markdown-body .figure {
+  text-align: center;
+}
+
 .markdown-body svg:not(:root) {
   overflow: hidden;
 }
@@ -303,35 +316,38 @@
 }
 
 .markdown-body h1 {
-  font-size: 32px;
+  font-size: 160%;
   font-weight: 600;
 }
 
 .markdown-body h2 {
-  font-size: 24px;
+  font-size: 140%;
   font-weight: 600;
 }
 
 .markdown-body h3 {
-  font-size: 20px;
+  font-size: 120%;
   font-weight: 600;
 }
 
 .markdown-body h4 {
-  font-size: 16px;
+  font-size: 110%;
   font-weight: 600;
 }
 
 .markdown-body h5 {
-  font-size: 14px;
+  font-size: 100%;
   font-weight: 600;
 }
 
 .markdown-body h6 {
-  font-size: 12px;
+  font-size: 100%;
   font-weight: 600;
 }
 
+.markdown-body .header-section-number {
+  padding-right: 0.8em;
+}
 .markdown-body p {
   margin-top: 0;
   margin-bottom: 10px;
@@ -530,35 +546,6 @@
   visibility: visible;
 }
 
-.markdown-body h1 {
-  padding-bottom: 0.3em;
-  font-size: 2em;
-  border-bottom: 1px solid #eaecef;
-}
-
-.markdown-body h2 {
-  padding-bottom: 0.3em;
-  font-size: 1.5em;
-  border-bottom: 1px solid #eaecef;
-}
-
-.markdown-body h3 {
-  font-size: 1.25em;
-}
-
-.markdown-body h4 {
-  font-size: 1em;
-}
-
-.markdown-body h5 {
-  font-size: 0.875em;
-}
-
-.markdown-body h6 {
-  font-size: 0.85em;
-  color: #6a737d;
-}
-
 .markdown-body ul,
 .markdown-body ol {
   padding-left: 1em;
@@ -734,4 +721,25 @@
 
 .markdown-body hr {
   border-bottom-color: #eee;
+}
+
+@media print {
+  .markdown-body .toc {
+    /*display: none;*/
+    overflow-y: none;
+    position: relative;
+    max-height: 100%;
+    width: 90%;
+    font-size: 90%;
+  }
+  .markdown-body {
+    width: 90%;
+    font-size: 11px;
+  }
+  .markdown-body .toc h2 {
+    display: none;
+  } 
+  .markdown-body .toc .author {
+    display: none;
+  } 
 }
