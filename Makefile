@@ -12,4 +12,9 @@ html: DeepRL.md
 		--toc --listings --css=github.css --bibliography=/home/vitay/Articles/biblio/ReinforcementLearning.bib \
 		--csl=apalike.csl DeepRL.md -o DeepRL.html
 
+export: DeepRL.md
+	pandoc -sSN -F pandoc-crossref --template=default.html5 --mathjax="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML" \
+		--toc --listings --css=github.css --bibliography=/home/vitay/Articles/biblio/ReinforcementLearning.bib \
+		--csl=apalike.csl DeepRL.md -o index.html
+
 
