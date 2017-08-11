@@ -763,4 +763,7 @@
   .markdown-body .toc .author {
     display: none;
   } 
+  .markdown-body img {
+    width: 90%;
+  }
 }
