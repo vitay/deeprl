@@ -743,3 +743,24 @@
     display: none;
   } 
 }
+
+/* When the screen is less than 600 pixels wide, hide all links, except for the first one ("Home"). Show the link that contains should open and close the topnav (.icon) */
+@media screen and (max-width: 600px) {
+  .markdown-body .toc {
+    /*display: none;*/
+    overflow-y: none;
+    position: relative;
+    max-height: 100%;
+    width: 90%;
+    font-size: 90%;
+  }
+  .markdown-body {
+    width: 90%;
+  }
+  .markdown-body .toc h2 {
+    display: none;
+  } 
+  .markdown-body .toc .author {
+    display: none;
+  } 
+}
