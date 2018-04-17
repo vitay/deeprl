@@ -5,18 +5,21 @@ email: <julien.vitay@informatik.tu-chemnitz.de>
 abstract: |
     The goal of this document is to summarize the state-of-the-art in deep reinforcement learning. It starts with basics in reinforcement learning and deep learning to introduce the notations. It covers different classes of deep RL models: 
 
-    1. Value-based algorithms (DQN...) used mostly for discrete problems like video games
-    2. Policy-gradient based algorithms (A3C, DDPG...) used for continuous control problems such as robotics
-    3. Recurrent attention models (RAM...) for partially observable problems
-    4. Model-based RL to reduce the sample complexity by incorporating a model of the environment."
+    1. Value-based algorithms (DQN...) used mostly for discrete problems like video games.
+    2. Policy-gradient based algorithms (A3C, DDPG...) used for continuous control problems such as robotics.
+    3. Recurrent attention models (RAM...) for partially observable problems.
+    4. Model-based RL to reduce the sample complexity by incorporating a model of the environment.
 autoSectionLabels: True 
 secPrefix: Section
 figPrefix: Fig.
 eqnPrefix: Eq.
-figureTitle: "*Figure*"
+figureTitle: Figure
 linkReferences: true
 link-citations: true
 autoEqnLabels: true
+bibliography: 
+- /home/vitay/Articles/biblio/ReinforcementLearning.bib
+- /home/vitay/Articles/biblio/DeepLearning.bib
 ---
 
 # Basics
@@ -375,7 +378,7 @@ Deep RL uses deep neural networks as function approximators, allowing complex re
 
 ### Deep neural networks
 
-A deep neural network consists of one input layer $\mathbf{x}$, one or several hidden layers $\mathbf{h_1}, \mathbf{h_2}, \ldots, \mathbf{h_n}$ and one output layer $\mathbf{y}$ (@fig:dnn).
+A deep neural network (DNN) consists of one input layer $\mathbf{x}$, one or several hidden layers $\mathbf{h_1}, \mathbf{h_2}, \ldots, \mathbf{h_n}$ and one output layer $\mathbf{y}$ (@fig:dnn).
 
 ![Architecture of a deep neural network. Figure taken from @Nielsen2015, CC-BY-NC.](img/dnn.png){#fig:dnn}
 
@@ -450,11 +453,29 @@ Partial derivatives are automatically computed by the underlying libraries, such
 * Adam
 * Many others. Check the doc of keras to see what is available: <https://keras.io/optimizers> 
 
-See this useful post for a comparison of the different optimizers: <http://ruder.io/optimizing-gradient-descent>. The common wisdom is that SGD with Nesterov momentum works best (i.e. it finds a better minimum) but its meta-parameters (learning rate, momentum) are hard to find, while Adam works out-of-the-box, at the cost of a slightly worse minimum. For deep RL, Adam is usually preferred, as the goal is to find a working solution, not optimize it to the last decimal.
+See this useful post for a comparison of the different optimizers: <http://ruder.io/optimizing-gradient-descent> [@Ruder2016]. The common wisdom is that SGD with Nesterov momentum works best (i.e. it finds a better minimum) but its meta-parameters (learning rate, momentum) are hard to find, while Adam works out-of-the-box, at the cost of a slightly worse minimum. For deep RL, Adam is usually preferred, as the goal is to quickly find a working solution, not to optimize it to the last decimal.
 
-![Comparison of different optimizers. Source: <http://ruder.io/optimizing-gradient-descent>.](img/optimizers.gif){#fig:optimizers width=50%}
+![Comparison of different optimizers. Source: @Ruder2016, <http://ruder.io/optimizing-gradient-descent>.](img/optimizers.gif){#fig:optimizers width=50%}
+
+Additional regularization mechanisms are now typically part of DNNs in order to avoid overfitting (learning by heart the training set but failing to generalize): L1/L2 regularization, dropout, batch normalization, etc. Refer to @Goodfellow2016 for further details.
 
 ### Convolutional networks
+
+Convolutional Neural Networks (CNN) are an adaptation of DNNs to deal with highly dimensional input spaces such as images. The idea is that neurons in the hidden layer reuse ("share") weights over the input image, as the features learned by early layers are probably local in visual classification tasks: in computer vision, an edge can be detected by the same filter all over the input image. 
+
+A **convolutional layer** learns to extract a given number of features (typically 16, 32, 64, etc) represented by 3x3 or 5x5 matrices. These matrices are then convoluted over the whole input image (or the previous convolutional layer) to produce **feature maps**. If the input image has a size NxMx1 (grayscale) or NxMx3 (colored), the convolutional layer will be a tensor of size NxMxF, where F is the number of extracted features. Padding issues may reduce marginally the spatial dimensions. One important aspect is that the convolutional layer is fully differentiable, so backpropagation and the usual optimizers can be used to learn the filters.
+
+![Convolutional layer. Source: <https://github.com/vdumoulin/conv_arithmetic>.](img/convlayer.gif){#fig:convlayer}
+
+After a convolutional layer, the spatial dimensions are preserved. In classification tasks, it does not matter where the object is in the image, the only thing that matters is what it is: classification requires **spatial invariance** in the learned representations. The **max-pooling layer** was introduced to downsample each feature map individually and increase their spatial invariance. Each feature map is divided into 2x2 blocks (generally): only the maximal feature activation in that block is preserved in the max-pooling layer. This reduces the spatial dimensions by a factor two in each direction, but keeps the number of features equal.
+
+![Max-pooling layer. Source: Stanford's CS231n course <http://cs231n.github.io/convolutional-networks>](img/maxpooling.png){#fig:maxpooling}
+
+A convolutional neural network is simply a sequence of convolutional layers and max-pooling layers (sometime two convolutional layers are applied in a row before max-pooling, as in VGG [@Simonyan2014]), followed by a couple of fully-connected layers and a softmax output layer. @fig:alexnet shows the architecture of AlexNet, the winning architecture of the ImageNet challenge in 2012 [@Krizhevsky2012].
+
+![Architecture of the AlexNet CNN [@Krizhevsky2012].](img/alexnet.png){#fig:alexnet}
+
+Many improvements have been proposed since 2012 (e.g. ResNets [@He2015]) but the idea stays similar. Generally, convolutional and max-pooling layers are alternated until the spatial dimensions are so reduced (around 10x10) that they can be put into a single vector and fed into a fully-connected layer. This is **NOT** the case in deep RL! Contrary to object classification, spatial information is crucial in deep RL: position of the ball, position of the body, etc. It matters whether the ball is to the right or to the left of your paddle. Max-pooling layers are therefore omitted and the CNNs only consist of convolutional and fully-connected layers. This greatly increases the number of weights in the networks, hence the number of training examples needed to train the network. This is still the main limitation of using CNNs in deep RL.
 
 ### Recurrent neural networks
 

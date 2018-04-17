@@ -89,10 +89,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <article>
 <p class="abstract"><p>The goal of this document is to summarize the state-of-the-art in deep reinforcement learning. It starts with basics in reinforcement learning and deep learning to introduce the notations. It covers different classes of deep RL models:</p>
 <ol type="1">
-<li>Value-based algorithms (DQN…) used mostly for discrete problems like video games</li>
-<li>Policy-gradient based algorithms (A3C, DDPG…) used for continuous control problems such as robotics</li>
-<li>Recurrent attention models (RAM…) for partially observable problems</li>
-<li>Model-based RL to reduce the sample complexity by incorporating a model of the environment.&quot;</li>
+<li>Value-based algorithms (DQN…) used mostly for discrete problems like video games.</li>
+<li>Policy-gradient based algorithms (A3C, DDPG…) used for continuous control problems such as robotics.</li>
+<li>Recurrent attention models (RAM…) for partially observable problems.</li>
+<li>Model-based RL to reduce the sample complexity by incorporating a model of the environment.</li>
 </ol></p>
 
 <nav id="TOC" class ="toc">
@@ -157,7 +157,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2 id="sec:reinforcement-learning"><span class="header-section-number">1.1</span> Reinforcement learning</h2>
 <p>RL methods apply to problems where an agent interacts with an environment in discrete time steps (Fig. <a href="#fig:agentenv">1</a>). At time <span class="math inline">\(t\)</span>, the agent is in state <span class="math inline">\(s_t\)</span> and decides to perform an action <span class="math inline">\(a_t\)</span>. At the next time step, it arrives in the state <span class="math inline">\(s_{t+1}\)</span> and obtains the reward <span class="math inline">\(r_{t+1}\)</span>. The goal of the agent is to maximize the reward obtained on the long term. The textbook by <span class="citation" data-cites="Sutton1998">Sutton and Barto (<a href="#ref-Sutton1998">1998</a>)</span> (updated in <span class="citation" data-cites="Sutton2017">Sutton and Barto (<a href="#ref-Sutton2017">2017</a>)</span>) defines the field extensively.</p>
 <figure>
-<img src="img/rl-agent.jpg" alt="Figure 1: Interaction between an agent and its environment (Sutton and Barto, 1998)." id="fig:agentenv" style="width:30.0%" /><figcaption><em>Figure</em> 1: Interaction between an agent and its environment <span class="citation" data-cites="Sutton1998">(Sutton and Barto, <a href="#ref-Sutton1998">1998</a>)</span>.</figcaption>
+<img src="img/rl-agent.jpg" alt="Figure 1: Interaction between an agent and its environment (Sutton and Barto, 1998)." id="fig:agentenv" style="width:30.0%" /><figcaption>Figure 1: Interaction between an agent and its environment <span class="citation" data-cites="Sutton1998">(Sutton and Barto, <a href="#ref-Sutton1998">1998</a>)</span>.</figcaption>
 </figure>
 <h3 id="sec:mdp-markov-decision-process"><span class="header-section-number">1.1.1</span> MDP: Markov Decision Process</h3>
 <p>Most reinforcement learning problems are modeled as <strong>Markov Decision Processes</strong> (MDP) defined by five quantities:</p>
@@ -220,13 +220,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 \qquad(9)\]</span></span></p>
 <p>The Bellman equations mean that the value of a state (resp. state-action pair) depends on the value of all other states (resp. state-action pairs), the current policy <span class="math inline">\(\pi\)</span> and the dynamics of the MDP (<span class="math inline">\(p(s&#39;|s, a)\)</span> and <span class="math inline">\(r(s, a, s&#39;)\)</span>).</p>
 <figure>
-<img src="img/backup.png" alt="Figure 2: Backup diagrams correponding to the Bellman equations (Sutton and Barto, 1998)." id="fig:backup" style="width:50.0%" /><figcaption><em>Figure</em> 2: Backup diagrams correponding to the Bellman equations <span class="citation" data-cites="Sutton1998">(Sutton and Barto, <a href="#ref-Sutton1998">1998</a>)</span>.</figcaption>
+<img src="img/backup.png" alt="Figure 2: Backup diagrams correponding to the Bellman equations (Sutton and Barto, 1998)." id="fig:backup" style="width:50.0%" /><figcaption>Figure 2: Backup diagrams correponding to the Bellman equations <span class="citation" data-cites="Sutton1998">(Sutton and Barto, <a href="#ref-Sutton1998">1998</a>)</span>.</figcaption>
 </figure>
 <h3 id="sec:dynamic-programming"><span class="header-section-number">1.1.5</span> Dynamic programming</h3>
 <p>The interesting property of the Bellman equations is that, if the states have the Markovian property, they admit <em>one and only one</em> solution. This means that for a given policy, if the dynamics of the MDP are known, it is possible to compute the value of all states or state-action pairs by solving the Bellman equations for all states or state-action pairs (<em>policy evaluation</em>).</p>
 <p>Once the values are known for a given policy, it is possible to improve the policy by selecting with the highest probability the action with the highest Q-value. For example, if the current policy chooses the action <span class="math inline">\(a_1\)</span> over <span class="math inline">\(a_2\)</span> in <span class="math inline">\(s\)</span> (<span class="math inline">\(\pi(s, a_1) &gt; \pi(s, a_2)\)</span>), but after evaluating the policy it turns out that <span class="math inline">\(Q^\pi(s, a_2) &gt; Q^\pi(s, a_1)\)</span> (the expected return after <span class="math inline">\(a_2\)</span> is higher than after <span class="math inline">\(a_1\)</span>), it makes more sense to preferentially select <span class="math inline">\(a_2\)</span>, as there is more reward afterwards. We can then create a new policy <span class="math inline">\(\pi&#39;\)</span> where <span class="math inline">\(\pi&#39;(s, a_2) &gt; \pi&#39;(s, a_1)\)</span>, which is is <em>better</em> policy than <span class="math inline">\(\pi\)</span> as more reward can be gathered after <span class="math inline">\(s\)</span>.</p>
 <figure>
-<img src="img/dynamicprogramming.png" alt="Figure 3: Dynamic programming alternates between policy evaluation and policy improvement (Sutton and Barto, 1998)." id="fig:dynamicprogramming" style="width:20.0%" /><figcaption><em>Figure</em> 3: Dynamic programming alternates between policy evaluation and policy improvement <span class="citation" data-cites="Sutton1998">(Sutton and Barto, <a href="#ref-Sutton1998">1998</a>)</span>.</figcaption>
+<img src="img/dynamicprogramming.png" alt="Figure 3: Dynamic programming alternates between policy evaluation and policy improvement (Sutton and Barto, 1998)." id="fig:dynamicprogramming" style="width:20.0%" /><figcaption>Figure 3: Dynamic programming alternates between policy evaluation and policy improvement <span class="citation" data-cites="Sutton1998">(Sutton and Barto, <a href="#ref-Sutton1998">1998</a>)</span>.</figcaption>
 </figure>
 <p><strong>Dynamic programming</strong> (DP) alternates between policy evaluation and policy improvement. If the problem is Markovian, it can be shown that DP converges to the <em>optimal policy</em> <span class="math inline">\(\pi^*\)</span>, i.e. the policy where the expected return is maximal in all states.</p>
 <p>Note that by definition the optimal policy is <em>deterministic</em> and <em>greedy</em>: if there is an action with a maximal Q-value for the optimal policy, it should be systematically taken. For the optimal policy <span class="math inline">\(\pi^*\)</span>, the Bellman equations become:</p>
@@ -244,7 +244,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>In practice, sample-based methods such as Monte-Carlo or temporal difference are used.</p>
 <h3 id="sec:monte-carlo-sampling"><span class="header-section-number">1.1.6</span> Monte-Carlo sampling</h3>
 <figure>
-<img src="img/unifiedreturn.png" alt="Figure 4: Monte-Carlo methods accumulate rewards over a complete episode. (Sutton and Barto, 1998)." id="fig:mc" style="width:50.0%" /><figcaption><em>Figure</em> 4: Monte-Carlo methods accumulate rewards over a complete episode. <span class="citation" data-cites="Sutton1998">(Sutton and Barto, <a href="#ref-Sutton1998">1998</a>)</span>.</figcaption>
+<img src="img/unifiedreturn.png" alt="Figure 4: Monte-Carlo methods accumulate rewards over a complete episode. (Sutton and Barto, 1998)." id="fig:mc" style="width:50.0%" /><figcaption>Figure 4: Monte-Carlo methods accumulate rewards over a complete episode. <span class="citation" data-cites="Sutton1998">(Sutton and Barto, <a href="#ref-Sutton1998">1998</a>)</span>.</figcaption>
 </figure>
 <p>When the environment is <em>a priori</em> unknown, it has to be explored in order to build estimates of the V or Q value functions. The key idea of <strong>Monte-Carlo</strong> sampling (MC) is rather simple:</p>
 <ol type="1">
@@ -312,7 +312,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul>
 <p>The main advantage of this learning method is that the update of the V- or Q-value can be applied immediately after a transition: no need to wait until the end of an episode, or even to have episodes at all.</p>
 <figure>
-<img src="img/backup-TD.png" alt="Figure 5: Temporal difference algorithms update values after a single transition (Sutton and Barto, 1998)." id="fig:td" style="width:3.0%" /><figcaption><em>Figure</em> 5: Temporal difference algorithms update values after a single transition <span class="citation" data-cites="Sutton1998">(Sutton and Barto, <a href="#ref-Sutton1998">1998</a>)</span>.</figcaption>
+<img src="img/backup-TD.png" alt="Figure 5: Temporal difference algorithms update values after a single transition (Sutton and Barto, 1998)." id="fig:td" style="width:3.0%" /><figcaption>Figure 5: Temporal difference algorithms update values after a single transition <span class="citation" data-cites="Sutton1998">(Sutton and Barto, <a href="#ref-Sutton1998">1998</a>)</span>.</figcaption>
 </figure>
 <p>When learning Q-values directly, the question is which next action <span class="math inline">\(a_{t+1}\)</span> should be used in the update rule: the action that will actually be taken for the next transition (defined by <span class="math inline">\(\pi(s_{t+1}, a_{t+1})\)</span>), or the greedy action (<span class="math inline">\(a^* = \text{argmax}_a Q^\pi(s_{t+1}, a)\)</span>). This relates to the <em>on-policy / off-policy</em> distinction already seen for MC methods:</p>
 <ul>
@@ -344,7 +344,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 \qquad(26)\]</span></span></p>
 <p>An action may lead to a high-valued state, but with such a small probability that it is actually not worth it. <span class="math inline">\(p(s&#39;|s, a)\)</span> and <span class="math inline">\(r(s, a, s&#39;)\)</span> therefore have to be known (or at least approximated), what defeats the purpose of sample-based methods.</p>
 <figure>
-<img src="img/actorcritic.png" alt="Figure 6: Actor-critic architecture (Sutton and Barto, 1998)." id="fig:actorcritic" style="width:30.0%" /><figcaption><em>Figure</em> 6: Actor-critic architecture <span class="citation" data-cites="Sutton1998">(Sutton and Barto, <a href="#ref-Sutton1998">1998</a>)</span>.</figcaption>
+<img src="img/actorcritic.png" alt="Figure 6: Actor-critic architecture (Sutton and Barto, 1998)." id="fig:actorcritic" style="width:30.0%" /><figcaption>Figure 6: Actor-critic architecture <span class="citation" data-cites="Sutton1998">(Sutton and Barto, <a href="#ref-Sutton1998">1998</a>)</span>.</figcaption>
 </figure>
 <p><strong>Actor-critic</strong> architectures have been proposed to solve this problem:</p>
 <ol type="1">
@@ -372,7 +372,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h4 id="sec:value-based-function-approximation" class="unnumbered">Value-based function approximation</h4>
 <p>In <strong>value-based</strong> methods, we want to approximate the Q-values <span class="math inline">\(Q^\pi(s,a)\)</span> of all possible state-action pairs for a given policy. The function approximator depends on a set of parameters <span class="math inline">\(\theta\)</span>. <span class="math inline">\(\theta\)</span> can for example represent all the weights and biases of a neural network. The approximated Q-value can now be noted <span class="math inline">\(Q(s, a ;\theta)\)</span> or <span class="math inline">\(Q_\theta(s, a)\)</span>. As the parameters will change over time during learning, we can omit the time <span class="math inline">\(t\)</span> from the notation. Similarly, action selection is usually <span class="math inline">\(\epsilon\)</span>-greedy or softmax, so the policy <span class="math inline">\(\pi\)</span> depends directly on the estimated Q-values and can therefore on the parameters: it is noted <span class="math inline">\(\pi_\theta\)</span>.</p>
 <figure>
-<img src="img/functionapprox.png" alt="Figure 7: Function approximators can either take a state-action pair as input and output the Q-value, or simply take a state as input and output the Q-values of all possible actions." id="fig:functionapprox" style="width:50.0%" /><figcaption><em>Figure</em> 7: Function approximators can either take a state-action pair as input and output the Q-value, or simply take a state as input and output the Q-values of all possible actions.</figcaption>
+<img src="img/functionapprox.png" alt="Figure 7: Function approximators can either take a state-action pair as input and output the Q-value, or simply take a state as input and output the Q-values of all possible actions." id="fig:functionapprox" style="width:50.0%" /><figcaption>Figure 7: Function approximators can either take a state-action pair as input and output the Q-value, or simply take a state as input and output the Q-values of all possible actions.</figcaption>
 </figure>
 <p>There are basically two options regarding the structure of the function approximator (Fig. <a href="#fig:functionapprox">7</a>):</p>
 <ol type="1">
@@ -416,9 +416,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2 id="sec:deep-learning"><span class="header-section-number">1.2</span> Deep learning</h2>
 <p>Deep RL uses deep neural networks as function approximators, allowing complex representations of the value of state-action pairs to be learned. This section provides a very quick overview of deep learning. For additional details, refer to the excellent book of <span class="citation" data-cites="Goodfellow2016">Goodfellow, Bengio, and Courville (<a href="#ref-Goodfellow2016">2016</a>)</span>.</p>
 <h3 id="sec:deep-neural-networks"><span class="header-section-number">1.2.1</span> Deep neural networks</h3>
-<p>A deep neural network consists of one input layer <span class="math inline">\(\mathbf{x}\)</span>, one or several hidden layers <span class="math inline">\(\mathbf{h_1}, \mathbf{h_2}, \ldots, \mathbf{h_n}\)</span> and one output layer <span class="math inline">\(\mathbf{y}\)</span> (Fig. <a href="#fig:dnn">8</a>).</p>
+<p>A deep neural network (DNN) consists of one input layer <span class="math inline">\(\mathbf{x}\)</span>, one or several hidden layers <span class="math inline">\(\mathbf{h_1}, \mathbf{h_2}, \ldots, \mathbf{h_n}\)</span> and one output layer <span class="math inline">\(\mathbf{y}\)</span> (Fig. <a href="#fig:dnn">8</a>).</p>
 <figure>
-<img src="img/dnn.png" alt="Figure 8: Architecture of a deep neural network. Figure taken from Nielsen (2015), CC-BY-NC." id="fig:dnn" /><figcaption><em>Figure</em> 8: Architecture of a deep neural network. Figure taken from <span class="citation" data-cites="Nielsen2015">Nielsen (<a href="#ref-Nielsen2015">2015</a>)</span>, CC-BY-NC.</figcaption>
+<img src="img/dnn.png" alt="Figure 8: Architecture of a deep neural network. Figure taken from Nielsen (2015), CC-BY-NC." id="fig:dnn" /><figcaption>Figure 8: Architecture of a deep neural network. Figure taken from <span class="citation" data-cites="Nielsen2015">Nielsen (<a href="#ref-Nielsen2015">2015</a>)</span>, CC-BY-NC.</figcaption>
 </figure>
 <p>Each layer <span class="math inline">\(k\)</span> (called <em>fully-connected</em>) transforms the activity of the previous layer (the vector <span class="math inline">\(\mathbf{h_{k-1}}\)</span>) into another vector <span class="math inline">\(\mathbf{h_{k}}\)</span> by multiplying it with a <strong>weight matrix</strong> <span class="math inline">\(W_k\)</span>, adding a <strong>bias</strong> vector <span class="math inline">\(\mathbf{b_k}\)</span> and applying a non-linear <strong>activation function</strong> <span class="math inline">\(f\)</span>.</p>
 <p><span id="eq:fullyconnected"><span class="math display">\[
@@ -473,11 +473,26 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li>Adam</li>
 <li>Many others. Check the doc of keras to see what is available: <a href="https://keras.io/optimizers" class="uri">https://keras.io/optimizers</a></li>
 </ul>
-<p>See this useful post for a comparison of the different optimizers: <a href="http://ruder.io/optimizing-gradient-descent" class="uri">http://ruder.io/optimizing-gradient-descent</a>. The common wisdom is that SGD with Nesterov momentum works best (i.e. it finds a better minimum) but its meta-parameters (learning rate, momentum) are hard to find, while Adam works out-of-the-box, at the cost of a slightly worse minimum. For deep RL, Adam is usually preferred, as the goal is to find a working solution, not optimize it to the last decimal.</p>
+<p>See this useful post for a comparison of the different optimizers: <a href="http://ruder.io/optimizing-gradient-descent" class="uri">http://ruder.io/optimizing-gradient-descent</a> <span class="citation" data-cites="Ruder2016">(Ruder, <a href="#ref-Ruder2016">2016</a>)</span>. The common wisdom is that SGD with Nesterov momentum works best (i.e. it finds a better minimum) but its meta-parameters (learning rate, momentum) are hard to find, while Adam works out-of-the-box, at the cost of a slightly worse minimum. For deep RL, Adam is usually preferred, as the goal is to quickly find a working solution, not to optimize it to the last decimal.</p>
 <figure>
-<img src="img/optimizers.gif" alt="Figure 9: Comparison of different optimizers. Source: http://ruder.io/optimizing-gradient-descent." id="fig:optimizers" style="width:50.0%" /><figcaption><em>Figure</em> 9: Comparison of different optimizers. Source: <a href="http://ruder.io/optimizing-gradient-descent" class="uri">http://ruder.io/optimizing-gradient-descent</a>.</figcaption>
+<img src="img/optimizers.gif" alt="Figure 9: Comparison of different optimizers. Source: Ruder (2016), http://ruder.io/optimizing-gradient-descent." id="fig:optimizers" style="width:50.0%" /><figcaption>Figure 9: Comparison of different optimizers. Source: <span class="citation" data-cites="Ruder2016">Ruder (<a href="#ref-Ruder2016">2016</a>)</span>, <a href="http://ruder.io/optimizing-gradient-descent" class="uri">http://ruder.io/optimizing-gradient-descent</a>.</figcaption>
 </figure>
+<p>Additional regularization mechanisms are now typically part of DNNs in order to avoid overfitting (learning by heart the training set but failing to generalize): L1/L2 regularization, dropout, batch normalization, etc. Refer to <span class="citation" data-cites="Goodfellow2016">Goodfellow et al. (<a href="#ref-Goodfellow2016">2016</a>)</span> for further details.</p>
 <h3 id="sec:convolutional-networks"><span class="header-section-number">1.2.2</span> Convolutional networks</h3>
+<p>Convolutional Neural Networks (CNN) are an adaptation of DNNs to deal with highly dimensional input spaces such as images. The idea is that neurons in the hidden layer reuse (“share”) weights over the input image, as the features learned by early layers are probably local in visual classification tasks: in computer vision, an edge can be detected by the same filter all over the input image.</p>
+<p>A <strong>convolutional layer</strong> learns to extract a given number of features (typically 16, 32, 64, etc) represented by 3x3 or 5x5 matrices. These matrices are then convoluted over the whole input image (or the previous convolutional layer) to produce <strong>feature maps</strong>. If the input image has a size NxMx1 (grayscale) or NxMx3 (colored), the convolutional layer will be a tensor of size NxMxF, where F is the number of extracted features. Padding issues may reduce marginally the spatial dimensions. One important aspect is that the convolutional layer is fully differentiable, so backpropagation and the usual optimizers can be used to learn the filters.</p>
+<figure>
+<img src="img/convlayer.gif" alt="Figure 10: Convolutional layer. Source: https://github.com/vdumoulin/conv_arithmetic." id="fig:convlayer" /><figcaption>Figure 10: Convolutional layer. Source: <a href="https://github.com/vdumoulin/conv_arithmetic" class="uri">https://github.com/vdumoulin/conv_arithmetic</a>.</figcaption>
+</figure>
+<p>After a convolutional layer, the spatial dimensions are preserved. In classification tasks, it does not matter where the object is in the image, the only thing that matters is what it is: classification requires <strong>spatial invariance</strong> in the learned representations. The <strong>max-pooling layer</strong> was introduced to downsample each feature map individually and increase their spatial invariance. Each feature map is divided into 2x2 blocks (generally): only the maximal feature activation in that block is preserved in the max-pooling layer. This reduces the spatial dimensions by a factor two in each direction, but keeps the number of features equal.</p>
+<figure>
+<img src="img/maxpooling.png" alt="Figure 11: Max-pooling layer. Source: Stanford’s CS231n course http://cs231n.github.io/convolutional-networks" id="fig:maxpooling" /><figcaption>Figure 11: Max-pooling layer. Source: Stanford’s CS231n course <a href="http://cs231n.github.io/convolutional-networks" class="uri">http://cs231n.github.io/convolutional-networks</a></figcaption>
+</figure>
+<p>A convolutional neural network is simply a sequence of convolutional layers and max-pooling layers (sometime two convolutional layers are applied in a row before max-pooling, as in VGG <span class="citation" data-cites="Simonyan2014">(Simonyan and Zisserman, <a href="#ref-Simonyan2014">2014</a>)</span>), followed by a couple of fully-connected layers and a softmax output layer. Fig. <a href="#fig:alexnet">12</a> shows the architecture of AlexNet, the winning architecture of the ImageNet challenge in 2012 <span class="citation" data-cites="Krizhevsky2012">(Krizhevsky, Sutskever, and Hinton, <a href="#ref-Krizhevsky2012">2012</a>)</span>.</p>
+<figure>
+<img src="img/alexnet.png" alt="Figure 12: Architecture of the AlexNet CNN (Krizhevsky et al., 2012)." id="fig:alexnet" /><figcaption>Figure 12: Architecture of the AlexNet CNN <span class="citation" data-cites="Krizhevsky2012">(Krizhevsky et al., <a href="#ref-Krizhevsky2012">2012</a>)</span>.</figcaption>
+</figure>
+<p>Many improvements have been proposed since 2012 (e.g. ResNets <span class="citation" data-cites="He2015">(He, Zhang, Ren, and Sun, <a href="#ref-He2015">2015</a>)</span>) but the idea stays similar. Generally, convolutional and max-pooling layers are alternated until the spatial dimensions are so reduced (around 10x10) that they can be put into a single vector and fed into a fully-connected layer. This is <strong>NOT</strong> the case in deep RL! Contrary to object classification, spatial information is crucial in deep RL: position of the ball, position of the body, etc. It matters whether the ball is to the right or to the left of your paddle. Max-pooling layers are therefore omitted and the CNNs only consist of convolutional and fully-connected layers. This greatly increases the number of weights in the networks, hence the number of training examples needed to train the network. This is still the main limitation of using CNNs in deep RL.</p>
 <h3 id="sec:recurrent-neural-networks"><span class="header-section-number">1.2.3</span> Recurrent neural networks</h3>
 <h1 id="sec:value-based-methods"><span class="header-section-number">2</span> Value-based methods</h1>
 <h2 id="sec:limitations-of-deep-neural-networks-for-function-approximation"><span class="header-section-number">2.1</span> Limitations of deep neural networks for function approximation</h2>
@@ -635,6 +650,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="ref-vanHasselt2015">
 <p>Hasselt, H. van, Guez, A., and Silver, D. (2015). Deep Reinforcement Learning with Double Q-learning. Retrieved from <a href="http://arxiv.org/abs/1509.06461" class="uri">http://arxiv.org/abs/1509.06461</a></p>
 </div>
+<div id="ref-He2015">
+<p>He, K., Zhang, X., Ren, S., and Sun, J. (2015). Deep Residual Learning for Image Recognition. Retrieved from <a href="http://arxiv.org/abs/1512.03385" class="uri">http://arxiv.org/abs/1512.03385</a></p>
+</div>
 <div id="ref-Heess2015">
 <p>Heess, N., Wayne, G., Silver, D., Lillicrap, T., Tassa, Y., and Erez, T. (2015). Learning continuous control policies by stochastic value gradients. MIT Press. Retrieved from <a href="http://dl.acm.org/citation.cfm?id=2969569" class="uri">http://dl.acm.org/citation.cfm?id=2969569</a></p>
 </div>
@@ -643,6 +661,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="ref-Heinrich2016">
 <p>Heinrich, J., and Silver, D. (2016). Deep Reinforcement Learning from Self-Play in Imperfect-Information Games. Retrieved from <a href="http://arxiv.org/abs/1603.01121" class="uri">http://arxiv.org/abs/1603.01121</a></p>
+</div>
+<div id="ref-Krizhevsky2012">
+<p>Krizhevsky, A., Sutskever, I., and Hinton, G. E. (2012). ImageNet Classification with Deep Convolutional Neural Networks. In <em>Adv. Neural inf. Process. Syst.</em> Retrieved from <a href="https://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf" class="uri">https://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf</a></p>
 </div>
 <div id="ref-Levine2016a">
 <p>Levine, S., Finn, C., Darrell, T., and Abbeel, P. (2016a). End-to-End Training of Deep Visuomotor Policies. <em>JMLR</em>, <em>17</em>. Retrieved from <a href="http://arxiv.org/abs/1504.00702" class="uri">http://arxiv.org/abs/1504.00702</a></p>
@@ -668,6 +689,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="ref-Niu2011">
 <p>Niu, F., Recht, B., Re, C., and Wright, S. J. (2011). HOGWILD!: A Lock-Free Approach to Parallelizing Stochastic Gradient Descent. In <em>Proc. Adv. Neural inf. Process. Syst.</em> (p. 21). Retrieved from <a href="http://arxiv.org/abs/1106.5730" class="uri">http://arxiv.org/abs/1106.5730</a></p>
 </div>
+<div id="ref-Ruder2016">
+<p>Ruder, S. (2016). An overview of gradient descent optimization algorithms. Retrieved from <a href="http://arxiv.org/abs/1609.04747" class="uri">http://arxiv.org/abs/1609.04747</a></p>
+</div>
 <div id="ref-Schaul2015">
 <p>Schaul, T., Quan, J., Antonoglou, I., and Silver, D. (2015). Prioritized Experience Replay. Retrieved from <a href="http://arxiv.org/abs/1511.05952" class="uri">http://arxiv.org/abs/1511.05952</a></p>
 </div>
@@ -679,6 +703,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="ref-Silver2014">
 <p>Silver, D., Lever, G., Heess, N., Degris, T., Wierstra, D., and Riedmiller, M. (2014). Deterministic Policy Gradient Algorithms. In E. P. Xing and T. Jebara (Eds.), <em>Proc. ICML</em> (Vol. 32, pp. 387–395). Bejing, China: PMLR. Retrieved from <a href="http://proceedings.mlr.press/v32/silver14.html" class="uri">http://proceedings.mlr.press/v32/silver14.html</a></p>
+</div>
+<div id="ref-Simonyan2014">
+<p>Simonyan, K., and Zisserman, A. (2014). Very Deep Convolutional Networks for Large-Scale Image Recognition. Retrieved from <a href="http://arxiv.org/abs/1409.1556" class="uri">http://arxiv.org/abs/1409.1556</a></p>
 </div>
 <div id="ref-Stollenga2014">
 <p>Stollenga, M., Masci, J., Gomez, F., and Schmidhuber, J. (2014). Deep Networks with Internal Selective Attention through Feedback Connections. Retrieved from <a href="http://arxiv.org/abs/1407.3068" class="uri">http://arxiv.org/abs/1407.3068</a></p>
