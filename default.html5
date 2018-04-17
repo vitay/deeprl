@@ -23,6 +23,9 @@ $if(highlighting-css)$
 $highlighting-css$
   </style>
 $endif$
+$if(fontpath)$
+  $fontpath$
+$endif$
 $for(css)$
   <link rel="stylesheet" href="$css$">
 $endfor$

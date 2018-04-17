@@ -2,23 +2,30 @@
 title: "**Deep Reinforcement Learning**"
 author: Julien Vitay
 email: <julien.vitay@informatik.tu-chemnitz.de>
-abstract: "The goal of this document is to summarize the state-of-the-art in deep reinforcement learning. It starts with basics in reinforcement learning and deep learning to introduce the notations. It is then composed of three main parts: 1) value-based algorithms (DQN...) 2) policy-gradient based algorithms (A3C, DDPG...) 3) Recurrent attention models (RAM...). Finally it provides and explains code snippets for these algorithms."
+abstract: |
+    The goal of this document is to summarize the state-of-the-art in deep reinforcement learning. It starts with basics in reinforcement learning and deep learning to introduce the notations. It covers different classes of deep RL models: 
+
+    1. Value-based algorithms (DQN...) used mostly for discrete problems like video games
+    2. Policy-gradient based algorithms (A3C, DDPG...) used for continuous control problems such as robotics
+    3. Recurrent attention models (RAM...) for partially observable problems
+    4. Model-based RL to reduce the sample complexity by incorporating a model of the environment."
 autoSectionLabels: True 
 secPrefix: Section
 figPrefix: Fig.
 eqnPrefix: Eq.
+figureTitle: "*Figure*"
 linkReferences: true
 link-citations: true
 autoEqnLabels: true
 ---
 
-# Introduction
+# Basics
 
-Deep reinforcement learning (deep RL) is the successful interation of deep learning methods, classically used in supervised or unsupervised learning contexts, with reinforcement learning (RL), a well-studied adaptive control method used in problems with delayed and partial feedback [@Sutton1998]. This section starts with the basics of RL, mostly to set the notations, and provides a quick overview of deep neural networks.
+Deep reinforcement learning (deep RL) is the successful integration of deep learning methods, classically used in supervised or unsupervised learning contexts, with reinforcement learning (RL), a well-studied adaptive control method used in problems with delayed and partial feedback [@Sutton1998]. This section starts with the basics of RL, mostly to set the notations, and provides a quick overview of deep neural networks.
 
-## Basic reinforcement learning 
+## Reinforcement learning 
 
-RL methods apply to problems where an agent interacts with an environment in discrete time steps (@fig:agentenv). At time $t$, the agent is in state $s_t$ and decides to perform an action $a_t$. At the next time step, it arrives in the state $s_{t+1}$ and obtains the reward $r_{t+1}$. The goal of the agent is to maximize the reward obtained on the long term.
+RL methods apply to problems where an agent interacts with an environment in discrete time steps (@fig:agentenv). At time $t$, the agent is in state $s_t$ and decides to perform an action $a_t$. At the next time step, it arrives in the state $s_{t+1}$ and obtains the reward $r_{t+1}$. The goal of the agent is to maximize the reward obtained on the long term. The textbook by @Sutton1998 (updated in @Sutton2017) defines the field extensively.
 
 ![Interaction between an agent and its environment [@Sutton1998].](img/rl-agent.jpg){#fig:agentenv width=30%}
 
@@ -42,7 +49,7 @@ i.e. you do not need the full history of the agent to predict where it will arri
 
 ### POMDP: Partially Observable Markov Decision Process
 
-In many problems (e.g. vision-based), one does not have access to the true states of the agent, but one can only indirectly observe them. For example, in a video game, the true state is defined by a couple of variables: coordinates $(x, y)$ of the two players, position of the ball, speed, etc. However, all you have access to are the raw pixels: sometimes the ball may be hidden behing a wall or a tree, but it still exists in the state space.
+In many problems (e.g. vision-based), one does not have access to the true states of the agent, but one can only indirectly observe them. For example, in a video game, the true state is defined by a couple of variables: coordinates $(x, y)$ of the two players, position of the ball, speed, etc. However, all you have access to are the raw pixels: sometimes the ball may be hidden behing a wall or a tree, but it still exists in the state space. Speed information is also not observable in a single frame.
 
 In a **Partially Observable Markov Decision Process** (POMDP), observations $o_t$ come from a space $\mathcal{O}$ and are linked to underlying states using the density function $p(o_t| s_t)$. Observations are usually not Markovian, so the full history of observations $h_t = (o_0, a_0, \dots o_t, a_t)$ is needed to solve the problem (see @sec:recurrent-attention-models).
 
@@ -224,7 +231,7 @@ $$
     \delta_t = r_{t+1} + \gamma \, Q^\pi(s_{t+1}, a_{t+1}) - Q^\pi(s_t, a_t)
 $$
 
-is called the **reward-prediction error** (RPE): it defines the surprise between the current reward prediction ($V^\pi(s_t)$ or $Q^\pi(s_t, a_t)$) and the sum of the immediate reward plus the reward prediction in the next state / after the next action.
+is called the **reward-prediction error** (RPE) or **TD error**: it defines the surprise between the current reward prediction ($V^\pi(s_t)$ or $Q^\pi(s_t, a_t)$) and the sum of the immediate reward plus the reward prediction in the next state / after the next action.
 
 * If $\delta_t > 0$, the transition was positively surprising: one obtains more reward or lands in a better state than expected. The initial state or action was actually underrated, so its estimated value must be increased.
 * If $\delta_t < 0$, the transition was negatively surprising. The initial state or action was overrated, its value must be decreased.
@@ -232,7 +239,7 @@ is called the **reward-prediction error** (RPE): it defines the surprise between
 
 The main advantage of this learning method is that the update of the V- or Q-value can be applied immediately after a transition: no need to wait until the end of an episode, or even to have episodes at all. 
 
-![Temporal difference algorithms update values after a single transition. [@Sutton1998].](img/backup-TD.png){#fig:td width=3%}
+![Temporal difference algorithms update values after a single transition [@Sutton1998].](img/backup-TD.png){#fig:td width=3%}
 
 When learning Q-values directly, the question is which next action $a_{t+1}$ should be used in the update rule: the action that will actually be taken for the next transition (defined by $\pi(s_{t+1}, a_{t+1})$), or the greedy action ($a^* = \text{argmax}_a Q^\pi(s_{t+1}, a)$). This relates to the *on-policy / off-policy* distinction already seen for MC methods:
 
@@ -254,14 +261,13 @@ Alternatively, domain knowledge can be used to create the behavior policy and re
 
 ### Actor-critic architectures
 
-
-Let's consider the reward-prediction error (RPE) based on state values:
+Let's consider the TD error based on state values:
 
 $$
  \delta_t = r_{t+1} + \gamma \, V^\pi(s_{t+1}) - V^\pi(s_t)
 $$
 
-As noted in the previous section, the RPE represents how surprisingly good (or bad) a transition between two states has been. It can be used to update the value of the state $s_t$:
+As noted in the previous section, the TD error represents how surprisingly good (or bad) a transition between two states has been (ergo the corresponding action). It can be used to update the value of the state $s_t$:
 
 $$
     V^\pi(s_t) \leftarrow V^\pi(s_t) + \alpha \, \delta_t
@@ -275,32 +281,186 @@ $$
 
 An action may lead to a high-valued state, but with such a small probability that it is actually not worth it. $p(s'|s, a)$ and $r(s, a, s')$ therefore have to be known (or at least approximated), what defeats the purpose of sample-based methods.
 
-![Actor-critic architecture.](img/actorcritic.jpg){#fig:actorcritic width=50%}
+![Actor-critic architecture [@Sutton1998].](img/actorcritic.png){#fig:actorcritic width=30%}
 
 **Actor-critic** architectures have been proposed to solve this problem:
 
 1. The **critic** learns to estimate the value of a state $V^\pi(s_t)$ and compute the RPE $\delta_t = r_{t+1} + \gamma \, V^\pi(s_{t+1}) - V^\pi(s_t)$.
 2. The **actor** uses the RPE to update a *preference* for the executed action: action with positive RPEs (positively surprising) should be reinforced (i.e. taken again in the future), while actions with negative RPEs should be avoided in the future.
 
-The main interest of this architecture is that the actor can take any form (neural network, decision tree), as long as it able to use the RPE for learning.  
+The main interest of this architecture is that the actor can take any form (neural network, decision tree), as long as it able to use the RPE for learning. The simplest actor would be a softmax action selection mechanism, which maintains a *preference* $p(s, a)$ for each action and updates it using the TD error:
+
+$$
+    p(s, a) \leftarrow p(s, a) + \alpha \, \delta_t
+$$
+
+The policy uses the softmax rule on these preferences:
+
+$$
+    \pi(s, a) = \frac{p(s, a)}{\sum_a p(s, a)}
+$$
+
+Actor-critic algorithms learn at the same time two aspects of the problem:
+
+* A value function (e.g. $V^\pi(s)$) to compute the TD error in the critic,
+* A policy $\pi$ in the actor.
+
+Classical TD learning only learn a value function ($V^\pi(s)$ or $Q^\pi(s, a)$): these methods are called **value-based** methods. Actor-critic architectures are an example of **policy-based** methods (see @sec:policy-based-methods).
 
 ### Function approximation 
 
-The goal of the agent is to find the optimal policy maximizing the expected return from every state. \emph{Value-based} methods (such as DQN) achieve that goal by estimating the Q-value of each state-action pair. Discrete algorithms transform these Q-values into a stochastic policy by sampling from a Gibbs distribution (softmax) to obtain the probability of choosing an action. The Q-values can be approximated by a deep neural network, by minimizing the quadratic error between the predicted Q-value $Q^{\pi}(s, a)$ and an estimation of the real expected return $R_t$ after that action:
+All the methods presented before are *tabular methods*, as one needs to store one value per state-action pair: either the Q-value of the action or a preference for that action. In most useful applications, the number of values to store would quickly become redhibitory: when working on raw images, the number of possible states alone is untractable. Moreover, these algorithms require that each state-action pair is visited a sufficient number of times to converge towards the optimal policy: if a single state-action pair is never visited, there is no guarantee that the optimal policy will be found. The problem becomes even more obvious when considering *continuous* state or action spaces.
+
+However, in a lot of applications, the optimal action to perform in two very close states is likely to be the same: changing one pixel in a video game does not change which action should be applied. It would therefore be very useful to be able to *interpolate* Q-values between different states: only a subset of all state-action pairs has to explored; the others will be "guessed" depending on the proximity between the states and/or the actions. The problem is now **generalization**, i.e. transferring acquired knowledge to unseen but similar situations.
+
+This is where **function approximation** becomes useful: the Q-values or the policy are not stored in a table, but rather learned by a function approximator. The type of function approximator does not really matter here: in deep RL we are of course interested in deep neural networks (@sec:deep-learning), but any kind of regressor theoretically works (linear algorithms, radial-basis function network, SVR...).
+
+#### Value-based function approximation {-}
+
+In **value-based** methods, we want to approximate the Q-values $Q^\pi(s,a)$ of all possible state-action pairs for a given policy. The function approximator depends on a set of parameters $\theta$. $\theta$ can for example represent all the weights and biases of a neural network. The approximated Q-value can now be noted $Q(s, a ;\theta)$ or $Q_\theta(s, a)$. As the parameters will change over time during learning, we can omit the time $t$ from the notation. Similarly, action selection is usually $\epsilon$-greedy or softmax, so the policy $\pi$ depends directly on the estimated Q-values and can therefore on the parameters: it is noted $\pi_\theta$.
+
+![Function approximators can either take a state-action pair as input and output the Q-value, or simply take a state as input and output the Q-values of all possible actions.](img/functionapprox.png){#fig:functionapprox width=50%}
+
+There are basically two options regarding the structure of the function approximator (@fig:functionapprox):
+
+1. The approximator takes a state-action pair $(s, a)$ as input and returns a single Q-value $Q(s, a)$.
+2. It takes a state $s$ as input and returns the Q-value of all possible actions in that state.
+
+The second option is of course only possible when the action space is discrete, but has the advantage to generalize better over similar states.
+
+The goal of a function approximator is to minimize a *loss function* (or cost function) $\mathcal{L}(\theta)$, so that the estimated Q-values converge for all state-pairs towards their target value, depending on the chosen algorithm:
+
+* Monte-Carlo methods: the Q-value of each $(s, a)$ pair should converge towards the mean expected return (mathematical expectation):
 
 $$
-    \mathcal{L}(\theta) = {E}_{\pi} [r_t + \gamma Q^{\pi}(s_{t+1}, a_{t+1}) - Q^{\pi}(s_t, a_t)]^2
+    \mathcal{L}(\theta) = E([R_t - Q_\theta(s_t, a_t)]^2)
+$$ 
+
+If we learn over $M$ episodes of length $T$, the loss function can be written as:
+
+$$
+    \mathcal{L}(\theta) = \frac{1}{M\, T} \sum_{e=1}^M \sum_{t = 1}^T [R^e_t - Q_\theta(s_t, a_t)]^2
+$$ 
+
+* Temporal difference methods: the Q-values should converge towards an estimation of the mean expected return. 
+    
+    * For SARSA:
+
+    $$
+    \mathcal{L}(\theta) = E([r_t + \gamma \, Q_\theta(s_{t+1}, a_{t+1}) - Q_\theta(s_t, a_t)]^2)
+    $$
+
+    * For Q-learning:
+
+    $$
+    \mathcal{L}(\theta) = E([r_t + \gamma \, \text{max}_a Q_\theta(s_{t+1}, a) - Q_\theta(s_t, a_t)]^2)
+    $$
+
+Any function approximator able to minimize these loss functions can be used. 
+
+#### Policy-based function approximation {-}
+
+In policy-based function approximation, we want to directly learn a policy $\pi_\theta(s, a)$ that maximizes the expected return of each possible transition, i.e. the ones which are selected by the policy. The **objective function** to be maximized is therefore defined over all trajectories $\tau = (s_t, a_t, s_{t+1}, a_{t+1}, \ldots)$:
+
+$$
+    J(\theta) = {E}_{\tau \sim \pi_\theta}(R_t)
 $$
 
+In short, the learned policy $\pi_\theta$ should only produce trajectories $\tau$ where each state is associated to a high expected return $R_t$ and avoid trajectories with low expected returns. Although this objective function leads to the desired behaviour, it is not computationally tractable as we would need to integrate over all possible trajectories. The methods presented in @sec:policy-based-methods will provide estimates of the gradient of this objective function.
 
 
 ## Deep learning
 
+Deep RL uses deep neural networks as function approximators, allowing complex representations of the value of state-action pairs to be learned. This section provides a very quick overview of deep learning. For additional details, refer to the excellent book of @Goodfellow2016.
+
 ### Deep neural networks
+
+A deep neural network consists of one input layer $\mathbf{x}$, one or several hidden layers $\mathbf{h_1}, \mathbf{h_2}, \ldots, \mathbf{h_n}$ and one output layer $\mathbf{y}$ (@fig:dnn).
+
+![Architecture of a deep neural network. Figure taken from @Nielsen2015, CC-BY-NC.](img/dnn.png){#fig:dnn}
+
+Each layer $k$ (called *fully-connected*) transforms the activity of the previous layer (the vector $\mathbf{h_{k-1}}$) into another vector $\mathbf{h_{k}}$ by multiplying it with a **weight matrix** $W_k$, adding a **bias** vector $\mathbf{b_k}$ and applying a non-linear **activation function** $f$.
+
+$$
+    \mathbf{h_{k}} = f(W_k \times \mathbf{h_{k-1}} + \mathbf{b_k})
+$${#eq:fullyconnected}
+
+The activation function can theoretically be of any type as long as it is non-linear (sigmoid, tanh...), but modern neural networks use preferentially the **Rectified Linear Unit** (ReLU) function $f(x) = \max(0, x)$ or its parameterized variants.
+
+The goal of learning is to find the weights and biases $\theta$ minimizing a given **loss function** on a training set $\mathcal{D}$. 
+
+* In *regression* problems, the **mean square error** (mse) is minimized:
+
+$$
+    \mathcal{L}(\theta) = E_{\mathbf{x}, \mathbf{t} \in \mathcal{D}} ||\mathbf{t} - \mathbf{y}||^2
+$$
+
+where $\mathbf{x}$ is the input, $\mathbf{t}$ the true output (defined in the training set) and $\mathbf{y}$ the prediction of the NN for the input $\mathbf{x}$. The closer the prediction from the true value, the smaller the mse.
+
+* In *classification* problems, the **cross entropy** (or negative log-likelihood) is minimized:
+
+$$
+    \mathcal{L}(\theta) = - E_{\mathbf{x}, \mathbf{t} \in \mathcal{D}} \sum_i t_i \log y_i
+$$
+
+where the log-likelihood of the prediction $\mathbf{y}$ to match the data $\mathbf{t}$ is maximized over the training set. The mse could be used for classification problems too, but the output layer usually has a softmax activation function for classification problems, which works nicely with the cross entropy loss function. See <https://rdipietro.github.io/friendly-intro-to-cross-entropy-loss> for the link between cross entropy and log-likelihood and <https://deepnotes.io/softmax-crossentropy> for the interplay between softmax and cross entropy.
+
+Once the loss function is defined, it has to be minimized by searching optimal values for the free parameters $\theta$. This optimization procedure is based on **gradient descent**, which is an iterative procedure modifying estimates of the free parameters in the opposite direction of the gradient of the loss function:
+
+$$
+\Delta \theta = -\eta \, \nabla_\theta \mathcal{L}(\theta) = -\eta \, \frac{\partial \mathcal{L}(\theta)}{\partial \theta}
+$$
+
+The learning rate $\eta$ is chosen very small to ensure a smooth convergence. Intuitively, the gradient (or partial derivative) represents how the loss function changes when each parameter is slightly increased. If the gradient w.r.t a single parameter (e.g. a weight $w$) is positive, increasing the weight increases the loss function (i.e. the error), so the weight should be slightly decreased instead. If the gradient is negative, one should increase the weight.
+
+The question is now to compute the gradient of the loss function w.r.t all the parameters of the DNN, i.e. each single weight and bias. The solution is given by the **backpropagation** algorithm, which is simply an application of the **chain rule** to feedforward neural networks:
+
+$$
+    \frac{\partial \mathcal{L}(\theta)}{\partial W_k} = \frac{\partial \mathcal{L}(\theta)}{\partial \mathbf{y}} \times \frac{\partial \mathbf{y}}{\partial \mathbf{h_n}} \times \frac{\partial \mathbf{h_n}}{\partial \mathbf{h_{n-1}}} \times \ldots \times \frac{\partial \mathbf{h_k}}{\partial W_k}
+$$
+
+Each layer of the network adds a contribution to the gradient when going **backwards** from the loss function to the parameters. Importantly, all functions used in a NN are differentiable, i.e. those partial derivatives exist (and are easy to compute). For the fully connected layer represented by @eq:fullyconnected, the partial derivative is given by:
+
+$$
+    \frac{\partial \mathbf{h_{k}}}{\partial \mathbf{h_{k-1}}} = f'(W_k \times \mathbf{h_{k-1}} + \mathbf{b_k}) \, W_k
+$$
+
+and its dependency on the parameters is:
+
+$$
+    \frac{\partial \mathbf{h_{k}}}{\partial W_k} = f'(W_k \times \mathbf{h_{k-1}} + \mathbf{b_k}) \, \mathbf{h_{k-1}}
+$$
+$$
+    \frac{\partial \mathbf{h_{k}}}{\partial \mathbf{b_k}} = f'(W_k \times \mathbf{h_{k-1}} + \mathbf{b_k})
+$$
+
+Activation functions are chosen to have an easy-to-compute derivative, such as the ReLU function:
+
+$$
+    f'(x) = \begin{cases} 1 \quad \text{if} \quad x > 0 \\ 0 \quad \text{otherwise.} \end{cases}
+$$
+
+Partial derivatives are automatically computed by the underlying libraries, such as tensorflow, theano, pytorch, etc. The next step is choose an **optimizer**, i.e. a gradient-based optimization method allow to modify the free parameters using the gradients. Optimizers do not work on the whole training set, but use **minibatches** (a random sample of training examples: their number is called the *batch size*) to compute iteratively the loss function. The most popular optimizers are:
+
+* SGD (stochastic gradient descent): vanilla gradient descent on random minibatches.
+* SGD with momentum (Nesterov or not): additional momentum to avoid local minima of the loss function.
+* Adagrad
+* Adadelta
+* RMSprop
+* Adam
+* Many others. Check the doc of keras to see what is available: <https://keras.io/optimizers> 
+
+See this useful post for a comparison of the different optimizers: <http://ruder.io/optimizing-gradient-descent>. The common wisdom is that SGD with Nesterov momentum works best (i.e. it finds a better minimum) but its meta-parameters (learning rate, momentum) are hard to find, while Adam works out-of-the-box, at the cost of a slightly worse minimum. For deep RL, Adam is usually preferred, as the goal is to find a working solution, not optimize it to the last decimal.
+
+![Comparison of different optimizers. Source: <http://ruder.io/optimizing-gradient-descent>.](img/optimizers.gif){#fig:optimizers width=50%}
 
 ### Convolutional networks
 
 ### Recurrent neural networks
+
+
+
+
 
 # Value-based methods
 
@@ -326,7 +486,11 @@ $$
 
 ## GORILA
 
-# Policy-gradient methods
+
+
+
+
+# Policy-based methods
 
 *Policy gradient* methods directly learn to produce the policy (stochastic or not). The goal of the neural network is to maximize an objective function $J(\theta) = {E}_{\pi_\theta}(R_t)$. The \emph{stochastic policy gradient theorem} \cite{Sutton1999} provides a useful estimate of the gradient that should be given to the neural network:
 
@@ -336,37 +500,57 @@ $$
 
 @Sutton1999, @Silver2014
 
-## REINFORCE
+## Actor-critic
+
+### REINFORCE
 
 @Williams1992
 
-## A3C
+### Advantage Actor-Critic
+
+Advantage actor-critic
+
+### A3C
 
 @Mnih2016
 
 HogWild!: @Niu2011
 
-## Continuous action spaces
 
-## Policy gradient theorems
+## Policy gradient
 
-## Stochastic Policy Gradient (SVG)
+### Continuous action spaces
+
+### Stochastic Policy Gradient (SVG)
 
 @Heess2015
 
-## Deterministic Policy Gradient (DPG)
+### Deterministic Policy Gradient (DPG)
 
 @Silver2014
 
-## Deep Deterministic Policy Gradient (DDPG)
+### Deep Deterministic Policy Gradient (DDPG)
 
 @Lillicrap2015
 
-## Fictitious Self-Play (FSP)
+### Fictitious Self-Play (FSP)
+
+@Heinrich2015 @Heinrich2016
+
+### Trust Region Policy Optimization (TRPO)
+
+@Schulman2015a
+
+### Generalized Advantage Estimation (GAE)
+
+@Schulman2015b
 
 # Recurrent Attention Models
 
 @Mnih2014, @Ba2014. @Stollenga2014
+
+# Model-based RL
+
 
 # Deep RL for robotics
 
@@ -434,6 +618,36 @@ for _ in range(1000):
     * Cross-Entropy Method (CEM)
     * Dueling network DQN (Dueling DQN)
     * Deep SARSA
+
+* `Coach` <https://github.com/NervanaSystems/coach> from Intel Nervana.
+
+    * Deep Q Network (DQN
+    * Double Deep Q Network (DDQN)
+    * Dueling Q Network
+    * Mixed Monte Carlo (MMC)
+    * Persistent Advantage Learning (PAL)
+    * Distributional Deep Q Network
+    * Bootstrapped Deep Q Network
+    * N-Step Q Learning | Distributed
+    * Neural Episodic Control (NEC)
+    * Normalized Advantage Functions (NAF) | Distributed
+    * Policy Gradients (PG) | Distributed
+    * Actor Critic / A3C | Distributed
+    * Deep Deterministic Policy Gradients (DDPG) | Distributed
+    * Proximal Policy Optimization (PPO)
+    * Clipped Proximal Policy Optimization | Distributed
+    * Direct Future Prediction (DFP) | Distributed
+
+* `OpenAI Baselines` <https://github.com/openai/baselines>
+
+    * A2C
+    * ACER
+    * ACKTR
+    * DDPG
+    * DQN
+    * PPO1 (Multi-CPU using MPI)
+    * PPO2 (Optimized for GPU)
+    * TRPO
 
 * DDPG in tensorflow <http://pemami4911.github.io/blog/2016/08/21/ddpg-rl.html>
 
