@@ -3,12 +3,7 @@ title: "**Deep Reinforcement Learning**"
 author: Julien Vitay
 email: <julien.vitay@informatik.tu-chemnitz.de>
 abstract: |
-    The goal of this document is to summarize the state-of-the-art in deep reinforcement learning. It starts with basics in reinforcement learning and deep learning to introduce the notations. It covers different classes of deep RL models: 
-
-    1. Value-based algorithms (DQN...) used mostly for discrete problems like video games.
-    2. Policy-gradient based algorithms (A3C, DDPG...) used for continuous control problems such as robotics.
-    3. Recurrent attention models (RAM...) for partially observable problems.
-    4. Model-based RL to reduce the sample complexity by incorporating a model of the environment.
+    The goal of this document is to keep track the state-of-the-art in deep reinforcement learning. It starts with basics in reinforcement learning and deep learning to introduce the notations. It tries to cover different classes of deep RL models, from value-based to policy-based, model-free or model-based, hierarchical, etc, with a focus on the application of deep RL to robotics.
 autoSectionLabels: True 
 secPrefix: Section
 figPrefix: Fig.
@@ -22,6 +17,19 @@ bibliography:
 - /home/vitay/Articles/biblio/DeepLearning.bib
 ---
 
+
+
+
+Different classes of deep RL can be identified. This document focuses on the following ones:   
+
+1. Value-based algorithms (DQN...) used mostly for discrete problems like video games.
+2. Policy-gradient based algorithms (A3C, DDPG...) used for continuous control problems such as robotics.
+3. Recurrent attention models (RAM...) for partially observable problems.
+4. Model-based RL to reduce the sample complexity by incorporating a model of the environment.
+5. Application of deep RL to robotics
+    
+See @Li2017, @Arulkumaran2017 and @Mousavi2018 for recent overviews of deep RL.
+
 # Basics
 
 Deep reinforcement learning (deep RL) is the successful integration of deep learning methods, classically used in supervised or unsupervised learning contexts, with reinforcement learning (RL), a well-studied adaptive control method used in problems with delayed and partial feedback [@Sutton1998]. This section starts with the basics of RL, mostly to set the notations, and provides a quick overview of deep neural networks.
@@ -30,7 +38,7 @@ Deep reinforcement learning (deep RL) is the successful integration of deep lear
 
 RL methods apply to problems where an agent interacts with an environment in discrete time steps (@fig:agentenv). At time $t$, the agent is in state $s_t$ and decides to perform an action $a_t$. At the next time step, it arrives in the state $s_{t+1}$ and obtains the reward $r_{t+1}$. The goal of the agent is to maximize the reward obtained on the long term. The textbook by @Sutton1998 (updated in @Sutton2017) defines the field extensively.
 
-![Interaction between an agent and its environment [@Sutton1998].](img/rl-agent.jpg){#fig:agentenv width=30%}
+![Interaction between an agent and its environment. Taken from @Sutton1998.](img/rl-agent.jpg){#fig:agentenv width=50%}
 
 ### MDP: Markov Decision Process
 
@@ -56,7 +64,7 @@ In many problems (e.g. vision-based), one does not have access to the true state
 
 In a **Partially Observable Markov Decision Process** (POMDP), observations $o_t$ come from a space $\mathcal{O}$ and are linked to underlying states using the density function $p(o_t| s_t)$. Observations are usually not Markovian, so the full history of observations $h_t = (o_0, a_0, \dots o_t, a_t)$ is needed to solve the problem (see @sec:recurrent-attention-models).
 
-### Policies
+### Policy and  value fucntions
 
 The policy defines the behavior of the agent: which action should be taken in each state. One distinguishes two kinds of policies:
 
@@ -121,7 +129,7 @@ $$
 
 The Bellman equations mean that the value of a state (resp. state-action pair) depends on the value of all other states (resp. state-action pairs), the current policy $\pi$ and the dynamics of the MDP ($p(s'|s, a)$ and $r(s, a, s')$).
 
-![Backup diagrams correponding to the Bellman equations [@Sutton1998].](img/backup.png){#fig:backup width=50%}
+![Backup diagrams correponding to the Bellman equations. Taken from @Sutton1998.](img/backup.png){#fig:backup width=50%}
 
 ### Dynamic programming
 
@@ -129,7 +137,7 @@ The interesting property of the Bellman equations is that, if the states have th
 
 Once the values are known for a given policy, it is possible to improve the policy by selecting with the highest probability the action with the highest Q-value. For example, if the current policy chooses the action $a_1$ over $a_2$ in $s$ ($\pi(s, a_1) > \pi(s, a_2)$), but after evaluating the policy it turns out that $Q^\pi(s, a_2) > Q^\pi(s, a_1)$ (the expected return after $a_2$ is higher than after $a_1$), it makes more sense to preferentially select $a_2$, as there is more reward afterwards. We can then create a new policy $\pi'$ where $\pi'(s, a_2) > \pi'(s, a_1)$, which is is *better* policy than $\pi$ as more reward can be gathered after $s$.
 
-![Dynamic programming alternates between policy evaluation and policy improvement [@Sutton1998].](img/dynamicprogramming.png){#fig:dynamicprogramming width=20%}
+![Dynamic programming alternates between policy evaluation and policy improvement. Taken from @Sutton1998.](img/dynamicprogramming.png){#fig:dynamicprogramming width=20%}
 
 **Dynamic programming** (DP) alternates between policy evaluation and policy improvement. If the problem is Markovian, it can be shown that DP converges to the *optimal policy* $\pi^*$, i.e. the policy where the expected return is maximal in all states. 
 
@@ -152,7 +160,7 @@ In practice, sample-based methods such as Monte-Carlo or temporal difference are
 
 ### Monte-Carlo sampling
 
-![Monte-Carlo methods accumulate rewards over a complete episode. [@Sutton1998].](img/unifiedreturn.png){#fig:mc width=50%}
+![Monte-Carlo methods accumulate rewards over a complete episode. Taken from @Sutton1998.](img/unifiedreturn.png){#fig:mc width=50%}
 
 When the environment is *a priori* unknown, it has to be explored in order to build estimates of the V or Q value functions. The key idea of **Monte-Carlo** sampling (MC) is rather simple:
 
@@ -209,53 +217,53 @@ The advantage of off-policy methods is that domain knowledge can be used to rest
 The main drawback of Monte-Carlo methods is that the task must be composed of finite episodes. Not only is it not always possible, but value updates have to wait for the end of the episode, what slows learning down. **Temporal difference** methods simply replace the actual return obtained after a state or an action, by an estimation composed of the reward immediately received plus the value of the next state or action, as in @eq:return:
 
 $$
-    R_t \approx r_{t+1} + \gamma \, V^\pi(s_{t+1}) \approx r_{t+1} + \gamma \, Q^\pi(s_{t+1}, a_{t+1})
+    R_t \approx r(s, a, s') + \gamma \, V^\pi(s') \approx r + \gamma \, Q^\pi(s', a')
 $$
 
 This gives us the following learning rules:
 
 $$
-    V^\pi(s_t) \leftarrow V^\pi(s_t) + \alpha (r_{t+1} + \gamma \, V^\pi(s_{t+1}) - V^\pi(s_t))
+    V^\pi(s) \leftarrow V^\pi(s) + \alpha (r(s, a, s') + \gamma \, V^\pi(s') - V^\pi(s))
 $$
 
 $$
-    Q^\pi(s_t, a_t) \leftarrow Q^\pi(s_t, a_t) + \alpha (r_{t+1} + \gamma \, Q^\pi(s_{t+1}, a_{t+1}) - Q^\pi(s_t, a_t))
+    Q^\pi(s, a) \leftarrow Q^\pi(s, a) + \alpha (r(s, a, s') + \gamma \, Q^\pi(s', a') - Q^\pi(s, a))
 $$
 
 The quantity:
 
 $$
- \delta_t = r_{t+1} + \gamma \, V^\pi(s_{t+1}) - V^\pi(s_t)
+ \delta = r(s, a, s') + \gamma \, V^\pi(s') - V^\pi(s)
 $$
 
 or:
 
 $$
-    \delta_t = r_{t+1} + \gamma \, Q^\pi(s_{t+1}, a_{t+1}) - Q^\pi(s_t, a_t)
+    \delta = r(s, a, s') + \gamma \, Q^\pi(s', a') - Q^\pi(s, a)
 $$
 
-is called the **reward-prediction error** (RPE) or **TD error**: it defines the surprise between the current reward prediction ($V^\pi(s_t)$ or $Q^\pi(s_t, a_t)$) and the sum of the immediate reward plus the reward prediction in the next state / after the next action.
+is called the **reward-prediction error** (RPE) or **TD error**: it defines the surprise between the current reward prediction ($V^\pi(s)$ or $Q^\pi(s, a)$) and the sum of the immediate reward plus the reward prediction in the next state / after the next action.
 
-* If $\delta_t > 0$, the transition was positively surprising: one obtains more reward or lands in a better state than expected. The initial state or action was actually underrated, so its estimated value must be increased.
-* If $\delta_t < 0$, the transition was negatively surprising. The initial state or action was overrated, its value must be decreased.
-* If $\delta_t = 0$, the transition was fully predicted: one obtains as much reward as expected, so the values should stay as they are.
+* If $\delta > 0$, the transition was positively surprising: one obtains more reward or lands in a better state than expected. The initial state or action was actually underrated, so its estimated value must be increased.
+* If $\delta < 0$, the transition was negatively surprising. The initial state or action was overrated, its value must be decreased.
+* If $\delta = 0$, the transition was fully predicted: one obtains as much reward as expected, so the values should stay as they are.
 
 The main advantage of this learning method is that the update of the V- or Q-value can be applied immediately after a transition: no need to wait until the end of an episode, or even to have episodes at all. 
 
-![Temporal difference algorithms update values after a single transition [@Sutton1998].](img/backup-TD.png){#fig:td width=3%}
+![Temporal difference algorithms update values after a single transition. Taken from @Sutton1998.](img/backup-TD.png){#fig:td width=3%}
 
-When learning Q-values directly, the question is which next action $a_{t+1}$ should be used in the update rule: the action that will actually be taken for the next transition (defined by $\pi(s_{t+1}, a_{t+1})$), or the greedy action ($a^* = \text{argmax}_a Q^\pi(s_{t+1}, a)$). This relates to the *on-policy / off-policy* distinction already seen for MC methods:
+When learning Q-values directly, the question is which next action $a'$ should be used in the update rule: the action that will actually be taken for the next transition (defined by $\pi(s', a')$), or the greedy action ($a^* = \text{argmax}_a Q^\pi(s', a)$). This relates to the *on-policy / off-policy* distinction already seen for MC methods:
 
-* *On-policy* TD learning is called **SARSA** (state-action-reward-state-action). It uses the next action sampled from the policy $\pi(s_{t+1}, a_{t+1})$ to update the current transition. It is required that this next action will actually be performed for the next transition. The policy must be $\epsilon$-soft, for example $\epsilon$-greedy or softmax:
+* *On-policy* TD learning is called **SARSA** (state-action-reward-state-action). It uses the next action sampled from the policy $\pi(s', a')$ to update the current transition. This selected action could be noted $\pi(s')$ for simplicity. It is required that this next action will actually be performed for the next transition. The policy must be $\epsilon$-soft, for example $\epsilon$-greedy or softmax:
 
 $$
-    \delta_t = r_{t+1} + \gamma \, Q^\pi(s_{t+1}, a_{t+1}) - Q^\pi(s_t, a_t)
+    \delta = r(s, a, s') + \gamma \, Q^\pi(s', \pi(s')) - Q^\pi(s, a)
 $$
 
 * *Off-policy* TD learning is called **Q-learning** [@Watkins1989]. The greedy action in the next state (the one with the highest Q-value) is used to update the current transition. It does not mean that the greedy action will actually have to be selected for the next transition. The learned policy can therefore also be deterministic:
 
 $$
-    \delta_t = r_{t+1} + \gamma \, \max_a Q^\pi(s_{t+1}, a) - Q^\pi(s_t, a_t)
+    \delta = r(s, a, s') + \gamma \, \max_{a'} Q^\pi(s', a') - Q^\pi(s, a)
 $$
 
 In Q-learning, the behavior policy has to ensure exploration, while this is achieved implicitely by the learned policy in SARSA, as it must be $\epsilon$-soft. An easy way of building a behavior policy based on a deterministic learned policy is $\epsilon$-greedy: the deterministic action $\mu(s_t)$ is chosen with probability 1 - $\epsilon$, the other actions with probability $\epsilon$. In continuous action spaces, additive noise (e.g. Ohrstein-Uhlenbeck) can be added to the action.
@@ -267,16 +275,16 @@ Alternatively, domain knowledge can be used to create the behavior policy and re
 Let's consider the TD error based on state values:
 
 $$
- \delta_t = r_{t+1} + \gamma \, V^\pi(s_{t+1}) - V^\pi(s_t)
+ \delta = r(s, a, s') + \gamma \, V^\pi(s') - V^\pi(s)
 $$
 
 As noted in the previous section, the TD error represents how surprisingly good (or bad) a transition between two states has been (ergo the corresponding action). It can be used to update the value of the state $s_t$:
 
 $$
-    V^\pi(s_t) \leftarrow V^\pi(s_t) + \alpha \, \delta_t
+    V^\pi(s) \leftarrow V^\pi(s) + \alpha \, \delta
 $$
 
-This allows to estimate the values of all states for the current policy. However, this does not help to 1) directy select the best action or 2) improve the policy. When only the V-values are given, one can only want to reach the next state $V^\pi(s_{t+1})$ with the highest value: one needs to know which action leads to this better state, i.e. have a model of the environment. Actually, one selects the action with the highest Q-value:
+This allows to estimate the values of all states for the current policy. However, this does not help to 1) directy select the best action or 2) improve the policy. When only the V-values are given, one can only want to reach the next state $V^\pi(s')$ with the highest value: one needs to know which action leads to this better state, i.e. have a model of the environment. Actually, one selects the action with the highest Q-value:
 
 $$
     Q^{\pi}(s, a) = \sum_{s' \in \mathcal{S}} p(s'|s, a) [r(s, a, s') + \gamma \, V^\pi(s')]
@@ -336,7 +344,7 @@ The goal of a function approximator is to minimize a *loss function* (or cost fu
 * Monte-Carlo methods: the Q-value of each $(s, a)$ pair should converge towards the mean expected return (mathematical expectation):
 
 $$
-    \mathcal{L}(\theta) = E([R_t - Q_\theta(s_t, a_t)]^2)
+    \mathcal{L}(\theta) = E([R_t - Q_\theta(s, a)]^2)
 $$ 
 
 If we learn over $M$ episodes of length $T$, the loss function can be written as:
@@ -350,13 +358,13 @@ $$
     * For SARSA:
 
     $$
-    \mathcal{L}(\theta) = E([r_t + \gamma \, Q_\theta(s_{t+1}, a_{t+1}) - Q_\theta(s_t, a_t)]^2)
+    \mathcal{L}(\theta) = E([r(s, a, s') + \gamma \, Q_\theta(s', \pi(s')) - Q_\theta(s, a)]^2)
     $$
 
     * For Q-learning:
 
     $$
-    \mathcal{L}(\theta) = E([r_t + \gamma \, \text{max}_a Q_\theta(s_{t+1}, a) - Q_\theta(s_t, a_t)]^2)
+    \mathcal{L}(\theta) = E([r(s, a, s') + \gamma \, \max_{a'} Q_\theta(s', a') - Q_\theta(s, a)]^2)
     $$
 
 Any function approximator able to minimize these loss functions can be used. 
@@ -473,42 +481,263 @@ After a convolutional layer, the spatial dimensions are preserved. In classifica
 
 A convolutional neural network is simply a sequence of convolutional layers and max-pooling layers (sometime two convolutional layers are applied in a row before max-pooling, as in VGG [@Simonyan2014]), followed by a couple of fully-connected layers and a softmax output layer. @fig:alexnet shows the architecture of AlexNet, the winning architecture of the ImageNet challenge in 2012 [@Krizhevsky2012].
 
-![Architecture of the AlexNet CNN [@Krizhevsky2012].](img/alexnet.png){#fig:alexnet}
+![Architecture of the AlexNet CNN. Taken from @Krizhevsky2012.](img/alexnet.png){#fig:alexnet}
 
-Many improvements have been proposed since 2012 (e.g. ResNets [@He2015]) but the idea stays similar. Generally, convolutional and max-pooling layers are alternated until the spatial dimensions are so reduced (around 10x10) that they can be put into a single vector and fed into a fully-connected layer. This is **NOT** the case in deep RL! Contrary to object classification, spatial information is crucial in deep RL: position of the ball, position of the body, etc. It matters whether the ball is to the right or to the left of your paddle. Max-pooling layers are therefore omitted and the CNNs only consist of convolutional and fully-connected layers. This greatly increases the number of weights in the networks, hence the number of training examples needed to train the network. This is still the main limitation of using CNNs in deep RL.
+Many improvements have been proposed since 2012 (e.g. ResNets [@He2015]) but the idea stays similar. Generally, convolutional and max-pooling layers are alternated until the spatial dimensions are so reduced (around 10x10) that they can be put into a single vector and fed into a fully-connected layer. This is **NOT** the case in deep RL! Contrary to object classification, spatial information is crucial in deep RL: position of the ball, position of the body, etc. It matters whether the ball is to the right or to the left of your paddle when you decide how to move it. Max-pooling layers are therefore omitted and the CNNs only consist of convolutional and fully-connected layers. This greatly increases the number of weights in the networks, hence the number of training examples needed to train the network. This is still the main limitation of using CNNs in deep RL.
 
 ### Recurrent neural networks
 
+Feedforward neural networks learn to efficiently map static inputs $\mathbf{x}$ to outputs $\mathbf{y}$ but have no memory or context: the output at time $t$ does not depend on the inputs at time $t-1$ or $t-2$, only the one at time $t$. This is problematic when dealing with video sequences for example: if the task is to classify videos into happy/sad, a frame by frame analysis is going to be inefficient (most frames a neutral). Concatenating all frames in a giant input vector would increase dramatically the complexity of the classifier and no generalization can be expected.
 
+Recurrent Neural Networks (RNN) are designed to deal with time-varying inputs, where the relevant information to take a decision at time $t$ may have happened at different times in the past. The general structure of a RNN is depicted on @fig:rnn:
 
+![Architecture of a RNN. Left: recurrent architecture. Right: unrolled network, showing that a RNN is equivalent to a deep network. Taken from <http://colah.github.io/posts/2015-08-Understanding-LSTMs>.](img/RNN-unrolled.png){#fig:rnn width=90%}
 
+The output $\mathbf{h}_t$ of the RNN at time $t$ depends on its current input $\mathbf{x}_t$, but also on its previous output $\mathbf{h}_{t-1}$, which, by recursion, depends on the whole history of inputs $(x_0, x_1, \ldots, x_t)$. 
+
+$$
+    \mathbf{h}_t = f(W_x \, \mathbf{x}_{t} + W_h \, \mathbf{h}_{t-1} + \mathbf{b})
+$$
+
+Once unrolled, a RNN is equivalent to a deep network, with $t$ layers of weights between the first input $\mathbf{x}_0$ and the current output $\mathbf{h}_t$. The only difference with a feedforward network is that weights are reused between two time steps / layers. **Backpropagation though time** (BPTT) can be used to propagate the gradient of the loss function backwards in time and learn the weights $W_x$ and $W_h$ using the usual optimizer (SGD, Adam...).
+
+However, this kind of RNN can only learn short-term dependencies because of the **vanishing gradient problem** [@Hochreiter1991]. When the gradient of the loss funcion travels backwards from  $\mathbf{h}_t$ to $\mathbf{x}_0$, it will be multiplied $t$ times by the recurrent weights $W_h$. If $|W_h| > 1$, the gradient will explode with increasing $t$, while if $|W_h| < 1$, the gradient will vanish to 0. 
+
+The solution to this problem is provided by **long short-term memory networks** [LSTM;@Hochreiter1997]. LSTM layers maintain additionally a state $\mathbf{C}_t$ (also called context or memory) which is manipulated by three learnable gates (input, forget and output gates). As in regular RNNs, a *candidate state* $\tilde{\mathbf{C}_t}$ is computed based on the current input and the previous output:
+
+$$
+    \tilde{\mathbf{C}_t} = f(W_x \, \mathbf{x}_{t} + W_h \, \mathbf{h}_{t-1} + \mathbf{b})
+$$
+
+![Architecture of a LSTM layer. Taken from <http://colah.github.io/posts/2015-08-Understanding-LSTMs>.](img/LSTM.png){#fig:lstm width=40%}
+
+The activation function $f$ is usually a tanh function. The input and forget learn to decide how the candidate state should be used to update the current state:
+
+* The input gate decides which part of the candidate state $\tilde{\mathbf{C}_t}$ will be used to update the current state $\mathbf{C}_t$:
+
+$$
+    \mathbf{i}_t = \sigma(W^i_x \, \mathbf{x}_{t} + W^i_h \, \mathbf{h}_{t-1} + \mathbf{b}^i)
+$$
+
+The sigmoid activation function $\sigma$ is used to output a number between 0 and 1 for each neuron: 0 means the candidate state will not be used at all, 1 means completely. 
+
+* The forget gate decides which part of the current state should be kept or forgotten:
+
+$$
+    \mathbf{f}_t = \sigma(W^f_x \, \mathbf{x}_{t} + W^f_h \, \mathbf{h}_{t-1} + \mathbf{b}^f)
+$$
+
+Similarly, 0 means taht the corresponding element of the current state will be erased, 1 that it will be kept.
+
+Once the input and forget gates are computed, the current state can be updated based on its previous value and the candidate state:
+
+$$
+   \mathbf{C}_t =  \mathbf{i}_t \odot \tilde{\mathbf{C}_t} + \mathbf{f}_t \odot \mathbf{C}_{t-1}
+$$
+
+where $\odot$ is the element-wise multiplication.
+
+* The output gate finally learns to select which part of the current state $\mathbf{C}_t$ should be used to produce the current output $\mathbf{h}_t$:
+
+$$
+    \mathbf{o}_t = \sigma(W^o_x \, \mathbf{x}_{t} + W^o_h \, \mathbf{h}_{t-1} + \mathbf{b}^o)
+$$
+
+$$
+    \mathbf{h}_t = \mathbf{o}_t \odot \tanh \mathbf{C}_t
+$$
+
+The architecture may seem complex, but everything is differentiable: backpropagation though time can be used to learn not only the input and recurrent weights for the candidate state, but also the weights and and biases of the gates. The main advantage of LSTMs is that they solve the vanishing gradient problem: if the input at time $t=0$ is important to produce a response at time $t$, the input gate will learn to put it into the memory and the forget gate will learn to maintain in the current state until it is not needed anymore. During this "working memory" phase, the gradient is multiplied by exactly one as nothing changes: the dependency can be learned with arbitrary time delays!
+
+There are alternatives to the classical LSTM layer such as the gated recurrent unit [GRU; @Cho2014] or peephole connections [@Gers2001]. See <http://colah.github.io/posts/2015-08-Understanding-LSTMs>, <https://medium.com/mlreview/understanding-lstm-and-its-diagrams-37e2f46f1714> or <http://blog.echen.me/2017/05/30/exploring-lstms/> for more visual explanations of LSTMs and their variants.
+
+RNNs are particularly useful for deep RL when considering POMDPs, i.e. partially observable problems. If an observation does not contain enough information about the underlying state (e.g. a single image does not contain speed information), LSTM can integrate these observations over time and learn to implicitely represent speed in its context vector, allowing efficient policies to be learned.
 
 # Value-based methods
 
 ## Limitations of deep neural networks for function approximation
 
-## Deep Q Network (DQN)
+The goal of value-based deep RL is to approximate the Q-value of each possible state-action pair using a deep (convolutional) neural network. As shown on @fig:functionapprox, the network can either take a state-action pair as input and return a single output value, or take only the state as input and return the Q-value of all possible actions (only possible if the action space is discrete), In both cases, the goal is to learn estimates $Q_\theta(s, a)$ with a NN with parameters $\theta$.
 
-@Mnih2015
+![](img/functionapprox.png){width=40%}
+
+When using Q-learning, we have already seen in @sec:function-approximation that the problem is a regression problem, where the following mse loss function has to be minimized:
+
+$$
+    \mathcal{L}(\theta) = E([r_t + \gamma \, \max_{a'} Q_\theta(s', a') - Q_\theta(s, a)]^2)
+$$
+
+In short, we want to reduce the prediction error, i.e. the mismatch between the estimate of the value of an action $Q_\theta(s, a)$ and the real expected return, here approximated with $r(s, a, s') + \gamma \, \text{max}_{a'} Q_\theta(s', a')$.
+
+We can compute this loss by gathering enough samples $(s, a, r, s')$ (i.e. single transitions), concatenating them randomly in minibatches, and let the DNN learn to minimize the prediction error using backpropagation and SGD, indirectly improving the policy. The following pseudocode would describe the training procedure when gathering transitions **online**, i.e. when directly interacting with the environment:
+
+---
+
+* Initialize value network $Q_{\theta}$ with random weights.
+* Initialize empty minibatch $\mathcal{D}$ of maximal size $n$.
+* Observe the initial state $s_0$.
+* for $t \in [0, T_\text{total}]$:
+    * Select the action $a_t$ based on the behaviour policy derived from $Q_\theta(s_t, a)$ (e.g. softmax).
+    * Perform the action $a_t$ and observe the next state $s_{t+1}$ and the reward $r_{t+1}$.
+    * Predict the Q-value of the greedy action in the next state $\max_{a'} Q_\theta(s_{t+1}, a')$
+    * Store $(s_t, a_t, r_{t+1} + \gamma \, \max_{a'} Q_\theta(s_{t+1}, a'))$ in the minibatch.
+    * If minibatch $\mathcal{D}$ is full:
+        * Train the value network $Q_{\theta}$ on $\mathcal{D}$ to minimize $\mathcal{L}(\theta) = E_\mathcal{D}([r(s, a, s') + \gamma \, \text{max}_{a'} Q_\theta(s', a') - Q_\theta(s, a)]^2)$
+        * Empty the minibatch $\mathcal{D}$.
+
+---
+
+However, the definition of the loss function uses the mathematical expectation operator $E$ over all transitions, which can only be approximated by **randomly** sampling the distribution (the MDP). This implies that the samples concatenated in a minibatch should be independent from each other (i.i.d). When gathering transitions online, the samples are correlated: $(s_t, a_t, r_{t+1}, s_{t+1})$ will be followed by $(s_{t+1}, a_{t+1}, r_{t+2}, s_{t+2})$, etc. When playing video games, two successive frames will be very similar (a few pixels will change, or even none if the sampling rate is too high) and the optimal action will likely not change either (to catch the ball in pong, you will need to perform the same action - going left - many times in a row).
+
+**Correlated inputs/outputs** are very bad for deep neural networks: the DNN will overfit and fall into a very bad local minimum. That is why stochastic gradient descent works so well: it randomly samples values from the training set to form minibatches and minimize the loss function on these uncorrelated samples (hopefully). If all samples of a minibatch were of the same class (e.g. zeros in MNIST), the network would converge poorly. This is the first problem preventing an easy use of deep neural networks as function approximators in RL.
+
+The second major problem is the **non-stationarity** of the targets in the loss function. In classification or regression, the desired values $\mathbf{t}$ are fixed throughout learning: the class of an object does not change in the middle of the training phase.
+
+$$
+    \mathcal{L}(\theta) = - E_{\mathbf{x}, \mathbf{t} \in \mathcal{D}} ||\mathbf{t} - \mathbf{y}||^2
+$$
+
+In Q-learning, the target $r(s, a, s') + \gamma \, \max_{a'} Q_\theta(s', a')$ will change during learning, as $Q_\theta(s', a')$ depends on the weights $\theta$ and will hopefully increase as the performance improves. This is the second problem of deep RL: deep NN are particularly bad on non-stationary problems, especially feedforward networks. They iteratively converge towards the desired value, but have troubles when the target also moves (like a dog chasing its tail).
+
+## Deep Q-Network (DQN)
+
+@Mnih2015 (originally arXived in @Mnih2013) proposed an elegant solution to the problems of correlated inputs/outputs and non-stationarity inherent to RL. This article is a milestone of deep RL and it is fair to say that it started or at least strongly renewed the interest for deep RL.
+
+The first idea proposed by @Mnih2015 solves the problem of correlated input/outputs and is actually quite simple: instead of feeding successive transitions into a minibatch and immediately training the NN on it, transitions are stored in a huge buffer called **experience replay memory** (ERM) able to store 100000 transitions. When the buffer is full, new transitions replace the old ones. SGD can now randomly sample the ERM to form minibatches and train the NN.
+
+![Experience replay memory. Interactions with the environment are stored in the ERM. Random minibatches are sampled from it to train the DQN value network.](img/ERM.svg){#fig:erm width=40%}
+
+The second idea solves the non-stationarity of the targets $r(s, a, s') + \gamma \, \max_{a'} Q_\theta(s', a')$. Instead of computing it with the current parameters $\theta$ of the NN, they are computed with an old version of the NN called the **target network** with parameters $\theta'$. The target network is updated only infrequently (every thousands of iterations or so) with the learned weights $\theta$. As this target network does not change very often, the targets stay constant for a long period of time, and the problem becomes more stationary.
+
+The resulting algorithm is called **Deep Q-Network (DQN)**. It is summarized by the following pseudocode:
+
+---
+
+* Initialize value network $Q_{\theta}$ with random weights.
+* Copy $Q_{\theta}$ to create the target network $Q_{\theta'}$.
+* Initialize experience replay memory $\mathcal{D}$ of maximal size $N$.
+* Observe the initial state $s_0$.
+* for $t \in [0, T_\text{total}]$:
+    * Select the action $a_t$ based on the behaviour policy derived from $Q_\theta(s_t, a)$ (e.g. softmax).
+    * Perform the action $a_t$ and observe the next state $s_{t+1}$ and the reward $r_{t+1}$.
+    * Store $(s_t, a_t, r_{t+1}, s_{t+1})$ in the experience replay memory.
+    * Every $T_\text{train}$ steps:
+        * Sample a minibatch $\mathcal{D}_s$ randomly from $\mathcal{D}$.
+        * For each transition $(s, a, r, s')$ in the minibatch:            
+            * Predict the Q-value of the greedy action in the next state $\max_{a'} Q_{\theta'}(s', a')$ using the target network.
+            * Compute the target value $y = r + \gamma \, \max_{a'} Q_{\theta'}(s', a')$.
+        * Train the value network $Q_{\theta}$ on $\mathcal{D}_s$ to minimize $\mathcal{L}(\theta) = E_{\mathcal{D}_s}([y - Q_\theta(s, a)]^2)$
+    * Every $T_\text{target}$ steps:
+        * Update the target network with the trained value network:  $\theta' \leftarrow \theta$
+
+---
+
+In this document, pseudocode will omit many details to simplify the explanations (for example here, the case where a state is terminal - the game ends - and the next state has to be chosen from the distribution of possible starting states). Refer to the original publication for more exact algorithms.
+
+The first thing to notice is that experienced transitions are not immediately used for learning, but simply stored in the ERM to be sampled later. Due to the huge size of the ERM, it is even likely that the recently experienced transition will only be used for learning hundreds or thousands of steps later. Meanwhile, very old transitions, generated using an initially bad policy, can be used to train the network for a very long time.
+
+The second thing is that the target network is not updated very often ($T_\text{target}=10000$), so the target values are going to be wrong a long time. More recent algorithms use a a smoothed version of the current weights, as proposed in @Lillicrap2015:
+
+$$
+    \theta' = \tau \, \theta + (1-\tau) \, \theta'
+$$ 
+
+If this rule is applied after each step with a very small rate $\tau$, the target network will slowly track the learned network, but never be the same.
+
+These two facts make DQN extremely slow to learn: millions of transitions are needed to obtain a satisfying policy. This is called the **sample complexity**, i.e. the number of transitions needed to obtain a satisfying performance. DQN finds very good policies, but at the cost of a very long training time.
+
+DQN was initially applied to solve various Atari 2600 games. Video frames were used as observations and the set of possible discrete actions was limited (left/right/up/down, shoot, etc). The CNN used is depicted on @fig:dqn. It has two convolutional layers, no max-pooling, 2 fully-connected layer and one output layer representing the Q-value of all possible actions in the games.
+
+![Architecture of the CNN used in the original DQN paper. Taken from @Mnih2015.](img/dqn.png){#fig:dqn}
+
+The problem of partial observability is solved by concatenating the four last video frames into a single tensor used as input to the CNN. The convolutional layers become able through learning to extract the speed information from it. Some of the Atari games (Pinball, Breakout) were solved with a performance well above human level, especially when they are mostly reactive. Games necessitating more long-term planning (Montezuma' Revenge) were still poorly learned, though.
+
+Beside being able to learn using delayed and sparse rewards in highly dimensional input spaces, the true *tour de force* of DQN is that it was able to learn the 49 Atari games in a row, using the same architecture and hyperparameters, and without resetting the weights between two games: knowledge acquired in one game could be reused for the next game. This created great excitement, as the ability to reuse knowledge over different tasks is a fundamental property of true intelligence.
 
 ## Double DQN
 
-<https://jaromiru.com/2016/11/07/lets-make-a-dqn-double-learning-and-prioritized-experience-replay/>
+In DQN, the experience replay memory and the target network were decisive in allowing the CNN to learn the tasks through RL. Their drawback is that they drastically slow down learning and increase the sample complexity. Additionally, DQN has stability issues: the same network may not converge the same way in different runs. One first improvement on DQN was proposed by @vanHasselt2015 and called **double DQN**.
 
-@vanHasselt2015
+The idea is that the target value $y = r(s, a, s') + \gamma \, \max_{a'} Q_{\theta'}(s', a')$ is frequently over-estimating the true expected return because of the max operator. Especially at the beginning of learning when Q-values are far from being correct, if an action is over-estimated ($Q_{\theta'}(s', a)$ is higher that its true value) and selected by the target network as the next greedy action, the learned Q-value $Q_{\theta}(s, a)$ will also become over-estimated, what will propagate to all previous actions on the long-term. @vanHasselt2010 showed that this over-estimation is inevitable in regular Q-learning and proposed **double learning**.
+
+The idea is to train independently two value networks: one will be used to find the greedy action (the action with the maximal Q-value), the other to estimate the Q-value itself. Even if the first network choose an over-estimated action as the greedy action, the other might provide a less over-estimated value for it, solving the problem.
+
+Applying double learning to DQN is particularly straightforward: there are already two value networks, the trained network and the target network. Instead of using the target network to both select the greedy action in the next state and estimate its Q-value, here the trained network $\theta$ is used to select the greedy action $a^* = \text{argmax}_{a'} Q_\theta (s', a')$ while the target network only estimates its Q-value. The target value becomes:
+
+$$
+    y = r(s, a, s') + \gamma \, Q_{\theta'}(s', \text{argmax}_{a'} Q_\theta (s', a')) 
+$$
+
+This induces only a small modification of the DQN algorithm and significantly improves its performance and stability:
+
+---
+
+* Every $T_\text{train}$ steps:
+    * Sample a minibatch $\mathcal{D}_s$ randomly from $\mathcal{D}$.
+    * For each transition $(s, a, r, s')$ in the minibatch:
+        * Select the greedy action in the next state $a^* = \text{argmax}_{a'} Q_\theta (s', a')$ using the trained network.     
+        * Predict its Q-value $Q_{\theta'}(s', a^*)$ using the target network.
+        * Compute the target value $y = r + \gamma \, Q_{\theta'}(s', a*)$.
+
+---
+
 
 ## Prioritised replay
 
-@Schaul2015
+Another drawback of the original DQN is that the experience replay memory is sampled uniformly. Novel and interesting transitions are selected with the same probability as old well-predicted transitions, what slows down learning. The main idea of **prioritized replay** [@Schaul2015] is to order the transitions in the experience replay memory in decreasing order of their TD error:
+
+$$
+    \delta = r(s, a, s') + \gamma \, Q_{\theta'}(s', \text{argmax}_{a'} Q_\theta (s', a')) - Q_\theta(s, a)
+$$
+
+and sample with a higher probability those surprising transitions to form a minibatch. However, non-surprising transitions might become relevant again after enough training, as the $Q_\theta(s, a)$ change, so prioritized replay has a softmax function over the TD error to ensure "exploration" of memorized transitions. This data structure has of course a non-negligeable computational cost, but accelerates learning so much that it is worth it. See <https://jaromiru.com/2016/11/07/lets-make-a-dqn-double-learning-and-prioritized-experience-replay/> for a presentation of double DQN with prioritized replay.
 
 ## Duelling network
 
-@Wang2016
+The classical DQN architecture uses a single NN to predict directly the value of all possible actions $Q_\theta(s, a)$. The value of an action depends on two factors:
+
+* the value of the underlying state $s$: in some states, all actions are bad, you lose whatever you do.
+* the interest of that action: some actions are better than others for a given state.
+
+This leads to the definition of the **advantage** $A^\pi(s,a)$ of an action:
+
+$$
+    A^\pi(s, a) = Q^\pi(s, a) - V^\pi(s)
+$${#eq:advantagefunction}
+
+The advantage of the optimal action in $s$ is equal to zero: the expected return in $s$ is the same as the expected return when being in $s$ and taking $a$, as the optimal policy will choose $a$ in $s$ anyway. The advantage of all other actions is negative: they bring less reward than the optimal action (by definition), so they are less advantageous. Note that this is only true if your estimate of $V^\pi(s)$ is correct.
+
+@Baird1993 has shown that it is advantageous to decompose the Q-value of an action into the value of the state and the advantage of the action (*advantage updating*):
+
+
+$$
+    Q^\pi(s, a) = V^\pi(s) + A^\pi(s, a)
+$$
+
+If you already know that the value of a state is very low, you do not need to bother exploring and learning the value of all actions in that state, they will not bring much. Moreover, the advantage function has less variance than the Q-values, which is a very good property when using neural networks for function approximation. Let's suppose we have two states with values -10 and 10, and two actions with advantage 0 and -1 (it does not matter which one). The Q-values will vary between -11 (the worst action in the worst state) and 10 (the best action in the best state), while the advantage only varies between -1 and 0. It is going to be much easier for a neural network to learn the advantages than the Q-values: **reducing the variance** of the outputs is the main difficulty in value-based deep RL as Q-values are theoretically not bounded.
+
+
+![Duelling network architecture. Top: classical feedforward architecture to predict Q-values. Bottom: Duelling networks predicting state values and advantage functions to form the Q-values. Taken from @Wang2016.](img/duelling.png){#fig:duelling width=60%}
+
+@Wang2016 incorporated the idea of *advantage updating* in a double DQN architecture with prioritized replay (@fig:duelling). As in DQN, the last layer represents the Q-values of the possible actions and has to minimize the mse loss:
+
+$$
+    \mathcal{L}(\theta) = E([r(s, a, s') + \gamma \, Q_{\theta'}(s', \text{argmax}_{a'} Q_\theta (s', a')) - Q_\theta(s, a)]^2)
+$$ 
+
+The difference is that the previous fully-connected layer is forced to represent the value of the input state $V_\beta(s)$ and the advantage of each action $A_\alpha(s, a)$ separately. There are two sets of weights in the network, $\alpha$ and $\beta$, although they are shared in the early convolutional layers. The output layer performs simply a parameter-less summation of both sub-networks:
+
+$$
+    Q_{\alpha, \beta}(s, a) = V_\beta(s) + A_\alpha(s, a)
+$$
+
+The issue 
 
 ## GORILA
 
+@Nair2015
 
-
+A similar idea will be retained for the A3C algorithm (@sec:asynchronous-advantage-actor-critic-a3c).
 
 
 # Policy-based methods
@@ -521,17 +750,19 @@ $$
 
 @Sutton1999, @Silver2014
 
+<http://www.scholarpedia.org/article/Policy_gradient_methods>
+
 ## Actor-critic
 
 ### REINFORCE
 
 @Williams1992
 
-### Advantage Actor-Critic
+### Advantage Actor-Critic (A2C)
 
 Advantage actor-critic
 
-### A3C
+### Asynchronous Advantage Actor-critic (A3C)
 
 @Mnih2016
 
@@ -540,9 +771,7 @@ HogWild!: @Niu2011
 
 ## Policy gradient
 
-### Continuous action spaces
-
-### Stochastic Policy Gradient (SVG)
+### Stochastic Value Gradient (SVG)
 
 @Heess2015
 
@@ -560,28 +789,47 @@ HogWild!: @Niu2011
 
 ### Trust Region Policy Optimization (TRPO)
 
+Natural policy gradient @Kakade2001
+
 @Schulman2015a
 
 ### Generalized Advantage Estimation (GAE)
 
 @Schulman2015b
 
+### Proximal Policy Optimization (PPO)
+
+@Schulman2017
+
+### Cross-entropy Method (CEM)
+
+@Szita2006
+
 # Recurrent Attention Models
+
+**Work in progress**
 
 @Mnih2014, @Ba2014. @Stollenga2014
 
 # Model-based RL
 
+**Work in progress**
+
+@Watter2015, @Corneil2018, @Feinberg2018, @Weber2017
 
 # Deep RL for robotics
 
+**Work in progress**
+
 @Agrawal2016, @Dosovitskiy2016, @Gu2017, @Levine2016a, @Levine2016b, @Zhang2015
 
-# Code samples
+# RL libraries
 
 ## Environments
 
-* OpenAI Gym <https://gym.openai.com>: a toolkit for comparing RL algorithms.
+Standard RL environments are needed to better compare the performance of RL algoritms. Below is a list of the most popular ones.
+
+* OpenAI Gym <https://gym.openai.com>: a standard toolkit for comparing RL algorithms provided by the OpenAI fundation. It provides many environments, from the classical toy problems in RL (GridWorld, pole-balancing) to more advanced problems (Mujoco simulated robots, Atari games, Minecraft...). The main advantage is the simplicity of the interface: the user only needs to select which task he wants to solve, and a simple for loop allows to perform actions and observe their consequences:
 
 ```python
 import gym
@@ -593,44 +841,22 @@ for _ in range(1000):
     observation, reward, done, info = env.step(action)
 ```
 
-* OpenAi Universe <https://universe.openai.com>: a framework for controlling video games.
+* OpenAI Universe <https://universe.openai.com>: a similar framework from OpenAI, but to control realistic video games (GTA V, etc).
 
-* Darts environment <https://github.com/DartEnv/dart-env>: an extension of gym to use the Darts simulator instead of Mujoco. 
+* Darts environment <https://github.com/DartEnv/dart-env>: a fork of gym to use the Darts simulator instead of Mujoco. 
+
+* Roboschool <https://github.com/openai/roboschool>: another alternative to Mujoco for continuous robotic control, this time from openAI.
 
 * NIPS 2017 musculoskettal challenge <https://github.com/stanfordnmbl/osim-rl>
 
 ## Algorithms
 
-* `rl-code` <https://github.com/rlcode/reinforcement-learning>: many code samples for simple RL problems
+State-of-the-art algorithms in deep RL are already implemented and freely available on the internet. Below is a preliminary list of the most popular ones. Most of them rely on tensorflow or keras for training the neural networks and interact directly with gym-like interfaces.
 
-    * Gridworld 
+* `rl-code` <https://github.com/rlcode/reinforcement-learning>: many code samples for simple RL problems (GridWorld, Cartpole, Atari Games). The code samples are mostly for educational purpose (Policy Iteration, Value Iteration, Monte-Carlo, SARSA, Q-learning, REINFORCE, DQN, A2C, A3C).
 
-        * Policy Iteration
-        * Value Iteration
-        * Monte Carlo
-        * SARSA
-        * Q-Learning
-        * Deep SARSA
-        * REINFORCE
 
-    * CartPole - Applying deep reinforcement learning on basic Cartpole game.   
-
-        * Deep Q Network
-        * Double Deep Q Network
-        * Policy Gradient
-        * Actor Critic (A2C)
-        * Asynchronous Advantage Actor Critic (A3C)   
-
-    * Atari - Mastering Atari games with Deep Reinforcement Learning    
-
-        * Breakout - DQN, DDQN Dueling DDQN A3C
-        * Pong - Policy Gradient  
-
-    * OpenAI GYM - [WIP]    
-
-        * Mountain Car - DQN
-
-* `keras-rl` <https://github.com/matthiasplappert/keras-rl>: many RL algorithms implemented in keras.
+* `keras-rl` <https://github.com/matthiasplappert/keras-rl>: many deep RL algorithms implemented directly in keras.
 
     * Deep Q Learning (DQN)
     * Double DQN
@@ -640,7 +866,7 @@ for _ in range(1000):
     * Dueling network DQN (Dueling DQN)
     * Deep SARSA
 
-* `Coach` <https://github.com/NervanaSystems/coach> from Intel Nervana.
+* `Coach` <https://github.com/NervanaSystems/coach> from Intel Nervana also provides many state-of-the-art algorithms.
 
     * Deep Q Network (DQN
     * Double Deep Q Network (DDQN)
@@ -659,7 +885,7 @@ for _ in range(1000):
     * Clipped Proximal Policy Optimization | Distributed
     * Direct Future Prediction (DFP) | Distributed
 
-* `OpenAI Baselines` <https://github.com/openai/baselines>
+* `OpenAI Baselines` <https://github.com/openai/baselines> from OpenAI too.
 
     * A2C
     * ACER
@@ -670,6 +896,16 @@ for _ in range(1000):
     * PPO2 (Optimized for GPU)
     * TRPO
 
-* DDPG in tensorflow <http://pemami4911.github.io/blog/2016/08/21/ddpg-rl.html>
+# Thanks {-}
+
+Thanks to all the students who helped me dive into that exciting research field, in particular: Winfried Lötzsch, Johannes Jung, Frank Witscher, Danny Hofmann, Oliver Lange, Vinayakumar Murganoor.
+
+# Notes {-}
+
+This document is meant to stay *work in progress* forever, as new algorithms will be added as they are published. Feel free to comment, correct, suggest, pull request by writing to <julien.vitay@informatik.tu-chemnitz.de>.
+
+For some reason, this document is better printed using chrome. The style is adapted from the Github-Markdown CSS template <https://www.npmjs.com/package/github-markdown-css>.
+
+Some figures are taken from the original publication ("Taken from" or "Source" in the caption). Their copyright stays to the respective authors, naturally. The rest is my own work and can be reproduced under any free license. 
 
 # References
