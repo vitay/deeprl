@@ -87,7 +87,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </header>
 
 <article>
-<p class="abstract">The goal of this document is to keep track the state-of-the-art in deep reinforcement learning. It starts with basics in reinforcement learning and deep learning to introduce the notations. It tries to cover different classes of deep RL models, from value-based to policy-based, model-free or model-based, hierarchical, etc, with a focus on the application of deep RL to robotics.</p>
+<p class="abstract">The goal of this document is to keep track the state-of-the-art in deep reinforcement learning. It starts with basics in reinforcement learning and deep learning to introduce the notations. It tries to cover different classes of deep RL models, from value-based to policy-based, model-free or model-based, etc, with a focus on the application of deep RL to robotics.</p>
 
 <nav id="TOC" class ="toc">
 <h2><strong>Deep Reinforcement Learning</strong></h2>
@@ -117,7 +117,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="#sec:double-dqn"><span class="toc-section-number">2.3</span> Double DQN</a></li>
 <li><a href="#sec:prioritised-replay"><span class="toc-section-number">2.4</span> Prioritised replay</a></li>
 <li><a href="#sec:duelling-network"><span class="toc-section-number">2.5</span> Duelling network</a></li>
-<li><a href="#sec:gorila"><span class="toc-section-number">2.6</span> GORILA</a></li>
+<li><a href="#sec:distributed-dqn-gorila"><span class="toc-section-number">2.6</span> Distributed DQN (GORILA)</a></li>
+<li><a href="#sec:deep-recurrent-q-learning-drqn"><span class="toc-section-number">2.7</span> Deep Recurrent Q-learning (DRQN)</a></li>
+<li><a href="#sec:other-variants-of-dqn"><span class="toc-section-number">2.8</span> Other variants of DQN</a></li>
 </ul></li>
 <li><a href="#sec:policy-based-methods"><span class="toc-section-number">3</span> Policy-based methods</a><ul>
 <li><a href="#sec:actor-critic"><span class="toc-section-number">3.1</span> Actor-critic</a><ul>
@@ -134,6 +136,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="#sec:generalized-advantage-estimation-gae"><span class="toc-section-number">3.2.6</span> Generalized Advantage Estimation (GAE)</a></li>
 <li><a href="#sec:proximal-policy-optimization-ppo"><span class="toc-section-number">3.2.7</span> Proximal Policy Optimization (PPO)</a></li>
 <li><a href="#sec:cross-entropy-method-cem"><span class="toc-section-number">3.2.8</span> Cross-entropy Method (CEM)</a></li>
+<li><a href="#sec:comparison-between-value-based-and-policy-based-methods"><span class="toc-section-number">3.2.9</span> Comparison between value-based and policy-based methods</a></li>
 </ul></li>
 </ul></li>
 <li><a href="#sec:recurrent-attention-models"><span class="toc-section-number">4</span> Recurrent Attention Models</a></li>
@@ -152,12 +155,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Different classes of deep RL can be identified. This document focuses on the following ones:</p>
 <ol type="1">
 <li>Value-based algorithms (DQN…) used mostly for discrete problems like video games.</li>
-<li>Policy-gradient based algorithms (A3C, DDPG…) used for continuous control problems such as robotics.</li>
+<li>Policy-based algorithms (A3C, DDPG…) used for continuous control problems such as robotics.</li>
 <li>Recurrent attention models (RAM…) for partially observable problems.</li>
 <li>Model-based RL to reduce the sample complexity by incorporating a model of the environment.</li>
 <li>Application of deep RL to robotics</li>
 </ol>
+<p><strong>Additional resources</strong></p>
 <p>See <span class="citation" data-cites="Li2017">Li (<a href="#ref-Li2017">2017</a>)</span>, <span class="citation" data-cites="Arulkumaran2017">Arulkumaran, Deisenroth, Brundage, and Bharath (<a href="#ref-Arulkumaran2017">2017</a>)</span> and <span class="citation" data-cites="Mousavi2018">Mousavi, Schukat, and Howley (<a href="#ref-Mousavi2018">2018</a>)</span> for recent overviews of deep RL.</p>
+<p>This series of posts from Arthur Juliani <a href="https://medium.com/emergent-future/simple-reinforcement-learning-with-tensorflow-part-0-q-learning-with-tables-and-neural-networks-d195264329d0" class="uri">https://medium.com/emergent-future/simple-reinforcement-learning-with-tensorflow-part-0-q-learning-with-tables-and-neural-networks-d195264329d0</a> also provide a very good introduction to deep RL, associated to code samples using tensorflow.</p>
 <h1 id="sec:basics"><span class="header-section-number">1</span> Basics</h1>
 <p>Deep reinforcement learning (deep RL) is the successful integration of deep learning methods, classically used in supervised or unsupervised learning contexts, with reinforcement learning (RL), a well-studied adaptive control method used in problems with delayed and partial feedback <span class="citation" data-cites="Sutton1998">(Sutton and Barto, <a href="#ref-Sutton1998">1998</a>)</span>. This section starts with the basics of RL, mostly to set the notations, and provides a quick overview of deep neural networks.</p>
 <h2 id="sec:reinforcement-learning"><span class="header-section-number">1.1</span> Reinforcement learning</h2>
@@ -354,7 +359,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </figure>
 <p><strong>Actor-critic</strong> architectures have been proposed to solve this problem:</p>
 <ol type="1">
-<li>The <strong>critic</strong> learns to estimate the value of a state <span class="math inline">\(V^\pi(s_t)\)</span> and compute the RPE <span class="math inline">\(\delta_t = r_{t+1} + \gamma \, V^\pi(s_{t+1}) - V^\pi(s_t)\)</span>.</li>
+<li>The <strong>critic</strong> learns to estimate the value of a state <span class="math inline">\(V^\pi(s)\)</span> and compute the RPE <span class="math inline">\(\delta = r(s, a, s&#39;) + \gamma \, V^\pi(s&#39;) - V^\pi(s)\)</span>.</li>
 <li>The <strong>actor</strong> uses the RPE to update a <em>preference</em> for the executed action: action with positive RPEs (positively surprising) should be reinforced (i.e. taken again in the future), while actions with negative RPEs should be avoided in the future.</li>
 </ol>
 <p>The main interest of this architecture is that the actor can take any form (neural network, decision tree), as long as it able to use the RPE for learning. The simplest actor would be a softmax action selection mechanism, which maintains a <em>preference</em> <span class="math inline">\(p(s, a)\)</span> for each action and updates it using the TD error:</p>
@@ -687,21 +692,52 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </figure>
 <p><span class="citation" data-cites="Wang2016">Wang et al. (<a href="#ref-Wang2016">2016</a>)</span> incorporated the idea of <em>advantage updating</em> in a double DQN architecture with prioritized replay (Fig. <a href="#fig:duelling">17</a>). As in DQN, the last layer represents the Q-values of the possible actions and has to minimize the mse loss:</p>
 <p><span><span class="math display">\[
-    \mathcal{L}(\theta) = E([r(s, a, s&#39;) + \gamma \, Q_{\theta&#39;}(s&#39;, \text{argmax}_{a&#39;} Q_\theta (s&#39;, a&#39;)) - Q_\theta(s, a)]^2)
+    \mathcal{L}(\theta) = E([r(s, a, s&#39;) + \gamma \, Q_{\theta&#39;, \alpha&#39;, \beta&#39;}(s&#39;, \text{argmax}_{a&#39;} Q_{\theta, \alpha, \beta} (s&#39;, a&#39;)) - Q_{\theta, \alpha, \beta}(s, a)]^2)
 \qquad(57)\]</span></span></p>
-<p>The difference is that the previous fully-connected layer is forced to represent the value of the input state <span class="math inline">\(V_\beta(s)\)</span> and the advantage of each action <span class="math inline">\(A_\alpha(s, a)\)</span> separately. There are two sets of weights in the network, <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span>, although they are shared in the early convolutional layers. The output layer performs simply a parameter-less summation of both sub-networks:</p>
+<p>The difference is that the previous fully-connected layer is forced to represent the value of the input state <span class="math inline">\(V_{\theta, \beta}(s)\)</span> and the advantage of each action <span class="math inline">\(A_{\theta, \alpha}(s, a)\)</span> separately. There are two separate sets of weights in the network, <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span>, to predict these two values, sharing representations from the early convolutional layers through weights <span class="math inline">\(\theta\)</span>. The output layer performs simply a parameter-less summation of both sub-networks:</p>
 <p><span><span class="math display">\[
-    Q_{\alpha, \beta}(s, a) = V_\beta(s) + A_\alpha(s, a)
+    Q_{\theta, \alpha, \beta}(s, a) = V_{\theta, \beta}(s) + A_{\theta, \alpha}(s, a)
 \qquad(58)\]</span></span></p>
-<p>The issue</p>
-<h2 id="sec:gorila"><span class="header-section-number">2.6</span> GORILA</h2>
-<p><span class="citation" data-cites="Nair2015">Nair et al. (<a href="#ref-Nair2015">2015</a>)</span></p>
-<p>A similar idea will be retained for the A3C algorithm (Section <a href="#sec:asynchronous-advantage-actor-critic-a3c">3.1.3</a>).</p>
+<p>The issue with this formulation is that one could add a constant to <span class="math inline">\(V_{\theta, \beta}(s)\)</span> and substract it from <span class="math inline">\(A_{\theta, \alpha}(s, a)\)</span> while obtaining the same result. An easy way to constrain the summation is to normalize the advantages, so that the greedy action has an advantage of zero as expected:</p>
+<p><span><span class="math display">\[
+    Q_{\theta, \alpha, \beta}(s, a) = V_{\theta, \beta}(s) + (A_{\theta, \alpha}(s, a) - \max_a A_{\theta, \alpha}(s, a))
+\qquad(59)\]</span></span></p>
+<p>By doing this, the advantages are still free, but the state value will have to take the correct valu. <span class="citation" data-cites="Wang2016">Wang et al. (<a href="#ref-Wang2016">2016</a>)</span> found that it is actually better to replace the <span class="math inline">\(\max\)</span> operator by the mean of the advantages. In this case, the advantages only need to change as fast as their mean, instead of having to compensate quickly for any change in the greedy action as the policy improves:</p>
+<p><span><span class="math display">\[
+    Q_{\theta, \alpha, \beta}(s, a) = V_{\theta, \beta}(s) + (A_{\theta, \alpha}(s, a) - \frac{1}{|\mathcal{A}|} \sum_a A_{\theta, \alpha}(s, a))
+\qquad(60)\]</span></span></p>
+<p>Apart from this specific output layer, everything works as usual, especially the gradient of the mse loss function can travel backwards using backpropagation to update the weights <span class="math inline">\(\theta\)</span>, <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span>. The resulting architecture outperforms double DQN with prioritized replay on most Atari games, particularly games with repetitive actions.</p>
+<h2 id="sec:distributed-dqn-gorila"><span class="header-section-number">2.6</span> Distributed DQN (GORILA)</h2>
+<p>The main limitation of deep RL is the slowness of learning, which is mainly influenced by two factors:</p>
+<ul>
+<li>the <em>sample complexity</em>, i.e. the number of transitions needed to learn a satisfying policy.</li>
+<li>the online interaction with the environment.</li>
+</ul>
+<p>The second factor is particularly critical in real-world applications like robotics: physical robots evolve in real time, so the acquisition speed of transitions will be limited. Even in simulation (video games, robot emulators), the simulator might turn out to be much slower than training the underlying neural network. Google Deepmind proposed the GORILA (General Reinforcement Learning Architecture) framework to speed up the training of DQN networks using distributed actors and learners <span class="citation" data-cites="Nair2015">(Nair et al., <a href="#ref-Nair2015">2015</a>)</span>. The framework is quite general and the distribution granularity can change depending on the task.</p>
+<figure>
+<img src="img/gorila-global.png" alt="Figure 18: GORILA architecture. Multiple actors interact with multiple copies of the environment and store their experiences in a (distributed) experience replay memory. Multiple DQN learners sample from the ERM and compute the gradient of the loss function w.r.t the parameters \theta. A master network (parameter server, possibly distributed) gathers the gradients, apply weight updates and synchronizes regularly both the actors and the learners with new parameters. Taken from Nair et al. (2015)." id="fig:gorila" style="width:90.0%" /><figcaption>Figure 18: GORILA architecture. Multiple actors interact with multiple copies of the environment and store their experiences in a (distributed) experience replay memory. Multiple DQN learners sample from the ERM and compute the gradient of the loss function w.r.t the parameters <span class="math inline">\(\theta\)</span>. A master network (parameter server, possibly distributed) gathers the gradients, apply weight updates and synchronizes regularly both the actors and the learners with new parameters. Taken from <span class="citation" data-cites="Nair2015">Nair et al. (<a href="#ref-Nair2015">2015</a>)</span>.</figcaption>
+</figure>
+<p>In GORILA, multiple actors interact with the environment to gather transitions. Each actor has an independent copy of the environment, so they can gather <span class="math inline">\(N\)</span> times more samples per second if there are <span class="math inline">\(N\)</span> actors. This is possible in simulation (starting <span class="math inline">\(N\)</span> instances of the same game in parallel) but much more complicated for real-world systems (but see <span class="citation" data-cites="Gu2017">Gu, Holly, Lillicrap, and Levine (<a href="#ref-Gu2017">2017</a>)</span> for an example where multiple identical robots are used to gather experiences in parallel).</p>
+<p>The experienced transitions are sent as in DQN to an experience replay memory, which may be distributed or centralized. Multiple DQN learners will then sample a minibatch from the ERM and compute the DQN loss on this minibatch (also using a target network). All learners start with the same parameters <span class="math inline">\(\theta\)</span> and simply compute the gradient of the loss function <span class="math inline">\(\frac{\partial \mathcal{L}(\theta)}{\partial \theta}\)</span> on the minibatch. The gradients are sent to a parameter server (a master network) which uses the gradients to apply the optimizer (e.g. SGD) and find new values for the parameters <span class="math inline">\(\theta\)</span>. Weight updates can also be applied in a distributed manner. This distributed method to train a network using multiple learners is now quite standard in deep learning: on multiple GPU systems, each GPU has a copy of the network and computes gradients on a different minibatch, while a master network integrates these gradients and updates the slaves.</p>
+<p>The parameter server regularly updates the actors (to gather samples with the new policy) and the learners (to compute gradients w.r.t the new parameter values). Such a distributed system can greatly accelerate learning, but it can be quite tricky to find the optimum number of actors and learners (too many learners might degrade the stability) or their update rate (if the learners are not updated frequently enough, the gradients might not be correct). A similar idea is at the core of the A3C algorithm (Section <a href="#sec:asynchronous-advantage-actor-critic-a3c">3.1.3</a>).</p>
+<h2 id="sec:deep-recurrent-q-learning-drqn"><span class="header-section-number">2.7</span> Deep Recurrent Q-learning (DRQN)</h2>
+<p>The Atari games used as a benchmark for value-based methods are <strong>partially observable MDPs</strong> (POMDP), i.e. a single frame does not contain enough information to predict what is going to happen next (e.g. the speed and direction of the ball on the screen is not known). In DQN, partial observability is solved by stacking four consecutive frames and using the resulting tensor as an input to the CNN. if this approach worked well for most Atari games, it has several limitations (as explained in <a href="https://medium.com/emergent-future/simple-reinforcement-learning-with-tensorflow-part-6-partial-observability-and-deep-recurrent-q-68463e9aeefc" class="uri">https://medium.com/emergent-future/simple-reinforcement-learning-with-tensorflow-part-6-partial-observability-and-deep-recurrent-q-68463e9aeefc</a>):</p>
+<ol type="1">
+<li>It increases the size of the experience replay memory, as four video frames have to be stored for each transition.</li>
+<li>It solves only short-term dependencies (instantaneous speeds). If the partial observability has long-term dependencies (an object has been hidden a long time ago but now becomes useful), the input to the neural network will not have that information. This is the main explanation why the original DQN performed so poorly on games necessitating long-term planning like Montezuma’s revenge.</li>
+</ol>
+<p>Building on previous ideas from the Schmidhuber’s group <span class="citation" data-cites="Bakker2001 Wierstra2007">(Bakker, <a href="#ref-Bakker2001">2001</a>; Wierstra, Foerster, Peters, and Schmidhuber, <a href="#ref-Wierstra2007">2007</a>)</span>, <span class="citation" data-cites="Hausknecht2015">Hausknecht and Stone (<a href="#ref-Hausknecht2015">2015</a>)</span> replaced one of the fully-connected layers of the DQN network by a LSTM layer (see Section <a href="#sec:recurrent-neural-networks">1.2.3</a>) while using single frames as inputs. The resulting <strong>deep recurrent q-learning</strong> (DRQN) network became able to solve POMDPs thanks to the astonishing learning abilities of LSTMs: the LSTM layer learn to remember which part of the sensory information will be useful to take decisions later.</p>
+<p>However, LSTMs are not a magical solution either. They are trained using <em>truncated BPTT</em>, i.e. on a limited history of states. Long-term dependencies exceeding the truncation horizon cannot be learned. Additionally, all states in that horizon (i.e. all frames) have to be stored in the ERM to train the network, increasing drastically its size. Despite these limitations, DRQN is a much more elegant solution to the partial observability problem, letting the network decide which horizon it needs to solve long-term dependencies.</p>
+<h2 id="sec:other-variants-of-dqn"><span class="header-section-number">2.8</span> Other variants of DQN</h2>
+<p>Double duelling DQN with prioritized replay is currently the state-of-the-art method for value-based deep RL. Several minor to significant improvements have been proposed since the corresponding milestone papers. This section provides some short explanations and links to the original papers (to be organized and extended).</p>
+<p><strong>Average-DQN</strong> proposes to increase the stability and performance of DQN by replacing the single target network (a copy of the trained network) by an average of the last parameter values, in other words an average of many past target networks <span class="citation" data-cites="Anschel2016">(Anschel, Baram, and Shimkin, <a href="#ref-Anschel2016">2016</a>)</span>.</p>
+<p><span class="citation" data-cites="He2016">He, Liu, Schwing, and Peng (<a href="#ref-He2016">2016</a>)</span> proposed <strong>fast reward propagation</strong> thourgh optimality tightening to speedup learning: when rewards are sparse, they require a lot of episodes to propagate these rare rewards to all actions leading to it. Their method combines immediate rewards (single steps) with actual returns (as in Monte-Carlo) via a constrained optimization approach.</p>
+<p>All RL methods based on the Bellman equations use the expectation operator to average returns and compute values. <span class="citation" data-cites="Bellemare2017">Bellemare, Dabney, and Munos (<a href="#ref-Bellemare2017">2017</a>)</span> propose to learn instead the <strong>value distribution</strong> through a modification of the Bellman equation. They show that learning the distribution of rewards rather than their mean leads to performance improvements. See <a href="https://deepmind.com/blog/going-beyond-average-reinforcement-learning/" class="uri">https://deepmind.com/blog/going-beyond-average-reinforcement-learning/</a> for more explanations.</p>
 <h1 id="sec:policy-based-methods"><span class="header-section-number">3</span> Policy-based methods</h1>
 <p><em>Policy gradient</em> methods directly learn to produce the policy (stochastic or not). The goal of the neural network is to maximize an objective function <span class="math inline">\(J(\theta) = {E}_{\pi_\theta}(R_t)\)</span>. The   provides a useful estimate of the gradient that should be given to the neural network:</p>
 <p><span><span class="math display">\[
 \nabla_\theta J(\theta) = {E}_{\pi_\theta}[\nabla_\theta \log \pi_\theta(s, a) Q^{\pi_\theta}(s, a)]
-\qquad(59)\]</span></span></p>
+\qquad(61)\]</span></span></p>
 <p><span class="citation" data-cites="Sutton1999">Sutton, McAllester, Singh, and Mansour (<a href="#ref-Sutton1999">1999</a>)</span>, <span class="citation" data-cites="Silver2014">Silver et al. (<a href="#ref-Silver2014">2014</a>)</span></p>
 <p><a href="http://www.scholarpedia.org/article/Policy_gradient_methods" class="uri">http://www.scholarpedia.org/article/Policy_gradient_methods</a></p>
 <h2 id="sec:actor-critic"><span class="header-section-number">3.1</span> Actor-critic</h2>
@@ -730,6 +766,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p><span class="citation" data-cites="Schulman2017">Schulman, Wolski, Dhariwal, Radford, and Klimov (<a href="#ref-Schulman2017">2017</a>)</span></p>
 <h3 id="sec:cross-entropy-method-cem"><span class="header-section-number">3.2.8</span> Cross-entropy Method (CEM)</h3>
 <p><span class="citation" data-cites="Szita2006">Szita and Lörincz (<a href="#ref-Szita2006">2006</a>)</span></p>
+<h3 id="sec:comparison-between-value-based-and-policy-based-methods"><span class="header-section-number">3.2.9</span> Comparison between value-based and policy-based methods</h3>
+<p><a href="https://flyyufelix.github.io/2017/10/12/dqn-vs-pg.html" class="uri">https://flyyufelix.github.io/2017/10/12/dqn-vs-pg.html</a></p>
 <h1 id="sec:recurrent-attention-models"><span class="header-section-number">4</span> Recurrent Attention Models</h1>
 <p><strong>Work in progress</strong></p>
 <p><span class="citation" data-cites="Mnih2014">Mnih, Heess, Graves, and Kavukcuoglu (<a href="#ref-Mnih2014">2014</a>)</span>, <span class="citation" data-cites="Ba2014">Ba, Mnih, and Kavukcuoglu (<a href="#ref-Ba2014">2014</a>)</span>. <span class="citation" data-cites="Stollenga2014">Stollenga, Masci, Gomez, and Schmidhuber (<a href="#ref-Stollenga2014">2014</a>)</span></p>
@@ -738,7 +776,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p><span class="citation" data-cites="Watter2015">Watter, Springenberg, Boedecker, and Riedmiller (<a href="#ref-Watter2015">2015</a>)</span>, <span class="citation" data-cites="Corneil2018">Corneil, Gerstner, and Brea (<a href="#ref-Corneil2018">2018</a>)</span>, <span class="citation" data-cites="Feinberg2018">Feinberg et al. (<a href="#ref-Feinberg2018">2018</a>)</span>, <span class="citation" data-cites="Weber2017">Weber et al. (<a href="#ref-Weber2017">2017</a>)</span></p>
 <h1 id="sec:deep-rl-for-robotics"><span class="header-section-number">6</span> Deep RL for robotics</h1>
 <p><strong>Work in progress</strong></p>
-<p><span class="citation" data-cites="Agrawal2016">Agrawal, Nair, Abbeel, Malik, and Levine (<a href="#ref-Agrawal2016">2016</a>)</span>, <span class="citation" data-cites="Dosovitskiy2016">Dosovitskiy and Koltun (<a href="#ref-Dosovitskiy2016">2016</a>)</span>, <span class="citation" data-cites="Gu2017">Gu, Holly, Lillicrap, and Levine (<a href="#ref-Gu2017">2017</a>)</span>, <span class="citation" data-cites="Levine2016a">Levine et al. (<a href="#ref-Levine2016a">2016</a><a href="#ref-Levine2016a">a</a>)</span>, <span class="citation" data-cites="Levine2016b">Levine et al. (<a href="#ref-Levine2016b">2016</a><a href="#ref-Levine2016b">b</a>)</span>, <span class="citation" data-cites="Zhang2015">Zhang, Leitner, Milford, Upcroft, and Corke (<a href="#ref-Zhang2015">2015</a>)</span></p>
+<p><span class="citation" data-cites="Agrawal2016">Agrawal, Nair, Abbeel, Malik, and Levine (<a href="#ref-Agrawal2016">2016</a>)</span>, <span class="citation" data-cites="Dosovitskiy2016">Dosovitskiy and Koltun (<a href="#ref-Dosovitskiy2016">2016</a>)</span>, <span class="citation" data-cites="Gu2017">Gu et al. (<a href="#ref-Gu2017">2017</a>)</span>, <span class="citation" data-cites="Levine2016a">Levine et al. (<a href="#ref-Levine2016a">2016</a><a href="#ref-Levine2016a">a</a>)</span>, <span class="citation" data-cites="Levine2016b">Levine et al. (<a href="#ref-Levine2016b">2016</a><a href="#ref-Levine2016b">b</a>)</span>, <span class="citation" data-cites="Zhang2015">Zhang, Leitner, Milford, Upcroft, and Corke (<a href="#ref-Zhang2015">2015</a>)</span></p>
 <h1 id="sec:rl-libraries"><span class="header-section-number">7</span> RL libraries</h1>
 <h2 id="sec:environments"><span class="header-section-number">7.1</span> Environments</h2>
 <p>Standard RL environments are needed to better compare the performance of RL algoritms. Below is a list of the most popular ones.</p>
@@ -814,6 +852,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="ref-Agrawal2016">
 <p>Agrawal, P., Nair, A., Abbeel, P., Malik, J., and Levine, S. (2016). Learning to Poke by Poking: Experiential Learning of Intuitive Physics. Retrieved from <a href="http://arxiv.org/abs/1606.07419" class="uri">http://arxiv.org/abs/1606.07419</a></p>
 </div>
+<div id="ref-Anschel2016">
+<p>Anschel, O., Baram, N., and Shimkin, N. (2016). Averaged-DQN: Variance Reduction and Stabilization for Deep Reinforcement Learning. Retrieved from <a href="http://arxiv.org/abs/1611.01929" class="uri">http://arxiv.org/abs/1611.01929</a></p>
+</div>
 <div id="ref-Arulkumaran2017">
 <p>Arulkumaran, K., Deisenroth, M. P., Brundage, M., and Bharath, A. A. (2017). A Brief Survey of Deep Reinforcement Learning. Retrieved from <a href="https://arxiv.org/pdf/1708.05866.pdf" class="uri">https://arxiv.org/pdf/1708.05866.pdf</a></p>
 </div>
@@ -822,6 +863,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="ref-Baird1993">
 <p>Baird, L. (1993). <em>Advantage updating</em>. Technical report WL- TR-93-1146, Wright-Patterson Air Force Base.</p>
+</div>
+<div id="ref-Bakker2001">
+<p>Bakker, B. (2001). Reinforcement Learning with Long Short-Term Memory. In <em>Adv. Neural inf. Process. Syst. 14 (nips 2001)</em> (pp. 1475–1482). Retrieved from <a href="https://papers.nips.cc/paper/1953-reinforcement-learning-with-long-short-term-memory" class="uri">https://papers.nips.cc/paper/1953-reinforcement-learning-with-long-short-term-memory</a></p>
+</div>
+<div id="ref-Bellemare2017">
+<p>Bellemare, M. G., Dabney, W., and Munos, R. (2017). A Distributional Perspective on Reinforcement Learning. Retrieved from <a href="http://arxiv.org/abs/1707.06887" class="uri">http://arxiv.org/abs/1707.06887</a></p>
 </div>
 <div id="ref-Cho2014">
 <p>Cho, K., Merrienboer, B. van, Gulcehre, C., Bahdanau, D., Bougares, F., Schwenk, H., and Bengio, Y. (2014). Learning Phrase Representations using RNN Encoder-Decoder for Statistical Machine Translation. Retrieved from <a href="http://arxiv.org/abs/1406.1078" class="uri">http://arxiv.org/abs/1406.1078</a></p>
@@ -849,6 +896,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="ref-vanHasselt2015">
 <p>Hasselt, H. van, Guez, A., and Silver, D. (2015). Deep Reinforcement Learning with Double Q-learning. Retrieved from <a href="http://arxiv.org/abs/1509.06461" class="uri">http://arxiv.org/abs/1509.06461</a></p>
+</div>
+<div id="ref-Hausknecht2015">
+<p>Hausknecht, M., and Stone, P. (2015). Deep Recurrent Q-Learning for Partially Observable MDPs. Retrieved from <a href="http://arxiv.org/abs/1507.06527" class="uri">http://arxiv.org/abs/1507.06527</a></p>
+</div>
+<div id="ref-He2016">
+<p>He, F. S., Liu, Y., Schwing, A. G., and Peng, J. (2016). Learning to Play in a Day: Faster Deep Reinforcement Learning by Optimality Tightening. Retrieved from <a href="http://arxiv.org/abs/1611.01606" class="uri">http://arxiv.org/abs/1611.01606</a></p>
 </div>
 <div id="ref-He2015">
 <p>He, K., Zhang, X., Ren, S., and Sun, J. (2015). Deep Residual Learning for Image Recognition. Retrieved from <a href="http://arxiv.org/abs/1512.03385" class="uri">http://arxiv.org/abs/1512.03385</a></p>
@@ -957,6 +1010,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="ref-Weber2017">
 <p>Weber, T., Racanière, S., Reichert, D. P., Buesing, L., Guez, A., Rezende, D. J., … Wierstra, D. (2017). Imagination-Augmented Agents for Deep Reinforcement Learning. Retrieved from <a href="http://arxiv.org/abs/1707.06203" class="uri">http://arxiv.org/abs/1707.06203</a></p>
+</div>
+<div id="ref-Wierstra2007">
+<p>Wierstra, D., Foerster, A., Peters, J., and Schmidhuber, J. (2007). Solving Deep Memory POMDPs with Recurrent Policy Gradients. In (pp. 697–706). Springer, Berlin, Heidelberg. <a href="https://doi.org/10.1007/978-3-540-74690-4_71" class="uri">https://doi.org/10.1007/978-3-540-74690-4_71</a></p>
 </div>
 <div id="ref-Williams1992">
 <p>Williams, R. J. (1992). Simple statistical gradient-following algorithms for connectionist reinforcement learning. <em>Mach. Learn.</em>, <em>8</em>, 229–256.</p>
