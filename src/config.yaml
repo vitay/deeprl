@@ -1,0 +1,27 @@
+title: Deep Reinforcement Learning
+author: Julien Vitay
+email: julien.vitay@informatik.tu-chemnitz.de
+
+files:
+    - 0-Introduction.md
+    - 1.1-BasicRL.md
+    - 1.2-DeepLearning.md
+    - 2-Valuebased.md
+    - 3.1-PolicyGradient.md
+    - 3.2-ActorCritic.md
+    - 3.3-DPG.md
+    - 3.4-NaturalGradient.md
+    # - 4-RAM.md
+    # - 5-ModelBased.md
+    # - 6-Robotics.md
+    - 7-Practice.md
+    - 8-References.md
+
+bibliography: 
+    - /home/vitay/Articles/biblio/ReinforcementLearning.bib
+    - /home/vitay/Articles/biblio/DeepLearning.bib
+
+mathjax: /usr/share/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML
+
+css: assets/github.css
+

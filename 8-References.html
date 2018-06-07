@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <meta name="author" content="Julien Vitay">
+  <title>Deep Reinforcement Learning</title>
+
+
+  <link rel="stylesheet" href="assets/syntax.css">
+  <link rel="stylesheet" href="assets/github.css">
+  <script src="/usr/share/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+
+</head>
+
+<body class="markdown-body">
+
+<header>
+  <h1 class="title"><strong>Deep Reinforcement Learning</strong></h1>
+  <p class="author">Julien Vitay - <a href="mailto:julien.vitay@informatik.tu-chemnitz.de">julien.vitay@informatik.tu-chemnitz.de</a></p>
+</header>
+
+
+<article>
+
+<nav id="TOC" class ="toc">
+  <h2><strong>Deep Reinforcement Learning</strong></h2>
+  <p class="author">Julien Vitay</p>
+
+<ul>
+<li><a href="./0-Introduction.html#sec:introduction"><span class="toc-section-number">1</span> Introduction</a></li>
+<li><a href="./1.1-BasicRL.html#sec:basics"><span class="toc-section-number">2</span> Basics</a><ul>
+<li><a href="./1.1-BasicRL.html#sec:reinforcement-learning-and-markov-decision-process"><span class="toc-section-number">2.1</span> Reinforcement learning and Markov Decision Process</a><ul>
+<li><a href="./1.1-BasicRL.html#sec:policy-and-value-functions"><span class="toc-section-number">2.1.1</span> Policy and value functions</a></li>
+<li><a href="./1.1-BasicRL.html#sec:bellman-equations"><span class="toc-section-number">2.1.2</span> Bellman equations</a></li>
+<li><a href="./1.1-BasicRL.html#sec:dynamic-programming"><span class="toc-section-number">2.1.3</span> Dynamic programming</a></li>
+<li><a href="./1.1-BasicRL.html#sec:monte-carlo-sampling"><span class="toc-section-number">2.1.4</span> Monte-Carlo sampling</a></li>
+<li><a href="./1.1-BasicRL.html#sec:temporal-difference"><span class="toc-section-number">2.1.5</span> Temporal Difference</a></li>
+<li><a href="./1.1-BasicRL.html#sec:actor-critic-architectures"><span class="toc-section-number">2.1.6</span> Actor-critic architectures</a></li>
+<li><a href="./1.1-BasicRL.html#sec:function-approximation"><span class="toc-section-number">2.1.7</span> Function approximation</a></li>
+</ul></li>
+<li><a href="./1.2-DeepLearning.html#sec:deep-learning"><span class="toc-section-number">2.2</span> Deep learning</a><ul>
+<li><a href="./1.2-DeepLearning.html#sec:deep-neural-networks"><span class="toc-section-number">2.2.1</span> Deep neural networks</a></li>
+<li><a href="./1.2-DeepLearning.html#sec:convolutional-networks"><span class="toc-section-number">2.2.2</span> Convolutional networks</a></li>
+<li><a href="./1.2-DeepLearning.html#sec:recurrent-neural-networks"><span class="toc-section-number">2.2.3</span> Recurrent neural networks</a></li>
+</ul></li>
+</ul></li>
+<li><a href="./2-Valuebased.html#sec:value-based-methods"><span class="toc-section-number">3</span> Value-based methods</a><ul>
+<li><a href="./2-Valuebased.html#sec:limitations-of-deep-neural-networks-for-function-approximation"><span class="toc-section-number">3.1</span> Limitations of deep neural networks for function approximation</a></li>
+<li><a href="./2-Valuebased.html#sec:deep-q-network-dqn"><span class="toc-section-number">3.2</span> Deep Q-Network (DQN)</a></li>
+<li><a href="./2-Valuebased.html#sec:double-dqn"><span class="toc-section-number">3.3</span> Double DQN</a></li>
+<li><a href="./2-Valuebased.html#sec:prioritised-replay"><span class="toc-section-number">3.4</span> Prioritised replay</a></li>
+<li><a href="./2-Valuebased.html#sec:duelling-network"><span class="toc-section-number">3.5</span> Duelling network</a></li>
+<li><a href="./2-Valuebased.html#sec:distributed-dqn-gorila"><span class="toc-section-number">3.6</span> Distributed DQN (GORILA)</a></li>
+<li><a href="./2-Valuebased.html#sec:deep-recurrent-q-learning-drqn"><span class="toc-section-number">3.7</span> Deep Recurrent Q-learning (DRQN)</a></li>
+<li><a href="./2-Valuebased.html#sec:other-variants-of-dqn"><span class="toc-section-number">3.8</span> Other variants of DQN</a></li>
+</ul></li>
+<li><a href="./3.1-PolicyGradient.html#sec:policy-gradient-methods"><span class="toc-section-number">4</span> Policy Gradient methods</a><ul>
+<li><a href="./3.1-PolicyGradient.html#sec:reinforce"><span class="toc-section-number">4.1</span> REINFORCE</a><ul>
+<li><a href="./3.1-PolicyGradient.html#sec:estimating-the-policy-gradient"><span class="toc-section-number">4.1.1</span> Estimating the policy gradient</a></li>
+<li><a href="./3.1-PolicyGradient.html#sec:reducing-the-variance"><span class="toc-section-number">4.1.2</span> Reducing the variance</a></li>
+<li><a href="./3.1-PolicyGradient.html#sec:policy-gradient-theorem"><span class="toc-section-number">4.1.3</span> Policy Gradient theorem</a></li>
+</ul></li>
+<li><a href="./3.2-ActorCritic.html#sec:advantage-actor-critic-methods"><span class="toc-section-number">4.2</span> Advantage Actor-Critic methods</a><ul>
+<li><a href="./3.2-ActorCritic.html#sec:advantage-actor-critic-a2c"><span class="toc-section-number">4.2.1</span> Advantage Actor-Critic (A2C)</a></li>
+<li><a href="./3.2-ActorCritic.html#sec:asynchronous-advantage-actor-critic-a3c"><span class="toc-section-number">4.2.2</span> Asynchronous Advantage Actor-Critic (A3C)</a></li>
+<li><a href="./3.2-ActorCritic.html#sec:generalized-advantage-estimation-gae"><span class="toc-section-number">4.2.3</span> Generalized Advantage Estimation (GAE)</a></li>
+<li><a href="./3.2-ActorCritic.html#sec:stochastic-actor-critic-for-continuous-action-spaces"><span class="toc-section-number">4.2.4</span> Stochastic actor-critic for continuous action spaces</a></li>
+</ul></li>
+<li><a href="./3.3-DPG.html#sec:deterministic-policy-gradient-dpg"><span class="toc-section-number">4.3</span> Deterministic Policy Gradient (DPG)</a><ul>
+<li><a href="./3.3-DPG.html#sec:deterministic-policy-gradient-theorem"><span class="toc-section-number">4.3.1</span> Deterministic policy gradient theorem</a></li>
+<li><a href="./3.3-DPG.html#sec:deep-deterministic-policy-gradient-ddpg"><span class="toc-section-number">4.3.2</span> Deep Deterministic Policy Gradient (DDPG)</a></li>
+</ul></li>
+<li><a href="./3.4-NaturalGradient.html#sec:natural-gradients"><span class="toc-section-number">4.4</span> Natural Gradients</a><ul>
+<li><a href="./3.4-NaturalGradient.html#sec:natural-actor-critic-nac"><span class="toc-section-number">4.4.1</span> Natural Actor Critic (NAC)</a></li>
+<li><a href="./3.4-NaturalGradient.html#sec:trust-region-policy-optimization-trpo"><span class="toc-section-number">4.4.2</span> Trust Region Policy Optimization (TRPO)</a></li>
+<li><a href="./3.4-NaturalGradient.html#sec:proximal-policy-optimization-ppo"><span class="toc-section-number">4.4.3</span> Proximal Policy Optimization (PPO)</a></li>
+</ul></li>
+<li><a href="./3.4-NaturalGradient.html#sec:off-policy-actor-critic"><span class="toc-section-number">4.5</span> Off-policy Actor-Critic</a><ul>
+<li><a href="./3.4-NaturalGradient.html#sec:importance-sampling"><span class="toc-section-number">4.5.1</span> Importance sampling</a></li>
+<li><a href="./3.4-NaturalGradient.html#sec:linear-off-policy-actor-critic-offpac"><span class="toc-section-number">4.5.2</span> Linear Off-Policy Actor-Critic (OffPAC)</a></li>
+<li><a href="./3.4-NaturalGradient.html#sec:actor-critic-with-experience-replay-acer"><span class="toc-section-number">4.5.3</span> Actor-Critic with Experience Replay (ACER)</a></li>
+</ul></li>
+<li><a href="./3.4-NaturalGradient.html#sec:other-policy-gradient-methods"><span class="toc-section-number">4.6</span> Other policy gradient methods</a><ul>
+<li><a href="./3.4-NaturalGradient.html#sec:stochastic-value-gradient-svg"><span class="toc-section-number">4.6.1</span> Stochastic Value Gradient (SVG)</a></li>
+<li><a href="./3.4-NaturalGradient.html#sec:fictitious-self-play-fsp"><span class="toc-section-number">4.6.2</span> Fictitious Self-Play (FSP)</a></li>
+<li><a href="./3.4-NaturalGradient.html#sec:q-prop"><span class="toc-section-number">4.6.3</span> Q-Prop</a></li>
+<li><a href="./3.4-NaturalGradient.html#sec:normalized-advantage-function-naf"><span class="toc-section-number">4.6.4</span> Normalized Advantage Function (NAF)</a></li>
+</ul></li>
+<li><a href="./3.4-NaturalGradient.html#sec:comparison-between-value-based-and-policy-gradient-methods"><span class="toc-section-number">4.7</span> Comparison between value-based and policy gradient methods</a></li>
+<li><a href="./3.4-NaturalGradient.html#sec:gradient-free-policy-search"><span class="toc-section-number">4.8</span> Gradient-free policy search</a><ul>
+<li><a href="./3.4-NaturalGradient.html#sec:cross-entropy-method-cem"><span class="toc-section-number">4.8.1</span> Cross-entropy Method (CEM)</a></li>
+<li><a href="./3.4-NaturalGradient.html#sec:evolutionary-search-es"><span class="toc-section-number">4.8.2</span> Evolutionary Search (ES)</a></li>
+</ul></li>
+</ul></li>
+<li><a href="./7-Practice.html#sec:deep-rl-in-practice"><span class="toc-section-number">5</span> Deep RL in practice</a><ul>
+<li><a href="./7-Practice.html#sec:limitations"><span class="toc-section-number">5.1</span> Limitations</a></li>
+<li><a href="./7-Practice.html#sec:reward-shaping"><span class="toc-section-number">5.2</span> Reward shaping</a></li>
+<li><a href="./7-Practice.html#sec:simulation-environments"><span class="toc-section-number">5.3</span> Simulation environments</a></li>
+<li><a href="./7-Practice.html#sec:algorithm-implementations"><span class="toc-section-number">5.4</span> Algorithm implementations</a></li>
+</ul></li>
+<li><a href="./8-References.html#sec:references">References</a></li>
+</ul>
+
+
+</nav>
+
+
+
+<h1 id="sec:references" class="unnumbered">References</h1>
+<div id="refs" class="references">
+<div id="ref-Andrychowicz2017">
+<p>Andrychowicz, M., Wolski, F., Ray, A., Schneider, J., Fong, R., Welinder, P., … Zaremba, W. (2017). Hindsight Experience Replay. Retrieved from <a href="http://arxiv.org/abs/1707.01495" class="uri">http://arxiv.org/abs/1707.01495</a></p>
+</div>
+<div id="ref-Anschel2016">
+<p>Anschel, O., Baram, N., and Shimkin, N. (2016). Averaged-DQN: Variance Reduction and Stabilization for Deep Reinforcement Learning. Retrieved from <a href="http://arxiv.org/abs/1611.01929" class="uri">http://arxiv.org/abs/1611.01929</a></p>
+</div>
+<div id="ref-Arulkumaran2017">
+<p>Arulkumaran, K., Deisenroth, M. P., Brundage, M., and Bharath, A. A. (2017). A Brief Survey of Deep Reinforcement Learning. Retrieved from <a href="https://arxiv.org/pdf/1708.05866.pdf" class="uri">https://arxiv.org/pdf/1708.05866.pdf</a></p>
+</div>
+<div id="ref-Baird1993">
+<p>Baird, L. (1993). <em>Advantage updating</em>. Technical report WL- TR-93-1146, Wright-Patterson Air Force Base.</p>
+</div>
+<div id="ref-Bakker2001">
+<p>Bakker, B. (2001). Reinforcement Learning with Long Short-Term Memory. In <em>Adv. Neural inf. Process. Syst. 14 (nips 2001)</em> (pp. 1475–1482). Retrieved from <a href="https://papers.nips.cc/paper/1953-reinforcement-learning-with-long-short-term-memory" class="uri">https://papers.nips.cc/paper/1953-reinforcement-learning-with-long-short-term-memory</a></p>
+</div>
+<div id="ref-Bellemare2017">
+<p>Bellemare, M. G., Dabney, W., and Munos, R. (2017). A Distributional Perspective on Reinforcement Learning. Retrieved from <a href="http://arxiv.org/abs/1707.06887" class="uri">http://arxiv.org/abs/1707.06887</a></p>
+</div>
+<div id="ref-Cho2014">
+<p>Cho, K., Merrienboer, B. van, Gulcehre, C., Bahdanau, D., Bougares, F., Schwenk, H., and Bengio, Y. (2014). Learning Phrase Representations using RNN Encoder-Decoder for Statistical Machine Translation. Retrieved from <a href="http://arxiv.org/abs/1406.1078" class="uri">http://arxiv.org/abs/1406.1078</a></p>
+</div>
+<div id="ref-Chou2017">
+<p>Chou, P.-W., Maturana, D., and Scherer, S. (2017). Improving Stochastic Policy Gradients in Continuous Control with Deep Reinforcement Learning using the Beta Distribution. In <em>Int. Conf. Mach. Learn.</em> Retrieved from <a href="http://proceedings.mlr.press/v70/chou17a/chou17a.pdf" class="uri">http://proceedings.mlr.press/v70/chou17a/chou17a.pdf</a></p>
+</div>
+<div id="ref-Degris2012">
+<p>Degris, T., White, M., and Sutton, R. S. (2012). Linear Off-Policy Actor-Critic. In <em>Proc. 2012 int. Conf. Mach. Learn.</em> Retrieved from <a href="http://arxiv.org/abs/1205.4839" class="uri">http://arxiv.org/abs/1205.4839</a></p>
+</div>
+<div id="ref-Gers2001">
+<p>Gers, F. (2001). <em>Long Short-Term Memory in Recurrent Neural Networks</em> (PhD Thesis). Ecole Polytechnique Fédérale de Lausanne. Retrieved from <a href="http://www.felixgers.de/papers/phd.pdf" class="uri">http://www.felixgers.de/papers/phd.pdf</a></p>
+</div>
+<div id="ref-Goodfellow2016">
+<p>Goodfellow, I., Bengio, Y., and Courville, A. (2016). <em>Deep Learning</em>. MIT Press. Retrieved from <a href="http://www.deeplearningbook.org" class="uri">http://www.deeplearningbook.org</a></p>
+</div>
+<div id="ref-Gu2017">
+<p>Gu, S., Holly, E., Lillicrap, T., and Levine, S. (2017). Deep Reinforcement Learning for Robotic Manipulation with Asynchronous Off-Policy Updates. In <em>Proc. ICRA</em>. Retrieved from <a href="http://arxiv.org/abs/1610.00633" class="uri">http://arxiv.org/abs/1610.00633</a></p>
+</div>
+<div id="ref-Gu2016">
+<p>Gu, S., Lillicrap, T., Ghahramani, Z., Turner, R. E., and Levine, S. (2016a). Q-Prop: Sample-Efficient Policy Gradient with An Off-Policy Critic. Retrieved from <a href="http://arxiv.org/abs/1611.02247" class="uri">http://arxiv.org/abs/1611.02247</a></p>
+</div>
+<div id="ref-Gu2016b">
+<p>Gu, S., Lillicrap, T., Sutskever, I., and Levine, S. (2016b). Continuous Deep Q-Learning with Model-based Acceleration. Retrieved from <a href="http://arxiv.org/abs/1603.00748" class="uri">http://arxiv.org/abs/1603.00748</a></p>
+</div>
+<div id="ref-Hafner2011">
+<p>Hafner, R., and Riedmiller, M. (2011). Reinforcement learning in feedback control. <em>Mach. Learn.</em>, <em>84</em>(1-2), 137–169. <a href="https://doi.org/10.1007/s10994-011-5235-x" class="uri">https://doi.org/10.1007/s10994-011-5235-x</a></p>
+</div>
+<div id="ref-vanHasselt2010">
+<p>Hasselt, H. van. (2010). Double Q-learning. In <em>Proc. 23rd int. Conf. Neural inf. Process. Syst. - vol. 2</em> (pp. 2613–2621). Curran Associates Inc. Retrieved from <a href="https://dl.acm.org/citation.cfm?id=2997187" class="uri">https://dl.acm.org/citation.cfm?id=2997187</a></p>
+</div>
+<div id="ref-vanHasselt2015">
+<p>Hasselt, H. van, Guez, A., and Silver, D. (2015). Deep Reinforcement Learning with Double Q-learning. Retrieved from <a href="http://arxiv.org/abs/1509.06461" class="uri">http://arxiv.org/abs/1509.06461</a></p>
+</div>
+<div id="ref-Hausknecht2015">
+<p>Hausknecht, M., and Stone, P. (2015). Deep Recurrent Q-Learning for Partially Observable MDPs. Retrieved from <a href="http://arxiv.org/abs/1507.06527" class="uri">http://arxiv.org/abs/1507.06527</a></p>
+</div>
+<div id="ref-He2016">
+<p>He, F. S., Liu, Y., Schwing, A. G., and Peng, J. (2016). Learning to Play in a Day: Faster Deep Reinforcement Learning by Optimality Tightening. Retrieved from <a href="http://arxiv.org/abs/1611.01606" class="uri">http://arxiv.org/abs/1611.01606</a></p>
+</div>
+<div id="ref-He2015">
+<p>He, K., Zhang, X., Ren, S., and Sun, J. (2015). Deep Residual Learning for Image Recognition. Retrieved from <a href="http://arxiv.org/abs/1512.03385" class="uri">http://arxiv.org/abs/1512.03385</a></p>
+</div>
+<div id="ref-Heess2015">
+<p>Heess, N., Wayne, G., Silver, D., Lillicrap, T., Tassa, Y., and Erez, T. (2015). Learning continuous control policies by stochastic value gradients. MIT Press. Retrieved from <a href="http://dl.acm.org/citation.cfm?id=2969569" class="uri">http://dl.acm.org/citation.cfm?id=2969569</a></p>
+</div>
+<div id="ref-Heinrich2015">
+<p>Heinrich, J., Lanctot, M., and Silver, D. (2015, June). Fictitious Self-Play in Extensive-Form Games. Retrieved from <a href="http://proceedings.mlr.press/v37/heinrich15.html" class="uri">http://proceedings.mlr.press/v37/heinrich15.html</a></p>
+</div>
+<div id="ref-Heinrich2016">
+<p>Heinrich, J., and Silver, D. (2016). Deep Reinforcement Learning from Self-Play in Imperfect-Information Games. Retrieved from <a href="http://arxiv.org/abs/1603.01121" class="uri">http://arxiv.org/abs/1603.01121</a></p>
+</div>
+<div id="ref-Hessel2017">
+<p>Hessel, M., Modayil, J., Hasselt, H. van, Schaul, T., Ostrovski, G., Dabney, W., … Silver, D. (2017). Rainbow: Combining Improvements in Deep Reinforcement Learning. Retrieved from <a href="http://arxiv.org/abs/1710.02298" class="uri">http://arxiv.org/abs/1710.02298</a></p>
+</div>
+<div id="ref-Hochreiter1991">
+<p>Hochreiter, S. (1991). <em>Untersuchungen zu dynamischen neuronalen Netzen</em> (Diploma thesis). TU Munich. Retrieved from <a href="http://people.idsia.ch/{~}juergen/SeppHochreiter1991ThesisAdvisorSchmidhuber.pdf" class="uri">http://people.idsia.ch/{~}juergen/SeppHochreiter1991ThesisAdvisorSchmidhuber.pdf</a></p>
+</div>
+<div id="ref-Hochreiter1997">
+<p>Hochreiter, S., and Schmidhuber, J. (1997). Long Short-Term Memory. <em>Neural Comput.</em>, <em>9</em>(8), 1735–1780. <a href="https://doi.org/10.1162/neco.1997.9.8.1735" class="uri">https://doi.org/10.1162/neco.1997.9.8.1735</a></p>
+</div>
+<div id="ref-Ioffe2015">
+<p>Ioffe, S., and Szegedy, C. (2015). Batch Normalization: Accelerating Deep Network Training by Reducing Internal Covariate Shift. Retrieved from <a href="http://arxiv.org/abs/1502.03167" class="uri">http://arxiv.org/abs/1502.03167</a></p>
+</div>
+<div id="ref-Kakade2001">
+<p>Kakade, S. (2001). A Natural Policy Gradient. In <em>Adv. Neural inf. Process. Syst. 14</em>. Retrieved from <a href="https://papers.nips.cc/paper/2073-a-natural-policy-gradient.pdf" class="uri">https://papers.nips.cc/paper/2073-a-natural-policy-gradient.pdf</a></p>
+</div>
+<div id="ref-Kingma2013">
+<p>Kingma, D. P., and Welling, M. (2013). Auto-Encoding Variational Bayes. Retrieved from <a href="http://arxiv.org/abs/1312.6114" class="uri">http://arxiv.org/abs/1312.6114</a></p>
+</div>
+<div id="ref-Krizhevsky2012">
+<p>Krizhevsky, A., Sutskever, I., and Hinton, G. E. (2012). ImageNet Classification with Deep Convolutional Neural Networks. In <em>Adv. Neural inf. Process. Syst.</em> Retrieved from <a href="https://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf" class="uri">https://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf</a></p>
+</div>
+<div id="ref-Levine2013">
+<p>Levine, S., and Koltun, V. (2013). Guided Policy Search. In <em>Proc. Mach. Learn. Res.</em> (pp. 1–9). Retrieved from <a href="http://proceedings.mlr.press/v28/levine13.html" class="uri">http://proceedings.mlr.press/v28/levine13.html</a></p>
+</div>
+<div id="ref-Li2017">
+<p>Li, Y. (2017). Deep Reinforcement Learning: An Overview. Retrieved from <a href="http://arxiv.org/abs/1701.07274" class="uri">http://arxiv.org/abs/1701.07274</a></p>
+</div>
+<div id="ref-Lillicrap2015">
+<p>Lillicrap, T. P., Hunt, J. J., Pritzel, A., Heess, N., Erez, T., Tassa, Y., … Wierstra, D. (2015). Continuous control with deep reinforcement learning. Retrieved from <a href="http://arxiv.org/abs/1509.02971" class="uri">http://arxiv.org/abs/1509.02971</a></p>
+</div>
+<div id="ref-Loetzsch2017">
+<p>Lötzsch, W., Vitay, J., and Hamker, F. H. (2017). Training a deep policy gradient-based neural network with asynchronous learners on a simulated robotic problem. In M. Eibl and M. Gaedke (Eds.), <em>Inform. 2017. Gesellschaft für inform.</em> (pp. 2143–2154). Bonn: Gesellschaft für Informatik, Bonn. Retrieved from <a href="https://dl.gi.de/handle/20.500.12116/3986" class="uri">https://dl.gi.de/handle/20.500.12116/3986</a></p>
+</div>
+<div id="ref-Meuleau200">
+<p>Meuleau, N., Meuleau, N., Peshkin, L., Kaelbling, L. P., and Kim, K.-e. (2000). <em>Off-Policy Policy Search</em>. MIT AI Lab. Retrieved from <a href="http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.28.894" class="uri">http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.28.894</a></p>
+</div>
+<div id="ref-Mirowski2016">
+<p>Mirowski, P., Pascanu, R., Viola, F., Soyer, H., Ballard, A. J., Banino, A., … Hadsell, R. (2016). Learning to Navigate in Complex Environments. Retrieved from <a href="http://arxiv.org/abs/1611.03673" class="uri">http://arxiv.org/abs/1611.03673</a></p>
+</div>
+<div id="ref-Mnih2016">
+<p>Mnih, V., Badia, A. P., Mirza, M., Graves, A., Lillicrap, T. P., Harley, T., … Kavukcuoglu, K. (2016). Asynchronous Methods for Deep Reinforcement Learning. In <em>Proc. ICML</em>. Retrieved from <a href="http://arxiv.org/abs/1602.01783" class="uri">http://arxiv.org/abs/1602.01783</a></p>
+</div>
+<div id="ref-Mnih2013">
+<p>Mnih, V., Kavukcuoglu, K., Silver, D., Graves, A., Antonoglou, I., Wierstra, D., and Riedmiller, M. (2013). Playing Atari with Deep Reinforcement Learning. Retrieved from <a href="http://arxiv.org/abs/1312.5602" class="uri">http://arxiv.org/abs/1312.5602</a></p>
+</div>
+<div id="ref-Mnih2015">
+<p>Mnih, V., Kavukcuoglu, K., Silver, D., Rusu, A. A., Veness, J., Bellemare, M. G., … Hassabis, D. (2015). Human-level control through deep reinforcement learning. <em>Nature</em>, <em>518</em>(7540), 529–533. <a href="https://doi.org/10.1038/nature14236" class="uri">https://doi.org/10.1038/nature14236</a></p>
+</div>
+<div id="ref-Mousavi2018">
+<p>Mousavi, S. S., Schukat, M., and Howley, E. (2018). Deep Reinforcement Learning: An Overview. In (pp. 426–440). Springer, Cham. <a href="https://doi.org/10.1007/978-3-319-56991-8_32" class="uri">https://doi.org/10.1007/978-3-319-56991-8_32</a></p>
+</div>
+<div id="ref-Nair2015">
+<p>Nair, A., Srinivasan, P., Blackwell, S., Alcicek, C., Fearon, R., De Maria, A., … Silver, D. (2015). Massively Parallel Methods for Deep Reinforcement Learning. Retrieved from <a href="https://arxiv.org/pdf/1507.04296.pdf" class="uri">https://arxiv.org/pdf/1507.04296.pdf</a></p>
+</div>
+<div id="ref-Nielsen2015">
+<p>Nielsen, M. A. (2015). <em>Neural Networks and Deep Learning</em>. Determination Press. Retrieved from <a href="http://neuralnetworksanddeeplearning.com/" class="uri">http://neuralnetworksanddeeplearning.com/</a></p>
+</div>
+<div id="ref-Niu2011">
+<p>Niu, F., Recht, B., Re, C., and Wright, S. J. (2011). HOGWILD!: A Lock-Free Approach to Parallelizing Stochastic Gradient Descent. In <em>Proc. Adv. Neural inf. Process. Syst.</em> (p. 21). Retrieved from <a href="http://arxiv.org/abs/1106.5730" class="uri">http://arxiv.org/abs/1106.5730</a></p>
+</div>
+<div id="ref-Peters2008">
+<p>Peters, J., and Schaal, S. (2008). Reinforcement learning of motor skills with policy gradients. <em>Neural Networks</em>, <em>21</em>(4), 682–697. <a href="https://doi.org/10.1016/j.neunet.2008.02.003" class="uri">https://doi.org/10.1016/j.neunet.2008.02.003</a></p>
+</div>
+<div id="ref-Popov2017">
+<p>Popov, I., Heess, N., Lillicrap, T., Hafner, R., Barth-Maron, G., Vecerik, M., … Riedmiller, M. (2017). Data-efficient Deep Reinforcement Learning for Dexterous Manipulation. Retrieved from <a href="http://arxiv.org/abs/1704.03073" class="uri">http://arxiv.org/abs/1704.03073</a></p>
+</div>
+<div id="ref-Ruder2016">
+<p>Ruder, S. (2016). An overview of gradient descent optimization algorithms. Retrieved from <a href="http://arxiv.org/abs/1609.04747" class="uri">http://arxiv.org/abs/1609.04747</a></p>
+</div>
+<div id="ref-Salimans2017">
+<p>Salimans, T., Ho, J., Chen, X., Sidor, S., and Sutskever, I. (2017). Evolution Strategies as a Scalable Alternative to Reinforcement Learning. Retrieved from <a href="http://arxiv.org/abs/1703.03864" class="uri">http://arxiv.org/abs/1703.03864</a></p>
+</div>
+<div id="ref-Schaul2015">
+<p>Schaul, T., Quan, J., Antonoglou, I., and Silver, D. (2015). Prioritized Experience Replay. Retrieved from <a href="http://arxiv.org/abs/1511.05952" class="uri">http://arxiv.org/abs/1511.05952</a></p>
+</div>
+<div id="ref-Schulman2015a">
+<p>Schulman, J., Levine, S., Abbeel, P., Jordan, M., and Moritz, P. (2015a, June). Trust Region Policy Optimization. Retrieved from <a href="http://proceedings.mlr.press/v37/schulman15.html" class="uri">http://proceedings.mlr.press/v37/schulman15.html</a></p>
+</div>
+<div id="ref-Schulman2015b">
+<p>Schulman, J., Moritz, P., Levine, S., Jordan, M., and Abbeel, P. (2015b). High-Dimensional Continuous Control Using Generalized Advantage Estimation. Retrieved from <a href="http://arxiv.org/abs/1506.02438" class="uri">http://arxiv.org/abs/1506.02438</a></p>
+</div>
+<div id="ref-Schulman2017">
+<p>Schulman, J., Wolski, F., Dhariwal, P., Radford, A., and Klimov, O. (2017). Proximal Policy Optimization Algorithms. Retrieved from <a href="http://arxiv.org/abs/1707.06347" class="uri">http://arxiv.org/abs/1707.06347</a></p>
+</div>
+<div id="ref-Silver2014">
+<p>Silver, D., Lever, G., Heess, N., Degris, T., Wierstra, D., and Riedmiller, M. (2014). Deterministic Policy Gradient Algorithms. In E. P. Xing and T. Jebara (Eds.), <em>Proc. ICML</em> (Vol. 32, pp. 387–395). Bejing, China: PMLR. Retrieved from <a href="http://proceedings.mlr.press/v32/silver14.html" class="uri">http://proceedings.mlr.press/v32/silver14.html</a></p>
+</div>
+<div id="ref-Simonyan2014">
+<p>Simonyan, K., and Zisserman, A. (2014). Very Deep Convolutional Networks for Large-Scale Image Recognition. Retrieved from <a href="http://arxiv.org/abs/1409.1556" class="uri">http://arxiv.org/abs/1409.1556</a></p>
+</div>
+<div id="ref-Sutton1998">
+<p>Sutton, R. S., and Barto, A. G. (1998). <em>Reinforcement Learning: An introduction</em>. Cambridge, MA: MIT press.</p>
+</div>
+<div id="ref-Sutton2017">
+<p>Sutton, R. S., and Barto, A. G. (2017). <em>Reinforcement Learning: An Introduction</em> (2nd ed.). Cambridge, MA: MIT Press. Retrieved from <a href="http://incompleteideas.net/sutton/book/the-book-2nd.html" class="uri">http://incompleteideas.net/sutton/book/the-book-2nd.html</a></p>
+</div>
+<div id="ref-Sutton1999">
+<p>Sutton, R. S., McAllester, D. A., Singh, S. P., and Mansour, Y. (1999). Policy Gradient Methods for Reinforcement Learning with Function Approximation. In <em>Neural inf. Process. Syst. 12</em> (pp. 1057–1063).</p>
+</div>
+<div id="ref-Szita2006">
+<p>Szita, I., and Lörincz, A. (2006). Learning Tetris Using the Noisy Cross-Entropy Method. <em>Neural Comput.</em>, <em>18</em>(12), 2936–2941. <a href="https://doi.org/10.1162/neco.2006.18.12.2936" class="uri">https://doi.org/10.1162/neco.2006.18.12.2936</a></p>
+</div>
+<div id="ref-Tang2010">
+<p>Tang, J., and Abbeel, P. (2010). On a Connection between Importance Sampling and the Likelihood Ratio Policy Gradient. In <em>Adv. Neural inf. Process. Syst.</em> Retrieved from <a href="http://rll.berkeley.edu/{~}jietang/pubs/nips10{\_}Tang.pdf" class="uri">http://rll.berkeley.edu/{~}jietang/pubs/nips10{\_}Tang.pdf</a></p>
+</div>
+<div id="ref-Ornstein1930">
+<p>Uhlenbeck, G. E., and Ornstein, L. (1930). On the Theory of the Brownian Motion. <em>Phys. Rev.</em>, <em>36</em>. <a href="https://doi.org/10.1103/PhysRev.36.823" class="uri">https://doi.org/10.1103/PhysRev.36.823</a></p>
+</div>
+<div id="ref-Wang2017">
+<p>Wang, Z., Bapst, V., Heess, N., Mnih, V., Munos, R., Kavukcuoglu, K., and Freitas, N. de. (2017). Sample Efficient Actor-Critic with Experience Replay. Retrieved from <a href="http://arxiv.org/abs/1611.01224" class="uri">http://arxiv.org/abs/1611.01224</a></p>
+</div>
+<div id="ref-Wang2016">
+<p>Wang, Z., Schaul, T., Hessel, M., Hasselt, H. van, Lanctot, M., and Freitas, N. de. (2016). Dueling Network Architectures for Deep Reinforcement Learning. In <em>Proc. ICML</em>. New York, NY, USA. Retrieved from <a href="http://arxiv.org/abs/1511.06581" class="uri">http://arxiv.org/abs/1511.06581</a></p>
+</div>
+<div id="ref-Watkins1989">
+<p>Watkins, C. J. (1989). <em>Learning from delayed rewards</em> (PhD thesis). University of Cambridge, England.</p>
+</div>
+<div id="ref-Wierstra2007">
+<p>Wierstra, D., Foerster, A., Peters, J., and Schmidhuber, J. (2007). Solving Deep Memory POMDPs with Recurrent Policy Gradients. In (pp. 697–706). Springer, Berlin, Heidelberg. <a href="https://doi.org/10.1007/978-3-540-74690-4_71" class="uri">https://doi.org/10.1007/978-3-540-74690-4_71</a></p>
+</div>
+<div id="ref-Williams1992">
+<p>Williams, R. J. (1992). Simple statistical gradient-following algorithms for connectionist reinforcement learning. <em>Mach. Learn.</em>, <em>8</em>, 229–256.</p>
+</div>
+<div id="ref-Williams1991">
+<p>Williams, R. J., and Peng, J. (1991). Function optimization using connectionist reinforcement learning algorithms. <em>Conn. Sci.</em>, <em>3</em>(3), 241–268.</p>
+</div>
+</div>
+
+<br>
+<div class="arrows">
+<a href="7-Practice.html" class="previous">&laquo; Previous</a>
+<a href="#" class="next">Next &raquo;</a>
+</div>
+
+
+</article>
+</body>
+</html>

@@ -1,5 +1,6 @@
 /*https://www.npmjs.com/package/github-markdown-css*/
 
+/*Body*/
 .markdown-body {
   -ms-text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;
@@ -16,7 +17,12 @@
   /*overflow:hidden;*/
 }
 
+.markdown-body article {
+  height:100%;
+  /*overflow:auto;*/
+} 
 
+/*TOC*/
 .markdown-body .toc {
   position: fixed;
   max-height: 100%;
@@ -43,149 +49,25 @@
   padding-right: 0.5em;
 }
 
-.markdown-body article {
-  height:100%;
-  /*overflow:auto;*/
-} 
-
-.markdown-body .pl-c {
-  color: #969896;
+/*Navigational arrows*/
+.markdown-body .arrows {
+    text-align:center; 
+    margin-top:20px;
+}
+.markdown-body .previous {
+    display: inline-block;
+    padding: 8px 16px;
+    background-color: #f1f1f1;
+    color: black;
+}
+.markdown-body .next {
+    display: inline-block;
+    padding: 8px 16px;
+    background-color: #0366d6;
+    color: white;
 }
 
-.markdown-body .pl-c1,
-.markdown-body .pl-s .pl-v {
-  color: #0086b3;
-}
-
-.markdown-body .pl-e,
-.markdown-body .pl-en {
-  color: #795da3;
-}
-
-.markdown-body .pl-smi,
-.markdown-body .pl-s .pl-s1 {
-  color: #333;
-}
-
-.markdown-body .pl-ent {
-  color: #63a35c;
-}
-
-.markdown-body .pl-k {
-  color: #a71d5d;
-}
-
-.markdown-body .pl-s,
-.markdown-body .pl-pds,
-.markdown-body .pl-s .pl-pse .pl-s1,
-.markdown-body .pl-sr,
-.markdown-body .pl-sr .pl-cce,
-.markdown-body .pl-sr .pl-sre,
-.markdown-body .pl-sr .pl-sra {
-  color: #183691;
-}
-
-.markdown-body .pl-v,
-.markdown-body .pl-smw {
-  color: #ed6a43;
-}
-
-.markdown-body .pl-bu {
-  color: #b52a1d;
-}
-
-.markdown-body .pl-ii {
-  color: #f8f8f8;
-  background-color: #b52a1d;
-}
-
-.markdown-body .pl-c2 {
-  color: #f8f8f8;
-  background-color: #b52a1d;
-}
-
-.markdown-body .pl-c2::before {
-  content: "^M";
-}
-
-.markdown-body .pl-sr .pl-cce {
-  font-weight: bold;
-  color: #63a35c;
-}
-
-.markdown-body .pl-ml {
-  color: #693a17;
-}
-
-.markdown-body .pl-mh,
-.markdown-body .pl-mh .pl-en,
-.markdown-body .pl-ms {
-  font-weight: bold;
-  color: #1d3e81;
-}
-
-.markdown-body .pl-mq {
-  color: #008080;
-}
-
-.markdown-body .pl-mi {
-  font-style: italic;
-  color: #333;
-}
-
-.markdown-body .pl-mb {
-  font-weight: bold;
-  color: #333;
-}
-
-.markdown-body .pl-md {
-  color: #bd2c00;
-  background-color: #ffecec;
-}
-
-.markdown-body .pl-mi1 {
-  color: #55a532;
-  background-color: #eaffea;
-}
-
-.markdown-body .pl-mc {
-  color: #ef9700;
-  background-color: #ffe3b4;
-}
-
-.markdown-body .pl-mi2 {
-  color: #d8d8d8;
-  background-color: #808080;
-}
-
-.markdown-body .pl-mdr {
-  font-weight: bold;
-  color: #795da3;
-}
-
-.markdown-body .pl-mo {
-  color: #1d3e81;
-}
-
-.markdown-body .pl-ba {
-  color: #595e62;
-}
-
-.markdown-body .pl-sg {
-  color: #c0c0c0;
-}
-
-.markdown-body .pl-corl {
-  text-decoration: underline;
-  color: #183691;
-}
-
-.markdown-body .octicon {
-  display: inline-block;
-  vertical-align: text-top;
-  fill: currentColor;
-}
-
+/*Basics*/
 .markdown-body a {
   background-color: transparent;
   -webkit-text-decoration-skip: objects;
@@ -219,6 +101,11 @@
 .markdown-body .figure {
   text-align: center;
   align: center;
+}
+.markdown-body figcaption {
+  margin-top: 10px;
+  margin-left: 10%;
+  width: 80%;
 }
 
 .markdown-body svg:not(:root) {
@@ -391,38 +278,6 @@
   font: 12px "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
 }
 
-.markdown-body .octicon {
-  vertical-align: text-bottom;
-}
-
-.markdown-body .pl-0 {
-  padding-left: 0 !important;
-}
-
-.markdown-body .pl-1 {
-  padding-left: 4px !important;
-}
-
-.markdown-body .pl-2 {
-  padding-left: 8px !important;
-}
-
-.markdown-body .pl-3 {
-  padding-left: 16px !important;
-}
-
-.markdown-body .pl-4 {
-  padding-left: 24px !important;
-}
-
-.markdown-body .pl-5 {
-  padding-left: 32px !important;
-}
-
-.markdown-body .pl-6 {
-  padding-left: 40px !important;
-}
-
 .markdown-body::before {
   display: table;
   content: "";
@@ -515,17 +370,6 @@
   margin-bottom: 16px;
   font-weight: 600;
   line-height: 1.25;
-}
-
-.markdown-body h1 .octicon-link,
-.markdown-body h2 .octicon-link,
-.markdown-body h3 .octicon-link,
-.markdown-body h4 .octicon-link,
-.markdown-body h5 .octicon-link,
-.markdown-body h6 .octicon-link {
-  color: #1b1f23;
-  vertical-align: middle;
-  visibility: hidden;
 }
 
 .markdown-body h1:hover .anchor,
