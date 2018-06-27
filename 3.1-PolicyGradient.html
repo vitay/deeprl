@@ -10,7 +10,7 @@
 
   <link rel="stylesheet" href="assets/syntax.css">
   <link rel="stylesheet" href="assets/github.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+  <script src="/usr/share/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
   <!--[if lt IE 9]>
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
   <![endif]-->
@@ -176,12 +176,12 @@
 <p><span id="eq:gradloglikelihood_trajectory"><span class="math display">\[
     \nabla_\theta \log \rho_\theta(\tau) = \sum_{t=0}^T \nabla_\theta \log \pi_\theta(s_t, a_t)
 \qquad(8)\]</span></span></p>
-<p>$<em></em>(s_t, a_t)§ is called the <strong>score function</strong>.</p>
+<p><span class="math inline">\(\nabla_\theta \log \pi_\theta(s_t, a_t)\)</span> is called the <strong>score function</strong>.</p>
 <p>This is the main reason why policy gradient algorithms are used: the gradient is independent from the MDP dynamics, allowing <strong>model-free</strong> learning. The policy gradient is then given by:</p>
 <p><span class="math display">\[
     \nabla_\theta J(\theta) =  {E}_{\tau \sim \rho_\theta}[\sum_{t=0}^T \nabla_\theta \log \pi_\theta(s_t, a_t) \, R(\tau) ] =  {E}_{\tau \sim \rho_\theta}[ \sum_{t=0}^T \nabla_\theta \log \pi_\theta(s_t, a_t) \, (\sum_{t=0}^T \gamma^t r_{t+1})]
 \]</span></p>
-<p>Estimating the policy gradient now becomes straightforward using Monte-Carlo sampling. The resulting algorithm is called the <strong>REINFORCE</strong> algorithm <span class="citation" data-cites="Williams1992">(Williams, <a href="8-References.html#ref-Williams1992">1992</a>)</span>:</p>
+<p>Estimating the policy gradient now becomes straightforward using Monte-Carlo sampling. The resulting algorithm is called the <strong>REINFORCE</strong> algorithm <span class="citation" data-cites="Williams1992">(Williams <a href="8-References.html#ref-Williams1992">1992</a>)</span>:</p>
 <hr />
 <ul>
 <li><p>while not converged:</p>
@@ -273,7 +273,7 @@
 <p><span class="math display">\[
  \nabla_\theta J(\theta) \approx \frac{1}{N} \sum_{i=1}^N \sum_{t=0}^T \nabla_\theta \log \pi_\theta(s_t, a_t) \, \hat{Q}(s_t, a_t)
 \]</span></p>
-<p><span class="citation" data-cites="Sutton1999">Sutton, McAllester, Singh, and Mansour (<a href="8-References.html#ref-Sutton1999">1999</a>)</span> showed that the policy gradient can be estimated by replacing the return of the sampled trajectory with the Q-value of each action, what leads to the <strong>policy gradient theorem</strong> (Eq. <a href="#eq:policygradienttheorem">9</a>):</p>
+<p><span class="citation" data-cites="Sutton1999">Sutton et al. (<a href="8-References.html#ref-Sutton1999">1999</a>)</span> showed that the policy gradient can be estimated by replacing the return of the sampled trajectory with the Q-value of each action, what leads to the <strong>policy gradient theorem</strong> (Eq. <a href="#eq:policygradienttheorem">9</a>):</p>
 <p><span id="eq:policygradienttheorem"><span class="math display">\[
     \nabla_\theta J(\theta) =  {E}_{s \sim \rho^\pi, a \sim \pi_\theta}[\nabla_\theta \log \pi_\theta(s, a) \, Q^{\pi_\theta}(s, a)]
 \qquad(9)\]</span></span></p>
@@ -290,7 +290,7 @@
 </ul>
 <p>Fig. <a href="#fig:actorcriticpolicy">19</a> shows the architecture of the algorithm. The only problem left is to provide the critic with the true Q-values.</p>
 <figure>
-<img src="img/policygradient.svg" alt="Figure 19: Architecture of the policy gradient (PG) method." id="fig:actorcriticpolicy" style="width:65.0%" /><figcaption>Figure 19: Architecture of the policy gradient (PG) method.</figcaption>
+<img src="img/policygradient.png" alt="Figure 19: Architecture of the policy gradient (PG) method." id="fig:actorcriticpolicy" style="width:65.0%" /><figcaption>Figure 19: Architecture of the policy gradient (PG) method.</figcaption>
 </figure>
 <p>Most policy-gradient algorithms (A3C, DPPG, TRPO) are actor-critic architectures. Some remarks:</p>
 <ul>

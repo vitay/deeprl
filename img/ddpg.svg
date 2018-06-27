@@ -15,7 +15,10 @@
    version="1.1"
    viewBox="0 0 255.51895 125.26035"
    height="125.26035mm"
-   width="255.51895mm">
+   width="255.51895mm"
+   inkscape:export-filename="/home/vitay/Research/DeepRL/manual/img/ddpg.png"
+   inkscape:export-xdpi="150"
+   inkscape:export-ydpi="150">
   <sodipodi:namedview
      fit-margin-bottom="0"
      fit-margin-right="0"
@@ -30,7 +33,7 @@
      inkscape:current-layer="layer1"
      inkscape:document-units="mm"
      inkscape:cy="240.15617"
-     inkscape:cx="662.38645"
+     inkscape:cx="444.1935"
      inkscape:zoom="0.98994949"
      inkscape:pageshadow="2"
      inkscape:pageopacity="0.0"
@@ -262,7 +265,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>

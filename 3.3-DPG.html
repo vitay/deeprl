@@ -10,7 +10,7 @@
 
   <link rel="stylesheet" href="assets/syntax.css">
   <link rel="stylesheet" href="assets/github.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+  <script src="/usr/share/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
   <!--[if lt IE 9]>
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
   <![endif]-->
@@ -148,7 +148,7 @@
 \]</span></p>
 <p>Fig. <a href="#fig:dpg">21</a> outlines the actor-critic architecture of the DPG (deterministic policy gradient) method, to compare with the actor-critic architecture of the stochastic policy gradient (Fig. <a href="#fig:actorcriticpolicy">19</a>).</p>
 <figure>
-<img src="img/dpg.svg" alt="Figure 21: Architecture of the DPG (deterministic policy gradient) method." id="fig:dpg" style="width:65.0%" /><figcaption>Figure 21: Architecture of the DPG (deterministic policy gradient) method.</figcaption>
+<img src="img/dpg.png" alt="Figure 21: Architecture of the DPG (deterministic policy gradient) method." id="fig:dpg" style="width:65.0%" /><figcaption>Figure 21: Architecture of the DPG (deterministic policy gradient) method.</figcaption>
 </figure>
 <p><span class="citation" data-cites="Silver2014">Silver et al. (<a href="8-References.html#ref-Silver2014">2014</a>)</span> investigated the performance of DPG using linear function approximators and showed that it compared positively to stochastic algorithms in high-dimensional or continuous action spaces. However, non-linear function approximators such as deep NN would not work yet.</p>
 <h3 id="sec:deep-deterministic-policy-gradient-ddpg"><span class="header-section-number">4.3.2</span> Deep Deterministic Policy Gradient (DDPG)</h3>
@@ -171,7 +171,7 @@
 <p><span class="math display">\[
     a_t = \mu_\theta(s_t) + \xi
 \]</span></p>
-<p>This additive noise could be anything, but the most practical choise is to use an <strong>Ornstein-Uhlenbeck</strong> process <span class="citation" data-cites="Ornstein1930">(Uhlenbeck and Ornstein, <a href="8-References.html#ref-Ornstein1930">1930</a>)</span> to generate temporally correlated noise with zero mean. Ornstein-Uhlenbeck processes are used in physics to model the velocity of Brownian particles with friction. It updates a variable <span class="math inline">\(x_t\)</span> using a stochastic differential equation (SDE):</p>
+<p>This additive noise could be anything, but the most practical choise is to use an <strong>Ornstein-Uhlenbeck</strong> process <span class="citation" data-cites="Ornstein1930">(Uhlenbeck and Ornstein <a href="8-References.html#ref-Ornstein1930">1930</a>)</span> to generate temporally correlated noise with zero mean. Ornstein-Uhlenbeck processes are used in physics to model the velocity of Brownian particles with friction. It updates a variable <span class="math inline">\(x_t\)</span> using a stochastic differential equation (SDE):</p>
 <p><span class="math display">\[ dx_t = \theta (\mu - x_t) dt + \sigma dW_t \qquad \text{with} \qquad dW_t = \mathcal{N}(0, dt)\]</span></p>
 <p><span class="math inline">\(\mu\)</span> is the mean of the process (usually 0), <span class="math inline">\(\theta\)</span> is the friction (how fast it varies with noise) and <span class="math inline">\(\sigma\)</span> controls the amount of noise. Fig. <a href="#fig:OU">22</a> shows three independent runs of a Ornstein-Uhlenbeck process: successive values of the variable <span class="math inline">\(x_t\)</span> vary randomly but coherently over time.</p>
 <figure>
@@ -179,7 +179,7 @@
 </figure>
 <p>The architecture of the DDPG algorithm is depicted on Fig. <a href="#fig:ddpg">23</a>.</p>
 <figure>
-<img src="img/ddpg.svg" alt="Figure 23: Architecture of the DDPG (deep deterministic policy gradient) algorithm." id="fig:ddpg" style="width:70.0%" /><figcaption>Figure 23: Architecture of the DDPG (deep deterministic policy gradient) algorithm.</figcaption>
+<img src="img/ddpg.png" alt="Figure 23: Architecture of the DDPG (deep deterministic policy gradient) algorithm." id="fig:ddpg" style="width:70.0%" /><figcaption>Figure 23: Architecture of the DDPG (deep deterministic policy gradient) algorithm.</figcaption>
 </figure>
 <p>The pseudo-algorithm is as follows:</p>
 <hr />
@@ -187,7 +187,7 @@
 <li>Initialize actor network <span class="math inline">\(\mu_{\theta}\)</span> and critic <span class="math inline">\(Q_\varphi\)</span> with random weights.</li>
 <li>Create the target networks <span class="math inline">\(\mu_{\theta&#39;}\)</span> and <span class="math inline">\(Q_{\varphi&#39;}\)</span>.</li>
 <li><p>Initialize experience replay memory <span class="math inline">\(\mathcal{D}\)</span> of maximal size <span class="math inline">\(N\)</span>.</p></li>
-<li>for episode <span class="math inline">\(in [1, M]\)</span>:
+<li>for episode <span class="math inline">\(\in [1, M]\)</span>:
 <ul>
 <li>Initialize random process <span class="math inline">\(\xi\)</span>.</li>
 <li>Observe the initial state <span class="math inline">\(s_0\)</span>.</li>
@@ -217,7 +217,7 @@
 <p><span class="math display">\[
     \nabla_a Q_\varphi(s, a) \approx \frac{Q_\varphi(s, a + da) - Q_\varphi(s, a)}{da}
 \]</span></p>
-<p>DDPG has rapidly become the state-of-the-art model-free method for continuous spaces (although now PPO is preferred). It is able to learn efficent policies on most contiuous problems, either pixel-based or using individual state variables. In the original DDPG paper, they showed that <em>batch normalization</em> <span class="citation" data-cites="Ioffe2015">(Ioffe and Szegedy, <a href="8-References.html#ref-Ioffe2015">2015</a>)</span> is crucial in stabilizing the training of deep networks on such problems. Its main limitation is its high sample complexity. Distributed versions of DDPG have been proposed to speed up learning, similarly to the parallel actor learners of A3C <span class="citation" data-cites="Loetzsch2017 Popov2017">(Lötzsch, Vitay, and Hamker, <a href="8-References.html#ref-Loetzsch2017">2017</a>; Popov et al., <a href="8-References.html#ref-Popov2017">2017</a>)</span>.</p>
+<p>DDPG has rapidly become the state-of-the-art model-free method for continuous spaces (although now PPO is preferred). It is able to learn efficent policies on most contiuous problems, either pixel-based or using individual state variables. In the original DDPG paper, they showed that <em>batch normalization</em> <span class="citation" data-cites="Ioffe2015">(Ioffe and Szegedy <a href="8-References.html#ref-Ioffe2015">2015</a>)</span> is crucial in stabilizing the training of deep networks on such problems. Its main limitation is its high sample complexity. Distributed versions of DDPG have been proposed to speed up learning, similarly to the parallel actor learners of A3C <span class="citation" data-cites="Loetzsch2017 Popov2017">(Lötzsch, Vitay, and Hamker <a href="8-References.html#ref-Loetzsch2017">2017</a>; Popov et al. <a href="8-References.html#ref-Popov2017">2017</a>)</span>.</p>
 <p><strong>Additional references:</strong> see <a href="http://pemami4911.github.io/blog/2016/08/21/ddpg-rl.html" class="uri">http://pemami4911.github.io/blog/2016/08/21/ddpg-rl.html</a> for additional explanations and step-by-step tensorflow code.</p>
 
 <br>

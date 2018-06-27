@@ -10,7 +10,7 @@
 
   <link rel="stylesheet" href="assets/syntax.css">
   <link rel="stylesheet" href="assets/github.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+  <script src="/usr/share/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
   <!--[if lt IE 9]>
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
   <![endif]-->
@@ -110,9 +110,9 @@
 </nav>
 
 
-</p>
+
 <h1 id="sec:basics"><span class="header-section-number">2</span> Basics</h1>
-<p>Deep reinforcement learning (deep RL) is the integration of deep learning methods, classically used in supervised or unsupervised learning contexts, with reinforcement learning (RL), a well-studied adaptive control method used in problems with delayed and partial feedback <span class="citation" data-cites="Sutton1998">(Sutton and Barto, <a href="8-References.html#ref-Sutton1998">1998</a>)</span>. This section starts with the basics of RL, mostly to set the notations, and provides a quick overview of deep neural networks.</p>
+<p>Deep reinforcement learning (deep RL) is the integration of deep learning methods, classically used in supervised or unsupervised learning contexts, with reinforcement learning (RL), a well-studied adaptive control method used in problems with delayed and partial feedback <span class="citation" data-cites="Sutton1998">(Sutton and Barto <a href="8-References.html#ref-Sutton1998">1998</a>)</span>. This section starts with the basics of RL, mostly to set the notations, and provides a quick overview of deep neural networks.</p>
 <h2 id="sec:reinforcement-learning-and-markov-decision-process"><span class="header-section-number">2.1</span> Reinforcement learning and Markov Decision Process</h2>
 <p>RL methods apply to problems where an agent interacts with an environment in discrete time steps (Fig. <a href="#fig:agentenv">1</a>). At time <span class="math inline">\(t\)</span>, the agent is in state <span class="math inline">\(s_t\)</span> and decides to perform an action <span class="math inline">\(a_t\)</span>. At the next time step, it arrives in the state <span class="math inline">\(s_{t+1}\)</span> and obtains the reward <span class="math inline">\(r_{t+1}\)</span>. The goal of the agent is to maximize the reward obtained on the long term. The textbook by <span class="citation" data-cites="Sutton1998">Sutton and Barto (<a href="8-References.html#ref-Sutton1998">1998</a>)</span> (updated in <span class="citation" data-cites="Sutton2017">Sutton and Barto (<a href="8-References.html#ref-Sutton2017">2017</a>)</span>) defines the field extensively.</p>
 <figure>
@@ -284,7 +284,7 @@
     \delta = r(s, a, s&#39;) + \gamma \, Q^\pi(s&#39;, \pi(s&#39;)) - Q^\pi(s, a)
 \]</span></p>
 <ul>
-<li><em>Off-policy</em> TD learning is called <strong>Q-learning</strong> <span class="citation" data-cites="Watkins1989">(Watkins, <a href="8-References.html#ref-Watkins1989">1989</a>)</span>. The greedy action in the next state (the one with the highest Q-value) is used to update the current transition. It does not mean that the greedy action will actually have to be selected for the next transition. The learned policy can therefore also be deterministic:</li>
+<li><em>Off-policy</em> TD learning is called <strong>Q-learning</strong> <span class="citation" data-cites="Watkins1989">(Watkins <a href="8-References.html#ref-Watkins1989">1989</a>)</span>. The greedy action in the next state (the one with the highest Q-value) is used to update the current transition. It does not mean that the greedy action will actually have to be selected for the next transition. The learned policy can therefore also be deterministic:</li>
 </ul>
 <p><span class="math display">\[
     \delta = r(s, a, s&#39;) + \gamma \, \max_{a&#39;} Q^\pi(s&#39;, a&#39;) - Q^\pi(s, a)
@@ -306,7 +306,7 @@
 \]</span></p>
 <p>An action may lead to a high-valued state, but with such a small probability that it is actually not worth it. <span class="math inline">\(p(s&#39;|s, a)\)</span> and <span class="math inline">\(r(s, a, s&#39;)\)</span> therefore have to be known (or at least approximated), what defeats the purpose of sample-based methods.</p>
 <figure>
-<img src="img/actorcritic.png" alt="Figure 6: Actor-critic architecture (Sutton and Barto, 1998)." id="fig:actorcritic" style="width:30.0%" /><figcaption>Figure 6: Actor-critic architecture <span class="citation" data-cites="Sutton1998">(Sutton and Barto, <a href="8-References.html#ref-Sutton1998">1998</a>)</span>.</figcaption>
+<img src="img/actorcritic.png" alt="Figure 6: Actor-critic architecture (Sutton and Barto 1998)." id="fig:actorcritic" style="width:30.0%" /><figcaption>Figure 6: Actor-critic architecture <span class="citation" data-cites="Sutton1998">(Sutton and Barto <a href="8-References.html#ref-Sutton1998">1998</a>)</span>.</figcaption>
 </figure>
 <p><strong>Actor-critic</strong> architectures have been proposed to solve this problem:</p>
 <ol type="1">

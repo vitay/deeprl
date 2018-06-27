@@ -8,7 +8,6 @@ author = metadata["author"]
 email = metadata["email"]
 css = metadata["css"]
 
-
 # List of files to compile
 files = metadata["files"]
 
@@ -31,8 +30,14 @@ for idx, f in enumerate(files):
         text += rfile.read()
         if not f == files[-1]:
             text += """
+
 <!--PAGEBREAK-->
+
 """ 
+with open('document.md','w') as wfile:
+    with open("src/config.yaml", "r") as rfile:
+        header = rfile.read()
+    wfile.write("---\n" + header + "---\n\n" + text)
 
 # Arguments to pandoc
 filters = ['pandoc-crossref', 'pandoc-citeproc']
@@ -41,12 +46,11 @@ pdoc_args = [
     '--toc',
     '--mathjax',
     '--number-sections',
-    '--csl=assets/apalike.csl',
     '--metadata=crossrefYaml:"assets/pandoc-crossref.yaml"',
 ] + bib_pandoc
 
 # Convert the file to html
-print("Convert the whole document...")
+print("Convert the whole document to html...")
 content = pypandoc.convert_text(
     text, 
     format='md',
@@ -71,7 +75,6 @@ output = template %{
 }
 
 # Write the standalone file to disc
-print("Write the single document...")
 with open('single.html','w') as wfile:
     wfile.write(output)
 
@@ -105,7 +108,6 @@ for ref in refs:
 
 
 # Split the content into files
-print("Split the HTML files...")
 parts = content.split("<!--PAGEBREAK-->")
 for idx, f in enumerate(files):
     parts[idx] += """
