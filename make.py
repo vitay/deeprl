@@ -12,7 +12,7 @@ css = metadata["css"]
 files = metadata["files"]
 
 # HTML file where the references will be shown
-reference_file = files[-1].replace('.md', ".html")
+reference_file = files[-1].replace('.md', ".html").split('-')[1]
 bibs = metadata["bibliography"]
 bib_pandoc = []
 for bib in bibs:
@@ -75,7 +75,7 @@ output = template %{
 }
 
 # Write the standalone file to disc
-with open('single.html','w') as wfile:
+with open('DeepRL.html','w') as wfile:
     wfile.write(output)
 
 # Analyse the toc files separately
@@ -95,7 +95,7 @@ for f in files:
         if re.search(r'toc-section-number', line): 
             # Extract the section tag
             tag = re.findall(r"href=\"\#sec:[\w-]+\"", line)[0]
-            new_tag = tag.replace('"#', '"./'+f.replace(".md", ".html") + "#")
+            new_tag = tag.replace('"#', '"./'+f.replace(".md", ".html").split('-')[1] + "#")
             # Update the TOC
             toc = toc.replace(tag, new_tag)
             # Update the total content
@@ -117,8 +117,8 @@ for idx, f in enumerate(files):
 <a href="%(next)s" class="next">Next &raquo;</a>
 </div>
 """% {
-    'prev': files[idx-1].replace('.md', '.html') if idx > 0 else "#",
-    'next': files[idx+1].replace('.md', '.html') if idx < len(files) -1 else "#",
+    'prev': files[idx-1].replace('.md', '.html').split('-')[1] if idx > 0 else "#",
+    'next': files[idx+1].replace('.md', '.html').split('-')[1] if idx < len(files) -1 else "#",
 }
     part = template %{
         'title': title,
@@ -129,5 +129,6 @@ for idx, f in enumerate(files):
         'toc': toc,
         'body': parts[idx]
     }
-    with open(f.replace('.md', '.html'), "w") as wfile:
+    ofile = f.replace('.md', '.html').split('-')[1]
+    with open(ofile, "w") as wfile:
         wfile.write(part)

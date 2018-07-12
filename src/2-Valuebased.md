@@ -10,7 +10,7 @@ The goal of value-based deep RL is to approximate the Q-value of each possible s
 When using Q-learning, we have already seen in @sec:function-approximation that the problem is a regression problem, where the following mse loss function has to be minimized:
 
 $$
-    \mathcal{L}(\theta) = E_\pi[(r_t + \gamma \, \max_{a'} Q_\theta(s', a') - Q_\theta(s, a))^2]
+    \mathcal{L}(\theta) = \mathbb{E}_\pi[(r_t + \gamma \, \max_{a'} Q_\theta(s', a') - Q_\theta(s, a))^2]
 $$
 
 In short, we want to reduce the prediction error, i.e. the mismatch between the estimate of the value of an action $Q_\theta(s, a)$ and the real expected return, here approximated with $r(s, a, s') + \gamma \, \text{max}_{a'} Q_\theta(s', a')$.
@@ -23,12 +23,12 @@ We can compute this loss by gathering enough samples $(s, a, r, s')$ (i.e. singl
 * Initialize empty minibatch $\mathcal{D}$ of maximal size $n$.
 * Observe the initial state $s_0$.
 * for $t \in [0, T_\text{total}]$:
-    * Select the action $a_t$ based on the behaviour policy derived from $Q_\theta(s_t, a)$ (e.g. softmax).
+    * Select the action $a_t$ based on the behavior policy derived from $Q_\theta(s_t, a)$ (e.g. softmax).
     * Perform the action $a_t$ and observe the next state $s_{t+1}$ and the reward $r_{t+1}$.
     * Predict the Q-value of the greedy action in the next state $\max_{a'} Q_\theta(s_{t+1}, a')$
     * Store $(s_t, a_t, r_{t+1} + \gamma \, \max_{a'} Q_\theta(s_{t+1}, a'))$ in the minibatch.
     * If minibatch $\mathcal{D}$ is full:
-        * Train the value network $Q_{\theta}$ on $\mathcal{D}$ to minimize $\mathcal{L}(\theta) = E_\mathcal{D}[(r(s, a, s') + \gamma \, \text{max}_{a'} Q_\theta(s', a') - Q_\theta(s, a))^2]$
+        * Train the value network $Q_{\theta}$ on $\mathcal{D}$ to minimize $\mathcal{L}(\theta) = \mathbb{E}_\mathcal{D}[(r(s, a, s') + \gamma \, \text{max}_{a'} Q_\theta(s', a') - Q_\theta(s, a))^2]$
         * Empty the minibatch $\mathcal{D}$.
 
 ---
@@ -40,7 +40,7 @@ However, the definition of the loss function uses the mathematical expectation o
 The second major problem is the **non-stationarity** of the targets in the loss function. In classification or regression, the desired values $\mathbf{t}$ are fixed throughout learning: the class of an object does not change in the middle of the training phase.
 
 $$
-    \mathcal{L}(\theta) = - E_{\mathbf{x}, \mathbf{t} \in \mathcal{D}}[ ||\mathbf{t} - \mathbf{y}||^2]
+    \mathcal{L}(\theta) = - \mathbb{E}_{\mathbf{x}, \mathbf{t} \in \mathcal{D}}[ ||\mathbf{t} - \mathbf{y}||^2]
 $$
 
 In Q-learning, the target $r(s, a, s') + \gamma \, \max_{a'} Q_\theta(s', a')$ will change during learning, as $Q_\theta(s', a')$ depends on the weights $\theta$ and will hopefully increase as the performance improves. This is the second problem of deep RL: deep NN are particularly bad on non-stationary problems, especially feedforward networks. They iteratively converge towards the desired value, but have troubles when the target also moves (like a dog chasing its tail).
@@ -64,7 +64,7 @@ The resulting algorithm is called **Deep Q-Network (DQN)**. It is summarized by 
 * Initialize experience replay memory $\mathcal{D}$ of maximal size $N$.
 * Observe the initial state $s_0$.
 * for $t \in [0, T_\text{total}]$:
-    * Select the action $a_t$ based on the behaviour policy derived from $Q_\theta(s_t, a)$ (e.g. softmax).
+    * Select the action $a_t$ based on the behavior policy derived from $Q_\theta(s_t, a)$ (e.g. softmax).
     * Perform the action $a_t$ and observe the next state $s_{t+1}$ and the reward $r_{t+1}$.
     * Store $(s_t, a_t, r_{t+1}, s_{t+1})$ in the experience replay memory.
     * Every $T_\text{train}$ steps:
@@ -72,7 +72,7 @@ The resulting algorithm is called **Deep Q-Network (DQN)**. It is summarized by 
         * For each transition $(s, a, r, s')$ in the minibatch:            
             * Predict the Q-value of the greedy action in the next state $\max_{a'} Q_{\theta'}(s', a')$ using the target network.
             * Compute the target value $y = r + \gamma \, \max_{a'} Q_{\theta'}(s', a')$.
-        * Train the value network $Q_{\theta}$ on $\mathcal{D}_s$ to minimize $\mathcal{L}(\theta) = E_{\mathcal{D}_s}[(y - Q_\theta(s, a))^2]$
+        * Train the value network $Q_{\theta}$ on $\mathcal{D}_s$ to minimize $\mathcal{L}(\theta) = \mathbb{E}_{\mathcal{D}_s}[(y - Q_\theta(s, a))^2]$
     * Every $T_\text{target}$ steps:
         * Update the target network with the trained value network:  $\theta' \leftarrow \theta$
 
@@ -128,9 +128,9 @@ This induces only a small modification of the DQN algorithm and significantly im
 ---
 
 
-## Prioritised replay
+## Prioritized experience replay
 
-Another drawback of the original DQN is that the experience replay memory is sampled uniformly. Novel and interesting transitions are selected with the same probability as old well-predicted transitions, what slows down learning. The main idea of **prioritized replay** [@Schaul2015] is to order the transitions in the experience replay memory in decreasing order of their TD error:
+Another drawback of the original DQN is that the experience replay memory is sampled uniformly. Novel and interesting transitions are selected with the same probability as old well-predicted transitions, what slows down learning. The main idea of **prioritized experience replay** [@Schaul2015] is to order the transitions in the experience replay memory in decreasing order of their TD error:
 
 $$
     \delta = r(s, a, s') + \gamma \, Q_{\theta'}(s', \text{argmax}_{a'} Q_\theta (s', a')) - Q_\theta(s, a)
@@ -172,7 +172,7 @@ The range of values taken by the advantages is also much smaller than the Q-valu
 @Wang2016 incorporated the idea of *advantage updating* in a double DQN architecture with prioritized replay (@fig:duelling). As in DQN, the last layer represents the Q-values of the possible actions and has to minimize the mse loss:
 
 $$
-    \mathcal{L}(\theta) = E_\pi([r(s, a, s') + \gamma \, Q_{\theta', \alpha', \beta'}(s', \text{argmax}_{a'} Q_{\theta, \alpha, \beta} (s', a')) - Q_{\theta, \alpha, \beta}(s, a)]^2)
+    \mathcal{L}(\theta) = \mathbb{E}_\pi([r(s, a, s') + \gamma \, Q_{\theta', \alpha', \beta'}(s', \text{argmax}_{a'} Q_{\theta, \alpha, \beta} (s', a')) - Q_{\theta, \alpha, \beta}(s, a)]^2)
 $$ 
 
 The difference is that the previous fully-connected layer is forced to represent the value of the input state $V_{\theta, \beta}(s)$ and the advantage of each action $A_{\theta, \alpha}(s, a)$ separately. There are two separate sets of weights in the network, $\alpha$ and $\beta$, to predict these two values, sharing  representations from the early convolutional layers through weights $\theta$. The output layer performs simply a parameter-less summation of both sub-networks:
@@ -226,12 +226,12 @@ However, LSTMs are not a magical solution either. They are trained using *trunca
 
 ## Other variants of DQN
 
-Double duelling DQN with prioritized replay is currently the state-of-the-art method for value-based deep RL (see @Hessel2017 for an experimental study of the contribution of each mechanism). Several minor to significant improvements have been proposed since the corresponding milestone papers. This section provides some short explanations and links to the original papers (to be organized and extended).
+Double duelling DQN with prioritized replay is currently the state-of-the-art method for value-based deep RL (see @Hessel2017 for an experimental study of the contribution of each mechanism and the corresponding **Rainbow** DQN network). Several improvements have been proposed since the corresponding milestone papers. This section provides some short explanations and links to the original papers (to be organized and extended).
 
 **Average-DQN** proposes to increase the stability and performance of DQN by replacing the single target network (a copy of the trained network) by an average of the last parameter values, in other words an average of many past target networks [@Anschel2016].
 
-@He2016 proposed **fast reward propagation** thourgh optimality tightening to speedup learning: when rewards are sparse, they require a lot of episodes to propagate these rare rewards to all actions leading to it. Their method combines immediate rewards (single steps) with actual returns (as in Monte-Carlo) via a constrained optimization approach.
+@He2016 proposed **fast reward propagation** through optimality tightening to speedup learning: when rewards are sparse, they require a lot of episodes to propagate these rare rewards to all actions leading to it. Their method combines immediate rewards (single steps) with actual returns (as in Monte-Carlo) via a constrained optimization approach.
 
-All RL methods based on the Bellman equations use the expectation operator to average returns and compute values. @Bellemare2017 propose to learn instead the **value distribution** through a modification of the Bellman equation. They show that learning the distribution of rewards rather than their mean leads to performance improvements. See <https://deepmind.com/blog/going-beyond-average-reinforcement-learning/> for more explanations.
+
 
 

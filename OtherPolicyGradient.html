@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <meta name="author" content="Julien Vitay">
+  <title>Deep Reinforcement Learning</title>
+
+
+  <link rel="stylesheet" href="assets/syntax.css">
+  <link rel="stylesheet" href="assets/github.css">
+  <script src="/usr/share/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+
+</head>
+
+<body class="markdown-body">
+
+<header>
+  <h1 class="title"><strong>Deep Reinforcement Learning</strong></h1>
+  <p class="author">Julien Vitay - <a href="mailto:julien.vitay@informatik.tu-chemnitz.de">julien.vitay@informatik.tu-chemnitz.de</a></p>
+</header>
+
+
+<article>
+
+<nav id="TOC" class ="toc">
+  <h2><strong>Deep Reinforcement Learning</strong></h2>
+  <p class="author">Julien Vitay</p>
+
+<ul>
+<li><a href="./Introduction.html#sec:introduction"><span class="toc-section-number">1</span> Introduction</a></li>
+<li><a href="./BasicRL.html#sec:basics"><span class="toc-section-number">2</span> Basics</a><ul>
+<li><a href="./BasicRL.html#sec:reinforcement-learning-and-markov-decision-process"><span class="toc-section-number">2.1</span> Reinforcement learning and Markov Decision Process</a><ul>
+<li><a href="./BasicRL.html#sec:policy-and-value-functions"><span class="toc-section-number">2.1.1</span> Policy and value functions</a></li>
+<li><a href="./BasicRL.html#sec:bellman-equations"><span class="toc-section-number">2.1.2</span> Bellman equations</a></li>
+<li><a href="./BasicRL.html#sec:dynamic-programming"><span class="toc-section-number">2.1.3</span> Dynamic programming</a></li>
+<li><a href="./BasicRL.html#sec:monte-carlo-sampling"><span class="toc-section-number">2.1.4</span> Monte-Carlo sampling</a></li>
+<li><a href="./BasicRL.html#sec:temporal-difference"><span class="toc-section-number">2.1.5</span> Temporal Difference</a></li>
+<li><a href="./BasicRL.html#sec:eligibility-traces"><span class="toc-section-number">2.1.6</span> Eligibility traces</a></li>
+<li><a href="./BasicRL.html#sec:actor-critic-architectures"><span class="toc-section-number">2.1.7</span> Actor-critic architectures</a></li>
+<li><a href="./BasicRL.html#sec:function-approximation"><span class="toc-section-number">2.1.8</span> Function approximation</a></li>
+</ul></li>
+<li><a href="./DeepLearning.html#sec:deep-learning"><span class="toc-section-number">2.2</span> Deep learning</a><ul>
+<li><a href="./DeepLearning.html#sec:deep-neural-networks"><span class="toc-section-number">2.2.1</span> Deep neural networks</a></li>
+<li><a href="./DeepLearning.html#sec:convolutional-networks"><span class="toc-section-number">2.2.2</span> Convolutional networks</a></li>
+<li><a href="./DeepLearning.html#sec:recurrent-neural-networks"><span class="toc-section-number">2.2.3</span> Recurrent neural networks</a></li>
+</ul></li>
+</ul></li>
+<li><a href="./Valuebased.html#sec:value-based-methods"><span class="toc-section-number">3</span> Value-based methods</a><ul>
+<li><a href="./Valuebased.html#sec:limitations-of-deep-neural-networks-for-function-approximation"><span class="toc-section-number">3.1</span> Limitations of deep neural networks for function approximation</a></li>
+<li><a href="./Valuebased.html#sec:deep-q-network-dqn"><span class="toc-section-number">3.2</span> Deep Q-Network (DQN)</a></li>
+<li><a href="./Valuebased.html#sec:double-dqn"><span class="toc-section-number">3.3</span> Double DQN</a></li>
+<li><a href="./Valuebased.html#sec:prioritized-experience-replay"><span class="toc-section-number">3.4</span> Prioritized experience replay</a></li>
+<li><a href="./Valuebased.html#sec:duelling-network"><span class="toc-section-number">3.5</span> Duelling network</a></li>
+<li><a href="./Valuebased.html#sec:distributed-dqn-gorila"><span class="toc-section-number">3.6</span> Distributed DQN (GORILA)</a></li>
+<li><a href="./Valuebased.html#sec:deep-recurrent-q-learning-drqn"><span class="toc-section-number">3.7</span> Deep Recurrent Q-learning (DRQN)</a></li>
+<li><a href="./Valuebased.html#sec:other-variants-of-dqn"><span class="toc-section-number">3.8</span> Other variants of DQN</a></li>
+</ul></li>
+<li><a href="./PolicyGradient.html#sec:policy-gradient-methods"><span class="toc-section-number">4</span> Policy Gradient methods</a><ul>
+<li><a href="./PolicyGradient.html#sec:reinforce"><span class="toc-section-number">4.1</span> REINFORCE</a><ul>
+<li><a href="./PolicyGradient.html#sec:estimating-the-policy-gradient"><span class="toc-section-number">4.1.1</span> Estimating the policy gradient</a></li>
+<li><a href="./PolicyGradient.html#sec:reducing-the-variance"><span class="toc-section-number">4.1.2</span> Reducing the variance</a></li>
+<li><a href="./PolicyGradient.html#sec:policy-gradient-theorem"><span class="toc-section-number">4.1.3</span> Policy Gradient theorem</a></li>
+</ul></li>
+<li><a href="./ActorCritic.html#sec:advantage-actor-critic-methods"><span class="toc-section-number">4.2</span> Advantage Actor-Critic methods</a><ul>
+<li><a href="./ActorCritic.html#sec:advantage-actor-critic-a2c"><span class="toc-section-number">4.2.1</span> Advantage Actor-Critic (A2C)</a></li>
+<li><a href="./ActorCritic.html#sec:asynchronous-advantage-actor-critic-a3c"><span class="toc-section-number">4.2.2</span> Asynchronous Advantage Actor-Critic (A3C)</a></li>
+<li><a href="./ActorCritic.html#sec:generalized-advantage-estimation-gae"><span class="toc-section-number">4.2.3</span> Generalized Advantage Estimation (GAE)</a></li>
+<li><a href="./ActorCritic.html#sec:stochastic-actor-critic-for-continuous-action-spaces"><span class="toc-section-number">4.2.4</span> Stochastic actor-critic for continuous action spaces</a></li>
+</ul></li>
+<li><a href="./ImportanceSampling.html#sec:off-policy-actor-critic"><span class="toc-section-number">4.3</span> Off-policy Actor-Critic</a><ul>
+<li><a href="./ImportanceSampling.html#sec:importance-sampling"><span class="toc-section-number">4.3.1</span> Importance sampling</a></li>
+<li><a href="./ImportanceSampling.html#sec:linear-off-policy-actor-critic-off-pac"><span class="toc-section-number">4.3.2</span> Linear Off-Policy Actor-Critic (Off-PAC)</a></li>
+<li><a href="./ImportanceSampling.html#sec:retrace"><span class="toc-section-number">4.3.3</span> Retrace</a></li>
+<li><a href="./ImportanceSampling.html#sec:self-imitation-learning-sil"><span class="toc-section-number">4.3.4</span> Self-Imitation Learning (SIL)</a></li>
+</ul></li>
+<li><a href="./DPG.html#sec:deterministic-policy-gradient-dpg"><span class="toc-section-number">4.4</span> Deterministic Policy Gradient (DPG)</a><ul>
+<li><a href="./DPG.html#sec:deterministic-policy-gradient-theorem"><span class="toc-section-number">4.4.1</span> Deterministic policy gradient theorem</a></li>
+<li><a href="./DPG.html#sec:deep-deterministic-policy-gradient-ddpg"><span class="toc-section-number">4.4.2</span> Deep Deterministic Policy Gradient (DDPG)</a></li>
+<li><a href="./DPG.html#sec:distributed-distributional-ddpg-d4pg"><span class="toc-section-number">4.4.3</span> Distributed Distributional DDPG (D4PG)</a></li>
+</ul></li>
+<li><a href="./NaturalGradient.html#sec:natural-gradients"><span class="toc-section-number">4.5</span> Natural Gradients</a><ul>
+<li><a href="./NaturalGradient.html#sec:natural-actor-critic-nac"><span class="toc-section-number">4.5.1</span> Natural Actor Critic (NAC)</a></li>
+<li><a href="./NaturalGradient.html#sec:trust-region-policy-optimization-trpo"><span class="toc-section-number">4.5.2</span> Trust Region Policy Optimization (TRPO)</a></li>
+<li><a href="./NaturalGradient.html#sec:proximal-policy-optimization-ppo"><span class="toc-section-number">4.5.3</span> Proximal Policy Optimization (PPO)</a></li>
+<li><a href="./NaturalGradient.html#sec:actor-critic-with-experience-replay-acer"><span class="toc-section-number">4.5.4</span> Actor-Critic with Experience Replay (ACER)</a></li>
+</ul></li>
+<li><a href="./OtherPolicyGradient.html#sec:distributional-learning"><span class="toc-section-number">4.6</span> Distributional learning</a><ul>
+<li><a href="./OtherPolicyGradient.html#sec:the-reactor"><span class="toc-section-number">4.6.1</span> The Reactor</a></li>
+</ul></li>
+<li><a href="./OtherPolicyGradient.html#sec:entropy-based-rl"><span class="toc-section-number">4.7</span> Entropy-based RL</a><ul>
+<li><a href="./OtherPolicyGradient.html#sec:soft-actor-critic-sac"><span class="toc-section-number">4.7.1</span> Soft Actor-Critic (SAC)</a></li>
+</ul></li>
+<li><a href="./OtherPolicyGradient.html#sec:other-policy-search-methods"><span class="toc-section-number">4.8</span> Other policy search methods</a><ul>
+<li><a href="./OtherPolicyGradient.html#sec:stochastic-value-gradient-svg"><span class="toc-section-number">4.8.1</span> Stochastic Value Gradient (SVG)</a></li>
+<li><a href="./OtherPolicyGradient.html#sec:q-prop"><span class="toc-section-number">4.8.2</span> Q-Prop</a></li>
+<li><a href="./OtherPolicyGradient.html#sec:normalized-advantage-function-naf"><span class="toc-section-number">4.8.3</span> Normalized Advantage Function (NAF)</a></li>
+<li><a href="./OtherPolicyGradient.html#sec:fictitious-self-play-fsp"><span class="toc-section-number">4.8.4</span> Fictitious Self-Play (FSP)</a></li>
+</ul></li>
+<li><a href="./OtherPolicyGradient.html#sec:comparison-between-value-based-and-policy-gradient-methods"><span class="toc-section-number">4.9</span> Comparison between value-based and policy gradient methods</a></li>
+<li><a href="./OtherPolicyGradient.html#sec:gradient-free-policy-search"><span class="toc-section-number">4.10</span> Gradient-free policy search</a><ul>
+<li><a href="./OtherPolicyGradient.html#sec:cross-entropy-method-cem"><span class="toc-section-number">4.10.1</span> Cross-entropy Method (CEM)</a></li>
+<li><a href="./OtherPolicyGradient.html#sec:evolutionary-search-es"><span class="toc-section-number">4.10.2</span> Evolutionary Search (ES)</a></li>
+</ul></li>
+</ul></li>
+<li><a href="./Practice.html#sec:deep-rl-in-practice"><span class="toc-section-number">5</span> Deep RL in practice</a><ul>
+<li><a href="./Practice.html#sec:limitations"><span class="toc-section-number">5.1</span> Limitations</a></li>
+<li><a href="./Practice.html#sec:reward-shaping"><span class="toc-section-number">5.2</span> Reward shaping</a></li>
+<li><a href="./Practice.html#sec:simulation-environments"><span class="toc-section-number">5.3</span> Simulation environments</a></li>
+<li><a href="./Practice.html#sec:algorithm-implementations"><span class="toc-section-number">5.4</span> Algorithm implementations</a></li>
+</ul></li>
+<li><a href="./References.html#sec:references">References</a></li>
+</ul>
+
+
+</nav>
+
+
+
+<h2 id="sec:distributional-learning"><span class="header-section-number">4.6</span> Distributional learning</h2>
+<p>All RL methods based on the Bellman equations use the expectation operator to average returns and compute the values of states and actions:</p>
+<p><span class="math display">\[
+    Q^\pi(s, a) ) = \mathbb{E}_{\pi}[R(s, a)]
+\]</span></p>
+<p><span class="citation" data-cites="Bellemare2017">Bellemare, Dabney, and Munos (<a href="References.html#ref-Bellemare2017">2017</a>)</span> propose to learn instead the <strong>value distribution</strong> through a modification of the Bellman equation. They show that learning the distribution of rewards rather than their mean leads to performance improvements.</p>
+<p>See <a href="https://deepmind.com/blog/going-beyond-average-reinforcement-learning/" class="uri">https://deepmind.com/blog/going-beyond-average-reinforcement-learning/</a> for more explanations.</p>
+<h3 id="sec:the-reactor"><span class="header-section-number">4.6.1</span> The Reactor</h3>
+<p><span class="citation" data-cites="Gruslys2017">Gruslys et al. (<a href="References.html#ref-Gruslys2017">2017</a>)</span></p>
+<h2 id="sec:entropy-based-rl"><span class="header-section-number">4.7</span> Entropy-based RL</h2>
+<h3 id="sec:soft-actor-critic-sac"><span class="header-section-number">4.7.1</span> Soft Actor-Critic (SAC)</h3>
+<p><span class="citation" data-cites="Haarnoya2018b">Haarnoja et al. (<a href="References.html#ref-Haarnoya2018b">2018</a>)</span></p>
+<h2 id="sec:other-policy-search-methods"><span class="header-section-number">4.8</span> Other policy search methods</h2>
+<h3 id="sec:stochastic-value-gradient-svg"><span class="header-section-number">4.8.1</span> Stochastic Value Gradient (SVG)</h3>
+<p><span class="citation" data-cites="Heess2015">Heess et al. (<a href="References.html#ref-Heess2015">2015</a>)</span></p>
+<h3 id="sec:q-prop"><span class="header-section-number">4.8.2</span> Q-Prop</h3>
+<p><span class="citation" data-cites="Gu2016">Gu, Lillicrap, Ghahramani, et al. (<a href="References.html#ref-Gu2016">2016</a>)</span></p>
+<h3 id="sec:normalized-advantage-function-naf"><span class="header-section-number">4.8.3</span> Normalized Advantage Function (NAF)</h3>
+<p><span class="citation" data-cites="Gu2016b">Gu, Lillicrap, Sutskever, et al. (<a href="References.html#ref-Gu2016b">2016</a>)</span></p>
+<h3 id="sec:fictitious-self-play-fsp"><span class="header-section-number">4.8.4</span> Fictitious Self-Play (FSP)</h3>
+<p><span class="citation" data-cites="Heinrich2015">Heinrich, Lanctot, and Silver (<a href="References.html#ref-Heinrich2015">2015</a>)</span> <span class="citation" data-cites="Heinrich2016">Heinrich and Silver (<a href="References.html#ref-Heinrich2016">2016</a>)</span></p>
+<h2 id="sec:comparison-between-value-based-and-policy-gradient-methods"><span class="header-section-number">4.9</span> Comparison between value-based and policy gradient methods</h2>
+<p>Having now reviewed both value-based methods (DQN and its variants) and policy gradient methods (A3C, DDPG, PPO), the question is which method to choose? While not much happens right now for value-based methods, policy gradient methods are atrracting a lot of attention, as they are able to learn policies in continuous action spaces, what is very important in robotics. <a href="https://flyyufelix.github.io/2017/10/12/dqn-vs-pg.html" class="uri">https://flyyufelix.github.io/2017/10/12/dqn-vs-pg.html</a> summarizes the advantages and inconvenients of policy gradient methods.</p>
+<p>Advantages:</p>
+<ul>
+<li>Better convergence properties.</li>
+<li>Effective in high-dimensional or continuous action spaces.</li>
+<li>Can learn stochastic policies.</li>
+</ul>
+<p>Disadvantages:</p>
+<ul>
+<li>Typically converge to a local rather than global optimum.</li>
+<li>Evaluating a policy is typically inefficient and high variance.</li>
+</ul>
+<p>Policy gradient methods are therefore usually less sample efficient, but can be more stable than value-based methods <span class="citation" data-cites="Duan2016">(Duan et al. <a href="References.html#ref-Duan2016">2016</a>)</span>.</p>
+<h2 id="sec:gradient-free-policy-search"><span class="header-section-number">4.10</span> Gradient-free policy search</h2>
+<p>The policy gradient methods presented above rely on backpropagation and gradient descent/ascent to update the parameters of the policy and maximize the objective function. Gradient descent is generally slow, sample inefficient and subject to local minima, but is nevertheless the go-to method in neural networks. However, it is not the only optimization that can be used in deep RL. This section presents some of the alternatives.</p>
+<h3 id="sec:cross-entropy-method-cem"><span class="header-section-number">4.10.1</span> Cross-entropy Method (CEM)</h3>
+<p><span class="citation" data-cites="Szita2006">Szita and Lörincz (<a href="References.html#ref-Szita2006">2006</a>)</span></p>
+<h3 id="sec:evolutionary-search-es"><span class="header-section-number">4.10.2</span> Evolutionary Search (ES)</h3>
+<p><span class="citation" data-cites="Salimans2017">Salimans et al. (<a href="References.html#ref-Salimans2017">2017</a>)</span></p>
+<p>Explanations from OpenAI: <a href="https://blog.openai.com/evolution-strategies/" class="uri">https://blog.openai.com/evolution-strategies/</a></p>
+<p>Deep neuroevolution at Uber: <a href="https://eng.uber.com/deep-neuroevolution/" class="uri">https://eng.uber.com/deep-neuroevolution/</a></p>
+
+<br>
+<div class="arrows">
+<a href="NaturalGradient.html" class="previous">&laquo; Previous</a>
+<a href="Practice.html" class="next">Next &raquo;</a>
+</div>
+
+
+</article>
+</body>
+</html>

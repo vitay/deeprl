@@ -25,11 +25,18 @@ This series of posts from Arthur Juliani <https://medium.com/emergent-future/sim
 
 This document is meant to stay *work in progress* forever, as new algorithms will be added as they are published. Feel free to comment, correct, suggest, pull request by writing to <julien.vitay@informatik.tu-chemnitz.de>.
 
-For some reason, this document is better printed using chrome. Use the single file version [here](./single.html) and print it to pdf. The style is adapted from the Github-Markdown CSS template <https://www.npmjs.com/package/github-markdown-css>. The document is written in Pandoc's Markdown and converted to html using pandoc-citeproc and pandoc-crossref.
+For some reason, this document is better printed using chrome. Use the single file version [here](./DeepRL.html) and print it to pdf. Alternatively, a pdf version generated using LaTeX is available [here](./DeepRL.pdf) (some images may disappear, as LaTeX does not support .gif or .svg images).
 
-Some figures are taken from the original publication ("Taken from" or "Source" in the caption). Their copyright stays to the respective authors, naturally. The rest is my own work and can be reproduced under any free license. 
+The style is adapted from the Github-Markdown CSS template <https://www.npmjs.com/package/github-markdown-css>. The document is written in Pandoc's Markdown and converted to html and pdf using pandoc-citeproc and pandoc-crossref.
+
+Some figures are taken from the original publication ("Taken from" or "Source" in the caption). Their copyright stays to the respective authors, naturally. The rest is my own work and can be distributed, reproduced and modified under CC-BY-SA-NC 4.0. 
 
 
 **Thanks**
 
 Thanks to all the students who helped me dive into that exciting research field, in particular: Winfried Lötzsch, Johannes Jung, Frank Witscher, Danny Hofmann, Oliver Lange, Vinayakumar Murganoor.
+
+**Copyright**
+
+Except where otherwise noted, this work is licensed under a [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License](http://creativecommons.org/licenses/by-nc-sa/4.0).
+

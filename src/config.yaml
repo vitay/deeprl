@@ -11,10 +11,13 @@ files:
     - 2-Valuebased.md
     - 3.1-PolicyGradient.md
     - 3.2-ActorCritic.md
-    - 3.3-DPG.md
-    - 3.4-NaturalGradient.md
+    - 3.3-ImportanceSampling.md
+    - 3.4-DPG.md
+    - 3.5-NaturalGradient.md
+    - 3.6-OtherPolicyGradient.md
     # - 4-RAM.md
     # - 5-ModelBased.md
+    # - 6-Hierarchical.md
     # - 6-Robotics.md
     - 7-Practice.md
     - 8-References.md
@@ -38,4 +41,8 @@ fontsize: "11pt"
 header-includes:
     - \usepackage{setspace}
     - \onehalfspacing
+    - \usepackage{titling}
+    - \pretitle{\begin{center}\begin{bfseries}\begin{huge}}
+    - \posttitle{\end{huge}\end{bfseries}\end{center}\vspace{2cm}}
+
 
