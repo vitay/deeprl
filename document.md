@@ -24,7 +24,7 @@ files:
     - 8-References.md
 
 # Bibliography
-bibliography: 
+bibliography:
     - /home/vitay/Articles/biblio/ReinforcementLearning.bib
     - /home/vitay/Articles/biblio/DeepLearning.bib
 csl: assets/apalike.csl
@@ -32,12 +32,12 @@ csl: assets/apalike.csl
 
 # CSS
 css: assets/github.css
-mathjax: /usr/share/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML
-#mathjax: https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML
+#mathjax: /usr/share/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML
+mathjax: https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML
 
 # Latex
-geometry: "margin=1in" 
-fontfamily: "times" 
+geometry: "margin=1in"
+fontfamily: "times"
 fontsize: "11pt"
 header-includes:
     - \usepackage{setspace}
@@ -45,8 +45,6 @@ header-includes:
     - \usepackage{titling}
     - \pretitle{\begin{center}\begin{bfseries}\begin{huge}}
     - \posttitle{\end{huge}\end{bfseries}\end{center}\vspace{2cm}}
-
-
 ---
 
 # Introduction
