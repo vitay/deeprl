@@ -5,6 +5,8 @@
 
 Excellent blog post from Alex Irpan on the limitations of deep RL: <https://www.alexirpan.com/2018/02/14/rl-hard.html>
 
+Another documented critic on deep RL: <https://thegradient.pub/why-rl-is-flawed/>
+
 ## Reward shaping
 
 Hindsight experience replay: @Andrychowicz2017 

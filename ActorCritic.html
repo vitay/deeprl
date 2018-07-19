@@ -10,7 +10,7 @@
 
   <link rel="stylesheet" href="assets/syntax.css">
   <link rel="stylesheet" href="assets/github.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+  <script src="/usr/share/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
   <!--[if lt IE 9]>
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
   <![endif]-->
@@ -84,10 +84,12 @@
 <li><a href="./DPG.html#sec:distributed-distributional-ddpg-d4pg"><span class="toc-section-number">4.4.3</span> Distributed Distributional DDPG (D4PG)</a></li>
 </ul></li>
 <li><a href="./NaturalGradient.html#sec:natural-gradients"><span class="toc-section-number">4.5</span> Natural Gradients</a><ul>
-<li><a href="./NaturalGradient.html#sec:natural-actor-critic-nac"><span class="toc-section-number">4.5.1</span> Natural Actor Critic (NAC)</a></li>
-<li><a href="./NaturalGradient.html#sec:trust-region-policy-optimization-trpo"><span class="toc-section-number">4.5.2</span> Trust Region Policy Optimization (TRPO)</a></li>
-<li><a href="./NaturalGradient.html#sec:proximal-policy-optimization-ppo"><span class="toc-section-number">4.5.3</span> Proximal Policy Optimization (PPO)</a></li>
-<li><a href="./NaturalGradient.html#sec:actor-critic-with-experience-replay-acer"><span class="toc-section-number">4.5.4</span> Actor-Critic with Experience Replay (ACER)</a></li>
+<li><a href="./NaturalGradient.html#sec:principle-of-natural-of-gradients"><span class="toc-section-number">4.5.1</span> Principle of natural of gradients</a></li>
+<li><a href="./NaturalGradient.html#sec:natural-policy-gradient"><span class="toc-section-number">4.5.2</span> Natural policy gradient</a></li>
+<li><a href="./NaturalGradient.html#sec:natural-actor-critic-nac"><span class="toc-section-number">4.5.3</span> Natural Actor Critic (NAC)</a></li>
+<li><a href="./NaturalGradient.html#sec:trust-region-policy-optimization-trpo"><span class="toc-section-number">4.5.4</span> Trust Region Policy Optimization (TRPO)</a></li>
+<li><a href="./NaturalGradient.html#sec:proximal-policy-optimization-ppo"><span class="toc-section-number">4.5.5</span> Proximal Policy Optimization (PPO)</a></li>
+<li><a href="./NaturalGradient.html#sec:actor-critic-with-experience-replay-acer"><span class="toc-section-number">4.5.6</span> Actor-Critic with Experience Replay (ACER)</a></li>
 </ul></li>
 <li><a href="./OtherPolicyGradient.html#sec:distributional-learning"><span class="toc-section-number">4.6</span> Distributional learning</a><ul>
 <li><a href="./OtherPolicyGradient.html#sec:the-reactor"><span class="toc-section-number">4.6.1</span> The Reactor</a></li>
@@ -289,7 +291,7 @@
 <p><span class="math display">\[
     \nabla_\theta J(\theta) =  \mathbb{E}_{s_t \sim \rho^\pi, a_t \sim \pi_\theta}[\nabla_\theta \log \pi_\theta (s_t, a_t) \, \sum_{l=0}^\infty (\gamma \lambda)^l \delta_{t+l} ]
 \]</span></p>
-<p>Note that <span class="citation" data-cites="Schulman2015b">Schulman, Moritz, et al. (<a href="References.html#ref-Schulman2015b">2015</a>)</span> additionally use <em>trust region optimization</em> to stabilize learning and further reduce the bias (see Section <a href="./NaturalGradient.html#sec:trust-region-policy-optimization-trpo">4.5.2</a>), for now just consider it is a better optimization method than gradient descent. The GAE algorithm is summarized here:</p>
+<p>Note that <span class="citation" data-cites="Schulman2015b">Schulman, Moritz, et al. (<a href="References.html#ref-Schulman2015b">2015</a>)</span> additionally use <em>trust region optimization</em> to stabilize learning and further reduce the bias (see Section <a href="./NaturalGradient.html#sec:trust-region-policy-optimization-trpo">4.5.4</a>), for now just consider it is a better optimization method than gradient descent. The GAE algorithm is summarized here:</p>
 <hr />
 <ul>
 <li>Initialize the actor <span class="math inline">\(\pi_\theta\)</span> and the critic <span class="math inline">\(V_\varphi\)</span> with random weights.</li>

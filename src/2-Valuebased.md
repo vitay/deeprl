@@ -69,7 +69,7 @@ The resulting algorithm is called **Deep Q-Network (DQN)**. It is summarized by 
     * Store $(s_t, a_t, r_{t+1}, s_{t+1})$ in the experience replay memory.
     * Every $T_\text{train}$ steps:
         * Sample a minibatch $\mathcal{D}_s$ randomly from $\mathcal{D}$.
-        * For each transition $(s, a, r, s')$ in the minibatch:            
+        * For each transition $(s, a, r, s')$ in the minibatch:
             * Predict the Q-value of the greedy action in the next state $\max_{a'} Q_{\theta'}(s', a')$ using the target network.
             * Compute the target value $y = r + \gamma \, \max_{a'} Q_{\theta'}(s', a')$.
         * Train the value network $Q_{\theta}$ on $\mathcal{D}_s$ to minimize $\mathcal{L}(\theta) = \mathbb{E}_{\mathcal{D}_s}[(y - Q_\theta(s, a))^2]$
@@ -86,7 +86,7 @@ The second thing is that the target network is not updated very often ($T_\text{
 
 $$
     \theta' = \tau \, \theta + (1-\tau) \, \theta'
-$$ 
+$$
 
 If this rule is applied after each step with a very small rate $\tau$, the target network will slowly track the learned network, but never be the same.
 
@@ -111,7 +111,7 @@ The idea is to train independently two value networks: one will be used to find 
 Applying double learning to DQN is particularly straightforward: there are already two value networks, the trained network and the target network. Instead of using the target network to both select the greedy action in the next state and estimate its Q-value, here the trained network $\theta$ is used to select the greedy action $a^* = \text{argmax}_{a'} Q_\theta (s', a')$ while the target network only estimates its Q-value. The target value becomes:
 
 $$
-    y = r(s, a, s') + \gamma \, Q_{\theta'}(s', \text{argmax}_{a'} Q_\theta (s', a')) 
+    y = r(s, a, s') + \gamma \, Q_{\theta'}(s', \text{argmax}_{a'} Q_\theta (s', a'))
 $$
 
 This induces only a small modification of the DQN algorithm and significantly improves its performance and stability:
@@ -121,7 +121,7 @@ This induces only a small modification of the DQN algorithm and significantly im
 * Every $T_\text{train}$ steps:
     * Sample a minibatch $\mathcal{D}_s$ randomly from $\mathcal{D}$.
     * For each transition $(s, a, r, s')$ in the minibatch:
-        * Select the greedy action in the next state $a^* = \text{argmax}_{a'} Q_\theta (s', a')$ using the trained network.     
+        * Select the greedy action in the next state $a^* = \text{argmax}_{a'} Q_\theta (s', a')$ using the trained network.
         * Predict its Q-value $Q_{\theta'}(s', a^*)$ using the target network.
         * Compute the target value $y = r + \gamma \, Q_{\theta'}(s', a*)$.
 
@@ -173,7 +173,7 @@ The range of values taken by the advantages is also much smaller than the Q-valu
 
 $$
     \mathcal{L}(\theta) = \mathbb{E}_\pi([r(s, a, s') + \gamma \, Q_{\theta', \alpha', \beta'}(s', \text{argmax}_{a'} Q_{\theta, \alpha, \beta} (s', a')) - Q_{\theta, \alpha, \beta}(s, a)]^2)
-$$ 
+$$
 
 The difference is that the previous fully-connected layer is forced to represent the value of the input state $V_{\theta, \beta}(s)$ and the advantage of each action $A_{\theta, \alpha}(s, a)$ separately. There are two separate sets of weights in the network, $\alpha$ and $\beta$, to predict these two values, sharing  representations from the early convolutional layers through weights $\theta$. The output layer performs simply a parameter-less summation of both sub-networks:
 
@@ -231,7 +231,3 @@ Double duelling DQN with prioritized replay is currently the state-of-the-art me
 **Average-DQN** proposes to increase the stability and performance of DQN by replacing the single target network (a copy of the trained network) by an average of the last parameter values, in other words an average of many past target networks [@Anschel2016].
 
 @He2016 proposed **fast reward propagation** through optimality tightening to speedup learning: when rewards are sparse, they require a lot of episodes to propagate these rare rewards to all actions leading to it. Their method combines immediate rewards (single steps) with actual returns (as in Monte-Carlo) via a constrained optimization approach.
-
-
-
-

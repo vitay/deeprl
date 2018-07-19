@@ -10,7 +10,7 @@
 
   <link rel="stylesheet" href="assets/syntax.css">
   <link rel="stylesheet" href="assets/github.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+  <script src="/usr/share/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
   <!--[if lt IE 9]>
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
   <![endif]-->
@@ -84,10 +84,12 @@
 <li><a href="./DPG.html#sec:distributed-distributional-ddpg-d4pg"><span class="toc-section-number">4.4.3</span> Distributed Distributional DDPG (D4PG)</a></li>
 </ul></li>
 <li><a href="./NaturalGradient.html#sec:natural-gradients"><span class="toc-section-number">4.5</span> Natural Gradients</a><ul>
-<li><a href="./NaturalGradient.html#sec:natural-actor-critic-nac"><span class="toc-section-number">4.5.1</span> Natural Actor Critic (NAC)</a></li>
-<li><a href="./NaturalGradient.html#sec:trust-region-policy-optimization-trpo"><span class="toc-section-number">4.5.2</span> Trust Region Policy Optimization (TRPO)</a></li>
-<li><a href="./NaturalGradient.html#sec:proximal-policy-optimization-ppo"><span class="toc-section-number">4.5.3</span> Proximal Policy Optimization (PPO)</a></li>
-<li><a href="./NaturalGradient.html#sec:actor-critic-with-experience-replay-acer"><span class="toc-section-number">4.5.4</span> Actor-Critic with Experience Replay (ACER)</a></li>
+<li><a href="./NaturalGradient.html#sec:principle-of-natural-of-gradients"><span class="toc-section-number">4.5.1</span> Principle of natural of gradients</a></li>
+<li><a href="./NaturalGradient.html#sec:natural-policy-gradient"><span class="toc-section-number">4.5.2</span> Natural policy gradient</a></li>
+<li><a href="./NaturalGradient.html#sec:natural-actor-critic-nac"><span class="toc-section-number">4.5.3</span> Natural Actor Critic (NAC)</a></li>
+<li><a href="./NaturalGradient.html#sec:trust-region-policy-optimization-trpo"><span class="toc-section-number">4.5.4</span> Trust Region Policy Optimization (TRPO)</a></li>
+<li><a href="./NaturalGradient.html#sec:proximal-policy-optimization-ppo"><span class="toc-section-number">4.5.5</span> Proximal Policy Optimization (PPO)</a></li>
+<li><a href="./NaturalGradient.html#sec:actor-critic-with-experience-replay-acer"><span class="toc-section-number">4.5.6</span> Actor-Critic with Experience Replay (ACER)</a></li>
 </ul></li>
 <li><a href="./OtherPolicyGradient.html#sec:distributional-learning"><span class="toc-section-number">4.6</span> Distributional learning</a><ul>
 <li><a href="./OtherPolicyGradient.html#sec:the-reactor"><span class="toc-section-number">4.6.1</span> The Reactor</a></li>
@@ -122,15 +124,30 @@
 
 
 <h2 id="sec:natural-gradients"><span class="header-section-number">4.5</span> Natural Gradients</h2>
+<p>The deep networks used as function approximators in the methods presented until now were all optimized (trained) using <strong>stochastic gradient descent</strong> (SGD) or any of its variants (RMSProp, Adam, etc). The basic idea is to change the parameters <span class="math inline">\(\theta\)</span> in the opposite direction of the gradient of the loss function (or the same direction as the policy gradient, in which case it is called gradient ascent), proportionally to a small learning rate <span class="math inline">\(\eta\)</span>:</p>
+<p><span class="math display">\[
+    \Delta \theta = - \eta \, \nabla_\theta \mathcal{L}(\theta)
+\]</span></p>
+<p>SGD is also called a <strong>steepest descent method</strong>: one searches for the smallest parameter change <span class="math inline">\(\Delta \theta\)</span> inducing the biggest negative change of the loss function. In classical supervised learning, this is what we want: we want to minimize the loss function as fast as possible, while keeping weight changes as small as possible, otherwise learning might become unstable (weight changes computed for a single minibatch might erase the changes made on previous minibatches). The main difficulty of supervised learning is to choose the right value for the learning rate: too high and learning is unstable; too low and learning takes forever.</p>
+<p>In deep RL, we have an additional problem: the problem is not stationary (see Section <a href="./Valuebased.html#sec:limitations-of-deep-neural-networks-for-function-approximation">3.1</a>). In Q-learning, the target <span class="math inline">\(r(s, a, s&#39;) + \gamma \, \max_{a&#39;} Q_\theta(S&#39;, a&#39;)\)</span> is changing with <span class="math inline">\(\theta\)</span>. If the Q-values change a lot between two minibatches, the network will not get any stable target signal to learn from, and the policy will end up suboptimal. The trick is to use <strong>target networks</strong> to compute the target, which can be either an old copy of the current network (vanilla DQN), or a smoothed version of it (DDPG). Obviously, this introduces a bias (the targets are always wrong during training), but this bias converges to zero (after sufficient training, the targets will be almost correct), at the cost of a huge sample complexity.</p>
+<p>Target networks cannot be used in <strong>on-policy</strong> methods, especially actor-critic architectures. As seen in Section <a href="./ImportanceSampling.html#sec:off-policy-actor-critic">4.3</a>, the critic must learn from transitions recently generated by the actor (although importance sampling and the Retrace algorithm might help). The problem with on-policy methods is that they waste a lot of data: they always need fresh samples to learn from and never reuse past experiences. The policy gradient theorem shows why:</p>
+<p><span class="math display">\[
+    \nabla_\theta J(\theta) =  \mathbb{E}_{s \sim \rho_\theta, a \sim \pi_\theta}[\nabla_\theta \log \pi_\theta(s, a) \, Q^{\pi_\theta}(s, a))] \approx  \mathbb{E}_{s \sim \rho_\theta, a \sim \pi_\theta}[\nabla_\theta \log \pi_\theta(s, a) \, Q_\varphi(s, a))]
+\]</span></p>
+<p>If the policy <span class="math inline">\(\pi_\theta\)</span> changes a lot between two updates, the estimated Q-value <span class="math inline">\(Q_\varphi(s, a)\)</span> will represent the value of the action for a totally different policy, not the true Q-value <span class="math inline">\(Q^{\pi_\theta}(s, a)\)</span>. The estimated policy gradient will then be strongly biased and learning will be suboptimal. In other words, the actor should not change much faster than the critic, and vice versa. A naive solution would be to use a very small learning rate for the actor, but this just slows down learning (sample complexity) without solving the problem.</p>
+<p>To solve the problem, we should actually do the opposite of the steepest descent: <em>search for the biggest parameter change <span class="math inline">\(\Delta \theta\)</span> inducing the smallest change in the policy, but in the right direction</em>. If the parameter change is high, the actor will learn a lot internally from each experience. But if the policy change is small between two updates (although the parameters have changed a lot), we might be able to reuse past experiences, as the targets will not be that wrong.</p>
+<p>This is where <strong>natural gradients</strong> come into play.</p>
+<h3 id="sec:principle-of-natural-of-gradients"><span class="header-section-number">4.5.1</span> Principle of natural of gradients</h3>
+<h3 id="sec:natural-policy-gradient"><span class="header-section-number">4.5.2</span> Natural policy gradient</h3>
 <p>Natural policy gradient <span class="citation" data-cites="Kakade2001">Kakade (<a href="References.html#ref-Kakade2001">2001</a>)</span></p>
-<h3 id="sec:natural-actor-critic-nac"><span class="header-section-number">4.5.1</span> Natural Actor Critic (NAC)</h3>
+<h3 id="sec:natural-actor-critic-nac"><span class="header-section-number">4.5.3</span> Natural Actor Critic (NAC)</h3>
 <p><span class="citation" data-cites="Peters2008">Peters and Schaal (<a href="References.html#ref-Peters2008">2008</a>)</span></p>
-<h3 id="sec:trust-region-policy-optimization-trpo"><span class="header-section-number">4.5.2</span> Trust Region Policy Optimization (TRPO)</h3>
+<h3 id="sec:trust-region-policy-optimization-trpo"><span class="header-section-number">4.5.4</span> Trust Region Policy Optimization (TRPO)</h3>
 <p><span class="citation" data-cites="Schulman2015a">Schulman, Levine, et al. (<a href="References.html#ref-Schulman2015a">2015</a>)</span></p>
-<h3 id="sec:proximal-policy-optimization-ppo"><span class="header-section-number">4.5.3</span> Proximal Policy Optimization (PPO)</h3>
+<h3 id="sec:proximal-policy-optimization-ppo"><span class="header-section-number">4.5.5</span> Proximal Policy Optimization (PPO)</h3>
 <p><span class="citation" data-cites="Schulman2017">Schulman et al. (<a href="References.html#ref-Schulman2017">2017</a>)</span></p>
 <p>Explanations from OpenAI: <a href="https://blog.openai.com/openai-baselines-ppo/#content" class="uri">https://blog.openai.com/openai-baselines-ppo/#content</a></p>
-<h3 id="sec:actor-critic-with-experience-replay-acer"><span class="header-section-number">4.5.4</span> Actor-Critic with Experience Replay (ACER)</h3>
+<h3 id="sec:actor-critic-with-experience-replay-acer"><span class="header-section-number">4.5.6</span> Actor-Critic with Experience Replay (ACER)</h3>
 <p><span class="citation" data-cites="Wang2017">Wang et al. (<a href="References.html#ref-Wang2017">2017</a>)</span></p>
 
 <br>

@@ -32,8 +32,8 @@ csl: assets/apalike.csl
 
 # CSS
 css: assets/github.css
-#mathjax: /usr/share/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML
-mathjax: https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML
+mathjax: /usr/share/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML
+#mathjax: https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML
 
 # Latex
 geometry: "margin=1in" 
@@ -742,7 +742,7 @@ The resulting algorithm is called **Deep Q-Network (DQN)**. It is summarized by 
     * Store $(s_t, a_t, r_{t+1}, s_{t+1})$ in the experience replay memory.
     * Every $T_\text{train}$ steps:
         * Sample a minibatch $\mathcal{D}_s$ randomly from $\mathcal{D}$.
-        * For each transition $(s, a, r, s')$ in the minibatch:            
+        * For each transition $(s, a, r, s')$ in the minibatch:
             * Predict the Q-value of the greedy action in the next state $\max_{a'} Q_{\theta'}(s', a')$ using the target network.
             * Compute the target value $y = r + \gamma \, \max_{a'} Q_{\theta'}(s', a')$.
         * Train the value network $Q_{\theta}$ on $\mathcal{D}_s$ to minimize $\mathcal{L}(\theta) = \mathbb{E}_{\mathcal{D}_s}[(y - Q_\theta(s, a))^2]$
@@ -759,7 +759,7 @@ The second thing is that the target network is not updated very often ($T_\text{
 
 $$
     \theta' = \tau \, \theta + (1-\tau) \, \theta'
-$$ 
+$$
 
 If this rule is applied after each step with a very small rate $\tau$, the target network will slowly track the learned network, but never be the same.
 
@@ -784,7 +784,7 @@ The idea is to train independently two value networks: one will be used to find 
 Applying double learning to DQN is particularly straightforward: there are already two value networks, the trained network and the target network. Instead of using the target network to both select the greedy action in the next state and estimate its Q-value, here the trained network $\theta$ is used to select the greedy action $a^* = \text{argmax}_{a'} Q_\theta (s', a')$ while the target network only estimates its Q-value. The target value becomes:
 
 $$
-    y = r(s, a, s') + \gamma \, Q_{\theta'}(s', \text{argmax}_{a'} Q_\theta (s', a')) 
+    y = r(s, a, s') + \gamma \, Q_{\theta'}(s', \text{argmax}_{a'} Q_\theta (s', a'))
 $$
 
 This induces only a small modification of the DQN algorithm and significantly improves its performance and stability:
@@ -794,7 +794,7 @@ This induces only a small modification of the DQN algorithm and significantly im
 * Every $T_\text{train}$ steps:
     * Sample a minibatch $\mathcal{D}_s$ randomly from $\mathcal{D}$.
     * For each transition $(s, a, r, s')$ in the minibatch:
-        * Select the greedy action in the next state $a^* = \text{argmax}_{a'} Q_\theta (s', a')$ using the trained network.     
+        * Select the greedy action in the next state $a^* = \text{argmax}_{a'} Q_\theta (s', a')$ using the trained network.
         * Predict its Q-value $Q_{\theta'}(s', a^*)$ using the target network.
         * Compute the target value $y = r + \gamma \, Q_{\theta'}(s', a*)$.
 
@@ -846,7 +846,7 @@ The range of values taken by the advantages is also much smaller than the Q-valu
 
 $$
     \mathcal{L}(\theta) = \mathbb{E}_\pi([r(s, a, s') + \gamma \, Q_{\theta', \alpha', \beta'}(s', \text{argmax}_{a'} Q_{\theta, \alpha, \beta} (s', a')) - Q_{\theta, \alpha, \beta}(s, a)]^2)
-$$ 
+$$
 
 The difference is that the previous fully-connected layer is forced to represent the value of the input state $V_{\theta, \beta}(s)$ and the advantage of each action $A_{\theta, \alpha}(s, a)$ separately. There are two separate sets of weights in the network, $\alpha$ and $\beta$, to predict these two values, sharing  representations from the early convolutional layers through weights $\theta$. The output layer performs simply a parameter-less summation of both sub-networks:
 
@@ -904,10 +904,6 @@ Double duelling DQN with prioritized replay is currently the state-of-the-art me
 **Average-DQN** proposes to increase the stability and performance of DQN by replacing the single target network (a copy of the trained network) by an average of the last parameter values, in other words an average of many past target networks [@Anschel2016].
 
 @He2016 proposed **fast reward propagation** through optimality tightening to speedup learning: when rewards are sparse, they require a lot of episodes to propagate these rare rewards to all actions leading to it. Their method combines immediate rewards (single steps) with actual returns (as in Monte-Carlo) via a constrained optimization approach.
-
-
-
-
 
 
 <!--PAGEBREAK-->
@@ -972,7 +968,7 @@ $$
     \nabla_\theta J(\theta) = \nabla_\theta \int_\tau \rho_\theta (\tau) \, R(\tau) \, d\tau =  \int_\tau (\nabla_\theta \rho_\theta (\tau)) \, R(\tau) \, d\tau
 $$
 
-We now use the **log-trick**, a simple identity based on the fact that: 
+We now use the **log-trick**, a simple identity based on the fact that:
 
 $$
     \frac{d \log f(x)}{dx} = \frac{f'(x)}{f(x)}
@@ -1040,7 +1036,7 @@ While very simple, the REINFORCE algorithm does not work very well in practice:
 
 1. The returns $\{R(\tau_i)\}$ have a very high variance (as the Q-values in value-based methods), which is problematic for NNs (see @sec:reducing-the-variance).
 2. It requires a lot of episodes to converge (sample inefficient).
-3. It only works with **online** learning: trajectories must be frequently sampled and immediately used to update the policy.  
+3. It only works with **online** learning: trajectories must be frequently sampled and immediately used to update the policy.
 4. The problem must be episodic ($T$ finite).
 
 However, it has two main advantages:
@@ -1069,7 +1065,7 @@ Another related problem is that the REINFORCE gradient is sensitive to **reward 
 1. $R(\tau_1) = 1$ and $R(\tau_2) = -1$
 2. $R(\tau_1) = 3$ and $R(\tau_2) = 1$
 
-In both cases, the policy should select the trajectory $\tau_1$. However, the policy gradient for $\tau_2$ will change its sign between the two cases, although the problem is the same! What we want to do is to maximize the returns, regardless the absolute value of the rewards, but the returns are unbounded. Because of the non-stationarity of the problem (the agent becomes better with training, so the returns of the sampled trajectories will increase), the policy gradients will increase over time, what is linked to the variance problem. Value-based methods addressed this problem by using **target networks**, but it is not a perfect solution (the gradients become biased). 
+In both cases, the policy should select the trajectory $\tau_1$. However, the policy gradient for $\tau_2$ will change its sign between the two cases, although the problem is the same! What we want to do is to maximize the returns, regardless the absolute value of the rewards, but the returns are unbounded. Because of the non-stationarity of the problem (the agent becomes better with training, so the returns of the sampled trajectories will increase), the policy gradients will increase over time, what is linked to the variance problem. Value-based methods addressed this problem by using **target networks**, but it is not a perfect solution (the gradients become biased).
 
 
 A first simple but effective idea to solve both problems would be to substract the mean of the sampled returns from the returns:
@@ -1113,7 +1109,7 @@ $$
     b = \frac{\mathbb{E}_{\tau \sim \rho_\theta}[(\nabla_\theta \log \rho_\theta (\tau))^2 \, R(\tau)]}{\mathbb{E}_{\tau \sim \rho_\theta}[(\nabla_\theta \log \rho_\theta (\tau))^2]}
 $$
 
-but the mean reward actually work quite well. Advantage actor-critic methods (@sec:advantage-actor-critic-methods) replace the constant $b$ with an estimate of the value of each state $\hat{V}(s_t)$. 
+but the mean reward actually work quite well. Advantage actor-critic methods (@sec:advantage-actor-critic-methods) replace the constant $b$ with an estimate of the value of each state $\hat{V}(s_t)$.
 
 ### Policy Gradient theorem
 
@@ -1129,7 +1125,7 @@ $$
  \nabla_\theta J(\theta) \approx \frac{1}{N} \sum_{i=1}^N (\sum_{t=0}^T \nabla_\theta \log \pi_\theta(s_t, a_t)  \, \sum_{t'=t}^T \gamma^{t'-t} \, r(s_{t'}, a_{t'}, s_{t'+1}) )
 $$
 
-The quantity $\hat{Q}(s_t, a_t) = \sum_{t'=t}^T \gamma^{t'-t} \, r(s_{t'}, a_{t'}, s_{t'+1})$ is called the **reward to-go** from the transition $(s_t, a_t)$, i.e. the discounted sum of future rewards after that transition. Quite obviously, the Q-value of that action is the mathematical expectation of this reward to-go. 
+The quantity $\hat{Q}(s_t, a_t) = \sum_{t'=t}^T \gamma^{t'-t} \, r(s_{t'}, a_{t'}, s_{t'+1})$ is called the **reward to-go** from the transition $(s_t, a_t)$, i.e. the discounted sum of future rewards after that transition. Quite obviously, the Q-value of that action is the mathematical expectation of this reward to-go.
 
 ![The reward to-go is the sum of rewards gathered during a single trajectory after a transition $(s, a)$. The Q-value of the action $(s, a)$ is the expectation of the reward to-go. Taken from S. Levine's lecture <http://rll.berkeley.edu/deeprlcourse/>.](img/rewardtogo.png){#fig:rewardtogo width=30%}
 
@@ -1145,7 +1141,7 @@ $${#eq:policygradienttheorem}
 
 where $\rho_\theta$ is the distribution of states reachable under the policy $\pi_\theta$. Because the actual return $R(\tau)$ is replaced by its expectation $Q^{\pi_\theta}(s, a)$, the policy gradient is now a mathematical expectation over **single transitions** instead of complete trajectories, allowing **bootstrapping** as in temporal difference methods (@sec:temporal-difference).
 
-One clearly sees that REINFORCE is actually a special case of the policy gradient theorem, where the Q-value of an action replaces the return obtained during the corresponding trajectory. 
+One clearly sees that REINFORCE is actually a special case of the policy gradient theorem, where the Q-value of an action replaces the return obtained during the corresponding trajectory.
 
 The problem is of course that the true Q-value of the actions is as unknown as the policy. However, @Sutton1999 showed that it is possible to estimate the Q-values with a function approximator $Q_\varphi(s, a)$ with parameters $\varphi$ and obtain an unbiased estimation:
 
@@ -1166,10 +1162,9 @@ The resulting algorithm belongs to the **actor-critic** class, in the sense that
 
 Most policy-gradient algorithms (A3C, DPPG, TRPO) are actor-critic architectures. Some remarks already:
 
-* Trajectories now appear only implicitely in the policy gradient, one can even sample single transitions. It should therefore be possible (with modifications) to do **off-policy learning**, for example with using importance sampling (@sec:importance-sampling) or a replay buffer of stored transitions as in DQN (see ACER sec:actor-critic-with-experience-replay-acer). REINFORCE works strictly on-policy.
+* Trajectories now appear only implicitely in the policy gradient, one can even sample single transitions. It should therefore be possible (with modifications) to do **off-policy learning**, for example with using importance sampling (@sec:importance-sampling) or a replay buffer of stored transitions as in DQN (see ACER @sec:actor-critic-with-experience-replay-acer). REINFORCE works strictly on-policy.
 * The policy gradient theorem suffers from the same **high variance** problem as REINFORCE. The different algorithms presented later are principally attempts to solve this problem and reduce the sample complexity: advantages, deterministic policies, natural gradients...
 * The actor and the critic can be completely separated, or share some parameters.
-
 
 
 <!--PAGEBREAK-->
@@ -1542,7 +1537,7 @@ $$
     \frac{\rho_\theta(\tau)}{\rho_b(\tau)} = \frac{p_0 (s_0) \, \prod_{t=0}^T \pi_\theta(s_t, a_t) p(s_{t+1} | s_t, a_t)}{p_0 (s_0) \, \prod_{t=0}^T b(s_t, a_t) p(s_{t+1} | s_t, a_t)} = \frac{\prod_{t=0}^T \pi_\theta(s_t, a_t)}{\prod_{t=0}^T b(s_t, a_t)} = \prod_{t=0}^T \frac{\pi_\theta(s_t, a_t)}{b(s_t, a_t)}
 $$
 
-This allows to estimate the objective function $J(\theta)$ using Monte Carlo sampling [@Meuleau2000,@Peshkin2002]:
+This allows to estimate the objective function $J(\theta)$ using Monte Carlo sampling [@Meuleau2000;@Peshkin2002]:
 
 $$
   J(\theta) \approx \frac{1}{m} \, \sum_{i=1}^m \frac{\rho_\theta(\tau_i)}{\rho_b(\tau_i)} \, R(\tau_i)
@@ -1729,14 +1724,16 @@ In the paper, they furthermore used entropy regularization as in A3C. They showe
 
 ## Deterministic Policy Gradient (DPG)
 
-So far, the actor produces a stochastic policy $\pi_\theta(s)$ assigning probabilities to each discrete action or necessitating sampling in some distribution for continuous actions (see @sec:stochastic-actor-critic-for-continuous-action-spaces). The main advantage is that stochastic policies ensure **exploration** of the state-action space: as most actions have a non-zero probability of being selected, we should not miss any important reward which should be ignored if the greedy action is always selected (exploration/exploitation dilemma). There are however two drawbacks:
+So far, the actor produces a stochastic policy $\pi_\theta(s)$ assigning probabilities to each discrete action or necessitating sampling in some distribution for continuous actions (see @sec:stochastic-actor-critic-for-continuous-action-spaces). The main advantage is that stochastic policies ensure **exploration** of the state-action space: as most actions have a non-zero probability of being selected, we should not miss any important reward which should be ignored if the greedy action is always selected (exploration/exploitation dilemma).
 
-1. The policy gradient theorem only works **on-policy**: the value of an action estimated by the critic must have been produced recently by the actor, otherwise the bias would increase dramatically. This prevents the use of an experience replay memory as in DQN to stabilize learning. Importance sampling can help, but is unstable for long trajectories.
-2. Because of the stochasticity of the policy, the returns may vary considerably between two episodes generated by the same optimal policy. This induces a lot of **variance** in the policy gradient, which explains why policy gradient methods have a worse **sample complexity** than value-based methods: they need more samples to get rid of this variance. 
+There are however two drawbacks:
 
-Successful value-based methods such as DQN produce a **deterministic policy**, where the action to be executed after learning is simply the greedy action $a^*_t = \text{argmax}_a Q_\theta(s_t, a)$. Exploration is enforced by forcing the behavior policy (the one used to generate the sample) to be stochastic ($\epsilon$-greedy), but the learned policy is itself deterministic. This is called **off-policy** learning, allowing to use a different policy than the learned one to explore. When using an experience replay memory, the behavior policy is simply an older version of the learning policy (as samples stored in the ERM were generated by an older version of the actor).
+1. The policy gradient theorem only works **on-policy**: the value of an action estimated by the critic must have been produced recently by the actor, otherwise the bias would increase dramatically (but see importance sampling, @sec:off-policy-actor-critic). This prevents the use of an experience replay memory as in DQN to stabilize learning. Importance sampling can help, but is unstable for long trajectories.
+2. Because of the stochasticity of the policy, the returns may vary considerably between two episodes generated by the same optimal policy. This induces a lot of **variance** in the policy gradient, which explains why policy gradient methods have a worse **sample complexity** than value-based methods: they need more samples to get rid of this variance.
 
-In this section, we will see the now state-of-the-art method DDPG (Deep Deterministic Policy Gradient), which tries to combine the advantages of policy gradient methods (continous or highly dimensional outputs, stability) with those of value-based methods (sample efficiency, off-policy). @sec:off-policy-actor-critic will present alternative to the deterministic policy methods to achieve off-policy learning.
+Successful value-based methods such as DQN produce a **deterministic policy**, where the action to be executed after learning is simply the greedy action $a^*_t = \text{argmax}_a Q_\theta(s_t, a)$. Exploration is enforced by forcing the behavior policy (the one used to generate the sample) to be stochastic ($\epsilon$-greedy), but the learned policy is itself deterministic. This is **off-policy** learning, allowing to use a different policy than the learned one to explore. When using an experience replay memory, the behavior policy is simply an older version of the learning policy (as samples stored in the ERM were generated by an older version of the actor).
+
+In this section, we will see the now state-of-the-art method DDPG (Deep Deterministic Policy Gradient), which tries to combine the advantages of policy gradient methods (actor-critic, continous or highly dimensional outputs, stability) with those of value-based methods (sample efficiency, off-policy). 
 
 
 ### Deterministic policy gradient theorem
@@ -1749,7 +1746,7 @@ $$
 
 As in the stochastic case, the distribution of states reachable by the policy $\rho_\mu$ is impossible to estimate, so we will have to perform approximations. Building on @Hafner2011, @Silver2014 showed how to obtain a usable gradient for the objective function when the policy is deterministic.
 
-Considering that the Q-value of an action is the expectation of the reward to-go after that action $Q^\pi(s, a) = \mathbb{E}_\pi[R(s, a)]$, maximizing the returns or maximizing the true Q-value of all actions leads to the same optimal policy. This is the basic idea behind dynamic programming (see @sec:dynamic-programming). where *policy evaluation* first finds the true Q-value of all state-action pairs and *policy improvement* changes the policy by selecting the action with the maximal Q-value $a^*_t = \text{argmax}_a Q_\theta(s_t, a)$. 
+Considering that the Q-value of an action is the expectation of the reward to-go after that action $Q^\pi(s, a) = \mathbb{E}_\pi[R(s, a)]$, maximizing the returns or maximizing the true Q-value of all actions leads to the same optimal policy. This is the basic idea behind dynamic programming (see @sec:dynamic-programming). where *policy evaluation* first finds the true Q-value of all state-action pairs and *policy improvement* changes the policy by selecting the action with the maximal Q-value $a^*_t = \text{argmax}_a Q_\theta(s_t, a)$.
 
 In the continuous case, we will simply state that the gradient of the objective function is the same as the gradient of the Q-value. Supposing we have an unbiased estimate $Q^\mu(s, a)$ of the value of any action in $s$, changing the policy $\mu_\theta(s)$ in the direction of $\nabla_\theta Q^\mu(s, a)$ leads to an action with a higher Q-value, therefore with a higher associated return:
 
@@ -1769,7 +1766,7 @@ $$
     \frac{\partial Q(s,a)}{\partial \theta} = \frac{\partial Q(s,a)}{\partial a} \times \frac{\partial a}{\partial \theta}
 $$
 
-The first term defines of the Q-value of an action changes when one varies slightly the action (if I move my joint a bit more to the right, do I get a higher Q-value, hence more reward?), the second term defines how the action changes when the parameters $\theta$ of the actor change (which weights should be changed in order to produce that action with a slightly higher Q-value?). 
+The first term defines of the Q-value of an action changes when one varies slightly the action (if I move my joint a bit more to the right, do I get a higher Q-value, hence more reward?), the second term defines how the action changes when the parameters $\theta$ of the actor change (which weights should be changed in order to produce that action with a slightly higher Q-value?).
 
 We already see an **actor-critic** architecture emerging from this equation: $\nabla_\theta \mu_\theta(s)$ only depends on the parameterized actor, while $\nabla_a Q^\mu(s, a)$ is a sort of critic, telling the actor in which direction to change its policy: towards actions associated with more reward.
 
@@ -1788,7 +1785,7 @@ $$
 
 ![Architecture of the DPG (deterministic policy gradient) method.](img/dpg.png){#fig:dpg width=65%}
 
-@Silver2014 investigated the performance of DPG using linear function approximators and showed that it compared positively to stochastic algorithms in high-dimensional or continuous action spaces. However, non-linear function approximators such as deep NN would not work yet. 
+@Silver2014 investigated the performance of DPG using linear function approximators and showed that it compared positively to stochastic algorithms in high-dimensional or continuous action spaces. However, non-linear function approximators such as deep NN would not work yet.
 
 ### Deep Deterministic Policy Gradient (DDPG)
 
@@ -1803,9 +1800,9 @@ They modified the update frequency of the target networks originally used in DQN
 
 $$
     \theta' = \tau \, \theta + (1-\tau) \, \theta'
-$$ 
+$$
 
-with $\tau <<1$. Using this update rule, the target networks are always "late" with respect to the trained networks, providing more stability to the learning of Q-values. 
+with $\tau <<1$. Using this update rule, the target networks are always "late" with respect to the trained networks, providing more stability to the learning of Q-values.
 
 The key idea borrowed from DPG is the policy gradient for the actor. The critic is learned using regular Q-learning and target networks:
 
@@ -1843,15 +1840,15 @@ The pseudo-algorithm is as follows:
 * Initialize experience replay memory $\mathcal{D}$ of maximal size $N$.
 
 * for episode $\in [1, M]$:
-    * Initialize random process $\xi$. 
+    * Initialize random process $\xi$.
     * Observe the initial state $s_0$.
     * for $t \in [0, T_\text{max}]$:
         * Select the action $a_t = \mu_\theta(s_t) + \xi$ according to the current policy and the noise.
         * Perform the action $a_t$ and observe the next state $s_{t+1}$ and the reward $r_{t+1}$.
         * Store $(s_t, a_t, r_{t+1}, s_{t+1})$ in the experience replay memory.
-        
+
         * Sample a minibatch of $N$ transitions randomly from $\mathcal{D}$.
-        * For each transition $(s_k, a_k, r_k, s'_k)$ in the minibatch:            
+        * For each transition $(s_k, a_k, r_k, s'_k)$ in the minibatch:
             * Compute the target value using target networks $y_k = r_k + \gamma \, Q_{\varphi'}(s'_k, \mu_{\theta'}(s'_k))$.
         * Update the critic by minimizing:
         $$
@@ -1861,7 +1858,7 @@ The pseudo-algorithm is as follows:
         $$
             \nabla_\theta J(\theta) = \frac{1}{N} \sum_k \nabla_\theta \mu_\theta(s_k) \times \nabla_a Q_\varphi(s_k, a) |_{a = \mu_\theta(s_k)}
         $$
-        * Update the target networks:  
+        * Update the target networks:
         $$\theta' \leftarrow \tau \theta + (1-\tau) \, \theta'$$
         $$\varphi' \leftarrow \tau \varphi + (1-\tau) \, \varphi'$$
 
@@ -1871,7 +1868,7 @@ The question that arises is how to obtain the gradient of the Q-value w.r.t the 
 
 $$
     \nabla_a Q_\varphi(s, a) \approx \frac{Q_\varphi(s, a + da) - Q_\varphi(s, a)}{da}
-$$ 
+$$
 
 Note that the DDPG algorithm is **off-policy**: the samples used to train the actor come from the replay buffer, i.e. were generated by an older version of the target policy. DDPG does not rely on importance sampling: as the policy is deterministic (we maximize $\mathbb{E}_{s}[Q(s, \mu_\theta(s))]$), there is no need to balance the probabilities of the behavior and target policies (with stochastic policies, one should maximize $\mathbb{E}_{s}[\sum_{a\in\mathcal{A}} \pi(s, a) Q(s, a)]$). In other words, the importance sampling weight can safely be set to 1 for deterministic policies.
 
@@ -1879,7 +1876,7 @@ DDPG has rapidly become the state-of-the-art model-free method for continuous ac
 
 **Additional references:** see <http://pemami4911.github.io/blog/2016/08/21/ddpg-rl.html> for additional explanations and step-by-step tensorflow code and <https://lilianweng.github.io/lil-log/2018/04/08/policy-gradient-algorithms.html> for contextual explanations.
 
-### Distributed Distributional DDPG (D4PG) 
+### Distributed Distributional DDPG (D4PG)
 
 Distributed Distributional DDPG [D4PG,@BarthMaron2018] proposed recently several improvements on DDPG to make it more efficient:
 
@@ -1892,14 +1889,35 @@ Distributed Distributional DDPG [D4PG,@BarthMaron2018] proposed recently several
 4. The replay buffer uses **Prioritized Experience Replay** [@Schaul2015] to sample transitions based the information gain.
 
 
-
-
-
 <!--PAGEBREAK-->
 
-
-
 ## Natural Gradients
+
+The deep networks used as function approximators in the methods presented until now were all optimized (trained) using **stochastic gradient descent** (SGD) or any of its variants (RMSProp, Adam, etc). The basic idea is to change the parameters $\theta$ in the opposite direction of the gradient of the loss function (or the same direction as the policy gradient, in which case it is called gradient ascent), proportionally to a small learning rate $\eta$:
+
+$$
+    \Delta \theta = - \eta \, \nabla_\theta \mathcal{L}(\theta)
+$$
+
+SGD is also called a **steepest descent method**: one searches for the smallest parameter change $\Delta \theta$ inducing the biggest negative change of the loss function. In classical supervised learning, this is what we want: we want to minimize the loss function as fast as possible, while keeping weight changes as small as possible, otherwise learning might become unstable (weight changes computed for a single minibatch might erase the changes made on previous minibatches). The main difficulty of supervised learning is to choose the right value for the learning rate: too high and learning is unstable; too low and learning takes forever.
+
+In deep RL, we have an additional problem: the problem is not stationary (see @sec:limitations-of-deep-neural-networks-for-function-approximation). In Q-learning, the target $r(s, a, s') + \gamma \, \max_{a'} Q_\theta(S', a')$ is changing with $\theta$. If the Q-values change a lot between two minibatches, the network will not get any stable target signal to learn from, and the policy will end up suboptimal. The trick is to use **target networks** to compute the target, which can be either an old copy of the current network (vanilla DQN), or a smoothed version of it (DDPG). Obviously, this introduces a bias (the targets are always wrong during training), but this bias converges to zero (after sufficient training, the targets will be almost correct), at the cost of a huge sample complexity.
+
+Target networks cannot be used in **on-policy** methods, especially actor-critic architectures. As seen in @sec:off-policy-actor-critic, the critic must learn from transitions recently generated by the actor (although importance sampling and the Retrace algorithm might help). The problem with on-policy methods is that they waste a lot of data: they always need fresh samples to learn from and never reuse past experiences. The policy gradient theorem shows why:
+
+$$
+    \nabla_\theta J(\theta) =  \mathbb{E}_{s \sim \rho_\theta, a \sim \pi_\theta}[\nabla_\theta \log \pi_\theta(s, a) \, Q^{\pi_\theta}(s, a))] \approx  \mathbb{E}_{s \sim \rho_\theta, a \sim \pi_\theta}[\nabla_\theta \log \pi_\theta(s, a) \, Q_\varphi(s, a))]
+$$
+
+If the policy $\pi_\theta$ changes a lot between two updates, the estimated Q-value $Q_\varphi(s, a)$ will represent the value of the action for a totally different policy, not the true Q-value $Q^{\pi_\theta}(s, a)$. The estimated policy gradient will then be strongly biased and learning will be suboptimal. In other words, the actor should not change much faster than the critic, and vice versa. A naive solution would be to use a very small learning rate for the actor, but this just slows down learning (sample complexity) without solving the problem.
+
+To solve the problem, we should actually do the opposite of the steepest descent: *search for the biggest parameter change $\Delta \theta$ inducing the smallest change in the policy, but in the right direction*. If the parameter change is high, the actor will learn a lot internally from each experience. But if the policy change is small between two updates (although the parameters have changed a lot), we might be able to reuse past experiences, as the targets will not be that wrong.
+
+This is where **natural gradients** come into play.
+
+### Principle of natural of gradients
+
+### Natural policy gradient
 
 Natural policy gradient @Kakade2001
 
@@ -1920,8 +1938,6 @@ Explanations from OpenAI: <https://blog.openai.com/openai-baselines-ppo/#content
 ### Actor-Critic with Experience Replay (ACER)
 
 @Wang2017
-
-
 
 
 <!--PAGEBREAK-->
@@ -2013,6 +2029,8 @@ Deep neuroevolution at Uber: <https://eng.uber.com/deep-neuroevolution/>
 ## Limitations
 
 Excellent blog post from Alex Irpan on the limitations of deep RL: <https://www.alexirpan.com/2018/02/14/rl-hard.html>
+
+Another documented critic on deep RL: <https://thegradient.pub/why-rl-is-flawed/>
 
 ## Reward shaping
 

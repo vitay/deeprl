@@ -10,7 +10,7 @@
 
   <link rel="stylesheet" href="assets/syntax.css">
   <link rel="stylesheet" href="assets/github.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+  <script src="/usr/share/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
   <!--[if lt IE 9]>
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
   <![endif]-->
@@ -84,10 +84,12 @@
 <li><a href="./DPG.html#sec:distributed-distributional-ddpg-d4pg"><span class="toc-section-number">4.4.3</span> Distributed Distributional DDPG (D4PG)</a></li>
 </ul></li>
 <li><a href="./NaturalGradient.html#sec:natural-gradients"><span class="toc-section-number">4.5</span> Natural Gradients</a><ul>
-<li><a href="./NaturalGradient.html#sec:natural-actor-critic-nac"><span class="toc-section-number">4.5.1</span> Natural Actor Critic (NAC)</a></li>
-<li><a href="./NaturalGradient.html#sec:trust-region-policy-optimization-trpo"><span class="toc-section-number">4.5.2</span> Trust Region Policy Optimization (TRPO)</a></li>
-<li><a href="./NaturalGradient.html#sec:proximal-policy-optimization-ppo"><span class="toc-section-number">4.5.3</span> Proximal Policy Optimization (PPO)</a></li>
-<li><a href="./NaturalGradient.html#sec:actor-critic-with-experience-replay-acer"><span class="toc-section-number">4.5.4</span> Actor-Critic with Experience Replay (ACER)</a></li>
+<li><a href="./NaturalGradient.html#sec:principle-of-natural-of-gradients"><span class="toc-section-number">4.5.1</span> Principle of natural of gradients</a></li>
+<li><a href="./NaturalGradient.html#sec:natural-policy-gradient"><span class="toc-section-number">4.5.2</span> Natural policy gradient</a></li>
+<li><a href="./NaturalGradient.html#sec:natural-actor-critic-nac"><span class="toc-section-number">4.5.3</span> Natural Actor Critic (NAC)</a></li>
+<li><a href="./NaturalGradient.html#sec:trust-region-policy-optimization-trpo"><span class="toc-section-number">4.5.4</span> Trust Region Policy Optimization (TRPO)</a></li>
+<li><a href="./NaturalGradient.html#sec:proximal-policy-optimization-ppo"><span class="toc-section-number">4.5.5</span> Proximal Policy Optimization (PPO)</a></li>
+<li><a href="./NaturalGradient.html#sec:actor-critic-with-experience-replay-acer"><span class="toc-section-number">4.5.6</span> Actor-Critic with Experience Replay (ACER)</a></li>
 </ul></li>
 <li><a href="./OtherPolicyGradient.html#sec:distributional-learning"><span class="toc-section-number">4.6</span> Distributional learning</a><ul>
 <li><a href="./OtherPolicyGradient.html#sec:the-reactor"><span class="toc-section-number">4.6.1</span> The Reactor</a></li>
@@ -181,7 +183,7 @@
 <p><span class="math display">\[
     \frac{\rho_\theta(\tau)}{\rho_b(\tau)} = \frac{p_0 (s_0) \, \prod_{t=0}^T \pi_\theta(s_t, a_t) p(s_{t+1} | s_t, a_t)}{p_0 (s_0) \, \prod_{t=0}^T b(s_t, a_t) p(s_{t+1} | s_t, a_t)} = \frac{\prod_{t=0}^T \pi_\theta(s_t, a_t)}{\prod_{t=0}^T b(s_t, a_t)} = \prod_{t=0}^T \frac{\pi_\theta(s_t, a_t)}{b(s_t, a_t)}
 \]</span></p>
-<p>This allows to estimate the objective function <span class="math inline">\(J(\theta)\)</span> using Monte Carlo sampling <span class="citation" data-cites="Meuleau2000">(Meuleau et al. <a href="References.html#ref-Meuleau2000">2000</a>,<span class="citation" data-cites="Peshkin2002">[@Peshkin2002]</span>)</span>:</p>
+<p>This allows to estimate the objective function <span class="math inline">\(J(\theta)\)</span> using Monte Carlo sampling <span class="citation" data-cites="Meuleau2000 Peshkin2002">(Meuleau et al. <a href="References.html#ref-Meuleau2000">2000</a>; Peshkin and Shelton <a href="References.html#ref-Peshkin2002">2002</a>)</span>:</p>
 <p><span class="math display">\[
   J(\theta) \approx \frac{1}{m} \, \sum_{i=1}^m \frac{\rho_\theta(\tau_i)}{\rho_b(\tau_i)} \, R(\tau_i)
 \]</span></p>
@@ -273,7 +275,7 @@
 <p><span class="math display">\[
     c_s = \lambda \min (1, \frac{\pi(s_s, a_s)}{b(s_s, a_s)})
 \]</span></p>
-<p>The importance sampling weight is clipped to 1, and decays exponentially with the parameter <span class="math inline">\(\lambda\)</span>. It can be seen as a trade-off between importance sampling and eligibility traces. The authors showed that Retrace(<span class="math inline">\(\lambda\)</span>) has a low variance (as it uses multiple returns), is safe (works for all <span class="math inline">\(\pi\)</span> and <span class="math inline">\(b\)</span>) and efficient (it can propagate rewards over many time steps). They used retrace to learn Atari games and compared it positively with DQN, both in terms of optimality and speed of learning. These properties make Retrace particularly suited for deep RL and actor-critic architectures: it is for example used in ACER (Section <a href="./NaturalGradient.html#sec:actor-critic-with-experience-replay-acer">4.5.4</a>) and the Reactor (Section <a href="./OtherPolicyGradient.html#sec:the-reactor">4.6.1</a>).</p>
+<p>The importance sampling weight is clipped to 1, and decays exponentially with the parameter <span class="math inline">\(\lambda\)</span>. It can be seen as a trade-off between importance sampling and eligibility traces. The authors showed that Retrace(<span class="math inline">\(\lambda\)</span>) has a low variance (as it uses multiple returns), is safe (works for all <span class="math inline">\(\pi\)</span> and <span class="math inline">\(b\)</span>) and efficient (it can propagate rewards over many time steps). They used retrace to learn Atari games and compared it positively with DQN, both in terms of optimality and speed of learning. These properties make Retrace particularly suited for deep RL and actor-critic architectures: it is for example used in ACER (Section <a href="./NaturalGradient.html#sec:actor-critic-with-experience-replay-acer">4.5.6</a>) and the Reactor (Section <a href="./OtherPolicyGradient.html#sec:the-reactor">4.6.1</a>).</p>
 <p>Rémi Munos uploaded some slides explaining Retrace in a simpler manner than in the original paper: <a href="https://ewrl.files.wordpress.com/2016/12/munos.pdf" class="uri">https://ewrl.files.wordpress.com/2016/12/munos.pdf</a>.</p>
 <h3 id="sec:self-imitation-learning-sil"><span class="header-section-number">4.3.4</span> Self-Imitation Learning (SIL)</h3>
 <p>We have discussed or now only strictly on-policy or off-policy methods. Off-policy methods are much more stable and efficient, but they learn generally a deterministic policy, what can be problematic in stochastic environments (e.g. two players games: being predictable is clearly an issue). Hybrid methods combining on- and off-policy mechanisms have clearly a great potential.</p>

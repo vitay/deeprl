@@ -10,7 +10,7 @@
 
   <link rel="stylesheet" href="assets/syntax.css">
   <link rel="stylesheet" href="assets/github.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+  <script src="/usr/share/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
   <!--[if lt IE 9]>
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
   <![endif]-->
@@ -84,10 +84,12 @@
 <li><a href="#sec:distributed-distributional-ddpg-d4pg"><span class="toc-section-number">4.4.3</span> Distributed Distributional DDPG (D4PG)</a></li>
 </ul></li>
 <li><a href="#sec:natural-gradients"><span class="toc-section-number">4.5</span> Natural Gradients</a><ul>
-<li><a href="#sec:natural-actor-critic-nac"><span class="toc-section-number">4.5.1</span> Natural Actor Critic (NAC)</a></li>
-<li><a href="#sec:trust-region-policy-optimization-trpo"><span class="toc-section-number">4.5.2</span> Trust Region Policy Optimization (TRPO)</a></li>
-<li><a href="#sec:proximal-policy-optimization-ppo"><span class="toc-section-number">4.5.3</span> Proximal Policy Optimization (PPO)</a></li>
-<li><a href="#sec:actor-critic-with-experience-replay-acer"><span class="toc-section-number">4.5.4</span> Actor-Critic with Experience Replay (ACER)</a></li>
+<li><a href="#sec:principle-of-natural-of-gradients"><span class="toc-section-number">4.5.1</span> Principle of natural of gradients</a></li>
+<li><a href="#sec:natural-policy-gradient"><span class="toc-section-number">4.5.2</span> Natural policy gradient</a></li>
+<li><a href="#sec:natural-actor-critic-nac"><span class="toc-section-number">4.5.3</span> Natural Actor Critic (NAC)</a></li>
+<li><a href="#sec:trust-region-policy-optimization-trpo"><span class="toc-section-number">4.5.4</span> Trust Region Policy Optimization (TRPO)</a></li>
+<li><a href="#sec:proximal-policy-optimization-ppo"><span class="toc-section-number">4.5.5</span> Proximal Policy Optimization (PPO)</a></li>
+<li><a href="#sec:actor-critic-with-experience-replay-acer"><span class="toc-section-number">4.5.6</span> Actor-Critic with Experience Replay (ACER)</a></li>
 </ul></li>
 <li><a href="#sec:distributional-learning"><span class="toc-section-number">4.6</span> Distributional learning</a><ul>
 <li><a href="#sec:the-reactor"><span class="toc-section-number">4.6.1</span> The Reactor</a></li>
@@ -665,7 +667,7 @@
 <p>The idea is to train independently two value networks: one will be used to find the greedy action (the action with the maximal Q-value), the other to estimate the Q-value itself. Even if the first network choose an over-estimated action as the greedy action, the other might provide a less over-estimated value for it, solving the problem.</p>
 <p>Applying double learning to DQN is particularly straightforward: there are already two value networks, the trained network and the target network. Instead of using the target network to both select the greedy action in the next state and estimate its Q-value, here the trained network <span class="math inline">\(\theta\)</span> is used to select the greedy action <span class="math inline">\(a^* = \text{argmax}_{a&#39;} Q_\theta (s&#39;, a&#39;)\)</span> while the target network only estimates its Q-value. The target value becomes:</p>
 <p><span class="math display">\[
-    y = r(s, a, s&#39;) + \gamma \, Q_{\theta&#39;}(s&#39;, \text{argmax}_{a&#39;} Q_\theta (s&#39;, a&#39;)) 
+    y = r(s, a, s&#39;) + \gamma \, Q_{\theta&#39;}(s&#39;, \text{argmax}_{a&#39;} Q_\theta (s&#39;, a&#39;))
 \]</span></p>
 <p>This induces only a small modification of the DQN algorithm and significantly improves its performance and stability:</p>
 <hr />
@@ -675,8 +677,7 @@
 <li>Sample a minibatch <span class="math inline">\(\mathcal{D}_s\)</span> randomly from <span class="math inline">\(\mathcal{D}\)</span>.</li>
 <li>For each transition <span class="math inline">\((s, a, r, s&#39;)\)</span> in the minibatch:
 <ul>
-<li>Select the greedy action in the next state <span class="math inline">\(a^* = \text{argmax}_{a&#39;} Q_\theta (s&#39;, a&#39;)\)</span> using the trained network.<br />
-</li>
+<li>Select the greedy action in the next state <span class="math inline">\(a^* = \text{argmax}_{a&#39;} Q_\theta (s&#39;, a&#39;)\)</span> using the trained network.</li>
 <li>Predict its Q-value <span class="math inline">\(Q_{\theta&#39;}(s&#39;, a^*)\)</span> using the target network.</li>
 <li>Compute the target value <span class="math inline">\(y = r + \gamma \, Q_{\theta&#39;}(s&#39;, a*)\)</span>.</li>
 </ul></li>
@@ -841,8 +842,7 @@
 <ol type="1">
 <li>The returns <span class="math inline">\(\{R(\tau_i)\}\)</span> have a very high variance (as the Q-values in value-based methods), which is problematic for NNs (see Section <a href="#sec:reducing-the-variance">4.1.2</a>).</li>
 <li>It requires a lot of episodes to converge (sample inefficient).</li>
-<li>It only works with <strong>online</strong> learning: trajectories must be frequently sampled and immediately used to update the policy.<br />
-</li>
+<li>It only works with <strong>online</strong> learning: trajectories must be frequently sampled and immediately used to update the policy.</li>
 <li>The problem must be episodic (<span class="math inline">\(T\)</span> finite).</li>
 </ol>
 <p>However, it has two main advantages:</p>
@@ -936,7 +936,7 @@
 </figure>
 <p>Most policy-gradient algorithms (A3C, DPPG, TRPO) are actor-critic architectures. Some remarks already:</p>
 <ul>
-<li>Trajectories now appear only implicitely in the policy gradient, one can even sample single transitions. It should therefore be possible (with modifications) to do <strong>off-policy learning</strong>, for example with using importance sampling (Section <a href="#sec:importance-sampling">4.3.1</a>) or a replay buffer of stored transitions as in DQN (see ACER sec:actor-critic-with-experience-replay-acer). REINFORCE works strictly on-policy.</li>
+<li>Trajectories now appear only implicitely in the policy gradient, one can even sample single transitions. It should therefore be possible (with modifications) to do <strong>off-policy learning</strong>, for example with using importance sampling (Section <a href="#sec:importance-sampling">4.3.1</a>) or a replay buffer of stored transitions as in DQN (see ACER Section <a href="#sec:actor-critic-with-experience-replay-acer">4.5.6</a>). REINFORCE works strictly on-policy.</li>
 <li>The policy gradient theorem suffers from the same <strong>high variance</strong> problem as REINFORCE. The different algorithms presented later are principally attempts to solve this problem and reduce the sample complexity: advantages, deterministic policies, natural gradients…</li>
 <li>The actor and the critic can be completely separated, or share some parameters.</li>
 </ul>
@@ -1109,7 +1109,7 @@
 <p><span class="math display">\[
     \nabla_\theta J(\theta) =  \mathbb{E}_{s_t \sim \rho^\pi, a_t \sim \pi_\theta}[\nabla_\theta \log \pi_\theta (s_t, a_t) \, \sum_{l=0}^\infty (\gamma \lambda)^l \delta_{t+l} ]
 \]</span></p>
-<p>Note that <span class="citation" data-cites="Schulman2015b">Schulman, Moritz, et al. (<a href="#ref-Schulman2015b">2015</a>)</span> additionally use <em>trust region optimization</em> to stabilize learning and further reduce the bias (see Section <a href="#sec:trust-region-policy-optimization-trpo">4.5.2</a>), for now just consider it is a better optimization method than gradient descent. The GAE algorithm is summarized here:</p>
+<p>Note that <span class="citation" data-cites="Schulman2015b">Schulman, Moritz, et al. (<a href="#ref-Schulman2015b">2015</a>)</span> additionally use <em>trust region optimization</em> to stabilize learning and further reduce the bias (see Section <a href="#sec:trust-region-policy-optimization-trpo">4.5.4</a>), for now just consider it is a better optimization method than gradient descent. The GAE algorithm is summarized here:</p>
 <hr />
 <ul>
 <li>Initialize the actor <span class="math inline">\(\pi_\theta\)</span> and the critic <span class="math inline">\(V_\varphi\)</span> with random weights.</li>
@@ -1217,7 +1217,7 @@
 <p><span class="math display">\[
     \frac{\rho_\theta(\tau)}{\rho_b(\tau)} = \frac{p_0 (s_0) \, \prod_{t=0}^T \pi_\theta(s_t, a_t) p(s_{t+1} | s_t, a_t)}{p_0 (s_0) \, \prod_{t=0}^T b(s_t, a_t) p(s_{t+1} | s_t, a_t)} = \frac{\prod_{t=0}^T \pi_\theta(s_t, a_t)}{\prod_{t=0}^T b(s_t, a_t)} = \prod_{t=0}^T \frac{\pi_\theta(s_t, a_t)}{b(s_t, a_t)}
 \]</span></p>
-<p>This allows to estimate the objective function <span class="math inline">\(J(\theta)\)</span> using Monte Carlo sampling <span class="citation" data-cites="Meuleau2000">(Meuleau et al. <a href="#ref-Meuleau2000">2000</a>,<span class="citation" data-cites="Peshkin2002">[@Peshkin2002]</span>)</span>:</p>
+<p>This allows to estimate the objective function <span class="math inline">\(J(\theta)\)</span> using Monte Carlo sampling <span class="citation" data-cites="Meuleau2000 Peshkin2002">(Meuleau et al. <a href="#ref-Meuleau2000">2000</a>; Peshkin and Shelton <a href="#ref-Peshkin2002">2002</a>)</span>:</p>
 <p><span class="math display">\[
   J(\theta) \approx \frac{1}{m} \, \sum_{i=1}^m \frac{\rho_\theta(\tau_i)}{\rho_b(\tau_i)} \, R(\tau_i)
 \]</span></p>
@@ -1309,7 +1309,7 @@
 <p><span class="math display">\[
     c_s = \lambda \min (1, \frac{\pi(s_s, a_s)}{b(s_s, a_s)})
 \]</span></p>
-<p>The importance sampling weight is clipped to 1, and decays exponentially with the parameter <span class="math inline">\(\lambda\)</span>. It can be seen as a trade-off between importance sampling and eligibility traces. The authors showed that Retrace(<span class="math inline">\(\lambda\)</span>) has a low variance (as it uses multiple returns), is safe (works for all <span class="math inline">\(\pi\)</span> and <span class="math inline">\(b\)</span>) and efficient (it can propagate rewards over many time steps). They used retrace to learn Atari games and compared it positively with DQN, both in terms of optimality and speed of learning. These properties make Retrace particularly suited for deep RL and actor-critic architectures: it is for example used in ACER (Section <a href="#sec:actor-critic-with-experience-replay-acer">4.5.4</a>) and the Reactor (Section <a href="#sec:the-reactor">4.6.1</a>).</p>
+<p>The importance sampling weight is clipped to 1, and decays exponentially with the parameter <span class="math inline">\(\lambda\)</span>. It can be seen as a trade-off between importance sampling and eligibility traces. The authors showed that Retrace(<span class="math inline">\(\lambda\)</span>) has a low variance (as it uses multiple returns), is safe (works for all <span class="math inline">\(\pi\)</span> and <span class="math inline">\(b\)</span>) and efficient (it can propagate rewards over many time steps). They used retrace to learn Atari games and compared it positively with DQN, both in terms of optimality and speed of learning. These properties make Retrace particularly suited for deep RL and actor-critic architectures: it is for example used in ACER (Section <a href="#sec:actor-critic-with-experience-replay-acer">4.5.6</a>) and the Reactor (Section <a href="#sec:the-reactor">4.6.1</a>).</p>
 <p>Rémi Munos uploaded some slides explaining Retrace in a simpler manner than in the original paper: <a href="https://ewrl.files.wordpress.com/2016/12/munos.pdf" class="uri">https://ewrl.files.wordpress.com/2016/12/munos.pdf</a>.</p>
 <h3 id="sec:self-imitation-learning-sil"><span class="header-section-number">4.3.4</span> Self-Imitation Learning (SIL)</h3>
 <p>We have discussed or now only strictly on-policy or off-policy methods. Off-policy methods are much more stable and efficient, but they learn generally a deterministic policy, what can be problematic in stochastic environments (e.g. two players games: being predictable is clearly an issue). Hybrid methods combining on- and off-policy mechanisms have clearly a great potential.</p>
@@ -1360,13 +1360,14 @@
 <p>In the paper, they furthermore used entropy regularization as in A3C. They showed that A2C+SIL has a better performance both on Atari games and continuous control problems (Mujoco) than state-of-the art methods (A3C, TRPO, Reactor, PPO). It shows that self-imitation learning can be very useful in problems where exploration is hard: a proper level of exploitation of past experiences actually fosters a deeper exploration of environment.</p>
 <!--PAGEBREAK-->
 <h2 id="sec:deterministic-policy-gradient-dpg"><span class="header-section-number">4.4</span> Deterministic Policy Gradient (DPG)</h2>
-<p>So far, the actor produces a stochastic policy <span class="math inline">\(\pi_\theta(s)\)</span> assigning probabilities to each discrete action or necessitating sampling in some distribution for continuous actions (see Section <a href="#sec:stochastic-actor-critic-for-continuous-action-spaces">4.2.4</a>). The main advantage is that stochastic policies ensure <strong>exploration</strong> of the state-action space: as most actions have a non-zero probability of being selected, we should not miss any important reward which should be ignored if the greedy action is always selected (exploration/exploitation dilemma). There are however two drawbacks:</p>
+<p>So far, the actor produces a stochastic policy <span class="math inline">\(\pi_\theta(s)\)</span> assigning probabilities to each discrete action or necessitating sampling in some distribution for continuous actions (see Section <a href="#sec:stochastic-actor-critic-for-continuous-action-spaces">4.2.4</a>). The main advantage is that stochastic policies ensure <strong>exploration</strong> of the state-action space: as most actions have a non-zero probability of being selected, we should not miss any important reward which should be ignored if the greedy action is always selected (exploration/exploitation dilemma).</p>
+<p>There are however two drawbacks:</p>
 <ol type="1">
-<li>The policy gradient theorem only works <strong>on-policy</strong>: the value of an action estimated by the critic must have been produced recently by the actor, otherwise the bias would increase dramatically. This prevents the use of an experience replay memory as in DQN to stabilize learning. Importance sampling can help, but is unstable for long trajectories.</li>
+<li>The policy gradient theorem only works <strong>on-policy</strong>: the value of an action estimated by the critic must have been produced recently by the actor, otherwise the bias would increase dramatically (but see importance sampling, Section <a href="#sec:off-policy-actor-critic">4.3</a>). This prevents the use of an experience replay memory as in DQN to stabilize learning. Importance sampling can help, but is unstable for long trajectories.</li>
 <li>Because of the stochasticity of the policy, the returns may vary considerably between two episodes generated by the same optimal policy. This induces a lot of <strong>variance</strong> in the policy gradient, which explains why policy gradient methods have a worse <strong>sample complexity</strong> than value-based methods: they need more samples to get rid of this variance.</li>
 </ol>
-<p>Successful value-based methods such as DQN produce a <strong>deterministic policy</strong>, where the action to be executed after learning is simply the greedy action <span class="math inline">\(a^*_t = \text{argmax}_a Q_\theta(s_t, a)\)</span>. Exploration is enforced by forcing the behavior policy (the one used to generate the sample) to be stochastic (<span class="math inline">\(\epsilon\)</span>-greedy), but the learned policy is itself deterministic. This is called <strong>off-policy</strong> learning, allowing to use a different policy than the learned one to explore. When using an experience replay memory, the behavior policy is simply an older version of the learning policy (as samples stored in the ERM were generated by an older version of the actor).</p>
-<p>In this section, we will see the now state-of-the-art method DDPG (Deep Deterministic Policy Gradient), which tries to combine the advantages of policy gradient methods (continous or highly dimensional outputs, stability) with those of value-based methods (sample efficiency, off-policy). Section <a href="#sec:off-policy-actor-critic">4.3</a> will present alternative to the deterministic policy methods to achieve off-policy learning.</p>
+<p>Successful value-based methods such as DQN produce a <strong>deterministic policy</strong>, where the action to be executed after learning is simply the greedy action <span class="math inline">\(a^*_t = \text{argmax}_a Q_\theta(s_t, a)\)</span>. Exploration is enforced by forcing the behavior policy (the one used to generate the sample) to be stochastic (<span class="math inline">\(\epsilon\)</span>-greedy), but the learned policy is itself deterministic. This is <strong>off-policy</strong> learning, allowing to use a different policy than the learned one to explore. When using an experience replay memory, the behavior policy is simply an older version of the learning policy (as samples stored in the ERM were generated by an older version of the actor).</p>
+<p>In this section, we will see the now state-of-the-art method DDPG (Deep Deterministic Policy Gradient), which tries to combine the advantages of policy gradient methods (actor-critic, continous or highly dimensional outputs, stability) with those of value-based methods (sample efficiency, off-policy).</p>
 <h3 id="sec:deterministic-policy-gradient-theorem"><span class="header-section-number">4.4.1</span> Deterministic policy gradient theorem</h3>
 <p>We now assume that we want to learn a parameterized <strong>deterministic policy</strong> <span class="math inline">\(\mu_\theta(s)\)</span>. As for the stochastic policy gradient theorem, the goal is to maximize the expectation over all states reachable by the policy of the reward to-go (return) after each action:</p>
 <p><span class="math display">\[
@@ -1455,8 +1456,7 @@
 <li>Update the actor using the sampled policy gradient: <span class="math display">\[
   \nabla_\theta J(\theta) = \frac{1}{N} \sum_k \nabla_\theta \mu_\theta(s_k) \times \nabla_a Q_\varphi(s_k, a) |_{a = \mu_\theta(s_k)}
   \]</span></li>
-<li><p>Update the target networks:<br />
-<span class="math display">\[\theta&#39; \leftarrow \tau \theta + (1-\tau) \, \theta&#39;\]</span> <span class="math display">\[\varphi&#39; \leftarrow \tau \varphi + (1-\tau) \, \varphi&#39;\]</span></p></li>
+<li><p>Update the target networks: <span class="math display">\[\theta&#39; \leftarrow \tau \theta + (1-\tau) \, \theta&#39;\]</span> <span class="math display">\[\varphi&#39; \leftarrow \tau \varphi + (1-\tau) \, \varphi&#39;\]</span></p></li>
 </ul></li>
 </ul></li>
 </ul>
@@ -1478,15 +1478,30 @@
 </ol>
 <!--PAGEBREAK-->
 <h2 id="sec:natural-gradients"><span class="header-section-number">4.5</span> Natural Gradients</h2>
+<p>The deep networks used as function approximators in the methods presented until now were all optimized (trained) using <strong>stochastic gradient descent</strong> (SGD) or any of its variants (RMSProp, Adam, etc). The basic idea is to change the parameters <span class="math inline">\(\theta\)</span> in the opposite direction of the gradient of the loss function (or the same direction as the policy gradient, in which case it is called gradient ascent), proportionally to a small learning rate <span class="math inline">\(\eta\)</span>:</p>
+<p><span class="math display">\[
+    \Delta \theta = - \eta \, \nabla_\theta \mathcal{L}(\theta)
+\]</span></p>
+<p>SGD is also called a <strong>steepest descent method</strong>: one searches for the smallest parameter change <span class="math inline">\(\Delta \theta\)</span> inducing the biggest negative change of the loss function. In classical supervised learning, this is what we want: we want to minimize the loss function as fast as possible, while keeping weight changes as small as possible, otherwise learning might become unstable (weight changes computed for a single minibatch might erase the changes made on previous minibatches). The main difficulty of supervised learning is to choose the right value for the learning rate: too high and learning is unstable; too low and learning takes forever.</p>
+<p>In deep RL, we have an additional problem: the problem is not stationary (see Section <a href="#sec:limitations-of-deep-neural-networks-for-function-approximation">3.1</a>). In Q-learning, the target <span class="math inline">\(r(s, a, s&#39;) + \gamma \, \max_{a&#39;} Q_\theta(S&#39;, a&#39;)\)</span> is changing with <span class="math inline">\(\theta\)</span>. If the Q-values change a lot between two minibatches, the network will not get any stable target signal to learn from, and the policy will end up suboptimal. The trick is to use <strong>target networks</strong> to compute the target, which can be either an old copy of the current network (vanilla DQN), or a smoothed version of it (DDPG). Obviously, this introduces a bias (the targets are always wrong during training), but this bias converges to zero (after sufficient training, the targets will be almost correct), at the cost of a huge sample complexity.</p>
+<p>Target networks cannot be used in <strong>on-policy</strong> methods, especially actor-critic architectures. As seen in Section <a href="#sec:off-policy-actor-critic">4.3</a>, the critic must learn from transitions recently generated by the actor (although importance sampling and the Retrace algorithm might help). The problem with on-policy methods is that they waste a lot of data: they always need fresh samples to learn from and never reuse past experiences. The policy gradient theorem shows why:</p>
+<p><span class="math display">\[
+    \nabla_\theta J(\theta) =  \mathbb{E}_{s \sim \rho_\theta, a \sim \pi_\theta}[\nabla_\theta \log \pi_\theta(s, a) \, Q^{\pi_\theta}(s, a))] \approx  \mathbb{E}_{s \sim \rho_\theta, a \sim \pi_\theta}[\nabla_\theta \log \pi_\theta(s, a) \, Q_\varphi(s, a))]
+\]</span></p>
+<p>If the policy <span class="math inline">\(\pi_\theta\)</span> changes a lot between two updates, the estimated Q-value <span class="math inline">\(Q_\varphi(s, a)\)</span> will represent the value of the action for a totally different policy, not the true Q-value <span class="math inline">\(Q^{\pi_\theta}(s, a)\)</span>. The estimated policy gradient will then be strongly biased and learning will be suboptimal. In other words, the actor should not change much faster than the critic, and vice versa. A naive solution would be to use a very small learning rate for the actor, but this just slows down learning (sample complexity) without solving the problem.</p>
+<p>To solve the problem, we should actually do the opposite of the steepest descent: <em>search for the biggest parameter change <span class="math inline">\(\Delta \theta\)</span> inducing the smallest change in the policy, but in the right direction</em>. If the parameter change is high, the actor will learn a lot internally from each experience. But if the policy change is small between two updates (although the parameters have changed a lot), we might be able to reuse past experiences, as the targets will not be that wrong.</p>
+<p>This is where <strong>natural gradients</strong> come into play.</p>
+<h3 id="sec:principle-of-natural-of-gradients"><span class="header-section-number">4.5.1</span> Principle of natural of gradients</h3>
+<h3 id="sec:natural-policy-gradient"><span class="header-section-number">4.5.2</span> Natural policy gradient</h3>
 <p>Natural policy gradient <span class="citation" data-cites="Kakade2001">Kakade (<a href="#ref-Kakade2001">2001</a>)</span></p>
-<h3 id="sec:natural-actor-critic-nac"><span class="header-section-number">4.5.1</span> Natural Actor Critic (NAC)</h3>
+<h3 id="sec:natural-actor-critic-nac"><span class="header-section-number">4.5.3</span> Natural Actor Critic (NAC)</h3>
 <p><span class="citation" data-cites="Peters2008">Peters and Schaal (<a href="#ref-Peters2008">2008</a>)</span></p>
-<h3 id="sec:trust-region-policy-optimization-trpo"><span class="header-section-number">4.5.2</span> Trust Region Policy Optimization (TRPO)</h3>
+<h3 id="sec:trust-region-policy-optimization-trpo"><span class="header-section-number">4.5.4</span> Trust Region Policy Optimization (TRPO)</h3>
 <p><span class="citation" data-cites="Schulman2015a">Schulman, Levine, et al. (<a href="#ref-Schulman2015a">2015</a>)</span></p>
-<h3 id="sec:proximal-policy-optimization-ppo"><span class="header-section-number">4.5.3</span> Proximal Policy Optimization (PPO)</h3>
+<h3 id="sec:proximal-policy-optimization-ppo"><span class="header-section-number">4.5.5</span> Proximal Policy Optimization (PPO)</h3>
 <p><span class="citation" data-cites="Schulman2017">Schulman et al. (<a href="#ref-Schulman2017">2017</a>)</span></p>
 <p>Explanations from OpenAI: <a href="https://blog.openai.com/openai-baselines-ppo/#content" class="uri">https://blog.openai.com/openai-baselines-ppo/#content</a></p>
-<h3 id="sec:actor-critic-with-experience-replay-acer"><span class="header-section-number">4.5.4</span> Actor-Critic with Experience Replay (ACER)</h3>
+<h3 id="sec:actor-critic-with-experience-replay-acer"><span class="header-section-number">4.5.6</span> Actor-Critic with Experience Replay (ACER)</h3>
 <p><span class="citation" data-cites="Wang2017">Wang et al. (<a href="#ref-Wang2017">2017</a>)</span></p>
 <!--PAGEBREAK-->
 <h2 id="sec:distributional-learning"><span class="header-section-number">4.6</span> Distributional learning</h2>
@@ -1536,6 +1551,7 @@
 <h1 id="sec:deep-rl-in-practice"><span class="header-section-number">5</span> Deep RL in practice</h1>
 <h2 id="sec:limitations"><span class="header-section-number">5.1</span> Limitations</h2>
 <p>Excellent blog post from Alex Irpan on the limitations of deep RL: <a href="https://www.alexirpan.com/2018/02/14/rl-hard.html" class="uri">https://www.alexirpan.com/2018/02/14/rl-hard.html</a></p>
+<p>Another documented critic on deep RL: <a href="https://thegradient.pub/why-rl-is-flawed/" class="uri">https://thegradient.pub/why-rl-is-flawed/</a></p>
 <h2 id="sec:reward-shaping"><span class="header-section-number">5.2</span> Reward shaping</h2>
 <p>Hindsight experience replay: <span class="citation" data-cites="Andrychowicz2017">Andrychowicz et al. (<a href="#ref-Andrychowicz2017">2017</a>)</span></p>
 <h2 id="sec:simulation-environments"><span class="header-section-number">5.3</span> Simulation environments</h2>
@@ -1680,7 +1696,7 @@
 <p>Li, Yuxi. 2017. “Deep Reinforcement Learning: An Overview,” January. <a href="http://arxiv.org/abs/1701.07274" class="uri">http://arxiv.org/abs/1701.07274</a>.</p>
 </div>
 <div id="ref-Lillicrap2015">
-<p>Lillicrap, Timothy P., Jonathan J. Hunt, Alexander Pritzel, Nicolas Heess, Tom Erez, Yuval Tassa, David Silver, and Daan Wierstra. 2015. “Continuous control with deep reinforcement learning.” <em>CoRR</em>. <a href="http://arxiv.org/abs/1509.02971" class="uri">http://arxiv.org/abs/1509.02971</a>.</p>
+<p>Lillicrap, Timothy P., Jonathan J. Hunt, Alexander Pritzel, Nicolas Heess, Tom Erez, Yuval Tassa, David Silver, and Daan Wierstra. 2015. “Continuous control with deep reinforcement learning,” September. <a href="http://arxiv.org/abs/1509.02971" class="uri">http://arxiv.org/abs/1509.02971</a>.</p>
 </div>
 <div id="ref-Loetzsch2017">
 <p>Lötzsch, Winfried, Julien Vitay, and Fred H. Hamker. 2017. “Training a deep policy gradient-based neural network with asynchronous learners on a simulated robotic problem.” In <em>Inform. 2017. Gesellschaft Für Inform.</em>, edited by Maximilian Eibl and Martin Gaedke, 2143–54. Bonn: Gesellschaft für Informatik, Bonn. <a href="https://dl.gi.de/handle/20.500.12116/3986" class="uri">https://dl.gi.de/handle/20.500.12116/3986</a>.</p>

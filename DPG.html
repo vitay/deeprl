@@ -10,7 +10,7 @@
 
   <link rel="stylesheet" href="assets/syntax.css">
   <link rel="stylesheet" href="assets/github.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+  <script src="/usr/share/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
   <!--[if lt IE 9]>
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
   <![endif]-->
@@ -84,10 +84,12 @@
 <li><a href="./DPG.html#sec:distributed-distributional-ddpg-d4pg"><span class="toc-section-number">4.4.3</span> Distributed Distributional DDPG (D4PG)</a></li>
 </ul></li>
 <li><a href="./NaturalGradient.html#sec:natural-gradients"><span class="toc-section-number">4.5</span> Natural Gradients</a><ul>
-<li><a href="./NaturalGradient.html#sec:natural-actor-critic-nac"><span class="toc-section-number">4.5.1</span> Natural Actor Critic (NAC)</a></li>
-<li><a href="./NaturalGradient.html#sec:trust-region-policy-optimization-trpo"><span class="toc-section-number">4.5.2</span> Trust Region Policy Optimization (TRPO)</a></li>
-<li><a href="./NaturalGradient.html#sec:proximal-policy-optimization-ppo"><span class="toc-section-number">4.5.3</span> Proximal Policy Optimization (PPO)</a></li>
-<li><a href="./NaturalGradient.html#sec:actor-critic-with-experience-replay-acer"><span class="toc-section-number">4.5.4</span> Actor-Critic with Experience Replay (ACER)</a></li>
+<li><a href="./NaturalGradient.html#sec:principle-of-natural-of-gradients"><span class="toc-section-number">4.5.1</span> Principle of natural of gradients</a></li>
+<li><a href="./NaturalGradient.html#sec:natural-policy-gradient"><span class="toc-section-number">4.5.2</span> Natural policy gradient</a></li>
+<li><a href="./NaturalGradient.html#sec:natural-actor-critic-nac"><span class="toc-section-number">4.5.3</span> Natural Actor Critic (NAC)</a></li>
+<li><a href="./NaturalGradient.html#sec:trust-region-policy-optimization-trpo"><span class="toc-section-number">4.5.4</span> Trust Region Policy Optimization (TRPO)</a></li>
+<li><a href="./NaturalGradient.html#sec:proximal-policy-optimization-ppo"><span class="toc-section-number">4.5.5</span> Proximal Policy Optimization (PPO)</a></li>
+<li><a href="./NaturalGradient.html#sec:actor-critic-with-experience-replay-acer"><span class="toc-section-number">4.5.6</span> Actor-Critic with Experience Replay (ACER)</a></li>
 </ul></li>
 <li><a href="./OtherPolicyGradient.html#sec:distributional-learning"><span class="toc-section-number">4.6</span> Distributional learning</a><ul>
 <li><a href="./OtherPolicyGradient.html#sec:the-reactor"><span class="toc-section-number">4.6.1</span> The Reactor</a></li>
@@ -122,13 +124,14 @@
 
 
 <h2 id="sec:deterministic-policy-gradient-dpg"><span class="header-section-number">4.4</span> Deterministic Policy Gradient (DPG)</h2>
-<p>So far, the actor produces a stochastic policy <span class="math inline">\(\pi_\theta(s)\)</span> assigning probabilities to each discrete action or necessitating sampling in some distribution for continuous actions (see Section <a href="./ActorCritic.html#sec:stochastic-actor-critic-for-continuous-action-spaces">4.2.4</a>). The main advantage is that stochastic policies ensure <strong>exploration</strong> of the state-action space: as most actions have a non-zero probability of being selected, we should not miss any important reward which should be ignored if the greedy action is always selected (exploration/exploitation dilemma). There are however two drawbacks:</p>
+<p>So far, the actor produces a stochastic policy <span class="math inline">\(\pi_\theta(s)\)</span> assigning probabilities to each discrete action or necessitating sampling in some distribution for continuous actions (see Section <a href="./ActorCritic.html#sec:stochastic-actor-critic-for-continuous-action-spaces">4.2.4</a>). The main advantage is that stochastic policies ensure <strong>exploration</strong> of the state-action space: as most actions have a non-zero probability of being selected, we should not miss any important reward which should be ignored if the greedy action is always selected (exploration/exploitation dilemma).</p>
+<p>There are however two drawbacks:</p>
 <ol type="1">
-<li>The policy gradient theorem only works <strong>on-policy</strong>: the value of an action estimated by the critic must have been produced recently by the actor, otherwise the bias would increase dramatically. This prevents the use of an experience replay memory as in DQN to stabilize learning. Importance sampling can help, but is unstable for long trajectories.</li>
+<li>The policy gradient theorem only works <strong>on-policy</strong>: the value of an action estimated by the critic must have been produced recently by the actor, otherwise the bias would increase dramatically (but see importance sampling, Section <a href="./ImportanceSampling.html#sec:off-policy-actor-critic">4.3</a>). This prevents the use of an experience replay memory as in DQN to stabilize learning. Importance sampling can help, but is unstable for long trajectories.</li>
 <li>Because of the stochasticity of the policy, the returns may vary considerably between two episodes generated by the same optimal policy. This induces a lot of <strong>variance</strong> in the policy gradient, which explains why policy gradient methods have a worse <strong>sample complexity</strong> than value-based methods: they need more samples to get rid of this variance.</li>
 </ol>
-<p>Successful value-based methods such as DQN produce a <strong>deterministic policy</strong>, where the action to be executed after learning is simply the greedy action <span class="math inline">\(a^*_t = \text{argmax}_a Q_\theta(s_t, a)\)</span>. Exploration is enforced by forcing the behavior policy (the one used to generate the sample) to be stochastic (<span class="math inline">\(\epsilon\)</span>-greedy), but the learned policy is itself deterministic. This is called <strong>off-policy</strong> learning, allowing to use a different policy than the learned one to explore. When using an experience replay memory, the behavior policy is simply an older version of the learning policy (as samples stored in the ERM were generated by an older version of the actor).</p>
-<p>In this section, we will see the now state-of-the-art method DDPG (Deep Deterministic Policy Gradient), which tries to combine the advantages of policy gradient methods (continous or highly dimensional outputs, stability) with those of value-based methods (sample efficiency, off-policy). Section <a href="./ImportanceSampling.html#sec:off-policy-actor-critic">4.3</a> will present alternative to the deterministic policy methods to achieve off-policy learning.</p>
+<p>Successful value-based methods such as DQN produce a <strong>deterministic policy</strong>, where the action to be executed after learning is simply the greedy action <span class="math inline">\(a^*_t = \text{argmax}_a Q_\theta(s_t, a)\)</span>. Exploration is enforced by forcing the behavior policy (the one used to generate the sample) to be stochastic (<span class="math inline">\(\epsilon\)</span>-greedy), but the learned policy is itself deterministic. This is <strong>off-policy</strong> learning, allowing to use a different policy than the learned one to explore. When using an experience replay memory, the behavior policy is simply an older version of the learning policy (as samples stored in the ERM were generated by an older version of the actor).</p>
+<p>In this section, we will see the now state-of-the-art method DDPG (Deep Deterministic Policy Gradient), which tries to combine the advantages of policy gradient methods (actor-critic, continous or highly dimensional outputs, stability) with those of value-based methods (sample efficiency, off-policy).</p>
 <h3 id="sec:deterministic-policy-gradient-theorem"><span class="header-section-number">4.4.1</span> Deterministic policy gradient theorem</h3>
 <p>We now assume that we want to learn a parameterized <strong>deterministic policy</strong> <span class="math inline">\(\mu_\theta(s)\)</span>. As for the stochastic policy gradient theorem, the goal is to maximize the expectation over all states reachable by the policy of the reward to-go (return) after each action:</p>
 <p><span class="math display">\[
@@ -217,8 +220,7 @@
 <li>Update the actor using the sampled policy gradient: <span class="math display">\[
   \nabla_\theta J(\theta) = \frac{1}{N} \sum_k \nabla_\theta \mu_\theta(s_k) \times \nabla_a Q_\varphi(s_k, a) |_{a = \mu_\theta(s_k)}
   \]</span></li>
-<li><p>Update the target networks:<br />
-<span class="math display">\[\theta&#39; \leftarrow \tau \theta + (1-\tau) \, \theta&#39;\]</span> <span class="math display">\[\varphi&#39; \leftarrow \tau \varphi + (1-\tau) \, \varphi&#39;\]</span></p></li>
+<li><p>Update the target networks: <span class="math display">\[\theta&#39; \leftarrow \tau \theta + (1-\tau) \, \theta&#39;\]</span> <span class="math display">\[\varphi&#39; \leftarrow \tau \varphi + (1-\tau) \, \varphi&#39;\]</span></p></li>
 </ul></li>
 </ul></li>
 </ul>

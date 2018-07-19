@@ -10,7 +10,7 @@
 
   <link rel="stylesheet" href="assets/syntax.css">
   <link rel="stylesheet" href="assets/github.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+  <script src="/usr/share/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
   <!--[if lt IE 9]>
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
   <![endif]-->
@@ -84,10 +84,12 @@
 <li><a href="./DPG.html#sec:distributed-distributional-ddpg-d4pg"><span class="toc-section-number">4.4.3</span> Distributed Distributional DDPG (D4PG)</a></li>
 </ul></li>
 <li><a href="./NaturalGradient.html#sec:natural-gradients"><span class="toc-section-number">4.5</span> Natural Gradients</a><ul>
-<li><a href="./NaturalGradient.html#sec:natural-actor-critic-nac"><span class="toc-section-number">4.5.1</span> Natural Actor Critic (NAC)</a></li>
-<li><a href="./NaturalGradient.html#sec:trust-region-policy-optimization-trpo"><span class="toc-section-number">4.5.2</span> Trust Region Policy Optimization (TRPO)</a></li>
-<li><a href="./NaturalGradient.html#sec:proximal-policy-optimization-ppo"><span class="toc-section-number">4.5.3</span> Proximal Policy Optimization (PPO)</a></li>
-<li><a href="./NaturalGradient.html#sec:actor-critic-with-experience-replay-acer"><span class="toc-section-number">4.5.4</span> Actor-Critic with Experience Replay (ACER)</a></li>
+<li><a href="./NaturalGradient.html#sec:principle-of-natural-of-gradients"><span class="toc-section-number">4.5.1</span> Principle of natural of gradients</a></li>
+<li><a href="./NaturalGradient.html#sec:natural-policy-gradient"><span class="toc-section-number">4.5.2</span> Natural policy gradient</a></li>
+<li><a href="./NaturalGradient.html#sec:natural-actor-critic-nac"><span class="toc-section-number">4.5.3</span> Natural Actor Critic (NAC)</a></li>
+<li><a href="./NaturalGradient.html#sec:trust-region-policy-optimization-trpo"><span class="toc-section-number">4.5.4</span> Trust Region Policy Optimization (TRPO)</a></li>
+<li><a href="./NaturalGradient.html#sec:proximal-policy-optimization-ppo"><span class="toc-section-number">4.5.5</span> Proximal Policy Optimization (PPO)</a></li>
+<li><a href="./NaturalGradient.html#sec:actor-critic-with-experience-replay-acer"><span class="toc-section-number">4.5.6</span> Actor-Critic with Experience Replay (ACER)</a></li>
 </ul></li>
 <li><a href="./OtherPolicyGradient.html#sec:distributional-learning"><span class="toc-section-number">4.6</span> Distributional learning</a><ul>
 <li><a href="./OtherPolicyGradient.html#sec:the-reactor"><span class="toc-section-number">4.6.1</span> The Reactor</a></li>
@@ -215,7 +217,7 @@
 <p>The idea is to train independently two value networks: one will be used to find the greedy action (the action with the maximal Q-value), the other to estimate the Q-value itself. Even if the first network choose an over-estimated action as the greedy action, the other might provide a less over-estimated value for it, solving the problem.</p>
 <p>Applying double learning to DQN is particularly straightforward: there are already two value networks, the trained network and the target network. Instead of using the target network to both select the greedy action in the next state and estimate its Q-value, here the trained network <span class="math inline">\(\theta\)</span> is used to select the greedy action <span class="math inline">\(a^* = \text{argmax}_{a&#39;} Q_\theta (s&#39;, a&#39;)\)</span> while the target network only estimates its Q-value. The target value becomes:</p>
 <p><span class="math display">\[
-    y = r(s, a, s&#39;) + \gamma \, Q_{\theta&#39;}(s&#39;, \text{argmax}_{a&#39;} Q_\theta (s&#39;, a&#39;)) 
+    y = r(s, a, s&#39;) + \gamma \, Q_{\theta&#39;}(s&#39;, \text{argmax}_{a&#39;} Q_\theta (s&#39;, a&#39;))
 \]</span></p>
 <p>This induces only a small modification of the DQN algorithm and significantly improves its performance and stability:</p>
 <hr />
@@ -225,8 +227,7 @@
 <li>Sample a minibatch <span class="math inline">\(\mathcal{D}_s\)</span> randomly from <span class="math inline">\(\mathcal{D}\)</span>.</li>
 <li>For each transition <span class="math inline">\((s, a, r, s&#39;)\)</span> in the minibatch:
 <ul>
-<li>Select the greedy action in the next state <span class="math inline">\(a^* = \text{argmax}_{a&#39;} Q_\theta (s&#39;, a&#39;)\)</span> using the trained network.<br />
-</li>
+<li>Select the greedy action in the next state <span class="math inline">\(a^* = \text{argmax}_{a&#39;} Q_\theta (s&#39;, a&#39;)\)</span> using the trained network.</li>
 <li>Predict its Q-value <span class="math inline">\(Q_{\theta&#39;}(s&#39;, a^*)\)</span> using the target network.</li>
 <li>Compute the target value <span class="math inline">\(y = r + \gamma \, Q_{\theta&#39;}(s&#39;, a*)\)</span>.</li>
 </ul></li>
