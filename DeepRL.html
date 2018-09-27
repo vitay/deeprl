@@ -10,7 +10,7 @@
 
   <link rel="stylesheet" href="assets/syntax.css">
   <link rel="stylesheet" href="assets/github.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+  <script src="/usr/share/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
   <!--[if lt IE 9]>
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
   <![endif]-->
@@ -84,12 +84,11 @@
 <li><a href="#sec:distributed-distributional-ddpg-d4pg"><span class="toc-section-number">4.4.3</span> Distributed Distributional DDPG (D4PG)</a></li>
 </ul></li>
 <li><a href="#sec:natural-gradients"><span class="toc-section-number">4.5</span> Natural Gradients</a><ul>
-<li><a href="#sec:principle-of-natural-of-gradients"><span class="toc-section-number">4.5.1</span> Principle of natural of gradients</a></li>
-<li><a href="#sec:natural-policy-gradient"><span class="toc-section-number">4.5.2</span> Natural policy gradient</a></li>
-<li><a href="#sec:natural-actor-critic-nac"><span class="toc-section-number">4.5.3</span> Natural Actor Critic (NAC)</a></li>
-<li><a href="#sec:trust-region-policy-optimization-trpo"><span class="toc-section-number">4.5.4</span> Trust Region Policy Optimization (TRPO)</a></li>
-<li><a href="#sec:proximal-policy-optimization-ppo"><span class="toc-section-number">4.5.5</span> Proximal Policy Optimization (PPO)</a></li>
-<li><a href="#sec:actor-critic-with-experience-replay-acer"><span class="toc-section-number">4.5.6</span> Actor-Critic with Experience Replay (ACER)</a></li>
+<li><a href="#sec:principle-of-natural-gradients"><span class="toc-section-number">4.5.1</span> Principle of natural gradients</a></li>
+<li><a href="#sec:natural-policy-gradient-and-natural-actor-critic-nac"><span class="toc-section-number">4.5.2</span> Natural policy gradient and Natural Actor Critic (NAC)</a></li>
+<li><a href="#sec:trust-region-policy-optimization-trpo"><span class="toc-section-number">4.5.3</span> Trust Region Policy Optimization (TRPO)</a></li>
+<li><a href="#sec:proximal-policy-optimization-ppo"><span class="toc-section-number">4.5.4</span> Proximal Policy Optimization (PPO)</a></li>
+<li><a href="#sec:actor-critic-with-experience-replay-acer"><span class="toc-section-number">4.5.5</span> Actor-Critic with Experience Replay (ACER)</a></li>
 </ul></li>
 <li><a href="#sec:distributional-learning"><span class="toc-section-number">4.6</span> Distributional learning</a><ul>
 <li><a href="#sec:the-reactor"><span class="toc-section-number">4.6.1</span> The Reactor</a></li>
@@ -109,11 +108,15 @@
 <li><a href="#sec:evolutionary-search-es"><span class="toc-section-number">4.10.2</span> Evolutionary Search (ES)</a></li>
 </ul></li>
 </ul></li>
-<li><a href="#sec:deep-rl-in-practice"><span class="toc-section-number">5</span> Deep RL in practice</a><ul>
-<li><a href="#sec:limitations"><span class="toc-section-number">5.1</span> Limitations</a></li>
-<li><a href="#sec:reward-shaping"><span class="toc-section-number">5.2</span> Reward shaping</a></li>
-<li><a href="#sec:simulation-environments"><span class="toc-section-number">5.3</span> Simulation environments</a></li>
-<li><a href="#sec:algorithm-implementations"><span class="toc-section-number">5.4</span> Algorithm implementations</a></li>
+<li><a href="#sec:model-based-rl"><span class="toc-section-number">5</span> Model-based RL</a><ul>
+<li><a href="#sec:dyna-q"><span class="toc-section-number">5.1</span> Dyna-Q</a></li>
+<li><a href="#sec:unsorted-references"><span class="toc-section-number">5.2</span> Unsorted references</a></li>
+</ul></li>
+<li><a href="#sec:deep-rl-in-practice"><span class="toc-section-number">6</span> Deep RL in practice</a><ul>
+<li><a href="#sec:limitations"><span class="toc-section-number">6.1</span> Limitations</a></li>
+<li><a href="#sec:reward-shaping"><span class="toc-section-number">6.2</span> Reward shaping</a></li>
+<li><a href="#sec:simulation-environments"><span class="toc-section-number">6.3</span> Simulation environments</a></li>
+<li><a href="#sec:algorithm-implementations"><span class="toc-section-number">6.4</span> Algorithm implementations</a></li>
 </ul></li>
 <li><a href="#sec:references">References</a></li>
 </ul>
@@ -936,7 +939,7 @@
 </figure>
 <p>Most policy-gradient algorithms (A3C, DPPG, TRPO) are actor-critic architectures. Some remarks already:</p>
 <ul>
-<li>Trajectories now appear only implicitely in the policy gradient, one can even sample single transitions. It should therefore be possible (with modifications) to do <strong>off-policy learning</strong>, for example with using importance sampling (Section <a href="#sec:importance-sampling">4.3.1</a>) or a replay buffer of stored transitions as in DQN (see ACER Section <a href="#sec:actor-critic-with-experience-replay-acer">4.5.6</a>). REINFORCE works strictly on-policy.</li>
+<li>Trajectories now appear only implicitely in the policy gradient, one can even sample single transitions. It should therefore be possible (with modifications) to do <strong>off-policy learning</strong>, for example with using importance sampling (Section <a href="#sec:importance-sampling">4.3.1</a>) or a replay buffer of stored transitions as in DQN (see ACER Section <a href="#sec:actor-critic-with-experience-replay-acer">4.5.5</a>). REINFORCE works strictly on-policy.</li>
 <li>The policy gradient theorem suffers from the same <strong>high variance</strong> problem as REINFORCE. The different algorithms presented later are principally attempts to solve this problem and reduce the sample complexity: advantages, deterministic policies, natural gradients…</li>
 <li>The actor and the critic can be completely separated, or share some parameters.</li>
 </ul>
@@ -949,13 +952,13 @@
 <p>which is the <strong>advantage</strong> of the action <span class="math inline">\(a\)</span> in <span class="math inline">\(s\)</span>, as already seen in <em>duelling networks</em> (Section <a href="#sec:duelling-network">3.5</a>).</p>
 <p>Now the problem is that the critic would have to approximate two functions: <span class="math inline">\(Q^{\pi}(s, a)\)</span> and <span class="math inline">\(V^{\pi}(s)\)</span>. <strong>Advantage actor-critic</strong> methods presented in this section (A2C, A3C, GAE) approximate the advantage of an action:</p>
 <p><span class="math display">\[
-    \nabla_\theta J(\theta) =  \mathbb{E}_{s \sim \rho^\pi, a \sim \pi_\theta}[\nabla_\theta \log \pi_\theta(s, a) \, A_\varphi(s, a)] 
+    \nabla_\theta J(\theta) =  \mathbb{E}_{s \sim \rho^\pi, a \sim \pi_\theta}[\nabla_\theta \log \pi_\theta(s, a) \, A_\varphi(s, a)]
 \]</span></p>
 <p><span class="math inline">\(A_\varphi(s, a)\)</span> is called the <strong>advantage estimate</strong> and should be equal to the real advantage <em>in expectation</em>.</p>
 <p>Different methods could be used to compute the advantage estimate:</p>
 <ul>
 <li><p><span class="math inline">\(A_\varphi(s, a) = R(s, a) - V_\varphi(s)\)</span> is the <strong>MC advantage estimate</strong>, the Q-value of the action being replaced by the actual return.</p></li>
-<li><p><span class="math inline">\(A_\varphi(s, a) = r(s, a, s&#39;) + \gamma \, V_\varphi(s&#39;) - V_\varphi(s))\)</span> is the <strong>TD advantage estimate</strong> or TD error.</p></li>
+<li><p><span class="math inline">\(A_\varphi(s, a) = r(s, a, s&#39;) + \gamma \, V_\varphi(s&#39;) - V_\varphi(s)\)</span> is the <strong>TD advantage estimate</strong> or TD error.</p></li>
 <li><p><span class="math inline">\(A_\varphi(s, a) = \sum_{k=0}^{n-1} \gamma^{k} \, r_{t+k+1} + \gamma^n \, V_\varphi(s_{t+n+1}) - V_\varphi(s_t)\)</span> is the <strong>n-step advantage estimate</strong>.</p></li>
 </ul>
 <p>The most popular approach is the n-step advantage, which is at the core of the methods A2C and A3C, and can be understood as a trade-off between MC and TD. MC and TD advantages could be used as well, but come with the respective disadvantages of MC (need for finite episodes, slow updates) and TD (unstable). Generalized Advantage Estimation (GAE, Section <a href="#sec:generalized-advantage-estimation-gae">4.2.3</a>) takes another interesting approach to estimate the advantage.</p>
@@ -968,7 +971,7 @@
 <li>n-step uses the <span class="math inline">\(n\)</span> next immediate rewards and approximates the rest with the value of the state visited <span class="math inline">\(n\)</span> steps later.</li>
 </ul>
 <p><span id="eq:a2c"><span class="math display">\[
-    \nabla_\theta J(\theta) =  \mathbb{E}_{s_t \sim \rho^\pi, a_t \sim \pi_\theta}[\nabla_\theta \log \pi_\theta(s_t, a_t) \, ( \sum_{k=0}^{n-1} \gamma^{k} \, r_{t+k+1} + \gamma^n \, V_\varphi(s_{t+n+1}) - V_\varphi(s_t))] 
+    \nabla_\theta J(\theta) =  \mathbb{E}_{s_t \sim \rho^\pi, a_t \sim \pi_\theta}[\nabla_\theta \log \pi_\theta(s_t, a_t) \, ( \sum_{k=0}^{n-1} \gamma^{k} \, r_{t+k+1} + \gamma^n \, V_\varphi(s_{t+n+1}) - V_\varphi(s_t))]
 \qquad(11)\]</span></span></p>
 <p>TD can be therefore be seen as a 1-step algorithm. For sparse rewards (mostly zero, +1 or -1 at the end of a game for example), this allows to update the <span class="math inline">\(n\)</span> last actions which lead to a win/loss, instead of only the last one in TD, speeding up learning. However, there is no need for finite episodes as in MC. In other words, n-step estimation ensures a trade-off between bias (wrong upadtes based on estimated as in TD) and variance (variability of the obtained returns as in MC). An alternative to n-step updating is the use of <em>eligibility traces</em> (see Section <a href="#sec:eligibility-traces">2.1.6</a>, <span class="citation" data-cites="Sutton1998">Sutton and Barto (<a href="#ref-Sutton1998">1998</a>)</span>).</p>
 <p>Having a computable formula for the policy gradient, the algorithm is rather simple:</p>
@@ -1059,7 +1062,7 @@
 <p>An interesting addition in A3C is the way they enforce exploration during learning. In actor-critic methods, exploration classically relies on the fact that the learned policies are stochastic (<strong>on-policy</strong>): <span class="math inline">\(\pi(s, a)\)</span> describes the probability of taking the action <span class="math inline">\(a\)</span> in the state <span class="math inline">\(s\)</span>. In discrete action spaces, the output of the actor is usually a softmax layer, ensuring that all actions get a non-zero probability of being selected during training. In continuous action spaces, the executed action is sampled from the output probability distribution. However, this is often not sufficient and hard to control.</p>
 <p>In A3C, the authors added an <strong>entropy regularization</strong> term <span class="citation" data-cites="Williams1991">(Williams and Peng <a href="#ref-Williams1991">1991</a>)</span> to the policy gradient update:</p>
 <p><span id="eq:a3c_entropy"><span class="math display">\[
-    \nabla_\theta J(\theta) =  \mathbb{E}_{s_t \sim \rho^\pi, a_t \sim \pi_\theta}[\nabla_\theta \log \pi_\theta(s_t, a_t) \, ( R_t - V_\varphi(s_t)) + \beta \, \nabla_\theta H(\pi_\theta(s_t))] 
+    \nabla_\theta J(\theta) =  \mathbb{E}_{s_t \sim \rho^\pi, a_t \sim \pi_\theta}[\nabla_\theta \log \pi_\theta(s_t, a_t) \, ( R_t - V_\varphi(s_t)) + \beta \, \nabla_\theta H(\pi_\theta(s_t))]
 \qquad(12)\]</span></span></p>
 <p>For discrete actions, the entropy of the policy for a state <span class="math inline">\(s_t\)</span> is simple to compute: <span class="math inline">\(H(\pi_\theta(s_t)) = - \sum_a \pi_\theta(s_t, a) \, \log \pi_\theta(s_t, a)\)</span>. For continuous actions, replace the sum with an integral. It measures the “randomness” of the policy: if the policy is fully deterministic (the same action is systematically selected), the entropy is zero as it carries no information. If the policy is completely random, the entropy is maximal. Maximizing the entropy at the same time as the returns improves exploration by forcing the policy to be as non-deterministic as possible.</p>
 <p>The parameter <span class="math inline">\(\beta\)</span> controls the level of regularization: we do not want the entropy to dominate either, as a purely random policy does not bring much reward. If <span class="math inline">\(\beta\)</span> is chosen too low, the entropy won’t play a significant role in the optimization and we may obtain a suboptimal deterministic policy early during training as there was not enough exploration. If <span class="math inline">\(\beta\)</span> is too high, the policy will be random. Entropy regularization adds yet another hyperparameter to the problem, but can be really useful for convergence when adequately chosen.</p>
@@ -1109,7 +1112,7 @@
 <p><span class="math display">\[
     \nabla_\theta J(\theta) =  \mathbb{E}_{s_t \sim \rho^\pi, a_t \sim \pi_\theta}[\nabla_\theta \log \pi_\theta (s_t, a_t) \, \sum_{l=0}^\infty (\gamma \lambda)^l \delta_{t+l} ]
 \]</span></p>
-<p>Note that <span class="citation" data-cites="Schulman2015b">Schulman, Moritz, et al. (<a href="#ref-Schulman2015b">2015</a>)</span> additionally use <em>trust region optimization</em> to stabilize learning and further reduce the bias (see Section <a href="#sec:trust-region-policy-optimization-trpo">4.5.4</a>), for now just consider it is a better optimization method than gradient descent. The GAE algorithm is summarized here:</p>
+<p>Note that <span class="citation" data-cites="Schulman2015b">Schulman, Moritz, et al. (<a href="#ref-Schulman2015b">2015</a>)</span> additionally use <em>trust region optimization</em> to stabilize learning and further reduce the bias (see Section <a href="#sec:trust-region-policy-optimization-trpo">4.5.3</a>), for now just consider it is a better optimization method than gradient descent. The GAE algorithm is summarized here:</p>
 <hr />
 <ul>
 <li>Initialize the actor <span class="math inline">\(\pi_\theta\)</span> and the critic <span class="math inline">\(V_\varphi\)</span> with random weights.</li>
@@ -1200,7 +1203,7 @@
 <p><span class="math display">\[
     \hat{J}(\theta) = \mathbb{E}_{\tau \sim \rho_b}[R(\tau)] = \int_\tau \rho_b(\tau) \, R(\tau) \, d\tau
 \]</span></p>
-<p>where <span class="math inline">\(\rho_b\)</span> is the distribution of trajectories generated by the <strong>behavior</strong> policy. In the general case, there is reason why <span class="math inline">\(\hat{J}(\theta)\)</span> should be close from <span class="math inline">\(J(\theta)\)</span>, even when taking their gradient.</p>
+<p>where <span class="math inline">\(\rho_b\)</span> is the distribution of trajectories generated by the <strong>behavior</strong> policy. In the general case, there is no reason why <span class="math inline">\(\hat{J}(\theta)\)</span> should be close from <span class="math inline">\(J(\theta)\)</span>, even when taking their gradient.</p>
 <p><strong>Importance sampling</strong> is a classical statistical method used to estimate properties of a distribution (here the expected return of the trajectories of the target policy) while only having samples generated from a different distribution (here the trajectories of the behavior policy). See for example <a href="https://statweb.stanford.edu/~owen/mc/Ch-var-is.pdf" class="uri">https://statweb.stanford.edu/~owen/mc/Ch-var-is.pdf</a> and <a href="http://timvieira.github.io/blog/post/2014/12/21/importance-sampling" class="uri">http://timvieira.github.io/blog/post/2014/12/21/importance-sampling</a> for more generic explanations.</p>
 <p>The trick is simply to rewrite the objective function as:</p>
 <p><span class="math display">\[
@@ -1309,7 +1312,7 @@
 <p><span class="math display">\[
     c_s = \lambda \min (1, \frac{\pi(s_s, a_s)}{b(s_s, a_s)})
 \]</span></p>
-<p>The importance sampling weight is clipped to 1, and decays exponentially with the parameter <span class="math inline">\(\lambda\)</span>. It can be seen as a trade-off between importance sampling and eligibility traces. The authors showed that Retrace(<span class="math inline">\(\lambda\)</span>) has a low variance (as it uses multiple returns), is safe (works for all <span class="math inline">\(\pi\)</span> and <span class="math inline">\(b\)</span>) and efficient (it can propagate rewards over many time steps). They used retrace to learn Atari games and compared it positively with DQN, both in terms of optimality and speed of learning. These properties make Retrace particularly suited for deep RL and actor-critic architectures: it is for example used in ACER (Section <a href="#sec:actor-critic-with-experience-replay-acer">4.5.6</a>) and the Reactor (Section <a href="#sec:the-reactor">4.6.1</a>).</p>
+<p>The importance sampling weight is clipped to 1, and decays exponentially with the parameter <span class="math inline">\(\lambda\)</span>. It can be seen as a trade-off between importance sampling and eligibility traces. The authors showed that Retrace(<span class="math inline">\(\lambda\)</span>) has a low variance (as it uses multiple returns), is safe (works for all <span class="math inline">\(\pi\)</span> and <span class="math inline">\(b\)</span>) and efficient (it can propagate rewards over many time steps). They used retrace to learn Atari games and compared it positively with DQN, both in terms of optimality and speed of learning. These properties make Retrace particularly suited for deep RL and actor-critic architectures: it is for example used in ACER (Section <a href="#sec:actor-critic-with-experience-replay-acer">4.5.5</a>) and the Reactor (Section <a href="#sec:the-reactor">4.6.1</a>).</p>
 <p>Rémi Munos uploaded some slides explaining Retrace in a simpler manner than in the original paper: <a href="https://ewrl.files.wordpress.com/2016/12/munos.pdf" class="uri">https://ewrl.files.wordpress.com/2016/12/munos.pdf</a>.</p>
 <h3 id="sec:self-imitation-learning-sil"><span class="header-section-number">4.3.4</span> Self-Imitation Learning (SIL)</h3>
 <p>We have discussed or now only strictly on-policy or off-policy methods. Off-policy methods are much more stable and efficient, but they learn generally a deterministic policy, what can be problematic in stochastic environments (e.g. two players games: being predictable is clearly an issue). Hybrid methods combining on- and off-policy mechanisms have clearly a great potential.</p>
@@ -1341,7 +1344,7 @@
 <li>Update the discounted sum of rewards <span class="math inline">\(R_k = r_k + \gamma \, R_{k+1}\)</span> <strong>and store it in the replay buffer <span class="math inline">\(\mathcal{D}\)</span></strong>.</li>
 </ul></li>
 <li><p>Update the actor and the critic <strong>on-policy</strong> with the episode: <span class="math display">\[
-  \theta \leftarrow \theta + \eta \, \sum_k \nabla_\theta \log \pi_\theta(s_k, a_k) \, (R_k - V_\varphi(s_k)) 
+  \theta \leftarrow \theta + \eta \, \sum_k \nabla_\theta \log \pi_\theta(s_k, a_k) \, (R_k - V_\varphi(s_k))
   \]</span> <span class="math display">\[
   \varphi \leftarrow \varphi + \eta \, \sum_k \nabla_\varphi (R - V_\varphi(s_k))^2
   \]</span></p></li>
@@ -1488,20 +1491,88 @@
 <p><span class="math display">\[
     \nabla_\theta J(\theta) =  \mathbb{E}_{s \sim \rho_\theta, a \sim \pi_\theta}[\nabla_\theta \log \pi_\theta(s, a) \, Q^{\pi_\theta}(s, a))] \approx  \mathbb{E}_{s \sim \rho_\theta, a \sim \pi_\theta}[\nabla_\theta \log \pi_\theta(s, a) \, Q_\varphi(s, a))]
 \]</span></p>
-<p>If the policy <span class="math inline">\(\pi_\theta\)</span> changes a lot between two updates, the estimated Q-value <span class="math inline">\(Q_\varphi(s, a)\)</span> will represent the value of the action for a totally different policy, not the true Q-value <span class="math inline">\(Q^{\pi_\theta}(s, a)\)</span>. The estimated policy gradient will then be strongly biased and learning will be suboptimal. In other words, the actor should not change much faster than the critic, and vice versa. A naive solution would be to use a very small learning rate for the actor, but this just slows down learning (sample complexity) without solving the problem.</p>
+<p>If the policy <span class="math inline">\(\pi_\theta\)</span> changes a lot between two updates, the estimated Q-value <span class="math inline">\(Q_\varphi(s, a)\)</span> will represent the value of the action for a totally different policy, not the true Q-value <span class="math inline">\(Q^{\pi_\theta}(s, a)\)</span>. The estimated policy gradient will then be strongly biased and learning will be suboptimal. In other words, the actor should not change much faster than the critic, and vice versa. A naive solution would be to use a very small learning rate for the actor, but this just slows down learning (adding to the sample complexity) without solving the problem.</p>
 <p>To solve the problem, we should actually do the opposite of the steepest descent: <em>search for the biggest parameter change <span class="math inline">\(\Delta \theta\)</span> inducing the smallest change in the policy, but in the right direction</em>. If the parameter change is high, the actor will learn a lot internally from each experience. But if the policy change is small between two updates (although the parameters have changed a lot), we might be able to reuse past experiences, as the targets will not be that wrong.</p>
-<p>This is where <strong>natural gradients</strong> come into play.</p>
-<h3 id="sec:principle-of-natural-of-gradients"><span class="header-section-number">4.5.1</span> Principle of natural of gradients</h3>
-<h3 id="sec:natural-policy-gradient"><span class="header-section-number">4.5.2</span> Natural policy gradient</h3>
-<p>Natural policy gradient <span class="citation" data-cites="Kakade2001">Kakade (<a href="#ref-Kakade2001">2001</a>)</span></p>
-<h3 id="sec:natural-actor-critic-nac"><span class="header-section-number">4.5.3</span> Natural Actor Critic (NAC)</h3>
-<p><span class="citation" data-cites="Peters2008">Peters and Schaal (<a href="#ref-Peters2008">2008</a>)</span></p>
-<h3 id="sec:trust-region-policy-optimization-trpo"><span class="header-section-number">4.5.4</span> Trust Region Policy Optimization (TRPO)</h3>
+<p>This is where <strong>natural gradients</strong> come into play, which are originally a statistical method to optimize over spaces of probability distributions, for example for variational inference. The idea to use natural gradients to train neural networks comes from <span class="citation" data-cites="Amari1998">Amari (<a href="#ref-Amari1998">1998</a>)</span>. <span class="citation" data-cites="Kakade2001">Kakade (<a href="#ref-Kakade2001">2001</a>)</span> applied natural gradients to policy gradient methods, while <span class="citation" data-cites="Peters2008">Peters and Schaal (<a href="#ref-Peters2008">2008</a>)</span> proposed a natural actor-critic algorithm for linear function approximators. The idea was adapted to deep RL by Schulman and colleagues, with Trust Region Policy Optimization <span class="citation" data-cites="Schulman2015a">(TRPO, Schulman, Levine, et al. <a href="#ref-Schulman2015a">2015</a>)</span> and Proximal Policy Optimization <span class="citation" data-cites="Schulman2017">(PPO, Schulman et al. <a href="#ref-Schulman2017">2017</a>)</span>, the latter gaining momentum over DDPG as the go-to method for continuous RL problems, particularly because of its smaller sample complexity and its robustness to hyperparameters.</p>
+<h3 id="sec:principle-of-natural-gradients"><span class="header-section-number">4.5.1</span> Principle of natural gradients</h3>
+<figure>
+<img src="img/naturalgradient.png" alt="Figure 26: Euclidian distances in the parameter space do not represent well the statistical distance between probability distributions. The two Gaussians on the left (\mathcal{N}(0, 0.2) and \mathcal{N}(1, 0.2)) have the same Euclidian distance in the parameter space (d = \sqrt{(\mu_0 - \mu_1)^2+(\sigma_0 - \sigma_1)^2}) than the two Gaussians on the right (\mathcal{N}(0, 10) and \mathcal{N}(1, 10)). However, the Gaussians on the right are much more similar than the two on the left: if you have a single sample, you could not say from which distribution it comes for the Gaussians on the right, while it is obvious for the Gaussians on the left." id="fig:naturalgradient" style="width:80.0%" /><figcaption>Figure 26: Euclidian distances in the parameter space do not represent well the statistical distance between probability distributions. The two Gaussians on the left (<span class="math inline">\(\mathcal{N}(0, 0.2)\)</span> and <span class="math inline">\(\mathcal{N}(1, 0.2)\)</span>) have the same Euclidian distance in the parameter space (<span class="math inline">\(d = \sqrt{(\mu_0 - \mu_1)^2+(\sigma_0 - \sigma_1)^2}\)</span>) than the two Gaussians on the right (<span class="math inline">\(\mathcal{N}(0, 10)\)</span> and <span class="math inline">\(\mathcal{N}(1, 10)\)</span>). However, the Gaussians on the right are much more similar than the two on the left: if you have a single sample, you could not say from which distribution it comes for the Gaussians on the right, while it is obvious for the Gaussians on the left.</figcaption>
+</figure>
+<p>Consider the two Gaussian distributions in the left part of Fig. <a href="#fig:naturalgradient">26</a> (<span class="math inline">\(\mathcal{N}(0, 0.2)\)</span> and <span class="math inline">\(\mathcal{N}(1, 0.2)\)</span>) and the two on the right (<span class="math inline">\(\mathcal{N}(0, 10)\)</span> and <span class="math inline">\(\mathcal{N}(1, 10)\)</span>). In both cases, the Distance in the Euclidian space <span class="math inline">\(d = \sqrt{(\mu_0 - \mu_1)^2+(\sigma_0 - \sigma_1)^2}\)</span> is the same between the two Gaussians. Obviously, the two distributions on the left are however further away from each other than the two on the the right. This indicates that the Euclidian distance in the parameter space (which is what <em>normal</em> gradients act on) is not a correct measurement of the statistical distance between two distributions (which what we want to minimize between two iterations of PG).</p>
+<p>In statistics, a common measurement of the statistical distance between two distributions <span class="math inline">\(p\)</span> and <span class="math inline">\(q\)</span> is the <strong>Kullback-Leibler (KL) divergence</strong> <span class="math inline">\(D_{KL}(p||q)\)</span>, also called relative entropy or information gain. It is defined as:</p>
+<p><span class="math display">\[
+    D_{KL}(p || q) = \mathbb{E}_{x \sim p} [\log \frac{p(x)}{q(x)}]  = \int p(x) \, \log \frac{p(x)}{q(x)} \, dx
+\]</span></p>
+<p>Its minimum is 0 when <span class="math inline">\(p=q\)</span> (as <span class="math inline">\(\log \frac{p(x)}{q(x)}\)</span> is then 0) and is positive otherwise. Minimizing the KL divergence is equivalent to “matching” two distributions. Note that supervised methods in machine learning can all be interpreted as a minimization of the KL divergence: if <span class="math inline">\(p(x)\)</span> represents the distribution of the data (the label of a sample <span class="math inline">\(x\)</span>) and <span class="math inline">\(q(x)\)</span> the one of the model (the prediction of a neural network for the same sample <span class="math inline">\(x\)</span>), supervised methods want the output distribution of the model to match the distribution of the data, i.e. make predictions that are the same as the labels. For generative models, this is for example at the core of <em>generative adversarial networks</em> <span class="citation" data-cites="Goodfellow2014 Arjovsky2017">(Goodfellow et al. <a href="#ref-Goodfellow2014">2014</a>; Arjovsky, Chintala, and Bottou <a href="#ref-Arjovsky2017">2017</a>)</span> or <em>variational autoencoders</em> <span class="citation" data-cites="Kingma2013">(Kingma and Welling <a href="#ref-Kingma2013">2013</a>)</span>.</p>
+<p>The KL divergence is however not symmetrical (<span class="math inline">\(D_{KL}(p || q) \neq D_{KL}(q || p)\)</span>), so a more useful divergence is the symmetric KL divergence, also known as Jensen-Shannon (JS) divergence:</p>
+<p><span class="math display">\[
+    D_{JS}(p || q) = \frac{D_{KL}(p || q) + D_{KL}(q || p)}{2}
+\]</span></p>
+<p>Other forms of divergence measurements exist, such as the Wasserstein distance which improves generative adversarial networks <span class="citation" data-cites="Arjovsky2017">(Arjovsky, Chintala, and Bottou <a href="#ref-Arjovsky2017">2017</a>)</span>, but they are not relevant here. See <a href="https://www.alexirpan.com/2017/02/22/wasserstein-gan.html" class="uri">https://www.alexirpan.com/2017/02/22/wasserstein-gan.html</a> for more explanations.</p>
+<p>We now have a global measurement of the similarity between two distributions on the whole input space, but which is hard to compute. How can we use it anyway in our optimization problem? As mentioned above, we search for the biggest parameter change <span class="math inline">\(\Delta \theta\)</span> inducing the smallest change in the policy. We need a metric linking changes in the parameters of the distribution (the weights of the network) to changes in the distribution itself. In other terms, we will apply gradient descent on the statistical manifold defined by the parameters rather than on the parameters themselves.</p>
+<figure>
+<img src="img/riemannian.png" alt="Figure 27: Illustration of the Riemannian metric. The Euclidian distance between p(x; \theta) and p(x; \theta + \Delta \theta) depends on the Euclidian distance between \theta and \theta + \Delta\theta, i.e. \theta. Riemannian metrics follow the geometry of the manifold to compute that distance, depending on its curvature." id="fig:riemannian" style="width:50.0%" /><figcaption>Figure 27: Illustration of the Riemannian metric. The Euclidian distance between <span class="math inline">\(p(x; \theta)\)</span> and <span class="math inline">\(p(x; \theta + \Delta \theta)\)</span> depends on the Euclidian distance between <span class="math inline">\(\theta\)</span> and <span class="math inline">\(\theta + \Delta\theta\)</span>, i.e. <span class="math inline">\(\theta\)</span>. Riemannian metrics follow the geometry of the manifold to compute that distance, depending on its curvature.</figcaption>
+</figure>
+<p>Let’s consider a parameterized distribution <span class="math inline">\(p(x; \theta)\)</span> and its new value <span class="math inline">\(p(x; \theta + \Delta \theta)\)</span> after applying a small parameter change <span class="math inline">\(\Delta \theta\)</span>. As depicted on Fig. <a href="#fig:riemannian">27</a>, the Euclidian metric in the parameter space (<span class="math inline">\(||\theta + \Delta \theta - \theta||^2\)</span>) does take the structure of the statistical manifold into account. We need to define a <strong>Riemannian metric</strong> which accounts locally for the curvature of the manifold between <span class="math inline">\(\theta\)</span> and <span class="math inline">\(\theta + \Delta \theta\)</span>. The Riemannian distance is defined by the dot product:</p>
+<p><span class="math display">\[
+    ||\Delta \theta||^2 = &lt; \Delta \theta , F(\theta) \, \Delta \theta &gt;
+\]</span></p>
+<p>where <span class="math inline">\(F(\theta)\)</span> is called the Riemannian metric tensor and is an inner product on the tangent space of the manifold at the point <span class="math inline">\(\theta\)</span>.</p>
+<p>When using the symmetric KL divergence to measure the distance between two distributions, the corresponding Riemannian metric is the <strong>Fisher Information Matrix</strong>, define as the Hessian matrix of the KL divergence around <span class="math inline">\(\theta\)</span>, i.e. the matrix of second order derivatives w.r.t the elements of <span class="math inline">\(\theta\)</span>. See <a href="https://stats.stackexchange.com/questions/51185/connection-between-fisher-metric-and-the-relative-entropy" class="uri">https://stats.stackexchange.com/questions/51185/connection-between-fisher-metric-and-the-relative-entropy</a> for an explanation of the link between the Fisher metric and KL divergence.</p>
+<p>The Fisher information matrix is defined as the Hessian of the KL divergence around <span class="math inline">\(\theta\)</span>, i.e. how the manifold locally changes around <span class="math inline">\(\theta\)</span>:</p>
+<p><span class="math display">\[
+    F(\theta) = \nabla^2 D_{JS}(p(x; \theta) || p(x; \theta + \Delta \theta))|_{\Delta \theta = 0}
+\]</span></p>
+<p>which necessitates to compute second order derivatives which are very complex and slow to obtain, especially when there are many parameters <span class="math inline">\(\theta\)</span> (the weights of the NN). Fortunately, it also has a simpler form which only depends on the outer product between the gradients of the log-probabilities:</p>
+<p><span class="math display">\[
+    F(\theta) = \mathbb{E}_{x \sim p(x, \theta)}[ \nabla \log p(x; \theta)  (\nabla \log p(x; \theta))^T]
+\]</span></p>
+<p>which is something we can easily sample and compute.</p>
+<p>Why is it useful? The Fisher Information matrix allows to <strong>locally</strong> approximate (for small <span class="math inline">\(\Delta \theta\)</span>) the KL divergence between the two close distributions (using a second order Taylor series expansion):</p>
+<p><span class="math display">\[
+    D_{JS}(p(x; \theta) || p(x; \theta + \Delta \theta)) \approx \Delta \theta^T \, F(\theta) \, \Delta \theta
+\]</span></p>
+<p>The KL divergence is then locally quadratic, which means that the update rules obtained when minimizing the KL divergence with gradient descent will be linear. Suppose we want to minimize a loss function <span class="math inline">\(L\)</span> parameterized by <span class="math inline">\(\theta\)</span> and depending on the distribution <span class="math inline">\(p\)</span>. <strong>Natural gradient descent</strong> <span class="citation" data-cites="Amari1998">(Amari <a href="#ref-Amari1998">1998</a>)</span> attempts to move along the statistical manifold defined by <span class="math inline">\(p\)</span> by correcting the gradient of <span class="math inline">\(L(\theta)\)</span> using the local curvature of the KL-divergence surface, i.e. moving some given distance in the direction <span class="math inline">\(\tilde{\nabla_\theta} L(\theta)\)</span>:</p>
+<p><span class="math display">\[
+    \tilde{\nabla_\theta} L(\theta) = F(\theta)^{-1} \, \nabla_\theta L(\theta)
+\]</span></p>
+<p><span class="math inline">\(\tilde{\nabla_\theta} L(\theta)\)</span> is the <strong>natural gradient</strong> of <span class="math inline">\(L(\theta)\)</span>. Natural gradient descent simply takes steps in this direction:</p>
+<p><span class="math display">\[
+    \delta \theta = - \eta \, \tilde{\nabla_\theta} L(\theta)
+\]</span></p>
+<p>When the manifold is not curved (<span class="math inline">\(F(\theta)\)</span> is the identity matrix), natural gradient descent is the regular gradient descent.</p>
+<p>But what is the advantage of natural gradients? The problem with regular gradient descent is that it relies on a fixed learning rate. In regions where the loss function is flat (a plateau), the gradient will be almost zero, leading to very slow improvements. Because the natural gradient depends on the inverse of the curvature (Fisher), the magnitude of the gradient will be higher in flat regions, leading to bigger steps, and smaller in very steep regions (around minima). Natural GD therefore converges faster and better than regular GD.</p>
+<p>Natural gradient descent is a generic optimization method, it can for example be used to train more efficiently deep networks in supervised learning <span class="citation" data-cites="Pascanu2013">(Pascanu and Bengio <a href="#ref-Pascanu2013">2013</a>)</span>. Its main drawback is the necessity to inverse the Fisher information matrix, whose size depends on the number of free parameters (if you have N weights in the NN, you need to inverse a NxN matrix). Several approximations allows to remediate to this problem, for example Kronecker-Factored Approximate Curvature (K-FAC, see <a href="https://syncedreview.com/2017/03/25/optimizing-neural-networks-using-structured-probabilistic-models/" class="uri">https://syncedreview.com/2017/03/25/optimizing-neural-networks-using-structured-probabilistic-models/</a>).</p>
+<p><strong>Additional resources</strong> to understand natural gradients:</p>
+<ul>
+<li><a href="http://andymiller.github.io/2016/10/02/natural_gradient_bbvi.html" class="uri">http://andymiller.github.io/2016/10/02/natural_gradient_bbvi.html</a></li>
+<li><a href="https://hips.seas.harvard.edu/blog/2013/01/25/the-natural-gradient/" class="uri">https://hips.seas.harvard.edu/blog/2013/01/25/the-natural-gradient/</a></li>
+<li><a href="http://kvfrans.com/what-is-the-natural-gradient-and-where-does-it-appear-in-trust-region-policy-optimization" class="uri">http://kvfrans.com/what-is-the-natural-gradient-and-where-does-it-appear-in-trust-region-policy-optimization</a></li>
+<li>A tutorial by John Schulman (OpenAI) <a href="https://www.youtube.com/watch?v=xvRrgxcpaHY" class="uri">https://www.youtube.com/watch?v=xvRrgxcpaHY</a></li>
+<li>A blog post on the related Hessian-free optimization and conjuguate gradients <a href="http://andrew.gibiansky.com/blog/machine-learning/hessian-free-optimization/" class="uri">http://andrew.gibiansky.com/blog/machine-learning/hessian-free-optimization/</a></li>
+</ul>
+<p><strong>Note:</strong> Natural gradients can also be used to train DQN architectures, resulting in more efficient and stable learning behaviors <span class="citation" data-cites="Knight2018">(Knight and Lerner <a href="#ref-Knight2018">2018</a>)</span>.</p>
+<h3 id="sec:natural-policy-gradient-and-natural-actor-critic-nac"><span class="header-section-number">4.5.2</span> Natural policy gradient and Natural Actor Critic (NAC)</h3>
+<p><span class="citation" data-cites="Kakade2001">Kakade (<a href="#ref-Kakade2001">2001</a>)</span> applied the principle of natural gradients proposed by <span class="citation" data-cites="Amari1998">Amari (<a href="#ref-Amari1998">1998</a>)</span> to the policy gradient theorem:</p>
+<p><span class="math display">\[
+    \nabla_\theta J(\theta) =  \mathbb{E}_{s \sim \rho_\theta, a \sim \pi_\theta}[\nabla_\theta \log \pi_\theta(s, a) \, Q^{\pi_\theta}(s, a)]
+\]</span></p>
+<p>This <em>regular</em> gradient does not take into account the underlying structure of the policy distribution <span class="math inline">\(\pi(s, a)\)</span>. The Fisher information matrix for the policy is defined by:</p>
+<p><span class="math display">\[
+    F(\theta) = \mathbb{E}_{s \sim \rho_\theta, a \sim \pi_\theta}[ \nabla \log \pi_\theta(s, a)  (\nabla \log \pi_\theta(s, a))^T]
+\]</span></p>
+<p>The natural policy gradient is simply:</p>
+<p><span class="math display">\[
+    \tilde{\nabla}_\theta J(\theta) = F(\theta)^{-1} \, \nabla_\theta J(\theta)  = \mathbb{E}_{s \sim \rho_\theta, a \sim \pi_\theta}[ F(\theta)^{-1} \,  \nabla_\theta \log \pi_\theta(s, a) \, Q^{\pi_\theta}(s, a)]
+\]</span></p>
+<p><span class="citation" data-cites="Kakade2001">Kakade (<a href="#ref-Kakade2001">2001</a>)</span> also shows that you can replace the true Q-value <span class="math inline">\(Q^{\pi_\theta}(s, a)\)</span> with a compatible approximation <span class="math inline">\(Q\varphi(s, a)\)</span> (as long as it minimizes the quadratic error) and still obtained an unbiased natural gradient. He experimented this new rule on various simple MDPs and observed drastic improvements over vanilla PG.</p>
+<p><span class="citation" data-cites="Peters2008">Peters and Schaal (<a href="#ref-Peters2008">2008</a>)</span> extended on the work of <span class="citation" data-cites="Kakade2001">Kakade (<a href="#ref-Kakade2001">2001</a>)</span> to propose the natural actor-critic (NAC). The exact derivations would be too complex to summarize here. He showed that the <span class="math inline">\(F(\theta)\)</span>) is a true Fisher information matrix even when using sampled episodes, and derived a baseline <span class="math inline">\(b\)</span> to reduce the variance of the natural policy gradient. He demonstrated the power of this algorithm by letting a robot learning motor primitives for baseball.</p>
+<h3 id="sec:trust-region-policy-optimization-trpo"><span class="header-section-number">4.5.3</span> Trust Region Policy Optimization (TRPO)</h3>
 <p><span class="citation" data-cites="Schulman2015a">Schulman, Levine, et al. (<a href="#ref-Schulman2015a">2015</a>)</span></p>
-<h3 id="sec:proximal-policy-optimization-ppo"><span class="header-section-number">4.5.5</span> Proximal Policy Optimization (PPO)</h3>
+<h3 id="sec:proximal-policy-optimization-ppo"><span class="header-section-number">4.5.4</span> Proximal Policy Optimization (PPO)</h3>
 <p><span class="citation" data-cites="Schulman2017">Schulman et al. (<a href="#ref-Schulman2017">2017</a>)</span></p>
 <p>Explanations from OpenAI: <a href="https://blog.openai.com/openai-baselines-ppo/#content" class="uri">https://blog.openai.com/openai-baselines-ppo/#content</a></p>
-<h3 id="sec:actor-critic-with-experience-replay-acer"><span class="header-section-number">4.5.6</span> Actor-Critic with Experience Replay (ACER)</h3>
+<h3 id="sec:actor-critic-with-experience-replay-acer"><span class="header-section-number">4.5.5</span> Actor-Critic with Experience Replay (ACER)</h3>
 <p><span class="citation" data-cites="Wang2017">Wang et al. (<a href="#ref-Wang2017">2017</a>)</span></p>
 <!--PAGEBREAK-->
 <h2 id="sec:distributional-learning"><span class="header-section-number">4.6</span> Distributional learning</h2>
@@ -1548,13 +1619,40 @@
 <p>Explanations from OpenAI: <a href="https://blog.openai.com/evolution-strategies/" class="uri">https://blog.openai.com/evolution-strategies/</a></p>
 <p>Deep neuroevolution at Uber: <a href="https://eng.uber.com/deep-neuroevolution/" class="uri">https://eng.uber.com/deep-neuroevolution/</a></p>
 <!--PAGEBREAK-->
-<h1 id="sec:deep-rl-in-practice"><span class="header-section-number">5</span> Deep RL in practice</h1>
-<h2 id="sec:limitations"><span class="header-section-number">5.1</span> Limitations</h2>
+<h1 id="sec:model-based-rl"><span class="header-section-number">5</span> Model-based RL</h1>
+<p>Model-free: The future is cached into values.</p>
+<p>Two problems of model-free:</p>
+<ol type="1">
+<li>Needs a lot of samples</li>
+<li>Cannot adapt to novel tasks in the same environment.</li>
+</ol>
+<p>Model-based uses an internal model to reason about the future (imagination).</p>
+<p>Works only when the model is fixed (AlphaGo) or easy to learn (symbolic, low-dimensional). Not robust yet against model imperfection.</p>
+<h2 id="sec:dyna-q"><span class="header-section-number">5.1</span> Dyna-Q</h2>
+<p><span class="citation" data-cites="Sutton1990">(Sutton and Barto <a href="#ref-Sutton1990">1990</a>)</span></p>
+<p><a href="https://medium.com/@ranko.mosic/online-planning-agent-dyna-q-algorithm-and-dyna-maze-example-sutton-and-barto-2016-7ad84a6dc52b" class="uri">https://medium.com/@ranko.mosic/online-planning-agent-dyna-q-algorithm-and-dyna-maze-example-sutton-and-barto-2016-7ad84a6dc52b</a></p>
+<h2 id="sec:unsorted-references"><span class="header-section-number">5.2</span> Unsorted references</h2>
+<p>Embed to Control: A Locally Linear Latent Dynamics Model for Control from Raw Images <span class="citation" data-cites="Watter2015">(Watter et al. <a href="#ref-Watter2015">2015</a>)</span></p>
+<p>Efficient Model-Based Deep Reinforcement Learning with Variational State Tabulation <span class="citation" data-cites="Corneil2018">(Corneil, Gerstner, and Brea <a href="#ref-Corneil2018">2018</a>)</span></p>
+<p>Model-Based Value Estimation for Efficient Model-Free Reinforcement Learning <span class="citation" data-cites="Feinberg2018">(Feinberg et al. <a href="#ref-Feinberg2018">2018</a>)</span></p>
+<p>Imagination-Augmented Agents for Deep Reinforcement Learning <span class="citation" data-cites="Weber2017">(Weber et al. <a href="#ref-Weber2017">2017</a>)</span>.</p>
+<p>Temporal Difference Model TDM <span class="citation" data-cites="Pong2018">(Pong et al. <a href="#ref-Pong2018">2018</a>)</span>: <a href="http://bair.berkeley.edu/blog/2018/04/26/tdm/" class="uri">http://bair.berkeley.edu/blog/2018/04/26/tdm/</a></p>
+<p>Learning to Adapt: Meta-Learning for Model-Based Control, <span class="citation" data-cites="Clavera2018">(Clavera et al. <a href="#ref-Clavera2018">2018</a>)</span></p>
+<p>The Predictron: End-To-End Learning and Planning <span class="citation" data-cites="Silver2016">(Silver et al. <a href="#ref-Silver2016">2016</a>)</span></p>
+<p>Model-Based Planning with Discrete and Continuous Actions <span class="citation" data-cites="Henaff2017">(Henaff, Whitney, and LeCun <a href="#ref-Henaff2017">2017</a>)</span></p>
+<p>Schema Networks: Zero-shot Transfer with a Generative Causal Model of Intuitive Physics <span class="citation" data-cites="Kansky2017">(Kansky et al. <a href="#ref-Kansky2017">2017</a>)</span></p>
+<p>Universal Planning Networks <span class="citation" data-cites="Srinivas2018">(Srinivas et al. <a href="#ref-Srinivas2018">2018</a>)</span></p>
+<p>World models <a href="https://worldmodels.github.io/" class="uri">https://worldmodels.github.io/</a> <span class="citation" data-cites="Ha2018">(Ha and Schmidhuber <a href="#ref-Ha2018">2018</a>)</span></p>
+<p>Recall Traces: Backtracking Models for Efficient Reinforcement Learning <span class="citation" data-cites="Goyal2018">(Goyal et al. <a href="#ref-Goyal2018">2018</a>)</span></p>
+<p>Deep Dyna-Q: Integrating Planning for Task-Completion Dialogue Policy Learning <span class="citation" data-cites="Peng2018">(Peng et al. <a href="#ref-Peng2018">2018</a>)</span></p>
+<!--PAGEBREAK-->
+<h1 id="sec:deep-rl-in-practice"><span class="header-section-number">6</span> Deep RL in practice</h1>
+<h2 id="sec:limitations"><span class="header-section-number">6.1</span> Limitations</h2>
 <p>Excellent blog post from Alex Irpan on the limitations of deep RL: <a href="https://www.alexirpan.com/2018/02/14/rl-hard.html" class="uri">https://www.alexirpan.com/2018/02/14/rl-hard.html</a></p>
 <p>Another documented critic on deep RL: <a href="https://thegradient.pub/why-rl-is-flawed/" class="uri">https://thegradient.pub/why-rl-is-flawed/</a></p>
-<h2 id="sec:reward-shaping"><span class="header-section-number">5.2</span> Reward shaping</h2>
+<h2 id="sec:reward-shaping"><span class="header-section-number">6.2</span> Reward shaping</h2>
 <p>Hindsight experience replay: <span class="citation" data-cites="Andrychowicz2017">Andrychowicz et al. (<a href="#ref-Andrychowicz2017">2017</a>)</span></p>
-<h2 id="sec:simulation-environments"><span class="header-section-number">5.3</span> Simulation environments</h2>
+<h2 id="sec:simulation-environments"><span class="header-section-number">6.3</span> Simulation environments</h2>
 <p>Standard RL environments are needed to better compare the performance of RL algoritms. Below is a list of the most popular ones.</p>
 <ul>
 <li>OpenAI Gym <a href="https://gym.openai.com" class="uri">https://gym.openai.com</a>: a standard toolkit for comparing RL algorithms provided by the OpenAI fundation. It provides many environments, from the classical toy problems in RL (GridWorld, pole-balancing) to more advanced problems (Mujoco simulated robots, Atari games, Minecraft…). The main advantage is the simplicity of the interface: the user only needs to select which task he wants to solve, and a simple for loop allows to perform actions and observe their consequences:</li>
@@ -1572,7 +1670,7 @@
 <li><p>Roboschool <a href="https://github.com/openai/roboschool" class="uri">https://github.com/openai/roboschool</a>: another alternative to Mujoco for continuous robotic control, this time from openAI.</p></li>
 <li><p>NIPS 2017 musculoskettal challenge <a href="https://github.com/stanfordnmbl/osim-rl" class="uri">https://github.com/stanfordnmbl/osim-rl</a></p></li>
 </ul>
-<h2 id="sec:algorithm-implementations"><span class="header-section-number">5.4</span> Algorithm implementations</h2>
+<h2 id="sec:algorithm-implementations"><span class="header-section-number">6.4</span> Algorithm implementations</h2>
 <p>State-of-the-art algorithms in deep RL are already implemented and freely available on the internet. Below is a preliminary list of the most popular ones. Most of them rely on tensorflow or keras for training the neural networks and interact directly with gym-like interfaces.</p>
 <ul>
 <li><p><code>rl-code</code> <a href="https://github.com/rlcode/reinforcement-learning" class="uri">https://github.com/rlcode/reinforcement-learning</a>: many code samples for simple RL problems (GridWorld, Cartpole, Atari Games). The code samples are mostly for educational purpose (Policy Iteration, Value Iteration, Monte-Carlo, SARSA, Q-learning, REINFORCE, DQN, A2C, A3C).</p></li>
@@ -1584,11 +1682,17 @@
 <!--PAGEBREAK-->
 <h1 id="sec:references" class="unnumbered">References</h1>
 <div id="refs" class="references">
+<div id="ref-Amari1998">
+<p>Amari, S.-I. 1998. “Natural gradient works efficiently in learning.” <em>Neural Comput.</em> 10 (2): 251–76.</p>
+</div>
 <div id="ref-Andrychowicz2017">
 <p>Andrychowicz, Marcin, Filip Wolski, Alex Ray, Jonas Schneider, Rachel Fong, Peter Welinder, Bob McGrew, Josh Tobin, Pieter Abbeel, and Wojciech Zaremba. 2017. “Hindsight Experience Replay,” July. <a href="http://arxiv.org/abs/1707.01495" class="uri">http://arxiv.org/abs/1707.01495</a>.</p>
 </div>
 <div id="ref-Anschel2016">
 <p>Anschel, Oron, Nir Baram, and Nahum Shimkin. 2016. “Averaged-DQN: Variance Reduction and Stabilization for Deep Reinforcement Learning,” November. <a href="http://arxiv.org/abs/1611.01929" class="uri">http://arxiv.org/abs/1611.01929</a>.</p>
+</div>
+<div id="ref-Arjovsky2017">
+<p>Arjovsky, Martin, Soumith Chintala, and Léon Bottou. 2017. “Wasserstein GAN,” January. <a href="http://arxiv.org/abs/1701.07875" class="uri">http://arxiv.org/abs/1701.07875</a>.</p>
 </div>
 <div id="ref-Arulkumaran2017">
 <p>Arulkumaran, Kai, Marc Peter Deisenroth, Miles Brundage, and Anil Anthony Bharath. 2017. “A Brief Survey of Deep Reinforcement Learning.” <a href="https://arxiv.org/pdf/1708.05866.pdf" class="uri">https://arxiv.org/pdf/1708.05866.pdf</a>.</p>
@@ -1611,17 +1715,32 @@
 <div id="ref-Chou2017">
 <p>Chou, Po-Wei, Daniel Maturana, and Sebastian Scherer. 2017. “Improving Stochastic Policy Gradients in Continuous Control with Deep Reinforcement Learning using the Beta Distribution.” In <em>Int. Conf. Mach. Learn.</em> <a href="http://proceedings.mlr.press/v70/chou17a/chou17a.pdf" class="uri">http://proceedings.mlr.press/v70/chou17a/chou17a.pdf</a>.</p>
 </div>
+<div id="ref-Clavera2018">
+<p>Clavera, Ignasi, Anusha Nagabandi, Ronald S. Fearing, Pieter Abbeel, Sergey Levine, and Chelsea Finn. 2018. “Learning to Adapt: Meta-Learning for Model-Based Control,” March. <a href="http://arxiv.org/abs/1803.11347" class="uri">http://arxiv.org/abs/1803.11347</a>.</p>
+</div>
+<div id="ref-Corneil2018">
+<p>Corneil, Dane, Wulfram Gerstner, and Johanni Brea. 2018. “Efficient Model-Based Deep Reinforcement Learning with Variational State Tabulation,” February. <a href="http://arxiv.org/abs/1802.04325" class="uri">http://arxiv.org/abs/1802.04325</a>.</p>
+</div>
 <div id="ref-Degris2012">
 <p>Degris, Thomas, Martha White, and Richard S. Sutton. 2012. “Linear Off-Policy Actor-Critic.” In <em>Proc. 2012 Int. Conf. Mach. Learn.</em> <a href="http://arxiv.org/abs/1205.4839" class="uri">http://arxiv.org/abs/1205.4839</a>.</p>
 </div>
 <div id="ref-Duan2016">
 <p>Duan, Yan, Xi Chen, Rein Houthooft, John Schulman, and Pieter Abbeel. 2016. “Benchmarking Deep Reinforcement Learning for Continuous Control,” April. <a href="http://arxiv.org/abs/1604.06778" class="uri">http://arxiv.org/abs/1604.06778</a>.</p>
 </div>
+<div id="ref-Feinberg2018">
+<p>Feinberg, Vladimir, Alvin Wan, Ion Stoica, Michael I. Jordan, Joseph E. Gonzalez, and Sergey Levine. 2018. “Model-Based Value Estimation for Efficient Model-Free Reinforcement Learning,” February. <a href="http://arxiv.org/abs/1803.00101" class="uri">http://arxiv.org/abs/1803.00101</a>.</p>
+</div>
 <div id="ref-Gers2001">
 <p>Gers, Felix. 2001. “Long Short-Term Memory in Recurrent Neural Networks.” PhD Thesis, Ecole Polytechnique Fédérale de Lausanne. <a href="http://www.felixgers.de/papers/phd.pdf" class="uri">http://www.felixgers.de/papers/phd.pdf</a>.</p>
 </div>
 <div id="ref-Goodfellow2016">
 <p>Goodfellow, Ian, Yoshua Bengio, and Aaron Courville. 2016. <em>Deep Learning</em>. MIT Press. <a href="http://www.deeplearningbook.org" class="uri">http://www.deeplearningbook.org</a>.</p>
+</div>
+<div id="ref-Goodfellow2014">
+<p>Goodfellow, Ian J., Jean Pouget-Abadie, Mehdi Mirza, Bing Xu, David Warde-Farley, Sherjil Ozair, Aaron Courville, and Yoshua Bengio. 2014. “Generative Adversarial Networks,” June. <a href="http://arxiv.org/abs/1406.2661" class="uri">http://arxiv.org/abs/1406.2661</a>.</p>
+</div>
+<div id="ref-Goyal2018">
+<p>Goyal, Anirudh, Philemon Brakel, William Fedus, Timothy Lillicrap, Sergey Levine, Hugo Larochelle, and Yoshua Bengio. 2018. “Recall Traces: Backtracking Models for Efficient Reinforcement Learning.”</p>
 </div>
 <div id="ref-Gruslys2017">
 <p>Gruslys, Audrunas, Will Dabney, Mohammad Gheshlaghi Azar, Bilal Piot, Marc Bellemare, and Remi Munos. 2017. “The Reactor: A fast and sample-efficient Actor-Critic agent for Reinforcement Learning,” April. <a href="http://arxiv.org/abs/1704.04651" class="uri">http://arxiv.org/abs/1704.04651</a>.</p>
@@ -1635,11 +1754,14 @@
 <div id="ref-Gu2016b">
 <p>Gu, Shixiang, Timothy Lillicrap, Ilya Sutskever, and Sergey Levine. 2016. “Continuous Deep Q-Learning with Model-based Acceleration,” March. <a href="http://arxiv.org/abs/1603.00748" class="uri">http://arxiv.org/abs/1603.00748</a>.</p>
 </div>
+<div id="ref-Ha2018">
+<p>Ha, David, and Jürgen Schmidhuber. 2018. “World Models,” March. <a href="https://doi.org/10.5281/zenodo.1207631" class="uri">https://doi.org/10.5281/zenodo.1207631</a>.</p>
+</div>
 <div id="ref-Haarnoya2018b">
 <p>Haarnoja, Tuomas, Aurick Zhou, Pieter Abbeel, and Sergey Levine. 2018. “Soft Actor-Critic: Off-Policy Maximum Entropy Deep Reinforcement Learning with a Stochastic Actor,” January. <a href="http://arxiv.org/abs/1801.01290" class="uri">http://arxiv.org/abs/1801.01290</a>.</p>
 </div>
 <div id="ref-Hafner2011">
-<p>Hafner, Roland, and Martin Riedmiller. 2011. “Reinforcement learning in feedback control.” <em>Mach. Learn.</em> 84 (1-2). Springer US:137–69. <a href="https://doi.org/10.1007/s10994-011-5235-x" class="uri">https://doi.org/10.1007/s10994-011-5235-x</a>.</p>
+<p>Hafner, Roland, and Martin Riedmiller. 2011. “Reinforcement learning in feedback control.” <em>Mach. Learn.</em> 84 (1-2). Springer US: 137–69. <a href="https://doi.org/10.1007/s10994-011-5235-x" class="uri">https://doi.org/10.1007/s10994-011-5235-x</a>.</p>
 </div>
 <div id="ref-Harutyunyan2016">
 <p>Harutyunyan, A., M. G. Bellemare, T. Stepleton, and R. Munos. 2016. “Q(<span class="math inline">\(\lambda\)</span>) with off-policy corrections.” <a href="http://arxiv.org/abs/1602.04951" class="uri">http://arxiv.org/abs/1602.04951</a>.</p>
@@ -1668,6 +1790,9 @@
 <div id="ref-Heinrich2016">
 <p>Heinrich, Johannes, and David Silver. 2016. “Deep Reinforcement Learning from Self-Play in Imperfect-Information Games,” March. <a href="http://arxiv.org/abs/1603.01121" class="uri">http://arxiv.org/abs/1603.01121</a>.</p>
 </div>
+<div id="ref-Henaff2017">
+<p>Henaff, Mikael, William F. Whitney, and Yann LeCun. 2017. “Model-Based Planning with Discrete and Continuous Actions,” May. <a href="http://arxiv.org/abs/1705.07177" class="uri">http://arxiv.org/abs/1705.07177</a>.</p>
+</div>
 <div id="ref-Hessel2017">
 <p>Hessel, Matteo, Joseph Modayil, Hado van Hasselt, Tom Schaul, Georg Ostrovski, Will Dabney, Dan Horgan, Bilal Piot, Mohammad Azar, and David Silver. 2017. “Rainbow: Combining Improvements in Deep Reinforcement Learning,” October. <a href="http://arxiv.org/abs/1710.02298" class="uri">http://arxiv.org/abs/1710.02298</a>.</p>
 </div>
@@ -1675,7 +1800,7 @@
 <p>Hochreiter, Sepp. 1991. “Untersuchungen zu dynamischen neuronalen Netzen.” Diploma thesis, TU Munich. <a href="http://people.idsia.ch/{~}juergen/SeppHochreiter1991ThesisAdvisorSchmidhuber.pdf" class="uri">http://people.idsia.ch/{~}juergen/SeppHochreiter1991ThesisAdvisorSchmidhuber.pdf</a>.</p>
 </div>
 <div id="ref-Hochreiter1997">
-<p>Hochreiter, Sepp, and J?rgen Schmidhuber. 1997. “Long Short-Term Memory.” <em>Neural Comput.</em> 9 (8). MIT Press:1735–80. <a href="https://doi.org/10.1162/neco.1997.9.8.1735" class="uri">https://doi.org/10.1162/neco.1997.9.8.1735</a>.</p>
+<p>Hochreiter, Sepp, and J?rgen Schmidhuber. 1997. “Long Short-Term Memory.” <em>Neural Comput.</em> 9 (8). MIT Press: 1735–80. <a href="https://doi.org/10.1162/neco.1997.9.8.1735" class="uri">https://doi.org/10.1162/neco.1997.9.8.1735</a>.</p>
 </div>
 <div id="ref-Ioffe2015">
 <p>Ioffe, Sergey, and Christian Szegedy. 2015. “Batch Normalization: Accelerating Deep Network Training by Reducing Internal Covariate Shift,” February. <a href="http://arxiv.org/abs/1502.03167" class="uri">http://arxiv.org/abs/1502.03167</a>.</p>
@@ -1683,8 +1808,14 @@
 <div id="ref-Kakade2001">
 <p>Kakade, Sham. 2001. “A Natural Policy Gradient.” In <em>Adv. Neural Inf. Process. Syst. 14</em>. <a href="https://papers.nips.cc/paper/2073-a-natural-policy-gradient.pdf" class="uri">https://papers.nips.cc/paper/2073-a-natural-policy-gradient.pdf</a>.</p>
 </div>
+<div id="ref-Kansky2017">
+<p>Kansky, Ken, Tom Silver, David A. Mély, Mohamed Eldawy, Miguel Lázaro-Gredilla, Xinghua Lou, Nimrod Dorfman, Szymon Sidor, Scott Phoenix, and Dileep George. 2017. “Schema Networks: Zero-shot Transfer with a Generative Causal Model of Intuitive Physics,” June. <a href="http://arxiv.org/abs/1706.04317" class="uri">http://arxiv.org/abs/1706.04317</a>.</p>
+</div>
 <div id="ref-Kingma2013">
 <p>Kingma, Diederik P, and Max Welling. 2013. “Auto-Encoding Variational Bayes,” December. <a href="http://arxiv.org/abs/1312.6114" class="uri">http://arxiv.org/abs/1312.6114</a>.</p>
+</div>
+<div id="ref-Knight2018">
+<p>Knight, Ethan, and Osher Lerner. 2018. “Natural Gradient Deep Q-learning,” March. <a href="http://arxiv.org/abs/1803.07482" class="uri">http://arxiv.org/abs/1803.07482</a>.</p>
 </div>
 <div id="ref-Krizhevsky2012">
 <p>Krizhevsky, Alex, Ilya Sutskever, and Geoffrey E Hinton. 2012. “ImageNet Classification with Deep Convolutional Neural Networks.” In <em>Adv. Neural Inf. Process. Syst.</em> <a href="https://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf" class="uri">https://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf</a>.</p>
@@ -1714,7 +1845,7 @@
 <p>Mnih, Volodymyr, Koray Kavukcuoglu, David Silver, Alex Graves, Ioannis Antonoglou, Daan Wierstra, and Martin Riedmiller. 2013. “Playing Atari with Deep Reinforcement Learning,” December. <a href="http://arxiv.org/abs/1312.5602" class="uri">http://arxiv.org/abs/1312.5602</a>.</p>
 </div>
 <div id="ref-Mnih2015">
-<p>Mnih, Volodymyr, Koray Kavukcuoglu, David Silver, Andrei A. Rusu, Joel Veness, Marc G. Bellemare, Alex Graves, et al. 2015. “Human-level control through deep reinforcement learning.” <em>Nature</em> 518 (7540). Nature Publishing Group:529–33. <a href="https://doi.org/10.1038/nature14236" class="uri">https://doi.org/10.1038/nature14236</a>.</p>
+<p>Mnih, Volodymyr, Koray Kavukcuoglu, David Silver, Andrei A. Rusu, Joel Veness, Marc G. Bellemare, Alex Graves, et al. 2015. “Human-level control through deep reinforcement learning.” <em>Nature</em> 518 (7540). Nature Publishing Group: 529–33. <a href="https://doi.org/10.1038/nature14236" class="uri">https://doi.org/10.1038/nature14236</a>.</p>
 </div>
 <div id="ref-Mousavi2018">
 <p>Mousavi, Seyed Sajad, Michael Schukat, and Enda Howley. 2018. “Deep Reinforcement Learning: An Overview.” In, 426–40. Springer, Cham. <a href="https://doi.org/10.1007/978-3-319-56991-8_32" class="uri">https://doi.org/10.1007/978-3-319-56991-8_32</a>.</p>
@@ -1734,11 +1865,17 @@
 <div id="ref-Oh2018">
 <p>Oh, Junhyuk, Yijie Guo, Satinder Singh, and Honglak Lee. 2018. “Self-Imitation Learning,” June. <a href="http://arxiv.org/abs/1806.05635" class="uri">http://arxiv.org/abs/1806.05635</a>.</p>
 </div>
+<div id="ref-Pascanu2013">
+<p>Pascanu, Razvan, and Yoshua Bengio. 2013. “Revisiting Natural Gradient for Deep Networks,” January. <a href="https://arxiv.org/abs/1301.3584" class="uri">https://arxiv.org/abs/1301.3584</a>.</p>
+</div>
+<div id="ref-Peng2018">
+<p>Peng, Baolin, Xiujun Li, Jianfeng Gao, Jingjing Liu, Kam-Fai Wong, and Shang-Yu Su. 2018. “Deep Dyna-Q: Integrating Planning for Task-Completion Dialogue Policy Learning,” January. <a href="http://arxiv.org/abs/1801.06176" class="uri">http://arxiv.org/abs/1801.06176</a>.</p>
+</div>
 <div id="ref-Peshkin2002">
 <p>Peshkin, Leonid, and Christian R. Shelton. 2002. “Learning from Scarce Experience,” April. <a href="http://arxiv.org/abs/cs/0204043" class="uri">http://arxiv.org/abs/cs/0204043</a>.</p>
 </div>
 <div id="ref-Peters2008">
-<p>Peters, Jan, and Stefan Schaal. 2008. “Reinforcement learning of motor skills with policy gradients.” <em>Neural Networks</em> 21 (4):682–97. <a href="https://doi.org/10.1016/j.neunet.2008.02.003" class="uri">https://doi.org/10.1016/j.neunet.2008.02.003</a>.</p>
+<p>Peters, Jan, and Stefan Schaal. 2008. “Reinforcement learning of motor skills with policy gradients.” <em>Neural Networks</em> 21 (4): 682–97. <a href="https://doi.org/10.1016/j.neunet.2008.02.003" class="uri">https://doi.org/10.1016/j.neunet.2008.02.003</a>.</p>
 </div>
 <div id="ref-Pong2018">
 <p>Pong, Vitchyr, Shixiang Gu, Murtaza Dalal, and Sergey Levine. 2018. “Temporal Difference Models: Model-Free Deep RL for Model-Based Control,” February. <a href="http://arxiv.org/abs/1802.09081" class="uri">http://arxiv.org/abs/1802.09081</a>.</p>
@@ -1768,7 +1905,7 @@
 <p>Schulman, John, Filip Wolski, Prafulla Dhariwal, Alec Radford, and Oleg Klimov. 2017. “Proximal Policy Optimization Algorithms,” July. <a href="http://arxiv.org/abs/1707.06347" class="uri">http://arxiv.org/abs/1707.06347</a>.</p>
 </div>
 <div id="ref-Silver2016">
-<p>Silver, David, Aja Huang, Chris J. Maddison, Arthur Guez, Laurent Sifre, George Van Den Driessche, Julian Schrittwieser, et al. 2016. “Mastering the game of Go with deep neural networks and tree search.” <em>Nature</em>. <a href="https://doi.org/10.1038/nature16961" class="uri">https://doi.org/10.1038/nature16961</a>.</p>
+<p>Silver, David, Hado van Hasselt, Matteo Hessel, Tom Schaul, Arthur Guez, Tim Harley, Gabriel Dulac-Arnold, et al. 2016. “The Predictron: End-To-End Learning and Planning,” December. <a href="http://arxiv.org/abs/1612.08810" class="uri">http://arxiv.org/abs/1612.08810</a>.</p>
 </div>
 <div id="ref-Silver2014">
 <p>Silver, David, Guy Lever, Nicolas Heess, Thomas Degris, Daan Wierstra, and Martin Riedmiller. 2014. “Deterministic Policy Gradient Algorithms.” In <em>Proc. ICML</em>, edited by Eric P Xing and Tony Jebara, 32:387–95. Proceedings of Machine Learning Research 1. Bejing, China: PMLR. <a href="http://proceedings.mlr.press/v32/silver14.html" class="uri">http://proceedings.mlr.press/v32/silver14.html</a>.</p>
@@ -1776,8 +1913,14 @@
 <div id="ref-Simonyan2014">
 <p>Simonyan, Karen, and Andrew Zisserman. 2014. “Very Deep Convolutional Networks for Large-Scale Image Recognition,” September. <a href="http://arxiv.org/abs/1409.1556" class="uri">http://arxiv.org/abs/1409.1556</a>.</p>
 </div>
+<div id="ref-Srinivas2018">
+<p>Srinivas, Aravind, Allan Jabri, Pieter Abbeel, Sergey Levine, and Chelsea Finn. 2018. “Universal Planning Networks,” April. <a href="http://arxiv.org/abs/1804.00645" class="uri">http://arxiv.org/abs/1804.00645</a>.</p>
+</div>
+<div id="ref-Sutton1990">
+<p>Sutton, R. S., and A. G. Barto. 1990. “Time-derivative models of Pavlovian reinforcement.” In <em>Learn. Comput. Neurosci. Found. Adapt. Networks</em>, 497—–537. MIT Press. <a href="http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.81.98" class="uri">http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.81.98</a>.</p>
+</div>
 <div id="ref-Sutton1998">
-<p>Sutton, R. S., and A. G. Barto. 1998. <em>Reinforcement Learning: An introduction</em>. Cambridge, MA: MIT press.</p>
+<p>———. 1998. <em>Reinforcement Learning: An introduction</em>. Cambridge, MA: MIT press.</p>
 </div>
 <div id="ref-Sutton2017">
 <p>———. 2017. <em>Reinforcement Learning: An Introduction</em>. 2nd ed. Cambridge, MA: MIT Press. <a href="http://incompleteideas.net/sutton/book/the-book-2nd.html" class="uri">http://incompleteideas.net/sutton/book/the-book-2nd.html</a>.</p>
@@ -1786,7 +1929,7 @@
 <p>Sutton, R. S., D. A McAllester, S. P. Singh, and Y. Mansour. 1999. “Policy Gradient Methods for Reinforcement Learning with Function Approximation.” In <em>Neural Inf. Process. Syst. 12</em>, 1057–63.</p>
 </div>
 <div id="ref-Szita2006">
-<p>Szita, István, and András Lörincz. 2006. “Learning Tetris Using the Noisy Cross-Entropy Method.” <em>Neural Comput.</em> 18 (12). MIT Press 238 Main St., Suite 500, Cambridge, MA 02142-1046 USA journals-info@mit.edu:2936–41. <a href="https://doi.org/10.1162/neco.2006.18.12.2936" class="uri">https://doi.org/10.1162/neco.2006.18.12.2936</a>.</p>
+<p>Szita, István, and András Lörincz. 2006. “Learning Tetris Using the Noisy Cross-Entropy Method.” <em>Neural Comput.</em> 18 (12). MIT Press 238 Main St., Suite 500, Cambridge, MA 02142-1046 USA journals-info@mit.edu: 2936–41. <a href="https://doi.org/10.1162/neco.2006.18.12.2936" class="uri">https://doi.org/10.1162/neco.2006.18.12.2936</a>.</p>
 </div>
 <div id="ref-Tang2010">
 <p>Tang, Jie, and Pieter Abbeel. 2010. “On a Connection between Importance Sampling and the Likelihood Ratio Policy Gradient.” In <em>Adv. Neural Inf. Process. Syst.</em> <a href="http://rll.berkeley.edu/{~}jietang/pubs/nips10{\_}Tang.pdf" class="uri">http://rll.berkeley.edu/{~}jietang/pubs/nips10{\_}Tang.pdf</a>.</p>
@@ -1803,14 +1946,20 @@
 <div id="ref-Watkins1989">
 <p>Watkins, Christopher JCH. 1989. “Learning from delayed rewards.” PhD thesis, University of Cambridge, England.</p>
 </div>
+<div id="ref-Watter2015">
+<p>Watter, Manuel, Jost Tobias Springenberg, Joschka Boedecker, and Martin Riedmiller. 2015. “Embed to Control: A Locally Linear Latent Dynamics Model for Control from Raw Images.” <a href="https://arxiv.org/pdf/1506.07365.pdf" class="uri">https://arxiv.org/pdf/1506.07365.pdf</a>.</p>
+</div>
+<div id="ref-Weber2017">
+<p>Weber, Théophane, Sébastien Racanière, David P. Reichert, Lars Buesing, Arthur Guez, Danilo Jimenez Rezende, Adria Puigdomènech Badia, et al. 2017. “Imagination-Augmented Agents for Deep Reinforcement Learning,” July. <a href="http://arxiv.org/abs/1707.06203" class="uri">http://arxiv.org/abs/1707.06203</a>.</p>
+</div>
 <div id="ref-Wierstra2007">
 <p>Wierstra, Daan, Alexander Foerster, Jan Peters, and Jürgen Schmidhuber. 2007. “Solving Deep Memory POMDPs with Recurrent Policy Gradients.” In, 697–706. Springer, Berlin, Heidelberg. <a href="https://doi.org/10.1007/978-3-540-74690-4_71" class="uri">https://doi.org/10.1007/978-3-540-74690-4_71</a>.</p>
 </div>
 <div id="ref-Williams1992">
-<p>Williams, R. J. 1992. “Simple statistical gradient-following algorithms for connectionist reinforcement learning.” <em>Mach. Learn.</em> 8:229–56.</p>
+<p>Williams, R. J. 1992. “Simple statistical gradient-following algorithms for connectionist reinforcement learning.” <em>Mach. Learn.</em> 8: 229–56.</p>
 </div>
 <div id="ref-Williams1991">
-<p>Williams, Ronald J, and Jing Peng. 1991. “Function optimization using connectionist reinforcement learning algorithms.” <em>Conn. Sci.</em> 3 (3):241–68.</p>
+<p>Williams, Ronald J, and Jing Peng. 1991. “Function optimization using connectionist reinforcement learning algorithms.” <em>Conn. Sci.</em> 3 (3): 241–68.</p>
 </div>
 </div>
 

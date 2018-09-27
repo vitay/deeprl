@@ -10,7 +10,7 @@
 
   <link rel="stylesheet" href="assets/syntax.css">
   <link rel="stylesheet" href="assets/github.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+  <script src="/usr/share/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
   <!--[if lt IE 9]>
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
   <![endif]-->
@@ -84,12 +84,11 @@
 <li><a href="./DPG.html#sec:distributed-distributional-ddpg-d4pg"><span class="toc-section-number">4.4.3</span> Distributed Distributional DDPG (D4PG)</a></li>
 </ul></li>
 <li><a href="./NaturalGradient.html#sec:natural-gradients"><span class="toc-section-number">4.5</span> Natural Gradients</a><ul>
-<li><a href="./NaturalGradient.html#sec:principle-of-natural-of-gradients"><span class="toc-section-number">4.5.1</span> Principle of natural of gradients</a></li>
-<li><a href="./NaturalGradient.html#sec:natural-policy-gradient"><span class="toc-section-number">4.5.2</span> Natural policy gradient</a></li>
-<li><a href="./NaturalGradient.html#sec:natural-actor-critic-nac"><span class="toc-section-number">4.5.3</span> Natural Actor Critic (NAC)</a></li>
-<li><a href="./NaturalGradient.html#sec:trust-region-policy-optimization-trpo"><span class="toc-section-number">4.5.4</span> Trust Region Policy Optimization (TRPO)</a></li>
-<li><a href="./NaturalGradient.html#sec:proximal-policy-optimization-ppo"><span class="toc-section-number">4.5.5</span> Proximal Policy Optimization (PPO)</a></li>
-<li><a href="./NaturalGradient.html#sec:actor-critic-with-experience-replay-acer"><span class="toc-section-number">4.5.6</span> Actor-Critic with Experience Replay (ACER)</a></li>
+<li><a href="./NaturalGradient.html#sec:principle-of-natural-gradients"><span class="toc-section-number">4.5.1</span> Principle of natural gradients</a></li>
+<li><a href="./NaturalGradient.html#sec:natural-policy-gradient-and-natural-actor-critic-nac"><span class="toc-section-number">4.5.2</span> Natural policy gradient and Natural Actor Critic (NAC)</a></li>
+<li><a href="./NaturalGradient.html#sec:trust-region-policy-optimization-trpo"><span class="toc-section-number">4.5.3</span> Trust Region Policy Optimization (TRPO)</a></li>
+<li><a href="./NaturalGradient.html#sec:proximal-policy-optimization-ppo"><span class="toc-section-number">4.5.4</span> Proximal Policy Optimization (PPO)</a></li>
+<li><a href="./NaturalGradient.html#sec:actor-critic-with-experience-replay-acer"><span class="toc-section-number">4.5.5</span> Actor-Critic with Experience Replay (ACER)</a></li>
 </ul></li>
 <li><a href="./OtherPolicyGradient.html#sec:distributional-learning"><span class="toc-section-number">4.6</span> Distributional learning</a><ul>
 <li><a href="./OtherPolicyGradient.html#sec:the-reactor"><span class="toc-section-number">4.6.1</span> The Reactor</a></li>
@@ -109,11 +108,15 @@
 <li><a href="./OtherPolicyGradient.html#sec:evolutionary-search-es"><span class="toc-section-number">4.10.2</span> Evolutionary Search (ES)</a></li>
 </ul></li>
 </ul></li>
-<li><a href="./Practice.html#sec:deep-rl-in-practice"><span class="toc-section-number">5</span> Deep RL in practice</a><ul>
-<li><a href="./Practice.html#sec:limitations"><span class="toc-section-number">5.1</span> Limitations</a></li>
-<li><a href="./Practice.html#sec:reward-shaping"><span class="toc-section-number">5.2</span> Reward shaping</a></li>
-<li><a href="./Practice.html#sec:simulation-environments"><span class="toc-section-number">5.3</span> Simulation environments</a></li>
-<li><a href="./Practice.html#sec:algorithm-implementations"><span class="toc-section-number">5.4</span> Algorithm implementations</a></li>
+<li><a href="./ModelBased.html#sec:model-based-rl"><span class="toc-section-number">5</span> Model-based RL</a><ul>
+<li><a href="./ModelBased.html#sec:dyna-q"><span class="toc-section-number">5.1</span> Dyna-Q</a></li>
+<li><a href="./ModelBased.html#sec:unsorted-references"><span class="toc-section-number">5.2</span> Unsorted references</a></li>
+</ul></li>
+<li><a href="./Practice.html#sec:deep-rl-in-practice"><span class="toc-section-number">6</span> Deep RL in practice</a><ul>
+<li><a href="./Practice.html#sec:limitations"><span class="toc-section-number">6.1</span> Limitations</a></li>
+<li><a href="./Practice.html#sec:reward-shaping"><span class="toc-section-number">6.2</span> Reward shaping</a></li>
+<li><a href="./Practice.html#sec:simulation-environments"><span class="toc-section-number">6.3</span> Simulation environments</a></li>
+<li><a href="./Practice.html#sec:algorithm-implementations"><span class="toc-section-number">6.4</span> Algorithm implementations</a></li>
 </ul></li>
 <li><a href="./References.html#sec:references">References</a></li>
 </ul>
@@ -166,7 +169,7 @@
 <p><span class="math display">\[
     \hat{J}(\theta) = \mathbb{E}_{\tau \sim \rho_b}[R(\tau)] = \int_\tau \rho_b(\tau) \, R(\tau) \, d\tau
 \]</span></p>
-<p>where <span class="math inline">\(\rho_b\)</span> is the distribution of trajectories generated by the <strong>behavior</strong> policy. In the general case, there is reason why <span class="math inline">\(\hat{J}(\theta)\)</span> should be close from <span class="math inline">\(J(\theta)\)</span>, even when taking their gradient.</p>
+<p>where <span class="math inline">\(\rho_b\)</span> is the distribution of trajectories generated by the <strong>behavior</strong> policy. In the general case, there is no reason why <span class="math inline">\(\hat{J}(\theta)\)</span> should be close from <span class="math inline">\(J(\theta)\)</span>, even when taking their gradient.</p>
 <p><strong>Importance sampling</strong> is a classical statistical method used to estimate properties of a distribution (here the expected return of the trajectories of the target policy) while only having samples generated from a different distribution (here the trajectories of the behavior policy). See for example <a href="https://statweb.stanford.edu/~owen/mc/Ch-var-is.pdf" class="uri">https://statweb.stanford.edu/~owen/mc/Ch-var-is.pdf</a> and <a href="http://timvieira.github.io/blog/post/2014/12/21/importance-sampling" class="uri">http://timvieira.github.io/blog/post/2014/12/21/importance-sampling</a> for more generic explanations.</p>
 <p>The trick is simply to rewrite the objective function as:</p>
 <p><span class="math display">\[
@@ -275,7 +278,7 @@
 <p><span class="math display">\[
     c_s = \lambda \min (1, \frac{\pi(s_s, a_s)}{b(s_s, a_s)})
 \]</span></p>
-<p>The importance sampling weight is clipped to 1, and decays exponentially with the parameter <span class="math inline">\(\lambda\)</span>. It can be seen as a trade-off between importance sampling and eligibility traces. The authors showed that Retrace(<span class="math inline">\(\lambda\)</span>) has a low variance (as it uses multiple returns), is safe (works for all <span class="math inline">\(\pi\)</span> and <span class="math inline">\(b\)</span>) and efficient (it can propagate rewards over many time steps). They used retrace to learn Atari games and compared it positively with DQN, both in terms of optimality and speed of learning. These properties make Retrace particularly suited for deep RL and actor-critic architectures: it is for example used in ACER (Section <a href="./NaturalGradient.html#sec:actor-critic-with-experience-replay-acer">4.5.6</a>) and the Reactor (Section <a href="./OtherPolicyGradient.html#sec:the-reactor">4.6.1</a>).</p>
+<p>The importance sampling weight is clipped to 1, and decays exponentially with the parameter <span class="math inline">\(\lambda\)</span>. It can be seen as a trade-off between importance sampling and eligibility traces. The authors showed that Retrace(<span class="math inline">\(\lambda\)</span>) has a low variance (as it uses multiple returns), is safe (works for all <span class="math inline">\(\pi\)</span> and <span class="math inline">\(b\)</span>) and efficient (it can propagate rewards over many time steps). They used retrace to learn Atari games and compared it positively with DQN, both in terms of optimality and speed of learning. These properties make Retrace particularly suited for deep RL and actor-critic architectures: it is for example used in ACER (Section <a href="./NaturalGradient.html#sec:actor-critic-with-experience-replay-acer">4.5.5</a>) and the Reactor (Section <a href="./OtherPolicyGradient.html#sec:the-reactor">4.6.1</a>).</p>
 <p>Rémi Munos uploaded some slides explaining Retrace in a simpler manner than in the original paper: <a href="https://ewrl.files.wordpress.com/2016/12/munos.pdf" class="uri">https://ewrl.files.wordpress.com/2016/12/munos.pdf</a>.</p>
 <h3 id="sec:self-imitation-learning-sil"><span class="header-section-number">4.3.4</span> Self-Imitation Learning (SIL)</h3>
 <p>We have discussed or now only strictly on-policy or off-policy methods. Off-policy methods are much more stable and efficient, but they learn generally a deterministic policy, what can be problematic in stochastic environments (e.g. two players games: being predictable is clearly an issue). Hybrid methods combining on- and off-policy mechanisms have clearly a great potential.</p>
@@ -307,7 +310,7 @@
 <li>Update the discounted sum of rewards <span class="math inline">\(R_k = r_k + \gamma \, R_{k+1}\)</span> <strong>and store it in the replay buffer <span class="math inline">\(\mathcal{D}\)</span></strong>.</li>
 </ul></li>
 <li><p>Update the actor and the critic <strong>on-policy</strong> with the episode: <span class="math display">\[
-  \theta \leftarrow \theta + \eta \, \sum_k \nabla_\theta \log \pi_\theta(s_k, a_k) \, (R_k - V_\varphi(s_k)) 
+  \theta \leftarrow \theta + \eta \, \sum_k \nabla_\theta \log \pi_\theta(s_k, a_k) \, (R_k - V_\varphi(s_k))
   \]</span> <span class="math display">\[
   \varphi \leftarrow \varphi + \eta \, \sum_k \nabla_\varphi (R - V_\varphi(s_k))^2
   \]</span></p></li>

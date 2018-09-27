@@ -10,7 +10,7 @@
 
   <link rel="stylesheet" href="assets/syntax.css">
   <link rel="stylesheet" href="assets/github.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+  <script src="/usr/share/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
   <!--[if lt IE 9]>
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
   <![endif]-->
@@ -84,12 +84,11 @@
 <li><a href="./DPG.html#sec:distributed-distributional-ddpg-d4pg"><span class="toc-section-number">4.4.3</span> Distributed Distributional DDPG (D4PG)</a></li>
 </ul></li>
 <li><a href="./NaturalGradient.html#sec:natural-gradients"><span class="toc-section-number">4.5</span> Natural Gradients</a><ul>
-<li><a href="./NaturalGradient.html#sec:principle-of-natural-of-gradients"><span class="toc-section-number">4.5.1</span> Principle of natural of gradients</a></li>
-<li><a href="./NaturalGradient.html#sec:natural-policy-gradient"><span class="toc-section-number">4.5.2</span> Natural policy gradient</a></li>
-<li><a href="./NaturalGradient.html#sec:natural-actor-critic-nac"><span class="toc-section-number">4.5.3</span> Natural Actor Critic (NAC)</a></li>
-<li><a href="./NaturalGradient.html#sec:trust-region-policy-optimization-trpo"><span class="toc-section-number">4.5.4</span> Trust Region Policy Optimization (TRPO)</a></li>
-<li><a href="./NaturalGradient.html#sec:proximal-policy-optimization-ppo"><span class="toc-section-number">4.5.5</span> Proximal Policy Optimization (PPO)</a></li>
-<li><a href="./NaturalGradient.html#sec:actor-critic-with-experience-replay-acer"><span class="toc-section-number">4.5.6</span> Actor-Critic with Experience Replay (ACER)</a></li>
+<li><a href="./NaturalGradient.html#sec:principle-of-natural-gradients"><span class="toc-section-number">4.5.1</span> Principle of natural gradients</a></li>
+<li><a href="./NaturalGradient.html#sec:natural-policy-gradient-and-natural-actor-critic-nac"><span class="toc-section-number">4.5.2</span> Natural policy gradient and Natural Actor Critic (NAC)</a></li>
+<li><a href="./NaturalGradient.html#sec:trust-region-policy-optimization-trpo"><span class="toc-section-number">4.5.3</span> Trust Region Policy Optimization (TRPO)</a></li>
+<li><a href="./NaturalGradient.html#sec:proximal-policy-optimization-ppo"><span class="toc-section-number">4.5.4</span> Proximal Policy Optimization (PPO)</a></li>
+<li><a href="./NaturalGradient.html#sec:actor-critic-with-experience-replay-acer"><span class="toc-section-number">4.5.5</span> Actor-Critic with Experience Replay (ACER)</a></li>
 </ul></li>
 <li><a href="./OtherPolicyGradient.html#sec:distributional-learning"><span class="toc-section-number">4.6</span> Distributional learning</a><ul>
 <li><a href="./OtherPolicyGradient.html#sec:the-reactor"><span class="toc-section-number">4.6.1</span> The Reactor</a></li>
@@ -109,11 +108,15 @@
 <li><a href="./OtherPolicyGradient.html#sec:evolutionary-search-es"><span class="toc-section-number">4.10.2</span> Evolutionary Search (ES)</a></li>
 </ul></li>
 </ul></li>
-<li><a href="./Practice.html#sec:deep-rl-in-practice"><span class="toc-section-number">5</span> Deep RL in practice</a><ul>
-<li><a href="./Practice.html#sec:limitations"><span class="toc-section-number">5.1</span> Limitations</a></li>
-<li><a href="./Practice.html#sec:reward-shaping"><span class="toc-section-number">5.2</span> Reward shaping</a></li>
-<li><a href="./Practice.html#sec:simulation-environments"><span class="toc-section-number">5.3</span> Simulation environments</a></li>
-<li><a href="./Practice.html#sec:algorithm-implementations"><span class="toc-section-number">5.4</span> Algorithm implementations</a></li>
+<li><a href="./ModelBased.html#sec:model-based-rl"><span class="toc-section-number">5</span> Model-based RL</a><ul>
+<li><a href="./ModelBased.html#sec:dyna-q"><span class="toc-section-number">5.1</span> Dyna-Q</a></li>
+<li><a href="./ModelBased.html#sec:unsorted-references"><span class="toc-section-number">5.2</span> Unsorted references</a></li>
+</ul></li>
+<li><a href="./Practice.html#sec:deep-rl-in-practice"><span class="toc-section-number">6</span> Deep RL in practice</a><ul>
+<li><a href="./Practice.html#sec:limitations"><span class="toc-section-number">6.1</span> Limitations</a></li>
+<li><a href="./Practice.html#sec:reward-shaping"><span class="toc-section-number">6.2</span> Reward shaping</a></li>
+<li><a href="./Practice.html#sec:simulation-environments"><span class="toc-section-number">6.3</span> Simulation environments</a></li>
+<li><a href="./Practice.html#sec:algorithm-implementations"><span class="toc-section-number">6.4</span> Algorithm implementations</a></li>
 </ul></li>
 <li><a href="./References.html#sec:references">References</a></li>
 </ul>
@@ -131,13 +134,13 @@
 <p>which is the <strong>advantage</strong> of the action <span class="math inline">\(a\)</span> in <span class="math inline">\(s\)</span>, as already seen in <em>duelling networks</em> (Section <a href="./Valuebased.html#sec:duelling-network">3.5</a>).</p>
 <p>Now the problem is that the critic would have to approximate two functions: <span class="math inline">\(Q^{\pi}(s, a)\)</span> and <span class="math inline">\(V^{\pi}(s)\)</span>. <strong>Advantage actor-critic</strong> methods presented in this section (A2C, A3C, GAE) approximate the advantage of an action:</p>
 <p><span class="math display">\[
-    \nabla_\theta J(\theta) =  \mathbb{E}_{s \sim \rho^\pi, a \sim \pi_\theta}[\nabla_\theta \log \pi_\theta(s, a) \, A_\varphi(s, a)] 
+    \nabla_\theta J(\theta) =  \mathbb{E}_{s \sim \rho^\pi, a \sim \pi_\theta}[\nabla_\theta \log \pi_\theta(s, a) \, A_\varphi(s, a)]
 \]</span></p>
 <p><span class="math inline">\(A_\varphi(s, a)\)</span> is called the <strong>advantage estimate</strong> and should be equal to the real advantage <em>in expectation</em>.</p>
 <p>Different methods could be used to compute the advantage estimate:</p>
 <ul>
 <li><p><span class="math inline">\(A_\varphi(s, a) = R(s, a) - V_\varphi(s)\)</span> is the <strong>MC advantage estimate</strong>, the Q-value of the action being replaced by the actual return.</p></li>
-<li><p><span class="math inline">\(A_\varphi(s, a) = r(s, a, s&#39;) + \gamma \, V_\varphi(s&#39;) - V_\varphi(s))\)</span> is the <strong>TD advantage estimate</strong> or TD error.</p></li>
+<li><p><span class="math inline">\(A_\varphi(s, a) = r(s, a, s&#39;) + \gamma \, V_\varphi(s&#39;) - V_\varphi(s)\)</span> is the <strong>TD advantage estimate</strong> or TD error.</p></li>
 <li><p><span class="math inline">\(A_\varphi(s, a) = \sum_{k=0}^{n-1} \gamma^{k} \, r_{t+k+1} + \gamma^n \, V_\varphi(s_{t+n+1}) - V_\varphi(s_t)\)</span> is the <strong>n-step advantage estimate</strong>.</p></li>
 </ul>
 <p>The most popular approach is the n-step advantage, which is at the core of the methods A2C and A3C, and can be understood as a trade-off between MC and TD. MC and TD advantages could be used as well, but come with the respective disadvantages of MC (need for finite episodes, slow updates) and TD (unstable). Generalized Advantage Estimation (GAE, Section <a href="./ActorCritic.html#sec:generalized-advantage-estimation-gae">4.2.3</a>) takes another interesting approach to estimate the advantage.</p>
@@ -150,7 +153,7 @@
 <li>n-step uses the <span class="math inline">\(n\)</span> next immediate rewards and approximates the rest with the value of the state visited <span class="math inline">\(n\)</span> steps later.</li>
 </ul>
 <p><span id="eq:a2c"><span class="math display">\[
-    \nabla_\theta J(\theta) =  \mathbb{E}_{s_t \sim \rho^\pi, a_t \sim \pi_\theta}[\nabla_\theta \log \pi_\theta(s_t, a_t) \, ( \sum_{k=0}^{n-1} \gamma^{k} \, r_{t+k+1} + \gamma^n \, V_\varphi(s_{t+n+1}) - V_\varphi(s_t))] 
+    \nabla_\theta J(\theta) =  \mathbb{E}_{s_t \sim \rho^\pi, a_t \sim \pi_\theta}[\nabla_\theta \log \pi_\theta(s_t, a_t) \, ( \sum_{k=0}^{n-1} \gamma^{k} \, r_{t+k+1} + \gamma^n \, V_\varphi(s_{t+n+1}) - V_\varphi(s_t))]
 \qquad(11)\]</span></span></p>
 <p>TD can be therefore be seen as a 1-step algorithm. For sparse rewards (mostly zero, +1 or -1 at the end of a game for example), this allows to update the <span class="math inline">\(n\)</span> last actions which lead to a win/loss, instead of only the last one in TD, speeding up learning. However, there is no need for finite episodes as in MC. In other words, n-step estimation ensures a trade-off between bias (wrong upadtes based on estimated as in TD) and variance (variability of the obtained returns as in MC). An alternative to n-step updating is the use of <em>eligibility traces</em> (see Section <a href="./BasicRL.html#sec:eligibility-traces">2.1.6</a>, <span class="citation" data-cites="Sutton1998">Sutton and Barto (<a href="References.html#ref-Sutton1998">1998</a>)</span>).</p>
 <p>Having a computable formula for the policy gradient, the algorithm is rather simple:</p>
@@ -241,7 +244,7 @@
 <p>An interesting addition in A3C is the way they enforce exploration during learning. In actor-critic methods, exploration classically relies on the fact that the learned policies are stochastic (<strong>on-policy</strong>): <span class="math inline">\(\pi(s, a)\)</span> describes the probability of taking the action <span class="math inline">\(a\)</span> in the state <span class="math inline">\(s\)</span>. In discrete action spaces, the output of the actor is usually a softmax layer, ensuring that all actions get a non-zero probability of being selected during training. In continuous action spaces, the executed action is sampled from the output probability distribution. However, this is often not sufficient and hard to control.</p>
 <p>In A3C, the authors added an <strong>entropy regularization</strong> term <span class="citation" data-cites="Williams1991">(Williams and Peng <a href="References.html#ref-Williams1991">1991</a>)</span> to the policy gradient update:</p>
 <p><span id="eq:a3c_entropy"><span class="math display">\[
-    \nabla_\theta J(\theta) =  \mathbb{E}_{s_t \sim \rho^\pi, a_t \sim \pi_\theta}[\nabla_\theta \log \pi_\theta(s_t, a_t) \, ( R_t - V_\varphi(s_t)) + \beta \, \nabla_\theta H(\pi_\theta(s_t))] 
+    \nabla_\theta J(\theta) =  \mathbb{E}_{s_t \sim \rho^\pi, a_t \sim \pi_\theta}[\nabla_\theta \log \pi_\theta(s_t, a_t) \, ( R_t - V_\varphi(s_t)) + \beta \, \nabla_\theta H(\pi_\theta(s_t))]
 \qquad(12)\]</span></span></p>
 <p>For discrete actions, the entropy of the policy for a state <span class="math inline">\(s_t\)</span> is simple to compute: <span class="math inline">\(H(\pi_\theta(s_t)) = - \sum_a \pi_\theta(s_t, a) \, \log \pi_\theta(s_t, a)\)</span>. For continuous actions, replace the sum with an integral. It measures the “randomness” of the policy: if the policy is fully deterministic (the same action is systematically selected), the entropy is zero as it carries no information. If the policy is completely random, the entropy is maximal. Maximizing the entropy at the same time as the returns improves exploration by forcing the policy to be as non-deterministic as possible.</p>
 <p>The parameter <span class="math inline">\(\beta\)</span> controls the level of regularization: we do not want the entropy to dominate either, as a purely random policy does not bring much reward. If <span class="math inline">\(\beta\)</span> is chosen too low, the entropy won’t play a significant role in the optimization and we may obtain a suboptimal deterministic policy early during training as there was not enough exploration. If <span class="math inline">\(\beta\)</span> is too high, the policy will be random. Entropy regularization adds yet another hyperparameter to the problem, but can be really useful for convergence when adequately chosen.</p>
@@ -291,7 +294,7 @@
 <p><span class="math display">\[
     \nabla_\theta J(\theta) =  \mathbb{E}_{s_t \sim \rho^\pi, a_t \sim \pi_\theta}[\nabla_\theta \log \pi_\theta (s_t, a_t) \, \sum_{l=0}^\infty (\gamma \lambda)^l \delta_{t+l} ]
 \]</span></p>
-<p>Note that <span class="citation" data-cites="Schulman2015b">Schulman, Moritz, et al. (<a href="References.html#ref-Schulman2015b">2015</a>)</span> additionally use <em>trust region optimization</em> to stabilize learning and further reduce the bias (see Section <a href="./NaturalGradient.html#sec:trust-region-policy-optimization-trpo">4.5.4</a>), for now just consider it is a better optimization method than gradient descent. The GAE algorithm is summarized here:</p>
+<p>Note that <span class="citation" data-cites="Schulman2015b">Schulman, Moritz, et al. (<a href="References.html#ref-Schulman2015b">2015</a>)</span> additionally use <em>trust region optimization</em> to stabilize learning and further reduce the bias (see Section <a href="./NaturalGradient.html#sec:trust-region-policy-optimization-trpo">4.5.3</a>), for now just consider it is a better optimization method than gradient descent. The GAE algorithm is summarized here:</p>
 <hr />
 <ul>
 <li>Initialize the actor <span class="math inline">\(\pi_\theta\)</span> and the critic <span class="math inline">\(V_\varphi\)</span> with random weights.</li>

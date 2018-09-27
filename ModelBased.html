@@ -126,44 +126,37 @@
 
 
 
-<h1 id="sec:deep-rl-in-practice"><span class="header-section-number">6</span> Deep RL in practice</h1>
-<h2 id="sec:limitations"><span class="header-section-number">6.1</span> Limitations</h2>
-<p>Excellent blog post from Alex Irpan on the limitations of deep RL: <a href="https://www.alexirpan.com/2018/02/14/rl-hard.html" class="uri">https://www.alexirpan.com/2018/02/14/rl-hard.html</a></p>
-<p>Another documented critic on deep RL: <a href="https://thegradient.pub/why-rl-is-flawed/" class="uri">https://thegradient.pub/why-rl-is-flawed/</a></p>
-<h2 id="sec:reward-shaping"><span class="header-section-number">6.2</span> Reward shaping</h2>
-<p>Hindsight experience replay: <span class="citation" data-cites="Andrychowicz2017">Andrychowicz et al. (<a href="References.html#ref-Andrychowicz2017">2017</a>)</span></p>
-<h2 id="sec:simulation-environments"><span class="header-section-number">6.3</span> Simulation environments</h2>
-<p>Standard RL environments are needed to better compare the performance of RL algoritms. Below is a list of the most popular ones.</p>
-<ul>
-<li>OpenAI Gym <a href="https://gym.openai.com" class="uri">https://gym.openai.com</a>: a standard toolkit for comparing RL algorithms provided by the OpenAI fundation. It provides many environments, from the classical toy problems in RL (GridWorld, pole-balancing) to more advanced problems (Mujoco simulated robots, Atari games, Minecraft…). The main advantage is the simplicity of the interface: the user only needs to select which task he wants to solve, and a simple for loop allows to perform actions and observe their consequences:</li>
-</ul>
-<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="im">import</span> gym</a>
-<a class="sourceLine" id="cb1-2" data-line-number="2">env <span class="op">=</span> gym.make(<span class="st">&quot;Taxi-v1&quot;</span>)</a>
-<a class="sourceLine" id="cb1-3" data-line-number="3">observation <span class="op">=</span> env.reset()</a>
-<a class="sourceLine" id="cb1-4" data-line-number="4"><span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1000</span>):</a>
-<a class="sourceLine" id="cb1-5" data-line-number="5">    env.render()</a>
-<a class="sourceLine" id="cb1-6" data-line-number="6">    action <span class="op">=</span> env.action_space.sample()</a>
-<a class="sourceLine" id="cb1-7" data-line-number="7">    observation, reward, done, info <span class="op">=</span> env.step(action)</a></code></pre></div>
-<ul>
-<li><p>OpenAI Universe <a href="https://universe.openai.com" class="uri">https://universe.openai.com</a>: a similar framework from OpenAI, but to control realistic video games (GTA V, etc).</p></li>
-<li><p>Darts environment <a href="https://github.com/DartEnv/dart-env" class="uri">https://github.com/DartEnv/dart-env</a>: a fork of gym to use the Darts simulator instead of Mujoco.</p></li>
-<li><p>Roboschool <a href="https://github.com/openai/roboschool" class="uri">https://github.com/openai/roboschool</a>: another alternative to Mujoco for continuous robotic control, this time from openAI.</p></li>
-<li><p>NIPS 2017 musculoskettal challenge <a href="https://github.com/stanfordnmbl/osim-rl" class="uri">https://github.com/stanfordnmbl/osim-rl</a></p></li>
-</ul>
-<h2 id="sec:algorithm-implementations"><span class="header-section-number">6.4</span> Algorithm implementations</h2>
-<p>State-of-the-art algorithms in deep RL are already implemented and freely available on the internet. Below is a preliminary list of the most popular ones. Most of them rely on tensorflow or keras for training the neural networks and interact directly with gym-like interfaces.</p>
-<ul>
-<li><p><code>rl-code</code> <a href="https://github.com/rlcode/reinforcement-learning" class="uri">https://github.com/rlcode/reinforcement-learning</a>: many code samples for simple RL problems (GridWorld, Cartpole, Atari Games). The code samples are mostly for educational purpose (Policy Iteration, Value Iteration, Monte-Carlo, SARSA, Q-learning, REINFORCE, DQN, A2C, A3C).</p></li>
-<li><p><code>keras-rl</code> <a href="https://github.com/matthiasplappert/keras-rl" class="uri">https://github.com/matthiasplappert/keras-rl</a>: many deep RL algorithms implemented directly in keras: DQN, DDQN, DDPG, Continuous DQN (CDQN or NAF), Cross-Entropy Method (CEM), Dueling DQN, Deep SARSA…</p></li>
-<li><p><code>Coach</code> <a href="https://github.com/NervanaSystems/coach" class="uri">https://github.com/NervanaSystems/coach</a> from Intel Nervana also provides many state-of-the-art algorithms: DQN, DDQN, Dueling DQN, Mixed Monte Carlo (MMC), Persistent Advantage Learning (PAL), Distributional Deep Q Network, Bootstrapped Deep Q Network, N-Step Q Learning, Neural Episodic Control (NEC), Normalized Advantage Functions (NAF), Policy Gradients (PG), A3C, DDPG, Proximal Policy Optimization (PPO), Clipped Proximal Policy Optimization, Direct Future Prediction (DFP)…</p></li>
-<li><p><code>OpenAI Baselines</code> <a href="https://github.com/openai/baselines" class="uri">https://github.com/openai/baselines</a> from OpenAI too: A2C, ACER, ACKTR, DDPG, DQN, PPO, TRPO…</p></li>
-<li><p><code>rlkit</code> <a href="https://github.com/vitchyr/rlkit" class="uri">https://github.com/vitchyr/rlkit</a> from Vitchyr Pong (PhD student at Berkeley) with in particular model-based algorithms (TDM <span class="citation" data-cites="Pong2018">Pong et al. (<a href="References.html#ref-Pong2018">2018</a>)</span>).</p></li>
-</ul>
+<h1 id="sec:model-based-rl"><span class="header-section-number">5</span> Model-based RL</h1>
+<p>Model-free: The future is cached into values.</p>
+<p>Two problems of model-free:</p>
+<ol type="1">
+<li>Needs a lot of samples</li>
+<li>Cannot adapt to novel tasks in the same environment.</li>
+</ol>
+<p>Model-based uses an internal model to reason about the future (imagination).</p>
+<p>Works only when the model is fixed (AlphaGo) or easy to learn (symbolic, low-dimensional). Not robust yet against model imperfection.</p>
+<h2 id="sec:dyna-q"><span class="header-section-number">5.1</span> Dyna-Q</h2>
+<p><span class="citation" data-cites="Sutton1990">(Sutton and Barto <a href="References.html#ref-Sutton1990">1990</a>)</span></p>
+<p><a href="https://medium.com/@ranko.mosic/online-planning-agent-dyna-q-algorithm-and-dyna-maze-example-sutton-and-barto-2016-7ad84a6dc52b" class="uri">https://medium.com/@ranko.mosic/online-planning-agent-dyna-q-algorithm-and-dyna-maze-example-sutton-and-barto-2016-7ad84a6dc52b</a></p>
+<h2 id="sec:unsorted-references"><span class="header-section-number">5.2</span> Unsorted references</h2>
+<p>Embed to Control: A Locally Linear Latent Dynamics Model for Control from Raw Images <span class="citation" data-cites="Watter2015">(Watter et al. <a href="References.html#ref-Watter2015">2015</a>)</span></p>
+<p>Efficient Model-Based Deep Reinforcement Learning with Variational State Tabulation <span class="citation" data-cites="Corneil2018">(Corneil, Gerstner, and Brea <a href="References.html#ref-Corneil2018">2018</a>)</span></p>
+<p>Model-Based Value Estimation for Efficient Model-Free Reinforcement Learning <span class="citation" data-cites="Feinberg2018">(Feinberg et al. <a href="References.html#ref-Feinberg2018">2018</a>)</span></p>
+<p>Imagination-Augmented Agents for Deep Reinforcement Learning <span class="citation" data-cites="Weber2017">(Weber et al. <a href="References.html#ref-Weber2017">2017</a>)</span>.</p>
+<p>Temporal Difference Model TDM <span class="citation" data-cites="Pong2018">(Pong et al. <a href="References.html#ref-Pong2018">2018</a>)</span>: <a href="http://bair.berkeley.edu/blog/2018/04/26/tdm/" class="uri">http://bair.berkeley.edu/blog/2018/04/26/tdm/</a></p>
+<p>Learning to Adapt: Meta-Learning for Model-Based Control, <span class="citation" data-cites="Clavera2018">(Clavera et al. <a href="References.html#ref-Clavera2018">2018</a>)</span></p>
+<p>The Predictron: End-To-End Learning and Planning <span class="citation" data-cites="Silver2016">(Silver et al. <a href="References.html#ref-Silver2016">2016</a>)</span></p>
+<p>Model-Based Planning with Discrete and Continuous Actions <span class="citation" data-cites="Henaff2017">(Henaff, Whitney, and LeCun <a href="References.html#ref-Henaff2017">2017</a>)</span></p>
+<p>Schema Networks: Zero-shot Transfer with a Generative Causal Model of Intuitive Physics <span class="citation" data-cites="Kansky2017">(Kansky et al. <a href="References.html#ref-Kansky2017">2017</a>)</span></p>
+<p>Universal Planning Networks <span class="citation" data-cites="Srinivas2018">(Srinivas et al. <a href="References.html#ref-Srinivas2018">2018</a>)</span></p>
+<p>World models <a href="https://worldmodels.github.io/" class="uri">https://worldmodels.github.io/</a> <span class="citation" data-cites="Ha2018">(Ha and Schmidhuber <a href="References.html#ref-Ha2018">2018</a>)</span></p>
+<p>Recall Traces: Backtracking Models for Efficient Reinforcement Learning <span class="citation" data-cites="Goyal2018">(Goyal et al. <a href="References.html#ref-Goyal2018">2018</a>)</span></p>
+<p>Deep Dyna-Q: Integrating Planning for Task-Completion Dialogue Policy Learning <span class="citation" data-cites="Peng2018">(Peng et al. <a href="References.html#ref-Peng2018">2018</a>)</span></p>
 
 <br>
 <div class="arrows">
-<a href="ModelBased.html" class="previous">&laquo; Previous</a>
-<a href="References.html" class="next">Next &raquo;</a>
+<a href="OtherPolicyGradient.html" class="previous">&laquo; Previous</a>
+<a href="Practice.html" class="next">Next &raquo;</a>
 </div>
 
 

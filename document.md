@@ -17,7 +17,7 @@ files:
     - 3.5-NaturalGradient.md
     - 3.6-OtherPolicyGradient.md
     # - 4-RAM.md
-    # - 5-ModelBased.md
+    - 5-ModelBased.md
     # - 6-Hierarchical.md
     # - 6-Robotics.md
     - 7-Practice.md
@@ -32,8 +32,8 @@ csl: assets/apalike.csl
 
 # CSS
 css: assets/github.css
-#mathjax: /usr/share/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML
-mathjax: https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML
+mathjax: /usr/share/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML
+#mathjax: https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML
 
 # Latex
 geometry: "margin=1in"
@@ -1175,33 +1175,33 @@ $$
     A^{\pi}(s, a) = Q^{\pi}(s, a) - V^\pi(s)
 $$
 
-which is the **advantage** of the action $a$ in $s$, as already seen in *duelling networks* (@sec:duelling-network). 
+which is the **advantage** of the action $a$ in $s$, as already seen in *duelling networks* (@sec:duelling-network).
 
 Now the problem is that the critic would have to approximate two functions: $Q^{\pi}(s, a)$ and $V^{\pi}(s)$. **Advantage actor-critic** methods presented in this section (A2C, A3C, GAE) approximate the advantage of an action:
 
 $$
-    \nabla_\theta J(\theta) =  \mathbb{E}_{s \sim \rho^\pi, a \sim \pi_\theta}[\nabla_\theta \log \pi_\theta(s, a) \, A_\varphi(s, a)] 
+    \nabla_\theta J(\theta) =  \mathbb{E}_{s \sim \rho^\pi, a \sim \pi_\theta}[\nabla_\theta \log \pi_\theta(s, a) \, A_\varphi(s, a)]
 $$
 
 
-$A_\varphi(s, a)$ is called the **advantage estimate** and should be equal to the real advantage *in expectation*. 
+$A_\varphi(s, a)$ is called the **advantage estimate** and should be equal to the real advantage *in expectation*.
 
 Different methods could be used to compute the advantage estimate:
 
 * $A_\varphi(s, a) =  R(s, a) - V_\varphi(s)$ is the **MC advantage estimate**, the Q-value of the action being replaced by the actual return.
 
-* $A_\varphi(s, a) =   r(s, a, s') + \gamma \, V_\varphi(s') - V_\varphi(s))$ is the **TD advantage estimate** or TD error.
+* $A_\varphi(s, a) =   r(s, a, s') + \gamma \, V_\varphi(s') - V_\varphi(s)$ is the **TD advantage estimate** or TD error.
 
-* $A_\varphi(s, a) =   \sum_{k=0}^{n-1} \gamma^{k} \, r_{t+k+1} + \gamma^n \, V_\varphi(s_{t+n+1}) - V_\varphi(s_t)$ is the **n-step advantage estimate**. 
+* $A_\varphi(s, a) =   \sum_{k=0}^{n-1} \gamma^{k} \, r_{t+k+1} + \gamma^n \, V_\varphi(s_{t+n+1}) - V_\varphi(s_t)$ is the **n-step advantage estimate**.
 
 
-The most popular approach is the n-step advantage, which is at the core of the methods A2C and A3C, and can be understood as a trade-off between MC and TD. MC and TD advantages could be used as well, but come with the respective disadvantages of MC (need for finite episodes, slow updates) and TD (unstable). Generalized Advantage Estimation (GAE, @sec:generalized-advantage-estimation-gae) takes another interesting approach to estimate the advantage. 
+The most popular approach is the n-step advantage, which is at the core of the methods A2C and A3C, and can be understood as a trade-off between MC and TD. MC and TD advantages could be used as well, but come with the respective disadvantages of MC (need for finite episodes, slow updates) and TD (unstable). Generalized Advantage Estimation (GAE, @sec:generalized-advantage-estimation-gae) takes another interesting approach to estimate the advantage.
 
 *Note:* A2C is actually derived from the A3C algorithm presented later, but it is simpler to explain it first. See <https://blog.openai.com/baselines-acktr-a2c/> for an explanation of the reasons. A good explanation of A2C and A3C with Python code is available at <https://cgnicholls.github.io/reinforcement-learning/2017/03/27/a3c.html>.
 
 ### Advantage Actor-Critic (A2C)
 
-The first aspect of A2C is that it relies on n-step updating, which is a trade-off between MC and TD: 
+The first aspect of A2C is that it relies on n-step updating, which is a trade-off between MC and TD:
 
 * MC waits until the end of an episode to update the value of an action using the reward to-go (sum of obtained rewards) $R(s, a)$.
 * TD updates immediately the action using the immediate reward $r(s, a, s')$ and approximates the rest with the value of the next state $V^\pi(s)$.
@@ -1209,7 +1209,7 @@ The first aspect of A2C is that it relies on n-step updating, which is a trade-o
 
 
 $$
-    \nabla_\theta J(\theta) =  \mathbb{E}_{s_t \sim \rho^\pi, a_t \sim \pi_\theta}[\nabla_\theta \log \pi_\theta(s_t, a_t) \, ( \sum_{k=0}^{n-1} \gamma^{k} \, r_{t+k+1} + \gamma^n \, V_\varphi(s_{t+n+1}) - V_\varphi(s_t))] 
+    \nabla_\theta J(\theta) =  \mathbb{E}_{s_t \sim \rho^\pi, a_t \sim \pi_\theta}[\nabla_\theta \log \pi_\theta(s_t, a_t) \, ( \sum_{k=0}^{n-1} \gamma^{k} \, r_{t+k+1} + \gamma^n \, V_\varphi(s_{t+n+1}) - V_\varphi(s_t))]
 $${#eq:a2c}
 
 TD can be therefore be seen as a 1-step algorithm. For sparse rewards (mostly zero, +1 or -1 at the end of a game for example), this allows to update the $n$ last actions which lead to a win/loss, instead of only the last one in TD, speeding up learning. However, there is no need for finite episodes as in MC. In other words, n-step estimation ensures a trade-off between bias (wrong upadtes based on estimated as in TD) and variance (variability of the obtained returns as in MC). An alternative to n-step updating is the use of *eligibility traces* (see @sec:eligibility-traces, @Sutton1998).
@@ -1235,7 +1235,7 @@ This is not very different in essence from REINFORCE (sample transitions, comput
         * Perform the action $a_k$ and observe the next state $s_{k+1}$ and the reward $r_{k+1}$.
         * Store $(s_k, a_k, r_{k+1})$ in the episode minibatch.
     * if $s_n$ is not terminal: set $R = V_\varphi(s_n)$ with the critic, else $R=0$.
-    
+
     * Reset gradient $d\theta$ and $d\varphi$ to 0.
     * for $k \in [n-1, 0]$: # Backwards iteration over the episode
         * Update the discounted sum of rewards $R = r_k + \gamma \, R$
@@ -1247,7 +1247,7 @@ This is not very different in essence from REINFORCE (sample transitions, comput
         $$
             d\varphi \leftarrow d\varphi + \nabla_\varphi (R - V_\varphi(s_k))^2
         $$
-    
+
     * Update the actor and the critic with the accumulated gradients using gradient descent or similar:
     $$
         \theta \leftarrow \theta + \eta \, d\theta \qquad \varphi \leftarrow \varphi + \eta \, d\varphi
@@ -1310,7 +1310,7 @@ An interesting addition in A3C is the way they enforce exploration during learni
 In A3C, the authors added an **entropy regularization** term [@Williams1991] to the policy gradient update:
 
 $$
-    \nabla_\theta J(\theta) =  \mathbb{E}_{s_t \sim \rho^\pi, a_t \sim \pi_\theta}[\nabla_\theta \log \pi_\theta(s_t, a_t) \, ( R_t - V_\varphi(s_t)) + \beta \, \nabla_\theta H(\pi_\theta(s_t))] 
+    \nabla_\theta J(\theta) =  \mathbb{E}_{s_t \sim \rho^\pi, a_t \sim \pi_\theta}[\nabla_\theta \log \pi_\theta(s_t, a_t) \, ( R_t - V_\varphi(s_t)) + \beta \, \nabla_\theta H(\pi_\theta(s_t))]
 $${#eq:a3c_entropy}
 
 For discrete actions, the entropy of the policy for a state $s_t$ is simple to compute: $H(\pi_\theta(s_t)) = - \sum_a \pi_\theta(s_t, a) \, \log \pi_\theta(s_t, a)$. For continuous actions, replace the sum with an integral. It measures the "randomness" of the policy: if the policy is fully deterministic (the same action is systematically selected), the entropy is zero as it carries no information. If the policy is completely random, the entropy is maximal. Maximizing the entropy at the same time as the returns improves exploration by forcing the policy to be as non-deterministic as possible.
@@ -1322,7 +1322,7 @@ The parameter $\beta$ controls the level of regularization: we do not want the e
 #### Comparison between A3C and DQN {-}
 
 1. DQN uses an experience replay memory to solve the correlation of inputs/outputs problem, while A3C uses parallel actor-learners. If multiple copies of the environment are available, A3C should be preferred because the ERM slows down learning (very old transitions are still used for learning) and requires a lot of memory.
-2. A3C is on-policy: the learned policy must be used to explore the environment. DQN is off-policy: a behavior policy can be used for exploration, allowing to guide externally which regions of the state-action space should be explored. Off-policy are often preferred when expert knowledge is available. 
+2. A3C is on-policy: the learned policy must be used to explore the environment. DQN is off-policy: a behavior policy can be used for exploration, allowing to guide externally which regions of the state-action space should be explored. Off-policy are often preferred when expert knowledge is available.
 3. DQN has to use target networks to fight the non-stationarity of the Q-values. A3C uses state-values and advantages, which are much more stable over time than Q-values, so there is no need for target networks.
 4. A3C can deal with continuous action spaces easily, as it uses a parameterized policy. DQN has to be strongly modified to deal with this problem.
 5. Both can deal with POMDP by using LSTMs in the actor network: A3C [@Mnih2016;@Mirowski2016], DQN [@Hausknecht2015, see @sec:deep-recurrent-q-learning-drqn].
@@ -1375,7 +1375,7 @@ In other words, the prediction error over $n$ steps is the (discounted) sum of t
 
 $$
     A^{\text{GAE}(\gamma, \lambda)}_t = (1-\lambda) \, \sum_{l=0}^\infty \lambda^l A^l_t = \sum_{l=0}^\infty (\gamma \lambda)^l \delta_{t+l}
-$$ 
+$$
 
 The GAE is the discounted sum of all n-step advantages. When $\lambda=0$, we have $A^{\text{GAE}(\gamma, 0)}_t = A^{0}_t = \delta_t$, i.e. the TD advantage (high bias, low variance). When $\lambda=1$, we have (at the limit) $A^{\text{GAE}(\gamma, 1)}_t = R_t$, i.e. the MC advantage (low bias, high variance). Choosing the right value of $\lambda$ between 0 and 1 allows to control the bias/variance trade-off.
 
@@ -1398,13 +1398,13 @@ Note that @Schulman2015b additionally use *trust region optimization* to stabili
         * Select a action $a_k$ using the actor $\pi_\theta$.
         * Perform the action $a_k$ and observe the next state $s_{k+1}$ and the reward $r_{k+1}$.
         * Store $(s_k, a_k, r_{k+1})$ in the minibatch.
-    
+
     * for $k \in [0, n]$:
         * Compute the TD error $\delta_k = r_{k+1} + \gamma \, V_\varphi(s_{k+1}) - V_\varphi(s_k)$
-        
+
     * for $k \in [0, n]$:
         * Compute the GAE advantage $A^{\text{GAE}(\gamma, \lambda)}_k = \sum_{l=0}^\infty (\gamma \lambda)^l \delta_{k+l}$
-        
+
     * Update the actor using the GAE advantage and natural gradients (TRPO).
 
     * Update the critic using natural gradients (TRPO)
@@ -1413,7 +1413,7 @@ Note that @Schulman2015b additionally use *trust region optimization* to stabili
 
 ### Stochastic actor-critic for continuous action spaces
 
-The actor-critic method presented above use **stochastic policies** $\pi_\theta(s, a)$ assigning parameterized probabilities of being selecting to each $(s, a)$ pair. 
+The actor-critic method presented above use **stochastic policies** $\pi_\theta(s, a)$ assigning parameterized probabilities of being selecting to each $(s, a)$ pair.
 
 * When the action space is discrete, the output layer of the actor is simply a *softmax* layer with as many neurons as possible actions in each state, making sure the probabilities sum to one. It is then straightforward to sample an action from this layer.
 
@@ -1454,13 +1454,13 @@ $$
     \nabla_\theta J(\theta) =  \mathbb{E}_{s \sim \rho^\pi, a \sim \pi_\theta}[\nabla_\theta \log \pi_\theta(s, a) \, Q^{\pi_\theta}(s, a)]
 $$
 
-The state distribution $\rho^\pi$ defines the ensemble of states that can be visited using the actor policy $\pi_\theta$. If, during Monte-Carlo sampling of the policy gradient, the states $s$ do not come from this state distribution, the approximated policy gradient will be wrong (high bias) and the resulting policy will be suboptimal. 
+The state distribution $\rho^\pi$ defines the ensemble of states that can be visited using the actor policy $\pi_\theta$. If, during Monte-Carlo sampling of the policy gradient, the states $s$ do not come from this state distribution, the approximated policy gradient will be wrong (high bias) and the resulting policy will be suboptimal.
 
 The major drawback of on-policy methods is their sample complexity: it is difficult to ensure that the *"interesting"* regions of the policy are actually discovered by the actor (see @fig:onlinepolicyexploration). If the actor is initialized in a flat region of the reward space (where there is not a lot of rewards), policy gradient updates will only change slightly the policy and it may take a lot of iterations until interesting policies are discovered and fine-tuned.
 
 ![Illustration of the sample complexity inherent to on-policy methods, where the actor has only two parameters $\theta_1$ and $\theta_2$. If only very small regions of the actor parameters are associated with high rewards, the policy might wander randomly for a very long time before "hitting"the interesting regions.](img/onpolicyexploration.png){#fig:onlinepolicyexploration width=50%}
 
-The problem becomes even worse when the state or action spaces are highly dimensional, or when rewards are sparse. Imagine the scenario where you are searching for your lost keys at home (a sparse reward is delivered only once you find them): you could spend hours trying randomly each action at your disposal (looking in your jackets, on your counter, but also jumping around, cooking something, watching TV...) until finally you explore the action "look behind the curtains" and find them. (Note: with deep RL, you would even have to do that one million times in order to allow gradient descent to train your brain...). If you had somebody telling you "if I were you, I would first search in your jackets, then on your counter and finally behind the curtains, but forget about watching TV, you will never find anything by doing that", this would certainly reduce your exploration time. 
+The problem becomes even worse when the state or action spaces are highly dimensional, or when rewards are sparse. Imagine the scenario where you are searching for your lost keys at home (a sparse reward is delivered only once you find them): you could spend hours trying randomly each action at your disposal (looking in your jackets, on your counter, but also jumping around, cooking something, watching TV...) until finally you explore the action "look behind the curtains" and find them. (Note: with deep RL, you would even have to do that one million times in order to allow gradient descent to train your brain...). If you had somebody telling you "if I were you, I would first search in your jackets, then on your counter and finally behind the curtains, but forget about watching TV, you will never find anything by doing that", this would certainly reduce your exploration time.
 
 This is somehow the idea behind **off-policy** algorithms: they use a **behavior policy** $b(s, a)$ to explore the environment and train the **target policy** $\pi(s, a)$ to reproduce the best ones by estimating how good they are. This does not come without caveats: if the behavior policy does not explore the optimal actions, the target policy will likely not be able to find it by itself, except by chance. But if the behavior policy is good enough, this can drastically reduce the amount of exploration needed to obtain a satisfying policy. @Sutton2017 noted that:
 
@@ -1503,7 +1503,7 @@ In policy gradient methods, we want to maximize the expected return of trajector
 
 $$
     J(\theta) = \mathbb{E}_{\tau \sim \rho_\theta}[R(\tau)] = \int_\tau \rho_\theta(\tau) \, R(\tau) \, d\tau \approx \frac{1}{N} \sum_{i=1}^N R(\tau_i)
-$$ 
+$$
 
 where $\rho_\theta$  is the distribution of trajectories $\tau$ generated by the **target** policy $\pi_\theta$. Mathematical expectations can be approximating by an average of enough samples of the estimator (Monte-Carlo). In policy gradient, we estimate the gradient, but let's consider we sample the objective function for now. If we use a behavior policy to generate the trajectories, what we are actually estimating is:
 
@@ -1511,7 +1511,7 @@ $$
     \hat{J}(\theta) = \mathbb{E}_{\tau \sim \rho_b}[R(\tau)] = \int_\tau \rho_b(\tau) \, R(\tau) \, d\tau
 $$
 
-where $\rho_b$ is the distribution of trajectories generated by the **behavior** policy. In the general case, there is reason why $\hat{J}(\theta)$ should be close from $J(\theta)$, even when taking their gradient.
+where $\rho_b$ is the distribution of trajectories generated by the **behavior** policy. In the general case, there is no reason why $\hat{J}(\theta)$ should be close from $J(\theta)$, even when taking their gradient.
 
 **Importance sampling** is a classical statistical method used to estimate properties of a distribution (here the expected return of the trajectories of the target policy) while only having samples generated from a different distribution (here the trajectories of the behavior policy). See for example <https://statweb.stanford.edu/~owen/mc/Ch-var-is.pdf> and <http://timvieira.github.io/blog/post/2014/12/21/importance-sampling> for more generic explanations.
 
@@ -1525,7 +1525,7 @@ $$
               & = \int_\tau \rho_b(\tau) \frac{\rho_\theta(\tau)}{\rho_b(\tau)} \, R(\tau) \, d\tau \\
               & = \mathbb{E}_{\tau \sim \rho_b}[\frac{\rho_\theta(\tau)}{\rho_b(\tau)} \, R(\tau)]  \\
 \end{aligned}
-$$ 
+$$
 
 The ratio $\frac{\rho_\theta(\tau)}{\rho_b(\tau)}$ is called the **importance sampling weight** for the trajectory. If a trajectory generated by $b$ is associated with a lot of reward $R(\tau)$ (with $\rho_b(\tau)$ significantly high), the actor should learn to reproduce that trajectory with a high probability $\rho_\theta(\tau)$, as its goal is to maximize $J(\theta)$. Conversely, if the associated reward is low ($R(\tau)\approx 0$), the target policy can forget about it (by setting $\rho_\theta(\tau) = 0$), even though the behavior policy still generates it!
 
@@ -1549,7 +1549,7 @@ All one needs to do is to repeatedly apply the following algorithm:
     * For each transition $(s_t, a_t, s_{t+1})$ of each trajectory, store:
         1. The received reward $r_{t+1}$.
         2. The probability $b(s_t, a_t)$ that the behavior policy generates this transition.
-        3. The probability $\pi_\theta(s_t, a_t)$ that the target policy generates this transition. 
+        3. The probability $\pi_\theta(s_t, a_t)$ that the target policy generates this transition.
 2. Estimate the objective function with:
 $$
   \hat{J}(\theta) = \frac{1}{m} \, \sum_{i=1}^m \left(\prod_{t=0}^T \frac{\pi_\theta(s_t, a_t)}{b(s_t, a_t)} \right) \, \left(\sum_{t=0}^T \gamma^t \, r_{t+1} \right)
@@ -1606,7 +1606,7 @@ $$
 \end{aligned}
 $$
 
-We now have an **actor-critic** architecture (actor $\pi_\theta(s, a)$, critic $Q_\varphi(s, a)$) able to learn from single transitions $(s,a)$ (**online update** instead of complete trajectories) generated **off-policy** (behavior policy $b(s,a)$ and importance sampling weight $\frac{\pi_\theta(s, a)}{b(s, a)}$). The off-policy actor-critic (Off-PAC) algorithm of @Degris2012 furthermore uses **eligibility traces** to stabilize learning. However, it was limited to linear function approximators because its variance is too high to train deep neural networks. 
+We now have an **actor-critic** architecture (actor $\pi_\theta(s, a)$, critic $Q_\varphi(s, a)$) able to learn from single transitions $(s,a)$ (**online update** instead of complete trajectories) generated **off-policy** (behavior policy $b(s,a)$ and importance sampling weight $\frac{\pi_\theta(s, a)}{b(s, a)}$). The off-policy actor-critic (Off-PAC) algorithm of @Degris2012 furthermore uses **eligibility traces** to stabilize learning. However, it was limited to linear function approximators because its variance is too high to train deep neural networks.
 
 ### Retrace
 
@@ -1614,7 +1614,7 @@ For a good deep RL algorithm, we need the two following properties:
 
 1. **Off-policy** learning: it allows to learn from transitions stored in a replay buffer (i.e. generated with an older policy). As NN need many iterations to converge, it is important to be able to re-use old transitions for its training, instead of constantly sampling new ones (sample complexity). Multiple parallel actors as in A3C allow to mitigate this problem, but it is still too complex.
 
-2. **Multi-step returns**: the two extremes of RL are TD (using a single "real" reward for the update, the rest is estimated) amd Monte-Carlo (use only "real" rewards, no estimation). TD has a smaller variance, but a high bias (errors in estimates propagate to all other values), while MC has a small bias but a high variance (learns from many real rewrads, but the returns may vary a lot between two almost identical episodes). Eligibility traces and n-step returns (used in A3C) are the most common trade-off between TD and MC. 
+2. **Multi-step returns**: the two extremes of RL are TD (using a single "real" reward for the update, the rest is estimated) amd Monte-Carlo (use only "real" rewards, no estimation). TD has a smaller variance, but a high bias (errors in estimates propagate to all other values), while MC has a small bias but a high variance (learns from many real rewrads, but the returns may vary a lot between two almost identical episodes). Eligibility traces and n-step returns (used in A3C) are the most common trade-off between TD and MC.
 
 The **Retrace** algorithm [@Munos2016] is designed to exhibit both properties when learning Q-values. It can therefore be used to train the critic (instead of classical Q-learning) and provide the actor with safe, efficient and low-variance values.
 
@@ -1644,9 +1644,9 @@ $$
     || \pi - b ||_1 \leq \frac{1 - \gamma}{\lambda \gamma}
 $$
 
-As $\gamma$ is typically chosen very close from 1 (e.g. 0.99), this does not leave much room for the target policy to differ from the behavior policy [see @Harutyunyan2016 for the proof]. 
+As $\gamma$ is typically chosen very close from 1 (e.g. 0.99), this does not leave much room for the target policy to differ from the behavior policy [see @Harutyunyan2016 for the proof].
 
-2. $c_s = \frac{\pi(s_s, a_s)}{b(s_s, a_s)}$ is the importance sampling weight. As shown in @sec:importance-sampling, importance sampling is unbiased in off-policy settings, but can have a very large variance: the product of ratios $\prod_{s=t+1}^{t'} \frac{\pi(s_s, a_s)}{b(s_s, a_s)}$ can quickly vary between two episodes. 
+2. $c_s = \frac{\pi(s_s, a_s)}{b(s_s, a_s)}$ is the importance sampling weight. As shown in @sec:importance-sampling, importance sampling is unbiased in off-policy settings, but can have a very large variance: the product of ratios $\prod_{s=t+1}^{t'} \frac{\pi(s_s, a_s)}{b(s_s, a_s)}$ can quickly vary between two episodes.
 
 3. $c_s = \pi(s_s, a_s)$ corresponds to the tree-backup algorithm $TB(\lambda)$ [@Precup2000]. It has the advantage to work for arbitrary policies $\pi$ and $b$, but the product of such probabilities decays very fast to zero when the time difference $t' - t$ increases: TD errors will be efficiently shared over a couple of steps only.
 
@@ -1656,14 +1656,14 @@ $$
     c_s = \lambda \min (1, \frac{\pi(s_s, a_s)}{b(s_s, a_s)})
 $$
 
-The importance sampling weight is clipped to 1, and decays exponentially with the parameter $\lambda$. It can be seen as a trade-off between importance sampling and eligibility traces. The authors showed that Retrace($\lambda$) has a low variance (as it uses multiple returns), is safe (works for all $\pi$ and $b$) and efficient (it can propagate rewards over many time steps). They used retrace to learn Atari games and compared it positively with DQN, both in terms of optimality and speed of learning.  These properties make Retrace particularly suited for deep RL and actor-critic architectures: it is for example used in ACER (@sec:actor-critic-with-experience-replay-acer) and the Reactor (@sec:the-reactor). 
+The importance sampling weight is clipped to 1, and decays exponentially with the parameter $\lambda$. It can be seen as a trade-off between importance sampling and eligibility traces. The authors showed that Retrace($\lambda$) has a low variance (as it uses multiple returns), is safe (works for all $\pi$ and $b$) and efficient (it can propagate rewards over many time steps). They used retrace to learn Atari games and compared it positively with DQN, both in terms of optimality and speed of learning.  These properties make Retrace particularly suited for deep RL and actor-critic architectures: it is for example used in ACER (@sec:actor-critic-with-experience-replay-acer) and the Reactor (@sec:the-reactor).
 
 Rémi Munos uploaded some slides explaining Retrace in a simpler manner than in the original paper: <https://ewrl.files.wordpress.com/2016/12/munos.pdf>.
 
 
 ### Self-Imitation Learning (SIL)
 
-We have discussed or now only strictly on-policy or off-policy methods. Off-policy methods are much more stable and efficient, but they learn generally a deterministic policy, what can be problematic in stochastic environments (e.g. two players games: being predictable is clearly an issue). Hybrid methods combining on- and off-policy mechanisms have clearly a great potential. 
+We have discussed or now only strictly on-policy or off-policy methods. Off-policy methods are much more stable and efficient, but they learn generally a deterministic policy, what can be problematic in stochastic environments (e.g. two players games: being predictable is clearly an issue). Hybrid methods combining on- and off-policy mechanisms have clearly a great potential.
 
 @Oh2018 proposed a **Self-Imitation Learning** (SIL) method that can extend on-policy actor-critic algorithms (e.g. A2C, @sec:advantage-actor-critic-a2c) with a replay buffer able to feed past *good* experiences to the NN to speed up learning.
 
@@ -1696,7 +1696,7 @@ where $(x)^+ = \max(0, x)$ is the positive function. Transitions sampled from th
 
     * Update the actor and the critic **on-policy** with the episode:
     $$
-        \theta \leftarrow \theta + \eta \, \sum_k \nabla_\theta \log \pi_\theta(s_k, a_k) \, (R_k - V_\varphi(s_k)) 
+        \theta \leftarrow \theta + \eta \, \sum_k \nabla_\theta \log \pi_\theta(s_k, a_k) \, (R_k - V_\varphi(s_k))
     $$
     $$
         \varphi \leftarrow \varphi + \eta \, \sum_k \nabla_\varphi (R - V_\varphi(s_k))^2
@@ -1715,7 +1715,6 @@ where $(x)^+ = \max(0, x)$ is the positive function. Transitions sampled from th
 ---
 
 In the paper, they furthermore used entropy regularization as in A3C. They showed that A2C+SIL has a better performance both on Atari games and continuous control problems (Mujoco) than state-of-the art methods (A3C, TRPO, Reactor, PPO). It shows that self-imitation learning can be very useful in problems where exploration is hard: a proper level of exploitation of past experiences actually fosters a deeper exploration of environment.
-
 
 
 <!--PAGEBREAK-->
@@ -1907,21 +1906,120 @@ $$
     \nabla_\theta J(\theta) =  \mathbb{E}_{s \sim \rho_\theta, a \sim \pi_\theta}[\nabla_\theta \log \pi_\theta(s, a) \, Q^{\pi_\theta}(s, a))] \approx  \mathbb{E}_{s \sim \rho_\theta, a \sim \pi_\theta}[\nabla_\theta \log \pi_\theta(s, a) \, Q_\varphi(s, a))]
 $$
 
-If the policy $\pi_\theta$ changes a lot between two updates, the estimated Q-value $Q_\varphi(s, a)$ will represent the value of the action for a totally different policy, not the true Q-value $Q^{\pi_\theta}(s, a)$. The estimated policy gradient will then be strongly biased and learning will be suboptimal. In other words, the actor should not change much faster than the critic, and vice versa. A naive solution would be to use a very small learning rate for the actor, but this just slows down learning (sample complexity) without solving the problem.
+If the policy $\pi_\theta$ changes a lot between two updates, the estimated Q-value $Q_\varphi(s, a)$ will represent the value of the action for a totally different policy, not the true Q-value $Q^{\pi_\theta}(s, a)$. The estimated policy gradient will then be strongly biased and learning will be suboptimal. In other words, the actor should not change much faster than the critic, and vice versa. A naive solution would be to use a very small learning rate for the actor, but this just slows down learning (adding to the sample complexity) without solving the problem.
 
 To solve the problem, we should actually do the opposite of the steepest descent: *search for the biggest parameter change $\Delta \theta$ inducing the smallest change in the policy, but in the right direction*. If the parameter change is high, the actor will learn a lot internally from each experience. But if the policy change is small between two updates (although the parameters have changed a lot), we might be able to reuse past experiences, as the targets will not be that wrong.
 
-This is where **natural gradients** come into play.
+This is where **natural gradients** come into play, which are originally a statistical method to optimize over spaces of probability distributions, for example for variational inference. The idea to use natural gradients to train neural networks comes from @Amari1998. @Kakade2001 applied natural gradients to policy gradient methods, while @Peters2008 proposed a natural actor-critic algorithm for linear function approximators. The idea was adapted to deep RL by Schulman and colleagues, with Trust Region Policy Optimization [TRPO,@Schulman2015a] and Proximal Policy Optimization [PPO,@Schulman2017], the latter gaining momentum over DDPG as the go-to method for continuous RL problems, particularly because of its smaller sample complexity and its robustness to hyperparameters.
 
-### Principle of natural of gradients
+### Principle of natural gradients
 
-### Natural policy gradient
+![Euclidian distances in the parameter space do not represent well the statistical distance between probability distributions. The two Gaussians on the left ($\mathcal{N}(0, 0.2)$ and $\mathcal{N}(1, 0.2)$) have the same Euclidian distance in the parameter space ($d = \sqrt{(\mu_0 - \mu_1)^2+(\sigma_0 - \sigma_1)^2}$) than the two Gaussians on the right ($\mathcal{N}(0, 10)$ and $\mathcal{N}(1, 10)$). However, the Gaussians on the right are much more similar than the two on the left: if you have a single sample, you could not say from which distribution it comes for the Gaussians on the right, while it is obvious for the Gaussians on the left.](img/naturalgradient.png){#fig:naturalgradient width=80%}
 
-Natural policy gradient @Kakade2001
+Consider the two Gaussian distributions in the left part of @fig:naturalgradient ($\mathcal{N}(0, 0.2)$ and $\mathcal{N}(1, 0.2)$) and the two on the right ($\mathcal{N}(0, 10)$ and $\mathcal{N}(1, 10)$). In both cases, the Distance in the Euclidian space $d = \sqrt{(\mu_0 - \mu_1)^2+(\sigma_0 - \sigma_1)^2}$ is the same between the two Gaussians. Obviously, the two distributions on the left are however further away from each other than the two on the the right. This indicates that the Euclidian distance in the parameter space (which is what *normal* gradients act on) is not a correct measurement of the statistical distance between two distributions (which what we want to minimize between two iterations of PG).
 
-### Natural Actor Critic (NAC)
+In statistics, a common measurement of the statistical distance between two distributions $p$ and $q$ is the **Kullback-Leibler (KL) divergence** $D_{KL}(p||q)$, also called relative entropy or information gain. It is defined as:
 
-@Peters2008
+$$
+    D_{KL}(p || q) = \mathbb{E}_{x \sim p} [\log \frac{p(x)}{q(x)}]  = \int p(x) \, \log \frac{p(x)}{q(x)} \, dx
+$$
+
+Its minimum is 0 when $p=q$ (as $\log \frac{p(x)}{q(x)}$ is then 0) and is positive otherwise. Minimizing the KL divergence is equivalent to "matching" two distributions. Note that supervised methods in machine learning can all be interpreted as a minimization of the KL divergence: if $p(x)$ represents the distribution of the data (the label of a sample $x$) and $q(x)$ the one of the model (the prediction of a neural network for the same sample $x$), supervised methods want the output distribution of the model to match the distribution of the data, i.e. make predictions that are the same as the labels. For generative models, this is for example at the core of *generative adversarial networks* [@Goodfellow2014;@Arjovsky2017] or *variational autoencoders* [@Kingma2013].
+
+The KL divergence is however not symmetrical ($D_{KL}(p || q) \neq D_{KL}(q || p)$), so a more useful divergence is the symmetric KL divergence, also known as Jensen-Shannon (JS) divergence:
+
+$$
+    D_{JS}(p || q) = \frac{D_{KL}(p || q) + D_{KL}(q || p)}{2}
+$$
+
+Other forms of divergence measurements exist, such as the Wasserstein distance which improves generative adversarial networks [@Arjovsky2017], but they are not relevant here. See <https://www.alexirpan.com/2017/02/22/wasserstein-gan.html> for more explanations.
+
+We now have a global measurement of the similarity between two distributions on the whole input space, but which is hard to compute. How can we use it anyway in our optimization problem? As mentioned above, we search for the biggest parameter change $\Delta \theta$ inducing the smallest change in the policy. We need a metric linking changes in the parameters of the distribution (the weights of the network) to changes in the distribution itself. In other terms, we will apply gradient descent on the statistical manifold defined by the parameters rather than on the parameters themselves.
+
+![Illustration of the Riemannian metric. The Euclidian distance between $p(x; \theta)$ and $p(x; \theta + \Delta \theta)$ depends on the Euclidian distance between $\theta$ and $\theta + \Delta\theta$, i.e. $\theta$. Riemannian metrics follow the geometry of the manifold to compute that distance, depending on its curvature. ](img/riemannian.png){#fig:riemannian width=50%}
+
+Let's consider a parameterized distribution $p(x; \theta)$ and its new value $p(x; \theta + \Delta \theta)$ after applying a small parameter change $\Delta \theta$.
+As depicted on @fig:riemannian, the Euclidian metric in the parameter space ($||\theta + \Delta \theta - \theta||^2$) does take the structure of the statistical manifold into account. We need to define a **Riemannian metric** which accounts locally for the curvature of the manifold between $\theta$ and $\theta + \Delta \theta$. The Riemannian distance is defined by the dot product:
+
+$$
+    ||\Delta \theta||^2 = < \Delta \theta , F(\theta) \, \Delta \theta >
+$$
+
+where $F(\theta)$ is called the Riemannian metric tensor and is an inner product on the tangent space of the manifold at the point $\theta$.
+
+When using the symmetric KL divergence to measure the distance between two distributions, the corresponding Riemannian metric is the **Fisher Information Matrix**, define as the Hessian matrix of the KL divergence around $\theta$, i.e. the matrix of second order derivatives w.r.t the elements of $\theta$. See <https://stats.stackexchange.com/questions/51185/connection-between-fisher-metric-and-the-relative-entropy> for an explanation of the link between the Fisher metric and KL divergence.
+
+The Fisher information matrix is defined as the Hessian of the KL divergence around $\theta$, i.e. how the manifold locally changes around $\theta$:
+
+$$
+    F(\theta) = \nabla^2 D_{JS}(p(x; \theta) || p(x; \theta + \Delta \theta))|_{\Delta \theta = 0}
+$$
+
+which necessitates to compute second order derivatives which are very complex and slow to obtain, especially when there are many parameters $\theta$ (the weights of the NN). Fortunately, it also has a simpler form which only depends on the outer product between the gradients of the log-probabilities:
+
+$$
+    F(\theta) = \mathbb{E}_{x \sim p(x, \theta)}[ \nabla \log p(x; \theta)  (\nabla \log p(x; \theta))^T]
+$$
+
+which is something we can easily sample and compute.
+
+Why is it useful? The Fisher Information matrix allows to **locally** approximate (for small $\Delta \theta$) the KL divergence between the two close distributions (using a second order Taylor series expansion):
+
+$$
+    D_{JS}(p(x; \theta) || p(x; \theta + \Delta \theta)) \approx \Delta \theta^T \, F(\theta) \, \Delta \theta
+$$
+
+The KL divergence is then locally quadratic, which means that the update rules obtained when minimizing the KL divergence with gradient descent will be linear. Suppose we want to minimize a loss function $L$ parameterized by $\theta$ and depending on the distribution $p$. **Natural gradient descent** [@Amari1998] attempts to move along the statistical manifold defined by $p$ by correcting the gradient of $L(\theta)$ using the local curvature of the KL-divergence surface, i.e. moving some given distance in the direction $\tilde{\nabla_\theta} L(\theta)$:
+
+$$
+    \tilde{\nabla_\theta} L(\theta) = F(\theta)^{-1} \, \nabla_\theta L(\theta)
+$$
+
+$\tilde{\nabla_\theta} L(\theta)$ is the **natural gradient** of $L(\theta)$. Natural gradient descent simply takes steps in this direction:
+
+$$
+    \delta \theta = - \eta \, \tilde{\nabla_\theta} L(\theta)
+$$
+
+When the manifold is not curved ($F(\theta)$ is the identity matrix), natural gradient descent is the regular gradient descent.
+
+But what is the advantage of natural gradients? The problem with regular gradient descent is that it relies on a fixed learning rate. In regions where the loss function is flat (a plateau), the gradient will be almost zero, leading to very slow improvements. Because the natural gradient depends on the inverse of the curvature (Fisher), the magnitude of the gradient will be higher in flat regions, leading to bigger steps, and smaller in very steep regions (around minima). Natural GD therefore converges faster and better than regular GD.
+
+Natural gradient descent is a generic optimization method, it can for example be used to train more efficiently deep networks in supervised learning [@Pascanu2013]. Its main drawback is the necessity to inverse the Fisher information matrix, whose size depends on the number of free parameters (if you have N weights in the NN, you need to inverse a NxN matrix). Several approximations allows to remediate to this problem, for example Kronecker-Factored Approximate Curvature (K-FAC, see <https://syncedreview.com/2017/03/25/optimizing-neural-networks-using-structured-probabilistic-models/>).
+
+**Additional resources** to understand natural gradients:
+
+* <http://andymiller.github.io/2016/10/02/natural_gradient_bbvi.html>
+* <https://hips.seas.harvard.edu/blog/2013/01/25/the-natural-gradient/>
+* <http://kvfrans.com/what-is-the-natural-gradient-and-where-does-it-appear-in-trust-region-policy-optimization>
+* A tutorial by John Schulman (OpenAI) <https://www.youtube.com/watch?v=xvRrgxcpaHY>
+* A blog post on the related Hessian-free optimization and conjuguate gradients <http://andrew.gibiansky.com/blog/machine-learning/hessian-free-optimization/>
+
+**Note:** Natural gradients can also be used to train DQN architectures, resulting in more efficient and stable learning behaviors [@Knight2018].
+
+### Natural policy gradient and Natural Actor Critic (NAC)
+
+@Kakade2001 applied the principle of natural gradients proposed by @Amari1998 to the policy gradient theorem:
+
+$$
+    \nabla_\theta J(\theta) =  \mathbb{E}_{s \sim \rho_\theta, a \sim \pi_\theta}[\nabla_\theta \log \pi_\theta(s, a) \, Q^{\pi_\theta}(s, a)]
+$$
+
+This *regular* gradient does not take into account the underlying structure of the policy distribution $\pi(s, a)$. The Fisher information matrix for the policy is defined by:
+
+$$
+    F(\theta) = \mathbb{E}_{s \sim \rho_\theta, a \sim \pi_\theta}[ \nabla \log \pi_\theta(s, a)  (\nabla \log \pi_\theta(s, a))^T]
+$$
+
+The natural policy gradient is simply:
+
+$$
+    \tilde{\nabla}_\theta J(\theta) = F(\theta)^{-1} \, \nabla_\theta J(\theta)  = \mathbb{E}_{s \sim \rho_\theta, a \sim \pi_\theta}[ F(\theta)^{-1} \,  \nabla_\theta \log \pi_\theta(s, a) \, Q^{\pi_\theta}(s, a)]
+$$
+
+@Kakade2001 also shows that you can replace the true Q-value $Q^{\pi_\theta}(s, a)$ with a compatible approximation $Q\varphi(s, a)$ (as long as it minimizes the quadratic error) and still obtained an unbiased natural gradient. He experimented this new rule on various simple MDPs and observed drastic improvements over vanilla PG.
+
+@Peters2008 extended on the work of @Kakade2001 to propose the natural actor-critic (NAC). The exact derivations would be too complex to summarize here. He showed that the $F(\theta)$) is a true Fisher information matrix even when using sampled episodes, and derived a baseline $b$ to reduce the variance of the natural policy gradient. He demonstrated the power of this algorithm by letting a robot learning motor primitives for baseball. 
 
 ### Trust Region Policy Optimization (TRPO)
 
@@ -2018,6 +2116,57 @@ The policy gradient methods presented above rely on backpropagation and gradient
 Explanations from OpenAI: <https://blog.openai.com/evolution-strategies/>
 
 Deep neuroevolution at Uber: <https://eng.uber.com/deep-neuroevolution/>
+
+<!--PAGEBREAK-->
+
+# Model-based RL
+
+Model-free: The future is cached into values.
+
+Two problems of model-free:
+
+1. Needs a lot of samples
+2. Cannot adapt to novel tasks in the same environment.
+
+Model-based uses an internal model to reason about the future (imagination).
+
+Works only when the model is fixed (AlphaGo) or easy to learn (symbolic, low-dimensional). Not robust yet against model imperfection.
+
+## Dyna-Q
+
+[@Sutton1990]
+
+<https://medium.com/@ranko.mosic/online-planning-agent-dyna-q-algorithm-and-dyna-maze-example-sutton-and-barto-2016-7ad84a6dc52b>
+
+
+## Unsorted references
+
+Embed to Control: A Locally Linear Latent Dynamics Model for Control from Raw Images [@Watter2015]
+
+Efficient Model-Based Deep Reinforcement Learning with Variational State Tabulation [@Corneil2018]
+
+Model-Based Value Estimation for Efficient Model-Free Reinforcement Learning [@Feinberg2018]
+
+Imagination-Augmented Agents for Deep Reinforcement Learning [@Weber2017].
+
+Temporal Difference Model TDM [@Pong2018]: <http://bair.berkeley.edu/blog/2018/04/26/tdm/>
+
+Learning to Adapt: Meta-Learning for Model-Based Control, [@Clavera2018]
+
+The Predictron: End-To-End Learning and Planning [@Silver2016]
+
+Model-Based Planning with Discrete and Continuous Actions [@Henaff2017]
+
+Schema Networks: Zero-shot Transfer with a Generative Causal Model of Intuitive Physics [@Kansky2017]
+
+Universal Planning Networks [@Srinivas2018]
+
+World models <https://worldmodels.github.io/> [@Ha2018]
+
+Recall Traces: Backtracking Models for Efficient Reinforcement Learning [@Goyal2018]
+
+Deep Dyna-Q: Integrating Planning for Task-Completion Dialogue Policy Learning [@Peng2018]
+
 
 <!--PAGEBREAK-->
 
