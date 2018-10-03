@@ -16,7 +16,7 @@ files:
     - 3.5-NaturalGradient.md
     - 3.6-OtherPolicyGradient.md
     # - 4-RAM.md
-    - 5-ModelBased.md
+    # - 5-ModelBased.md
     # - 6-Hierarchical.md
     # - 6-Robotics.md
     - 7-Practice.md
@@ -36,7 +36,7 @@ mathjax: /usr/share/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML
 
 # Latex
 geometry: "margin=1in"
-fontfamily: "times"
+fontfamily: "roboto"
 fontsize: "11pt"
 header-includes:
     - \usepackage{setspace}

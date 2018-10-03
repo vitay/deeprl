@@ -108,15 +108,11 @@
 <li><a href="./OtherPolicyGradient.html#sec:evolutionary-search-es"><span class="toc-section-number">4.10.2</span> Evolutionary Search (ES)</a></li>
 </ul></li>
 </ul></li>
-<li><a href="./ModelBased.html#sec:model-based-rl"><span class="toc-section-number">5</span> Model-based RL</a><ul>
-<li><a href="./ModelBased.html#sec:dyna-q"><span class="toc-section-number">5.1</span> Dyna-Q</a></li>
-<li><a href="./ModelBased.html#sec:unsorted-references"><span class="toc-section-number">5.2</span> Unsorted references</a></li>
-</ul></li>
-<li><a href="./Practice.html#sec:deep-rl-in-practice"><span class="toc-section-number">6</span> Deep RL in practice</a><ul>
-<li><a href="./Practice.html#sec:limitations"><span class="toc-section-number">6.1</span> Limitations</a></li>
-<li><a href="./Practice.html#sec:reward-shaping"><span class="toc-section-number">6.2</span> Reward shaping</a></li>
-<li><a href="./Practice.html#sec:simulation-environments"><span class="toc-section-number">6.3</span> Simulation environments</a></li>
-<li><a href="./Practice.html#sec:algorithm-implementations"><span class="toc-section-number">6.4</span> Algorithm implementations</a></li>
+<li><a href="./Practice.html#sec:deep-rl-in-practice"><span class="toc-section-number">5</span> Deep RL in practice</a><ul>
+<li><a href="./Practice.html#sec:limitations"><span class="toc-section-number">5.1</span> Limitations</a></li>
+<li><a href="./Practice.html#sec:reward-shaping"><span class="toc-section-number">5.2</span> Reward shaping</a></li>
+<li><a href="./Practice.html#sec:simulation-environments"><span class="toc-section-number">5.3</span> Simulation environments</a></li>
+<li><a href="./Practice.html#sec:algorithm-implementations"><span class="toc-section-number">5.4</span> Algorithm implementations</a></li>
 </ul></li>
 <li><a href="./References.html#sec:references">References</a></li>
 </ul>
@@ -126,13 +122,13 @@
 
 
 
-<h1 id="sec:deep-rl-in-practice"><span class="header-section-number">6</span> Deep RL in practice</h1>
-<h2 id="sec:limitations"><span class="header-section-number">6.1</span> Limitations</h2>
+<h1 id="sec:deep-rl-in-practice"><span class="header-section-number">5</span> Deep RL in practice</h1>
+<h2 id="sec:limitations"><span class="header-section-number">5.1</span> Limitations</h2>
 <p>Excellent blog post from Alex Irpan on the limitations of deep RL: <a href="https://www.alexirpan.com/2018/02/14/rl-hard.html" class="uri">https://www.alexirpan.com/2018/02/14/rl-hard.html</a></p>
 <p>Another documented critic on deep RL: <a href="https://thegradient.pub/why-rl-is-flawed/" class="uri">https://thegradient.pub/why-rl-is-flawed/</a></p>
-<h2 id="sec:reward-shaping"><span class="header-section-number">6.2</span> Reward shaping</h2>
+<h2 id="sec:reward-shaping"><span class="header-section-number">5.2</span> Reward shaping</h2>
 <p>Hindsight experience replay: <span class="citation" data-cites="Andrychowicz2017">Andrychowicz et al. (<a href="References.html#ref-Andrychowicz2017">2017</a>)</span></p>
-<h2 id="sec:simulation-environments"><span class="header-section-number">6.3</span> Simulation environments</h2>
+<h2 id="sec:simulation-environments"><span class="header-section-number">5.3</span> Simulation environments</h2>
 <p>Standard RL environments are needed to better compare the performance of RL algoritms. Below is a list of the most popular ones.</p>
 <ul>
 <li>OpenAI Gym <a href="https://gym.openai.com" class="uri">https://gym.openai.com</a>: a standard toolkit for comparing RL algorithms provided by the OpenAI fundation. It provides many environments, from the classical toy problems in RL (GridWorld, pole-balancing) to more advanced problems (Mujoco simulated robots, Atari games, Minecraft…). The main advantage is the simplicity of the interface: the user only needs to select which task he wants to solve, and a simple for loop allows to perform actions and observe their consequences:</li>
@@ -150,7 +146,7 @@
 <li><p>Roboschool <a href="https://github.com/openai/roboschool" class="uri">https://github.com/openai/roboschool</a>: another alternative to Mujoco for continuous robotic control, this time from openAI.</p></li>
 <li><p>NIPS 2017 musculoskettal challenge <a href="https://github.com/stanfordnmbl/osim-rl" class="uri">https://github.com/stanfordnmbl/osim-rl</a></p></li>
 </ul>
-<h2 id="sec:algorithm-implementations"><span class="header-section-number">6.4</span> Algorithm implementations</h2>
+<h2 id="sec:algorithm-implementations"><span class="header-section-number">5.4</span> Algorithm implementations</h2>
 <p>State-of-the-art algorithms in deep RL are already implemented and freely available on the internet. Below is a preliminary list of the most popular ones. Most of them rely on tensorflow or keras for training the neural networks and interact directly with gym-like interfaces.</p>
 <ul>
 <li><p><code>rl-code</code> <a href="https://github.com/rlcode/reinforcement-learning" class="uri">https://github.com/rlcode/reinforcement-learning</a>: many code samples for simple RL problems (GridWorld, Cartpole, Atari Games). The code samples are mostly for educational purpose (Policy Iteration, Value Iteration, Monte-Carlo, SARSA, Q-learning, REINFORCE, DQN, A2C, A3C).</p></li>
@@ -162,7 +158,7 @@
 
 <br>
 <div class="arrows">
-<a href="ModelBased.html" class="previous">&laquo; Previous</a>
+<a href="OtherPolicyGradient.html" class="previous">&laquo; Previous</a>
 <a href="References.html" class="next">Next &raquo;</a>
 </div>
 
