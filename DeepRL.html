@@ -10,7 +10,7 @@
 
   <link rel="stylesheet" href="assets/syntax.css">
   <link rel="stylesheet" href="assets/github.css">
-  <script src="/usr/share/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
   <!--[if lt IE 9]>
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
   <![endif]-->
@@ -1509,22 +1509,22 @@
 <figure>
 <img src="img/riemannian.png" alt="Figure 27: Illustration of the Riemannian metric. The Euclidian distance between p(x; \theta) and p(x; \theta + \Delta \theta) depends on the Euclidian distance between \theta and \theta + \Delta\theta, i.e. \theta. Riemannian metrics follow the geometry of the manifold to compute that distance, depending on its curvature." id="fig:riemannian" style="width:50.0%" /><figcaption>Figure 27: Illustration of the Riemannian metric. The Euclidian distance between <span class="math inline">\(p(x; \theta)\)</span> and <span class="math inline">\(p(x; \theta + \Delta \theta)\)</span> depends on the Euclidian distance between <span class="math inline">\(\theta\)</span> and <span class="math inline">\(\theta + \Delta\theta\)</span>, i.e. <span class="math inline">\(\theta\)</span>. Riemannian metrics follow the geometry of the manifold to compute that distance, depending on its curvature.</figcaption>
 </figure>
-<p>Let’s consider a parameterized distribution <span class="math inline">\(p(x; \theta)\)</span> and its new value <span class="math inline">\(p(x; \theta + \Delta \theta)\)</span> after applying a small parameter change <span class="math inline">\(\Delta \theta\)</span>. As depicted on Fig. <a href="#fig:riemannian">27</a>, the Euclidian metric in the parameter space (<span class="math inline">\(||\theta + \Delta \theta - \theta||^2\)</span>) does take the structure of the statistical manifold into account. We need to define a <strong>Riemannian metric</strong> which accounts locally for the curvature of the manifold between <span class="math inline">\(\theta\)</span> and <span class="math inline">\(\theta + \Delta \theta\)</span>. The Riemannian distance is defined by the dot product:</p>
+<p>Let’s consider a parameterized distribution <span class="math inline">\(p(x; \theta)\)</span> and its new value <span class="math inline">\(p(x; \theta + \Delta \theta)\)</span> after applying a small parameter change <span class="math inline">\(\Delta \theta\)</span>. As depicted on Fig. <a href="#fig:riemannian">27</a>, the Euclidian metric in the parameter space (<span class="math inline">\(||\theta + \Delta \theta - \theta||^2\)</span>) does not take the structure of the statistical manifold into account. We need to define a <strong>Riemannian metric</strong> which accounts locally for the curvature of the manifold between <span class="math inline">\(\theta\)</span> and <span class="math inline">\(\theta + \Delta \theta\)</span>. The Riemannian distance is defined by the dot product:</p>
 <p><span class="math display">\[
     ||\Delta \theta||^2 = &lt; \Delta \theta , F(\theta) \, \Delta \theta &gt;
 \]</span></p>
 <p>where <span class="math inline">\(F(\theta)\)</span> is called the Riemannian metric tensor and is an inner product on the tangent space of the manifold at the point <span class="math inline">\(\theta\)</span>.</p>
-<p>When using the symmetric KL divergence to measure the distance between two distributions, the corresponding Riemannian metric is the <strong>Fisher Information Matrix</strong>, define as the Hessian matrix of the KL divergence around <span class="math inline">\(\theta\)</span>, i.e. the matrix of second order derivatives w.r.t the elements of <span class="math inline">\(\theta\)</span>. See <a href="https://stats.stackexchange.com/questions/51185/connection-between-fisher-metric-and-the-relative-entropy" class="uri">https://stats.stackexchange.com/questions/51185/connection-between-fisher-metric-and-the-relative-entropy</a> for an explanation of the link between the Fisher metric and KL divergence.</p>
+<p>When using the symmetric KL divergence to measure the distance between two distributions, the corresponding Riemannian metric is the <strong>Fisher Information Matrix</strong> (FIM), defined as the Hessian matrix of the KL divergence around <span class="math inline">\(\theta\)</span>, i.e. the matrix of second order derivatives w.r.t the elements of <span class="math inline">\(\theta\)</span>. See <a href="https://stats.stackexchange.com/questions/51185/connection-between-fisher-metric-and-the-relative-entropy" class="uri">https://stats.stackexchange.com/questions/51185/connection-between-fisher-metric-and-the-relative-entropy</a> for an explanation of the link between the Fisher metric and KL divergence.</p>
 <p>The Fisher information matrix is defined as the Hessian of the KL divergence around <span class="math inline">\(\theta\)</span>, i.e. how the manifold locally changes around <span class="math inline">\(\theta\)</span>:</p>
 <p><span class="math display">\[
     F(\theta) = \nabla^2 D_{JS}(p(x; \theta) || p(x; \theta + \Delta \theta))|_{\Delta \theta = 0}
 \]</span></p>
-<p>which necessitates to compute second order derivatives which are very complex and slow to obtain, especially when there are many parameters <span class="math inline">\(\theta\)</span> (the weights of the NN). Fortunately, it also has a simpler form which only depends on the outer product between the gradients of the log-probabilities:</p>
+<p>which necessitates to compute second order derivatives which are very complex and slow to obtain, especially when there are many parameters <span class="math inline">\(\theta\)</span> (the weights of the NN). Fortunately, it also has a simpler form which only depends on the outer product between the gradients of the log-likelihoods:</p>
 <p><span class="math display">\[
     F(\theta) = \mathbb{E}_{x \sim p(x, \theta)}[ \nabla \log p(x; \theta)  (\nabla \log p(x; \theta))^T]
 \]</span></p>
 <p>which is something we can easily sample and compute.</p>
-<p>Why is it useful? The Fisher Information matrix allows to <strong>locally</strong> approximate (for small <span class="math inline">\(\Delta \theta\)</span>) the KL divergence between the two close distributions (using a second order Taylor series expansion):</p>
+<p>Why is it useful? The Fisher Information matrix allows to <strong>locally</strong> approximate (for small <span class="math inline">\(\Delta \theta\)</span>) the KL divergence between the two close distributions (using a second-order Taylor series expansion):</p>
 <p><span class="math display">\[
     D_{JS}(p(x; \theta) || p(x; \theta + \Delta \theta)) \approx \Delta \theta^T \, F(\theta) \, \Delta \theta
 \]</span></p>
@@ -1743,7 +1743,8 @@
 </ul></li>
 </ul>
 <hr />
-<p>The main advantage of PPO with respect to TRPO is its simplicity: the clipped objective can be directly maximized using first-order methods like stochastic gradient descent. It does not depend on assumptions about the parameter space: CNNs and RNNs can be used for the policy .</p>
+<p>The main advantage of PPO with respect to TRPO is its simplicity: the clipped objective can be directly maximized using first-order methods like stochastic gradient descent or Adam. It does not depend on assumptions about the parameter space: CNNs and RNNs can be used for the policy. It is sample-efficient, as several epochs of parameter updates are performed between two transition samplings: the policy network therefore needs less fresh samples that strictly on-policy algorithms to converge.</p>
+<p>The only drawbacks of PPO is that there no convergence guarantee (although in practice it converges more often than other state-of-the-art methods) and that the right value for <span class="math inline">\(\epsilon\)</span> has to be determined. PPO has improved the state-of-the-art on Atori games and MUjoco robotic tasks. It has become the go-to method for continuous control problems.</p>
 <p><strong>Additional resources</strong></p>
 <ul>
 <li>More explanations and demos from OpenAI: <a href="https://blog.openai.com/openai-baselines-ppo" class="uri">https://blog.openai.com/openai-baselines-ppo</a></li>
