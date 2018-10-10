@@ -285,7 +285,6 @@
 <li>A small step in the policy distribution space, as the KL divergence between the previous and the new policies is kept small.</li>
 </ul>
 <p>Exactly what we needed! The parameter region around <span class="math inline">\(\theta_\text{old}\)</span> where the KL divergence s kept small is called the <strong>trust region</strong>. This means that we can safely take big optimization steps (e.g. with a high learning rate or even analytically) without risking to violate the initial assumptions.</p>
-<p><strong>TODO: is it the same as ELBO?</strong></p>
 <h4 id="sec:sample-based-formulation" class="unnumbered">Sample-based formulation</h4>
 <p>Although the theoretical proofs in <span class="citation" data-cites="Schulman2015a">Schulman, Levine, et al. (<a href="References.html#ref-Schulman2015a">2015</a>)</span> used the regularized optimization method, the practical implementation uses the constrained optimization problem:</p>
 <p><span class="math display">\[

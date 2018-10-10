@@ -1639,7 +1639,6 @@
 <li>A small step in the policy distribution space, as the KL divergence between the previous and the new policies is kept small.</li>
 </ul>
 <p>Exactly what we needed! The parameter region around <span class="math inline">\(\theta_\text{old}\)</span> where the KL divergence s kept small is called the <strong>trust region</strong>. This means that we can safely take big optimization steps (e.g. with a high learning rate or even analytically) without risking to violate the initial assumptions.</p>
-<p><strong>TODO: is it the same as ELBO?</strong></p>
 <h4 id="sec:sample-based-formulation" class="unnumbered">Sample-based formulation</h4>
 <p>Although the theoretical proofs in <span class="citation" data-cites="Schulman2015a">Schulman, Levine, et al. (<a href="#ref-Schulman2015a">2015</a>)</span> used the regularized optimization method, the practical implementation uses the constrained optimization problem:</p>
 <p><span class="math display">\[
@@ -1959,7 +1958,7 @@
 <p>Li, Yuxi. 2017. “Deep Reinforcement Learning: An Overview,” January. <a href="http://arxiv.org/abs/1701.07274">http://arxiv.org/abs/1701.07274</a>.</p>
 </div>
 <div id="ref-Lillicrap2015">
-<p>Lillicrap, Timothy P., Jonathan J. Hunt, Alexander Pritzel, Nicolas Heess, Tom Erez, Yuval Tassa, David Silver, and Daan Wierstra. 2015. “Continuous control with deep reinforcement learning,” September. <a href="http://arxiv.org/abs/1509.02971">http://arxiv.org/abs/1509.02971</a>.</p>
+<p>Lillicrap, Timothy P., Jonathan J. Hunt, Alexander Pritzel, Nicolas Heess, Tom Erez, Yuval Tassa, David Silver, and Daan Wierstra. 2015. “Continuous control with deep reinforcement learning.” <em>CoRR</em>. <a href="http://arxiv.org/abs/1509.02971">http://arxiv.org/abs/1509.02971</a>.</p>
 </div>
 <div id="ref-Loetzsch2017">
 <p>Lötzsch, Winfried, Julien Vitay, and Fred H. Hamker. 2017. “Training a deep policy gradient-based neural network with asynchronous learners on a simulated robotic problem.” In <em>INFORMATIK 2017. Gesellschaft Für Informatik</em>, edited by Maximilian Eibl and Martin Gaedke, 2143–54. Bonn: Gesellschaft für Informatik, Bonn. <a href="https://dl.gi.de/handle/20.500.12116/3986">https://dl.gi.de/handle/20.500.12116/3986</a>.</p>
@@ -2034,7 +2033,7 @@
 <p>Schulman, John, Filip Wolski, Prafulla Dhariwal, Alec Radford, and Oleg Klimov. 2017. “Proximal Policy Optimization Algorithms,” July. <a href="http://arxiv.org/abs/1707.06347">http://arxiv.org/abs/1707.06347</a>.</p>
 </div>
 <div id="ref-Silver2016">
-<p>Silver, David, Aja Huang, Chris J. Maddison, Arthur Guez, Laurent Sifre, George Van Den Driessche, Julian Schrittwieser, et al. 2016. “Mastering the game of Go with deep neural networks and tree search.” <em>Nature</em>. <a href="https://doi.org/10.1038/nature16961">https://doi.org/10.1038/nature16961</a>.</p>
+<p>Silver, David, Hado van Hasselt, Matteo Hessel, Tom Schaul, Arthur Guez, Tim Harley, Gabriel Dulac-Arnold, et al. 2016. “The Predictron: End-To-End Learning and Planning,” December. <a href="http://arxiv.org/abs/1612.08810">http://arxiv.org/abs/1612.08810</a>.</p>
 </div>
 <div id="ref-Silver2014">
 <p>Silver, David, Guy Lever, Nicolas Heess, Thomas Degris, Daan Wierstra, and Martin Riedmiller. 2014. “Deterministic Policy Gradient Algorithms.” In <em>Proc. ICML</em>, edited by Eric P Xing and Tony Jebara, 32:387–95. Proceedings of Machine Learning Research 1. Bejing, China: PMLR. <a href="http://proceedings.mlr.press/v32/silver14.html">http://proceedings.mlr.press/v32/silver14.html</a>.</p>
