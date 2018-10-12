@@ -8,8 +8,8 @@
   color: #24292e;
   font-family: "Roboto", Helvetica, Arial, sans-serif;
   /*font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";*/
-  font-size: 16px;
-  line-height: 1.5;
+  font-size: 18px;
+  line-height: 1.65;
   word-wrap: break-word;
   width: 50%;
   text-align: justify;
@@ -20,7 +20,7 @@
 .markdown-body article {
   height:100%;
   /*overflow:auto;*/
-} 
+}
 
 /*TOC*/
 .markdown-body .toc {
@@ -31,18 +31,18 @@
   left: 1em;
   top: 0em;
   padding-right: 1em;
-  font-size: 90%;
-} 
+  font-size: 80%;
+}
 
 .markdown-body .toc h2 {
   text-align: left;
-} 
+}
 .markdown-body .toc .author {
   text-align: left;
-} 
+}
 
-#TOC::-webkit-scrollbar { 
-    display: none; 
+#TOC::-webkit-scrollbar {
+    display: none;
 }
 
 .markdown-body .toc-section-number{
@@ -51,7 +51,7 @@
 
 /*Navigational arrows*/
 .markdown-body .arrows {
-    text-align:center; 
+    text-align:center;
     margin-top:20px;
 }
 .markdown-body .previous {
@@ -151,6 +151,7 @@
 
 .markdown-body a {
   color: #0366d6;
+  /* color: #779a2b;   */
   text-decoration: none;
 }
 
@@ -582,10 +583,10 @@
   }
   .markdown-body .toc h2 {
     display: none;
-  } 
+  }
   .markdown-body .toc .author {
     display: none;
-  } 
+  }
 }
 
 /* When the screen is less than 600 pixels wide, hide all links, except for the first one ("Home"). Show the link that contains should open and close the topnav (.icon) */
@@ -603,10 +604,10 @@
   }
   .markdown-body .toc h2 {
     display: none;
-  } 
+  }
   .markdown-body .toc .author {
     display: none;
-  } 
+  }
   .markdown-body img {
     width: 90%;
   }
