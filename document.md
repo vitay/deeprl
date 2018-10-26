@@ -1916,7 +1916,7 @@ This is where **natural gradients** come into play, which are originally a stati
 
 ![Euclidian distances in the parameter space do not represent well the statistical distance between probability distributions. The two Gaussians on the left ($\mathcal{N}(0, 0.2)$ and $\mathcal{N}(1, 0.2)$) have the same Euclidian distance in the parameter space ($d = \sqrt{(\mu_0 - \mu_1)^2+(\sigma_0 - \sigma_1)^2}$) than the two Gaussians on the right ($\mathcal{N}(0, 10)$ and $\mathcal{N}(1, 10)$). However, the Gaussians on the right are much more similar than the two on the left: if you have a single sample, you could not say from which distribution it comes for the Gaussians on the right, while it is obvious for the Gaussians on the left.](img/naturalgradient.png){#fig:naturalgradient width=80%}
 
-Consider the two Gaussian distributions in the left part of @fig:naturalgradient ($\mathcal{N}(0, 0.2)$ and $\mathcal{N}(1, 0.2)$) and the two on the right ($\mathcal{N}(0, 10)$ and $\mathcal{N}(1, 10)$). In both cases, the Distance in the Euclidian space $d = \sqrt{(\mu_0 - \mu_1)^2+(\sigma_0 - \sigma_1)^2}$ is the same between the two Gaussians. Obviously, the two distributions on the left are however further away from each other than the two on the the right. This indicates that the Euclidian distance in the parameter space (which is what *normal* gradients act on) is not a correct measurement of the statistical distance between two distributions (which what we want to minimize between two iterations of PG).
+Consider the two Gaussian distributions in the left part of @fig:naturalgradient ($\mathcal{N}(0, 0.2)$ and $\mathcal{N}(1, 0.2)$) and the two on the right ($\mathcal{N}(0, 10)$ and $\mathcal{N}(1, 10)$). In both cases, the distance in the Euclidian space of parameters $d = \sqrt{(\mu_0 - \mu_1)^2+(\sigma_0 - \sigma_1)^2}$ is the same between the two Gaussians. Obviously, the two distributions on the left are however further away from each other than the two on the the right. This indicates that the Euclidian distance in the parameter space (which is what *regular* gradients act on) is not a correct measurement of the statistical distance between two distributions (which what we want to minimize between two iterations of PG).
 
 In statistics, a common measurement of the statistical distance between two distributions $p$ and $q$ is the **Kullback-Leibler (KL) divergence** $D_{KL}(p||q)$, also called relative entropy or information gain. It is defined as:
 
@@ -1936,7 +1936,7 @@ Other forms of divergence measurements exist, such as the Wasserstein distance w
 
 We now have a global measurement of the similarity between two distributions on the whole input space, but which is hard to compute. How can we use it anyway in our optimization problem? As mentioned above, we search for the biggest parameter change $\Delta \theta$ inducing the smallest change in the policy. We need a metric linking changes in the parameters of the distribution (the weights of the network) to changes in the distribution itself. In other terms, we will apply gradient descent on the statistical manifold defined by the parameters rather than on the parameters themselves.
 
-![Illustration of the Riemannian metric. The Euclidian distance between $p(x; \theta)$ and $p(x; \theta + \Delta \theta)$ depends on the Euclidian distance between $\theta$ and $\theta + \Delta\theta$, i.e. $\theta$. Riemannian metrics follow the geometry of the manifold to compute that distance, depending on its curvature. ](img/riemannian.png){#fig:riemannian width=50%}
+![Naive illustration of the Riemannian metric. The Euclidian distance between $p(x; \theta)$ and $p(x; \theta + \Delta \theta)$ depends on the Euclidian distance between $\theta$ and $\theta + \Delta\theta$, i.e. $\Delta \theta$. Riemannian metrics follow the geometry of the manifold to compute that distance, depending on its curvature. This figure is only for illustration: Riemanian metrics are purely local, $\Delta \theta$ should be much smaller.](img/riemannian.png){#fig:riemannian width=50%}
 
 Let's consider a parameterized distribution $p(x; \theta)$ and its new value $p(x; \theta + \Delta \theta)$ after applying a small parameter change $\Delta \theta$.
 As depicted on @fig:riemannian, the Euclidian metric in the parameter space ($||\theta + \Delta \theta - \theta||^2$) does not take the structure of the statistical manifold into account. We need to define a **Riemannian metric** which accounts locally for the curvature of the manifold between $\theta$ and $\theta + \Delta \theta$. The Riemannian distance is defined by the dot product:
@@ -1978,7 +1978,7 @@ $$
 $\tilde{\nabla_\theta} L(\theta)$ is the **natural gradient** of $L(\theta)$. Natural gradient descent simply takes steps in this direction:
 
 $$
-    \delta \theta = - \eta \, \tilde{\nabla_\theta} L(\theta)
+    \Delta \theta = - \eta \, \tilde{\nabla_\theta} L(\theta)
 $$
 
 When the manifold is not curved ($F(\theta)$ is the identity matrix), natural gradient descent is the regular gradient descent.

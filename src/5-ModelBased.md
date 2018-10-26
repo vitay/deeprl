@@ -45,3 +45,5 @@ World models <https://worldmodels.github.io/> [@Ha2018]
 Recall Traces: Backtracking Models for Efficient Reinforcement Learning [@Goyal2018]
 
 Deep Dyna-Q: Integrating Planning for Task-Completion Dialogue Policy Learning [@Peng2018]
+
+Q-map: a Convolutional Approach for Goal-Oriented Reinforcement Learning [@Pardo2018]
