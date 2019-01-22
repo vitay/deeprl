@@ -984,10 +984,25 @@
 </figure>
 <p>Having a computable formula for the policy gradient, the algorithm is rather simple:</p>
 <ol type="1">
-<li>Acquire a batch of transitions <span class="math inline">\((s, a, r, s&#39;)\)</span> using the current policy <span class="math inline">\(\pi_\theta\)</span> (either a finite episode or a truncated one).</li>
-<li>For each state encountered, compute the discounted sum of the next <span class="math inline">\(n\)</span> rewards <span class="math inline">\(\sum_{k=0}^{n} \gamma^{k} \, r_{t+k+1}\)</span> and use the critic to estimate the value of the state encountered <span class="math inline">\(n\)</span> steps later <span class="math inline">\(V_\varphi(s_{t+n+1})\)</span>.</li>
+<li><p>Acquire a batch of transitions <span class="math inline">\((s, a, r, s&#39;)\)</span> using the current policy <span class="math inline">\(\pi_\theta\)</span> (either a finite episode or a truncated one).</p></li>
+<li><p>For each state encountered, compute the discounted sum of the next <span class="math inline">\(n\)</span> rewards <span class="math inline">\(\sum_{k=0}^{n} \gamma^{k} \, r_{t+k+1}\)</span> and use the critic to estimate the value of the state encountered <span class="math inline">\(n\)</span> steps later <span class="math inline">\(V_\varphi(s_{t+n+1})\)</span>.</p></li>
+</ol>
+<p><span class="math display">\[
+    R_t = \sum_{k=0}^{n-1} \gamma^{k} \, r_{t+k+1} + \gamma^n \, V_\varphi(s_{t+n+1})
+\]</span></p>
+<ol start="3" type="1">
 <li>Update the actor using Eq. <a href="#eq:a2c">11</a>.</li>
+</ol>
+<p><span class="math display">\[
+    \nabla_\theta J(\theta) =  \sum_t \nabla_\theta \log \pi_\theta(s_t, a_t) \, (R_t - V_\varphi(s_t))
+\]</span></p>
+<ol start="4" type="1">
 <li>Update the critic to minimize the TD error between the estimated value of a state and its true value.</li>
+</ol>
+<p><span class="math display">\[
+    \mathcal{L}(\varphi) = \sum_t (R_t - V_\varphi(s_t))^2
+\]</span></p>
+<ol start="5" type="1">
 <li>Repeat.</li>
 </ol>
 <p>This is not very different in essence from REINFORCE (sample transitions, compute the return, update the policy), apart from the facts that episodes do not need to be finite and that a critic has to be learned in parallel. A more detailed pseudo-algorithm for a single A2C learner is the following:</p>

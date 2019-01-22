@@ -1228,9 +1228,25 @@ A2C has an actor-critic architecture (@fig:a3c):
 Having a computable formula for the policy gradient, the algorithm is rather simple:
 
 1. Acquire a batch of transitions $(s, a, r, s')$ using the current policy $\pi_\theta$ (either a finite episode or a truncated one).
+
 2. For each state encountered, compute the discounted sum of the next $n$ rewards $\sum_{k=0}^{n} \gamma^{k} \, r_{t+k+1}$ and use the critic to estimate the value of the state encountered $n$ steps later $V_\varphi(s_{t+n+1})$.
+
+$$
+    R_t = \sum_{k=0}^{n-1} \gamma^{k} \, r_{t+k+1} + \gamma^n \, V_\varphi(s_{t+n+1})
+$$
+
 3. Update the actor using @eq:a2c.
+
+$$
+    \nabla_\theta J(\theta) =  \sum_t \nabla_\theta \log \pi_\theta(s_t, a_t) \, (R_t - V_\varphi(s_t))
+$$
+
 4. Update the critic to minimize the TD error between the estimated value of a state and its true value.
+
+$$
+    \mathcal{L}(\varphi) = \sum_t (R_t - V_\varphi(s_t))^2
+$$
+
 5. Repeat.
 
 This is not very different in essence from REINFORCE (sample transitions, compute the return, update the policy), apart from the facts that episodes do not need to be finite and that a critic has to be learned in parallel. A more detailed pseudo-algorithm for a single A2C learner is the following:
