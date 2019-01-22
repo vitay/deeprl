@@ -25,15 +25,15 @@ files:
 
 # Bibliography
 bibliography:
-    - /home/vitay/Articles/biblio/ReinforcementLearning.bib
-    - /home/vitay/Articles/biblio/DeepLearning.bib
+    - /home/vitay/Biblio/bibtex/ReinforcementLearning.bib
+    - /home/vitay/Biblio/bibtex/DeepLearning.bib
 csl: assets/apalike.csl
 
 
 # CSS
 css: assets/github.css
-#mathjax: /usr/share/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML
-mathjax: https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML
+mathjax: /usr/share/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML
+#mathjax: https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML
 
 # Latex
 geometry: "margin=1in"
@@ -106,20 +106,20 @@ RL methods apply to problems where an agent interacts with an environment in dis
 
 Reinforcement learning problems are described as **Markov Decision Processes** (MDP) defined by five quantities:
 
-* a state space $\mathcal{S}$ where each state $s$ respects the Markovian property. It can be finite or infinite. 
+* a state space $\mathcal{S}$ where each state $s$ respects the Markovian property. It can be finite or infinite.
 * an action space $\mathcal{A}$ of actions $a$, which can be finite or infinite, discrete or continuous.
 * an initial state distribution $p_0(s_0)$ (from which states is the agent likely to start).
 * a transition dynamics model with density $p(s'|s, a)$, sometimes noted $\mathcal{P}_{ss'}^a$. It defines the probability of arriving in the state $s'$ at time $t+1$ when being in the state $s$ and performing the action $a$.
 * a reward function $r(s, a, s') : \mathcal{S}\times\mathcal{A}\times\mathcal{S} \rightarrow \Re$ defining the (stochastic) reward obtained after performing $a$ in state $s$ and arriving in $s'$.
 
-The behavior of the agent over time is a **trajectory** (also called episode, history or roll-out) $\tau = (s_0, a_0, s_1, a_, \ldots, s_T, a_T)$ defined by the dynamics of the MDP. Each transition occurs with a probability $p(s'|s, a)$ and provides a certain amount of reward defined by $r(s, a, s')$. In episodic tasks, the horizon $T$ is finite, while in continuing tasks $T$ is infinite. 
+The behavior of the agent over time is a **trajectory** (also called episode, history or roll-out) $\tau = (s_0, a_0, s_1, a_, \ldots, s_T, a_T)$ defined by the dynamics of the MDP. Each transition occurs with a probability $p(s'|s, a)$ and provides a certain amount of reward defined by $r(s, a, s')$. In episodic tasks, the horizon $T$ is finite, while in continuing tasks $T$ is infinite.
 
 
 Importantly, the **Markovian property** states that:
 
 $$
     p(s_{t+1}|s_t, a_t) = p(s_{t+1}|s_t, a_t, s_{t-1}, a_{t-1}, \dots s_0, a_0)
-$$ 
+$$
 
 i.e. you do not need the full history of the agent to predict where it will arrive after an action. In simple problems, this is just a question of providing enough information to the description of a state: if a transition depends on what happened in the past, just put that information in the state description.
 
@@ -134,15 +134,15 @@ The policy defines the behavior of the agent: which action should be taken in ea
 * a stochastic policy $\pi : \mathcal{S} \rightarrow P(\mathcal{A})$ defines the probability distribution $P(\mathcal{A})$ of performing an action.
 * a deterministic policy $\mu(s_t)$ is a discrete mapping of $\mathcal{S} \rightarrow \mathcal{A}$.
 
-The policy can be used to explore the environment and generate trajectories of states, rewards and actions. The performance of a policy is determined by calculating the **expected discounted return**, i.e. the sum of all rewards received from time step t onwards: 
+The policy can be used to explore the environment and generate trajectories of states, rewards and actions. The performance of a policy is determined by calculating the **expected discounted return**, i.e. the sum of all rewards received from time step t onwards:
 
 $$
     R_t = \sum_{k=0}^{T} \gamma^k \, r_{t+k+1}
 $$
 
-where $0 < \gamma \leq 1$ is the discount rate and $r_{t+1}$ represents the reward obtained during the transition from $s_t$ to $s_{t+1}$. 
+where $0 < \gamma \leq 1$ is the discount rate and $r_{t+1}$ represents the reward obtained during the transition from $s_t$ to $s_{t+1}$.
 
-The **discount rate** $\gamma$ is a critical hyperparameter of RL: chosen too small, only immediate rewards will matter (i.e. participate to $R_t$) and the agent will be greedy. Chosen too close from 1, hypothetical rewards delivered in one year from now will count as much as slightly smaller rewards delivered for certain now. 
+The **discount rate** $\gamma$ is a critical hyperparameter of RL: chosen too small, only immediate rewards will matter (i.e. participate to $R_t$) and the agent will be greedy. Chosen too close from 1, hypothetical rewards delivered in one year from now will count as much as slightly smaller rewards delivered for certain now.
 
 If the task is episodic ($T$ is finite, the trajectories ends after a finite number of transitions), $\gamma$ can be set to 1, but if the task is continuing ($T=\infty$, trajectories have no end), $\gamma$ must be chosen smaller than 1.
 
@@ -152,9 +152,9 @@ $$
     Q^{\pi}(s, a) = \mathbb{E}_{\pi}[R_t | s_t = s, a_t=a]
 $$
 
-More precisely, the Q-value of a state-action pair is the mathematical expectation of the expected return over all trajectories starting in $(s, a)$ defined by the policy $\pi$. 
+More precisely, the Q-value of a state-action pair is the mathematical expectation of the expected return over all trajectories starting in $(s, a)$ defined by the policy $\pi$.
 
-Similarly, the value of a state $s$ is the expected discounted reward received if the agent starts in $s$ and thereafter follows its policy $\pi$. 
+Similarly, the value of a state $s$ is the expected discounted reward received if the agent starts in $s$ and thereafter follows its policy $\pi$.
 
 $$
     V^{\pi}(s) = \mathbb{E}_{\pi}[R_t | s_t = s]
@@ -202,13 +202,13 @@ The Bellman equations mean that the value of a state (resp. state-action pair) d
 
 ### Dynamic programming
 
-The interesting property of the Bellman equations is that, if the states have the Markovian property, they admit *one and only one* solution. This means that for a given policy, if the dynamics of the MDP are known, it is possible to compute the value of all states or state-action pairs by solving the Bellman equations for all states or state-action pairs (*policy evaluation*). 
+The interesting property of the Bellman equations is that, if the states have the Markovian property, they admit *one and only one* solution. This means that for a given policy, if the dynamics of the MDP are known, it is possible to compute the value of all states or state-action pairs by solving the Bellman equations for all states or state-action pairs (*policy evaluation*).
 
 Once the values are known for a given policy, it is possible to improve the policy by selecting with the highest probability the action with the highest Q-value. For example, if the current policy chooses the action $a_1$ over $a_2$ in $s$ ($\pi(s, a_1) > \pi(s, a_2)$), but after evaluating the policy it turns out that $Q^\pi(s, a_2) > Q^\pi(s, a_1)$ (the expected return after $a_2$ is higher than after $a_1$), it makes more sense to preferentially select $a_2$, as there is more reward afterwards. We can then create a new policy $\pi'$ where $\pi'(s, a_2) > \pi'(s, a_1)$, which is is *better* policy than $\pi$ as more reward can be gathered after $s$.
 
 ![Dynamic programming alternates between policy evaluation and policy improvement. Taken from @Sutton1998.](img/dynamicprogramming.png){#fig:dynamicprogramming width=20%}
 
-**Dynamic programming** (DP) alternates between policy evaluation and policy improvement. If the problem is Markovian, it can be shown that DP converges to the *optimal policy* $\pi^*$, i.e. the policy where the expected return is maximal in all states. 
+**Dynamic programming** (DP) alternates between policy evaluation and policy improvement. If the problem is Markovian, it can be shown that DP converges to the *optimal policy* $\pi^*$, i.e. the policy where the expected return is maximal in all states.
 
 Note that by definition the optimal policy is *deterministic* and *greedy*: if there is an action with a maximal Q-value for the optimal policy, it should be systematically taken. For the optimal policy $\pi^*$, the Bellman equations become:
 
@@ -225,7 +225,7 @@ Dynamic programming can only be used when:
 * the dynamics of the MDP ($p(s'|s, a)$ and $r(s, a, s')$) are fully known.
 * the number of states and state-action pairs is small (one Bellman equation per state or state/action to solve).
 
-In practice, sample-based methods such as Monte-Carlo or temporal difference are used. 
+In practice, sample-based methods such as Monte-Carlo or temporal difference are used.
 
 ### Monte-Carlo sampling
 
@@ -236,7 +236,7 @@ When the environment is *a priori* unknown, it has to be explored in order to bu
 1. Start from a state $s_0$.
 2. Perform an episode (sequence of state-action transitions) until a terminal state $s_T$ is reached using your current policy $\pi$.
 3. Accumulate the rewards into the actual return for that episode $R_t^{(e)} = \sum_{k=0}^T r_{t+k+1}$ for each time step.
-4. Repeat often enough so that the value of a state $s$ can be approximated by the average of many actual returns: 
+4. Repeat often enough so that the value of a state $s$ can be approximated by the average of many actual returns:
 
 $$V^\pi(s) = \mathbb{E}_\pi[R_t | s_t = s] \approx \frac{1}{M} \sum_{e=1}^M R_t^{(e)}$$
 
@@ -263,12 +263,12 @@ The second issue is linked to the **exploration-exploitation** dilemma: the epis
 
 There are two types of methods trying to cope with exploration:
 
-* **On-policy** methods generate the episodes using the learned policy $\pi$, but it has to be *$\epsilon$-soft*, i.e. stochastic: it has to let a probability of at least $\epsilon$ of selecting another action than the greedy action (the one with the highest estimated Q-value). 
-* **Off-policy** methods use a second policy called the *behavior policy* to generate the episodes, but learn a different policy for exploitation, which can even be deterministic. 
+* **On-policy** methods generate the episodes using the learned policy $\pi$, but it has to be *$\epsilon$-soft*, i.e. stochastic: it has to let a probability of at least $\epsilon$ of selecting another action than the greedy action (the one with the highest estimated Q-value).
+* **Off-policy** methods use a second policy called the *behavior policy* to generate the episodes, but learn a different policy for exploitation, which can even be deterministic.
 
 $\epsilon$-soft policies are easy to create. The simplest one is the **$\epsilon$-greedy** action selection method, which assigns a probability $(1-\epsilon)$ of selecting the greedy action (the one with the highest Q-value), and a probability $\epsilon$ of selecting any of the other available actions:
 
-$$ 
+$$
     a_t = \begin{cases} a_t^* \quad \text{with probability} \quad (1 - \epsilon) \\
                        \text{any other action with probability } \epsilon \end{cases}
 $$
@@ -277,9 +277,9 @@ Another solution is the **Softmax** (or Gibbs distribution) action selection met
 
 $$
     P(s, a) = \frac{\exp Q^\pi(s, a) / \tau}{ \sum_b \exp Q^\pi(s, b) / \tau}
-$$ 
+$$
 
-$\tau$ is a positive parameter called the temperature: high temperatures cause the actions to be nearly equiprobable, while low temperatures cause $\tau$ is a positive parameter called the temperature. 
+$\tau$ is a positive parameter called the temperature: high temperatures cause the actions to be nearly equiprobable, while low temperatures cause $\tau$ is a positive parameter called the temperature.
 
 The advantage of off-policy methods is that domain knowledge can be used to restrict the search in the state-action space. For example, only moves actually played by chess experts in a given state will be actually explored, not random stupid moves. The obvious drawback being that if the optimal solution is not explored by the behavior policy, the agent has no way to discover it by itself.
 
@@ -359,7 +359,7 @@ $$
     Q^\pi(s_t, a_t) \leftarrow  Q^\pi(s_t, a_t) + \alpha \, \sum_{t'=t}^T (\gamma \lambda)^{t'-t} \delta_{t'}
 $$
 
-From this equation, $\gamma$ and $\lambda$ seem to play a relatively similar role, but remember that $\gamma$ is also used in the TD error, so they control different aspects of learning. The drawback of this approach is that the future transitions at $t'>t$ and their respective TD errors must be known when updating the transition, so this prevents online learning (the episode must be terminated to apply the updates). 
+From this equation, $\gamma$ and $\lambda$ seem to play a relatively similar role, but remember that $\gamma$ is also used in the TD error, so they control different aspects of learning. The drawback of this approach is that the future transitions at $t'>t$ and their respective TD errors must be known when updating the transition, so this prevents online learning (the episode must be terminated to apply the updates).
 
 * The *backward view* considers that the TD error made at time $t$ is sent backwards in time to all transitions previously executed. The easiest wayto implement this is to update an eligibility trace $e(s,a)$ for each possible transition, which is incremented every time a transition is visited and otherwise decays exponentially with a speed controlled by $\lambda$:
 
@@ -367,7 +367,7 @@ $$
     e(s, a) = \begin{cases} e(s, a) + 1 \quad \text{if} \quad s=s_t \quad \text{and} \quad a=a_t \\
                             \lambda \, e(s, a) \quad \text{otherwise.}
               \end{cases}
-$$ 
+$$
 
 The Q-value of **all** transitions $(s, a)$ (not only the one just executed) is then updated proportionally to the corresponding trace and the current TD error:
 
@@ -377,7 +377,7 @@ $$
 
 The forward and backward implementations are equivalent: the first requires to know the future, the second requires to update many transitions at each time step. The best solution will depend on the complexity of the problem.
 
-TD learning, SARSA and Q-learning can all be efficiently extended using eligibility traces. This gives the algorithms TD($\lambda$), SARSA($\lambda$) and Q($\lambda$), which can learn much faster than their 1-step equivalent, at the cost of more computations. 
+TD learning, SARSA and Q-learning can all be efficiently extended using eligibility traces. This gives the algorithms TD($\lambda$), SARSA($\lambda$) and Q($\lambda$), which can learn much faster than their 1-step equivalent, at the cost of more computations.
 
 ### Actor-critic architectures
 
@@ -427,7 +427,7 @@ Actor-critic algorithms learn at the same time two aspects of the problem:
 
 Classical TD learning only learn a value function ($V^\pi(s)$ or $Q^\pi(s, a)$): these methods are called **value-based** methods. Actor-critic architectures are particularly important in **policy search** methods (see @sec:policy-gradient-methods).
 
-### Function approximation 
+### Function approximation
 
 All the methods presented before are *tabular methods*, as one needs to store one value per state-action pair: either the Q-value of the action or a preference for that action. In most useful applications, the number of values to store would quickly become redhibitory: when working on raw images, the number of possible states alone is untractable. Moreover, these algorithms require that each state-action pair is visited a sufficient number of times to converge towards the optimal policy: if a single state-action pair is never visited, there is no guarantee that the optimal policy will be found. The problem becomes even more obvious when considering *continuous* state or action spaces.
 
@@ -454,16 +454,16 @@ The goal of a function approximator is to minimize a *loss function* (or cost fu
 
 $$
     \mathcal{L}(\theta) = \mathbb{E}_\pi[(R_t - Q_\theta(s, a))^2]
-$$ 
+$$
 
 If we learn over $N$ episodes of length $T$, the loss function can be approximated as:
 
 $$
-    \mathcal{L}(\theta) \approx \frac{1}{N} \sum_{e=1}^M \sum_{t = 1}^T [R^e_t - Q_\theta(s_t, a_t)]^2
-$$ 
+    \mathcal{L}(\theta) \approx \frac{1}{N} \sum_{e=1}^N \sum_{t = 1}^T [R^e_t - Q_\theta(s_t, a_t)]^2
+$$
 
-* Temporal difference methods: the Q-values should converge towards an estimation of the mean expected return. 
-    
+* Temporal difference methods: the Q-values should converge towards an estimation of the mean expected return.
+
     * For SARSA:
 
     $$
@@ -476,7 +476,7 @@ $$
     \mathcal{L}(\theta) = \mathbb{E}_\pi[(r(s, a, s') + \gamma \, \max_{a'} Q_\theta(s', a') - Q_\theta(s, a))^2]
     $$
 
-Any function approximator able to minimize these loss functions can be used. 
+Any function approximator able to minimize these loss functions can be used.
 
 #### Policy-based function approximation {-}
 
@@ -511,7 +511,7 @@ $${#eq:fullyconnected}
 
 The activation function can theoretically be of any type as long as it is non-linear (sigmoid, tanh...), but modern neural networks use preferentially the **Rectified Linear Unit** (ReLU) function $f(x) = \max(0, x)$ or its parameterized variants.
 
-The goal of learning is to find the weights and biases $\theta$ minimizing a given **loss function** on a training set $\mathcal{D}$. 
+The goal of learning is to find the weights and biases $\theta$ minimizing a given **loss function** on a training set $\mathcal{D}$.
 
 * In *regression* problems, the **mean square error** (mse) is minimized:
 
@@ -572,7 +572,7 @@ Partial derivatives are automatically computed by the underlying libraries, such
 * Adadelta
 * RMSprop
 * Adam
-* Many others. Check the doc of keras to see what is available: <https://keras.io/optimizers> 
+* Many others. Check the doc of keras to see what is available: <https://keras.io/optimizers>
 
 See this useful post for a comparison of the different optimizers: <http://ruder.io/optimizing-gradient-descent> [@Ruder2016]. The common wisdom is that SGD with Nesterov momentum works best (i.e. it finds a better minimum) but its meta-parameters (learning rate, momentum) are hard to find, while Adam works out-of-the-box, at the cost of a slightly worse minimum. For deep RL, Adam is usually preferred, as the goal is to quickly find a working solution, not to optimize it to the last decimal.
 
@@ -582,7 +582,7 @@ Additional regularization mechanisms are now typically part of DNNs in order to 
 
 ### Convolutional networks
 
-Convolutional Neural Networks (CNN) are an adaptation of DNNs to deal with highly dimensional input spaces such as images. The idea is that neurons in the hidden layer reuse ("share") weights over the input image, as the features learned by early layers are probably local in visual classification tasks: in computer vision, an edge can be detected by the same filter all over the input image. 
+Convolutional Neural Networks (CNN) are an adaptation of DNNs to deal with highly dimensional input spaces such as images. The idea is that neurons in the hidden layer reuse ("share") weights over the input image, as the features learned by early layers are probably local in visual classification tasks: in computer vision, an edge can be detected by the same filter all over the input image.
 
 A **convolutional layer** learns to extract a given number of features (typically 16, 32, 64, etc) represented by 3x3 or 5x5 matrices. These matrices are then convoluted over the whole input image (or the previous convolutional layer) to produce **feature maps**. If the input image has a size NxMx1 (grayscale) or NxMx3 (colored), the convolutional layer will be a tensor of size NxMxF, where F is the number of extracted features. Padding issues may reduce marginally the spatial dimensions. One important aspect is that the convolutional layer is fully differentiable, so backpropagation and the usual optimizers can be used to learn the filters.
 
@@ -592,7 +592,7 @@ After a convolutional layer, the spatial dimensions are preserved. In classifica
 
 ![Max-pooling layer. Source: Stanford's CS231n course <http://cs231n.github.io/convolutional-networks>](img/maxpooling.png){#fig:maxpooling}
 
-A convolutional neural network is simply a sequence of convolutional layers and max-pooling layers (sometime two convolutional layers are applied in a row before max-pooling, as in VGG [@Simonyan2014]), followed by a couple of fully-connected layers and a softmax output layer. @fig:alexnet shows the architecture of AlexNet, the winning architecture of the ImageNet challenge in 2012 [@Krizhevsky2012].
+A convolutional neural network is simply a sequence of convolutional layers and max-pooling layers (sometime two convolutional layers are applied in a row before max-pooling, as in VGG [@Simonyan2015]), followed by a couple of fully-connected layers and a softmax output layer. @fig:alexnet shows the architecture of AlexNet, the winning architecture of the ImageNet challenge in 2012 [@Krizhevsky2012].
 
 ![Architecture of the AlexNet CNN. Taken from @Krizhevsky2012.](img/alexnet.png){#fig:alexnet}
 
@@ -606,7 +606,7 @@ Recurrent Neural Networks (RNN) are designed to deal with time-varying inputs, w
 
 ![Architecture of a RNN. Left: recurrent architecture. Right: unrolled network, showing that a RNN is equivalent to a deep network. Taken from <http://colah.github.io/posts/2015-08-Understanding-LSTMs>.](img/RNN-unrolled.png){#fig:rnn width=90%}
 
-The output $\mathbf{h}_t$ of the RNN at time $t$ depends on its current input $\mathbf{x}_t$, but also on its previous output $\mathbf{h}_{t-1}$, which, by recursion, depends on the whole history of inputs $(x_0, x_1, \ldots, x_t)$. 
+The output $\mathbf{h}_t$ of the RNN at time $t$ depends on its current input $\mathbf{x}_t$, but also on its previous output $\mathbf{h}_{t-1}$, which, by recursion, depends on the whole history of inputs $(x_0, x_1, \ldots, x_t)$.
 
 $$
     \mathbf{h}_t = f(W_x \, \mathbf{x}_{t} + W_h \, \mathbf{h}_{t-1} + \mathbf{b})
@@ -614,7 +614,7 @@ $$
 
 Once unrolled, a RNN is equivalent to a deep network, with $t$ layers of weights between the first input $\mathbf{x}_0$ and the current output $\mathbf{h}_t$. The only difference with a feedforward network is that weights are reused between two time steps / layers. **Backpropagation though time** (BPTT) can be used to propagate the gradient of the loss function backwards in time and learn the weights $W_x$ and $W_h$ using the usual optimizer (SGD, Adam...).
 
-However, this kind of RNN can only learn short-term dependencies because of the **vanishing gradient problem** [@Hochreiter1991]. When the gradient of the loss funcion travels backwards from  $\mathbf{h}_t$ to $\mathbf{x}_0$, it will be multiplied $t$ times by the recurrent weights $W_h$. If $|W_h| > 1$, the gradient will explode with increasing $t$, while if $|W_h| < 1$, the gradient will vanish to 0. 
+However, this kind of RNN can only learn short-term dependencies because of the **vanishing gradient problem** [@Hochreiter1991]. When the gradient of the loss funcion travels backwards from  $\mathbf{h}_t$ to $\mathbf{x}_0$, it will be multiplied $t$ times by the recurrent weights $W_h$. If $|W_h| > 1$, the gradient will explode with increasing $t$, while if $|W_h| < 1$, the gradient will vanish to 0.
 
 The solution to this problem is provided by **long short-term memory networks** [LSTM;@Hochreiter1997]. LSTM layers maintain additionally a state $\mathbf{C}_t$ (also called context or memory) which is manipulated by three learnable gates (input, forget and output gates). As in regular RNNs, a *candidate state* $\tilde{\mathbf{C}_t}$ is computed based on the current input and the previous output:
 
@@ -632,7 +632,7 @@ $$
     \mathbf{i}_t = \sigma(W^i_x \, \mathbf{x}_{t} + W^i_h \, \mathbf{h}_{t-1} + \mathbf{b}^i)
 $$
 
-The sigmoid activation function $\sigma$ is used to output a number between 0 and 1 for each neuron: 0 means the candidate state will not be used at all, 1 means completely. 
+The sigmoid activation function $\sigma$ is used to output a number between 0 and 1 for each neuron: 0 means the candidate state will not be used at all, 1 means completely.
 
 * The forget gate decides which part of the current state should be kept or forgotten:
 
@@ -676,7 +676,7 @@ RNNs are particularly useful for deep RL when considering POMDPs, i.e. partially
 
 The goal of value-based deep RL is to approximate the Q-value of each possible state-action pair using a deep (convolutional) neural network. As shown on @fig:functionapprox, the network can either take a state-action pair as input and return a single output value, or take only the state as input and return the Q-value of all possible actions (only possible if the action space is discrete), In both cases, the goal is to learn estimates $Q_\theta(s, a)$ with a NN with parameters $\theta$.
 
-![Function approximators can either associate a state-action pair $(s, a)$ to its Q-value (left), or associate a state $s$ to the Q-avlues of all actions possible in that state (right).](img/functionapprox.png){width=40%}
+![Function approximators can either associate a state-action pair $(s, a)$ to its Q-value (left), or associate a state $s$ to the Q-values of all actions possible in that state (right).](img/functionapprox.png){width=40%}
 
 When using Q-learning, we have already seen in @sec:function-approximation that the problem is a regression problem, where the following mse loss function has to be minimized:
 
@@ -1019,11 +1019,15 @@ Estimating the policy gradient now becomes straightforward using Monte-Carlo sam
 * while not converged:
 
     * Sample $N$ trajectories $\{\tau_i\}$ using the current policy $\pi_\theta$ and observe the returns $\{R(\tau_i)\}$.
+
     * Estimate the policy gradient as an average over the trajectories:
+
     $$
        \nabla_\theta J(\theta) \approx \frac{1}{N} \sum_{i=1}^N \sum_{t=0}^T \nabla_\theta \log \pi_\theta(s_t, a_t) \, R(\tau_i)
     $$
+
     * Update the policy using gradient ascent:
+
     $$
         \theta \leftarrow \theta + \eta \, \nabla_\theta J(\theta)
     $$
@@ -1156,7 +1160,7 @@ The resulting algorithm belongs to the **actor-critic** class, in the sense that
 
 @fig:actorcriticpolicy shows the architecture of the algorithm. The only problem left is to provide the critic with the true Q-values.
 
-![Architecture of the policy gradient (PG) method.](img/policygradient.png){#fig:actorcriticpolicy width=65%}
+![Architecture of the policy gradient (PG) method.](img/policygradient.png){#fig:actorcriticpolicy width=80%}
 
 Most policy-gradient algorithms (A3C, DPPG, TRPO) are actor-critic architectures. Some remarks already:
 
@@ -1212,7 +1216,14 @@ $$
     \nabla_\theta J(\theta) =  \mathbb{E}_{s_t \sim \rho^\pi, a_t \sim \pi_\theta}[\nabla_\theta \log \pi_\theta(s_t, a_t) \, ( \sum_{k=0}^{n-1} \gamma^{k} \, r_{t+k+1} + \gamma^n \, V_\varphi(s_{t+n+1}) - V_\varphi(s_t))]
 $${#eq:a2c}
 
-TD can be therefore be seen as a 1-step algorithm. For sparse rewards (mostly zero, +1 or -1 at the end of a game for example), this allows to update the $n$ last actions which lead to a win/loss, instead of only the last one in TD, speeding up learning. However, there is no need for finite episodes as in MC. In other words, n-step estimation ensures a trade-off between bias (wrong upadtes based on estimated as in TD) and variance (variability of the obtained returns as in MC). An alternative to n-step updating is the use of *eligibility traces* (see @sec:eligibility-traces, @Sutton1998).
+TD can be therefore be seen as a 1-step algorithm. For sparse rewards (mostly zero, +1 or -1 at the end of a game for example), this allows to update the $n$ last actions which lead to a win/loss, instead of only the last one in TD, speeding up learning. However, there is no need for finite episodes as in MC. In other words, n-step estimation ensures a trade-off between bias (wrong updates based on estimated values as in TD) and variance (variability of the obtained returns as in MC). An alternative to n-step updating is the use of *eligibility traces* (see @sec:eligibility-traces, @Sutton1998).
+
+A2C has an actor-critic architecture (@fig:a3c):
+
+* The actor outputs the policy $\pi_\theta$ for a state $s$, i.e. a vector of probabilities for each action.
+* The critic outputs the value $V_\varphi(s)$ of a state $s$.
+
+![Advantage actor-critic architecture.](img/a3c.png){#fig:a3c width=70%}
 
 Having a computable formula for the policy gradient, the algorithm is rather simple:
 
@@ -1357,7 +1368,7 @@ Generally speaking:
 * the more $\psi_t$ relies on real rewards (e.g. $R_t$), the more the gradient will be correct on average (small bias), but the more it will vary (high variance). This increases the sample complexity: we need to average more samples to correctly estimate the gradient.
 * the more $\psi_t$ relies on estimations (e.g. the TD error), the more stable the gradient (small variance), but the more incorrect it is (high bias). This can lead to suboptimal policies, i.e. local optima of the objective function.
 
-This is the classical bias/variance trade-off in machine learning (see @sec:reducing-the-variance). The n-step algorithm used in A2C is an attempt to mitigate between these extrema. @Schulman2015b proposed the **Generalized Advantage Estimate** (GAE) to further control the bias/variance trade-off.
+This is the classical bias/variance trade-off in machine learning (see @sec:reducing-the-variance). The n-step algorithm used in A2C is an attempt to mitigate between these extrema. @Schulman2015a proposed the **Generalized Advantage Estimate** (GAE) to further control the bias/variance trade-off.
 
 Let's define the n-step advantage:
 
@@ -1379,7 +1390,7 @@ $$
 
 The GAE is the discounted sum of all n-step advantages. When $\lambda=0$, we have $A^{\text{GAE}(\gamma, 0)}_t = A^{0}_t = \delta_t$, i.e. the TD advantage (high bias, low variance). When $\lambda=1$, we have (at the limit) $A^{\text{GAE}(\gamma, 1)}_t = R_t$, i.e. the MC advantage (low bias, high variance). Choosing the right value of $\lambda$ between 0 and 1 allows to control the bias/variance trade-off.
 
-$\gamma$ and $\lambda$ play different roles in GAE: $\gamma$ determines the scale or horizon of the value functions: how much future rewards rewards are to be taken into account. The higher $\gamma <1$, the smaller the bias, but the higher the variance. Empirically, @Schulman2015b found that small $\lambda$ values introduce less bias than $\gamma$, so $\lambda$ can be chosen smaller than $\gamma$ (which is typically 0.99).
+$\gamma$ and $\lambda$ play different roles in GAE: $\gamma$ determines the scale or horizon of the value functions: how much future rewards rewards are to be taken into account. The higher $\gamma <1$, the smaller the bias, but the higher the variance. Empirically, @Schulman2015a found that small $\lambda$ values introduce less bias than $\gamma$, so $\lambda$ can be chosen smaller than $\gamma$ (which is typically 0.99).
 
 The policy gradient for Generalized Advantage Estimation is therefore:
 
@@ -1387,7 +1398,7 @@ $$
     \nabla_\theta J(\theta) =  \mathbb{E}_{s_t \sim \rho^\pi, a_t \sim \pi_\theta}[\nabla_\theta \log \pi_\theta (s_t, a_t) \, \sum_{l=0}^\infty (\gamma \lambda)^l \delta_{t+l} ]
 $$
 
-Note that @Schulman2015b additionally use *trust region optimization* to stabilize learning and further reduce the bias (see @sec:trust-region-policy-optimization-trpo), for now just consider it is a better optimization method than  gradient descent. The GAE algorithm is summarized here:
+Note that @Schulman2015a additionally use *trust region optimization* to stabilize learning and further reduce the bias (see @sec:trust-region-policy-optimization-trpo), for now just consider it is a better optimization method than  gradient descent. The GAE algorithm is summarized here:
 
 ---
 
@@ -1527,7 +1538,7 @@ $$
 \end{aligned}
 $$
 
-The ratio $\frac{\rho_\theta(\tau)}{\rho_b(\tau)}$ is called the **importance sampling weight** for the trajectory. If a trajectory generated by $b$ is associated with a lot of reward $R(\tau)$ (with $\rho_b(\tau)$ significantly high), the actor should learn to reproduce that trajectory with a high probability $\rho_\theta(\tau)$, as its goal is to maximize $J(\theta)$. Conversely, if the associated reward is low ($R(\tau)\approx 0$), the target policy can forget about it (by setting $\rho_\theta(\tau) = 0$), even though the behavior policy still generates it!
+The ratio $\frac{\rho_\theta(\tau)}{\rho_b(\tau)}$ is called the **importance sampling weight** for the trajectory. If a trajectory generated by $b$ is associated with a lot of rewards $R(\tau)$ (with $\rho_b(\tau)$ significantly high), the actor should learn to reproduce that trajectory with a high probability $\rho_\theta(\tau)$, as its goal is to maximize $J(\theta)$. Conversely, if the associated reward is low ($R(\tau)\approx 0$), the target policy can forget about it (by setting $\rho_\theta(\tau) = 0$), even though the behavior policy still generates it!
 
 The problem is now to estimate the importance sampling weight. Using the definition of the likelihood of a trajectory, the importance sampling weight only depends on the policies, not the dynamics of the environment (they cancel out):
 
@@ -1546,14 +1557,21 @@ All one needs to do is to repeatedly apply the following algorithm:
 ---
 
 1. Generate $m$ trajectories $\tau_i$ using the behavior policy:
+
     * For each transition $(s_t, a_t, s_{t+1})$ of each trajectory, store:
+
         1. The received reward $r_{t+1}$.
+
         2. The probability $b(s_t, a_t)$ that the behavior policy generates this transition.
+
         3. The probability $\pi_\theta(s_t, a_t)$ that the target policy generates this transition.
+
 2. Estimate the objective function with:
+
 $$
   \hat{J}(\theta) = \frac{1}{m} \, \sum_{i=1}^m \left(\prod_{t=0}^T \frac{\pi_\theta(s_t, a_t)}{b(s_t, a_t)} \right) \, \left(\sum_{t=0}^T \gamma^t \, r_{t+1} \right)
 $$
+
 3. Update the target policy to maximize $\hat{J}(\theta)$.
 
 ---
@@ -1567,12 +1585,13 @@ $$
 When decomposing the policy gradient for each state encountered, one can also use the **causality** principle to simplify the terms:
 
 1. The return after being in a state $s_t$ only depends on future states.
+
 2. The importance sampling weight (relative probability of arriving in $s_t$ using the behavior and target policies) only depends on the past weights.
 
 This gives the following approximation of the policy gradient, used for example in Guided policy search [@Levine2013]:
 
 $$
-    \nabla_\theta J(\theta) =  \mathbb{E}_{\tau \sim \rho_b}[ \sum_{t=0}^T \nabla_\theta \log \pi_\theta(s_t, a_t) \, \left(\prod_{t'=0}^t \frac{\pi_\theta(s_{t'}, a_{t'})}{b(s_{t'}, a_{t'})} \right) \, \left(\sum_{t'=t}^T r(s_{t'}, a_{t'}) \right)]
+    \nabla_\theta J(\theta) =  \mathbb{E}_{\tau \sim \rho_b}[ \sum_{t=0}^T \nabla_\theta \log \pi_\theta(s_t, a_t) \, \left(\prod_{t'=0}^t \frac{\pi_\theta(s_{t'}, a_{t'})}{b(s_{t'}, a_{t'})} \right) \, \left(\sum_{t'=t}^T \gamma^{t'-t} \, r(s_{t'}, a_{t'}) \right)]
 $$
 
 
@@ -1681,33 +1700,49 @@ where $(x)^+ = \max(0, x)$ is the positive function. Transitions sampled from th
 ---
 
 * Initialize the actor $\pi_\theta$ and the critic $V_\varphi$ with random weights.
+
 * Initialize the prioritized experience replay buffer $\mathcal{D}$.
+
 * Observe the initial state $s_0$.
+
 * for $t \in [0, T_\text{total}]$:
+
     * Initialize empty episode minibatch.
+
     * for $k \in [0, n]$: # Sample episode
+
         * Select a action $a_k$ using the actor $\pi_\theta$.
+
         * Perform the action $a_k$ and observe the next state $s_{k+1}$ and the reward $r_{k+1}$.
+
         * Store $(s_k, a_k, r_{k+1})$ in the episode minibatch.
 
     * if $s_n$ is not terminal: set $R_n = V_\varphi(s_n)$ with the critic, else $R_n=0$.
+
     * for $k \in [n-1, 0]$: # Backwards iteration over the episode
+
         * Update the discounted sum of rewards $R_k = r_k + \gamma \, R_{k+1}$ **and store it in the replay buffer $\mathcal{D}$**.
 
     * Update the actor and the critic **on-policy** with the episode:
+
     $$
         \theta \leftarrow \theta + \eta \, \sum_k \nabla_\theta \log \pi_\theta(s_k, a_k) \, (R_k - V_\varphi(s_k))
     $$
+
     $$
         \varphi \leftarrow \varphi + \eta \, \sum_k \nabla_\varphi (R - V_\varphi(s_k))^2
     $$
 
     * for $m \in [0, M]$:
+
         * Sample a minibatch of K transitions $(s_k, a_k, R_k)$ from the replay buffer $\mathcal{D}$ prioritized with high $(R_k - V_\varphi(s_k))$.
+
         * Update the actor and the critic **off-policy** with self-imitation.
+
         $$
             \theta \leftarrow \theta + \eta \, \sum_k \nabla_\theta \log \pi_\theta(s_k, a_k) \, (R_k - V_\varphi(s_k))^+
         $$
+
         $$
             \varphi \leftarrow \varphi + \eta \, \sum_k \nabla_\varphi ((R_k - V_\varphi(s_k))^+)^2
         $$
@@ -1730,7 +1765,7 @@ There are however two drawbacks:
 
 Successful value-based methods such as DQN produce a **deterministic policy**, where the action to be executed after learning is simply the greedy action $a^*_t = \text{argmax}_a Q_\theta(s_t, a)$. Exploration is enforced by forcing the behavior policy (the one used to generate the sample) to be stochastic ($\epsilon$-greedy), but the learned policy is itself deterministic. This is **off-policy** learning, allowing to use a different policy than the learned one to explore. When using an experience replay memory, the behavior policy is simply an older version of the learning policy (as samples stored in the ERM were generated by an older version of the actor).
 
-In this section, we will see the now state-of-the-art method DDPG (Deep Deterministic Policy Gradient), which tries to combine the advantages of policy gradient methods (actor-critic, continous or highly dimensional outputs, stability) with those of value-based methods (sample efficiency, off-policy). 
+In this section, we will see the now state-of-the-art method DDPG (Deep Deterministic Policy Gradient), which tries to combine the advantages of policy gradient methods (actor-critic, continous or highly dimensional outputs, stability) with those of value-based methods (sample efficiency, off-policy).
 
 
 ### Deterministic policy gradient theorem
@@ -1813,7 +1848,7 @@ $$
     a_t = \mu_\theta(s_t) + \xi
 $$
 
-This additive noise could be anything, but the most practical choise is to use an **Ornstein-Uhlenbeck** process [@Ornstein1930] to generate temporally correlated noise with zero mean. Ornstein-Uhlenbeck processes are used in physics to model the velocity of Brownian particles with friction. It updates a variable $x_t$ using a stochastic differential equation (SDE):
+This additive noise could be anything, but the most practical choise is to use an **Ornstein-Uhlenbeck** process [@Uhlenbeck1930] to generate temporally correlated noise with zero mean. Ornstein-Uhlenbeck processes are used in physics to model the velocity of Brownian particles with friction. It updates a variable $x_t$ using a stochastic differential equation (SDE):
 
 
 $$ dx_t = \theta (\mu - x_t) dt + \sigma dW_t \qquad \text{with} \qquad dW_t = \mathcal{N}(0, dt)$$
@@ -1869,13 +1904,13 @@ $$
 
 Note that the DDPG algorithm is **off-policy**: the samples used to train the actor come from the replay buffer, i.e. were generated by an older version of the target policy. DDPG does not rely on importance sampling: as the policy is deterministic (we maximize $\mathbb{E}_{s}[Q(s, \mu_\theta(s))]$), there is no need to balance the probabilities of the behavior and target policies (with stochastic policies, one should maximize $\mathbb{E}_{s}[\sum_{a\in\mathcal{A}} \pi(s, a) Q(s, a)]$). In other words, the importance sampling weight can safely be set to 1 for deterministic policies.
 
-DDPG has rapidly become the state-of-the-art model-free method for continuous action spaces (although now PPO is preferred). It is able to learn efficent policies on most contiuous problems, either pixel-based or using individual state variables. In the original DDPG paper, they showed that *batch normalization* [@Ioffe2015] is crucial in stabilizing the training of deep networks on such problems. Its main limitation is its high sample complexity. Distributed versions of DDPG have been proposed to speed up learning, similarly to the parallel actor learners of A3C [@Loetzsch2017;@Popov2017;@BarthMaron2018].
+DDPG has rapidly become the state-of-the-art model-free method for continuous action spaces (although now PPO is preferred). It is able to learn efficent policies on most contiuous problems, either pixel-based or using individual state variables. In the original DDPG paper, they showed that *batch normalization* [@Ioffe2015] is crucial in stabilizing the training of deep networks on such problems. Its main limitation is its high sample complexity. Distributed versions of DDPG have been proposed to speed up learning, similarly to the parallel actor learners of A3C [@Lotzsch2017;@Popov2017;@Barth-Maron2018].
 
 **Additional references:** see <http://pemami4911.github.io/blog/2016/08/21/ddpg-rl.html> for additional explanations and step-by-step tensorflow code and <https://lilianweng.github.io/lil-log/2018/04/08/policy-gradient-algorithms.html> for contextual explanations.
 
 ### Distributed Distributional DDPG (D4PG)
 
-Distributed Distributional DDPG [D4PG,@BarthMaron2018] proposed recently several improvements on DDPG to make it more efficient:
+Distributed Distributional DDPG [D4PG,@Barth-Maron2018] proposed recently several improvements on DDPG to make it more efficient:
 
 1. The critic is trained using **distributional learning** [@Bellemare2017] instead of classical Q-learning to improve the stability of learning in the actor (less variance). See @sec:distributional-learning for more explanations.
 
@@ -1910,7 +1945,7 @@ If the policy $\pi_\theta$ changes a lot between two updates, the estimated Q-va
 
 To solve the problem, we should actually do the opposite of the steepest descent: *search for the biggest parameter change $\Delta \theta$ inducing the smallest change in the policy, but in the right direction*. If the parameter change is high, the actor will learn a lot internally from each experience. But if the policy change is small between two updates (although the parameters have changed a lot), we might be able to reuse past experiences, as the targets will not be that wrong.
 
-This is where **natural gradients** come into play, which are originally a statistical method to optimize over spaces of probability distributions, for example for variational inference. The idea to use natural gradients to train neural networks comes from @Amari1998. @Kakade2001 applied natural gradients to policy gradient methods, while @Peters2008 proposed a natural actor-critic algorithm for linear function approximators. The idea was adapted to deep RL by Schulman and colleagues, with Trust Region Policy Optimization [TRPO,@Schulman2015a] and Proximal Policy Optimization [PPO,@Schulman2017], the latter gaining momentum over DDPG as the go-to method for continuous RL problems, particularly because of its smaller sample complexity and its robustness to hyperparameters.
+This is where **natural gradients** come into play, which are originally a statistical method to optimize over spaces of probability distributions, for example for variational inference. The idea to use natural gradients to train neural networks comes from @Amari1998. @Kakade2001 applied natural gradients to policy gradient methods, while @Peters2008 proposed a natural actor-critic algorithm for linear function approximators. The idea was adapted to deep RL by Schulman and colleagues, with Trust Region Policy Optimization [TRPO,@Schulman2015] and Proximal Policy Optimization [PPO,@Schulman2017], the latter gaining momentum over DDPG as the go-to method for continuous RL problems, particularly because of its smaller sample complexity and its robustness to hyperparameters.
 
 ### Principle of natural gradients
 
@@ -1947,7 +1982,7 @@ $$
 
 where $F(\theta)$ is called the Riemannian metric tensor and is an inner product on the tangent space of the manifold at the point $\theta$.
 
-When using the symmetric KL divergence to measure the distance between two distributions, the corresponding Riemannian metric is the **Fisher Information Matrix** (FIM), defined as the Hessian matrix of the KL divergence around $\theta$, i.e. the matrix of second order derivatives w.r.t the elements of $\theta$. See <https://stats.stackexchange.com/questions/51185/connection-between-fisher-metric-and-the-relative-entropy> for an explanation of the link between the Fisher metric and KL divergence.
+When using the symmetric KL divergence to measure the distance between two distributions, the corresponding Riemannian metric is the **Fisher Information Matrix** (FIM), defined as the Hessian matrix of the KL divergence around $\theta$, i.e. the matrix of second order derivatives w.r.t the elements of $\theta$. See <https://stats.stackexchange.com/questions/51185/connection-between-fisher-metric-and-the-relative-entropy> and <https://wiseodd.github.io/techblog/2018/03/14/natural-gradient/> for an explanation of the link between the Fisher matrix and KL divergence.
 
 The Fisher information matrix is defined as the Hessian of the KL divergence around $\theta$, i.e. how the manifold locally changes around $\theta$:
 
@@ -1992,6 +2027,7 @@ Natural gradient descent is a generic optimization method, it can for example be
 * <http://andymiller.github.io/2016/10/02/natural_gradient_bbvi.html>
 * <https://hips.seas.harvard.edu/blog/2013/01/25/the-natural-gradient/>
 * <http://kvfrans.com/what-is-the-natural-gradient-and-where-does-it-appear-in-trust-region-policy-optimization>
+* <https://wiseodd.github.io/techblog/2018/03/14/natural-gradient/>
 * A tutorial by John Schulman (OpenAI) <https://www.youtube.com/watch?v=xvRrgxcpaHY>
 * A blog post on the related Hessian-free optimization and conjuguate gradients <http://andrew.gibiansky.com/blog/machine-learning/hessian-free-optimization/>
 * K-FAC: <https://syncedreview.com/2017/03/25/optimizing-neural-networks-using-structured-probabilistic-models/>
@@ -2019,7 +2055,7 @@ $$
     \tilde{\nabla}_\theta J(\theta) = F(\theta)^{-1} \, \nabla_\theta J(\theta)  = \mathbb{E}_{s \sim \rho_\theta, a \sim \pi_\theta}[ F(\theta)^{-1} \,  \nabla_\theta \log \pi_\theta(s, a) \, Q^{\pi_\theta}(s, a)]
 $$
 
-@Kakade2001 also shows that you can replace the true Q-value $Q^{\pi_\theta}(s, a)$ with a compatible approximation $Q\varphi(s, a)$ (as long as it minimizes the quadratic error) and still obtained an unbiased natural gradient. An important theoretical result is that policy improvement is guaranteed with natural gradients: the new policy after an update is always better (more expected returns) than before. He experimented this new rule on various simple MDPs and observed drastic improvements over vanilla PG.
+@Kakade2001 also shows that you can replace the true Q-value $Q^{\pi_\theta}(s, a)$ with a compatible approximation $Q_\varphi(s, a)$ (as long as it minimizes the quadratic error) and still obtained an unbiased natural gradient. An important theoretical result is that policy improvement is guaranteed with natural gradients: the new policy after an update is always better (more expected returns) than before. He experimented this new rule on various simple MDPs and observed drastic improvements over vanilla PG.
 
 @Peters2008 extended on the work of @Kakade2001 to propose the natural actor-critic (NAC). The exact derivations would be too complex to summarize here, but the article is an interesting read. He particularly reviews the progress at that time on policy gradient for its use in robotics. He showed that the $F(\theta)$) is a true Fisher information matrix even when using sampled episodes, and derived a baseline $b$ to reduce the variance of the natural policy gradient. He demonstrated the power of this algorithm by letting a robot learning motor primitives for baseball.
 
@@ -2027,7 +2063,7 @@ $$
 
 #### Principle {-}
 
-@Schulman2015a extended the idea of natural gradients to allow their use for non-linear function approximators (e.g. deep networks), as the previous algorithms only worked efficiently for linear approximators. The proposed algorithm, Trust Region Policy Optimization (TRPO), has now been replaced in practice by Proximal Policy Optimization (PPO, see next section) but its novel ideas are important to understand already.
+@Schulman2015 extended the idea of natural gradients to allow their use for non-linear function approximators (e.g. deep networks), as the previous algorithms only worked efficiently for linear approximators. The proposed algorithm, Trust Region Policy Optimization (TRPO), has now been replaced in practice by Proximal Policy Optimization (PPO, see next section) but its novel ideas are important to understand already.
 
 Let's note the expected return of a policy $\pi$ as:
 
@@ -2038,7 +2074,7 @@ $$
 where $\rho_\pi$ is the discounted visitation frequency distribution (the probability that a state $s$ will be visited at some point in time by the policy $\pi$):
 
 $$
-    \rho_\pi(s) = P(s_0=s) + \gamma \, P(s_1=s + \gamma^2 \, P(s_2=s) + \ldots
+    \rho_\pi(s) = P(s_0=s) + \gamma \, P(s_1=s) + \gamma^2 \, P(s_2=s) + \ldots
 $$
 
 @Kakade2002 had shown that it is possible to relate the expected return of two policies $\pi_\theta$ and $\pi_{\theta_\text{old}}$ using advantages (omitting $\pi$ in the notations):
@@ -2049,7 +2085,7 @@ $$
 
 The advantage $A_{\pi_{\theta_\text{old}}}(s, a)$ denotes the change in the expected return obtained after $(s, a)$ when using the new policy $\pi_\theta$, in comparison to the one obtained with the old policy $\pi_{\theta_\text{old}}$. While this formula seems interesting (it measures how good the new policy is with regard to the average performance of the old policy, so we could optimize directly), it is difficult to estimate as the mathematical expectation depends on state-action pairs generated by the new policy : $s \sim \rho_{\pi_\theta}, a \sim \pi_\theta$.
 
-@Schulman2015a propose an approximation to this formula, by considering that if the two policies $\pi_\theta$ and $\pi_{\theta_\text{old}}$ are not very different from another, one can sample the states from the old distribution:
+@Schulman2015 propose an approximation to this formula, by considering that if the two policies $\pi_\theta$ and $\pi_{\theta_\text{old}}$ are not very different from another, one can sample the states from the old distribution:
 
 $$
     \eta(\theta) \approx \eta(\theta_\text{old}) + \mathbb{E}_{s \sim \rho_{\pi_{\theta_\text{old}}}, a \sim \pi_\theta} [A_{\pi_{\theta_\text{old}}}(s, a)]
@@ -2079,7 +2115,7 @@ $${#eq:linesearch}
 
 This is the conservative policy iteration method of @Kakade2002, where a bound on the difference between $\eta(\pi_{\theta_\text{old}})$ and $J_{\theta_\text{old}}(\theta)$ can be derived.
 
-@Schulman2015a propose to penalize instead the objective function by the KL divergence between the new and old policies. There are basically two ways to penalize an optimization problem:
+@Schulman2015 propose to penalize instead the objective function by the KL divergence between the new and old policies. There are basically two ways to penalize an optimization problem:
 
 1. Adding a hard constraint on the KL divergence, leading to a constrained optimization problem (where Lagrange methods can be applied):
 
@@ -2107,7 +2143,7 @@ $$
 This maximum KL divergence over the state space would be very hard to compute. Empirical evaluations showed however that it is safe to use the mean KL divergence, or even to sample it:
 
 $$
-    \bar{D}_{KL}(\pi_{\theta_\text{old}} || \pi_\theta) = \mathbb{E}_s D_{KL}(\pi_{\theta_\text{old}}(s, .) || \pi_\theta(s, .)) \approx \frac{1}{N} \sum_{i=1}^N D_{KL}(\pi_{\theta_\text{old}}(s_i, .) || \pi_\theta(s_i, .))
+    \bar{D}_{KL}(\pi_{\theta_\text{old}} || \pi_\theta) = \mathbb{E}_s [D_{KL}(\pi_{\theta_\text{old}}(s, .) || \pi_\theta(s, .))] \approx \frac{1}{N} \sum_{i=1}^N D_{KL}(\pi_{\theta_\text{old}}(s_i, .) || \pi_\theta(s_i, .))
 $$
 
 #### Trust regions {-}
@@ -2132,7 +2168,7 @@ Exactly what we needed! The parameter region around $\theta_\text{old}$ where th
 
 #### Sample-based formulation {-}
 
-Although the theoretical proofs in @Schulman2015a used the regularized optimization method, the practical implementation uses the constrained optimization problem:
+Although the theoretical proofs in @Schulman2015 used the regularized optimization method, the practical implementation uses the constrained optimization problem:
 
 $$
     \text{maximize}_\theta \qquad J_{\theta_\text{old}}(\theta) = \eta(\theta_\text{old}) + \mathbb{E}_{s \sim \rho_{\pi_{\theta_\text{old}}}, a \sim \pi_\theta} [A_{\pi_{\theta_\text{old}}}(s, a)] \\
@@ -2146,7 +2182,7 @@ $$
     \qquad \text{subject to} \qquad D_{KL}(\pi_{\theta_\text{old}} || \pi_\theta) \leq \delta
 $$
 
-Now that states and actions are generated by the old policy, we can safely sample many trajectories using $\pi_{\theta_\text{old}}$ (@Schulman2015a proposes two methods called single path and Vine, but we ignore it here), compute the advantages of all state-action pairs (using real rewards along the trajectories), form the surrogate objective function and optimize it using second-order optimization methods.
+Now that states and actions are generated by the old policy, we can safely sample many trajectories using $\pi_{\theta_\text{old}}$ (@Schulman2015 proposes two methods called single path and Vine, but we ignore it here), compute the advantages of all state-action pairs (using real rewards along the trajectories), form the surrogate objective function and optimize it using second-order optimization methods.
 
 One last thing to notice is that the advantages $A_{\pi_{\theta_\text{old}}}(s, a) = Q_{\pi_{\theta_\text{old}}}(s, a) - V_{\pi_{\theta_\text{old}}}(s)$ depend on the value of the states encountered by $\pi_{\theta_\text{old}}$. The state values do not depend on the policies, they are constant for each optimization step, so they can also be safely removed:
 
@@ -2201,7 +2237,7 @@ $$
 
 which is the **natural gradient descent**! The size of the step $\frac{1}{\lambda}$ still has to be determined, but it can also be replaced by a fixed hyperparameter.
 
-The main problem is now to compute and inverse the Fisher information matrix, which is quadratic with the number of parameters $\theta$, i.e. with the number of weights in the NN. @Schulman2015a proposes to used **conjugate gradients** to iteratively approximate the Fisher, a second-order method which will not be presented here (see <https://www.cs.cmu.edu/~quake-papers/painless-conjugate-gradient.pdf> for a detailed introduction). After the conjugate gradient optimization step, the constraint $D_{KL}(\pi_{\theta_\text{old}} || \pi_\theta) \leq \delta$ is however not ensured anymore, so a line search is made as in @eq:linesearch until that criteria is met.
+The main problem is now to compute and inverse the Fisher information matrix, which is quadratic with the number of parameters $\theta$, i.e. with the number of weights in the NN. @Schulman2015 proposes to used **conjugate gradients** to iteratively approximate the Fisher, a second-order method which will not be presented here (see <https://www.cs.cmu.edu/~quake-papers/painless-conjugate-gradient.pdf> for a detailed introduction). After the conjugate gradient optimization step, the constraint $D_{KL}(\pi_{\theta_\text{old}} || \pi_\theta) \leq \delta$ is however not ensured anymore, so a line search is made as in @eq:linesearch until that criteria is met.
 
 
 #### Summary {-}
@@ -2224,25 +2260,25 @@ However, it has several limitations:
 
 ### Proximal Policy Optimization (PPO)
 
-Proximal Policy Optimization (PPO) was proposed by @Schulman2017 to overcome the problems of TRPO (complexity, unabiity to share parameters or to use complext NN architectures) while increasing the range of tasks learnable by the system (compared to DQN) and improving the sample complexity (compared to online PG methods, which perform only one update per step).
+Proximal Policy Optimization (PPO) was proposed by @Schulman2017 to overcome the problems of TRPO (complexity, unability to share parameters or to use complex NN architectures) while increasing the range of tasks learnable by the system (compared to DQN) and improving the sample complexity (compared to online PG methods, which perform only one update per step).
 
 For that, they investigated various surrogate objectives (lower bounds) that could be solved using first-order optimization techniques (gradient descent).  Let's rewrite the surrogate loss of TRPO in the following manner:
 
 $$
-    L^\text{CPI}(\theta) = \mathbb{E}_{t} [\frac{\pi_\theta(s_t, a_t)}{\pi_{\theta_\text{old}}(s_t, a_t)} \, A_{\pi_{\theta_\text{old}}}(s_t, a_t)] = \mathbb{E}_{t} [r_t(\theta) \, A_{\pi_{\theta_\text{old}}}(s_t, a_t)]
+    L^\text{CPI}(\theta) = \mathbb{E}_{t} [\frac{\pi_\theta(s_t, a_t)}{\pi_{\theta_\text{old}}(s_t, a_t)} \, A_{\pi_{\theta_\text{old}}}(s_t, a_t)] = \mathbb{E}_{t} [\rho_t(\theta) \, A_{\pi_{\theta_\text{old}}}(s_t, a_t)]
 $$
 
-by making the dependency over time explicit and noting the importance sampling weight $r_t(\theta)$. The superscript CPI refers to conservative policy iteration [@Kakade2002}. Without a constraint, the maximization of $L^\text{CPI}$ would lead to an excessively large policy updates. The authors searched how to modify the objective, in order to penalize changes to the policy that make $r_t(\theta)$ very different from 1, i.e. where the KL divergence between the new and old policies would become high. They ended up with the following surrogate loss:
+by making the dependency over time explicit and noting the importance sampling weight $\rho_t(\theta)$. The superscript CPI refers to conservative policy iteration [@Kakade2002]. Without a constraint, the maximization of $L^\text{CPI}$ would lead to an excessively large policy updates. The authors searched how to modify the objective, in order to penalize changes to the policy that make $\rho_t(\theta)$ very different from 1, i.e. where the KL divergence between the new and old policies would become high. They ended up with the following surrogate loss:
 
 $$
-    L^\text{CLIP}(\theta) = \mathbb{E}_{t} [ \min (r_t(\theta) \, A_{\pi_{\theta_\text{old}}}(s_t, a_t), \text{clip}(r_t(\theta) , 1- \epsilon, 1+\epsilon) \,  A_{\pi_{\theta_\text{old}}}(s_t, a_t)]
+    L^\text{CLIP}(\theta) = \mathbb{E}_{t} [ \min (\rho_t(\theta) \, A_{\pi_{\theta_\text{old}}}(s_t, a_t), \text{clip}(\rho_t(\theta) , 1- \epsilon, 1+\epsilon) \,  A_{\pi_{\theta_\text{old}}}(s_t, a_t)]
 $$
 
 The left part of the min operator is the surrogate objective of TRPO $L^\text{CPI}(\theta)$. The right part restricts the importance sampling weight between $1-\epsilon$ and $1 +\epsilon$.  Let's consider two cases (depicted on @fig:ppo):
 
 ![Illustration of the effect of clipping the importance sampling weight. Taken from @Schulman2017.](img/ppo.png){#fig:ppo width=80%}
 
-1. the transition $s_t, a_t$ has a positive advantage, i.e. it is a better action than expected. The probability of selecting that action again should be increased, i.e. $\pi_\theta(s_t, a_t) > \pi_{\theta_\text{old}}(s_t, a_t)$. However, the importance sampling weight could become very high (a change from 0.01 to 0.05 is a ration of $r_t(\theta) = 5$). In that case, $r_t(\theta)$ will be clipped to $1+\epsilon$. for example 1.2. As a consequence, the parameters $\theta$ will move in the right direction, but the distance between the new and the old policies will stay small.
+1. the transition $s_t, a_t$ has a positive advantage, i.e. it is a better action than expected. The probability of selecting that action again should be increased, i.e. $\pi_\theta(s_t, a_t) > \pi_{\theta_\text{old}}(s_t, a_t)$. However, the importance sampling weight could become very high (a change from 0.01 to 0.05 is a ration of $\rho_t(\theta) = 5$). In that case, $\rho_t(\theta)$ will be clipped to $1+\epsilon$, for example 1.2. As a consequence, the parameters $\theta$ will move in the right direction, but the distance between the new and the old policies will stay small.
 
 2. the transition $s_t, a_t$ has a negative advantage, i.e. it is a worse action than expected. Its probability will be decreased and the importance sampling weight might become much smaller than 1. Clipping it to $1-\epsilon$ avoids drastic changes to the policy, while still going in the right direction.
 
@@ -2277,7 +2313,7 @@ The pseudo-algorithm of PPO is as follows:
 
 The main advantage of PPO with respect to TRPO is its simplicity: the clipped objective can be directly maximized using first-order methods like stochastic gradient descent or Adam. It does not depend on assumptions about the parameter space: CNNs and RNNs can be used for the policy. It is sample-efficient, as several epochs of parameter updates are performed between two transition samplings: the policy network therefore needs less fresh samples that strictly on-policy algorithms to converge.
 
-The only drawbacks of PPO is that there no convergence guarantee (although in practice it converges more often than other state-of-the-art methods) and that the right value for $\epsilon$ has to be determined. PPO has improved the state-of-the-art on Atori games and MUjoco robotic tasks. It has become the go-to method for continuous control problems.
+The only drawbacks of PPO is that there no convergence guarantee (although in practice it converges more often than other state-of-the-art methods) and that the right value for $\epsilon$ has to be determined. PPO has improved the state-of-the-art on Atori games and Mujoco robotic tasks. It has become the go-to method for continuous control problems.
 
 **Additional resources**
 
@@ -2285,7 +2321,222 @@ The only drawbacks of PPO is that there no convergence guarantee (although in pr
 
 ### Actor-Critic with Experience Replay (ACER)
 
-@Wang2017 tested
+The natural gradient methods presented above are stochastic actor-critic methods, therefore strictly on-policy. Off-policy methods such as DQN or DDPG allow to reuse past transitions through the usage of an **experience replay memory**, potentially reducing the sample complexity at the cost of a higher variance and worse stability (@sec:off-policy-actor-critic). @Wang2017 proposed an off-policy actor-critic architecture using variance reduction techniques, the off-policy Retrace algorithm [@Munos2016, @sec:retrace], parallel training of multiple actor-learners [@Mnih2016, @sec:asynchronous-advantage-actor-critic-a3c], truncated importance sampling with bias correction (@sec:importance-sampling), stochastic duelling network architectures [@Wang2016, @sec:duelling-network], and efficient trust region policy optimization. It can be seen as the off-policy counterpart to A3C.
+
+The first aspect of ACER is that it interleaves on-policy learning with off-policy: the agent samples a trajectory $\tau$, learns from it on-policy, stores it in the replay buffer, samples $n$ trajectories from the replay buffer and learns off-policy from each of them:
+
+---
+
+* Sample a trajectory $\tau$ using the current policy.
+
+* Apply ACER on-policy on $\tau$.
+
+* Store $\tau$ in the replay buffer.
+
+* Sample $n$ trajectories from the replay buffer.
+
+* for each sampled trajectory $\tau_k$:
+
+    * Apply ACER off-policy on $\tau_k$.
+
+---
+
+Mixing on-policy learning with off-policy is quite similar to the Self-Imitation Learning approach of [@Oh2018, @sec:self-imitation-learning-sil].
+
+#### Retrace evaluation {-}
+
+ACER comes in two flavours: one for discrete action spaces, one for continuous spaces. The discrete version is simpler, so let's focus on this one. As any policy-gradient method, ACER tries to estimate the policy gradient for each transition of a trajectory, but using importance sampling [@Degris2012, @sec:linear-off-policy-actor-critic-off-pac]:
+
+$$
+    \nabla_\theta J(\theta)  = \mathbb{E}_{s_t, a_t \sim \rho_b} [\frac{\pi_\theta(s_t, a_t)}{b(s_t, a_t)} \, Q_\varphi(s_t, a_t) \, \nabla_\theta \log \pi_\theta(s_t, a_t)]
+$$
+
+The problem is now to train the critic $Q_\varphi(s_t, a_t)$ by computing the correct target. ACER learning builds on the Retrace algorithm [@Munos2016, @sec:retrace]:
+
+$$
+    \Delta Q_\varphi(s_t, a_t) = \alpha \, \sum_{t'=t}^T (\gamma)^{t'-t} \left(\prod_{s=t+1}^{t'} c_s \right) \, \delta_{t'}
+$$
+
+with $c_s = \lambda \min (1, \frac{\pi_\theta(s_s, a_s)}{b(s_s, a_s)})$ being the clipped importance sampling weight and $\delta_{t'}$ is the TD error at time $t'>t$:
+
+$$
+    \delta_{t'} = r_{t'+1} + \gamma \, V(s_{t'+1}) - V(s_{t'})
+$$
+
+By noting $Q^\text{ret}$ the target value for the update of the critic (neglecting the learning rate $\alpha$):
+
+$$
+    Q^\text{ret}(s_t, a_t) = Q_\varphi(s_t, a_t) +  \sum_{t'=t}^T (\gamma)^{t'-t} \left(\prod_{s=t+1}^{t'} c_s \right) \, \delta_{t'}
+$$
+
+we can transform the Retrace formula into a recurrent one:
+
+$$
+\begin{aligned}
+    Q^\text{ret}(s_t, a_t) & = Q_\varphi(s_t, a_t) + \delta_t + \sum_{t'=t+1}^T (\gamma)^{t'-t} \left(\prod_{s=t+1}^{t'} c_s \right) \, \delta_{t'} \\
+    & = Q_\varphi(s_t, a_t) + \delta_t + \gamma \, c_{t+1} \, (Q^\text{ret}(s_{t+1}, a_{t+1}) - Q_\varphi(s_{t+1}, a_{t+1})) \\
+\end{aligned}
+$$
+
+$Q_\varphi(s_t, a_t) + \delta_t = Q_\varphi(s_t, a_t) + r_{t+1} + \gamma \, V(s_{t+1}) - V(s_t)$ can furthermore be reduced to $r_{t+1} + \gamma \, V(s_{t+1})$ by considering that $Q_\varphi(s_t, a_t) \approx V(s_t)$ (the paper does not justify this assumption, but it should be true in expectation).
+
+This gives us the following target value for the Q-values:
+
+$$
+    Q^\text{ret}(s_t, a_t) = r_{t+1} + \gamma \, c_{t+1} \, (Q^\text{ret}(s_{t+1}, a_{t+1}) - Q_\varphi(s_{t+1}, a_{t+1})) + \gamma \, V(s_{t+1})
+$$
+
+One remaining issue is that the critic would also need to output the value of each state $V(s_{t+1})$, in addition to the Q-values $Q_\varphi(s_t, a_t)$. In the discrete case, this is not necessary, as the value of a state is the expectation of the value of the available actions under the current policy:
+
+$$
+    V(s_{t+1}) = \mathbb{E}_{a_{t+1} \sim \pi_\theta} [Q_\varphi(s_{t+1}, a_{t+1})] = \sum_a \pi_\theta(s_{t+1}, a) \, Q_\varphi(s_{t+1}, a))
+$$
+
+The value of the next state can be easily computed when we have the policy $\pi_\theta(s, a)$ (actor) and the Q-value $Q_\varphi(s, a)$ (critic) of each action $a$ in a state $s$.
+
+The actor-critic architecture needed for ACER is therefore the following:
+
+* The **actor** $\pi_\theta$ takes a state $s$ as input and outputs a vector of probabilities $\pi_\theta$ for each available action.
+
+* The **critic** $Q_\varphi$ takes a state $s$ as input and outputs a vector of Q-values.
+
+This is different from the architecture of A3C, where the critic "only" had to output the value of a state $V_\varphi(s)$: it is now a vector of Q-values. Note that the actor and the critic can share most of their parameters: the network only needs to output two different vectors $\pi_\theta(s)$ and $Q_\varphi(s)$ for each input state $s$ (@fig:acer). This makes a "two heads" NN, similar to the **duelling architecture** of [@Wang2016, @sec:duelling-network].
+
+![Architecture of the ACER actor-critic.](img/acer.png){#fig:acer width=90%}
+
+The target Q-value $Q^\text{ret}(s, a)$ can be found recursively by iterating backwards over the episode:
+
+---
+
+* Initialize $Q^\text{ret}(s_T, a_T)$, $Q_\varphi(s_T, a_T)$ and $V(s_T)$ to 0, as the terminal state has no value.
+
+* for $t \in [T-1, \ldots, 0]$:
+
+    * Update the target Q-value using the received reward, the critic and the previous target value:
+
+    $$
+        Q^\text{ret}(s_t, a_t) = r_{t+1} + \gamma \, c_{t+1} \, (Q^\text{ret}(s_{t+1}, a_{t+1}) - Q_\varphi(s_{t+1}, a_{t+1})) + \gamma \, V(s_{t+1})
+    $$
+
+    * Apply the critic on the current action:
+
+    $$
+        Q_\varphi(s_t, a_t)
+    $$
+
+    * Estimate the value of the state using the critic:
+
+    $$
+        V(s_t) = \sum_a \pi_\theta(s_t) \, Q_\varphi(s_t, a)
+    $$
+
+---
+
+As the target value $Q^\text{ret}(s, a)$ use multiple "real" rewards $r_{t+1}$, it is actually less biased than the critic $Q_\varphi(s, a)$. It is then better to use it to update the actor:
+
+$$
+    \nabla_\theta J(\theta)  = \mathbb{E}_{s_t, a_t \sim \rho_b} [\frac{\pi_\theta(s_t, a_t)}{b(s_t, a_t)} \, Q^\text{ret}(s_t, a_t) \, \nabla_\theta \log \pi_\theta(s_t, a_t)]
+$$
+
+The critic just has to minimize the mse with the target value:
+
+$$
+    \mathcal{L}(\varphi) = \mathbb{E}_{s_t, a_t \sim \rho_b} [(Q^\text{ret}(s, a) - Q_\varphi(s, a))^2]
+$$
+
+
+#### Importance weight truncation with bias correction {-}
+
+When updating the actor, we rely on the importance sampling weight $\rho_t = \frac{\pi_\theta(s_t, a_t)}{b(s_t, a_t)}$ which can vary a lot and destabilize learning.
+
+$$
+    \nabla_\theta J(\theta)  = \mathbb{E}_{s_t, a_t \sim \rho_b} [\rho_t \, Q^\text{ret}(s_t, a_t) \, \nabla_\theta \log \pi_\theta(s_t, a_t)]
+$$
+
+PPO (@sec:proximal-policy-optimization-ppo) solved this problem by clipping the importance sampling weight between $1- \epsilon$ and $1+\epsilon$. ACER uses a similar strategy, but only using an upper bound $c = 10$ on the weight:
+
+$$
+    \bar{\rho}_t = \min(c, \rho_t)
+$$
+
+Using $\bar{\rho}_t$ in the policy gradient directly would introduce a bias: actions whose importance sampling weight $\rho_t$ is higher than $c$ would contribute to the policy gradient with a smaller value than they should, introducing a bias.
+
+The solution in ACER is to add a **bias correcting term**, that corrects the policy gradient when an action has a weight higher than $c$:
+
+$$
+\begin{aligned}
+    \nabla_\theta J(\theta)  = & \mathbb{E}_{s_t \sim \rho_b} [\mathbb{E}_{a_t \sim b} [\hat{\rho}_t \, Q^\text{ret}(s_t, a_t) \, \nabla_\theta \log \pi_\theta(s_t, a_t)] \\
+    & + \mathbb{E}_{a \sim \pi_\theta}[(\frac{\rho_t(a) - c}{\rho_t(a)})^+ \, Q_\varphi(s_t, a) \, \nabla_\theta \log \pi_\theta(s_t, a)]] \\
+\end{aligned}
+$$
+
+The left part of that equation is the same policy gradient as before, but using a clipped importance sampling weight.
+
+The right part requires to integrate over all possible actions in the state $s_t$ according to the learned policy $\pi_\theta$, although only the action $a_t$ was selected by the behavior policy $b$. The term $(\frac{\rho_t(a) - c}{\rho_t(a)})^+$ is zero for all actions having an importance sampling weight smaller than c, and has a maximum of 1. In practice, this correction term can be computed using the vectors $\pi_\theta(s, a)$ and $Q_\varphi(s, a)$, which are the outputs of the actor and the critic, respectively.
+
+Finally, the Q-values $Q^\text{ret}(s_t, a_t)$ and $Q_\varphi(s_t, a)$ are transformed into advantages $Q^\text{ret}(s_t, a_t)  - V_\varphi(s_t)$ and $Q_\varphi(s_t, a) - V_\varphi(s_t)$ by substracting the value of the state in order to reduce the variance of the policy gradient.
+
+In short, we now have an estimator of the policy gradient which is **unbiased** and of smaller variance.
+
+#### Efficient trust region policy optimization {-}
+
+However, the variance is still too high. The last important step of ACER is an efficient TRPO update for the parameters of the actor.
+
+A first component of their TRPO update is they use a **target actor network** $\theta'$ (called averaged policy network in the paper) slowly tracking the actor $\theta$ after each update:
+
+$$
+    \theta' \leftarrow \alpha \, \theta' + (1 - \alpha) \, \theta
+$$
+
+A second component is that the actor is decomposed into two components:
+
+1. a distribution $f$.
+2. the statistics $\Phi_\theta(x)$ of this distribution.
+
+This is what you do when you apply the softmax action selection on Q-values: the distribution is the Gibbs (or Boltzmann) distribution and the Q-values are its statistics. In the discrete case, they take a categorical (or multinouilli) distribution: $\Phi_\theta(s)$ is the probability for each action to be taken and the distribution selects one of them. Think of a dice with one side per action and probabilities governed by the policy. In the continuous case, it could be anything, for example a normal distribution.
+
+Let's rewrite the policy gradient with that formulation (we omit here the bias correction, but ACER uses it), but only w.r.t the output of the actor $\Phi_\theta(s_t)$ for a state $s_t$:
+
+$$
+    \hat{g_t}^\text{ACER} = \nabla_{\Phi_\theta(s_t)} J(\theta)  = \rho_t \, (Q^\text{ret}(s_t, a_t) - V_\phi(s_t) ) \, \nabla_{\Phi_\theta(s_t)} \log f(a_t | \Phi_\theta(s_t))
+$$
+
+To compute the policy gradient, we would only need to apply the chain rule:
+
+$$
+    \nabla_\theta J(\theta) = \mathbb{E}_{s_t, a_t \sim \rho_b} [ \hat{g_t}^\text{ACER} \, \nabla_\theta \Phi_\theta(s_t) ]
+$$
+
+The variance of $\hat{g_t}^\text{ACER}$ is too high. ACER defines the following TRPO problem: we search for a gradient $z$ solution of:
+
+$$
+    \min_z ||\hat{g_t}^\text{ACER} - z ||^2 \\
+    \text{s.t.} \quad \nabla_{\Phi_\theta(s_t)} D_{KL}( f(\cdot | \Phi_{\theta'}(s_t) ) || f(\cdot | \Phi_{\theta'}(s_t)) )^T \times z < \delta
+$$
+
+The exact meaning of the constraint is hard to grasp, but here some intuition: the change of policy $z$ (remember that $\hat{g_t}^\text{ACER}$ is defined w.r.t the output of the actor) should be as orthogonal as possible (within a margin $\delta$) to the change of the **Kullback-Leibler** divergence between the policy defined by the actor ($\theta$) and the one defined by the **target actor** ($\theta'$). In other words, we want to update the actor, but without making the new policy too different from its past values (the target actor).
+
+The advantage of this formulation is that the objective function is quadratic in $z$ and the constraint is linear. We can therefore very easily find its solution using KKT optimization:
+
+$$
+    z^* = \hat{g_t}^\text{ACER} - \max(0, \frac{k^T \, \hat{g_t}^\text{ACER} - \delta}{||k||^2}) \, k
+$$
+
+where $k = \nabla_{\Phi_\theta(s_t)} D_{KL}( f(\cdot | \Phi_{\theta'}(s_t) ) || f(\cdot | \Phi_{\theta'}(s_t)) )$.
+
+Having obtained $z^*$, we can safely update the parameters of the actor in the direction of:
+
+$$
+    \nabla_\theta J(\theta) = \mathbb{E}_{s_t, a_t \sim \rho_b} [ z^* \, \nabla_\theta \Phi_\theta(s_t) ]
+$$
+
+As noted in the paper: *"The trust region step is carried out in the space of the statistics of the distribution $f$ , and not in the space of the policy parameters. This is done deliberately so as to avoid an additional back-propagation step through the policy network"*. We indeed need only one network update per transition. If the KL divergence was computed with respect to $\pi_\theta$ directly, one would need to apply backpropagation on the target network too.
+
+The target network $\theta'$ is furthermore used as the behavior policy $b(s, a)$. here is also a **target critic network** $\varphi'$, which is primarily used to compute the value of the states $V_{\varphi'}(s)$ for variance reduction.
+
+For a complete description of the algorithm, refer to the paper... To summarize, ACER is an actor-critic architecture using Retrace estimated values, importance weight truncation with bias correction and efficient TRPO. Its variant for continuous action spaces furthermore uses a **Stochastic Dueling Network** (SDN) in order estimate both $Q_\varphi(s, a)$ and $V_\varphi(s)$. It is straightforward in the discrete case (multiply the policy with the Q-values and take the average) but hard in the continuous case.
+
+ACER improved the performance and/or the sample efficiency of the state-of-the-art (A3C, DDPG, etc) on a variety of tasks (Atari, Mujoco). Apart from truncation with bias correction, all aspects of the algorithm are essential to obtain this improvement, as shown by ablation studies.
 
 
 <!--PAGEBREAK-->
@@ -2298,7 +2549,7 @@ $$
     Q^\pi(s, a) ) = \mathbb{E}_{\pi}[R(s, a)]
 $$
 
-@Bellemare2017 propose to learn instead the **value distribution** through a modification of the Bellman equation. They show that learning the distribution of rewards rather than their mean leads to performance improvements. 
+@Bellemare2017 propose to learn instead the **value distribution** through a modification of the Bellman equation. They show that learning the distribution of rewards rather than their mean leads to performance improvements.
 
 See <https://deepmind.com/blog/going-beyond-average-reinforcement-learning/> for more explanations.
 
@@ -2313,7 +2564,7 @@ See <https://deepmind.com/blog/going-beyond-average-reinforcement-learning/> for
 
 ### Soft Actor-Critic (SAC)
 
-@Haarnoya2018b
+@Haarnoja2018a
 
 ## Other policy search methods
 
@@ -2328,7 +2579,7 @@ See <https://deepmind.com/blog/going-beyond-average-reinforcement-learning/> for
 
 ### Normalized Advantage Function (NAF)
 
-@Gu2016b
+@Gu2016a
 
 
 ### Fictitious Self-Play (FSP)
@@ -2355,9 +2606,9 @@ Policy gradient methods are therefore usually less sample efficient, but can be 
 
 ## Gradient-free policy search
 
-The policy gradient methods presented above rely on backpropagation and gradient descent/ascent to update the parameters of the policy and maximize the objective function. Gradient descent is generally slow, sample inefficient and subject to local minima, but is nevertheless the go-to method in neural networks. However, it is not the only optimization that can be used in deep RL. This section presents some of the alternatives. 
+The policy gradient methods presented above rely on backpropagation and gradient descent/ascent to update the parameters of the policy and maximize the objective function. Gradient descent is generally slow, sample inefficient and subject to local minima, but is nevertheless the go-to method in neural networks. However, it is not the only optimization that can be used in deep RL. This section presents some of the alternatives.
 
-### Cross-entropy Method (CEM) 
+### Cross-entropy Method (CEM)
 
 @Szita2006
 
@@ -2368,6 +2619,7 @@ The policy gradient methods presented above rely on backpropagation and gradient
 Explanations from OpenAI: <https://blog.openai.com/evolution-strategies/>
 
 Deep neuroevolution at Uber: <https://eng.uber.com/deep-neuroevolution/>
+
 
 <!--PAGEBREAK-->
 
@@ -2382,7 +2634,7 @@ Another documented critic on deep RL: <https://thegradient.pub/why-rl-is-flawed/
 
 ## Reward shaping
 
-Hindsight experience replay: @Andrychowicz2017 
+Hindsight experience replay: @Andrychowicz2017
 
 ## Simulation environments
 
@@ -2402,7 +2654,7 @@ for _ in range(1000):
 
 * OpenAI Universe <https://universe.openai.com>: a similar framework from OpenAI, but to control realistic video games (GTA V, etc).
 
-* Darts environment <https://github.com/DartEnv/dart-env>: a fork of gym to use the Darts simulator instead of Mujoco. 
+* Darts environment <https://github.com/DartEnv/dart-env>: a fork of gym to use the Darts simulator instead of Mujoco.
 
 * Roboschool <https://github.com/openai/roboschool>: another alternative to Mujoco for continuous robotic control, this time from openAI.
 
@@ -2422,6 +2674,8 @@ State-of-the-art algorithms in deep RL are already implemented and freely availa
 * `OpenAI Baselines` <https://github.com/openai/baselines> from OpenAI too: A2C, ACER, ACKTR, DDPG, DQN, PPO, TRPO...
 
 * `rlkit` <https://github.com/vitchyr/rlkit> from Vitchyr Pong (PhD student at Berkeley) with in particular model-based algorithms (TDM @Pong2018).
+
+* `chainer-rl` <https://github.com/chainer/chainerrl> implemented in Chainer (an alternative to tensorflow): A3C, ACER, Categorical DQN; DQN (including Double DQN, Persistent Advantage Learning (PAL), Double PAL, Dynamic Policy Programming (DPP)), DDPG, , PGT (Policy Gradient Theorem), PCL (Path Consistency Learning), PPO, TRPO.
 
 
 <!--PAGEBREAK-->

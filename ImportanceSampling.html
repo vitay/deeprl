@@ -10,7 +10,7 @@
 
   <link rel="stylesheet" href="assets/syntax.css">
   <link rel="stylesheet" href="assets/github.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+  <script src="/usr/share/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
   <!--[if lt IE 9]>
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
   <![endif]-->
@@ -128,9 +128,9 @@
     \nabla_\theta J(\theta) =  \mathbb{E}_{s \sim \rho^\pi, a \sim \pi_\theta}[\nabla_\theta \log \pi_\theta(s, a) \, Q^{\pi_\theta}(s, a)]
 \]</span></p>
 <p>The state distribution <span class="math inline">\(\rho^\pi\)</span> defines the ensemble of states that can be visited using the actor policy <span class="math inline">\(\pi_\theta\)</span>. If, during Monte-Carlo sampling of the policy gradient, the states <span class="math inline">\(s\)</span> do not come from this state distribution, the approximated policy gradient will be wrong (high bias) and the resulting policy will be suboptimal.</p>
-<p>The major drawback of on-policy methods is their sample complexity: it is difficult to ensure that the <em>“interesting”</em> regions of the policy are actually discovered by the actor (see Fig. <a href="#fig:onlinepolicyexploration">22</a>). If the actor is initialized in a flat region of the reward space (where there is not a lot of rewards), policy gradient updates will only change slightly the policy and it may take a lot of iterations until interesting policies are discovered and fine-tuned.</p>
+<p>The major drawback of on-policy methods is their sample complexity: it is difficult to ensure that the <em>“interesting”</em> regions of the policy are actually discovered by the actor (see Fig. <a href="#fig:onlinepolicyexploration">23</a>). If the actor is initialized in a flat region of the reward space (where there is not a lot of rewards), policy gradient updates will only change slightly the policy and it may take a lot of iterations until interesting policies are discovered and fine-tuned.</p>
 <figure>
-<img src="img/onpolicyexploration.png" alt="Figure 22: Illustration of the sample complexity inherent to on-policy methods, where the actor has only two parameters \theta_1 and \theta_2. If only very small regions of the actor parameters are associated with high rewards, the policy might wander randomly for a very long time before “hitting”the interesting regions." id="fig:onlinepolicyexploration" style="width:50.0%" /><figcaption>Figure 22: Illustration of the sample complexity inherent to on-policy methods, where the actor has only two parameters <span class="math inline">\(\theta_1\)</span> and <span class="math inline">\(\theta_2\)</span>. If only very small regions of the actor parameters are associated with high rewards, the policy might wander randomly for a very long time before “hitting”the interesting regions.</figcaption>
+<img src="img/onpolicyexploration.png" alt="Figure 23: Illustration of the sample complexity inherent to on-policy methods, where the actor has only two parameters \theta_1 and \theta_2. If only very small regions of the actor parameters are associated with high rewards, the policy might wander randomly for a very long time before “hitting”the interesting regions." id="fig:onlinepolicyexploration" style="width:50.0%" /><figcaption>Figure 23: Illustration of the sample complexity inherent to on-policy methods, where the actor has only two parameters <span class="math inline">\(\theta_1\)</span> and <span class="math inline">\(\theta_2\)</span>. If only very small regions of the actor parameters are associated with high rewards, the policy might wander randomly for a very long time before “hitting”the interesting regions.</figcaption>
 </figure>
 <p>The problem becomes even worse when the state or action spaces are highly dimensional, or when rewards are sparse. Imagine the scenario where you are searching for your lost keys at home (a sparse reward is delivered only once you find them): you could spend hours trying randomly each action at your disposal (looking in your jackets, on your counter, but also jumping around, cooking something, watching TV…) until finally you explore the action “look behind the curtains” and find them. (Note: with deep RL, you would even have to do that one million times in order to allow gradient descent to train your brain…). If you had somebody telling you “if I were you, I would first search in your jackets, then on your counter and finally behind the curtains, but forget about watching TV, you will never find anything by doing that”, this would certainly reduce your exploration time.</p>
 <p>This is somehow the idea behind <strong>off-policy</strong> algorithms: they use a <strong>behavior policy</strong> <span class="math inline">\(b(s, a)\)</span> to explore the environment and train the <strong>target policy</strong> <span class="math inline">\(\pi(s, a)\)</span> to reproduce the best ones by estimating how good they are. This does not come without caveats: if the behavior policy does not explore the optimal actions, the target policy will likely not be able to find it by itself, except by chance. But if the behavior policy is good enough, this can drastically reduce the amount of exploration needed to obtain a satisfying policy. <span class="citation" data-cites="Sutton2017">Sutton and Barto (<a href="References.html#ref-Sutton2017">2017</a>)</span> noted that:</p>
@@ -146,7 +146,7 @@
 <p>Actions which would be selected by the target policy should be selected at least from time to time by the behavior policy in order to allow their update: if the target policy thinks this action should be executed, the behavior policy should try it to confirm or infirm this assumption. In mathematical terms, there is an assumption of <em>coverage</em> of <span class="math inline">\(\pi\)</span> by <span class="math inline">\(b\)</span> (the support of <span class="math inline">\(b\)</span> includes the one of <span class="math inline">\(\pi\)</span>).</p>
 <p>There are mostly two ways to create the behavior policy:</p>
 <ol type="1">
-<li><p><em>Use expert knowledge / human demonstrations</em>. Not all available actions should be explored: the programmer already knows they do not belong to the optimal policy. When an agent learns to play chess, for example, the behavior policy could consist of the moves typically played by human experts: if chess masters play this move, it is likely to be a good action, so it should be tried out, valued and possibly incorporated into the target policy (if it is indeed a good action, experts might be wrong). A similar idea was used to bootstrap early versions of AlphaGo <span class="citation" data-cites="Silver2016">(Silver et al. <a href="References.html#ref-Silver2016">2016</a>)</span>. In robotics, one could for example use “classical” engineering methods to control the exploration of the robot, while learning (hopefully) a better policy. It is also possible to perform <em>imitation learning</em>, where the agent learns from human demonstrations (e.g. <span class="citation" data-cites="Levine2013">Levine and Koltun (<a href="References.html#ref-Levine2013">2013</a>)</span>).</p></li>
+<li><p><em>Use expert knowledge / human demonstrations</em>. Not all available actions should be explored: the programmer already knows they do not belong to the optimal policy. When an agent learns to play chess, for example, the behavior policy could consist of the moves typically played by human experts: if chess masters play this move, it is likely to be a good action, so it should be tried out, valued and possibly incorporated into the target policy (if it is indeed a good action, experts might be wrong). A similar idea was used to bootstrap early versions of AlphaGo <span class="citation" data-cites="Silver2016">(Silver et al. <a href="References.html#ref-Silver2016">2016</a>)</span>. In robotics, one could for example use “classical” engineering methods to control the exploration of the robot, while learning (hopefully) a better policy. It is also possible to perform <em>imitation learning</em>, where the agent learns from human demonstrations (e.g. <span class="citation" data-cites="Levine2013">Levine and Koltun (<a href="References.html#ref-Levine2013">2013</a>)</span>).</p></li>
 <li><p><em>Derive it from the target policy</em>. In Q-learning, the target policy can be <strong>deterministic</strong>, i.e. always select the greedy action (with the maximum Q-value). The behavior policy can be derived from the target policy by making it <em><span class="math inline">\(\epsilon\)</span>-soft</em>, for example using a <span class="math inline">\(\epsilon\)</span>-greedy or softmax action selection scheme on the Q-values learned by the target policy (see Section <a href="./BasicRL.html#sec:monte-carlo-sampling">2.1.4</a>).</p></li>
 </ol>
 <p>The second option allows to control the level of exploration during learning (by controlling <span class="math inline">\(\epsilon\)</span> or the softmax temperature) while making sure that the target policy (the one used in production) is deterministic and optimal. It furthermore makes sure that Eq. <a href="#eq:qlearningcondition">13</a> is respected: the greedy action of the target policy always has a non-zero probability of being selected by an <span class="math inline">\(\epsilon\)</span>-greedy or softmax action selection. This is harder to ensure using expert knowledge.</p>
@@ -177,7 +177,7 @@
               &amp; = \mathbb{E}_{\tau \sim \rho_b}[\frac{\rho_\theta(\tau)}{\rho_b(\tau)} \, R(\tau)]  \\
 \end{aligned}
 \]</span></p>
-<p>The ratio <span class="math inline">\(\frac{\rho_\theta(\tau)}{\rho_b(\tau)}\)</span> is called the <strong>importance sampling weight</strong> for the trajectory. If a trajectory generated by <span class="math inline">\(b\)</span> is associated with a lot of reward <span class="math inline">\(R(\tau)\)</span> (with <span class="math inline">\(\rho_b(\tau)\)</span> significantly high), the actor should learn to reproduce that trajectory with a high probability <span class="math inline">\(\rho_\theta(\tau)\)</span>, as its goal is to maximize <span class="math inline">\(J(\theta)\)</span>. Conversely, if the associated reward is low (<span class="math inline">\(R(\tau)\approx 0\)</span>), the target policy can forget about it (by setting <span class="math inline">\(\rho_\theta(\tau) = 0\)</span>), even though the behavior policy still generates it!</p>
+<p>The ratio <span class="math inline">\(\frac{\rho_\theta(\tau)}{\rho_b(\tau)}\)</span> is called the <strong>importance sampling weight</strong> for the trajectory. If a trajectory generated by <span class="math inline">\(b\)</span> is associated with a lot of rewards <span class="math inline">\(R(\tau)\)</span> (with <span class="math inline">\(\rho_b(\tau)\)</span> significantly high), the actor should learn to reproduce that trajectory with a high probability <span class="math inline">\(\rho_\theta(\tau)\)</span>, as its goal is to maximize <span class="math inline">\(J(\theta)\)</span>. Conversely, if the associated reward is low (<span class="math inline">\(R(\tau)\approx 0\)</span>), the target policy can forget about it (by setting <span class="math inline">\(\rho_\theta(\tau) = 0\)</span>), even though the behavior policy still generates it!</p>
 <p>The problem is now to estimate the importance sampling weight. Using the definition of the likelihood of a trajectory, the importance sampling weight only depends on the policies, not the dynamics of the environment (they cancel out):</p>
 <p><span class="math display">\[
     \frac{\rho_\theta(\tau)}{\rho_b(\tau)} = \frac{p_0 (s_0) \, \prod_{t=0}^T \pi_\theta(s_t, a_t) p(s_{t+1} | s_t, a_t)}{p_0 (s_0) \, \prod_{t=0}^T b(s_t, a_t) p(s_{t+1} | s_t, a_t)} = \frac{\prod_{t=0}^T \pi_\theta(s_t, a_t)}{\prod_{t=0}^T b(s_t, a_t)} = \prod_{t=0}^T \frac{\pi_\theta(s_t, a_t)}{b(s_t, a_t)}
@@ -189,18 +189,21 @@
 <p>All one needs to do is to repeatedly apply the following algorithm:</p>
 <hr />
 <ol type="1">
-<li>Generate <span class="math inline">\(m\)</span> trajectories <span class="math inline">\(\tau_i\)</span> using the behavior policy:
+<li><p>Generate <span class="math inline">\(m\)</span> trajectories <span class="math inline">\(\tau_i\)</span> using the behavior policy:</p>
 <ul>
-<li>For each transition <span class="math inline">\((s_t, a_t, s_{t+1})\)</span> of each trajectory, store:
+<li><p>For each transition <span class="math inline">\((s_t, a_t, s_{t+1})\)</span> of each trajectory, store:</p>
 <ol type="1">
-<li>The received reward <span class="math inline">\(r_{t+1}\)</span>.</li>
-<li>The probability <span class="math inline">\(b(s_t, a_t)\)</span> that the behavior policy generates this transition.</li>
-<li>The probability <span class="math inline">\(\pi_\theta(s_t, a_t)\)</span> that the target policy generates this transition.</li>
+<li><p>The received reward <span class="math inline">\(r_{t+1}\)</span>.</p></li>
+<li><p>The probability <span class="math inline">\(b(s_t, a_t)\)</span> that the behavior policy generates this transition.</p></li>
+<li><p>The probability <span class="math inline">\(\pi_\theta(s_t, a_t)\)</span> that the target policy generates this transition.</p></li>
 </ol></li>
 </ul></li>
-<li>Estimate the objective function with: <span class="math display">\[
+<li><p>Estimate the objective function with:</p></li>
+</ol>
+<p><span class="math display">\[
   \hat{J}(\theta) = \frac{1}{m} \, \sum_{i=1}^m \left(\prod_{t=0}^T \frac{\pi_\theta(s_t, a_t)}{b(s_t, a_t)} \right) \, \left(\sum_{t=0}^T \gamma^t \, r_{t+1} \right)
-\]</span></li>
+\]</span></p>
+<ol start="3" type="1">
 <li>Update the target policy to maximize <span class="math inline">\(\hat{J}(\theta)\)</span>.</li>
 </ol>
 <hr />
@@ -210,12 +213,12 @@
 \]</span></p>
 <p>When decomposing the policy gradient for each state encountered, one can also use the <strong>causality</strong> principle to simplify the terms:</p>
 <ol type="1">
-<li>The return after being in a state <span class="math inline">\(s_t\)</span> only depends on future states.</li>
-<li>The importance sampling weight (relative probability of arriving in <span class="math inline">\(s_t\)</span> using the behavior and target policies) only depends on the past weights.</li>
+<li><p>The return after being in a state <span class="math inline">\(s_t\)</span> only depends on future states.</p></li>
+<li><p>The importance sampling weight (relative probability of arriving in <span class="math inline">\(s_t\)</span> using the behavior and target policies) only depends on the past weights.</p></li>
 </ol>
 <p>This gives the following approximation of the policy gradient, used for example in Guided policy search <span class="citation" data-cites="Levine2013">(Levine and Koltun <a href="References.html#ref-Levine2013">2013</a>)</span>:</p>
 <p><span class="math display">\[
-    \nabla_\theta J(\theta) =  \mathbb{E}_{\tau \sim \rho_b}[ \sum_{t=0}^T \nabla_\theta \log \pi_\theta(s_t, a_t) \, \left(\prod_{t&#39;=0}^t \frac{\pi_\theta(s_{t&#39;}, a_{t&#39;})}{b(s_{t&#39;}, a_{t&#39;})} \right) \, \left(\sum_{t&#39;=t}^T r(s_{t&#39;}, a_{t&#39;}) \right)]
+    \nabla_\theta J(\theta) =  \mathbb{E}_{\tau \sim \rho_b}[ \sum_{t=0}^T \nabla_\theta \log \pi_\theta(s_t, a_t) \, \left(\prod_{t&#39;=0}^t \frac{\pi_\theta(s_{t&#39;}, a_{t&#39;})}{b(s_{t&#39;}, a_{t&#39;})} \right) \, \left(\sum_{t&#39;=t}^T \gamma^{t&#39;-t} \, r(s_{t&#39;}, a_{t&#39;}) \right)]
 \]</span></p>
 <h3 id="sec:linear-off-policy-actor-critic-off-pac"><span class="header-section-number">4.3.2</span> Linear Off-Policy Actor-Critic (Off-PAC)</h3>
 <p>The first off-policy actor-critic method was proposed by <span class="citation" data-cites="Degris2012">Degris, White, and Sutton (<a href="References.html#ref-Degris2012">2012</a>)</span> for linear approximators. Another way to express the objective function in policy search is by using the Bellman equation (here in the off-policy setting):</p>
@@ -288,37 +291,43 @@
 <p>where <span class="math inline">\((x)^+ = \max(0, x)\)</span> is the positive function. Transitions sampled from the replay buffer will participate to the off-policy learning only if their return is higher that the current value of the state, i.e. if they are good experiences compared to what is currently known (<span class="math inline">\(V_\varphi(s)\)</span>). The pseudo-algorithm is actually quite simple and simply extends the A2C procedure:</p>
 <hr />
 <ul>
-<li>Initialize the actor <span class="math inline">\(\pi_\theta\)</span> and the critic <span class="math inline">\(V_\varphi\)</span> with random weights.</li>
-<li>Initialize the prioritized experience replay buffer <span class="math inline">\(\mathcal{D}\)</span>.</li>
-<li>Observe the initial state <span class="math inline">\(s_0\)</span>.</li>
-<li>for <span class="math inline">\(t \in [0, T_\text{total}]\)</span>:
+<li><p>Initialize the actor <span class="math inline">\(\pi_\theta\)</span> and the critic <span class="math inline">\(V_\varphi\)</span> with random weights.</p></li>
+<li><p>Initialize the prioritized experience replay buffer <span class="math inline">\(\mathcal{D}\)</span>.</p></li>
+<li><p>Observe the initial state <span class="math inline">\(s_0\)</span>.</p></li>
+<li><p>for <span class="math inline">\(t \in [0, T_\text{total}]\)</span>:</p>
 <ul>
-<li>Initialize empty episode minibatch.</li>
-<li>for <span class="math inline">\(k \in [0, n]\)</span>: # Sample episode
+<li><p>Initialize empty episode minibatch.</p></li>
+<li><p>for <span class="math inline">\(k \in [0, n]\)</span>: # Sample episode</p>
 <ul>
-<li>Select a action <span class="math inline">\(a_k\)</span> using the actor <span class="math inline">\(\pi_\theta\)</span>.</li>
-<li>Perform the action <span class="math inline">\(a_k\)</span> and observe the next state <span class="math inline">\(s_{k+1}\)</span> and the reward <span class="math inline">\(r_{k+1}\)</span>.</li>
-<li>Store <span class="math inline">\((s_k, a_k, r_{k+1})\)</span> in the episode minibatch.</li>
+<li><p>Select a action <span class="math inline">\(a_k\)</span> using the actor <span class="math inline">\(\pi_\theta\)</span>.</p></li>
+<li><p>Perform the action <span class="math inline">\(a_k\)</span> and observe the next state <span class="math inline">\(s_{k+1}\)</span> and the reward <span class="math inline">\(r_{k+1}\)</span>.</p></li>
+<li><p>Store <span class="math inline">\((s_k, a_k, r_{k+1})\)</span> in the episode minibatch.</p></li>
 </ul></li>
-<li>if <span class="math inline">\(s_n\)</span> is not terminal: set <span class="math inline">\(R_n = V_\varphi(s_n)\)</span> with the critic, else <span class="math inline">\(R_n=0\)</span>.</li>
-<li>for <span class="math inline">\(k \in [n-1, 0]\)</span>: # Backwards iteration over the episode
+<li><p>if <span class="math inline">\(s_n\)</span> is not terminal: set <span class="math inline">\(R_n = V_\varphi(s_n)\)</span> with the critic, else <span class="math inline">\(R_n=0\)</span>.</p></li>
+<li><p>for <span class="math inline">\(k \in [n-1, 0]\)</span>: # Backwards iteration over the episode</p>
 <ul>
 <li>Update the discounted sum of rewards <span class="math inline">\(R_k = r_k + \gamma \, R_{k+1}\)</span> <strong>and store it in the replay buffer <span class="math inline">\(\mathcal{D}\)</span></strong>.</li>
 </ul></li>
-<li><p>Update the actor and the critic <strong>on-policy</strong> with the episode: <span class="math display">\[
-  \theta \leftarrow \theta + \eta \, \sum_k \nabla_\theta \log \pi_\theta(s_k, a_k) \, (R_k - V_\varphi(s_k))
-  \]</span> <span class="math display">\[
-  \varphi \leftarrow \varphi + \eta \, \sum_k \nabla_\varphi (R - V_\varphi(s_k))^2
-  \]</span></p></li>
-<li>for <span class="math inline">\(m \in [0, M]\)</span>:
+<li><p>Update the actor and the critic <strong>on-policy</strong> with the episode:</p></li>
+</ul>
+<p><span class="math display">\[
+      \theta \leftarrow \theta + \eta \, \sum_k \nabla_\theta \log \pi_\theta(s_k, a_k) \, (R_k - V_\varphi(s_k))
+  \]</span></p>
+<p><span class="math display">\[
+      \varphi \leftarrow \varphi + \eta \, \sum_k \nabla_\varphi (R - V_\varphi(s_k))^2
+  \]</span></p>
 <ul>
-<li>Sample a minibatch of K transitions <span class="math inline">\((s_k, a_k, R_k)\)</span> from the replay buffer <span class="math inline">\(\mathcal{D}\)</span> prioritized with high <span class="math inline">\((R_k - V_\varphi(s_k))\)</span>.</li>
-<li>Update the actor and the critic <strong>off-policy</strong> with self-imitation. <span class="math display">\[
-  \theta \leftarrow \theta + \eta \, \sum_k \nabla_\theta \log \pi_\theta(s_k, a_k) \, (R_k - V_\varphi(s_k))^+
-  \]</span> <span class="math display">\[
-  \varphi \leftarrow \varphi + \eta \, \sum_k \nabla_\varphi ((R_k - V_\varphi(s_k))^+)^2
-  \]</span></li>
-</ul></li>
+<li><p>for <span class="math inline">\(m \in [0, M]\)</span>:</p>
+<ul>
+<li><p>Sample a minibatch of K transitions <span class="math inline">\((s_k, a_k, R_k)\)</span> from the replay buffer <span class="math inline">\(\mathcal{D}\)</span> prioritized with high <span class="math inline">\((R_k - V_\varphi(s_k))\)</span>.</p></li>
+<li><p>Update the actor and the critic <strong>off-policy</strong> with self-imitation.</p></li>
+</ul>
+<p><span class="math display">\[
+      \theta \leftarrow \theta + \eta \, \sum_k \nabla_\theta \log \pi_\theta(s_k, a_k) \, (R_k - V_\varphi(s_k))^+
+  \]</span></p>
+<p><span class="math display">\[
+      \varphi \leftarrow \varphi + \eta \, \sum_k \nabla_\varphi ((R_k - V_\varphi(s_k))^+)^2
+  \]</span></p></li>
 </ul></li>
 </ul>
 <hr />

@@ -13,7 +13,7 @@ Works only when the model is fixed (AlphaGo) or easy to learn (symbolic, low-dim
 
 ## Dyna-Q
 
-[@Sutton1990]
+[@Sutton1990a]
 
 <https://medium.com/@ranko.mosic/online-planning-agent-dyna-q-algorithm-and-dyna-maze-example-sutton-and-barto-2016-7ad84a6dc52b>
 
@@ -32,7 +32,7 @@ Temporal Difference Model TDM [@Pong2018]: <http://bair.berkeley.edu/blog/2018/0
 
 Learning to Adapt: Meta-Learning for Model-Based Control, [@Clavera2018]
 
-The Predictron: End-To-End Learning and Planning [@Silver2016]
+The Predictron: End-To-End Learning and Planning [@Silver2016a]
 
 Model-Based Planning with Discrete and Continuous Actions [@Henaff2017]
 

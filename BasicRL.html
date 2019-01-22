@@ -10,7 +10,7 @@
 
   <link rel="stylesheet" href="assets/syntax.css">
   <link rel="stylesheet" href="assets/github.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+  <script src="/usr/share/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
   <!--[if lt IE 9]>
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
   <![endif]-->
@@ -247,7 +247,7 @@
 <li><strong>Off-policy</strong> methods use a second policy called the <em>behavior policy</em> to generate the episodes, but learn a different policy for exploitation, which can even be deterministic.</li>
 </ul>
 <p><span class="math inline">\(\epsilon\)</span>-soft policies are easy to create. The simplest one is the <strong><span class="math inline">\(\epsilon\)</span>-greedy</strong> action selection method, which assigns a probability <span class="math inline">\((1-\epsilon)\)</span> of selecting the greedy action (the one with the highest Q-value), and a probability <span class="math inline">\(\epsilon\)</span> of selecting any of the other available actions:</p>
-<p><span class="math display">\[ 
+<p><span class="math display">\[
     a_t = \begin{cases} a_t^* \quad \text{with probability} \quad (1 - \epsilon) \\
                        \text{any other action with probability } \epsilon \end{cases}
 \]</span></p>
@@ -363,7 +363,7 @@
 \]</span></p>
 <p>Actor-critic algorithms learn at the same time two aspects of the problem:</p>
 <ul>
-<li>A value function (e.g. <span class="math inline">\(V^\pi(s)\)</span>) to compute the TD error in the critic,</li>
+<li>A value function (e.g. <span class="math inline">\(V^\pi(s)\)</span>) to compute the TD error in the critic,</li>
 <li>A policy <span class="math inline">\(\pi\)</span> in the actor.</li>
 </ul>
 <p>Classical TD learning only learn a value function (<span class="math inline">\(V^\pi(s)\)</span> or <span class="math inline">\(Q^\pi(s, a)\)</span>): these methods are called <strong>value-based</strong> methods. Actor-critic architectures are particularly important in <strong>policy search</strong> methods (see Section <a href="./PolicyGradient.html#sec:policy-gradient-methods">4</a>).</p>
@@ -391,7 +391,7 @@
 \]</span></p>
 <p>If we learn over <span class="math inline">\(N\)</span> episodes of length <span class="math inline">\(T\)</span>, the loss function can be approximated as:</p>
 <p><span class="math display">\[
-    \mathcal{L}(\theta) \approx \frac{1}{N} \sum_{e=1}^M \sum_{t = 1}^T [R^e_t - Q_\theta(s_t, a_t)]^2
+    \mathcal{L}(\theta) \approx \frac{1}{N} \sum_{e=1}^N \sum_{t = 1}^T [R^e_t - Q_\theta(s_t, a_t)]^2
 \]</span></p>
 <ul>
 <li><p>Temporal difference methods: the Q-values should converge towards an estimation of the mean expected return.</p>

@@ -10,7 +10,7 @@
 
   <link rel="stylesheet" href="assets/syntax.css">
   <link rel="stylesheet" href="assets/github.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+  <script src="/usr/share/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
   <!--[if lt IE 9]>
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
   <![endif]-->
@@ -197,14 +197,18 @@
 <ul>
 <li><p>while not converged:</p>
 <ul>
-<li>Sample <span class="math inline">\(N\)</span> trajectories <span class="math inline">\(\{\tau_i\}\)</span> using the current policy <span class="math inline">\(\pi_\theta\)</span> and observe the returns <span class="math inline">\(\{R(\tau_i)\}\)</span>.</li>
-<li>Estimate the policy gradient as an average over the trajectories: <span class="math display">\[
- \nabla_\theta J(\theta) \approx \frac{1}{N} \sum_{i=1}^N \sum_{t=0}^T \nabla_\theta \log \pi_\theta(s_t, a_t) \, R(\tau_i)
-  \]</span></li>
-<li>Update the policy using gradient ascent: <span class="math display">\[
-  \theta \leftarrow \theta + \eta \, \nabla_\theta J(\theta)
-  \]</span></li>
-</ul></li>
+<li><p>Sample <span class="math inline">\(N\)</span> trajectories <span class="math inline">\(\{\tau_i\}\)</span> using the current policy <span class="math inline">\(\pi_\theta\)</span> and observe the returns <span class="math inline">\(\{R(\tau_i)\}\)</span>.</p></li>
+<li><p>Estimate the policy gradient as an average over the trajectories:</p></li>
+</ul>
+<p><span class="math display">\[
+     \nabla_\theta J(\theta) \approx \frac{1}{N} \sum_{i=1}^N \sum_{t=0}^T \nabla_\theta \log \pi_\theta(s_t, a_t) \, R(\tau_i)
+  \]</span></p>
+<ul>
+<li>Update the policy using gradient ascent:</li>
+</ul>
+<p><span class="math display">\[
+      \theta \leftarrow \theta + \eta \, \nabla_\theta J(\theta)
+  \]</span></p></li>
 </ul>
 <hr />
 <p>While very simple, the REINFORCE algorithm does not work very well in practice:</p>
@@ -301,7 +305,7 @@
 </ul>
 <p>Fig. <a href="#fig:actorcriticpolicy">20</a> shows the architecture of the algorithm. The only problem left is to provide the critic with the true Q-values.</p>
 <figure>
-<img src="img/policygradient.png" alt="Figure 20: Architecture of the policy gradient (PG) method." id="fig:actorcriticpolicy" style="width:65.0%" /><figcaption>Figure 20: Architecture of the policy gradient (PG) method.</figcaption>
+<img src="img/policygradient.png" alt="Figure 20: Architecture of the policy gradient (PG) method." id="fig:actorcriticpolicy" style="width:80.0%" /><figcaption>Figure 20: Architecture of the policy gradient (PG) method.</figcaption>
 </figure>
 <p>Most policy-gradient algorithms (A3C, DPPG, TRPO) are actor-critic architectures. Some remarks already:</p>
 <ul>

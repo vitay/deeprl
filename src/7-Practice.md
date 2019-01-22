@@ -9,7 +9,7 @@ Another documented critic on deep RL: <https://thegradient.pub/why-rl-is-flawed/
 
 ## Reward shaping
 
-Hindsight experience replay: @Andrychowicz2017 
+Hindsight experience replay: @Andrychowicz2017
 
 ## Simulation environments
 
@@ -29,7 +29,7 @@ for _ in range(1000):
 
 * OpenAI Universe <https://universe.openai.com>: a similar framework from OpenAI, but to control realistic video games (GTA V, etc).
 
-* Darts environment <https://github.com/DartEnv/dart-env>: a fork of gym to use the Darts simulator instead of Mujoco. 
+* Darts environment <https://github.com/DartEnv/dart-env>: a fork of gym to use the Darts simulator instead of Mujoco.
 
 * Roboschool <https://github.com/openai/roboschool>: another alternative to Mujoco for continuous robotic control, this time from openAI.
 
@@ -49,3 +49,5 @@ State-of-the-art algorithms in deep RL are already implemented and freely availa
 * `OpenAI Baselines` <https://github.com/openai/baselines> from OpenAI too: A2C, ACER, ACKTR, DDPG, DQN, PPO, TRPO...
 
 * `rlkit` <https://github.com/vitchyr/rlkit> from Vitchyr Pong (PhD student at Berkeley) with in particular model-based algorithms (TDM @Pong2018).
+
+* `chainer-rl` <https://github.com/chainer/chainerrl> implemented in Chainer (an alternative to tensorflow): A3C, ACER, Categorical DQN; DQN (including Double DQN, Persistent Advantage Learning (PAL), Double PAL, Dynamic Policy Programming (DPP)), DDPG, , PGT (Policy Gradient Theorem), PCL (Path Consistency Learning), PPO, TRPO.
