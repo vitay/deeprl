@@ -90,11 +90,12 @@
 <li><a href="./NaturalGradient.html#sec:proximal-policy-optimization-ppo"><span class="toc-section-number">4.5.4</span> Proximal Policy Optimization (PPO)</a></li>
 <li><a href="./NaturalGradient.html#sec:actor-critic-with-experience-replay-acer"><span class="toc-section-number">4.5.5</span> Actor-Critic with Experience Replay (ACER)</a></li>
 </ul></li>
-<li><a href="./OtherPolicyGradient.html#sec:distributional-learning"><span class="toc-section-number">4.6</span> Distributional learning</a><ul>
-<li><a href="./OtherPolicyGradient.html#sec:the-reactor"><span class="toc-section-number">4.6.1</span> The Reactor</a></li>
+<li><a href="./OtherPolicyGradient.html#sec:maximum-entropy-rl"><span class="toc-section-number">4.6</span> Maximum Entropy RL</a><ul>
+<li><a href="#sec:entropy-regularization-1"><span class="toc-section-number">4.6.1</span> Entropy regularization</a></li>
+<li><a href="./OtherPolicyGradient.html#sec:soft-actor-critic-sac"><span class="toc-section-number">4.6.2</span> Soft Actor-Critic (SAC)</a></li>
 </ul></li>
-<li><a href="./OtherPolicyGradient.html#sec:entropy-based-rl"><span class="toc-section-number">4.7</span> Entropy-based RL</a><ul>
-<li><a href="./OtherPolicyGradient.html#sec:soft-actor-critic-sac"><span class="toc-section-number">4.7.1</span> Soft Actor-Critic (SAC)</a></li>
+<li><a href="./OtherPolicyGradient.html#sec:distributional-learning"><span class="toc-section-number">4.7</span> Distributional learning</a><ul>
+<li><a href="./OtherPolicyGradient.html#sec:the-reactor"><span class="toc-section-number">4.7.1</span> The Reactor</a></li>
 </ul></li>
 <li><a href="./OtherPolicyGradient.html#sec:other-policy-search-methods"><span class="toc-section-number">4.8</span> Other policy search methods</a><ul>
 <li><a href="./OtherPolicyGradient.html#sec:stochastic-value-gradient-svg"><span class="toc-section-number">4.8.1</span> Stochastic Value Gradient (SVG)</a></li>
@@ -183,6 +184,9 @@
 </div>
 <div id="ref-Gu2016a">
 <p>Gu, Shixiang, Timothy Lillicrap, Ilya Sutskever, and Sergey Levine. 2016. “Continuous Deep Q-Learning with Model-Based Acceleration,” March. <a href="http://arxiv.org/abs/1603.00748">http://arxiv.org/abs/1603.00748</a>.</p>
+</div>
+<div id="ref-Haarnoja2017">
+<p>Haarnoja, Tuomas, Haoran Tang, Pieter Abbeel, and Sergey Levine. 2017. “Reinforcement Learning with Deep Energy-Based Policies.” <em>arXiv:1702.08165 [Cs]</em>, February. <a href="http://arxiv.org/abs/1702.08165">http://arxiv.org/abs/1702.08165</a>.</p>
 </div>
 <div id="ref-Haarnoja2018a">
 <p>Haarnoja, Tuomas, Aurick Zhou, Pieter Abbeel, and Sergey Levine. 2018. “Soft Actor-Critic: Off-Policy Maximum Entropy Deep Reinforcement Learning with a Stochastic Actor,” January. <a href="http://arxiv.org/abs/1801.01290">http://arxiv.org/abs/1801.01290</a>.</p>
@@ -280,6 +284,9 @@
 <div id="ref-Niu2011">
 <p>Niu, Feng, Benjamin Recht, Christopher Re, and Stephen J. Wright. 2011. “HOGWILD!: A Lock-Free Approach to Parallelizing Stochastic Gradient Descent.” In <em>Proc. Advances in Neural Information Processing Systems</em>, 21–21. <a href="http://arxiv.org/abs/1106.5730">http://arxiv.org/abs/1106.5730</a>.</p>
 </div>
+<div id="ref-ODonoghue2016">
+<p>O’Donoghue, Brendan, Remi Munos, Koray Kavukcuoglu, and Volodymyr Mnih. 2016. “Combining Policy Gradient and Q-Learning.” <em>arXiv:1611.01626 [Cs, Math, Stat]</em>, November. <a href="http://arxiv.org/abs/1611.01626">http://arxiv.org/abs/1611.01626</a>.</p>
+</div>
 <div id="ref-Oh2018">
 <p>Oh, Junhyuk, Yijie Guo, Satinder Singh, and Honglak Lee. 2018. “Self-Imitation Learning,” June. <a href="http://arxiv.org/abs/1806.05635">http://arxiv.org/abs/1806.05635</a>.</p>
 </div>
@@ -342,6 +349,12 @@
 </div>
 <div id="ref-Tang2010">
 <p>Tang, Jie, and Pieter Abbeel. 2010. “On a Connection Between Importance Sampling and the Likelihood Ratio Policy Gradient.” In <em>Adv. Neural Inf. Process. Syst.</em> <a href="http://rll.berkeley.edu/~jietang/pubs/nips10_Tang.pdf">http://rll.berkeley.edu/~jietang/pubs/nips10_Tang.pdf</a>.</p>
+</div>
+<div id="ref-Todorov2008">
+<p>Todorov, E. 2008. “General Duality Between Optimal Control and Estimation.” In <em>2008 47th IEEE Conference on Decision and Control</em>, 4286–92. <a href="https://doi.org/10.1109/CDC.2008.4739438">https://doi.org/10.1109/CDC.2008.4739438</a>.</p>
+</div>
+<div id="ref-Toussaint2009">
+<p>Toussaint, Marc. 2009. “Robot Trajectory Optimization Using Approximate Inference.” In <em>Proceedings of the 26th Annual International Conference on Machine Learning</em>, 1049–56. ICML ’09. New York, NY, USA: ACM. <a href="https://doi.org/10.1145/1553374.1553508">https://doi.org/10.1145/1553374.1553508</a>.</p>
 </div>
 <div id="ref-Uhlenbeck1930">
 <p>Uhlenbeck, G. E., and L.S Ornstein. 1930. “On the Theory of the Brownian Motion.” <em>Physical Review</em> 36. <a href="https://doi.org/10.1103/PhysRev.36.823">https://doi.org/10.1103/PhysRev.36.823</a>.</p>

@@ -90,11 +90,12 @@
 <li><a href="./NaturalGradient.html#sec:proximal-policy-optimization-ppo"><span class="toc-section-number">4.5.4</span> Proximal Policy Optimization (PPO)</a></li>
 <li><a href="./NaturalGradient.html#sec:actor-critic-with-experience-replay-acer"><span class="toc-section-number">4.5.5</span> Actor-Critic with Experience Replay (ACER)</a></li>
 </ul></li>
-<li><a href="./OtherPolicyGradient.html#sec:distributional-learning"><span class="toc-section-number">4.6</span> Distributional learning</a><ul>
-<li><a href="./OtherPolicyGradient.html#sec:the-reactor"><span class="toc-section-number">4.6.1</span> The Reactor</a></li>
+<li><a href="./OtherPolicyGradient.html#sec:maximum-entropy-rl"><span class="toc-section-number">4.6</span> Maximum Entropy RL</a><ul>
+<li><a href="#sec:entropy-regularization-1"><span class="toc-section-number">4.6.1</span> Entropy regularization</a></li>
+<li><a href="./OtherPolicyGradient.html#sec:soft-actor-critic-sac"><span class="toc-section-number">4.6.2</span> Soft Actor-Critic (SAC)</a></li>
 </ul></li>
-<li><a href="./OtherPolicyGradient.html#sec:entropy-based-rl"><span class="toc-section-number">4.7</span> Entropy-based RL</a><ul>
-<li><a href="./OtherPolicyGradient.html#sec:soft-actor-critic-sac"><span class="toc-section-number">4.7.1</span> Soft Actor-Critic (SAC)</a></li>
+<li><a href="./OtherPolicyGradient.html#sec:distributional-learning"><span class="toc-section-number">4.7</span> Distributional learning</a><ul>
+<li><a href="./OtherPolicyGradient.html#sec:the-reactor"><span class="toc-section-number">4.7.1</span> The Reactor</a></li>
 </ul></li>
 <li><a href="./OtherPolicyGradient.html#sec:other-policy-search-methods"><span class="toc-section-number">4.8</span> Other policy search methods</a><ul>
 <li><a href="./OtherPolicyGradient.html#sec:stochastic-value-gradient-svg"><span class="toc-section-number">4.8.1</span> Stochastic Value Gradient (SVG)</a></li>
@@ -282,7 +283,7 @@
 \]</span></p>
 <p>The quantity <span class="math inline">\(\hat{Q}(s_t, a_t) = \sum_{t&#39;=t}^T \gamma^{t&#39;-t} \, r(s_{t&#39;}, a_{t&#39;}, s_{t&#39;+1})\)</span> is called the <strong>reward to-go</strong> from the transition <span class="math inline">\((s_t, a_t)\)</span>, i.e. the discounted sum of future rewards after that transition. Quite obviously, the Q-value of that action is the mathematical expectation of this reward to-go.</p>
 <figure>
-<img src="img/rewardtogo.png" alt="Figure 19: The reward to-go is the sum of rewards gathered during a single trajectory after a transition (s, a). The Q-value of the action (s, a) is the expectation of the reward to-go. Taken from S. Levine’s lecture http://rll.berkeley.edu/deeprlcourse/." id="fig:rewardtogo" style="width:30.0%" /><figcaption>Figure 19: The reward to-go is the sum of rewards gathered during a single trajectory after a transition <span class="math inline">\((s, a)\)</span>. The Q-value of the action <span class="math inline">\((s, a)\)</span> is the expectation of the reward to-go. Taken from S. Levine’s lecture <a href="http://rll.berkeley.edu/deeprlcourse/" class="uri">http://rll.berkeley.edu/deeprlcourse/</a>.</figcaption>
+<img src="img/rewardtogo.png" alt="Figure 20: The reward to-go is the sum of rewards gathered during a single trajectory after a transition (s, a). The Q-value of the action (s, a) is the expectation of the reward to-go. Taken from S. Levine’s lecture http://rll.berkeley.edu/deeprlcourse/." id="fig:rewardtogo" style="width:30.0%" /><figcaption>Figure 20: The reward to-go is the sum of rewards gathered during a single trajectory after a transition <span class="math inline">\((s, a)\)</span>. The Q-value of the action <span class="math inline">\((s, a)\)</span> is the expectation of the reward to-go. Taken from S. Levine’s lecture <a href="http://rll.berkeley.edu/deeprlcourse/" class="uri">http://rll.berkeley.edu/deeprlcourse/</a>.</figcaption>
 </figure>
 <p><span class="math display">\[
  \nabla_\theta J(\theta) \approx \frac{1}{N} \sum_{i=1}^N \sum_{t=0}^T \nabla_\theta \log \pi_\theta(s_t, a_t) \, \hat{Q}(s_t, a_t)
@@ -303,9 +304,9 @@
 <li>The <strong>actor</strong> <span class="math inline">\(\pi_\theta(s, a)\)</span> learns to approximate the policy by maximizing Eq. <a href="#eq:policygradienttheoremapprox">10</a>.</li>
 <li>The <strong>critic</strong> <span class="math inline">\(Q_\varphi(s, a)\)</span> learns to estimate the policy by minimizing the mse with the true Q-values.</li>
 </ul>
-<p>Fig. <a href="#fig:actorcriticpolicy">20</a> shows the architecture of the algorithm. The only problem left is to provide the critic with the true Q-values.</p>
+<p>Fig. <a href="#fig:actorcriticpolicy">21</a> shows the architecture of the algorithm. The only problem left is to provide the critic with the true Q-values.</p>
 <figure>
-<img src="img/policygradient.png" alt="Figure 20: Architecture of the policy gradient (PG) method." id="fig:actorcriticpolicy" style="width:80.0%" /><figcaption>Figure 20: Architecture of the policy gradient (PG) method.</figcaption>
+<img src="img/policygradient.png" alt="Figure 21: Architecture of the policy gradient (PG) method." id="fig:actorcriticpolicy" style="width:80.0%" /><figcaption>Figure 21: Architecture of the policy gradient (PG) method.</figcaption>
 </figure>
 <p>Most policy-gradient algorithms (A3C, DPPG, TRPO) are actor-critic architectures. Some remarks already:</p>
 <ul>

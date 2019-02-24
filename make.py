@@ -33,7 +33,7 @@ for idx, f in enumerate(files):
 
 <!--PAGEBREAK-->
 
-""" 
+"""
 with open('document.md','w') as wfile:
     with open("src/config.yaml", "r") as rfile:
         header = rfile.read()
@@ -46,13 +46,22 @@ pdoc_args = [
     '--toc',
     '--mathjax',
     '--number-sections',
-    '--metadata=crossrefYaml:"assets/pandoc-crossref.yaml"',
+    '--metadata=crossrefYaml:"assets/pandoc-crossref.yaml"', # stopped working...
+    '--metadata=autoSectionLabels:true',
+    '--metadata=numberSections:true',
+    '--metadata=secPrefix:Section',
+    '--metadata=figPrefix:Fig.',
+    '--metadata=eqnPrefix:Eq.',
+    '--metadata=figureTitle:Figure',
+    '--metadata=linkReferences:true',
+    '--metadata=link-citations:true',
+    '--metadata=autoEqnLabels:false',
 ] + bib_pandoc
 
 # Convert the file to html
 print("Convert the whole document to html...")
 content = pypandoc.convert_text(
-    text, 
+    text,
     format='md',
     to='html',
     extra_args=pdoc_args,
@@ -86,20 +95,23 @@ for f in files:
     with open(filename, "r") as rfile:
         section = rfile.read()
     local_toc = pypandoc.convert_text(
-        section, 
+        section,
         format='md',
         to='html',
         extra_args=pdoc_args,
         filters=filters)
     for line in local_toc.split("\n"):
-        if re.search(r'toc-section-number', line): 
+        if re.search(r'toc-section-number', line):
             # Extract the section tag
-            tag = re.findall(r"href=\"\#sec:[\w-]+\"", line)[0]
-            new_tag = tag.replace('"#', '"./'+f.replace(".md", ".html").split('-')[1] + "#")
-            # Update the TOC
-            toc = toc.replace(tag, new_tag)
-            # Update the total content
-            content = content.replace(tag, new_tag)
+            try:
+                tag = re.findall(r"href=\"\#sec:[\w-]+\"", line)[0] # Changed in pandoc?
+                new_tag = tag.replace('"#', '"./'+f.replace(".md", ".html").split('-')[1] + "#")
+                # Update the TOC
+                toc = toc.replace(tag, new_tag)
+                # Update the total content
+                content = content.replace(tag, new_tag)
+            except Exception as e:
+                print("Could not translate", tag)
 
 # Update the refs
 refs = re.findall(r"href=\"\#ref-[\w]*\"", content)

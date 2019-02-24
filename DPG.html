@@ -90,11 +90,12 @@
 <li><a href="./NaturalGradient.html#sec:proximal-policy-optimization-ppo"><span class="toc-section-number">4.5.4</span> Proximal Policy Optimization (PPO)</a></li>
 <li><a href="./NaturalGradient.html#sec:actor-critic-with-experience-replay-acer"><span class="toc-section-number">4.5.5</span> Actor-Critic with Experience Replay (ACER)</a></li>
 </ul></li>
-<li><a href="./OtherPolicyGradient.html#sec:distributional-learning"><span class="toc-section-number">4.6</span> Distributional learning</a><ul>
-<li><a href="./OtherPolicyGradient.html#sec:the-reactor"><span class="toc-section-number">4.6.1</span> The Reactor</a></li>
+<li><a href="./OtherPolicyGradient.html#sec:maximum-entropy-rl"><span class="toc-section-number">4.6</span> Maximum Entropy RL</a><ul>
+<li><a href="#sec:entropy-regularization-1"><span class="toc-section-number">4.6.1</span> Entropy regularization</a></li>
+<li><a href="./OtherPolicyGradient.html#sec:soft-actor-critic-sac"><span class="toc-section-number">4.6.2</span> Soft Actor-Critic (SAC)</a></li>
 </ul></li>
-<li><a href="./OtherPolicyGradient.html#sec:entropy-based-rl"><span class="toc-section-number">4.7</span> Entropy-based RL</a><ul>
-<li><a href="./OtherPolicyGradient.html#sec:soft-actor-critic-sac"><span class="toc-section-number">4.7.1</span> Soft Actor-Critic (SAC)</a></li>
+<li><a href="./OtherPolicyGradient.html#sec:distributional-learning"><span class="toc-section-number">4.7</span> Distributional learning</a><ul>
+<li><a href="./OtherPolicyGradient.html#sec:the-reactor"><span class="toc-section-number">4.7.1</span> The Reactor</a></li>
 </ul></li>
 <li><a href="./OtherPolicyGradient.html#sec:other-policy-search-methods"><span class="toc-section-number">4.8</span> Other policy search methods</a><ul>
 <li><a href="./OtherPolicyGradient.html#sec:stochastic-value-gradient-svg"><span class="toc-section-number">4.8.1</span> Stochastic Value Gradient (SVG)</a></li>
@@ -158,9 +159,9 @@
 \]</span> <span class="math display">\[
     J(\varphi) = \mathbb{E}_{s \sim \rho_\mu}[(Q^\mu(s, \mu_\theta(s)) - Q_\varphi(s, \mu_\theta(s)))^2]
 \]</span></p>
-<p>Fig. <a href="#fig:dpg">24</a> outlines the actor-critic architecture of the DPG (deterministic policy gradient) method, to compare with the actor-critic architecture of the stochastic policy gradient (Fig. <a href="#fig:actorcriticpolicy">20</a>).</p>
+<p>Fig. <a href="#fig:dpg">25</a> outlines the actor-critic architecture of the DPG (deterministic policy gradient) method, to compare with the actor-critic architecture of the stochastic policy gradient (Fig. <a href="#fig:actorcriticpolicy">21</a>).</p>
 <figure>
-<img src="img/dpg.png" alt="Figure 24: Architecture of the DPG (deterministic policy gradient) method." id="fig:dpg" style="width:65.0%" /><figcaption>Figure 24: Architecture of the DPG (deterministic policy gradient) method.</figcaption>
+<img src="img/dpg.png" alt="Figure 25: Architecture of the DPG (deterministic policy gradient) method." id="fig:dpg" style="width:65.0%" /><figcaption>Figure 25: Architecture of the DPG (deterministic policy gradient) method.</figcaption>
 </figure>
 <p><span class="citation" data-cites="Silver2014">Silver et al. (<a href="References.html#ref-Silver2014">2014</a>)</span> investigated the performance of DPG using linear function approximators and showed that it compared positively to stochastic algorithms in high-dimensional or continuous action spaces. However, non-linear function approximators such as deep NN would not work yet.</p>
 <h3 id="sec:deep-deterministic-policy-gradient-ddpg"><span class="header-section-number">4.4.2</span> Deep Deterministic Policy Gradient (DDPG)</h3>
@@ -185,13 +186,13 @@
 \]</span></p>
 <p>This additive noise could be anything, but the most practical choise is to use an <strong>Ornstein-Uhlenbeck</strong> process <span class="citation" data-cites="Uhlenbeck1930">(Uhlenbeck and Ornstein <a href="References.html#ref-Uhlenbeck1930">1930</a>)</span> to generate temporally correlated noise with zero mean. Ornstein-Uhlenbeck processes are used in physics to model the velocity of Brownian particles with friction. It updates a variable <span class="math inline">\(x_t\)</span> using a stochastic differential equation (SDE):</p>
 <p><span class="math display">\[ dx_t = \theta (\mu - x_t) dt + \sigma dW_t \qquad \text{with} \qquad dW_t = \mathcal{N}(0, dt)\]</span></p>
-<p><span class="math inline">\(\mu\)</span> is the mean of the process (usually 0), <span class="math inline">\(\theta\)</span> is the friction (how fast it varies with noise) and <span class="math inline">\(\sigma\)</span> controls the amount of noise. Fig. <a href="#fig:OU">25</a> shows three independent runs of a Ornstein-Uhlenbeck process: successive values of the variable <span class="math inline">\(x_t\)</span> vary randomly but coherently over time.</p>
+<p><span class="math inline">\(\mu\)</span> is the mean of the process (usually 0), <span class="math inline">\(\theta\)</span> is the friction (how fast it varies with noise) and <span class="math inline">\(\sigma\)</span> controls the amount of noise. Fig. <a href="#fig:OU">26</a> shows three independent runs of a Ornstein-Uhlenbeck process: successive values of the variable <span class="math inline">\(x_t\)</span> vary randomly but coherently over time.</p>
 <figure>
-<img src="img/OU.png" alt="Figure 25: Three independent runs of an Ornstein-Uhlenbeck process with \mu=0, \sigma=0.3, \theta=0.15 and dt=0.1. The code is adapted from https://gist.github.com/jimfleming/9a62b2f7ed047ff78e95b5398e955b9e" id="fig:OU" style="width:80.0%" /><figcaption>Figure 25: Three independent runs of an Ornstein-Uhlenbeck process with <span class="math inline">\(\mu=0\)</span>, <span class="math inline">\(\sigma=0.3\)</span>, <span class="math inline">\(\theta=0.15\)</span> and <span class="math inline">\(dt=0.1\)</span>. The code is adapted from <a href="https://gist.github.com/jimfleming/9a62b2f7ed047ff78e95b5398e955b9e" class="uri">https://gist.github.com/jimfleming/9a62b2f7ed047ff78e95b5398e955b9e</a></figcaption>
+<img src="img/OU.png" alt="Figure 26: Three independent runs of an Ornstein-Uhlenbeck process with \mu=0, \sigma=0.3, \theta=0.15 and dt=0.1. The code is adapted from https://gist.github.com/jimfleming/9a62b2f7ed047ff78e95b5398e955b9e" id="fig:OU" style="width:80.0%" /><figcaption>Figure 26: Three independent runs of an Ornstein-Uhlenbeck process with <span class="math inline">\(\mu=0\)</span>, <span class="math inline">\(\sigma=0.3\)</span>, <span class="math inline">\(\theta=0.15\)</span> and <span class="math inline">\(dt=0.1\)</span>. The code is adapted from <a href="https://gist.github.com/jimfleming/9a62b2f7ed047ff78e95b5398e955b9e" class="uri">https://gist.github.com/jimfleming/9a62b2f7ed047ff78e95b5398e955b9e</a></figcaption>
 </figure>
-<p>The architecture of the DDPG algorithm is depicted on Fig. <a href="#fig:ddpg">26</a>.</p>
+<p>The architecture of the DDPG algorithm is depicted on Fig. <a href="#fig:ddpg">27</a>.</p>
 <figure>
-<img src="img/ddpg.png" alt="Figure 26: Architecture of the DDPG (deep deterministic policy gradient) algorithm." id="fig:ddpg" style="width:70.0%" /><figcaption>Figure 26: Architecture of the DDPG (deep deterministic policy gradient) algorithm.</figcaption>
+<img src="img/ddpg.png" alt="Figure 27: Architecture of the DDPG (deep deterministic policy gradient) algorithm." id="fig:ddpg" style="width:70.0%" /><figcaption>Figure 27: Architecture of the DDPG (deep deterministic policy gradient) algorithm.</figcaption>
 </figure>
 <p>The pseudo-algorithm is as follows:</p>
 <hr />
@@ -234,7 +235,7 @@
 <h3 id="sec:distributed-distributional-ddpg-d4pg"><span class="header-section-number">4.4.3</span> Distributed Distributional DDPG (D4PG)</h3>
 <p>Distributed Distributional DDPG <span class="citation" data-cites="Barth-Maron2018">(D4PG, Barth-Maron et al. <a href="#ref-Barth-Maron2018">2018</a>)</span> proposed recently several improvements on DDPG to make it more efficient:</p>
 <ol type="1">
-<li><p>The critic is trained using <strong>distributional learning</strong> <span class="citation" data-cites="Bellemare2017">(Bellemare, Dabney, and Munos <a href="References.html#ref-Bellemare2017">2017</a>)</span> instead of classical Q-learning to improve the stability of learning in the actor (less variance). See Section <a href="./OtherPolicyGradient.html#sec:distributional-learning">4.6</a> for more explanations.</p></li>
+<li><p>The critic is trained using <strong>distributional learning</strong> <span class="citation" data-cites="Bellemare2017">(Bellemare, Dabney, and Munos <a href="References.html#ref-Bellemare2017">2017</a>)</span> instead of classical Q-learning to improve the stability of learning in the actor (less variance). See Section <a href="./OtherPolicyGradient.html#sec:distributional-learning">4.7</a> for more explanations.</p></li>
 <li><p>The critic uses <strong>n-step</strong> returns instead of simple one-step TD returns as in A3C (Section <a href="./ActorCritic.html#sec:advantage-actor-critic-methods">4.2</a>, <span class="citation" data-cites="Mnih2016">Mnih et al. (<a href="References.html#ref-Mnih2016">2016</a>)</span>).</p></li>
 <li><p><strong>Multiple Distributed Parallel Actors</strong> gather <span class="math inline">\((s, a, r, s&#39;)\)</span> transitions in parallel and write them to the same replay buffer.</p></li>
 <li><p>The replay buffer uses <strong>Prioritized Experience Replay</strong> <span class="citation" data-cites="Schaul2015">(Schaul et al. <a href="References.html#ref-Schaul2015">2015</a>)</span> to sample transitions based the information gain.</p></li>

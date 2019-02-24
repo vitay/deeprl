@@ -35,6 +35,7 @@ css: assets/github.css
 #mathjax: /usr/share/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML
 mathjax: https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML
 
+
 # Latex
 geometry: "margin=1in"
 fontfamily: "roboto"
@@ -674,9 +675,9 @@ RNNs are particularly useful for deep RL when considering POMDPs, i.e. partially
 
 ## Limitations of deep neural networks for function approximation
 
-The goal of value-based deep RL is to approximate the Q-value of each possible state-action pair using a deep (convolutional) neural network. As shown on @fig:functionapprox, the network can either take a state-action pair as input and return a single output value, or take only the state as input and return the Q-value of all possible actions (only possible if the action space is discrete), In both cases, the goal is to learn estimates $Q_\theta(s, a)$ with a NN with parameters $\theta$.
+The goal of value-based deep RL is to approximate the Q-value of each possible state-action pair using a deep (convolutional) neural network. As shown on @fig:functionapprox2, the network can either take a state-action pair as input and return a single output value, or take only the state as input and return the Q-value of all possible actions (only possible if the action space is discrete), In both cases, the goal is to learn estimates $Q_\theta(s, a)$ with a NN with parameters $\theta$.
 
-![Function approximators can either associate a state-action pair $(s, a)$ to its Q-value (left), or associate a state $s$ to the Q-values of all actions possible in that state (right).](img/functionapprox.png){width=40%}
+![Function approximators can either associate a state-action pair $(s, a)$ to its Q-value (left), or associate a state $s$ to the Q-values of all actions possible in that state (right).](img/functionapprox.png){#fig:functionapprox2 width=60%}
 
 When using Q-learning, we have already seen in @sec:function-approximation that the problem is a regression problem, where the following mse loss function has to be minimized:
 
@@ -2557,6 +2558,30 @@ ACER improved the performance and/or the sample efficiency of the state-of-the-a
 
 <!--PAGEBREAK-->
 
+
+## Maximum Entropy RL
+
+**Work in progress**
+
+### Entropy regularization
+
+@Todorov2008 a stochastic policy emerges as the optimal answer when we consider the connection between optimal control and probabilistic inference
+
+@Toussaint2009 Maximum entropy RL
+
+@ODonoghue2016 Combining policy gradient and Q-learning
+
+@Haarnoja2017 Reinforcement Learning with Deep Energy-Based Policies
+
+### Soft Actor-Critic (SAC)
+
+
+* Main limitations of on-policy algorithms: high sample complexity and poor convergence properties, leading to difficult tuining of hyperparameters.
+
+* Off-policy reduces the sample complexity, but increases the variance = instability.
+
+@Haarnoja2018a
+
 ## Distributional learning
 
 All RL methods based on the Bellman equations use the expectation operator to average returns and compute the values of states and actions:
@@ -2574,13 +2599,6 @@ See <https://deepmind.com/blog/going-beyond-average-reinforcement-learning/> for
 
 @Gruslys2017
 
-
-## Entropy-based RL
-
-
-### Soft Actor-Critic (SAC)
-
-@Haarnoja2018a
 
 ## Other policy search methods
 
@@ -2605,20 +2623,19 @@ See <https://deepmind.com/blog/going-beyond-average-reinforcement-learning/> for
 
 ## Comparison between value-based and policy gradient methods
 
-Having now reviewed both value-based methods (DQN and its variants) and policy gradient methods (A3C, DDPG, PPO), the question is which method to choose? While not much happens right now for value-based methods, policy gradient methods are atrracting a lot of attention, as they are able to learn policies in continuous action spaces, what is very important in robotics.  <https://flyyufelix.github.io/2017/10/12/dqn-vs-pg.html> summarizes the advantages and inconvenients of policy gradient methods.
+Having now reviewed both value-based methods (DQN and its variants) and policy gradient methods (A3C, DDPG, PPO), the question is which method to choose? While not much happens right now for value-based methods, policy gradient methods are attracting a lot of attention, as they are able to learn policies in continuous action spaces, what is very important in robotics.  <https://flyyufelix.github.io/2017/10/12/dqn-vs-pg.html> summarizes the advantages and inconvenients of policy gradient methods.
 
-Advantages:
+Advantages of PG:
 
-* Better convergence properties.
+* Better convergence properties, more stable [@Duan2016].
 * Effective in high-dimensional or continuous action spaces.
 * Can learn stochastic policies.
 
-Disadvantages:
+Disadvantages of PG:
 
 * Typically converge to a local rather than global optimum.
-* Evaluating a policy is typically inefficient and high variance.
-
-Policy gradient methods are therefore usually less sample efficient, but can be more stable than value-based methods [@Duan2016].
+* Evaluating a policy is often inefficient and having a high variance.
+* Worse sample efficiency (but it is getting better).
 
 ## Gradient-free policy search
 
