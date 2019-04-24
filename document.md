@@ -2565,7 +2565,7 @@ ACER improved the performance and/or the sample efficiency of the state-of-the-a
 
 ### Entropy regularization
 
-@Todorov2008 a stochastic policy emerges as the optimal answer when we consider the connection between optimal control and probabilistic inference
+@Todorov2008 a stochastic policy emerges as the optimal answer when we consider the connection between optimal control and probabilistic inference.
 
 @Toussaint2009 Maximum entropy RL
 

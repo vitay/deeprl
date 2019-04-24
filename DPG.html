@@ -137,7 +137,7 @@
 <p><span class="math display">\[
     J(\theta) =  \mathbb{E}_{s \sim \rho_\mu}[R(s, \mu_\theta(s))]
 \]</span></p>
-<p>As in the stochastic case, the distribution of states reachable by the policy <span class="math inline">\(\rho_\mu\)</span> is impossible to estimate, so we will have to perform approximations. Building on <span class="citation" data-cites="Hafner2011">Hafner and Riedmiller (<a href="References.html#ref-Hafner2011">2011</a>)</span>, <span class="citation" data-cites="Silver2014">Silver et al. (<a href="References.html#ref-Silver2014">2014</a>)</span> showed how to obtain a usable gradient for the objective function when the policy is deterministic.</p>
+<p>As in the stochastic case, the distribution of states reachable by the policy <span class="math inline">\(\rho_\mu\)</span> is impossible to estimate, so we will have to perform approximations. Building on <span class="citation" data-cites="Hafner2011">Hafner and Riedmiller (<a href="References.html#ref-Hafner2011" role="doc-biblioref">2011</a>)</span>, <span class="citation" data-cites="Silver2014">Silver et al. (<a href="References.html#ref-Silver2014" role="doc-biblioref">2014</a>)</span> showed how to obtain a usable gradient for the objective function when the policy is deterministic.</p>
 <p>Considering that the Q-value of an action is the expectation of the reward to-go after that action <span class="math inline">\(Q^\pi(s, a) = \mathbb{E}_\pi[R(s, a)]\)</span>, maximizing the returns or maximizing the true Q-value of all actions leads to the same optimal policy. This is the basic idea behind dynamic programming (see Section <a href="./BasicRL.html#sec:dynamic-programming">2.1.3</a>). where <em>policy evaluation</em> first finds the true Q-value of all state-action pairs and <em>policy improvement</em> changes the policy by selecting the action with the maximal Q-value <span class="math inline">\(a^*_t = \text{argmax}_a Q_\theta(s_t, a)\)</span>.</p>
 <p>In the continuous case, we will simply state that the gradient of the objective function is the same as the gradient of the Q-value. Supposing we have an unbiased estimate <span class="math inline">\(Q^\mu(s, a)\)</span> of the value of any action in <span class="math inline">\(s\)</span>, changing the policy <span class="math inline">\(\mu_\theta(s)\)</span> in the direction of <span class="math inline">\(\nabla_\theta Q^\mu(s, a)\)</span> leads to an action with a higher Q-value, therefore with a higher associated return:</p>
 <p><span class="math display">\[
@@ -153,7 +153,7 @@
 \]</span></p>
 <p>The first term defines of the Q-value of an action changes when one varies slightly the action (if I move my joint a bit more to the right, do I get a higher Q-value, hence more reward?), the second term defines how the action changes when the parameters <span class="math inline">\(\theta\)</span> of the actor change (which weights should be changed in order to produce that action with a slightly higher Q-value?).</p>
 <p>We already see an <strong>actor-critic</strong> architecture emerging from this equation: <span class="math inline">\(\nabla_\theta \mu_\theta(s)\)</span> only depends on the parameterized actor, while <span class="math inline">\(\nabla_a Q^\mu(s, a)\)</span> is a sort of critic, telling the actor in which direction to change its policy: towards actions associated with more reward.</p>
-<p>As in the stochastic policy gradient theorem, the question is now how to obtain an unbiased estimate of the Q-value of any action and compute its gradient. <span class="citation" data-cites="Silver2014">Silver et al. (<a href="References.html#ref-Silver2014">2014</a>)</span> showed that it is possible to use a function approximator <span class="math inline">\(Q_\varphi(s, a)\)</span> as long as it is compatible and minimize the quadratic error with the true Q-values:</p>
+<p>As in the stochastic policy gradient theorem, the question is now how to obtain an unbiased estimate of the Q-value of any action and compute its gradient. <span class="citation" data-cites="Silver2014">Silver et al. (<a href="References.html#ref-Silver2014" role="doc-biblioref">2014</a>)</span> showed that it is possible to use a function approximator <span class="math inline">\(Q_\varphi(s, a)\)</span> as long as it is compatible and minimize the quadratic error with the true Q-values:</p>
 <p><span class="math display">\[
     \nabla_\theta J(\theta) = \mathbb{E}_{s \sim \rho_\mu}[\nabla_\theta \mu_\theta(s) \times \nabla_a Q_\varphi(s, a) |_{a = \mu_\theta(s)}]
 \]</span> <span class="math display">\[
@@ -163,15 +163,15 @@
 <figure>
 <img src="img/dpg.png" alt="Figure 25: Architecture of the DPG (deterministic policy gradient) method." id="fig:dpg" style="width:65.0%" /><figcaption>Figure 25: Architecture of the DPG (deterministic policy gradient) method.</figcaption>
 </figure>
-<p><span class="citation" data-cites="Silver2014">Silver et al. (<a href="References.html#ref-Silver2014">2014</a>)</span> investigated the performance of DPG using linear function approximators and showed that it compared positively to stochastic algorithms in high-dimensional or continuous action spaces. However, non-linear function approximators such as deep NN would not work yet.</p>
+<p><span class="citation" data-cites="Silver2014">Silver et al. (<a href="References.html#ref-Silver2014" role="doc-biblioref">2014</a>)</span> investigated the performance of DPG using linear function approximators and showed that it compared positively to stochastic algorithms in high-dimensional or continuous action spaces. However, non-linear function approximators such as deep NN would not work yet.</p>
 <h3 id="sec:deep-deterministic-policy-gradient-ddpg"><span class="header-section-number">4.4.2</span> Deep Deterministic Policy Gradient (DDPG)</h3>
-<p><span class="citation" data-cites="Lillicrap2015">Lillicrap et al. (<a href="References.html#ref-Lillicrap2015">2015</a>)</span> extended the DPG approach to work with non-linear function approximators. In fact, they combined ideas from DQN and DPG to create a very successful algorithm able to solve continuous problems off-policy, the <strong>deep deterministic policy gradient</strong> (DDPG) algorithm..</p>
+<p><span class="citation" data-cites="Lillicrap2015">Lillicrap et al. (<a href="References.html#ref-Lillicrap2015" role="doc-biblioref">2015</a>)</span> extended the DPG approach to work with non-linear function approximators. In fact, they combined ideas from DQN and DPG to create a very successful algorithm able to solve continuous problems off-policy, the <strong>deep deterministic policy gradient</strong> (DDPG) algorithm..</p>
 <p>The key ideas borrowed from DQN are:</p>
 <ul>
 <li>Using an <strong>experience replay memory</strong> to store past transitions and learn off-policy.</li>
 <li>Using <strong>target networks</strong> to stabilize learning.</li>
 </ul>
-<p>They modified the update frequency of the target networks originally used in DQN. In DQN, the target networks are updated with the parameters of the trained networks every couple of thousands of steps. The target networks therefore change a lot between two updates, but not very often. <span class="citation" data-cites="Lillicrap2015">Lillicrap et al. (<a href="References.html#ref-Lillicrap2015">2015</a>)</span> found that it is actually better to make the target networks slowly track the trained networks, by updating their parameters after each update of the trained network using a sliding average for both the actor and the critic:</p>
+<p>They modified the update frequency of the target networks originally used in DQN. In DQN, the target networks are updated with the parameters of the trained networks every couple of thousands of steps. The target networks therefore change a lot between two updates, but not very often. <span class="citation" data-cites="Lillicrap2015">Lillicrap et al. (<a href="References.html#ref-Lillicrap2015" role="doc-biblioref">2015</a>)</span> found that it is actually better to make the target networks slowly track the trained networks, by updating their parameters after each update of the trained network using a sliding average for both the actor and the critic:</p>
 <p><span class="math display">\[
     \theta&#39; = \tau \, \theta + (1-\tau) \, \theta&#39;
 \]</span></p>
@@ -184,7 +184,7 @@
 <p><span class="math display">\[
     a_t = \mu_\theta(s_t) + \xi
 \]</span></p>
-<p>This additive noise could be anything, but the most practical choise is to use an <strong>Ornstein-Uhlenbeck</strong> process <span class="citation" data-cites="Uhlenbeck1930">(Uhlenbeck and Ornstein <a href="References.html#ref-Uhlenbeck1930">1930</a>)</span> to generate temporally correlated noise with zero mean. Ornstein-Uhlenbeck processes are used in physics to model the velocity of Brownian particles with friction. It updates a variable <span class="math inline">\(x_t\)</span> using a stochastic differential equation (SDE):</p>
+<p>This additive noise could be anything, but the most practical choise is to use an <strong>Ornstein-Uhlenbeck</strong> process <span class="citation" data-cites="Uhlenbeck1930">(Uhlenbeck and Ornstein <a href="References.html#ref-Uhlenbeck1930" role="doc-biblioref">1930</a>)</span> to generate temporally correlated noise with zero mean. Ornstein-Uhlenbeck processes are used in physics to model the velocity of Brownian particles with friction. It updates a variable <span class="math inline">\(x_t\)</span> using a stochastic differential equation (SDE):</p>
 <p><span class="math display">\[ dx_t = \theta (\mu - x_t) dt + \sigma dW_t \qquad \text{with} \qquad dW_t = \mathcal{N}(0, dt)\]</span></p>
 <p><span class="math inline">\(\mu\)</span> is the mean of the process (usually 0), <span class="math inline">\(\theta\)</span> is the friction (how fast it varies with noise) and <span class="math inline">\(\sigma\)</span> controls the amount of noise. Fig. <a href="#fig:OU">26</a> shows three independent runs of a Ornstein-Uhlenbeck process: successive values of the variable <span class="math inline">\(x_t\)</span> vary randomly but coherently over time.</p>
 <figure>
@@ -197,29 +197,29 @@
 <p>The pseudo-algorithm is as follows:</p>
 <hr />
 <ul>
-<li>Initialize actor network <span class="math inline">\(\mu_{\theta}\)</span> and critic <span class="math inline">\(Q_\varphi\)</span> with random weights.</li>
-<li>Create the target networks <span class="math inline">\(\mu_{\theta&#39;}\)</span> and <span class="math inline">\(Q_{\varphi&#39;}\)</span>.</li>
+<li><p>Initialize actor network <span class="math inline">\(\mu_{\theta}\)</span> and critic <span class="math inline">\(Q_\varphi\)</span> with random weights.</p></li>
+<li><p>Create the target networks <span class="math inline">\(\mu_{\theta&#39;}\)</span> and <span class="math inline">\(Q_{\varphi&#39;}\)</span>.</p></li>
 <li><p>Initialize experience replay memory <span class="math inline">\(\mathcal{D}\)</span> of maximal size <span class="math inline">\(N\)</span>.</p></li>
-<li>for episode <span class="math inline">\(\in [1, M]\)</span>:
+<li><p>for episode <span class="math inline">\(\in [1, M]\)</span>:</p>
 <ul>
 <li>Initialize random process <span class="math inline">\(\xi\)</span>.</li>
 <li>Observe the initial state <span class="math inline">\(s_0\)</span>.</li>
 <li>for <span class="math inline">\(t \in [0, T_\text{max}]\)</span>:
 <ul>
-<li>Select the action <span class="math inline">\(a_t = \mu_\theta(s_t) + \xi\)</span> according to the current policy and the noise.</li>
-<li>Perform the action <span class="math inline">\(a_t\)</span> and observe the next state <span class="math inline">\(s_{t+1}\)</span> and the reward <span class="math inline">\(r_{t+1}\)</span>.</li>
+<li><p>Select the action <span class="math inline">\(a_t = \mu_\theta(s_t) + \xi\)</span> according to the current policy and the noise.</p></li>
+<li><p>Perform the action <span class="math inline">\(a_t\)</span> and observe the next state <span class="math inline">\(s_{t+1}\)</span> and the reward <span class="math inline">\(r_{t+1}\)</span>.</p></li>
 <li><p>Store <span class="math inline">\((s_t, a_t, r_{t+1}, s_{t+1})\)</span> in the experience replay memory.</p></li>
-<li>Sample a minibatch of <span class="math inline">\(N\)</span> transitions randomly from <span class="math inline">\(\mathcal{D}\)</span>.</li>
-<li>For each transition <span class="math inline">\((s_k, a_k, r_k, s&#39;_k)\)</span> in the minibatch:
+<li><p>Sample a minibatch of <span class="math inline">\(N\)</span> transitions randomly from <span class="math inline">\(\mathcal{D}\)</span>.</p></li>
+<li><p>For each transition <span class="math inline">\((s_k, a_k, r_k, s&#39;_k)\)</span> in the minibatch:</p>
 <ul>
 <li>Compute the target value using target networks <span class="math inline">\(y_k = r_k + \gamma \, Q_{\varphi&#39;}(s&#39;_k, \mu_{\theta&#39;}(s&#39;_k))\)</span>.</li>
 </ul></li>
-<li>Update the critic by minimizing: <span class="math display">\[
+<li><p>Update the critic by minimizing: <span class="math display">\[
   \mathcal{L}(\varphi) = \frac{1}{N} \sum_k (y_k - Q_\varphi(s_k, a_k))^2
-  \]</span></li>
-<li>Update the actor using the sampled policy gradient: <span class="math display">\[
+  \]</span></p></li>
+<li><p>Update the actor using the sampled policy gradient: <span class="math display">\[
   \nabla_\theta J(\theta) = \frac{1}{N} \sum_k \nabla_\theta \mu_\theta(s_k) \times \nabla_a Q_\varphi(s_k, a) |_{a = \mu_\theta(s_k)}
-  \]</span></li>
+  \]</span></p></li>
 <li><p>Update the target networks: <span class="math display">\[\theta&#39; \leftarrow \tau \theta + (1-\tau) \, \theta&#39;\]</span> <span class="math display">\[\varphi&#39; \leftarrow \tau \varphi + (1-\tau) \, \varphi&#39;\]</span></p></li>
 </ul></li>
 </ul></li>
@@ -230,15 +230,15 @@
     \nabla_a Q_\varphi(s, a) \approx \frac{Q_\varphi(s, a + da) - Q_\varphi(s, a)}{da}
 \]</span></p>
 <p>Note that the DDPG algorithm is <strong>off-policy</strong>: the samples used to train the actor come from the replay buffer, i.e. were generated by an older version of the target policy. DDPG does not rely on importance sampling: as the policy is deterministic (we maximize <span class="math inline">\(\mathbb{E}_{s}[Q(s, \mu_\theta(s))]\)</span>), there is no need to balance the probabilities of the behavior and target policies (with stochastic policies, one should maximize <span class="math inline">\(\mathbb{E}_{s}[\sum_{a\in\mathcal{A}} \pi(s, a) Q(s, a)]\)</span>). In other words, the importance sampling weight can safely be set to 1 for deterministic policies.</p>
-<p>DDPG has rapidly become the state-of-the-art model-free method for continuous action spaces (although now PPO is preferred). It is able to learn efficent policies on most contiuous problems, either pixel-based or using individual state variables. In the original DDPG paper, they showed that <em>batch normalization</em> <span class="citation" data-cites="Ioffe2015">(Ioffe and Szegedy <a href="References.html#ref-Ioffe2015">2015</a>)</span> is crucial in stabilizing the training of deep networks on such problems. Its main limitation is its high sample complexity. Distributed versions of DDPG have been proposed to speed up learning, similarly to the parallel actor learners of A3C <span class="citation" data-cites="Lotzsch2017 Popov2017 Barth-Maron2018">(Lötzsch, Vitay, and Hamker <a href="References.html#ref-Lotzsch2017">2017</a>; Popov et al. <a href="References.html#ref-Popov2017">2017</a>; Barth-Maron et al. <a href="#ref-Barth-Maron2018">2018</a>)</span>.</p>
+<p>DDPG has rapidly become the state-of-the-art model-free method for continuous action spaces (although now PPO is preferred). It is able to learn efficent policies on most contiuous problems, either pixel-based or using individual state variables. In the original DDPG paper, they showed that <em>batch normalization</em> <span class="citation" data-cites="Ioffe2015">(Ioffe and Szegedy <a href="References.html#ref-Ioffe2015" role="doc-biblioref">2015</a>)</span> is crucial in stabilizing the training of deep networks on such problems. Its main limitation is its high sample complexity. Distributed versions of DDPG have been proposed to speed up learning, similarly to the parallel actor learners of A3C <span class="citation" data-cites="Lotzsch2017 Popov2017 Barth-Maron2018">(Lötzsch, Vitay, and Hamker <a href="References.html#ref-Lotzsch2017" role="doc-biblioref">2017</a>; Popov et al. <a href="References.html#ref-Popov2017" role="doc-biblioref">2017</a>; Barth-Maron et al. <a href="#ref-Barth-Maron2018" role="doc-biblioref">2018</a>)</span>.</p>
 <p><strong>Additional references:</strong> see <a href="http://pemami4911.github.io/blog/2016/08/21/ddpg-rl.html" class="uri">http://pemami4911.github.io/blog/2016/08/21/ddpg-rl.html</a> for additional explanations and step-by-step tensorflow code and <a href="https://lilianweng.github.io/lil-log/2018/04/08/policy-gradient-algorithms.html" class="uri">https://lilianweng.github.io/lil-log/2018/04/08/policy-gradient-algorithms.html</a> for contextual explanations.</p>
 <h3 id="sec:distributed-distributional-ddpg-d4pg"><span class="header-section-number">4.4.3</span> Distributed Distributional DDPG (D4PG)</h3>
-<p>Distributed Distributional DDPG <span class="citation" data-cites="Barth-Maron2018">(D4PG, Barth-Maron et al. <a href="#ref-Barth-Maron2018">2018</a>)</span> proposed recently several improvements on DDPG to make it more efficient:</p>
+<p>Distributed Distributional DDPG <span class="citation" data-cites="Barth-Maron2018">(D4PG, Barth-Maron et al. <a href="#ref-Barth-Maron2018" role="doc-biblioref">2018</a>)</span> proposed recently several improvements on DDPG to make it more efficient:</p>
 <ol type="1">
-<li><p>The critic is trained using <strong>distributional learning</strong> <span class="citation" data-cites="Bellemare2017">(Bellemare, Dabney, and Munos <a href="References.html#ref-Bellemare2017">2017</a>)</span> instead of classical Q-learning to improve the stability of learning in the actor (less variance). See Section <a href="./OtherPolicyGradient.html#sec:distributional-learning">4.7</a> for more explanations.</p></li>
-<li><p>The critic uses <strong>n-step</strong> returns instead of simple one-step TD returns as in A3C (Section <a href="./ActorCritic.html#sec:advantage-actor-critic-methods">4.2</a>, <span class="citation" data-cites="Mnih2016">Mnih et al. (<a href="References.html#ref-Mnih2016">2016</a>)</span>).</p></li>
+<li><p>The critic is trained using <strong>distributional learning</strong> <span class="citation" data-cites="Bellemare2017">(Bellemare, Dabney, and Munos <a href="References.html#ref-Bellemare2017" role="doc-biblioref">2017</a>)</span> instead of classical Q-learning to improve the stability of learning in the actor (less variance). See Section <a href="./OtherPolicyGradient.html#sec:distributional-learning">4.7</a> for more explanations.</p></li>
+<li><p>The critic uses <strong>n-step</strong> returns instead of simple one-step TD returns as in A3C (Section <a href="./ActorCritic.html#sec:advantage-actor-critic-methods">4.2</a>, <span class="citation" data-cites="Mnih2016">Mnih et al. (<a href="References.html#ref-Mnih2016" role="doc-biblioref">2016</a>)</span>).</p></li>
 <li><p><strong>Multiple Distributed Parallel Actors</strong> gather <span class="math inline">\((s, a, r, s&#39;)\)</span> transitions in parallel and write them to the same replay buffer.</p></li>
-<li><p>The replay buffer uses <strong>Prioritized Experience Replay</strong> <span class="citation" data-cites="Schaul2015">(Schaul et al. <a href="References.html#ref-Schaul2015">2015</a>)</span> to sample transitions based the information gain.</p></li>
+<li><p>The replay buffer uses <strong>Prioritized Experience Replay</strong> <span class="citation" data-cites="Schaul2015">(Schaul et al. <a href="References.html#ref-Schaul2015" role="doc-biblioref">2015</a>)</span> to sample transitions based the information gain.</p></li>
 </ol>
 
 <br>

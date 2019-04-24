@@ -126,39 +126,39 @@
 <h2 id="sec:maximum-entropy-rl"><span class="header-section-number">4.6</span> Maximum Entropy RL</h2>
 <p><strong>Work in progress</strong></p>
 <h3 id="sec:entropy-regularization-1"><span class="header-section-number">4.6.1</span> Entropy regularization</h3>
-<p><span class="citation" data-cites="Todorov2008">Todorov (<a href="References.html#ref-Todorov2008">2008</a>)</span> a stochastic policy emerges as the optimal answer when we consider the connection between optimal control and probabilistic inference</p>
-<p><span class="citation" data-cites="Toussaint2009">Toussaint (<a href="References.html#ref-Toussaint2009">2009</a>)</span> Maximum entropy RL</p>
-<p><span class="citation" data-cites="ODonoghue2016">O’Donoghue et al. (<a href="References.html#ref-ODonoghue2016">2016</a>)</span> Combining policy gradient and Q-learning</p>
-<p><span class="citation" data-cites="Haarnoja2017">Haarnoja et al. (<a href="References.html#ref-Haarnoja2017">2017</a>)</span> Reinforcement Learning with Deep Energy-Based Policies</p>
+<p><span class="citation" data-cites="Todorov2008">Todorov (<a href="References.html#ref-Todorov2008" role="doc-biblioref">2008</a>)</span> a stochastic policy emerges as the optimal answer when we consider the connection between optimal control and probabilistic inference.</p>
+<p><span class="citation" data-cites="Toussaint2009">Toussaint (<a href="References.html#ref-Toussaint2009" role="doc-biblioref">2009</a>)</span> Maximum entropy RL</p>
+<p><span class="citation" data-cites="ODonoghue2016">O’Donoghue et al. (<a href="References.html#ref-ODonoghue2016" role="doc-biblioref">2016</a>)</span> Combining policy gradient and Q-learning</p>
+<p><span class="citation" data-cites="Haarnoja2017">Haarnoja et al. (<a href="References.html#ref-Haarnoja2017" role="doc-biblioref">2017</a>)</span> Reinforcement Learning with Deep Energy-Based Policies</p>
 <h3 id="sec:soft-actor-critic-sac"><span class="header-section-number">4.6.2</span> Soft Actor-Critic (SAC)</h3>
 <ul>
 <li><p>Main limitations of on-policy algorithms: high sample complexity and poor convergence properties, leading to difficult tuining of hyperparameters.</p></li>
 <li><p>Off-policy reduces the sample complexity, but increases the variance = instability.</p></li>
 </ul>
-<p><span class="citation" data-cites="Haarnoja2018a">Haarnoja et al. (<a href="References.html#ref-Haarnoja2018a">2018</a>)</span></p>
+<p><span class="citation" data-cites="Haarnoja2018a">Haarnoja et al. (<a href="References.html#ref-Haarnoja2018a" role="doc-biblioref">2018</a>)</span></p>
 <h2 id="sec:distributional-learning"><span class="header-section-number">4.7</span> Distributional learning</h2>
 <p>All RL methods based on the Bellman equations use the expectation operator to average returns and compute the values of states and actions:</p>
 <p><span class="math display">\[
     Q^\pi(s, a) ) = \mathbb{E}_{\pi}[R(s, a)]
 \]</span></p>
-<p><span class="citation" data-cites="Bellemare2017">Bellemare, Dabney, and Munos (<a href="References.html#ref-Bellemare2017">2017</a>)</span> propose to learn instead the <strong>value distribution</strong> through a modification of the Bellman equation. They show that learning the distribution of rewards rather than their mean leads to performance improvements.</p>
+<p><span class="citation" data-cites="Bellemare2017">Bellemare, Dabney, and Munos (<a href="References.html#ref-Bellemare2017" role="doc-biblioref">2017</a>)</span> propose to learn instead the <strong>value distribution</strong> through a modification of the Bellman equation. They show that learning the distribution of rewards rather than their mean leads to performance improvements.</p>
 <p>See <a href="https://deepmind.com/blog/going-beyond-average-reinforcement-learning/" class="uri">https://deepmind.com/blog/going-beyond-average-reinforcement-learning/</a> for more explanations.</p>
 <h3 id="sec:the-reactor"><span class="header-section-number">4.7.1</span> The Reactor</h3>
-<p><span class="citation" data-cites="Gruslys2017">Gruslys et al. (<a href="References.html#ref-Gruslys2017">2017</a>)</span></p>
+<p><span class="citation" data-cites="Gruslys2017">Gruslys et al. (<a href="References.html#ref-Gruslys2017" role="doc-biblioref">2017</a>)</span></p>
 <h2 id="sec:other-policy-search-methods"><span class="header-section-number">4.8</span> Other policy search methods</h2>
 <h3 id="sec:stochastic-value-gradient-svg"><span class="header-section-number">4.8.1</span> Stochastic Value Gradient (SVG)</h3>
-<p><span class="citation" data-cites="Heess2015">Heess et al. (<a href="References.html#ref-Heess2015">2015</a>)</span></p>
+<p><span class="citation" data-cites="Heess2015">Heess et al. (<a href="References.html#ref-Heess2015" role="doc-biblioref">2015</a>)</span></p>
 <h3 id="sec:q-prop"><span class="header-section-number">4.8.2</span> Q-Prop</h3>
-<p><span class="citation" data-cites="Gu2016">Gu, Lillicrap, Ghahramani, et al. (<a href="References.html#ref-Gu2016">2016</a>)</span></p>
+<p><span class="citation" data-cites="Gu2016">Gu, Lillicrap, Ghahramani, et al. (<a href="References.html#ref-Gu2016" role="doc-biblioref">2016</a>)</span></p>
 <h3 id="sec:normalized-advantage-function-naf"><span class="header-section-number">4.8.3</span> Normalized Advantage Function (NAF)</h3>
-<p><span class="citation" data-cites="Gu2016a">Gu, Lillicrap, Sutskever, et al. (<a href="References.html#ref-Gu2016a">2016</a>)</span></p>
+<p><span class="citation" data-cites="Gu2016a">Gu, Lillicrap, Sutskever, et al. (<a href="References.html#ref-Gu2016a" role="doc-biblioref">2016</a>)</span></p>
 <h3 id="sec:fictitious-self-play-fsp"><span class="header-section-number">4.8.4</span> Fictitious Self-Play (FSP)</h3>
-<p><span class="citation" data-cites="Heinrich2015">Heinrich, Lanctot, and Silver (<a href="References.html#ref-Heinrich2015">2015</a>)</span> <span class="citation" data-cites="Heinrich2016">Heinrich and Silver (<a href="References.html#ref-Heinrich2016">2016</a>)</span></p>
+<p><span class="citation" data-cites="Heinrich2015">Heinrich, Lanctot, and Silver (<a href="References.html#ref-Heinrich2015" role="doc-biblioref">2015</a>)</span> <span class="citation" data-cites="Heinrich2016">Heinrich and Silver (<a href="References.html#ref-Heinrich2016" role="doc-biblioref">2016</a>)</span></p>
 <h2 id="sec:comparison-between-value-based-and-policy-gradient-methods"><span class="header-section-number">4.9</span> Comparison between value-based and policy gradient methods</h2>
 <p>Having now reviewed both value-based methods (DQN and its variants) and policy gradient methods (A3C, DDPG, PPO), the question is which method to choose? While not much happens right now for value-based methods, policy gradient methods are attracting a lot of attention, as they are able to learn policies in continuous action spaces, what is very important in robotics. <a href="https://flyyufelix.github.io/2017/10/12/dqn-vs-pg.html" class="uri">https://flyyufelix.github.io/2017/10/12/dqn-vs-pg.html</a> summarizes the advantages and inconvenients of policy gradient methods.</p>
 <p>Advantages of PG:</p>
 <ul>
-<li>Better convergence properties, more stable <span class="citation" data-cites="Duan2016">(Duan et al. <a href="References.html#ref-Duan2016">2016</a>)</span>.</li>
+<li>Better convergence properties, more stable <span class="citation" data-cites="Duan2016">(Duan et al. <a href="References.html#ref-Duan2016" role="doc-biblioref">2016</a>)</span>.</li>
 <li>Effective in high-dimensional or continuous action spaces.</li>
 <li>Can learn stochastic policies.</li>
 </ul>
@@ -171,9 +171,9 @@
 <h2 id="sec:gradient-free-policy-search"><span class="header-section-number">4.10</span> Gradient-free policy search</h2>
 <p>The policy gradient methods presented above rely on backpropagation and gradient descent/ascent to update the parameters of the policy and maximize the objective function. Gradient descent is generally slow, sample inefficient and subject to local minima, but is nevertheless the go-to method in neural networks. However, it is not the only optimization that can be used in deep RL. This section presents some of the alternatives.</p>
 <h3 id="sec:cross-entropy-method-cem"><span class="header-section-number">4.10.1</span> Cross-entropy Method (CEM)</h3>
-<p><span class="citation" data-cites="Szita2006">Szita and Lörincz (<a href="References.html#ref-Szita2006">2006</a>)</span></p>
+<p><span class="citation" data-cites="Szita2006">Szita and Lörincz (<a href="References.html#ref-Szita2006" role="doc-biblioref">2006</a>)</span></p>
 <h3 id="sec:evolutionary-search-es"><span class="header-section-number">4.10.2</span> Evolutionary Search (ES)</h3>
-<p><span class="citation" data-cites="Salimans2017">Salimans et al. (<a href="References.html#ref-Salimans2017">2017</a>)</span></p>
+<p><span class="citation" data-cites="Salimans2017">Salimans et al. (<a href="References.html#ref-Salimans2017" role="doc-biblioref">2017</a>)</span></p>
 <p>Explanations from OpenAI: <a href="https://blog.openai.com/evolution-strategies/" class="uri">https://blog.openai.com/evolution-strategies/</a></p>
 <p>Deep neuroevolution at Uber: <a href="https://eng.uber.com/deep-neuroevolution/" class="uri">https://eng.uber.com/deep-neuroevolution/</a></p>
 
