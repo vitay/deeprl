@@ -241,7 +241,7 @@
 <li><span class="math inline">\(R(\tau_1) = 3\)</span> and <span class="math inline">\(R(\tau_2) = 1\)</span></li>
 </ol>
 <p>In both cases, the policy should select the trajectory <span class="math inline">\(\tau_1\)</span>. However, the policy gradient for <span class="math inline">\(\tau_2\)</span> will change its sign between the two cases, although the problem is the same! What we want to do is to maximize the returns, regardless the absolute value of the rewards, but the returns are unbounded. Because of the non-stationarity of the problem (the agent becomes better with training, so the returns of the sampled trajectories will increase), the policy gradients will increase over time, what is linked to the variance problem. Value-based methods addressed this problem by using <strong>target networks</strong>, but it is not a perfect solution (the gradients become biased).</p>
-<p>A first simple but effective idea to solve both problems would be to substract the mean of the sampled returns from the returns:</p>
+<p>A first simple but effective idea to solve both problems would be to subtract the mean of the sampled returns from the returns:</p>
 <hr />
 <ul>
 <li><p>while not converged:</p>
@@ -259,7 +259,7 @@
 </ul></li>
 </ul>
 <hr />
-<p>This obviously solves the reward scaling problem, and reduces the variance of the gradients. But are we allowed to do this (i.e. does it introduce a bias to the gradient)? <span class="citation" data-cites="Williams1992">Williams (<a href="References.html#ref-Williams1992" role="doc-biblioref">1992</a>)</span> showed that substracting a constant <span class="math inline">\(b\)</span> from the returns still leads to an unbiased estimate of the gradient:</p>
+<p>This obviously solves the reward scaling problem, and reduces the variance of the gradients. But are we allowed to do this (i.e. does it introduce a bias to the gradient)? <span class="citation" data-cites="Williams1992">Williams (<a href="References.html#ref-Williams1992" role="doc-biblioref">1992</a>)</span> showed that subtracting a constant <span class="math inline">\(b\)</span> from the returns still leads to an unbiased estimate of the gradient:</p>
 <p><span class="math display">\[
     \nabla_\theta J(\theta) =  \mathbb{E}_{\tau \sim \rho_\theta}[\nabla_\theta \log \rho_\theta (\tau) \, (R(\tau) -b) ]
 \]</span></p>
@@ -310,7 +310,7 @@
 </figure>
 <p>Most policy-gradient algorithms (A3C, DPPG, TRPO) are actor-critic architectures. Some remarks already:</p>
 <ul>
-<li>Trajectories now appear only implicitely in the policy gradient, one can even sample single transitions. It should therefore be possible (with modifications) to do <strong>off-policy learning</strong>, for example with using importance sampling (Section <a href="./ImportanceSampling.html#sec:importance-sampling">4.3.1</a>) or a replay buffer of stored transitions as in DQN (see ACER Section <a href="./NaturalGradient.html#sec:actor-critic-with-experience-replay-acer">4.5.5</a>). REINFORCE works strictly on-policy.</li>
+<li>Trajectories now appear only implicitly in the policy gradient, one can even sample single transitions. It should therefore be possible (with modifications) to do <strong>off-policy learning</strong>, for example with using importance sampling (Section <a href="./ImportanceSampling.html#sec:importance-sampling">4.3.1</a>) or a replay buffer of stored transitions as in DQN (see ACER Section <a href="./NaturalGradient.html#sec:actor-critic-with-experience-replay-acer">4.5.5</a>). REINFORCE works strictly on-policy.</li>
 <li>The policy gradient theorem suffers from the same <strong>high variance</strong> problem as REINFORCE. The different algorithms presented later are principally attempts to solve this problem and reduce the sample complexity: advantages, deterministic policies, natural gradients…</li>
 <li>The actor and the critic can be completely separated, or share some parameters.</li>
 </ul>

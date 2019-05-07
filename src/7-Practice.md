@@ -13,9 +13,9 @@ Hindsight experience replay: @Andrychowicz2017
 
 ## Simulation environments
 
-Standard RL environments are needed to better compare the performance of RL algoritms. Below is a list of the most popular ones.
+Standard RL environments are needed to better compare the performance of RL algorithms. Below is a list of the most popular ones.
 
-* OpenAI Gym <https://gym.openai.com>: a standard toolkit for comparing RL algorithms provided by the OpenAI fundation. It provides many environments, from the classical toy problems in RL (GridWorld, pole-balancing) to more advanced problems (Mujoco simulated robots, Atari games, Minecraft...). The main advantage is the simplicity of the interface: the user only needs to select which task he wants to solve, and a simple for loop allows to perform actions and observe their consequences:
+* OpenAI Gym <https://gym.openai.com>: a standard toolkit for comparing RL algorithms provided by the OpenAI foundation. It provides many environments, from the classical toy problems in RL (GridWorld, pole-balancing) to more advanced problems (Mujoco simulated robots, Atari games, Minecraft...). The main advantage is the simplicity of the interface: the user only needs to select which task he wants to solve, and a simple for loop allows to perform actions and observe their consequences:
 
 ```python
 import gym
@@ -33,11 +33,17 @@ for _ in range(1000):
 
 * Roboschool <https://github.com/openai/roboschool>: another alternative to Mujoco for continuous robotic control, this time from openAI.
 
-* NIPS 2017 musculoskettal challenge <https://github.com/stanfordnmbl/osim-rl>
+* NIPS 2017 musculo-skeletal challenge <https://github.com/stanfordnmbl/osim-rl>
+
+* Deepmind Lab <https://github.com/deepmind/lab>: a 3D learning environment based on id Software's Quake III Arena via ioquake3 and other open source software.
+
+* AnimalAI Olympics <https://github.com/beyretb/AnimalAI-Olympics>, a gym-like environment aimed at confronting RL algorithms to typical tasks in the animal cognition literature.
 
 ## Algorithm implementations
 
 State-of-the-art algorithms in deep RL are already implemented and freely available on the internet. Below is a preliminary list of the most popular ones. Most of them rely on tensorflow or keras for training the neural networks and interact directly with gym-like interfaces.
+
+* <https://github.com/ShangtongZhang/reinforcement-learning-an-introduction>: all the exercises in Python of the [@Sutton2017] book.
 
 * `rl-code` <https://github.com/rlcode/reinforcement-learning>: many code samples for simple RL problems (GridWorld, Cartpole, Atari Games). The code samples are mostly for educational purpose (Policy Iteration, Value Iteration, Monte-Carlo, SARSA, Q-learning, REINFORCE, DQN, A2C, A3C).
 
@@ -48,6 +54,6 @@ State-of-the-art algorithms in deep RL are already implemented and freely availa
 
 * `OpenAI Baselines` <https://github.com/openai/baselines> from OpenAI too: A2C, ACER, ACKTR, DDPG, DQN, PPO, TRPO...
 
-* `rlkit` <https://github.com/vitchyr/rlkit> from Vitchyr Pong (PhD student at Berkeley) with in particular model-based algorithms (TDM @Pong2018).
+* `rlkit` <https://github.com/vitchyr/rlkit> from Vitchyr Pong (PhD student at Berkeley) with in particular model-based algorithms (TDM, @Pong2018).
 
 * `chainer-rl` <https://github.com/chainer/chainerrl> implemented in Chainer (an alternative to tensorflow): A3C, ACER, Categorical DQN; DQN (including Double DQN, Persistent Advantage Learning (PAL), Double PAL, Dynamic Policy Programming (DPP)), DDPG, , PGT (Policy Gradient Theorem), PCL (Path Consistency Learning), PPO, TRPO.

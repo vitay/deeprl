@@ -124,7 +124,7 @@ $$
 
 i.e. you do not need the full history of the agent to predict where it will arrive after an action. In simple problems, this is just a question of providing enough information to the description of a state: if a transition depends on what happened in the past, just put that information in the state description.
 
-If the Markov property is not met, RL methods may not converge (or poorly). In many problems, one does not have access to the true states of the agent, but one can only indirectly observe them. For example, in a video game, the true state is defined by a couple of variables: coordinates $(x, y)$ of the two players, position of the ball, speed, etc. However, all you have access to are the raw pixels: sometimes the ball may be hidden behing a wall or a tree, but it still exists in the state space. Speed information is also not observable in a single frame.
+If the Markov property is not met, RL methods may not converge (or poorly). In many problems, one does not have access to the true states of the agent, but one can only indirectly observe them. For example, in a video game, the true state is defined by a couple of variables: coordinates $(x, y)$ of the two players, position of the ball, speed, etc. However, all you have access to are the raw pixels: sometimes the ball may be hidden behind a wall or a tree, but it still exists in the state space. Speed information is also not observable in a single frame.
 
 In a **Partially Observable Markov Decision Process** (POMDP), observations $o_t$ come from a space $\mathcal{O}$ and are linked to underlying states using the density function $p(o_t| s_t)$. Observations are usually not Markovian, so the full history of observations $h_t = (o_0, a_0, \dots o_t, a_t)$ is needed to solve the problem.
 
@@ -135,7 +135,7 @@ The policy defines the behavior of the agent: which action should be taken in ea
 * a stochastic policy $\pi : \mathcal{S} \rightarrow P(\mathcal{A})$ defines the probability distribution $P(\mathcal{A})$ of performing an action.
 * a deterministic policy $\mu(s_t)$ is a discrete mapping of $\mathcal{S} \rightarrow \mathcal{A}$.
 
-The policy can be used to explore the environment and generate trajectories of states, rewards and actions. The performance of a policy is determined by calculating the **expected discounted return**, i.e. the sum of all rewards received from time step t onwards:
+The policy can be used to explore the environment and generate trajectories of states, rewards and actions. The performance of a policy is determined by calculating the **expected discounted return**, i.e. the sum of all rewards received from time step $t$ onwards:
 
 $$
     R_t = \sum_{k=0}^{T} \gamma^k \, r_{t+k+1}
@@ -199,7 +199,7 @@ $$
 
 The Bellman equations mean that the value of a state (resp. state-action pair) depends on the value of all other states (resp. state-action pairs), the current policy $\pi$ and the dynamics of the MDP ($p(s'|s, a)$ and $r(s, a, s')$).
 
-![Backup diagrams correponding to the Bellman equations. Taken from @Sutton1998.](img/backup.png){#fig:backup width=50%}
+![Backup diagrams corresponding to the Bellman equations. Taken from @Sutton1998.](img/backup.png){#fig:backup width=50%}
 
 ### Dynamic programming
 
@@ -320,7 +320,7 @@ is called the **reward-prediction error** (RPE) or **TD error**: it defines the 
 * If $\delta < 0$, the transition was negatively surprising. The initial state or action was overrated, its value must be decreased.
 * If $\delta = 0$, the transition was fully predicted: one obtains as much reward as expected, so the values should stay as they are.
 
-The main advantage of this learning method is that the update of the V- or Q-value can be applied immediately after a transition: no need to wait until the end of an episode, or even to have episodes at all: this is called **online learning** and allows very fast learning from single transitions. The main drawback is that the updates depend on other estimates, which are initially wrong: it will take a whilebefore all estimates are correct.
+The main advantage of this learning method is that the update of the V- or Q-value can be applied immediately after a transition: no need to wait until the end of an episode, or even to have episodes at all: this is called **online learning** and allows very fast learning from single transitions. The main drawback is that the updates depend on other estimates, which are initially wrong: it will take a while before all estimates are correct.
 
 ![Temporal difference algorithms update values after a single transition. Taken from @Sutton1998.](img/backup-TD.png){#fig:td width=3%}
 
@@ -338,7 +338,7 @@ $$
     \delta = r(s, a, s') + \gamma \, \max_{a'} Q^\pi(s', a') - Q^\pi(s, a)
 $$
 
-In Q-learning, the behavior policy has to ensure exploration, while this is achieved implicitely by the learned policy in SARSA, as it must be $\epsilon$-soft. An easy way of building a behavior policy based on a deterministic learned policy is $\epsilon$-greedy: the deterministic action $\mu(s_t)$ is chosen with probability 1 - $\epsilon$, the other actions with probability $\epsilon$. In continuous action spaces, additive noise (e.g. Ohrstein-Uhlenbeck, see @sec:deep-deterministic-policy-gradient-ddpg) can be added to the action.
+In Q-learning, the behavior policy has to ensure exploration, while this is achieved implicitly by the learned policy in SARSA, as it must be $\epsilon$-soft. An easy way of building a behavior policy based on a deterministic learned policy is $\epsilon$-greedy: the deterministic action $\mu(s_t)$ is chosen with probability 1 - $\epsilon$, the other actions with probability $\epsilon$. In continuous action spaces, additive noise (e.g. Ohrstein-Uhlenbeck, see @sec:deep-deterministic-policy-gradient-ddpg) can be added to the action.
 
 Alternatively, domain knowledge can be used to create the behavior policy and restrict the search to meaningful actions: compilation of expert moves in games, approximate solutions, etc. Again, the risk is that the behavior policy never explores the actually optimal actions. See @sec:off-policy-actor-critic for more details on the difference between on-policy and off-policy methods.
 
@@ -346,7 +346,7 @@ Alternatively, domain knowledge can be used to create the behavior policy and re
 
 The main drawback of TD learning is that learning can be slow and necessitate many transitions to converge (sample complexity). This is particularly true when the problem provides **sparse rewards** (as opposed to dense rewards). For example in a game like chess, a reward is given only at the end of a game (+1 for winning, -1 for losing). All other actions receive a reward of 0, although they are as important as the last one in order to win.
 
-Imagine you initialize all Q-values to 0 and apply Q-learning. During the first episode, all actions but the last one will receive a reward $r(s, a, s')$ of 0 and arrive in a state where the greedy action has a value $Q^\pi(s', a')$ of 0, so the TD error $\delta$ is 0 and their Q-value will not change. Only the very last action will receive a non-zero reward and update its value slightly (because of the learning rate $\alpha$). When this episode is performed again, the last action will again be updated, but also the one just before: $Q^\pi(s', a')$ is now different from 0 for this action, so the TD error is now different from 0. It is straightforward to see that if the episode has a length of 100 moves, the agent will need at least 100 episodes to "backpropagate" the final sparse reward to the first action of the episode. In pratice, this is even worse: the learning rate $\alpha$ and the discount rate $\gamma$ will slow learning down even more. MC methods suffer less from this problem, as the first action of the episode would be updated using the actual return, which contains the final reward (although it is discounted by $\gamma$).
+Imagine you initialize all Q-values to 0 and apply Q-learning. During the first episode, all actions but the last one will receive a reward $r(s, a, s')$ of 0 and arrive in a state where the greedy action has a value $Q^\pi(s', a')$ of 0, so the TD error $\delta$ is 0 and their Q-value will not change. Only the very last action will receive a non-zero reward and update its value slightly (because of the learning rate $\alpha$). When this episode is performed again, the last action will again be updated, but also the one just before: $Q^\pi(s', a')$ is now different from 0 for this action, so the TD error is now different from 0. It is straightforward to see that if the episode has a length of 100 moves, the agent will need at least 100 episodes to "backpropagate" the final sparse reward to the first action of the episode. In practice, this is even worse: the learning rate $\alpha$ and the discount rate $\gamma$ will slow learning down even more. MC methods suffer less from this problem, as the first action of the episode would be updated using the actual return, which contains the final reward (although it is discounted by $\gamma$).
 
 **Eligibility traces** can be seen a trick to mix the advantages of MC (faster updates) with the ones of TD (online learning, smaller variance). The idea is that the TD error at time $t$ ($\delta_t$) will be used not only to update the action taken at time $t$ ($\Delta Q(s_t, a_t) = \alpha \, \delta_t$), but also all the preceding actions, which are also responsible for the success or failure of the action taken at time $t$. A parameter $\lambda$ between 0 and 1 (decaying factor) controls how far back in time a single TD error influences past actions. This is important when the policy is mostly exploratory: initial actions may be mostly random and finally find the the reward by chance. They should learn less from the reward than the last one, otherwise they would be systematically reproduced. @fig:eligibilitytraces shows the principle of eligibility traces in a simple Gridworld environment.
 
@@ -362,7 +362,7 @@ $$
 
 From this equation, $\gamma$ and $\lambda$ seem to play a relatively similar role, but remember that $\gamma$ is also used in the TD error, so they control different aspects of learning. The drawback of this approach is that the future transitions at $t'>t$ and their respective TD errors must be known when updating the transition, so this prevents online learning (the episode must be terminated to apply the updates).
 
-* The *backward view* considers that the TD error made at time $t$ is sent backwards in time to all transitions previously executed. The easiest wayto implement this is to update an eligibility trace $e(s,a)$ for each possible transition, which is incremented every time a transition is visited and otherwise decays exponentially with a speed controlled by $\lambda$:
+* The *backward view* considers that the TD error made at time $t$ is sent backwards in time to all transitions previously executed. The easiest way to implement this is to update an eligibility trace $e(s,a)$ for each possible transition, which is incremented every time a transition is visited and otherwise decays exponentially with a speed controlled by $\lambda$:
 
 $$
     e(s, a) = \begin{cases} e(s, a) + 1 \quad \text{if} \quad s=s_t \quad \text{and} \quad a=a_t \\
@@ -430,7 +430,7 @@ Classical TD learning only learn a value function ($V^\pi(s)$ or $Q^\pi(s, a)$):
 
 ### Function approximation
 
-All the methods presented before are *tabular methods*, as one needs to store one value per state-action pair: either the Q-value of the action or a preference for that action. In most useful applications, the number of values to store would quickly become redhibitory: when working on raw images, the number of possible states alone is untractable. Moreover, these algorithms require that each state-action pair is visited a sufficient number of times to converge towards the optimal policy: if a single state-action pair is never visited, there is no guarantee that the optimal policy will be found. The problem becomes even more obvious when considering *continuous* state or action spaces.
+All the methods presented before are *tabular methods*, as one needs to store one value per state-action pair: either the Q-value of the action or a preference for that action. In most useful applications, the number of values to store would quickly become prohibitive: when working on raw images, the number of possible states alone is untractable. Moreover, these algorithms require that each state-action pair is visited a sufficient number of times to converge towards the optimal policy: if a single state-action pair is never visited, there is no guarantee that the optimal policy will be found. The problem becomes even more obvious when considering *continuous* state or action spaces.
 
 However, in a lot of applications, the optimal action to perform in two very close states is likely to be the same: changing one pixel in a video game does not change which action should be applied. It would therefore be very useful to be able to *interpolate* Q-values between different states: only a subset of all state-action pairs has to explored; the others will be "guessed" depending on the proximity between the states and/or the actions. The problem is now **generalization**, i.e. transferring acquired knowledge to unseen but similar situations.
 
@@ -615,7 +615,7 @@ $$
 
 Once unrolled, a RNN is equivalent to a deep network, with $t$ layers of weights between the first input $\mathbf{x}_0$ and the current output $\mathbf{h}_t$. The only difference with a feedforward network is that weights are reused between two time steps / layers. **Backpropagation though time** (BPTT) can be used to propagate the gradient of the loss function backwards in time and learn the weights $W_x$ and $W_h$ using the usual optimizer (SGD, Adam...).
 
-However, this kind of RNN can only learn short-term dependencies because of the **vanishing gradient problem** [@Hochreiter1991]. When the gradient of the loss funcion travels backwards from  $\mathbf{h}_t$ to $\mathbf{x}_0$, it will be multiplied $t$ times by the recurrent weights $W_h$. If $|W_h| > 1$, the gradient will explode with increasing $t$, while if $|W_h| < 1$, the gradient will vanish to 0.
+However, this kind of RNN can only learn short-term dependencies because of the **vanishing gradient problem** [@Hochreiter1991]. When the gradient of the loss function travels backwards from  $\mathbf{h}_t$ to $\mathbf{x}_0$, it will be multiplied $t$ times by the recurrent weights $W_h$. If $|W_h| > 1$, the gradient will explode with increasing $t$, while if $|W_h| < 1$, the gradient will vanish to 0.
 
 The solution to this problem is provided by **long short-term memory networks** [LSTM;@Hochreiter1997]. LSTM layers maintain additionally a state $\mathbf{C}_t$ (also called context or memory) which is manipulated by three learnable gates (input, forget and output gates). As in regular RNNs, a *candidate state* $\tilde{\mathbf{C}_t}$ is computed based on the current input and the previous output:
 
@@ -641,7 +641,7 @@ $$
     \mathbf{f}_t = \sigma(W^f_x \, \mathbf{x}_{t} + W^f_h \, \mathbf{h}_{t-1} + \mathbf{b}^f)
 $$
 
-Similarly, 0 means taht the corresponding element of the current state will be erased, 1 that it will be kept.
+Similarly, 0 means that the corresponding element of the current state will be erased, 1 that it will be kept.
 
 Once the input and forget gates are computed, the current state can be updated based on its previous value and the candidate state:
 
@@ -665,7 +665,7 @@ The architecture may seem complex, but everything is differentiable: backpropaga
 
 There are alternatives to the classical LSTM layer such as the gated recurrent unit [GRU; @Cho2014] or peephole connections [@Gers2001]. See <http://colah.github.io/posts/2015-08-Understanding-LSTMs>, <https://medium.com/mlreview/understanding-lstm-and-its-diagrams-37e2f46f1714> or <http://blog.echen.me/2017/05/30/exploring-lstms/> for more visual explanations of LSTMs and their variants.
 
-RNNs are particularly useful for deep RL when considering POMDPs, i.e. partially observable problems. If an observation does not contain enough information about the underlying state (e.g. a single image does not contain speed information), LSTM can integrate these observations over time and learn to implicitely represent speed in its context vector, allowing efficient policies to be learned.
+RNNs are particularly useful for deep RL when considering POMDPs, i.e. partially observable problems. If an observation does not contain enough information about the underlying state (e.g. a single image does not contain speed information), LSTM can integrate these observations over time and learn to implicitly represent speed in its context vector, allowing efficient policies to be learned.
 
 
 <!--PAGEBREAK-->
@@ -808,7 +808,7 @@ $$
     \delta = r(s, a, s') + \gamma \, Q_{\theta'}(s', \text{argmax}_{a'} Q_\theta (s', a')) - Q_\theta(s, a)
 $$
 
-and sample with a higher probability those surprising transitions to form a minibatch. However, non-surprising transitions might become relevant again after enough training, as the $Q_\theta(s, a)$ change, so prioritized replay has a softmax function over the TD error to ensure "exploration" of memorized transitions. This data structure has of course a non-negligeable computational cost, but accelerates learning so much that it is worth it. See <https://jaromiru.com/2016/11/07/lets-make-a-dqn-double-learning-and-prioritized-experience-replay/> for a presentation of double DQN with prioritized replay.
+and sample with a higher probability those surprising transitions to form a minibatch. However, non-surprising transitions might become relevant again after enough training, as the $Q_\theta(s, a)$ change, so prioritized replay has a softmax function over the TD error to ensure "exploration" of memorized transitions. This data structure has of course a non-negligible computational cost, but accelerates learning so much that it is worth it. See <https://jaromiru.com/2016/11/07/lets-make-a-dqn-double-learning-and-prioritized-experience-replay/> for a presentation of double DQN with prioritized replay.
 
 ## Duelling network
 
@@ -859,7 +859,7 @@ $$
     Q_{\theta, \alpha, \beta}(s, a) = V_{\theta, \beta}(s) + (A_{\theta, \alpha}(s, a) - \max_a A_{\theta, \alpha}(s, a))
 $$
 
-By doing this, the advantages are still free, but the state value will have to take the correct valu. @Wang2016 found that it is actually better to replace the $\max$ operator by the mean of the advantages. In this case, the advantages only need to change as fast as their mean, instead of having to compensate quickly for any change in the greedy action as the policy improves:
+By doing this, the advantages are still free, but the state value will have to take the correct value. @Wang2016 found that it is actually better to replace the $\max$ operator by the mean of the advantages. In this case, the advantages only need to change as fast as their mean, instead of having to compensate quickly for any change in the greedy action as the policy improves:
 
 $$
     Q_{\theta, \alpha, \beta}(s, a) = V_{\theta, \beta}(s) + (A_{\theta, \alpha}(s, a) - \frac{1}{|\mathcal{A}|} \sum_a A_{\theta, \alpha}(s, a))
@@ -1071,7 +1071,7 @@ Another related problem is that the REINFORCE gradient is sensitive to **reward 
 In both cases, the policy should select the trajectory $\tau_1$. However, the policy gradient for $\tau_2$ will change its sign between the two cases, although the problem is the same! What we want to do is to maximize the returns, regardless the absolute value of the rewards, but the returns are unbounded. Because of the non-stationarity of the problem (the agent becomes better with training, so the returns of the sampled trajectories will increase), the policy gradients will increase over time, what is linked to the variance problem. Value-based methods addressed this problem by using **target networks**, but it is not a perfect solution (the gradients become biased).
 
 
-A first simple but effective idea to solve both problems would be to substract the mean of the sampled returns from the returns:
+A first simple but effective idea to solve both problems would be to subtract the mean of the sampled returns from the returns:
 
 ---
 
@@ -1093,7 +1093,7 @@ A first simple but effective idea to solve both problems would be to substract t
 
 ---
 
-This obviously solves the reward scaling problem, and reduces the variance of the gradients. But are we allowed to do this (i.e. does it introduce a bias to the gradient)? @Williams1992 showed that substracting a constant $b$ from the returns still leads to an unbiased estimate of the gradient:
+This obviously solves the reward scaling problem, and reduces the variance of the gradients. But are we allowed to do this (i.e. does it introduce a bias to the gradient)? @Williams1992 showed that subtracting a constant $b$ from the returns still leads to an unbiased estimate of the gradient:
 
 
 $$
@@ -1165,7 +1165,7 @@ The resulting algorithm belongs to the **actor-critic** class, in the sense that
 
 Most policy-gradient algorithms (A3C, DPPG, TRPO) are actor-critic architectures. Some remarks already:
 
-* Trajectories now appear only implicitely in the policy gradient, one can even sample single transitions. It should therefore be possible (with modifications) to do **off-policy learning**, for example with using importance sampling (@sec:importance-sampling) or a replay buffer of stored transitions as in DQN (see ACER @sec:actor-critic-with-experience-replay-acer). REINFORCE works strictly on-policy.
+* Trajectories now appear only implicitly in the policy gradient, one can even sample single transitions. It should therefore be possible (with modifications) to do **off-policy learning**, for example with using importance sampling (@sec:importance-sampling) or a replay buffer of stored transitions as in DQN (see ACER @sec:actor-critic-with-experience-replay-acer). REINFORCE works strictly on-policy.
 * The policy gradient theorem suffers from the same **high variance** problem as REINFORCE. The different algorithms presented later are principally attempts to solve this problem and reduce the sample complexity: advantages, deterministic policies, natural gradients...
 * The actor and the critic can be completely separated, or share some parameters.
 
@@ -1494,7 +1494,7 @@ This is somehow the idea behind **off-policy** algorithms: they use a **behavior
 
 *"On-policy methods are generally simpler and are considered first. Off-policy methods require additional concepts and notation, and because the data is due to a different policy, off-policy methods are often of greater variance and are slower to converge."*
 
-The most famous off-policy method is Q-learning (@sec:temporal-difference). The reason why it is off-policy is that it does not use the next executed action ($a_{t+1}$) to update the value of an action, but the greedy ation in the next state, which is independent from exploration:
+The most famous off-policy method is Q-learning (@sec:temporal-difference). The reason why it is off-policy is that it does not use the next executed action ($a_{t+1}$) to update the value of an action, but the greedy action in the next state, which is independent from exploration:
 
 $$
     \delta = r(s, a, s') + \gamma \, \max_{a'} Q^\pi(s', a') - Q^\pi(s, a)
@@ -1650,7 +1650,7 @@ For a good deep RL algorithm, we need the two following properties:
 
 1. **Off-policy** learning: it allows to learn from transitions stored in a replay buffer (i.e. generated with an older policy). As NN need many iterations to converge, it is important to be able to re-use old transitions for its training, instead of constantly sampling new ones (sample complexity). Multiple parallel actors as in A3C allow to mitigate this problem, but it is still too complex.
 
-2. **Multi-step returns**: the two extremes of RL are TD (using a single "real" reward for the update, the rest is estimated) amd Monte-Carlo (use only "real" rewards, no estimation). TD has a smaller variance, but a high bias (errors in estimates propagate to all other values), while MC has a small bias but a high variance (learns from many real rewrads, but the returns may vary a lot between two almost identical episodes). Eligibility traces and n-step returns (used in A3C) are the most common trade-off between TD and MC.
+2. **Multi-step returns**: the two extremes of RL are TD (using a single "real" reward for the update, the rest is estimated) and Monte-Carlo (use only "real" rewards, no estimation). TD has a smaller variance, but a high bias (errors in estimates propagate to all other values), while MC has a small bias but a high variance (learns from many real rewards, but the returns may vary a lot between two almost identical episodes). Eligibility traces and n-step returns (used in A3C) are the most common trade-off between TD and MC.
 
 The **Retrace** algorithm [@Munos2016] is designed to exhibit both properties when learning Q-values. It can therefore be used to train the critic (instead of classical Q-learning) and provide the actor with safe, efficient and low-variance values.
 
@@ -1666,7 +1666,7 @@ $$
     \Delta Q^\pi(s_t, a_t) = \alpha \, \sum_{t'=t}^T (\gamma \lambda)^{t'-t} \delta_{t'}
 $$
 
-The Retrace algorithm proposes to generalize this formula using a parameter $c_s$ for each timestep between $t$ and $t'$:
+The Retrace algorithm proposes to generalize this formula using a parameter $c_s$ for each time step between $t$ and $t'$:
 
 $$
     \Delta Q^\pi(s_t, a_t) = \alpha \, \sum_{t'=t}^T (\gamma)^{t'-t} \left(\prod_{s=t+1}^{t'} c_s \right) \, \delta_{t'}
@@ -1782,7 +1782,7 @@ There are however two drawbacks:
 
 Successful value-based methods such as DQN produce a **deterministic policy**, where the action to be executed after learning is simply the greedy action $a^*_t = \text{argmax}_a Q_\theta(s_t, a)$. Exploration is enforced by forcing the behavior policy (the one used to generate the sample) to be stochastic ($\epsilon$-greedy), but the learned policy is itself deterministic. This is **off-policy** learning, allowing to use a different policy than the learned one to explore. When using an experience replay memory, the behavior policy is simply an older version of the learning policy (as samples stored in the ERM were generated by an older version of the actor).
 
-In this section, we will see the now state-of-the-art method DDPG (Deep Deterministic Policy Gradient), which tries to combine the advantages of policy gradient methods (actor-critic, continous or highly dimensional outputs, stability) with those of value-based methods (sample efficiency, off-policy).
+In this section, we will see the now state-of-the-art method DDPG (Deep Deterministic Policy Gradient), which tries to combine the advantages of policy gradient methods (actor-critic, continuous or highly dimensional outputs, stability) with those of value-based methods (sample efficiency, off-policy).
 
 
 ### Deterministic policy gradient theorem
@@ -1865,7 +1865,7 @@ $$
     a_t = \mu_\theta(s_t) + \xi
 $$
 
-This additive noise could be anything, but the most practical choise is to use an **Ornstein-Uhlenbeck** process [@Uhlenbeck1930] to generate temporally correlated noise with zero mean. Ornstein-Uhlenbeck processes are used in physics to model the velocity of Brownian particles with friction. It updates a variable $x_t$ using a stochastic differential equation (SDE):
+This additive noise could be anything, but the most practical choice is to use an **Ornstein-Uhlenbeck** process [@Uhlenbeck1930] to generate temporally correlated noise with zero mean. Ornstein-Uhlenbeck processes are used in physics to model the velocity of Brownian particles with friction. It updates a variable $x_t$ using a stochastic differential equation (SDE):
 
 
 $$ dx_t = \theta (\mu - x_t) dt + \sigma dW_t \qquad \text{with} \qquad dW_t = \mathcal{N}(0, dt)$$
@@ -1988,7 +1988,7 @@ Other forms of divergence measurements exist, such as the Wasserstein distance w
 
 We now have a global measurement of the similarity between two distributions on the whole input space, but which is hard to compute. How can we use it anyway in our optimization problem? As mentioned above, we search for the biggest parameter change $\Delta \theta$ inducing the smallest change in the policy. We need a metric linking changes in the parameters of the distribution (the weights of the network) to changes in the distribution itself. In other terms, we will apply gradient descent on the statistical manifold defined by the parameters rather than on the parameters themselves.
 
-![Naive illustration of the Riemannian metric. The Euclidian distance between $p(x; \theta)$ and $p(x; \theta + \Delta \theta)$ depends on the Euclidian distance between $\theta$ and $\theta + \Delta\theta$, i.e. $\Delta \theta$. Riemannian metrics follow the geometry of the manifold to compute that distance, depending on its curvature. This figure is only for illustration: Riemanian metrics are purely local, $\Delta \theta$ should be much smaller.](img/riemannian.png){#fig:riemannian width=50%}
+![Naive illustration of the Riemannian metric. The Euclidian distance between $p(x; \theta)$ and $p(x; \theta + \Delta \theta)$ depends on the Euclidian distance between $\theta$ and $\theta + \Delta\theta$, i.e. $\Delta \theta$. Riemannian metrics follow the geometry of the manifold to compute that distance, depending on its curvature. This figure is only for illustration: Riemannian metrics are purely local, $\Delta \theta$ should be much smaller.](img/riemannian.png){#fig:riemannian width=50%}
 
 Let's consider a parameterized distribution $p(x; \theta)$ and its new value $p(x; \theta + \Delta \theta)$ after applying a small parameter change $\Delta \theta$.
 As depicted on @fig:riemannian, the Euclidian metric in the parameter space ($||\theta + \Delta \theta - \theta||^2$) does not take the structure of the statistical manifold into account. We need to define a **Riemannian metric** which accounts locally for the curvature of the manifold between $\theta$ and $\theta + \Delta \theta$. The Riemannian distance is defined by the dot product:
@@ -2277,7 +2277,7 @@ However, it has several limitations:
 
 ### Proximal Policy Optimization (PPO)
 
-Proximal Policy Optimization (PPO) was proposed by @Schulman2017 to overcome the problems of TRPO (complexity, unability to share parameters or to use complex NN architectures) while increasing the range of tasks learnable by the system (compared to DQN) and improving the sample complexity (compared to online PG methods, which perform only one update per step).
+Proximal Policy Optimization (PPO) was proposed by @Schulman2017 to overcome the problems of TRPO (complexity, inability to share parameters or to use complex NN architectures) while increasing the range of tasks learnable by the system (compared to DQN) and improving the sample complexity (compared to online PG methods, which perform only one update per step).
 
 For that, they investigated various surrogate objectives (lower bounds) that could be solved using first-order optimization techniques (gradient descent).  Let's rewrite the surrogate loss of TRPO in the following manner:
 
@@ -2330,7 +2330,7 @@ The pseudo-algorithm of PPO is as follows:
 
 The main advantage of PPO with respect to TRPO is its simplicity: the clipped objective can be directly maximized using first-order methods like stochastic gradient descent or Adam. It does not depend on assumptions about the parameter space: CNNs and RNNs can be used for the policy. It is sample-efficient, as several epochs of parameter updates are performed between two transition samplings: the policy network therefore needs less fresh samples that strictly on-policy algorithms to converge.
 
-The only drawbacks of PPO is that there no convergence guarantee (although in practice it converges more often than other state-of-the-art methods) and that the right value for $\epsilon$ has to be determined. PPO has improved the state-of-the-art on Atori games and Mujoco robotic tasks. It has become the go-to method for continuous control problems.
+The only drawbacks of PPO is that there no convergence guarantee (although in practice it converges more often than other state-of-the-art methods) and that the right value for $\epsilon$ has to be determined. PPO has improved the state-of-the-art on Atari games and Mujoco robotic tasks. It has become the go-to method for continuous control problems.
 
 **Additional resources**
 
@@ -2362,7 +2362,7 @@ Mixing on-policy learning with off-policy is quite similar to the Self-Imitation
 
 #### Retrace evaluation {-}
 
-ACER comes in two flavours: one for discrete action spaces, one for continuous spaces. The discrete version is simpler, so let's focus on this one. As any policy-gradient method, ACER tries to estimate the policy gradient for each transition of a trajectory, but using importance sampling [@Degris2012, @sec:linear-off-policy-actor-critic-off-pac]:
+ACER comes in two flavors: one for discrete action spaces, one for continuous spaces. The discrete version is simpler, so let's focus on this one. As any policy-gradient method, ACER tries to estimate the policy gradient for each transition of a trajectory, but using importance sampling [@Degris2012, @sec:linear-off-policy-actor-critic-off-pac]:
 
 $$
     \nabla_\theta J(\theta)  = \mathbb{E}_{s_t, a_t \sim \rho_b} [\frac{\pi_\theta(s_t, a_t)}{b(s_t, a_t)} \, Q_\varphi(s_t, a_t) \, \nabla_\theta \log \pi_\theta(s_t, a_t)]
@@ -2671,9 +2671,9 @@ Hindsight experience replay: @Andrychowicz2017
 
 ## Simulation environments
 
-Standard RL environments are needed to better compare the performance of RL algoritms. Below is a list of the most popular ones.
+Standard RL environments are needed to better compare the performance of RL algorithms. Below is a list of the most popular ones.
 
-* OpenAI Gym <https://gym.openai.com>: a standard toolkit for comparing RL algorithms provided by the OpenAI fundation. It provides many environments, from the classical toy problems in RL (GridWorld, pole-balancing) to more advanced problems (Mujoco simulated robots, Atari games, Minecraft...). The main advantage is the simplicity of the interface: the user only needs to select which task he wants to solve, and a simple for loop allows to perform actions and observe their consequences:
+* OpenAI Gym <https://gym.openai.com>: a standard toolkit for comparing RL algorithms provided by the OpenAI foundation. It provides many environments, from the classical toy problems in RL (GridWorld, pole-balancing) to more advanced problems (Mujoco simulated robots, Atari games, Minecraft...). The main advantage is the simplicity of the interface: the user only needs to select which task he wants to solve, and a simple for loop allows to perform actions and observe their consequences:
 
 ```python
 import gym
@@ -2691,11 +2691,17 @@ for _ in range(1000):
 
 * Roboschool <https://github.com/openai/roboschool>: another alternative to Mujoco for continuous robotic control, this time from openAI.
 
-* NIPS 2017 musculoskettal challenge <https://github.com/stanfordnmbl/osim-rl>
+* NIPS 2017 musculo-skeletal challenge <https://github.com/stanfordnmbl/osim-rl>
+
+* Deepmind Lab <https://github.com/deepmind/lab>: a 3D learning environment based on id Software's Quake III Arena via ioquake3 and other open source software.
+
+* AnimalAI Olympics <https://github.com/beyretb/AnimalAI-Olympics>, a gym-like environment aimed at confronting RL algorithms to typical tasks in the animal cognition literature.
 
 ## Algorithm implementations
 
 State-of-the-art algorithms in deep RL are already implemented and freely available on the internet. Below is a preliminary list of the most popular ones. Most of them rely on tensorflow or keras for training the neural networks and interact directly with gym-like interfaces.
+
+* <https://github.com/ShangtongZhang/reinforcement-learning-an-introduction>: all the exercises in Python of the [@Sutton2017] book.
 
 * `rl-code` <https://github.com/rlcode/reinforcement-learning>: many code samples for simple RL problems (GridWorld, Cartpole, Atari Games). The code samples are mostly for educational purpose (Policy Iteration, Value Iteration, Monte-Carlo, SARSA, Q-learning, REINFORCE, DQN, A2C, A3C).
 
@@ -2706,7 +2712,7 @@ State-of-the-art algorithms in deep RL are already implemented and freely availa
 
 * `OpenAI Baselines` <https://github.com/openai/baselines> from OpenAI too: A2C, ACER, ACKTR, DDPG, DQN, PPO, TRPO...
 
-* `rlkit` <https://github.com/vitchyr/rlkit> from Vitchyr Pong (PhD student at Berkeley) with in particular model-based algorithms (TDM @Pong2018).
+* `rlkit` <https://github.com/vitchyr/rlkit> from Vitchyr Pong (PhD student at Berkeley) with in particular model-based algorithms (TDM, @Pong2018).
 
 * `chainer-rl` <https://github.com/chainer/chainerrl> implemented in Chainer (an alternative to tensorflow): A3C, ACER, Categorical DQN; DQN (including Double DQN, Persistent Advantage Learning (PAL), Double PAL, Dynamic Policy Programming (DPP)), DDPG, , PGT (Policy Gradient Theorem), PCL (Path Consistency Learning), PPO, TRPO.
 
