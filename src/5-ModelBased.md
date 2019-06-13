@@ -1,5 +1,7 @@
 # Model-based RL
 
+**work in progress**
+
 Model-free: The future is cached into values.
 
 Two problems of model-free:

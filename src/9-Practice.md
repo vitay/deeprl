@@ -7,10 +7,6 @@ Excellent blog post from Alex Irpan on the limitations of deep RL: <https://www.
 
 Another documented critic on deep RL: <https://thegradient.pub/why-rl-is-flawed/>
 
-## Reward shaping
-
-Hindsight experience replay: @Andrychowicz2017
-
 ## Simulation environments
 
 Standard RL environments are needed to better compare the performance of RL algorithms. Below is a list of the most popular ones.

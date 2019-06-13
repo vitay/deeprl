@@ -92,7 +92,8 @@
 </ul></li>
 <li><a href="./OtherPolicyGradient.html#sec:maximum-entropy-rl"><span class="toc-section-number">4.6</span> Maximum Entropy RL</a><ul>
 <li><a href="#sec:entropy-regularization-1"><span class="toc-section-number">4.6.1</span> Entropy regularization</a></li>
-<li><a href="./OtherPolicyGradient.html#sec:soft-actor-critic-sac"><span class="toc-section-number">4.6.2</span> Soft Actor-Critic (SAC)</a></li>
+<li><a href="./OtherPolicyGradient.html#sec:soft-q-learning"><span class="toc-section-number">4.6.2</span> Soft Q-learning</a></li>
+<li><a href="./OtherPolicyGradient.html#sec:soft-actor-critic-sac"><span class="toc-section-number">4.6.3</span> Soft Actor-Critic (SAC)</a></li>
 </ul></li>
 <li><a href="./OtherPolicyGradient.html#sec:distributional-learning"><span class="toc-section-number">4.7</span> Distributional learning</a><ul>
 <li><a href="./OtherPolicyGradient.html#sec:the-reactor"><span class="toc-section-number">4.7.1</span> The Reactor</a></li>
@@ -109,11 +110,18 @@
 <li><a href="./OtherPolicyGradient.html#sec:evolutionary-search-es"><span class="toc-section-number">4.10.2</span> Evolutionary Search (ES)</a></li>
 </ul></li>
 </ul></li>
-<li><a href="./Practice.html#sec:deep-rl-in-practice"><span class="toc-section-number">5</span> Deep RL in practice</a><ul>
-<li><a href="./Practice.html#sec:limitations"><span class="toc-section-number">5.1</span> Limitations</a></li>
-<li><a href="./Practice.html#sec:reward-shaping"><span class="toc-section-number">5.2</span> Reward shaping</a></li>
-<li><a href="./Practice.html#sec:simulation-environments"><span class="toc-section-number">5.3</span> Simulation environments</a></li>
-<li><a href="./Practice.html#sec:algorithm-implementations"><span class="toc-section-number">5.4</span> Algorithm implementations</a></li>
+<li><a href="./RAM.html#sec:recurrent-attention-models"><span class="toc-section-number">5</span> Recurrent Attention Models</a></li>
+<li><a href="./ModelBased.html#sec:model-based-rl"><span class="toc-section-number">6</span> Model-based RL</a><ul>
+<li><a href="./ModelBased.html#sec:dyna-q"><span class="toc-section-number">6.1</span> Dyna-Q</a></li>
+<li><a href="./ModelBased.html#sec:unsorted-references"><span class="toc-section-number">6.2</span> Unsorted references</a></li>
+</ul></li>
+<li><a href="./Hierarchical.html#sec:hierarchical-reinforcement-learning"><span class="toc-section-number">7</span> Hierarchical Reinforcement Learning</a></li>
+<li><a href="./Inverse.html#sec:inverse-reinforcement-learning"><span class="toc-section-number">8</span> Inverse Reinforcement Learning</a></li>
+<li><a href="./Robotics.html#sec:deep-rl-for-robotics"><span class="toc-section-number">9</span> Deep RL for robotics</a></li>
+<li><a href="./Practice.html#sec:deep-rl-in-practice"><span class="toc-section-number">10</span> Deep RL in practice</a><ul>
+<li><a href="./Practice.html#sec:limitations"><span class="toc-section-number">10.1</span> Limitations</a></li>
+<li><a href="./Practice.html#sec:simulation-environments"><span class="toc-section-number">10.2</span> Simulation environments</a></li>
+<li><a href="./Practice.html#sec:algorithm-implementations"><span class="toc-section-number">10.3</span> Algorithm implementations</a></li>
 </ul></li>
 <li><a href="./References.html#sec:references">References</a></li>
 </ul>
@@ -125,263 +133,356 @@
 
 <h1 id="sec:references" class="unnumbered">References</h1>
 <div id="refs" class="references" role="doc-bibliography">
+<div id="ref-Agrawal2016">
+<p>Agrawal, P., Nair, A., Abbeel, P., Malik, J., and Levine, S. (2016). Learning to Poke by Poking: Experiential Learning of Intuitive Physics. Available at: <a href="http://arxiv.org/abs/1606.07419">http://arxiv.org/abs/1606.07419</a>.</p>
+</div>
 <div id="ref-Amari1998">
-<p>Amari, S.-I. 1998. “Natural Gradient Works Efficiently in Learning.” <em>Neural Computation</em> 10 (2): 251–76.</p>
+<p>Amari, S.-I. (1998). Natural gradient works efficiently in learning. <em>Neural Computation</em> 10, 251–276.</p>
+</div>
+<div id="ref-Amarjyoti2017">
+<p>Amarjyoti, S. (2017). Deep Reinforcement Learning for Robotic Manipulation-The state of the art. Available at: <a href="http://arxiv.org/abs/1701.08878">http://arxiv.org/abs/1701.08878</a>.</p>
 </div>
 <div id="ref-Andrychowicz2017">
-<p>Andrychowicz, Marcin, Filip Wolski, Alex Ray, Jonas Schneider, Rachel Fong, Peter Welinder, Bob McGrew, Josh Tobin, Pieter Abbeel, and Wojciech Zaremba. 2017. “Hindsight Experience Replay,” July. <a href="http://arxiv.org/abs/1707.01495">http://arxiv.org/abs/1707.01495</a>.</p>
+<p>Andrychowicz, M., Wolski, F., Ray, A., Schneider, J., Fong, R., Welinder, P., et al. (2017). Hindsight Experience Replay. Available at: <a href="http://arxiv.org/abs/1707.01495">http://arxiv.org/abs/1707.01495</a>.</p>
 </div>
 <div id="ref-Anschel2016">
-<p>Anschel, Oron, Nir Baram, and Nahum Shimkin. 2016. “Averaged-DQN: Variance Reduction and Stabilization for Deep Reinforcement Learning,” November. <a href="http://arxiv.org/abs/1611.01929">http://arxiv.org/abs/1611.01929</a>.</p>
+<p>Anschel, O., Baram, N., and Shimkin, N. (2016). Averaged-DQN: Variance Reduction and Stabilization for Deep Reinforcement Learning. Available at: <a href="http://arxiv.org/abs/1611.01929">http://arxiv.org/abs/1611.01929</a>.</p>
 </div>
 <div id="ref-Arjovsky2017">
-<p>Arjovsky, Martin, Soumith Chintala, and Léon Bottou. 2017. “Wasserstein GAN,” January. <a href="http://arxiv.org/abs/1701.07875">http://arxiv.org/abs/1701.07875</a>.</p>
+<p>Arjovsky, M., Chintala, S., and Bottou, L. (2017). Wasserstein GAN. Available at: <a href="http://arxiv.org/abs/1701.07875">http://arxiv.org/abs/1701.07875</a>.</p>
 </div>
 <div id="ref-Arulkumaran2017">
-<p>Arulkumaran, Kai, Marc Peter Deisenroth, Miles Brundage, and Anil Anthony Bharath. 2017. “A Brief Survey of Deep Reinforcement Learning.” <a href="https://arxiv.org/pdf/1708.05866.pdf">https://arxiv.org/pdf/1708.05866.pdf</a>.</p>
+<p>Arulkumaran, K., Deisenroth, M. P., Brundage, M., and Bharath, A. A. (2017). A Brief Survey of Deep Reinforcement Learning. Available at: <a href="https://arxiv.org/pdf/1708.05866.pdf">https://arxiv.org/pdf/1708.05866.pdf</a>.</p>
+</div>
+<div id="ref-Ba2014">
+<p>Ba, J., Mnih, V., and Kavukcuoglu, K. (2014). Multiple Object Recognition with Visual Attention. Available at: <a href="http://arxiv.org/abs/1412.7755">http://arxiv.org/abs/1412.7755</a>.</p>
 </div>
 <div id="ref-Baird1993">
-<p>Baird, L. C. 1993. “Advantage Updating.” Technical Report WL-TR-93-1146. Wright-Patterson Air Force Base. <a href="http://leemon.com/papers/1993b.pdf">http://leemon.com/papers/1993b.pdf</a>.</p>
+<p>Baird, L. C. (1993). Advantage updating. Wright-Patterson Air Force Base Available at: <a href="http://leemon.com/papers/1993b.pdf">http://leemon.com/papers/1993b.pdf</a>.</p>
 </div>
 <div id="ref-Bakker2001">
-<p>Bakker, Bram. 2001. “Reinforcement Learning with Long Short-Term Memory.” In <em>Advances in Neural Information Processing Systems 14 (NIPS 2001)</em>, 1475–82. <a href="https://papers.nips.cc/paper/1953-reinforcement-learning-with-long-short-term-memory">https://papers.nips.cc/paper/1953-reinforcement-learning-with-long-short-term-memory</a>.</p>
+<p>Bakker, B. (2001). Reinforcement Learning with Long Short-Term Memory. in <em>Advances in Neural Information Processing Systems 14 (NIPS 2001)</em>, 1475–1482. Available at: <a href="https://papers.nips.cc/paper/1953-reinforcement-learning-with-long-short-term-memory">https://papers.nips.cc/paper/1953-reinforcement-learning-with-long-short-term-memory</a>.</p>
 </div>
 <div id="ref-Barth-Maron2018">
-<p>Barth-Maron, Gabriel, Matthew W. Hoffman, David Budden, Will Dabney, Dan Horgan, Dhruva TB, Alistair Muldal, Nicolas Heess, and Timothy Lillicrap. 2018. “Distributed Distributional Deterministic Policy Gradients,” April. <a href="http://arxiv.org/abs/1804.08617">http://arxiv.org/abs/1804.08617</a>.</p>
+<p>Barth-Maron, G., Hoffman, M. W., Budden, D., Dabney, W., Horgan, D., TB, D., et al. (2018). Distributed Distributional Deterministic Policy Gradients. Available at: <a href="http://arxiv.org/abs/1804.08617">http://arxiv.org/abs/1804.08617</a>.</p>
 </div>
 <div id="ref-Bellemare2017">
-<p>Bellemare, Marc G., Will Dabney, and Rémi Munos. 2017. “A Distributional Perspective on Reinforcement Learning,” July. <a href="http://arxiv.org/abs/1707.06887">http://arxiv.org/abs/1707.06887</a>.</p>
+<p>Bellemare, M. G., Dabney, W., and Munos, R. (2017). A Distributional Perspective on Reinforcement Learning. Available at: <a href="http://arxiv.org/abs/1707.06887">http://arxiv.org/abs/1707.06887</a>.</p>
 </div>
 <div id="ref-Cho2014">
-<p>Cho, Kyunghyun, Bart van Merrienboer, Caglar Gulcehre, Dzmitry Bahdanau, Fethi Bougares, Holger Schwenk, and Yoshua Bengio. 2014. “Learning Phrase Representations Using RNN Encoder-Decoder for Statistical Machine Translation,” June. <a href="http://arxiv.org/abs/1406.1078">http://arxiv.org/abs/1406.1078</a>.</p>
+<p>Cho, K., van Merrienboer, B., Gulcehre, C., Bahdanau, D., Bougares, F., Schwenk, H., et al. (2014). Learning Phrase Representations using RNN Encoder-Decoder for Statistical Machine Translation. Available at: <a href="http://arxiv.org/abs/1406.1078">http://arxiv.org/abs/1406.1078</a>.</p>
 </div>
 <div id="ref-Chou2017">
-<p>Chou, Po-Wei, Daniel Maturana, and Sebastian Scherer. 2017. “Improving Stochastic Policy Gradients in Continuous Control with Deep Reinforcement Learning Using the Beta Distribution.” In <em>International Conference on Machine Learning</em>. <a href="http://proceedings.mlr.press/v70/chou17a/chou17a.pdf">http://proceedings.mlr.press/v70/chou17a/chou17a.pdf</a>.</p>
+<p>Chou, P.-W., Maturana, D., and Scherer, S. (2017). Improving Stochastic Policy Gradients in Continuous Control with Deep Reinforcement Learning using the Beta Distribution. in <em>International Conference on Machine Learning</em> Available at: <a href="http://proceedings.mlr.press/v70/chou17a/chou17a.pdf">http://proceedings.mlr.press/v70/chou17a/chou17a.pdf</a>.</p>
+</div>
+<div id="ref-Clavera2018">
+<p>Clavera, I., Nagabandi, A., Fearing, R. S., Abbeel, P., Levine, S., and Finn, C. (2018). Learning to Adapt: Meta-Learning for Model-Based Control. Available at: <a href="http://arxiv.org/abs/1803.11347">http://arxiv.org/abs/1803.11347</a>.</p>
+</div>
+<div id="ref-Co-Reyes2018">
+<p>Co-Reyes, J. D., Liu, Y., Gupta, A., Eysenbach, B., Abbeel, P., and Levine, S. (2018). Self-Consistent Trajectory Autoencoder: Hierarchical Reinforcement Learning with Trajectory Embeddings.</p>
+</div>
+<div id="ref-Corneil2018">
+<p>Corneil, D., Gerstner, W., and Brea, J. (2018). Efficient Model-Based Deep Reinforcement Learning with Variational State Tabulation. Available at: <a href="http://arxiv.org/abs/1802.04325">http://arxiv.org/abs/1802.04325</a>.</p>
 </div>
 <div id="ref-Degris2012">
-<p>Degris, Thomas, Martha White, and Richard S. Sutton. 2012. “Linear Off-Policy Actor-Critic.” In <em>Proceedings of the 2012 International Conference on Machine Learning</em>. <a href="http://arxiv.org/abs/1205.4839">http://arxiv.org/abs/1205.4839</a>.</p>
+<p>Degris, T., White, M., and Sutton, R. S. (2012). Linear Off-Policy Actor-Critic. in <em>Proceedings of the 2012 International Conference on Machine Learning</em> Available at: <a href="http://arxiv.org/abs/1205.4839">http://arxiv.org/abs/1205.4839</a>.</p>
+</div>
+<div id="ref-Ding2019">
+<p>Ding, Y., Florensa, C., Phielipp, M., and Abbeel, P. (2019). Goal-conditioned Imitation Learning. in <em>International Conference on Machine Learning (ICML)</em> (Long Beach, California: PMLR), 8. Available at: <a href="https://openreview.net/pdf?id=HkglHcSj2N">https://openreview.net/pdf?id=HkglHcSj2N</a>.</p>
+</div>
+<div id="ref-Dosovitskiy2016">
+<p>Dosovitskiy, A., and Koltun, V. (2016). Learning to Act by Predicting the Future. Available at: <a href="http://arxiv.org/abs/1611.01779">http://arxiv.org/abs/1611.01779</a>.</p>
 </div>
 <div id="ref-Duan2016">
-<p>Duan, Yan, Xi Chen, Rein Houthooft, John Schulman, and Pieter Abbeel. 2016. “Benchmarking Deep Reinforcement Learning for Continuous Control,” April. <a href="http://arxiv.org/abs/1604.06778">http://arxiv.org/abs/1604.06778</a>.</p>
+<p>Duan, Y., Chen, X., Houthooft, R., Schulman, J., and Abbeel, P. (2016). Benchmarking Deep Reinforcement Learning for Continuous Control. Available at: <a href="http://arxiv.org/abs/1604.06778">http://arxiv.org/abs/1604.06778</a>.</p>
+</div>
+<div id="ref-Feinberg2018">
+<p>Feinberg, V., Wan, A., Stoica, I., Jordan, M. I., Gonzalez, J. E., and Levine, S. (2018). Model-Based Value Estimation for Efficient Model-Free Reinforcement Learning. Available at: <a href="http://arxiv.org/abs/1803.00101">http://arxiv.org/abs/1803.00101</a>.</p>
 </div>
 <div id="ref-Gers2001">
-<p>Gers, Felix. 2001. “Long Short-Term Memory in Recurrent Neural Networks.” PhD thesis. <a href="http://www.felixgers.de/papers/phd.pdf">http://www.felixgers.de/papers/phd.pdf</a>.</p>
+<p>Gers, F. (2001). Long Short-Term Memory in Recurrent Neural Networks. Available at: <a href="http://www.felixgers.de/papers/phd.pdf">http://www.felixgers.de/papers/phd.pdf</a>.</p>
 </div>
 <div id="ref-Goodfellow2016">
-<p>Goodfellow, Ian, Yoshua Bengio, and Aaron Courville. 2016. <em>Deep Learning</em>. MIT Press. <a href="http://www.deeplearningbook.org">http://www.deeplearningbook.org</a>.</p>
+<p>Goodfellow, I., Bengio, Y., and Courville, A. (2016). <em>Deep Learning</em>. MIT Press Available at: <a href="http://www.deeplearningbook.org">http://www.deeplearningbook.org</a>.</p>
 </div>
 <div id="ref-Goodfellow2014">
-<p>Goodfellow, Ian J., Jean Pouget-Abadie, Mehdi Mirza, Bing Xu, David Warde-Farley, Sherjil Ozair, Aaron Courville, and Yoshua Bengio. 2014. “Generative Adversarial Networks,” June. <a href="http://arxiv.org/abs/1406.2661">http://arxiv.org/abs/1406.2661</a>.</p>
+<p>Goodfellow, I. J., Pouget-Abadie, J., Mirza, M., Xu, B., Warde-Farley, D., Ozair, S., et al. (2014). Generative Adversarial Networks. Available at: <a href="http://arxiv.org/abs/1406.2661">http://arxiv.org/abs/1406.2661</a>.</p>
+</div>
+<div id="ref-Goyal2018">
+<p>Goyal, A., Brakel, P., Fedus, W., Lillicrap, T., Levine, S., Larochelle, H., et al. (2018). Recall Traces: Backtracking Models for Efficient Reinforcement Learning. Available at: <a href="http://arxiv.org/abs/1804.00379">http://arxiv.org/abs/1804.00379</a>.</p>
 </div>
 <div id="ref-Gruslys2017">
-<p>Gruslys, Audrunas, Will Dabney, Mohammad Gheshlaghi Azar, Bilal Piot, Marc Bellemare, and Remi Munos. 2017. “The Reactor: A Fast and Sample-Efficient Actor-Critic Agent for Reinforcement Learning,” April. <a href="http://arxiv.org/abs/1704.04651">http://arxiv.org/abs/1704.04651</a>.</p>
+<p>Gruslys, A., Dabney, W., Azar, M. G., Piot, B., Bellemare, M., and Munos, R. (2017). The Reactor: A fast and sample-efficient Actor-Critic agent for Reinforcement Learning. Available at: <a href="http://arxiv.org/abs/1704.04651">http://arxiv.org/abs/1704.04651</a>.</p>
 </div>
 <div id="ref-Gu2017">
-<p>Gu, Shixiang, Ethan Holly, Timothy Lillicrap, and Sergey Levine. 2017. “Deep Reinforcement Learning for Robotic Manipulation with Asynchronous Off-Policy Updates.” In <em>Proc. ICRA</em>. <a href="http://arxiv.org/abs/1610.00633">http://arxiv.org/abs/1610.00633</a>.</p>
+<p>Gu, S., Holly, E., Lillicrap, T., and Levine, S. (2017). Deep Reinforcement Learning for Robotic Manipulation with Asynchronous Off-Policy Updates. in <em>Proc. ICRA</em> Available at: <a href="http://arxiv.org/abs/1610.00633">http://arxiv.org/abs/1610.00633</a>.</p>
 </div>
 <div id="ref-Gu2016">
-<p>Gu, Shixiang, Timothy Lillicrap, Zoubin Ghahramani, Richard E. Turner, and Sergey Levine. 2016. “Q-Prop: Sample-Efficient Policy Gradient with an Off-Policy Critic,” November. <a href="http://arxiv.org/abs/1611.02247">http://arxiv.org/abs/1611.02247</a>.</p>
+<p>Gu, S., Lillicrap, T., Ghahramani, Z., Turner, R. E., and Levine, S. (2016a). Q-Prop: Sample-Efficient Policy Gradient with An Off-Policy Critic. Available at: <a href="http://arxiv.org/abs/1611.02247">http://arxiv.org/abs/1611.02247</a>.</p>
 </div>
 <div id="ref-Gu2016a">
-<p>Gu, Shixiang, Timothy Lillicrap, Ilya Sutskever, and Sergey Levine. 2016. “Continuous Deep Q-Learning with Model-Based Acceleration,” March. <a href="http://arxiv.org/abs/1603.00748">http://arxiv.org/abs/1603.00748</a>.</p>
+<p>Gu, S., Lillicrap, T., Sutskever, I., and Levine, S. (2016b). Continuous Deep Q-Learning with Model-based Acceleration. Available at: <a href="http://arxiv.org/abs/1603.00748">http://arxiv.org/abs/1603.00748</a>.</p>
+</div>
+<div id="ref-Ha2018">
+<p>Ha, D., and Schmidhuber, J. (2018). World Models. doi:<a href="https://doi.org/10.5281/zenodo.1207631">10.5281/zenodo.1207631</a>.</p>
+</div>
+<div id="ref-Haarnoja2018">
+<p>Haarnoja, T., Hartikainen, K., Abbeel, P., and Levine, S. (2018a). Latent Space Policies for Hierarchical Reinforcement Learning. Available at: <a href="http://arxiv.org/abs/1804.02808">http://arxiv.org/abs/1804.02808</a>.</p>
 </div>
 <div id="ref-Haarnoja2017">
-<p>Haarnoja, Tuomas, Haoran Tang, Pieter Abbeel, and Sergey Levine. 2017. “Reinforcement Learning with Deep Energy-Based Policies.” <em>arXiv:1702.08165 [Cs]</em>, February. <a href="http://arxiv.org/abs/1702.08165">http://arxiv.org/abs/1702.08165</a>.</p>
+<p>Haarnoja, T., Tang, H., Abbeel, P., and Levine, S. (2017). Reinforcement Learning with Deep Energy-Based Policies. <em>arXiv:1702.08165 [cs]</em>. Available at: <a href="http://arxiv.org/abs/1702.08165">http://arxiv.org/abs/1702.08165</a> [Accessed February 13, 2019].</p>
 </div>
 <div id="ref-Haarnoja2018a">
-<p>Haarnoja, Tuomas, Aurick Zhou, Pieter Abbeel, and Sergey Levine. 2018. “Soft Actor-Critic: Off-Policy Maximum Entropy Deep Reinforcement Learning with a Stochastic Actor,” January. <a href="http://arxiv.org/abs/1801.01290">http://arxiv.org/abs/1801.01290</a>.</p>
+<p>Haarnoja, T., Zhou, A., Abbeel, P., and Levine, S. (2018b). Soft Actor-Critic: Off-Policy Maximum Entropy Deep Reinforcement Learning with a Stochastic Actor. Available at: <a href="http://arxiv.org/abs/1801.01290">http://arxiv.org/abs/1801.01290</a>.</p>
 </div>
 <div id="ref-Hafner2011">
-<p>Hafner, Roland, and Martin Riedmiller. 2011. “Reinforcement Learning in Feedback Control.” <em>Machine Learning</em> 84 (1-2): 137–69. <a href="https://doi.org/10.1007/s10994-011-5235-x">https://doi.org/10.1007/s10994-011-5235-x</a>.</p>
+<p>Hafner, R., and Riedmiller, M. (2011). Reinforcement learning in feedback control. <em>Machine Learning</em> 84, 137–169. doi:<a href="https://doi.org/10.1007/s10994-011-5235-x">10.1007/s10994-011-5235-x</a>.</p>
 </div>
 <div id="ref-Harutyunyan2016">
-<p>Harutyunyan, A., M. G. Bellemare, T. Stepleton, and R. Munos. 2016. “Q(<span class="math inline">\(\lambda\)</span>) with Off-Policy Corrections.” <a href="http://arxiv.org/abs/1602.04951">http://arxiv.org/abs/1602.04951</a>.</p>
+<p>Harutyunyan, A., Bellemare, M. G., Stepleton, T., and Munos, R. (2016). Q(<span class="math inline">\(\lambda\)</span>) with off-policy corrections. Available at: <a href="http://arxiv.org/abs/1602.04951">http://arxiv.org/abs/1602.04951</a>.</p>
 </div>
 <div id="ref-Hausknecht2015">
-<p>Hausknecht, Matthew, and Peter Stone. 2015. “Deep Recurrent Q-Learning for Partially Observable MDPs,” July. <a href="http://arxiv.org/abs/1507.06527">http://arxiv.org/abs/1507.06527</a>.</p>
+<p>Hausknecht, M., and Stone, P. (2015). Deep Recurrent Q-Learning for Partially Observable MDPs. Available at: <a href="http://arxiv.org/abs/1507.06527">http://arxiv.org/abs/1507.06527</a>.</p>
 </div>
 <div id="ref-He2016">
-<p>He, Frank S., Yang Liu, Alexander G. Schwing, and Jian Peng. 2016. “Learning to Play in a Day: Faster Deep Reinforcement Learning by Optimality Tightening,” November. <a href="http://arxiv.org/abs/1611.01606">http://arxiv.org/abs/1611.01606</a>.</p>
+<p>He, F. S., Liu, Y., Schwing, A. G., and Peng, J. (2016). Learning to Play in a Day: Faster Deep Reinforcement Learning by Optimality Tightening. Available at: <a href="http://arxiv.org/abs/1611.01606">http://arxiv.org/abs/1611.01606</a>.</p>
 </div>
 <div id="ref-He2015">
-<p>He, Kaiming, Xiangyu Zhang, Shaoqing Ren, and Jian Sun. 2015. “Deep Residual Learning for Image Recognition,” December. <a href="http://arxiv.org/abs/1512.03385">http://arxiv.org/abs/1512.03385</a>.</p>
+<p>He, K., Zhang, X., Ren, S., and Sun, J. (2015). Deep Residual Learning for Image Recognition. Available at: <a href="http://arxiv.org/abs/1512.03385">http://arxiv.org/abs/1512.03385</a>.</p>
 </div>
 <div id="ref-Heess2015">
-<p>Heess, Nicolas, Greg Wayne, David Silver, Timothy Lillicrap, Yuval Tassa, and Tom Erez. 2015. “Learning Continuous Control Policies by Stochastic Value Gradients.” <em>Proc. International Conference on Neural Information Processing Systems</em>, 2944–52. <a href="http://dl.acm.org/citation.cfm?id=2969569">http://dl.acm.org/citation.cfm?id=2969569</a>.</p>
+<p>Heess, N., Wayne, G., Silver, D., Lillicrap, T., Tassa, Y., and Erez, T. (2015). Learning continuous control policies by stochastic value gradients. <em>Proc. International Conference on Neural Information Processing Systems</em>, 2944–2952. Available at: <a href="http://dl.acm.org/citation.cfm?id=2969569">http://dl.acm.org/citation.cfm?id=2969569</a>.</p>
 </div>
 <div id="ref-Heinrich2015">
-<p>Heinrich, Johannes, Marc Lanctot, and David Silver. 2015. “Fictitious Self-Play in Extensive-Form Games,” June, 805–13. <a href="http://proceedings.mlr.press/v37/heinrich15.html">http://proceedings.mlr.press/v37/heinrich15.html</a>.</p>
+<p>Heinrich, J., Lanctot, M., and Silver, D. (2015). Fictitious Self-Play in Extensive-Form Games. 805–813. Available at: <a href="http://proceedings.mlr.press/v37/heinrich15.html">http://proceedings.mlr.press/v37/heinrich15.html</a>.</p>
 </div>
 <div id="ref-Heinrich2016">
-<p>Heinrich, Johannes, and David Silver. 2016. “Deep Reinforcement Learning from Self-Play in Imperfect-Information Games,” March. <a href="http://arxiv.org/abs/1603.01121">http://arxiv.org/abs/1603.01121</a>.</p>
+<p>Heinrich, J., and Silver, D. (2016). Deep Reinforcement Learning from Self-Play in Imperfect-Information Games. Available at: <a href="http://arxiv.org/abs/1603.01121">http://arxiv.org/abs/1603.01121</a>.</p>
+</div>
+<div id="ref-Henaff2017">
+<p>Henaff, M., Whitney, W. F., and LeCun, Y. (2017). Model-Based Planning with Discrete and Continuous Actions. Available at: <a href="http://arxiv.org/abs/1705.07177">http://arxiv.org/abs/1705.07177</a>.</p>
 </div>
 <div id="ref-Hessel2017">
-<p>Hessel, Matteo, Joseph Modayil, Hado van Hasselt, Tom Schaul, Georg Ostrovski, Will Dabney, Dan Horgan, Bilal Piot, Mohammad Azar, and David Silver. 2017. “Rainbow: Combining Improvements in Deep Reinforcement Learning,” October. <a href="http://arxiv.org/abs/1710.02298">http://arxiv.org/abs/1710.02298</a>.</p>
+<p>Hessel, M., Modayil, J., van Hasselt, H., Schaul, T., Ostrovski, G., Dabney, W., et al. (2017). Rainbow: Combining Improvements in Deep Reinforcement Learning. Available at: <a href="http://arxiv.org/abs/1710.02298">http://arxiv.org/abs/1710.02298</a>.</p>
 </div>
 <div id="ref-Hochreiter1991">
-<p>Hochreiter, Sepp. 1991. “Untersuchungen Zu Dynamischen Neuronalen Netzen.” PhD thesis. <a href="http://people.idsia.ch/~juergen/SeppHochreiter1991ThesisAdvisorSchmidhuber.pdf">http://people.idsia.ch/~juergen/SeppHochreiter1991ThesisAdvisorSchmidhuber.pdf</a>.</p>
+<p>Hochreiter, S. (1991). Untersuchungen zu dynamischen neuronalen Netzen. Available at: <a href="http://people.idsia.ch/~juergen/SeppHochreiter1991ThesisAdvisorSchmidhuber.pdf">http://people.idsia.ch/~juergen/SeppHochreiter1991ThesisAdvisorSchmidhuber.pdf</a>.</p>
 </div>
 <div id="ref-Hochreiter1997">
-<p>Hochreiter, S, and J Schmidhuber. 1997. “Long Short-Term Memory.” <em>Neural Computation</em> 9 (8): 1735–80. <a href="http://www.ncbi.nlm.nih.gov/pubmed/9377276">http://www.ncbi.nlm.nih.gov/pubmed/9377276</a>.</p>
+<p>Hochreiter, S., and Schmidhuber, J. (1997). Long short-term memory. <em>Neural computation</em> 9, 1735–80. Available at: <a href="http://www.ncbi.nlm.nih.gov/pubmed/9377276">http://www.ncbi.nlm.nih.gov/pubmed/9377276</a>.</p>
 </div>
 <div id="ref-Ioffe2015">
-<p>Ioffe, Sergey, and Christian Szegedy. 2015. “Batch Normalization: Accelerating Deep Network Training by Reducing Internal Covariate Shift,” February. <a href="http://arxiv.org/abs/1502.03167">http://arxiv.org/abs/1502.03167</a>.</p>
+<p>Ioffe, S., and Szegedy, C. (2015). Batch Normalization: Accelerating Deep Network Training by Reducing Internal Covariate Shift. Available at: <a href="http://arxiv.org/abs/1502.03167">http://arxiv.org/abs/1502.03167</a>.</p>
 </div>
 <div id="ref-Kakade2001">
-<p>Kakade, Sham. 2001. “A Natural Policy Gradient.” In <em>Advances in Neural Information Processing Systems 14</em>. <a href="https://papers.nips.cc/paper/2073-a-natural-policy-gradient.pdf">https://papers.nips.cc/paper/2073-a-natural-policy-gradient.pdf</a>.</p>
+<p>Kakade, S. (2001). A Natural Policy Gradient. in <em>Advances in Neural Information Processing Systems 14</em> Available at: <a href="https://papers.nips.cc/paper/2073-a-natural-policy-gradient.pdf">https://papers.nips.cc/paper/2073-a-natural-policy-gradient.pdf</a>.</p>
 </div>
 <div id="ref-Kakade2002">
-<p>Kakade, Sham, and John Langford. 2002. “Approximately Optimal Approximate Reinforcement Learning.” <em>Proc. 19th International Conference on Machine Learning</em>, 267–74. <a href="http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.7.7601">http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.7.7601</a>.</p>
+<p>Kakade, S., and Langford, J. (2002). Approximately Optimal Approximate Reinforcement Learning. <em>Proc. 19th International Conference on Machine Learning</em>, 267–274. Available at: <a href="http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.7.7601">http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.7.7601</a>.</p>
+</div>
+<div id="ref-Kansky2017">
+<p>Kansky, K., Silver, T., Mély, D. A., Eldawy, M., Lázaro-Gredilla, M., Lou, X., et al. (2017). Schema Networks: Zero-shot Transfer with a Generative Causal Model of Intuitive Physics. <em>arXiv:1706.04317 [cs]</em>. Available at: <a href="http://arxiv.org/abs/1706.04317">http://arxiv.org/abs/1706.04317</a> [Accessed January 10, 2019].</p>
 </div>
 <div id="ref-Kingma2013">
-<p>Kingma, Diederik P, and Max Welling. 2013. “Auto-Encoding Variational Bayes,” December. <a href="http://arxiv.org/abs/1312.6114">http://arxiv.org/abs/1312.6114</a>.</p>
+<p>Kingma, D. P., and Welling, M. (2013). Auto-Encoding Variational Bayes. Available at: <a href="http://arxiv.org/abs/1312.6114">http://arxiv.org/abs/1312.6114</a>.</p>
 </div>
 <div id="ref-Knight2018">
-<p>Knight, Ethan, and Osher Lerner. 2018. “Natural Gradient Deep Q-Learning,” March. <a href="http://arxiv.org/abs/1803.07482">http://arxiv.org/abs/1803.07482</a>.</p>
+<p>Knight, E., and Lerner, O. (2018). Natural Gradient Deep Q-learning. Available at: <a href="http://arxiv.org/abs/1803.07482">http://arxiv.org/abs/1803.07482</a>.</p>
 </div>
 <div id="ref-Krizhevsky2012">
-<p>Krizhevsky, Alex, Ilya Sutskever, and Geoffrey E Hinton. 2012. “ImageNet Classification with Deep Convolutional Neural Networks.” In <em>Advances in Neural Information Processing Systems (NIPS)</em>. <a href="https://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf">https://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf</a>.</p>
+<p>Krizhevsky, A., Sutskever, I., and Hinton, G. E. (2012). ImageNet Classification with Deep Convolutional Neural Networks. in <em>Advances in Neural Information Processing Systems (NIPS)</em> Available at: <a href="https://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf">https://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf</a>.</p>
+</div>
+<div id="ref-Levine2016">
+<p>Levine, S., Finn, C., Darrell, T., and Abbeel, P. (2016a). End-to-End Training of Deep Visuomotor Policies. <em>JMLR</em> 17. Available at: <a href="http://arxiv.org/abs/1504.00702">http://arxiv.org/abs/1504.00702</a>.</p>
 </div>
 <div id="ref-Levine2013">
-<p>Levine, Sergey, and Vladlen Koltun. 2013. “Guided Policy Search.” In <em>Proceedings of Machine Learning Research</em>, 1–9. <a href="http://proceedings.mlr.press/v28/levine13.html">http://proceedings.mlr.press/v28/levine13.html</a>.</p>
+<p>Levine, S., and Koltun, V. (2013). Guided Policy Search. in <em>Proceedings of Machine Learning Research</em>, 1–9. Available at: <a href="http://proceedings.mlr.press/v28/levine13.html">http://proceedings.mlr.press/v28/levine13.html</a>.</p>
+</div>
+<div id="ref-Levine2016a">
+<p>Levine, S., Pastor, P., Krizhevsky, A., and Quillen, D. (2016b). Learning Hand-Eye Coordination for Robotic Grasping with Deep Learning and Large-Scale Data Collection. in <em>Proc. ISER</em> Available at: <a href="http://arxiv.org/abs/1603.02199">http://arxiv.org/abs/1603.02199</a>.</p>
 </div>
 <div id="ref-Li2017">
-<p>Li, Yuxi. 2017. “Deep Reinforcement Learning: An Overview,” January. <a href="http://arxiv.org/abs/1701.07274">http://arxiv.org/abs/1701.07274</a>.</p>
+<p>Li, Y. (2017). Deep Reinforcement Learning: An Overview. Available at: <a href="http://arxiv.org/abs/1701.07274">http://arxiv.org/abs/1701.07274</a>.</p>
 </div>
 <div id="ref-Lillicrap2015">
-<p>Lillicrap, Timothy P., Jonathan J. Hunt, Alexander Pritzel, Nicolas Heess, Tom Erez, Yuval Tassa, David Silver, and Daan Wierstra. 2015. “Continuous Control with Deep Reinforcement Learning.” <em>CoRR</em>. <a href="http://arxiv.org/abs/1509.02971">http://arxiv.org/abs/1509.02971</a>.</p>
+<p>Lillicrap, T. P., Hunt, J. J., Pritzel, A., Heess, N., Erez, T., Tassa, Y., et al. (2015). Continuous control with deep reinforcement learning. <em>CoRR</em>. Available at: <a href="http://arxiv.org/abs/1509.02971">http://arxiv.org/abs/1509.02971</a>.</p>
 </div>
 <div id="ref-Lotzsch2017">
-<p>Lötzsch, Winfried, Julien Vitay, and Fred H. Hamker. 2017. “Training a Deep Policy Gradient-Based Neural Network with Asynchronous Learners on a Simulated Robotic Problem.” In <em>INFORMATIK 2017. Gesellschaft Für Informatik</em>, edited by Maximilian Eibl and Martin Gaedke, 2143–54. Gesellschaft für Informatik, Bonn. <a href="https://dl.gi.de/handle/20.500.12116/3986">https://dl.gi.de/handle/20.500.12116/3986</a>.</p>
+<p>Lötzsch, W., Vitay, J., and Hamker, F. H. (2017). Training a deep policy gradient-based neural network with asynchronous learners on a simulated robotic problem. in <em>INFORMATIK 2017. Gesellschaft für Informatik</em>, eds. M. Eibl and M. Gaedke (Gesellschaft für Informatik, Bonn), 2143–2154. Available at: <a href="https://dl.gi.de/handle/20.500.12116/3986">https://dl.gi.de/handle/20.500.12116/3986</a>.</p>
+</div>
+<div id="ref-Machado2018">
+<p>Machado, M. C., Bellemare, M. G., and Bowling, M. (2018). Count-Based Exploration with the Successor Representation. <em>arXiv:1807.11622 [cs, stat]</em>. Available at: <a href="http://arxiv.org/abs/1807.11622">http://arxiv.org/abs/1807.11622</a> [Accessed February 23, 2019].</p>
 </div>
 <div id="ref-Meuleau2000">
-<p>Meuleau, Nicolas, Leonid Peshkin, Leslie P. Kaelbling, and Kee-eung Kim. 2000. “Off-Policy Policy Search.” <a href="http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.28.894">http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.28.894</a>.</p>
+<p>Meuleau, N., Peshkin, L., Kaelbling, L. P., and Kim, K.-e. (2000). Off-Policy Policy Search. Available at: <a href="http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.28.894">http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.28.894</a>.</p>
 </div>
 <div id="ref-Mirowski2016">
-<p>Mirowski, Piotr, Razvan Pascanu, Fabio Viola, Hubert Soyer, Andrew J. Ballard, Andrea Banino, Misha Denil, et al. 2016. “Learning to Navigate in Complex Environments,” November. <a href="http://arxiv.org/abs/1611.03673">http://arxiv.org/abs/1611.03673</a>.</p>
+<p>Mirowski, P., Pascanu, R., Viola, F., Soyer, H., Ballard, A. J., Banino, A., et al. (2016). Learning to Navigate in Complex Environments. Available at: <a href="http://arxiv.org/abs/1611.03673">http://arxiv.org/abs/1611.03673</a>.</p>
 </div>
 <div id="ref-Mnih2016">
-<p>Mnih, Volodymyr, Adrià Puigdomènech Badia, Mehdi Mirza, Alex Graves, Timothy P. Lillicrap, Tim Harley, David Silver, and Koray Kavukcuoglu. 2016. “Asynchronous Methods for Deep Reinforcement Learning.” In <em>Proc. ICML</em>. <a href="http://arxiv.org/abs/1602.01783">http://arxiv.org/abs/1602.01783</a>.</p>
+<p>Mnih, V., Badia, A. P., Mirza, M., Graves, A., Lillicrap, T. P., Harley, T., et al. (2016). Asynchronous Methods for Deep Reinforcement Learning. in <em>Proc. ICML</em> Available at: <a href="http://arxiv.org/abs/1602.01783">http://arxiv.org/abs/1602.01783</a>.</p>
+</div>
+<div id="ref-Mnih2014">
+<p>Mnih, V., Heess, N., Graves, A., and Kavukcuoglu, K. (2014). Recurrent Models of Visual Attention. Available at: <a href="http://arxiv.org/abs/1406.6247">http://arxiv.org/abs/1406.6247</a>.</p>
 </div>
 <div id="ref-Mnih2013">
-<p>Mnih, Volodymyr, Koray Kavukcuoglu, David Silver, Alex Graves, Ioannis Antonoglou, Daan Wierstra, and Martin Riedmiller. 2013. “Playing Atari with Deep Reinforcement Learning,” December. <a href="http://arxiv.org/abs/1312.5602">http://arxiv.org/abs/1312.5602</a>.</p>
+<p>Mnih, V., Kavukcuoglu, K., Silver, D., Graves, A., Antonoglou, I., Wierstra, D., et al. (2013). Playing Atari with Deep Reinforcement Learning. Available at: <a href="http://arxiv.org/abs/1312.5602">http://arxiv.org/abs/1312.5602</a>.</p>
 </div>
 <div id="ref-Mnih2015">
-<p>Mnih, Volodymyr, Koray Kavukcuoglu, David Silver, Andrei A. Rusu, Joel Veness, Marc G. Bellemare, Alex Graves, et al. 2015. “Human-Level Control Through Deep Reinforcement Learning.” <em>Nature</em> 518 (7540): 529–33. <a href="https://doi.org/10.1038/nature14236">https://doi.org/10.1038/nature14236</a>.</p>
+<p>Mnih, V., Kavukcuoglu, K., Silver, D., Rusu, A. A., Veness, J., Bellemare, M. G., et al. (2015). Human-level control through deep reinforcement learning. <em>Nature</em> 518, 529–533. doi:<a href="https://doi.org/10.1038/nature14236">10.1038/nature14236</a>.</p>
 </div>
 <div id="ref-Mousavi2018">
-<p>Mousavi, Seyed Sajad, Michael Schukat, and Enda Howley. 2018. “Deep Reinforcement Learning: An Overview.” In, 426–40. Springer, Cham. <a href="https://doi.org/10.1007/978-3-319-56991-8_32">https://doi.org/10.1007/978-3-319-56991-8_32</a>.</p>
+<p>Mousavi, S. S., Schukat, M., and Howley, E. (2018). “Deep Reinforcement Learning: An Overview,” in (Springer, Cham), 426–440. doi:<a href="https://doi.org/10.1007/978-3-319-56991-8_32">10.1007/978-3-319-56991-8_32</a>.</p>
 </div>
 <div id="ref-Munos2016">
-<p>Munos, Rémi, Tom Stepleton, Anna Harutyunyan, and Marc G. Bellemare. 2016. “Safe and Efficient Off-Policy Reinforcement Learning,” June. <a href="http://arxiv.org/abs/1606.02647">http://arxiv.org/abs/1606.02647</a>.</p>
+<p>Munos, R., Stepleton, T., Harutyunyan, A., and Bellemare, M. G. (2016). Safe and Efficient Off-Policy Reinforcement Learning. Available at: <a href="http://arxiv.org/abs/1606.02647">http://arxiv.org/abs/1606.02647</a>.</p>
+</div>
+<div id="ref-Nachum2018">
+<p>Nachum, O., Gu, S., Lee, H., and Levine, S. (2018). Data-Efficient Hierarchical Reinforcement Learning. Available at: <a href="http://arxiv.org/abs/1805.08296">http://arxiv.org/abs/1805.08296</a>.</p>
+</div>
+<div id="ref-Nachum2017">
+<p>Nachum, O., Norouzi, M., Xu, K., and Schuurmans, D. (2017). Bridging the Gap Between Value and Policy Based Reinforcement Learning. <em>arXiv:1702.08892 [cs, stat]</em>. Available at: <a href="http://arxiv.org/abs/1702.08892">http://arxiv.org/abs/1702.08892</a> [Accessed June 12, 2019].</p>
 </div>
 <div id="ref-Nair2015">
-<p>Nair, Arun, Praveen Srinivasan, Sam Blackwell, Cagdas Alcicek, Rory Fearon, Alessandro De Maria, Vedavyas Panneershelvam, et al. 2015. “Massively Parallel Methods for Deep Reinforcement Learning.” <a href="https://arxiv.org/pdf/1507.04296.pdf">https://arxiv.org/pdf/1507.04296.pdf</a>.</p>
+<p>Nair, A., Srinivasan, P., Blackwell, S., Alcicek, C., Fearon, R., De Maria, A., et al. (2015). Massively Parallel Methods for Deep Reinforcement Learning. Available at: <a href="https://arxiv.org/pdf/1507.04296.pdf">https://arxiv.org/pdf/1507.04296.pdf</a>.</p>
 </div>
 <div id="ref-Nielsen2015">
-<p>Nielsen, Michael A. 2015. <em>Neural Networks and Deep Learning</em>. Determination Press. <a href="http://neuralnetworksanddeeplearning.com/">http://neuralnetworksanddeeplearning.com/</a>.</p>
+<p>Nielsen, M. A. (2015). <em>Neural Networks and Deep Learning</em>. Determination Press Available at: <a href="http://neuralnetworksanddeeplearning.com/">http://neuralnetworksanddeeplearning.com/</a>.</p>
 </div>
 <div id="ref-Niu2011">
-<p>Niu, Feng, Benjamin Recht, Christopher Re, and Stephen J. Wright. 2011. “HOGWILD!: A Lock-Free Approach to Parallelizing Stochastic Gradient Descent.” In <em>Proc. Advances in Neural Information Processing Systems</em>, 21–21. <a href="http://arxiv.org/abs/1106.5730">http://arxiv.org/abs/1106.5730</a>.</p>
+<p>Niu, F., Recht, B., Re, C., and Wright, S. J. (2011). HOGWILD!: A Lock-Free Approach to Parallelizing Stochastic Gradient Descent. in <em>Proc. Advances in Neural Information Processing Systems</em>, 21–21. Available at: <a href="http://arxiv.org/abs/1106.5730">http://arxiv.org/abs/1106.5730</a>.</p>
 </div>
 <div id="ref-ODonoghue2016">
-<p>O’Donoghue, Brendan, Remi Munos, Koray Kavukcuoglu, and Volodymyr Mnih. 2016. “Combining Policy Gradient and Q-Learning.” <em>arXiv:1611.01626 [Cs, Math, Stat]</em>, November. <a href="http://arxiv.org/abs/1611.01626">http://arxiv.org/abs/1611.01626</a>.</p>
+<p>O’Donoghue, B., Munos, R., Kavukcuoglu, K., and Mnih, V. (2016). Combining policy gradient and Q-learning. <em>arXiv:1611.01626 [cs, math, stat]</em>. Available at: <a href="http://arxiv.org/abs/1611.01626">http://arxiv.org/abs/1611.01626</a> [Accessed February 13, 2019].</p>
 </div>
 <div id="ref-Oh2018">
-<p>Oh, Junhyuk, Yijie Guo, Satinder Singh, and Honglak Lee. 2018. “Self-Imitation Learning,” June. <a href="http://arxiv.org/abs/1806.05635">http://arxiv.org/abs/1806.05635</a>.</p>
+<p>Oh, J., Guo, Y., Singh, S., and Lee, H. (2018). Self-Imitation Learning. Available at: <a href="http://arxiv.org/abs/1806.05635">http://arxiv.org/abs/1806.05635</a>.</p>
+</div>
+<div id="ref-Pardo2018">
+<p>Pardo, F., Levdik, V., and Kormushev, P. (2018). Q-map: A Convolutional Approach for Goal-Oriented Reinforcement Learning. Available at: <a href="http://arxiv.org/abs/1810.02927">http://arxiv.org/abs/1810.02927</a>.</p>
 </div>
 <div id="ref-Pascanu2013">
-<p>Pascanu, Razvan, and Yoshua Bengio. 2013. “Revisiting Natural Gradient for Deep Networks,” January. <a href="https://arxiv.org/abs/1301.3584">https://arxiv.org/abs/1301.3584</a>.</p>
+<p>Pascanu, R., and Bengio, Y. (2013). Revisiting Natural Gradient for Deep Networks. Available at: <a href="https://arxiv.org/abs/1301.3584">https://arxiv.org/abs/1301.3584</a>.</p>
+</div>
+<div id="ref-Peng2018">
+<p>Peng, B., Li, X., Gao, J., Liu, J., Wong, K.-F., and Su, S.-Y. (2018). Deep Dyna-Q: Integrating Planning for Task-Completion Dialogue Policy Learning. Available at: <a href="http://arxiv.org/abs/1801.06176">http://arxiv.org/abs/1801.06176</a>.</p>
 </div>
 <div id="ref-Peshkin2002">
-<p>Peshkin, Leonid, and Christian R. Shelton. 2002. “Learning from Scarce Experience,” April. <a href="http://arxiv.org/abs/cs/0204043">http://arxiv.org/abs/cs/0204043</a>.</p>
+<p>Peshkin, L., and Shelton, C. R. (2002). Learning from Scarce Experience. Available at: <a href="http://arxiv.org/abs/cs/0204043">http://arxiv.org/abs/cs/0204043</a>.</p>
 </div>
 <div id="ref-Peters2008">
-<p>Peters, Jan, and Stefan Schaal. 2008. “Reinforcement Learning of Motor Skills with Policy Gradients.” <em>Neural Networks</em> 21 (4): 682–97. <a href="https://doi.org/10.1016/j.neunet.2008.02.003">https://doi.org/10.1016/j.neunet.2008.02.003</a>.</p>
+<p>Peters, J., and Schaal, S. (2008). Reinforcement learning of motor skills with policy gradients. <em>Neural Networks</em> 21, 682–697. doi:<a href="https://doi.org/10.1016/j.neunet.2008.02.003">10.1016/j.neunet.2008.02.003</a>.</p>
 </div>
 <div id="ref-Pong2018">
-<p>Pong, Vitchyr, Shixiang Gu, Murtaza Dalal, and Sergey Levine. 2018. “Temporal Difference Models: Model-Free Deep RL for Model-Based Control,” February. <a href="http://arxiv.org/abs/1802.09081">http://arxiv.org/abs/1802.09081</a>.</p>
+<p>Pong, V., Gu, S., Dalal, M., and Levine, S. (2018). Temporal Difference Models: Model-Free Deep RL for Model-Based Control. Available at: <a href="http://arxiv.org/abs/1802.09081">http://arxiv.org/abs/1802.09081</a>.</p>
 </div>
 <div id="ref-Popov2017">
-<p>Popov, Ivaylo, Nicolas Heess, Timothy Lillicrap, Roland Hafner, Gabriel Barth-Maron, Matej Vecerik, Thomas Lampe, Yuval Tassa, Tom Erez, and Martin Riedmiller. 2017. “Data-Efficient Deep Reinforcement Learning for Dexterous Manipulation,” April. <a href="http://arxiv.org/abs/1704.03073">http://arxiv.org/abs/1704.03073</a>.</p>
+<p>Popov, I., Heess, N., Lillicrap, T., Hafner, R., Barth-Maron, G., Vecerik, M., et al. (2017). Data-efficient Deep Reinforcement Learning for Dexterous Manipulation. Available at: <a href="http://arxiv.org/abs/1704.03073">http://arxiv.org/abs/1704.03073</a>.</p>
 </div>
 <div id="ref-Precup2000">
-<p>Precup, D., R. S Sutton, and S. Singh. 2000. “Eligibility Traces for Off-Policy Policy Evaluation.” In <em>Proceedings of the Seventeenth International Conference on Machine Learning.</em></p>
+<p>Precup, D., Sutton, R. S., and Singh, S. (2000). Eligibility traces for off-policy policy evaluation. in <em>Proceedings of the Seventeenth International Conference on Machine Learning.</em></p>
 </div>
 <div id="ref-Ruder2016">
-<p>Ruder, Sebastian. 2016. “An Overview of Gradient Descent Optimization Algorithms,” September. <a href="http://arxiv.org/abs/1609.04747">http://arxiv.org/abs/1609.04747</a>.</p>
+<p>Ruder, S. (2016). An overview of gradient descent optimization algorithms. Available at: <a href="http://arxiv.org/abs/1609.04747">http://arxiv.org/abs/1609.04747</a>.</p>
 </div>
 <div id="ref-Salimans2017">
-<p>Salimans, Tim, Jonathan Ho, Xi Chen, Szymon Sidor, and Ilya Sutskever. 2017. “Evolution Strategies as a Scalable Alternative to Reinforcement Learning,” March. <a href="http://arxiv.org/abs/1703.03864">http://arxiv.org/abs/1703.03864</a>.</p>
+<p>Salimans, T., Ho, J., Chen, X., Sidor, S., and Sutskever, I. (2017). Evolution Strategies as a Scalable Alternative to Reinforcement Learning. Available at: <a href="http://arxiv.org/abs/1703.03864">http://arxiv.org/abs/1703.03864</a>.</p>
 </div>
 <div id="ref-Schaul2015">
-<p>Schaul, Tom, John Quan, Ioannis Antonoglou, and David Silver. 2015. “Prioritized Experience Replay,” November. <a href="http://arxiv.org/abs/1511.05952">http://arxiv.org/abs/1511.05952</a>.</p>
+<p>Schaul, T., Quan, J., Antonoglou, I., and Silver, D. (2015). Prioritized Experience Replay. Available at: <a href="http://arxiv.org/abs/1511.05952">http://arxiv.org/abs/1511.05952</a>.</p>
+</div>
+<div id="ref-Schulman2017a">
+<p>Schulman, J., Chen, X., and Abbeel, P. (2017a). Equivalence Between Policy Gradients and Soft Q-Learning. <em>arXiv:1704.06440 [cs]</em>. Available at: <a href="http://arxiv.org/abs/1704.06440">http://arxiv.org/abs/1704.06440</a> [Accessed June 12, 2019].</p>
 </div>
 <div id="ref-Schulman2015">
-<p>Schulman, John, Sergey Levine, Pieter Abbeel, Michael Jordan, and Philipp Moritz. 2015. “Trust Region Policy Optimization,” June, 1889–97. <a href="http://proceedings.mlr.press/v37/schulman15.html">http://proceedings.mlr.press/v37/schulman15.html</a>.</p>
+<p>Schulman, J., Levine, S., Abbeel, P., Jordan, M., and Moritz, P. (2015a). Trust Region Policy Optimization. 1889–1897. Available at: <a href="http://proceedings.mlr.press/v37/schulman15.html">http://proceedings.mlr.press/v37/schulman15.html</a>.</p>
 </div>
 <div id="ref-Schulman2015a">
-<p>Schulman, John, Philipp Moritz, Sergey Levine, Michael Jordan, and Pieter Abbeel. 2015. “High-Dimensional Continuous Control Using Generalized Advantage Estimation,” June. <a href="http://arxiv.org/abs/1506.02438">http://arxiv.org/abs/1506.02438</a>.</p>
+<p>Schulman, J., Moritz, P., Levine, S., Jordan, M., and Abbeel, P. (2015b). High-Dimensional Continuous Control Using Generalized Advantage Estimation. Available at: <a href="http://arxiv.org/abs/1506.02438">http://arxiv.org/abs/1506.02438</a>.</p>
 </div>
 <div id="ref-Schulman2017">
-<p>Schulman, John, Filip Wolski, Prafulla Dhariwal, Alec Radford, and Oleg Klimov. 2017. “Proximal Policy Optimization Algorithms,” July. <a href="http://arxiv.org/abs/1707.06347">http://arxiv.org/abs/1707.06347</a>.</p>
+<p>Schulman, J., Wolski, F., Dhariwal, P., Radford, A., and Klimov, O. (2017b). Proximal Policy Optimization Algorithms. Available at: <a href="http://arxiv.org/abs/1707.06347">http://arxiv.org/abs/1707.06347</a>.</p>
 </div>
 <div id="ref-Silver2016">
-<p>Silver, David, Aja Huang, Chris J. Maddison, Arthur Guez, Laurent Sifre, George Van Den Driessche, Julian Schrittwieser, et al. 2016. “Mastering the Game of Go with Deep Neural Networks and Tree Search.” <em>Nature</em>. <a href="https://doi.org/10.1038/nature16961">https://doi.org/10.1038/nature16961</a>.</p>
+<p>Silver, D., Huang, A., Maddison, C. J., Guez, A., Sifre, L., Van Den Driessche, G., et al. (2016a). Mastering the game of Go with deep neural networks and tree search. <em>Nature</em>. doi:<a href="https://doi.org/10.1038/nature16961">10.1038/nature16961</a>.</p>
 </div>
 <div id="ref-Silver2014">
-<p>Silver, David, Guy Lever, Nicolas Heess, Thomas Degris, Daan Wierstra, and Martin Riedmiller. 2014. “Deterministic Policy Gradient Algorithms.” In <em>Proc. ICML</em>, edited by Eric P Xing and Tony Jebara, 32:387–95. Proceedings of Machine Learning Research. PMLR. <a href="http://proceedings.mlr.press/v32/silver14.html">http://proceedings.mlr.press/v32/silver14.html</a>.</p>
+<p>Silver, D., Lever, G., Heess, N., Degris, T., Wierstra, D., and Riedmiller, M. (2014). Deterministic Policy Gradient Algorithms. in <em>Proc. ICML</em> Proceedings of Machine Learning Research., eds. E. P. Xing and T. Jebara (PMLR), 387–395. Available at: <a href="http://proceedings.mlr.press/v32/silver14.html">http://proceedings.mlr.press/v32/silver14.html</a>.</p>
+</div>
+<div id="ref-Silver2016a">
+<p>Silver, D., van Hasselt, H., Hessel, M., Schaul, T., Guez, A., Harley, T., et al. (2016b). The Predictron: End-To-End Learning and Planning. Available at: <a href="http://arxiv.org/abs/1612.08810">http://arxiv.org/abs/1612.08810</a>.</p>
 </div>
 <div id="ref-Simonyan2015">
-<p>Simonyan, Karen, and Andrew Zisserman. 2015. “Very Deep Convolutional Networks for Large-Scale Image Recognition.” <em>International Conference on Learning Representations (ICRL)</em>, 1–14. <a href="https://doi.org/10.1016/j.infsof.2008.09.005">https://doi.org/10.1016/j.infsof.2008.09.005</a>.</p>
+<p>Simonyan, K., and Zisserman, A. (2015). Very Deep Convolutional Networks for Large-Scale Image Recognition. <em>International Conference on Learning Representations (ICRL)</em>, 1–14. doi:<a href="https://doi.org/10.1016/j.infsof.2008.09.005">10.1016/j.infsof.2008.09.005</a>.</p>
 </div>
-<div id="ref-Sutton1999">
-<p>Sutton, Richard S., David McAllester, Satinder Singh, and Yishay Mansour. 1999. “Policy Gradient Methods for Reinforcement Learning with Function Approximation.” In <em>Proceedings of the 12th International Conference on Neural Information Processing Systems</em>, 1057–63. MIT Press. <a href="https://dl.acm.org/citation.cfm?id=3009806">https://dl.acm.org/citation.cfm?id=3009806</a>.</p>
+<div id="ref-Srinivas2018">
+<p>Srinivas, A., Jabri, A., Abbeel, P., Levine, S., and Finn, C. (2018). Universal Planning Networks. Available at: <a href="http://arxiv.org/abs/1804.00645">http://arxiv.org/abs/1804.00645</a>.</p>
+</div>
+<div id="ref-Stollenga2014">
+<p>Stollenga, M., Masci, J., Gomez, F., and Schmidhuber, J. (2014). Deep Networks with Internal Selective Attention through Feedback Connections. Available at: <a href="http://arxiv.org/abs/1407.3068">http://arxiv.org/abs/1407.3068</a>.</p>
+</div>
+<div id="ref-Sutton1990a">
+<p>Sutton, R. S. (1990). Integrated Architectures for Learning, Planning, and Reacting Based on Approximating Dynamic Programming. <em>Machine Learning Proceedings 1990</em>, 216–224. doi:<a href="https://doi.org/10.1016/B978-1-55860-141-3.50030-4">10.1016/B978-1-55860-141-3.50030-4</a>.</p>
 </div>
 <div id="ref-Sutton1998">
-<p>Sutton, R. S., and A. G. Barto. 1998. <em>Reinforcement Learning: An Introduction</em>. Cambridge, MA: MIT press.</p>
+<p>Sutton, R. S., and Barto, A. G. (1998). <em>Reinforcement Learning: An introduction</em>. Cambridge, MA: MIT press.</p>
 </div>
 <div id="ref-Sutton2017">
-<p>———. 2017. <em>Reinforcement Learning: An Introduction</em>. 2nd ed. Cambridge, MA: MIT Press. <a href="http://incompleteideas.net/book/the-book-2nd.html">http://incompleteideas.net/book/the-book-2nd.html</a>.</p>
+<p>Sutton, R. S., and Barto, A. G. (2017). <em>Reinforcement Learning: An Introduction</em>. 2nd ed. Cambridge, MA: MIT Press Available at: <a href="http://incompleteideas.net/book/the-book-2nd.html">http://incompleteideas.net/book/the-book-2nd.html</a>.</p>
+</div>
+<div id="ref-Sutton1999">
+<p>Sutton, R. S., McAllester, D., Singh, S., and Mansour, Y. (1999). Policy gradient methods for reinforcement learning with function approximation. in <em>Proceedings of the 12th International Conference on Neural Information Processing Systems</em> (MIT Press), 1057–1063. Available at: <a href="https://dl.acm.org/citation.cfm?id=3009806">https://dl.acm.org/citation.cfm?id=3009806</a>.</p>
 </div>
 <div id="ref-Szita2006">
-<p>Szita, István, and András Lörincz. 2006. “Learning Tetris Using the Noisy Cross-Entropy Method.” <em>Neural Computation</em> 18 (12): 2936–41. <a href="https://doi.org/10.1162/neco.2006.18.12.2936">https://doi.org/10.1162/neco.2006.18.12.2936</a>.</p>
+<p>Szita, I., and Lörincz, A. (2006). Learning Tetris Using the Noisy Cross-Entropy Method. <em>Neural Computation</em> 18, 2936–2941. doi:<a href="https://doi.org/10.1162/neco.2006.18.12.2936">10.1162/neco.2006.18.12.2936</a>.</p>
 </div>
 <div id="ref-Tang2010">
-<p>Tang, Jie, and Pieter Abbeel. 2010. “On a Connection Between Importance Sampling and the Likelihood Ratio Policy Gradient.” In <em>Adv. Neural Inf. Process. Syst.</em> <a href="http://rll.berkeley.edu/~jietang/pubs/nips10_Tang.pdf">http://rll.berkeley.edu/~jietang/pubs/nips10_Tang.pdf</a>.</p>
+<p>Tang, J., and Abbeel, P. (2010). On a Connection between Importance Sampling and the Likelihood Ratio Policy Gradient. in <em>Adv. Neural inf. Process. Syst.</em> Available at: <a href="http://rll.berkeley.edu/~jietang/pubs/nips10_Tang.pdf">http://rll.berkeley.edu/~jietang/pubs/nips10_Tang.pdf</a>.</p>
 </div>
 <div id="ref-Todorov2008">
-<p>Todorov, E. 2008. “General Duality Between Optimal Control and Estimation.” In <em>2008 47th IEEE Conference on Decision and Control</em>, 4286–92. <a href="https://doi.org/10.1109/CDC.2008.4739438">https://doi.org/10.1109/CDC.2008.4739438</a>.</p>
+<p>Todorov, E. (2008). General duality between optimal control and estimation. in <em>2008 47th IEEE Conference on Decision and Control</em>, 4286–4292. doi:<a href="https://doi.org/10.1109/CDC.2008.4739438">10.1109/CDC.2008.4739438</a>.</p>
 </div>
 <div id="ref-Toussaint2009">
-<p>Toussaint, Marc. 2009. “Robot Trajectory Optimization Using Approximate Inference.” In <em>Proceedings of the 26th Annual International Conference on Machine Learning</em>, 1049–56. ICML ’09. New York, NY, USA: ACM. <a href="https://doi.org/10.1145/1553374.1553508">https://doi.org/10.1145/1553374.1553508</a>.</p>
+<p>Toussaint, M. (2009). Robot Trajectory Optimization Using Approximate Inference. in <em>Proceedings of the 26th Annual International Conference on Machine Learning</em> ICML ’09. (New York, NY, USA: ACM), 1049–1056. doi:<a href="https://doi.org/10.1145/1553374.1553508">10.1145/1553374.1553508</a>.</p>
 </div>
 <div id="ref-Uhlenbeck1930">
-<p>Uhlenbeck, G. E., and L. S Ornstein. 1930. “On the Theory of the Brownian Motion.” <em>Physical Review</em> 36. <a href="https://doi.org/10.1103/PhysRev.36.823">https://doi.org/10.1103/PhysRev.36.823</a>.</p>
+<p>Uhlenbeck, G. E., and Ornstein, L. S. (1930). On the Theory of the Brownian Motion. <em>Physical Review</em> 36. doi:<a href="https://doi.org/10.1103/PhysRev.36.823">10.1103/PhysRev.36.823</a>.</p>
 </div>
 <div id="ref-vanHasselt2010">
-<p>van Hasselt, Hado. 2010. “Double Q-Learning.” In <em>Proceedings of the 23rd International Conference on Neural Information Processing Systems - Volume 2</em>, 2613–21. Curran Associates Inc. <a href="https://dl.acm.org/citation.cfm?id=2997187">https://dl.acm.org/citation.cfm?id=2997187</a>.</p>
+<p>van Hasselt, H. (2010). Double Q-learning. in <em>Proceedings of the 23rd International Conference on Neural Information Processing Systems - Volume 2</em> (Curran Associates Inc.), 2613–2621. Available at: <a href="https://dl.acm.org/citation.cfm?id=2997187">https://dl.acm.org/citation.cfm?id=2997187</a>.</p>
 </div>
 <div id="ref-vanHasselt2015">
-<p>van Hasselt, Hado, Arthur Guez, and David Silver. 2015. “Deep Reinforcement Learning with Double Q-Learning,” September. <a href="http://arxiv.org/abs/1509.06461">http://arxiv.org/abs/1509.06461</a>.</p>
+<p>van Hasselt, H., Guez, A., and Silver, D. (2015). Deep Reinforcement Learning with Double Q-learning. Available at: <a href="http://arxiv.org/abs/1509.06461">http://arxiv.org/abs/1509.06461</a>.</p>
 </div>
 <div id="ref-Wang2017">
-<p>Wang, Ziyu, Victor Bapst, Nicolas Heess, Volodymyr Mnih, Remi Munos, Koray Kavukcuoglu, and Nando de Freitas. 2017. “Sample Efficient Actor-Critic with Experience Replay,” November. <a href="http://arxiv.org/abs/1611.01224">http://arxiv.org/abs/1611.01224</a>.</p>
+<p>Wang, Z., Bapst, V., Heess, N., Mnih, V., Munos, R., Kavukcuoglu, K., et al. (2017). Sample Efficient Actor-Critic with Experience Replay. Available at: <a href="http://arxiv.org/abs/1611.01224">http://arxiv.org/abs/1611.01224</a>.</p>
 </div>
 <div id="ref-Wang2016">
-<p>Wang, Ziyu, Tom Schaul, Matteo Hessel, Hado van Hasselt, Marc Lanctot, and Nando de Freitas. 2016. “Dueling Network Architectures for Deep Reinforcement Learning.” In <em>Proc. ICML</em>. <a href="http://arxiv.org/abs/1511.06581">http://arxiv.org/abs/1511.06581</a>.</p>
+<p>Wang, Z., Schaul, T., Hessel, M., van Hasselt, H., Lanctot, M., and de Freitas, N. (2016). Dueling Network Architectures for Deep Reinforcement Learning. in <em>Proc. ICML</em> Available at: <a href="http://arxiv.org/abs/1511.06581">http://arxiv.org/abs/1511.06581</a>.</p>
 </div>
 <div id="ref-Watkins1989">
-<p>Watkins, Christopher JCH. 1989. “Learning from Delayed Rewards.” PhD thesis.</p>
+<p>Watkins, C. J. (1989). Learning from delayed rewards.</p>
+</div>
+<div id="ref-Watter2015">
+<p>Watter, M., Springenberg, J. T., Boedecker, J., and Riedmiller, M. (2015). Embed to Control: A Locally Linear Latent Dynamics Model for Control from Raw Images. Available at: <a href="https://arxiv.org/pdf/1506.07365.pdf">https://arxiv.org/pdf/1506.07365.pdf</a>.</p>
+</div>
+<div id="ref-Weber2017">
+<p>Weber, T., Racanière, S., Reichert, D. P., Buesing, L., Guez, A., Rezende, D. J., et al. (2017). Imagination-Augmented Agents for Deep Reinforcement Learning. Available at: <a href="http://arxiv.org/abs/1707.06203">http://arxiv.org/abs/1707.06203</a>.</p>
 </div>
 <div id="ref-Wierstra2007">
-<p>Wierstra, Daan, Alexander Foerster, Jan Peters, and Jürgen Schmidhuber. 2007. “Solving Deep Memory POMDPs with Recurrent Policy Gradients.” In, 697–706. Springer, Berlin, Heidelberg. <a href="https://doi.org/10.1007/978-3-540-74690-4_71">https://doi.org/10.1007/978-3-540-74690-4_71</a>.</p>
+<p>Wierstra, D., Foerster, A., Peters, J., and Schmidhuber, J. (2007). “Solving Deep Memory POMDPs with Recurrent Policy Gradients,” in (Springer, Berlin, Heidelberg), 697–706. doi:<a href="https://doi.org/10.1007/978-3-540-74690-4_71">10.1007/978-3-540-74690-4_71</a>.</p>
 </div>
 <div id="ref-Williams1992">
-<p>Williams, R. J. 1992. “Simple Statistical Gradient-Following Algorithms for Connectionist Reinforcement Learning.” <em>Machine Learning</em> 8: 229–56.</p>
+<p>Williams, R. J. (1992). Simple statistical gradient-following algorithms for connectionist reinforcement learning. <em>Machine Learning</em> 8, 229–256.</p>
 </div>
 <div id="ref-Williams1991">
-<p>Williams, Ronald J, and Jing Peng. 1991. “Function Optimization Using Connectionist Reinforcement Learning Algorithms.” <em>Connection Science</em> 3 (3): 241–68.</p>
+<p>Williams, R. J., and Peng, J. (1991). Function optimization using connectionist reinforcement learning algorithms. <em>Connection Science</em> 3, 241–268.</p>
+</div>
+<div id="ref-Zhang2015">
+<p>Zhang, F., Leitner, J., Milford, M., Upcroft, B., and Corke, P. (2015). Towards Vision-Based Deep Reinforcement Learning for Robotic Motion Control. in <em>Proc. Acra</em> Available at: <a href="http://arxiv.org/abs/1511.03791">http://arxiv.org/abs/1511.03791</a>.</p>
+</div>
+<div id="ref-Ziebart2008">
+<p>Ziebart, B. D., Maas, A., Bagnell, J. A., and Dey, A. K. (2008). Maximum Entropy Inverse Reinforcement Learning. in <em>AAAI Conference on Artificial Intelligence</em>, 6.</p>
 </div>
 </div>
 

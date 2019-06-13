@@ -92,7 +92,8 @@
 </ul></li>
 <li><a href="./OtherPolicyGradient.html#sec:maximum-entropy-rl"><span class="toc-section-number">4.6</span> Maximum Entropy RL</a><ul>
 <li><a href="#sec:entropy-regularization-1"><span class="toc-section-number">4.6.1</span> Entropy regularization</a></li>
-<li><a href="./OtherPolicyGradient.html#sec:soft-actor-critic-sac"><span class="toc-section-number">4.6.2</span> Soft Actor-Critic (SAC)</a></li>
+<li><a href="./OtherPolicyGradient.html#sec:soft-q-learning"><span class="toc-section-number">4.6.2</span> Soft Q-learning</a></li>
+<li><a href="./OtherPolicyGradient.html#sec:soft-actor-critic-sac"><span class="toc-section-number">4.6.3</span> Soft Actor-Critic (SAC)</a></li>
 </ul></li>
 <li><a href="./OtherPolicyGradient.html#sec:distributional-learning"><span class="toc-section-number">4.7</span> Distributional learning</a><ul>
 <li><a href="./OtherPolicyGradient.html#sec:the-reactor"><span class="toc-section-number">4.7.1</span> The Reactor</a></li>
@@ -109,11 +110,18 @@
 <li><a href="./OtherPolicyGradient.html#sec:evolutionary-search-es"><span class="toc-section-number">4.10.2</span> Evolutionary Search (ES)</a></li>
 </ul></li>
 </ul></li>
-<li><a href="./Practice.html#sec:deep-rl-in-practice"><span class="toc-section-number">5</span> Deep RL in practice</a><ul>
-<li><a href="./Practice.html#sec:limitations"><span class="toc-section-number">5.1</span> Limitations</a></li>
-<li><a href="./Practice.html#sec:reward-shaping"><span class="toc-section-number">5.2</span> Reward shaping</a></li>
-<li><a href="./Practice.html#sec:simulation-environments"><span class="toc-section-number">5.3</span> Simulation environments</a></li>
-<li><a href="./Practice.html#sec:algorithm-implementations"><span class="toc-section-number">5.4</span> Algorithm implementations</a></li>
+<li><a href="./RAM.html#sec:recurrent-attention-models"><span class="toc-section-number">5</span> Recurrent Attention Models</a></li>
+<li><a href="./ModelBased.html#sec:model-based-rl"><span class="toc-section-number">6</span> Model-based RL</a><ul>
+<li><a href="./ModelBased.html#sec:dyna-q"><span class="toc-section-number">6.1</span> Dyna-Q</a></li>
+<li><a href="./ModelBased.html#sec:unsorted-references"><span class="toc-section-number">6.2</span> Unsorted references</a></li>
+</ul></li>
+<li><a href="./Hierarchical.html#sec:hierarchical-reinforcement-learning"><span class="toc-section-number">7</span> Hierarchical Reinforcement Learning</a></li>
+<li><a href="./Inverse.html#sec:inverse-reinforcement-learning"><span class="toc-section-number">8</span> Inverse Reinforcement Learning</a></li>
+<li><a href="./Robotics.html#sec:deep-rl-for-robotics"><span class="toc-section-number">9</span> Deep RL for robotics</a></li>
+<li><a href="./Practice.html#sec:deep-rl-in-practice"><span class="toc-section-number">10</span> Deep RL in practice</a><ul>
+<li><a href="./Practice.html#sec:limitations"><span class="toc-section-number">10.1</span> Limitations</a></li>
+<li><a href="./Practice.html#sec:simulation-environments"><span class="toc-section-number">10.2</span> Simulation environments</a></li>
+<li><a href="./Practice.html#sec:algorithm-implementations"><span class="toc-section-number">10.3</span> Algorithm implementations</a></li>
 </ul></li>
 <li><a href="./References.html#sec:references">References</a></li>
 </ul>
@@ -147,7 +155,7 @@
 <p>Actions which would be selected by the target policy should be selected at least from time to time by the behavior policy in order to allow their update: if the target policy thinks this action should be executed, the behavior policy should try it to confirm or infirm this assumption. In mathematical terms, there is an assumption of <em>coverage</em> of <span class="math inline">\(\pi\)</span> by <span class="math inline">\(b\)</span> (the support of <span class="math inline">\(b\)</span> includes the one of <span class="math inline">\(\pi\)</span>).</p>
 <p>There are mostly two ways to create the behavior policy:</p>
 <ol type="1">
-<li><p><em>Use expert knowledge / human demonstrations</em>. Not all available actions should be explored: the programmer already knows they do not belong to the optimal policy. When an agent learns to play chess, for example, the behavior policy could consist of the moves typically played by human experts: if chess masters play this move, it is likely to be a good action, so it should be tried out, valued and possibly incorporated into the target policy (if it is indeed a good action, experts might be wrong). A similar idea was used to bootstrap early versions of AlphaGo <span class="citation" data-cites="Silver2016">(Silver et al. <a href="References.html#ref-Silver2016" role="doc-biblioref">2016</a>)</span>. In robotics, one could for example use “classical” engineering methods to control the exploration of the robot, while learning (hopefully) a better policy. It is also possible to perform <em>imitation learning</em>, where the agent learns from human demonstrations (e.g. <span class="citation" data-cites="Levine2013">Levine and Koltun (<a href="References.html#ref-Levine2013" role="doc-biblioref">2013</a>)</span>).</p></li>
+<li><p><em>Use expert knowledge / human demonstrations</em>. Not all available actions should be explored: the programmer already knows they do not belong to the optimal policy. When an agent learns to play chess, for example, the behavior policy could consist of the moves typically played by human experts: if chess masters play this move, it is likely to be a good action, so it should be tried out, valued and possibly incorporated into the target policy (if it is indeed a good action, experts might be wrong). A similar idea was used to bootstrap early versions of AlphaGo <span class="citation" data-cites="Silver2016">(Silver et al., <a href="References.html#ref-Silver2016" role="doc-biblioref">2016</a><a href="References.html#ref-Silver2016" role="doc-biblioref">a</a>)</span>. In robotics, one could for example use “classical” engineering methods to control the exploration of the robot, while learning (hopefully) a better policy. It is also possible to perform <em>imitation learning</em>, where the agent learns from human demonstrations (e.g. <span class="citation" data-cites="Levine2013">Levine and Koltun (<a href="References.html#ref-Levine2013" role="doc-biblioref">2013</a>)</span>).</p></li>
 <li><p><em>Derive it from the target policy</em>. In Q-learning, the target policy can be <strong>deterministic</strong>, i.e. always select the greedy action (with the maximum Q-value). The behavior policy can be derived from the target policy by making it <em><span class="math inline">\(\epsilon\)</span>-soft</em>, for example using a <span class="math inline">\(\epsilon\)</span>-greedy or softmax action selection scheme on the Q-values learned by the target policy (see Section <a href="./BasicRL.html#sec:monte-carlo-sampling">2.1.4</a>).</p></li>
 </ol>
 <p>The second option allows to control the level of exploration during learning (by controlling <span class="math inline">\(\epsilon\)</span> or the softmax temperature) while making sure that the target policy (the one used in production) is deterministic and optimal. It furthermore makes sure that Eq. <a href="#eq:qlearningcondition">13</a> is respected: the greedy action of the target policy always has a non-zero probability of being selected by an <span class="math inline">\(\epsilon\)</span>-greedy or softmax action selection. This is harder to ensure using expert knowledge.</p>
@@ -183,7 +191,7 @@
 <p><span class="math display">\[
     \frac{\rho_\theta(\tau)}{\rho_b(\tau)} = \frac{p_0 (s_0) \, \prod_{t=0}^T \pi_\theta(s_t, a_t) p(s_{t+1} | s_t, a_t)}{p_0 (s_0) \, \prod_{t=0}^T b(s_t, a_t) p(s_{t+1} | s_t, a_t)} = \frac{\prod_{t=0}^T \pi_\theta(s_t, a_t)}{\prod_{t=0}^T b(s_t, a_t)} = \prod_{t=0}^T \frac{\pi_\theta(s_t, a_t)}{b(s_t, a_t)}
 \]</span></p>
-<p>This allows to estimate the objective function <span class="math inline">\(J(\theta)\)</span> using Monte Carlo sampling <span class="citation" data-cites="Meuleau2000 Peshkin2002">(Meuleau et al. <a href="References.html#ref-Meuleau2000" role="doc-biblioref">2000</a>; Peshkin and Shelton <a href="References.html#ref-Peshkin2002" role="doc-biblioref">2002</a>)</span>:</p>
+<p>This allows to estimate the objective function <span class="math inline">\(J(\theta)\)</span> using Monte Carlo sampling <span class="citation" data-cites="Meuleau2000 Peshkin2002">(Meuleau et al., <a href="References.html#ref-Meuleau2000" role="doc-biblioref">2000</a>; Peshkin and Shelton, <a href="References.html#ref-Peshkin2002" role="doc-biblioref">2002</a>)</span>:</p>
 <p><span class="math display">\[
   J(\theta) \approx \frac{1}{m} \, \sum_{i=1}^m \frac{\rho_\theta(\tau_i)}{\rho_b(\tau_i)} \, R(\tau_i)
 \]</span></p>
@@ -217,12 +225,12 @@
 <li><p>The return after being in a state <span class="math inline">\(s_t\)</span> only depends on future states.</p></li>
 <li><p>The importance sampling weight (relative probability of arriving in <span class="math inline">\(s_t\)</span> using the behavior and target policies) only depends on the past weights.</p></li>
 </ol>
-<p>This gives the following approximation of the policy gradient, used for example in Guided policy search <span class="citation" data-cites="Levine2013">(Levine and Koltun <a href="References.html#ref-Levine2013" role="doc-biblioref">2013</a>)</span>:</p>
+<p>This gives the following approximation of the policy gradient, used for example in Guided policy search <span class="citation" data-cites="Levine2013">(Levine and Koltun, <a href="References.html#ref-Levine2013" role="doc-biblioref">2013</a>)</span>:</p>
 <p><span class="math display">\[
     \nabla_\theta J(\theta) =  \mathbb{E}_{\tau \sim \rho_b}[ \sum_{t=0}^T \nabla_\theta \log \pi_\theta(s_t, a_t) \, \left(\prod_{t&#39;=0}^t \frac{\pi_\theta(s_{t&#39;}, a_{t&#39;})}{b(s_{t&#39;}, a_{t&#39;})} \right) \, \left(\sum_{t&#39;=t}^T \gamma^{t&#39;-t} \, r(s_{t&#39;}, a_{t&#39;}) \right)]
 \]</span></p>
 <h3 id="sec:linear-off-policy-actor-critic-off-pac"><span class="header-section-number">4.3.2</span> Linear Off-Policy Actor-Critic (Off-PAC)</h3>
-<p>The first off-policy actor-critic method was proposed by <span class="citation" data-cites="Degris2012">Degris, White, and Sutton (<a href="References.html#ref-Degris2012" role="doc-biblioref">2012</a>)</span> for linear approximators. Another way to express the objective function in policy search is by using the Bellman equation (here in the off-policy setting):</p>
+<p>The first off-policy actor-critic method was proposed by <span class="citation" data-cites="Degris2012">Degris et al. (<a href="References.html#ref-Degris2012" role="doc-biblioref">2012</a>)</span> for linear approximators. Another way to express the objective function in policy search is by using the Bellman equation (here in the off-policy setting):</p>
 <p><span class="math display">\[
     J(\theta) = \mathbb{E}_{s \sim \rho_b} [V^{\pi_\theta}(s)] = \mathbb{E}_{s \sim \rho_b} [\sum_{a\in\mathcal{A}} \pi(s, a) \, Q^{\pi_\theta}(s, a)]
 \]</span></p>
@@ -234,7 +242,7 @@
 <p><span class="math display">\[
     \nabla_\theta  (\pi_\theta(s, a) \, Q^{\pi_\theta}(s, a)) = Q^{\pi_\theta}(s, a) \, \nabla_\theta  \pi_\theta(s, a) + \pi_\theta(s, a) \, \nabla_\theta Q^{\pi_\theta}(s, a)
 \]</span></p>
-<p>The second term depends on <span class="math inline">\(\nabla_\theta Q^{\pi_\theta}(s, a)\)</span>, which is very difficult to estimate. <span class="citation" data-cites="Degris2012">Degris, White, and Sutton (<a href="References.html#ref-Degris2012" role="doc-biblioref">2012</a>)</span> showed that when the Q-values are estimated by an unbiased <strong>critic</strong> <span class="math inline">\(Q_\varphi(s, a)\)</span>, this second term can be omitted. Using the log-trick and importance sampling, the policy gradient can be expressed as:</p>
+<p>The second term depends on <span class="math inline">\(\nabla_\theta Q^{\pi_\theta}(s, a)\)</span>, which is very difficult to estimate. <span class="citation" data-cites="Degris2012">Degris et al. (<a href="References.html#ref-Degris2012" role="doc-biblioref">2012</a>)</span> showed that when the Q-values are estimated by an unbiased <strong>critic</strong> <span class="math inline">\(Q_\varphi(s, a)\)</span>, this second term can be omitted. Using the log-trick and importance sampling, the policy gradient can be expressed as:</p>
 <p><span class="math display">\[
 \begin{aligned}
     \nabla_\theta J(\theta) &amp; = \mathbb{E}_{s \sim \rho_b} [\sum_{a\in\mathcal{A}} Q_\varphi(s, a) \, \nabla_\theta \pi_\theta(s, a)] \\
@@ -242,14 +250,14 @@
                             &amp; = \mathbb{E}_{s,a \sim \rho_b} [\frac{\pi_\theta(s, a)}{b(s, a)} \, Q_\varphi(s, a) \, \nabla_\theta \log \pi_\theta(s, a)] \\
 \end{aligned}
 \]</span></p>
-<p>We now have an <strong>actor-critic</strong> architecture (actor <span class="math inline">\(\pi_\theta(s, a)\)</span>, critic <span class="math inline">\(Q_\varphi(s, a)\)</span>) able to learn from single transitions <span class="math inline">\((s,a)\)</span> (<strong>online update</strong> instead of complete trajectories) generated <strong>off-policy</strong> (behavior policy <span class="math inline">\(b(s,a)\)</span> and importance sampling weight <span class="math inline">\(\frac{\pi_\theta(s, a)}{b(s, a)}\)</span>). The off-policy actor-critic (Off-PAC) algorithm of <span class="citation" data-cites="Degris2012">Degris, White, and Sutton (<a href="References.html#ref-Degris2012" role="doc-biblioref">2012</a>)</span> furthermore uses <strong>eligibility traces</strong> to stabilize learning. However, it was limited to linear function approximators because its variance is too high to train deep neural networks.</p>
+<p>We now have an <strong>actor-critic</strong> architecture (actor <span class="math inline">\(\pi_\theta(s, a)\)</span>, critic <span class="math inline">\(Q_\varphi(s, a)\)</span>) able to learn from single transitions <span class="math inline">\((s,a)\)</span> (<strong>online update</strong> instead of complete trajectories) generated <strong>off-policy</strong> (behavior policy <span class="math inline">\(b(s,a)\)</span> and importance sampling weight <span class="math inline">\(\frac{\pi_\theta(s, a)}{b(s, a)}\)</span>). The off-policy actor-critic (Off-PAC) algorithm of <span class="citation" data-cites="Degris2012">Degris et al. (<a href="References.html#ref-Degris2012" role="doc-biblioref">2012</a>)</span> furthermore uses <strong>eligibility traces</strong> to stabilize learning. However, it was limited to linear function approximators because its variance is too high to train deep neural networks.</p>
 <h3 id="sec:retrace"><span class="header-section-number">4.3.3</span> Retrace</h3>
 <p>For a good deep RL algorithm, we need the two following properties:</p>
 <ol type="1">
 <li><p><strong>Off-policy</strong> learning: it allows to learn from transitions stored in a replay buffer (i.e. generated with an older policy). As NN need many iterations to converge, it is important to be able to re-use old transitions for its training, instead of constantly sampling new ones (sample complexity). Multiple parallel actors as in A3C allow to mitigate this problem, but it is still too complex.</p></li>
 <li><p><strong>Multi-step returns</strong>: the two extremes of RL are TD (using a single “real” reward for the update, the rest is estimated) and Monte-Carlo (use only “real” rewards, no estimation). TD has a smaller variance, but a high bias (errors in estimates propagate to all other values), while MC has a small bias but a high variance (learns from many real rewards, but the returns may vary a lot between two almost identical episodes). Eligibility traces and n-step returns (used in A3C) are the most common trade-off between TD and MC.</p></li>
 </ol>
-<p>The <strong>Retrace</strong> algorithm <span class="citation" data-cites="Munos2016">(Munos et al. <a href="References.html#ref-Munos2016" role="doc-biblioref">2016</a>)</span> is designed to exhibit both properties when learning Q-values. It can therefore be used to train the critic (instead of classical Q-learning) and provide the actor with safe, efficient and low-variance values.</p>
+<p>The <strong>Retrace</strong> algorithm <span class="citation" data-cites="Munos2016">(Munos et al., <a href="References.html#ref-Munos2016" role="doc-biblioref">2016</a>)</span> is designed to exhibit both properties when learning Q-values. It can therefore be used to train the critic (instead of classical Q-learning) and provide the actor with safe, efficient and low-variance values.</p>
 <p>In the generic form, Q-learning updates the Q-value of a transition <span class="math inline">\((s_t, a_t)\)</span> using the TD error:</p>
 <p><span class="math display">\[
     \Delta Q^\pi(s_t, a_t) = \alpha \, \delta_t = \alpha \, (r_{t+1} + \gamma \, \max_a Q^\pi(s_{t+1}, a_{t+1}) - Q^\pi(s_t, a_t))
@@ -269,10 +277,10 @@
 <p><span class="math display">\[
     || \pi - b ||_1 \leq \frac{1 - \gamma}{\lambda \gamma}
 \]</span></p>
-<p>As <span class="math inline">\(\gamma\)</span> is typically chosen very close from 1 (e.g. 0.99), this does not leave much room for the target policy to differ from the behavior policy <span class="citation" data-cites="Harutyunyan2016">(see Harutyunyan et al. <a href="References.html#ref-Harutyunyan2016" role="doc-biblioref">2016</a> for the proof)</span>.</p>
+<p>As <span class="math inline">\(\gamma\)</span> is typically chosen very close from 1 (e.g. 0.99), this does not leave much room for the target policy to differ from the behavior policy <span class="citation" data-cites="Harutyunyan2016">(see Harutyunyan et al., <a href="References.html#ref-Harutyunyan2016" role="doc-biblioref">2016</a> for the proof)</span>.</p>
 <ol start="2" type="1">
 <li><p><span class="math inline">\(c_s = \frac{\pi(s_s, a_s)}{b(s_s, a_s)}\)</span> is the importance sampling weight. As shown in Section <a href="./ImportanceSampling.html#sec:importance-sampling">4.3.1</a>, importance sampling is unbiased in off-policy settings, but can have a very large variance: the product of ratios <span class="math inline">\(\prod_{s=t+1}^{t&#39;} \frac{\pi(s_s, a_s)}{b(s_s, a_s)}\)</span> can quickly vary between two episodes.</p></li>
-<li><p><span class="math inline">\(c_s = \pi(s_s, a_s)\)</span> corresponds to the tree-backup algorithm <span class="math inline">\(TB(\lambda)\)</span> <span class="citation" data-cites="Precup2000">(Precup, Sutton, and Singh <a href="References.html#ref-Precup2000" role="doc-biblioref">2000</a>)</span>. It has the advantage to work for arbitrary policies <span class="math inline">\(\pi\)</span> and <span class="math inline">\(b\)</span>, but the product of such probabilities decays very fast to zero when the time difference <span class="math inline">\(t&#39; - t\)</span> increases: TD errors will be efficiently shared over a couple of steps only.</p></li>
+<li><p><span class="math inline">\(c_s = \pi(s_s, a_s)\)</span> corresponds to the tree-backup algorithm <span class="math inline">\(TB(\lambda)\)</span> <span class="citation" data-cites="Precup2000">(Precup et al., <a href="References.html#ref-Precup2000" role="doc-biblioref">2000</a>)</span>. It has the advantage to work for arbitrary policies <span class="math inline">\(\pi\)</span> and <span class="math inline">\(b\)</span>, but the product of such probabilities decays very fast to zero when the time difference <span class="math inline">\(t&#39; - t\)</span> increases: TD errors will be efficiently shared over a couple of steps only.</p></li>
 </ol>
 <p>For Retrace, <span class="citation" data-cites="Munos2016">Munos et al. (<a href="References.html#ref-Munos2016" role="doc-biblioref">2016</a>)</span> showed that a much better value for <span class="math inline">\(c_s\)</span> is:</p>
 <p><span class="math display">\[

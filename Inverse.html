@@ -131,36 +131,15 @@
 
 
 
-
-<h1 id="sec:introduction"><span class="header-section-number">1</span> Introduction</h1>
-<p>The goal of this document is to keep track the state-of-the-art in deep reinforcement learning. It starts with basics in reinforcement learning and deep learning to introduce the notations and covers different classes of deep RL methods, value-based or policy-based, model-free or model-based, etc.</p>
-<p>Different classes of deep RL methods can be identified. This document will focus on the following ones:</p>
-<ol type="1">
-<li>Value-based algorithms (DQN…) used mostly for discrete problems like video games.</li>
-<li>Policy-gradient algorithms (A3C, DDPG…) used for continuous control problems such as robotics.</li>
-<li>Recurrent attention models (RAM…) for partially observable problems.</li>
-<li>Model-based RL to reduce the sample complexity by incorporating a model of the environment.</li>
-<li>Application of deep RL to robotics</li>
-</ol>
-<p>One could extend the list and talk about hierarchical RL, inverse RL, imitation-based RL, etc…</p>
-<p><strong>Additional resources</strong></p>
-<p>See <span class="citation" data-cites="Li2017">Li (<a href="References.html#ref-Li2017" role="doc-biblioref">2017</a>)</span>, <span class="citation" data-cites="Arulkumaran2017">Arulkumaran et al. (<a href="References.html#ref-Arulkumaran2017" role="doc-biblioref">2017</a>)</span> and <span class="citation" data-cites="Mousavi2018">Mousavi et al. (<a href="References.html#ref-Mousavi2018" role="doc-biblioref">2018</a>)</span> for recent overviews of deep RL.</p>
-<p>The CS294 course of Sergey Levine at Berkeley is incredibly complete: <a href="http://rll.berkeley.edu/deeprlcourse/" class="uri">http://rll.berkeley.edu/deeprlcourse/</a>. The Reinforcement Learning course by David Silver at UCL covers also the whole field: <a href="http://www0.cs.ucl.ac.uk/staff/d.silver/web/Teaching.html" class="uri">http://www0.cs.ucl.ac.uk/staff/d.silver/web/Teaching.html</a>.</p>
-<p>This series of posts from Arthur Juliani <a href="https://medium.com/emergent-future/simple-reinforcement-learning-with-tensorflow-part-0-q-learning-with-tables-and-neural-networks-d195264329d0" class="uri">https://medium.com/emergent-future/simple-reinforcement-learning-with-tensorflow-part-0-q-learning-with-tables-and-neural-networks-d195264329d0</a> also provide a very good introduction to deep RL, associated to code samples using tensorflow.</p>
-<p><strong>Notes</strong></p>
-<p>This document is meant to stay <em>work in progress</em> forever, as new algorithms will be added as they are published. Feel free to comment, correct, suggest, pull request by writing to <a href="mailto:julien.vitay@informatik.tu-chemnitz.de" class="email">julien.vitay@informatik.tu-chemnitz.de</a>.</p>
-<p>For some reason, this document is better printed using chrome. Use the single file version <a href="./DeepRL.html">here</a> and print it to pdf. Alternatively, a pdf version generated using LaTeX is available <a href="./DeepRL.pdf">here</a> (some images may disappear, as LaTeX does not support .gif or .svg images).</p>
-<p>The style is adapted from the Github-Markdown CSS template <a href="https://www.npmjs.com/package/github-markdown-css" class="uri">https://www.npmjs.com/package/github-markdown-css</a>. The document is written in Pandoc’s Markdown and converted to html and pdf using pandoc-citeproc and pandoc-crossref.</p>
-<p>Some figures are taken from the original publication (“Taken from” or “Source” in the caption). Their copyright stays to the respective authors, naturally. The rest is my own work and can be distributed, reproduced and modified under CC-BY-SA-NC 4.0.</p>
-<p><strong>Thanks</strong></p>
-<p>Thanks to all the students who helped me dive into that exciting research field, in particular: Winfried Lötzsch, Johannes Jung, Frank Witscher, Danny Hofmann, Oliver Lange, Vinayakumar Murganoor.</p>
-<p><strong>Copyright</strong></p>
-<p>Except where otherwise noted, this work is licensed under a <a href="http://creativecommons.org/licenses/by-nc-sa/4.0">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.</p>
+<h1 id="sec:inverse-reinforcement-learning"><span class="header-section-number">8</span> Inverse Reinforcement Learning</h1>
+<p><strong>work in progress</strong></p>
+<p>Hindsight experience replay: <span class="citation" data-cites="Andrychowicz2017">Andrychowicz et al. (<a href="References.html#ref-Andrychowicz2017" role="doc-biblioref">2017</a>)</span></p>
+<p>Goal-conditioned inverse RL: <span class="citation" data-cites="Ding2019">Ding et al. (<a href="References.html#ref-Ding2019" role="doc-biblioref">2019</a>)</span></p>
 
 <br>
 <div class="arrows">
-<a href="#" class="previous">&laquo; Previous</a>
-<a href="BasicRL.html" class="next">Next &raquo;</a>
+<a href="Hierarchical.html" class="previous">&laquo; Previous</a>
+<a href="Robotics.html" class="next">Next &raquo;</a>
 </div>
 
 

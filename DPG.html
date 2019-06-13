@@ -92,7 +92,8 @@
 </ul></li>
 <li><a href="./OtherPolicyGradient.html#sec:maximum-entropy-rl"><span class="toc-section-number">4.6</span> Maximum Entropy RL</a><ul>
 <li><a href="#sec:entropy-regularization-1"><span class="toc-section-number">4.6.1</span> Entropy regularization</a></li>
-<li><a href="./OtherPolicyGradient.html#sec:soft-actor-critic-sac"><span class="toc-section-number">4.6.2</span> Soft Actor-Critic (SAC)</a></li>
+<li><a href="./OtherPolicyGradient.html#sec:soft-q-learning"><span class="toc-section-number">4.6.2</span> Soft Q-learning</a></li>
+<li><a href="./OtherPolicyGradient.html#sec:soft-actor-critic-sac"><span class="toc-section-number">4.6.3</span> Soft Actor-Critic (SAC)</a></li>
 </ul></li>
 <li><a href="./OtherPolicyGradient.html#sec:distributional-learning"><span class="toc-section-number">4.7</span> Distributional learning</a><ul>
 <li><a href="./OtherPolicyGradient.html#sec:the-reactor"><span class="toc-section-number">4.7.1</span> The Reactor</a></li>
@@ -109,11 +110,18 @@
 <li><a href="./OtherPolicyGradient.html#sec:evolutionary-search-es"><span class="toc-section-number">4.10.2</span> Evolutionary Search (ES)</a></li>
 </ul></li>
 </ul></li>
-<li><a href="./Practice.html#sec:deep-rl-in-practice"><span class="toc-section-number">5</span> Deep RL in practice</a><ul>
-<li><a href="./Practice.html#sec:limitations"><span class="toc-section-number">5.1</span> Limitations</a></li>
-<li><a href="./Practice.html#sec:reward-shaping"><span class="toc-section-number">5.2</span> Reward shaping</a></li>
-<li><a href="./Practice.html#sec:simulation-environments"><span class="toc-section-number">5.3</span> Simulation environments</a></li>
-<li><a href="./Practice.html#sec:algorithm-implementations"><span class="toc-section-number">5.4</span> Algorithm implementations</a></li>
+<li><a href="./RAM.html#sec:recurrent-attention-models"><span class="toc-section-number">5</span> Recurrent Attention Models</a></li>
+<li><a href="./ModelBased.html#sec:model-based-rl"><span class="toc-section-number">6</span> Model-based RL</a><ul>
+<li><a href="./ModelBased.html#sec:dyna-q"><span class="toc-section-number">6.1</span> Dyna-Q</a></li>
+<li><a href="./ModelBased.html#sec:unsorted-references"><span class="toc-section-number">6.2</span> Unsorted references</a></li>
+</ul></li>
+<li><a href="./Hierarchical.html#sec:hierarchical-reinforcement-learning"><span class="toc-section-number">7</span> Hierarchical Reinforcement Learning</a></li>
+<li><a href="./Inverse.html#sec:inverse-reinforcement-learning"><span class="toc-section-number">8</span> Inverse Reinforcement Learning</a></li>
+<li><a href="./Robotics.html#sec:deep-rl-for-robotics"><span class="toc-section-number">9</span> Deep RL for robotics</a></li>
+<li><a href="./Practice.html#sec:deep-rl-in-practice"><span class="toc-section-number">10</span> Deep RL in practice</a><ul>
+<li><a href="./Practice.html#sec:limitations"><span class="toc-section-number">10.1</span> Limitations</a></li>
+<li><a href="./Practice.html#sec:simulation-environments"><span class="toc-section-number">10.2</span> Simulation environments</a></li>
+<li><a href="./Practice.html#sec:algorithm-implementations"><span class="toc-section-number">10.3</span> Algorithm implementations</a></li>
 </ul></li>
 <li><a href="./References.html#sec:references">References</a></li>
 </ul>
@@ -184,7 +192,7 @@
 <p><span class="math display">\[
     a_t = \mu_\theta(s_t) + \xi
 \]</span></p>
-<p>This additive noise could be anything, but the most practical choice is to use an <strong>Ornstein-Uhlenbeck</strong> process <span class="citation" data-cites="Uhlenbeck1930">(Uhlenbeck and Ornstein <a href="References.html#ref-Uhlenbeck1930" role="doc-biblioref">1930</a>)</span> to generate temporally correlated noise with zero mean. Ornstein-Uhlenbeck processes are used in physics to model the velocity of Brownian particles with friction. It updates a variable <span class="math inline">\(x_t\)</span> using a stochastic differential equation (SDE):</p>
+<p>This additive noise could be anything, but the most practical choice is to use an <strong>Ornstein-Uhlenbeck</strong> process <span class="citation" data-cites="Uhlenbeck1930">(Uhlenbeck and Ornstein, <a href="References.html#ref-Uhlenbeck1930" role="doc-biblioref">1930</a>)</span> to generate temporally correlated noise with zero mean. Ornstein-Uhlenbeck processes are used in physics to model the velocity of Brownian particles with friction. It updates a variable <span class="math inline">\(x_t\)</span> using a stochastic differential equation (SDE):</p>
 <p><span class="math display">\[ dx_t = \theta (\mu - x_t) dt + \sigma dW_t \qquad \text{with} \qquad dW_t = \mathcal{N}(0, dt)\]</span></p>
 <p><span class="math inline">\(\mu\)</span> is the mean of the process (usually 0), <span class="math inline">\(\theta\)</span> is the friction (how fast it varies with noise) and <span class="math inline">\(\sigma\)</span> controls the amount of noise. Fig. <a href="#fig:OU">26</a> shows three independent runs of a Ornstein-Uhlenbeck process: successive values of the variable <span class="math inline">\(x_t\)</span> vary randomly but coherently over time.</p>
 <figure>
@@ -230,15 +238,15 @@
     \nabla_a Q_\varphi(s, a) \approx \frac{Q_\varphi(s, a + da) - Q_\varphi(s, a)}{da}
 \]</span></p>
 <p>Note that the DDPG algorithm is <strong>off-policy</strong>: the samples used to train the actor come from the replay buffer, i.e. were generated by an older version of the target policy. DDPG does not rely on importance sampling: as the policy is deterministic (we maximize <span class="math inline">\(\mathbb{E}_{s}[Q(s, \mu_\theta(s))]\)</span>), there is no need to balance the probabilities of the behavior and target policies (with stochastic policies, one should maximize <span class="math inline">\(\mathbb{E}_{s}[\sum_{a\in\mathcal{A}} \pi(s, a) Q(s, a)]\)</span>). In other words, the importance sampling weight can safely be set to 1 for deterministic policies.</p>
-<p>DDPG has rapidly become the state-of-the-art model-free method for continuous action spaces (although now PPO is preferred). It is able to learn efficent policies on most contiuous problems, either pixel-based or using individual state variables. In the original DDPG paper, they showed that <em>batch normalization</em> <span class="citation" data-cites="Ioffe2015">(Ioffe and Szegedy <a href="References.html#ref-Ioffe2015" role="doc-biblioref">2015</a>)</span> is crucial in stabilizing the training of deep networks on such problems. Its main limitation is its high sample complexity. Distributed versions of DDPG have been proposed to speed up learning, similarly to the parallel actor learners of A3C <span class="citation" data-cites="Lotzsch2017 Popov2017 Barth-Maron2018">(Lötzsch, Vitay, and Hamker <a href="References.html#ref-Lotzsch2017" role="doc-biblioref">2017</a>; Popov et al. <a href="References.html#ref-Popov2017" role="doc-biblioref">2017</a>; Barth-Maron et al. <a href="#ref-Barth-Maron2018" role="doc-biblioref">2018</a>)</span>.</p>
+<p>DDPG has rapidly become the state-of-the-art model-free method for continuous action spaces (although now PPO is preferred). It is able to learn efficent policies on most contiuous problems, either pixel-based or using individual state variables. In the original DDPG paper, they showed that <em>batch normalization</em> <span class="citation" data-cites="Ioffe2015">(Ioffe and Szegedy, <a href="References.html#ref-Ioffe2015" role="doc-biblioref">2015</a>)</span> is crucial in stabilizing the training of deep networks on such problems. Its main limitation is its high sample complexity. Distributed versions of DDPG have been proposed to speed up learning, similarly to the parallel actor learners of A3C <span class="citation" data-cites="Lotzsch2017 Popov2017 Barth-Maron2018">(Barth-Maron et al., <a href="#ref-Barth-Maron2018" role="doc-biblioref">2018</a>; Lötzsch et al., <a href="References.html#ref-Lotzsch2017" role="doc-biblioref">2017</a>; Popov et al., <a href="References.html#ref-Popov2017" role="doc-biblioref">2017</a>)</span>.</p>
 <p><strong>Additional references:</strong> see <a href="http://pemami4911.github.io/blog/2016/08/21/ddpg-rl.html" class="uri">http://pemami4911.github.io/blog/2016/08/21/ddpg-rl.html</a> for additional explanations and step-by-step tensorflow code and <a href="https://lilianweng.github.io/lil-log/2018/04/08/policy-gradient-algorithms.html" class="uri">https://lilianweng.github.io/lil-log/2018/04/08/policy-gradient-algorithms.html</a> for contextual explanations.</p>
 <h3 id="sec:distributed-distributional-ddpg-d4pg"><span class="header-section-number">4.4.3</span> Distributed Distributional DDPG (D4PG)</h3>
-<p>Distributed Distributional DDPG <span class="citation" data-cites="Barth-Maron2018">(D4PG, Barth-Maron et al. <a href="#ref-Barth-Maron2018" role="doc-biblioref">2018</a>)</span> proposed recently several improvements on DDPG to make it more efficient:</p>
+<p>Distributed Distributional DDPG <span class="citation" data-cites="Barth-Maron2018">(D4PG, Barth-Maron et al., <a href="#ref-Barth-Maron2018" role="doc-biblioref">2018</a>)</span> proposed recently several improvements on DDPG to make it more efficient:</p>
 <ol type="1">
-<li><p>The critic is trained using <strong>distributional learning</strong> <span class="citation" data-cites="Bellemare2017">(Bellemare, Dabney, and Munos <a href="References.html#ref-Bellemare2017" role="doc-biblioref">2017</a>)</span> instead of classical Q-learning to improve the stability of learning in the actor (less variance). See Section <a href="./OtherPolicyGradient.html#sec:distributional-learning">4.7</a> for more explanations.</p></li>
+<li><p>The critic is trained using <strong>distributional learning</strong> <span class="citation" data-cites="Bellemare2017">(Bellemare et al., <a href="References.html#ref-Bellemare2017" role="doc-biblioref">2017</a>)</span> instead of classical Q-learning to improve the stability of learning in the actor (less variance). See Section <a href="./OtherPolicyGradient.html#sec:distributional-learning">4.7</a> for more explanations.</p></li>
 <li><p>The critic uses <strong>n-step</strong> returns instead of simple one-step TD returns as in A3C (Section <a href="./ActorCritic.html#sec:advantage-actor-critic-methods">4.2</a>, <span class="citation" data-cites="Mnih2016">Mnih et al. (<a href="References.html#ref-Mnih2016" role="doc-biblioref">2016</a>)</span>).</p></li>
 <li><p><strong>Multiple Distributed Parallel Actors</strong> gather <span class="math inline">\((s, a, r, s&#39;)\)</span> transitions in parallel and write them to the same replay buffer.</p></li>
-<li><p>The replay buffer uses <strong>Prioritized Experience Replay</strong> <span class="citation" data-cites="Schaul2015">(Schaul et al. <a href="References.html#ref-Schaul2015" role="doc-biblioref">2015</a>)</span> to sample transitions based the information gain.</p></li>
+<li><p>The replay buffer uses <strong>Prioritized Experience Replay</strong> <span class="citation" data-cites="Schaul2015">(Schaul et al., <a href="References.html#ref-Schaul2015" role="doc-biblioref">2015</a>)</span> to sample transitions based the information gain.</p></li>
 </ol>
 
 <br>

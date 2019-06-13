@@ -92,7 +92,8 @@
 </ul></li>
 <li><a href="./OtherPolicyGradient.html#sec:maximum-entropy-rl"><span class="toc-section-number">4.6</span> Maximum Entropy RL</a><ul>
 <li><a href="#sec:entropy-regularization-1"><span class="toc-section-number">4.6.1</span> Entropy regularization</a></li>
-<li><a href="./OtherPolicyGradient.html#sec:soft-actor-critic-sac"><span class="toc-section-number">4.6.2</span> Soft Actor-Critic (SAC)</a></li>
+<li><a href="./OtherPolicyGradient.html#sec:soft-q-learning"><span class="toc-section-number">4.6.2</span> Soft Q-learning</a></li>
+<li><a href="./OtherPolicyGradient.html#sec:soft-actor-critic-sac"><span class="toc-section-number">4.6.3</span> Soft Actor-Critic (SAC)</a></li>
 </ul></li>
 <li><a href="./OtherPolicyGradient.html#sec:distributional-learning"><span class="toc-section-number">4.7</span> Distributional learning</a><ul>
 <li><a href="./OtherPolicyGradient.html#sec:the-reactor"><span class="toc-section-number">4.7.1</span> The Reactor</a></li>
@@ -109,11 +110,18 @@
 <li><a href="./OtherPolicyGradient.html#sec:evolutionary-search-es"><span class="toc-section-number">4.10.2</span> Evolutionary Search (ES)</a></li>
 </ul></li>
 </ul></li>
-<li><a href="./Practice.html#sec:deep-rl-in-practice"><span class="toc-section-number">5</span> Deep RL in practice</a><ul>
-<li><a href="./Practice.html#sec:limitations"><span class="toc-section-number">5.1</span> Limitations</a></li>
-<li><a href="./Practice.html#sec:reward-shaping"><span class="toc-section-number">5.2</span> Reward shaping</a></li>
-<li><a href="./Practice.html#sec:simulation-environments"><span class="toc-section-number">5.3</span> Simulation environments</a></li>
-<li><a href="./Practice.html#sec:algorithm-implementations"><span class="toc-section-number">5.4</span> Algorithm implementations</a></li>
+<li><a href="./RAM.html#sec:recurrent-attention-models"><span class="toc-section-number">5</span> Recurrent Attention Models</a></li>
+<li><a href="./ModelBased.html#sec:model-based-rl"><span class="toc-section-number">6</span> Model-based RL</a><ul>
+<li><a href="./ModelBased.html#sec:dyna-q"><span class="toc-section-number">6.1</span> Dyna-Q</a></li>
+<li><a href="./ModelBased.html#sec:unsorted-references"><span class="toc-section-number">6.2</span> Unsorted references</a></li>
+</ul></li>
+<li><a href="./Hierarchical.html#sec:hierarchical-reinforcement-learning"><span class="toc-section-number">7</span> Hierarchical Reinforcement Learning</a></li>
+<li><a href="./Inverse.html#sec:inverse-reinforcement-learning"><span class="toc-section-number">8</span> Inverse Reinforcement Learning</a></li>
+<li><a href="./Robotics.html#sec:deep-rl-for-robotics"><span class="toc-section-number">9</span> Deep RL for robotics</a></li>
+<li><a href="./Practice.html#sec:deep-rl-in-practice"><span class="toc-section-number">10</span> Deep RL in practice</a><ul>
+<li><a href="./Practice.html#sec:limitations"><span class="toc-section-number">10.1</span> Limitations</a></li>
+<li><a href="./Practice.html#sec:simulation-environments"><span class="toc-section-number">10.2</span> Simulation environments</a></li>
+<li><a href="./Practice.html#sec:algorithm-implementations"><span class="toc-section-number">10.3</span> Algorithm implementations</a></li>
 </ul></li>
 <li><a href="./References.html#sec:references">References</a></li>
 </ul>
@@ -124,7 +132,7 @@
 
 
 <h1 id="sec:basics"><span class="header-section-number">2</span> Basics</h1>
-<p>Deep reinforcement learning (deep RL) is the integration of deep learning methods, classically used in supervised or unsupervised learning contexts, with reinforcement learning (RL), a well-studied adaptive control method used in problems with delayed and partial feedback <span class="citation" data-cites="Sutton1998">(Sutton and Barto <a href="References.html#ref-Sutton1998" role="doc-biblioref">1998</a>)</span>. This section starts with the basics of RL, mostly to set the notations, and provides a quick overview of deep neural networks.</p>
+<p>Deep reinforcement learning (deep RL) is the integration of deep learning methods, classically used in supervised or unsupervised learning contexts, with reinforcement learning (RL), a well-studied adaptive control method used in problems with delayed and partial feedback <span class="citation" data-cites="Sutton1998">(Sutton and Barto, <a href="References.html#ref-Sutton1998" role="doc-biblioref">1998</a>)</span>. This section starts with the basics of RL, mostly to set the notations, and provides a quick overview of deep neural networks.</p>
 <h2 id="sec:reinforcement-learning-and-markov-decision-process"><span class="header-section-number">2.1</span> Reinforcement learning and Markov Decision Process</h2>
 <p>RL methods apply to problems where an agent interacts with an environment in discrete time steps (Fig. <a href="#fig:agentenv">1</a>). At time <span class="math inline">\(t\)</span>, the agent is in state <span class="math inline">\(s_t\)</span> and decides to perform an action <span class="math inline">\(a_t\)</span>. At the next time step, it arrives in the state <span class="math inline">\(s_{t+1}\)</span> and obtains the reward <span class="math inline">\(r_{t+1}\)</span>. The goal of the agent is to maximize the reward obtained on the long term. The textbook by <span class="citation" data-cites="Sutton1998">Sutton and Barto (<a href="References.html#ref-Sutton1998" role="doc-biblioref">1998</a>)</span> (updated in <span class="citation" data-cites="Sutton2017">Sutton and Barto (<a href="References.html#ref-Sutton2017" role="doc-biblioref">2017</a>)</span>) defines the field extensively.</p>
 <figure>
@@ -296,7 +304,7 @@
     \delta = r(s, a, s&#39;) + \gamma \, Q^\pi(s&#39;, \pi(s&#39;)) - Q^\pi(s, a)
 \]</span></p>
 <ul>
-<li><strong>Off-policy</strong> TD learning is called <strong>Q-learning</strong> <span class="citation" data-cites="Watkins1989">(Watkins <a href="References.html#ref-Watkins1989" role="doc-biblioref">1989</a>)</span>. The greedy action in the next state (the one with the highest Q-value) is used to update the current transition. It does not mean that the greedy action will actually have to be selected for the next transition. The learned policy can therefore also be deterministic:</li>
+<li><strong>Off-policy</strong> TD learning is called <strong>Q-learning</strong> <span class="citation" data-cites="Watkins1989">(Watkins, <a href="References.html#ref-Watkins1989" role="doc-biblioref">1989</a>)</span>. The greedy action in the next state (the one with the highest Q-value) is used to update the current transition. It does not mean that the greedy action will actually have to be selected for the next transition. The learned policy can therefore also be deterministic:</li>
 </ul>
 <p><span class="math display">\[
     \delta = r(s, a, s&#39;) + \gamma \, \max_{a&#39;} Q^\pi(s&#39;, a&#39;) - Q^\pi(s, a)
@@ -347,7 +355,7 @@
 \]</span></p>
 <p>An action may lead to a high-valued state, but with such a small probability that it is actually not worth it. <span class="math inline">\(p(s&#39;|s, a)\)</span> and <span class="math inline">\(r(s, a, s&#39;)\)</span> therefore have to be known (or at least approximated), what defeats the purpose of sample-based methods.</p>
 <figure>
-<img src="img/actorcritic.png" alt="Figure 7: Actor-critic architecture (Sutton and Barto 1998)." id="fig:actorcritic" style="width:30.0%" /><figcaption>Figure 7: Actor-critic architecture <span class="citation" data-cites="Sutton1998">(Sutton and Barto <a href="References.html#ref-Sutton1998" role="doc-biblioref">1998</a>)</span>.</figcaption>
+<img src="img/actorcritic.png" alt="Figure 7: Actor-critic architecture (Sutton and Barto, 1998)." id="fig:actorcritic" style="width:30.0%" /><figcaption>Figure 7: Actor-critic architecture <span class="citation" data-cites="Sutton1998">(Sutton and Barto, <a href="References.html#ref-Sutton1998" role="doc-biblioref">1998</a>)</span>.</figcaption>
 </figure>
 <p><strong>Actor-critic</strong> architectures have been proposed to solve this problem:</p>
 <ol type="1">

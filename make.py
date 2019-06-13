@@ -2,7 +2,7 @@ import pypandoc
 import re, yaml
 
 # Meta information
-metadata = yaml.load(open("src/config.yaml", "r"))
+metadata = yaml.load(open("src/config.yaml", "r"), Loader=yaml.FullLoader)
 title = metadata["title"]
 author = metadata["author"]
 email = metadata["email"]
@@ -14,7 +14,8 @@ files = metadata["files"]
 # HTML file where the references will be shown
 reference_file = files[-1].replace('.md', ".html").split('-')[1]
 bibs = metadata["bibliography"]
-bib_pandoc = []
+csl = metadata["csl"]
+bib_pandoc = ["--csl="+csl]
 for bib in bibs:
     bib_pandoc.append("--bibliography=" + bib )
 
