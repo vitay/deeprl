@@ -96,9 +96,10 @@
 <li><a href="#sec:soft-actor-critic-sac"><span class="toc-section-number">4.6.3</span> Soft Actor-Critic (SAC)</a></li>
 </ul></li>
 <li><a href="#sec:distributional-learning"><span class="toc-section-number">4.7</span> Distributional learning</a><ul>
-<li><a href="#sec:the-reactor"><span class="toc-section-number">4.7.1</span> The Reactor</a></li>
+<li><a href="#sec:categorical-dqn"><span class="toc-section-number">4.7.1</span> Categorical DQN</a></li>
+<li><a href="#sec:the-reactor"><span class="toc-section-number">4.7.2</span> The Reactor</a></li>
 </ul></li>
-<li><a href="#sec:other-policy-search-methods"><span class="toc-section-number">4.8</span> Other policy search methods</a><ul>
+<li><a href="#sec:miscellaneous-model-free-algorithm"><span class="toc-section-number">4.8</span> Miscellaneous model-free algorithm</a><ul>
 <li><a href="#sec:stochastic-value-gradient-svg"><span class="toc-section-number">4.8.1</span> Stochastic Value Gradient (SVG)</a></li>
 <li><a href="#sec:q-prop"><span class="toc-section-number">4.8.2</span> Q-Prop</a></li>
 <li><a href="#sec:normalized-advantage-function-naf"><span class="toc-section-number">4.8.3</span> Normalized Advantage Function (NAF)</a></li>
@@ -110,18 +111,14 @@
 <li><a href="#sec:evolutionary-search-es"><span class="toc-section-number">4.10.2</span> Evolutionary Search (ES)</a></li>
 </ul></li>
 </ul></li>
-<li><a href="#sec:recurrent-attention-models"><span class="toc-section-number">5</span> Recurrent Attention Models</a></li>
-<li><a href="#sec:model-based-rl"><span class="toc-section-number">6</span> Model-based RL</a><ul>
-<li><a href="#sec:dyna-q"><span class="toc-section-number">6.1</span> Dyna-Q</a></li>
-<li><a href="#sec:unsorted-references"><span class="toc-section-number">6.2</span> Unsorted references</a></li>
+<li><a href="#sec:model-based-rl"><span class="toc-section-number">5</span> Model-based RL</a><ul>
+<li><a href="#sec:dyna-q"><span class="toc-section-number">5.1</span> Dyna-Q</a></li>
+<li><a href="#sec:unsorted-references"><span class="toc-section-number">5.2</span> Unsorted references</a></li>
 </ul></li>
-<li><a href="#sec:hierarchical-reinforcement-learning"><span class="toc-section-number">7</span> Hierarchical Reinforcement Learning</a></li>
-<li><a href="#sec:inverse-reinforcement-learning"><span class="toc-section-number">8</span> Inverse Reinforcement Learning</a></li>
-<li><a href="#sec:deep-rl-for-robotics"><span class="toc-section-number">9</span> Deep RL for robotics</a></li>
-<li><a href="#sec:deep-rl-in-practice"><span class="toc-section-number">10</span> Deep RL in practice</a><ul>
-<li><a href="#sec:limitations"><span class="toc-section-number">10.1</span> Limitations</a></li>
-<li><a href="#sec:simulation-environments"><span class="toc-section-number">10.2</span> Simulation environments</a></li>
-<li><a href="#sec:algorithm-implementations"><span class="toc-section-number">10.3</span> Algorithm implementations</a></li>
+<li><a href="#sec:deep-rl-in-practice"><span class="toc-section-number">6</span> Deep RL in practice</a><ul>
+<li><a href="#sec:limitations"><span class="toc-section-number">6.1</span> Limitations</a></li>
+<li><a href="#sec:simulation-environments"><span class="toc-section-number">6.2</span> Simulation environments</a></li>
+<li><a href="#sec:algorithm-implementations"><span class="toc-section-number">6.3</span> Algorithm implementations</a></li>
 </ul></li>
 <li><a href="#sec:references">References</a></li>
 </ul>
@@ -1347,7 +1344,7 @@
 <p><span class="math display">\[
     c_s = \lambda \min (1, \frac{\pi(s_s, a_s)}{b(s_s, a_s)})
 \]</span></p>
-<p>The importance sampling weight is clipped to 1, and decays exponentially with the parameter <span class="math inline">\(\lambda\)</span>. It can be seen as a trade-off between importance sampling and eligibility traces. The authors showed that Retrace(<span class="math inline">\(\lambda\)</span>) has a low variance (as it uses multiple returns), is safe (works for all <span class="math inline">\(\pi\)</span> and <span class="math inline">\(b\)</span>) and efficient (it can propagate rewards over many time steps). They used retrace to learn Atari games and compared it positively with DQN, both in terms of optimality and speed of learning. These properties make Retrace particularly suited for deep RL and actor-critic architectures: it is for example used in ACER (Section <a href="#sec:actor-critic-with-experience-replay-acer">4.5.5</a>) and the Reactor (Section <a href="#sec:the-reactor">4.7.1</a>).</p>
+<p>The importance sampling weight is clipped to 1, and decays exponentially with the parameter <span class="math inline">\(\lambda\)</span>. It can be seen as a trade-off between importance sampling and eligibility traces. The authors showed that Retrace(<span class="math inline">\(\lambda\)</span>) has a low variance (as it uses multiple returns), is safe (works for all <span class="math inline">\(\pi\)</span> and <span class="math inline">\(b\)</span>) and efficient (it can propagate rewards over many time steps). They used retrace to learn Atari games and compared it positively with DQN, both in terms of optimality and speed of learning. These properties make Retrace particularly suited for deep RL and actor-critic architectures: it is for example used in ACER (Section <a href="#sec:actor-critic-with-experience-replay-acer">4.5.5</a>) and the Reactor (Section <a href="#sec:the-reactor">4.7.2</a>).</p>
 <p>Rémi Munos uploaded some slides explaining Retrace in a simpler manner than in the original paper: <a href="https://ewrl.files.wordpress.com/2016/12/munos.pdf" class="uri">https://ewrl.files.wordpress.com/2016/12/munos.pdf</a>.</p>
 <h3 id="sec:self-imitation-learning-sil"><span class="header-section-number">4.3.4</span> Self-Imitation Learning (SIL)</h3>
 <p>We have discussed or now only strictly on-policy or off-policy methods. Off-policy methods are much more stable and efficient, but they learn generally a deterministic policy, what can be problematic in stochastic environments (e.g. two players games: being predictable is clearly an issue). Hybrid methods combining on- and off-policy mechanisms have clearly a great potential.</p>
@@ -1990,7 +1987,7 @@
 <p><span id="eq:softV_update"><span class="math display">\[
     V_\text{soft}(s_t) = \mathbb{E}_{a_{t} \in \pi} [Q_\text{soft}(s_{t}, a_{t}) - \log \, \pi(s_t, a_t)]
 \qquad(18)\]</span></span></p>
-<p>The notation in <span class="citation" data-cites="Haarnoja2017">Haarnoja et al. (<a href="#ref-Haarnoja2017" role="doc-biblioref">2017</a>)</span> is much more complex than that (the paper includes the theoretical proofs), but it boils down to this in <span class="citation" data-cites="Haarnoja2018a">Haarnoja et al. (<a href="#ref-Haarnoja2018a" role="doc-biblioref">2018</a><a href="#ref-Haarnoja2018a" role="doc-biblioref">b</a>)</span>. When Eq. <a href="#eq:softQ_update">17</a> is applied repeatedly with the definition of Eq. <a href="#eq:softV_update">18</a>, it converges to the optimal solution of Eq. <a href="#eq:softQ">16</a>, at least in the tabular case.</p>
+<p>The notation in <span class="citation" data-cites="Haarnoja2017">Haarnoja et al. (<a href="#ref-Haarnoja2017" role="doc-biblioref">2017</a>)</span> is much more complex than that (the paper includes the theoretical proofs), but it boils down to this in <span class="citation" data-cites="Haarnoja2018a">Haarnoja et al. (<a href="#ref-Haarnoja2018a" role="doc-biblioref">2018</a>)</span>. When Eq. <a href="#eq:softQ_update">17</a> is applied repeatedly with the definition of Eq. <a href="#eq:softV_update">18</a>, it converges to the optimal solution of Eq. <a href="#eq:softQ">16</a>, at least in the tabular case.</p>
 <p>The soft V-value of a state is the expectation of the Q-values in that state (as in regular RL) minus the log probability of each action. This last term measures the entropy of the policy in each state (when expanding the expectation over the policy, we obtain <span class="math inline">\(- \pi \log \pi\)</span>, which is the entropy).</p>
 <p>In a nutshell, the soft Q-learning algorithm is:</p>
 <ul>
@@ -2008,7 +2005,7 @@
 <img src="img/softQL.png" alt="Figure 33: Policy learned by Soft Q-learning in a multi-goal setting. Taken from Haarnoja et al. (2017)." id="fig:softql" /><figcaption>Figure 33: Policy learned by Soft Q-learning in a multi-goal setting. Taken from <span class="citation" data-cites="Haarnoja2017">Haarnoja et al. (<a href="#ref-Haarnoja2017" role="doc-biblioref">2017</a>)</span>.</figcaption>
 </figure>
 <h3 id="sec:soft-actor-critic-sac"><span class="header-section-number">4.6.3</span> Soft Actor-Critic (SAC)</h3>
-<p><span class="citation" data-cites="Haarnoja2018a">Haarnoja et al. (<a href="#ref-Haarnoja2018a" role="doc-biblioref">2018</a><a href="#ref-Haarnoja2018a" role="doc-biblioref">b</a>)</span> proposed the <strong>Soft Actor-Critic</strong> (SAC), an off-policy actor-critic which allows to have a stochastic actor (contrary to DDPG) while being more optimal and sample efficient than on-policy methods such as A3C or PPO. It is also less sensible to hyperparameters than all these methods.</p>
+<p><span class="citation" data-cites="Haarnoja2018a">Haarnoja et al. (<a href="#ref-Haarnoja2018a" role="doc-biblioref">2018</a>)</span> proposed the <strong>Soft Actor-Critic</strong> (SAC), an off-policy actor-critic which allows to have a stochastic actor (contrary to DDPG) while being more optimal and sample efficient than on-policy methods such as A3C or PPO. It is also less sensible to hyperparameters than all these methods.</p>
 <p>SAC builds on soft Q-learning to achieve these improvements. It relies on three different function approximators:</p>
 <ul>
 <li>a soft state value function <span class="math inline">\(V_\varphi(s)\)</span>.</li>
@@ -2028,7 +2025,7 @@
 <p><span class="math display">\[
     \mathcal{L}(\psi) = \mathbb{E}_{s_t, a_t \in \mathcal{D}} [(r_{t+1} + \gamma \, V_\varphi(s_{t+1}) - Q_\psi(s_t, a_t))^2]
 \]</span></p>
-<p>Finally, the policy <span class="math inline">\(\pi_\theta\)</span> can be trained to maximize the obtained returns. There are many ways to do that, but <span class="citation" data-cites="Haarnoja2018a">Haarnoja et al. (<a href="#ref-Haarnoja2018a" role="doc-biblioref">2018</a><a href="#ref-Haarnoja2018a" role="doc-biblioref">b</a>)</span> proposes to minimize the Kullback-Leibler (KL) divergence (see Section <a href="#sec:principle-of-natural-gradients">4.5.1</a>) between the current policy <span class="math inline">\(\pi_\theta\)</span> and a softmax function over the soft Q-values:</p>
+<p>Finally, the policy <span class="math inline">\(\pi_\theta\)</span> can be trained to maximize the obtained returns. There are many ways to do that, but <span class="citation" data-cites="Haarnoja2018a">Haarnoja et al. (<a href="#ref-Haarnoja2018a" role="doc-biblioref">2018</a>)</span> proposes to minimize the Kullback-Leibler (KL) divergence (see Section <a href="#sec:principle-of-natural-gradients">4.5.1</a>) between the current policy <span class="math inline">\(\pi_\theta\)</span> and a softmax function over the soft Q-values:</p>
 <p><span class="math display">\[
     \mathcal{L}(\theta) = \mathbb{E}_{s_t \in \mathcal{D}} [D_\text{KL}(\pi_\theta(s, \cdot) | \frac{\exp Q_\psi(s_t, \cdot)}{Z(s_t)})]
 \]</span></p>
@@ -2053,17 +2050,124 @@
 </ul>
 <hr />
 <p>SAC was compared to DDPG, PPO, soft Q-learning and others on a set of gym and humanoid robotics tasks (with 21 joints!). It outperforms all these methods in both the final performance and the sample complexity, the difference being even more obvious for the complex tasks. The exploration bonus given by the maximum entropy allows the agent to discover better policies than its counterparts. SAC is an actor-critic architecture (the critic computing both V and Q) working off-policy (using an experience replay memory, so re-using past experiences) allowing to learn stochastic policies, even in high dimensional spaces.</p>
+<!--PAGEBREAK-->
 <h2 id="sec:distributional-learning"><span class="header-section-number">4.7</span> Distributional learning</h2>
-<p><strong>Work in progress</strong></p>
 <p>All RL methods based on the Bellman equations use the expectation operator to average returns and compute the values of states and actions:</p>
 <p><span class="math display">\[
-    Q^\pi(s, a) ) = \mathbb{E}_{\pi}[R(s, a)]
+    Q^\pi(s, a) = \mathbb{E}_{s, a \in \pi}[R(s, a)]
 \]</span></p>
-<p><span class="citation" data-cites="Bellemare2017">Bellemare et al. (<a href="#ref-Bellemare2017" role="doc-biblioref">2017</a>)</span> propose to learn instead the <strong>value distribution</strong> through a modification of the Bellman equation. They show that learning the distribution of rewards rather than their mean leads to performance improvements.</p>
-<p>See <a href="https://deepmind.com/blog/going-beyond-average-reinforcement-learning/" class="uri">https://deepmind.com/blog/going-beyond-average-reinforcement-learning/</a> for more explanations.</p>
-<h3 id="sec:the-reactor"><span class="header-section-number">4.7.1</span> The Reactor</h3>
-<p><span class="citation" data-cites="Gruslys2017">Gruslys et al. (<a href="#ref-Gruslys2017" role="doc-biblioref">2017</a>)</span></p>
-<h2 id="sec:other-policy-search-methods"><span class="header-section-number">4.8</span> Other policy search methods</h2>
+<p>The variance of the returns is not considered in the action selection scheme, and most methods actually try to reduce this variance as it impairs the convergence of neural networks. Decision theory states that only the mean should matter on the long-term, but one can imagine tasks where the variance is an important factor for the decision. Imagine you are in a game where you have two actions available: the first one brings returns of 10 and 20, with a probability of 0.5 each (to simplify), while the second one brings returns of -10 and +40 with probability 0.5 too. Both actions have the same Q-value of 15 (a return which is actually never experienced), so one can theoretically pick whatever action, both are optimal in the Bellman’s sense. However, this is only true when playing <strong>long enough</strong>. If, after learning, one is only allowed one try on that game, it is obviously safer (but less fun) to choose the first action, as one wins at worse 10, while it is -10 with the second action. Knowing the distribution of the returns can allow to distinguish risky choices from safe ones more easily and adapt the behavior. Another advantage would be that by learning the distribution of the returns instead of just their mean, one actually gathers more information about the environment dynamics: it can only help the convergence of the algorithm towards the optimal policy.</p>
+<h3 id="sec:categorical-dqn"><span class="header-section-number">4.7.1</span> Categorical DQN</h3>
+<p><span class="citation" data-cites="Bellemare2017">Bellemare et al. (<a href="#ref-Bellemare2017" role="doc-biblioref">2017</a>)</span> proposed to learn the <strong>value distribution</strong> (the probability distribution of the returns) through a modification of the Bellman equation. They show that learning the complete distribution of rewards instead of their mean leads to performance improvements on Atari games over modern variants of DQN.</p>
+<p>Their proposed <strong>categorical DQN</strong> (also called C51) has an architecture based on DQN, but where the output layer predicts the distribution of the returns for each action <span class="math inline">\(a\)</span> in state <span class="math inline">\(s\)</span>, instead of its mean <span class="math inline">\(Q^\pi(s, a)\)</span>. In practice, each action <span class="math inline">\(a\)</span> is represented by <span class="math inline">\(N\)</span> output neurons, who encode the support of the distribution of returns. If the returns take values between <span class="math inline">\(V_\text{min}\)</span> and <span class="math inline">\(V_\text{max}\)</span>, one can represent their distribution <span class="math inline">\(\mathcal{Z}\)</span> by taking <span class="math inline">\(N\)</span> discrete “bins” (called <em>atoms</em> in the paper) in that range. Fig. <a href="#fig:distributionallearning">34</a> shows how the distribution of returns between -10 and 10 can be represented using 21 atoms.</p>
+<figure>
+<img src="img/distributionallearning.png" alt="Figure 34: Example of a value distribution using 21 atoms between -10 and 10. The average return is 3, but its variance is explicitly represented." id="fig:distributionallearning" style="width:80.0%" /><figcaption>Figure 34: Example of a value distribution using 21 atoms between -10 and 10. The average return is 3, but its variance is explicitly represented.</figcaption>
+</figure>
+<p>Of course, the main problem is to know in advance the range of returns <span class="math inline">\([V_\text{min}, V_\text{max}]\)</span> (it depends largely on the choice of the discount rate <span class="math inline">\(\gamma\)</span>), but you can infer it from training another algorithm such as DQN beforehand. <span class="citation" data-cites="Dabney2017">Dabney et al. (<a href="#ref-Dabney2017" role="doc-biblioref">2017</a>)</span> got rid of this problem with quantile regression. In the paper, the authors found out experimentally that 51 is the most efficient number of atoms (hence the name C51).</p>
+<p>Let’s note <span class="math inline">\(z_i\)</span> these atoms with <span class="math inline">\(1 \leq i &lt; N\)</span>. The atom probability that the return associated to a state-action pair <span class="math inline">\((s, a)\)</span> lies within the bin associated to the atom <span class="math inline">\(z_i\)</span> is noted <span class="math inline">\(p_i(s, a)\)</span>. These probabilities can be predicted by a neural network, typically by using a softmax function over outputs <span class="math inline">\(f_i(s, a; \theta)\)</span>:</p>
+<p><span class="math display">\[
+    p_i(s, a; \theta) = \frac{\exp f_i(s, a; \theta)}{\sum_{j=1}^{N} \exp f_j(s, a; \theta)}
+\]</span></p>
+<p>The distribution of the returns <span class="math inline">\(\mathcal{Z}\)</span> is simply a sum over the atoms (represented by the Dirac distribution <span class="math inline">\(\delta_{z_i}\)</span>):</p>
+<p><span class="math display">\[
+    \mathcal{Z}_\theta(s, a) = \sum_{i=1}^{N} p_i(s, a; \theta) \, \delta_{z_i}
+\]</span></p>
+<p>If these probabilities are correctly estimated, the Q-value is easy to compute as the mean of the distribution:</p>
+<p><span class="math display">\[
+    Q_\theta(s, a) = \mathbb{E} \mathcal{Z}_\theta(s, a) = \sum_{i=1}^{N} p_i(s, a; \theta) \, z_i
+\]</span></p>
+<p>These Q-values can then be used for action selection as in the regular DQN. The problem is now to learn the value distribution <span class="math inline">\(\mathcal{Z}_\theta\)</span>, i.e. to find a learning rule / loss function for the <span class="math inline">\(p_i(s, a; \theta)\)</span>. Let’s consider a single transition <span class="math inline">\((s, a, r, s&#39;)\)</span> and select the greedy action <span class="math inline">\(a&#39;\)</span> in <span class="math inline">\(s&#39;\)</span> using the current policy <span class="math inline">\(\pi_\theta\)</span>. The value distribution <span class="math inline">\(\mathcal{Z}_\theta\)</span> can be evaluated by applying recursively the Bellman operator <span class="math inline">\(\mathcal{T}\)</span>:</p>
+<p><span class="math display">\[
+    \mathcal{T} \, \mathcal{Z}_\theta(s, a) = \mathcal{R}(s, a) + \gamma \, \mathcal{Z}_\theta(s&#39;, a&#39;)
+\]</span></p>
+<p>where <span class="math inline">\(\mathcal{R}(s, a)\)</span> is the distribution of immediate rewards after <span class="math inline">\((s, a)\)</span>. This use of the Bellman operator is the same as in Q-learning:</p>
+<p><span class="math display">\[
+    \mathcal{T} \, \mathcal{Q}_\theta(s, a) = \mathbb{E}[r(s, a)] + \gamma \, \mathcal{Q}_\theta(s&#39;, a&#39;)
+\]</span></p>
+<p>In Q-learning, one minimizes the difference (mse) between <span class="math inline">\(\mathcal{T} \, \mathcal{Q}_\theta(s, a)\)</span> and <span class="math inline">\(\mathcal{Q}_\theta(s, a)\)</span>, which are expectations (so we only manipulate scalars). Here, we will minimize the statistical distance between the distributions <span class="math inline">\(\mathcal{T} \, \mathcal{Z}_\theta(s, a)\)</span> and <span class="math inline">\(\mathcal{Z}_\theta(s, a)\)</span> themselves, using for example the KL divergence, Wasserstein metric, total variation or whatnot.</p>
+<p>The problem is mostly that the distributions <span class="math inline">\(\mathcal{T} \, \mathcal{Z}_\theta(s, a)\)</span> and <span class="math inline">\(\mathcal{Z}_\theta(s, a)\)</span> do not have the same support: for a particular atom <span class="math inline">\(z_i\)</span>, <span class="math inline">\(\mathcal{T} \, \mathcal{Z}_\theta(s, a)\)</span> can have a non-zero probability <span class="math inline">\(p_i(s, a)\)</span>, while <span class="math inline">\(\mathcal{Z}_\theta(s, a)\)</span> has a zero probability. Besides, the probabilities must sum to 1, so one cannot update the <span class="math inline">\(z_i\)</span> independently from one another.</p>
+<p>The proposed method consists of three steps:</p>
+<ol type="1">
+<li>Computation of the Bellman update <span class="math inline">\(\mathcal{T} \, \mathcal{Z}_\theta(s, a)\)</span>. They simply compute translated values for each <span class="math inline">\(z_i\)</span> according to:</li>
+</ol>
+<p><span class="math display">\[
+    \mathcal{T} \, z_i = r + \gamma \, z_i
+\]</span></p>
+<p>and clip the obtained value to <span class="math inline">\([V_\text{min}, V_\text{max}]\)</span>. The reward <span class="math inline">\(r\)</span> translates the distribution of atoms, while the discount rate <span class="math inline">\(\gamma\)</span> scales it. Fig. <a href="#fig:distributionallearning2">35</a> shows the distribution of <span class="math inline">\(\mathcal{T} \, \mathcal{Z}_\theta(s, a)\)</span> compared to <span class="math inline">\(\mathcal{Z}_\theta(s, a)\)</span>. Note that the atoms of the two distributions are not aligned.</p>
+<figure>
+<img src="img/distributionallearning2.png" alt="Figure 35: Computation of the Bellman update \mathcal{T} \, \mathcal{Z}_\theta(s, a). The atoms of the two distributions are not aligned." id="fig:distributionallearning2" style="width:80.0%" /><figcaption>Figure 35: Computation of the Bellman update <span class="math inline">\(\mathcal{T} \, \mathcal{Z}_\theta(s, a)\)</span>. The atoms of the two distributions are not aligned.</figcaption>
+</figure>
+<ol start="2" type="1">
+<li>Distribution of the probabilities of <span class="math inline">\(\mathcal{T} \, \mathcal{Z}_\theta(s, a)\)</span> on the support of <span class="math inline">\(\mathcal{Z}_\theta(s, a)\)</span>. The projected atom <span class="math inline">\(\mathcal{T} \, z_i\)</span> lie between two “real” atoms <span class="math inline">\(z_l\)</span> and <span class="math inline">\(z_u\)</span>, with a non-integer index <span class="math inline">\(b\)</span> (for example <span class="math inline">\(b = 3.4\)</span>, <span class="math inline">\(l = 3\)</span> and <span class="math inline">\(u=4\)</span>). The corresponding probability <span class="math inline">\(p_{b}(s&#39;, a&#39;; \theta)\)</span> of the next greedy action <span class="math inline">\((s&#39;, a&#39;)\)</span> is “spread” to its neighbors through a local interpolation depending on the distances between <span class="math inline">\(b\)</span>, <span class="math inline">\(l\)</span> and <span class="math inline">\(u\)</span>:</li>
+</ol>
+<p><span class="math display">\[
+    \Delta p_{l}(s&#39;, a&#39;; \theta) = p_{b}(s&#39;, a&#39;; \theta) \, (b - u)
+\]</span> <span class="math display">\[
+    \Delta p_{u}(s&#39;, a&#39;; \theta) = p_{b}(s&#39;, a&#39;; \theta) \, (l - b)
+\]</span></p>
+<p>Fig. <a href="#fig:distributionallearning3">36</a> shows how the projected update distribution <span class="math inline">\(\Phi \, \mathcal{T} \, \mathcal{Z}_\theta(s, a)\)</span> now matches the support of <span class="math inline">\(\mathcal{Z}_\theta(s, a)\)</span></p>
+<figure>
+<img src="img/distributionallearning3.png" alt="Figure 36: Projected update \Phi \, \mathcal{T} \, \mathcal{Z}_\theta(s, a) on the support of \mathcal{Z}_\theta(s, a). The atoms are now aligned, the statistical distance between the two distributions can be minimized." id="fig:distributionallearning3" style="width:80.0%" /><figcaption>Figure 36: Projected update <span class="math inline">\(\Phi \, \mathcal{T} \, \mathcal{Z}_\theta(s, a)\)</span> on the support of <span class="math inline">\(\mathcal{Z}_\theta(s, a)\)</span>. The atoms are now aligned, the statistical distance between the two distributions can be minimized.</figcaption>
+</figure>
+<p>The projection of the Bellman update onto an atom <span class="math inline">\(z_i\)</span> can be summarized by the following equation:</p>
+<p><span class="math display">\[
+    (\Phi \, \mathcal{T} \, \mathcal{Z}_\theta(s, a))_i = \sum_{j=1}^N \big [1 - \frac{| [\mathcal{T}\, z_j]_{V_\text{min}}^{V_\text{max}} - z_i|}{\Delta z} \big ]_0^1 \, p_j (s&#39;, a&#39;; \theta)
+\]</span></p>
+<p>where <span class="math inline">\([\cdot]_a^b\)</span> bounds its argument in <span class="math inline">\([a, b]\)</span> and <span class="math inline">\(\Delta z\)</span> is the step size between two atoms.</p>
+<ol start="3" type="1">
+<li>Minimizing the statistical distance between <span class="math inline">\(\Phi \, \mathcal{T} \, \mathcal{Z}_\theta(s, a)\)</span> and <span class="math inline">\(\mathcal{Z}_\theta(s, a)\)</span>. Now that the Bellman update has the same support as the value distribution, we can minimize the KL divergence between the two for a single transition:</li>
+</ol>
+<p><span class="math display">\[
+    \mathcal{L}(\theta) = D_\text{KL} (\Phi \, \mathcal{T} \, \mathcal{Z}_{\theta&#39;}(s, a) | \mathcal{Z}_\theta(s, a))
+\]</span></p>
+<p>using a target network <span class="math inline">\(\theta&#39;\)</span> for the target. It is to be noted that minimizing the KL divergence is the same as minimizing the cross-entropy between the two, as in classification tasks:</p>
+<p><span class="math display">\[
+    \mathcal{L}(\theta) =  - \sum_i (\Phi \, \mathcal{T} \, \mathcal{Z}_{\theta&#39;}(s, a))_i \log p_i (s, a; \theta)
+\]</span></p>
+<p>The projected Bellman update plays the role of the one-hot encoded target vector in classification (except that it is not one-hot encoded). DQN performs a regression on the Q-values (mse loss), while categorical DQN performs a classification (cross-entropy loss). Apart from the way the target is computed, categorical DQN is very similar to DQN: architecture, experience replay memory, target networks, etc.</p>
+<p>Fig. <a href="#fig:categoricaldqn">37</a> illustrates how the predicted value distribution changes when playing Space invaders, also have a look at the Youtube video. C51 outperforms DQN on most Atari games, both in terms of the achieved performance and the sample complexity.</p>
+<figure>
+<img src="img/categoricaldqn.gif" alt="Figure 37: Evolution of the value distribution for the categorical DQN playing Space Invaders. Animation taken from https://deepmind.com/blog/going-beyond-average-reinforcement-learning/" id="fig:categoricaldqn" style="width:100.0%" /><figcaption>Figure 37: Evolution of the value distribution for the categorical DQN playing Space Invaders. Animation taken from <a href="https://deepmind.com/blog/going-beyond-average-reinforcement-learning/" class="uri">https://deepmind.com/blog/going-beyond-average-reinforcement-learning/</a></figcaption>
+</figure>
+<iframe width="989" height="371" src="https://www.youtube.com/embed/yFBwyPuO2Vg" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+</iframe>
+<p><strong>Additional resources:</strong></p>
+<ul>
+<li><a href="https://deepmind.com/blog/going-beyond-average-reinforcement-learning" class="uri">https://deepmind.com/blog/going-beyond-average-reinforcement-learning</a></li>
+<li><a href="https://physai.sciencesconf.org/data/pages/distributional_RL_Remi_Munos.pdf" class="uri">https://physai.sciencesconf.org/data/pages/distributional_RL_Remi_Munos.pdf</a></li>
+<li><a href="https://flyyufelix.github.io/2017/10/24/distributional-bellman.html" class="uri">https://flyyufelix.github.io/2017/10/24/distributional-bellman.html</a>, with keras code for C51.</li>
+</ul>
+<h3 id="sec:the-reactor"><span class="header-section-number">4.7.2</span> The Reactor</h3>
+<p>The <strong>Reactor</strong> (Retrace Actor) of <span class="citation" data-cites="Gruslys2017">Gruslys et al. (<a href="#ref-Gruslys2017" role="doc-biblioref">2017</a>)</span> combines many architectural and algorithmic contributions seen until now in order to provide an algorithm that is both sample efficient and with a good run-time performance. A3C has for example a better run-time performance (smaller wall-clock time for the training) than DQN or categorical DQN thanks to the use of multiple actor-learners in parallel, but its sample complexity is actually higher (as it is on-policy).</p>
+<p>The Reactor combines and improves on:</p>
+<ul>
+<li>An actor-critic architecture using policy gradient with importance sampling (Section <a href="#sec:importance-sampling">4.3.1</a>),</li>
+<li>Off-policy corrected returns computed by the Retrace algorithm (Section <a href="#sec:retrace">4.3.3</a>),</li>
+<li>Distributional learning of the Q-values in the critic (Section <a href="#sec:categorical-dqn">4.7.1</a>),</li>
+<li>Prioritized experience replay for sequences (Section <a href="#sec:prioritized-experience-replay">3.4</a>).</li>
+</ul>
+<p>One could consider REACTOR as the distributional version of ACER (Section <a href="#sec:actor-critic-with-experience-replay-acer">4.5.5</a>, <span class="citation" data-cites="Wang2017">Wang et al. (<a href="#ref-Wang2017" role="doc-biblioref">2017</a>)</span>). We will not go into all the details here, but simply outline the main novelties.</p>
+<p>The Reactor is composed of an actor <span class="math inline">\(\pi_\theta(s, a)\)</span> and a critic <span class="math inline">\(Q_\varphi(s, a)\)</span>. The actor is trained using policy gradient with importance sampling, as in Off-PAC (Section <a href="#sec:linear-off-policy-actor-critic-off-pac">4.3.2</a>). For a single state <span class="math inline">\(s\)</span> and an action <span class="math inline">\(\hat{a}\)</span> sampled by the behavior policy <span class="math inline">\(b\)</span>, the gradient of the objective is defined as:</p>
+<p><span class="math display">\[
+\begin{aligned}
+    \nabla_\theta J(\theta) = \frac{\pi_\theta(s, \hat{a})}{b(s, \hat{a})} &amp; \, (R(s, \hat{a}) - Q_\varphi(s, \hat{a})) \, \nabla_\theta \log \pi_\theta(s, \hat{a}) \\
+    &amp; + \sum_a Q_\varphi(s, a) \, \nabla_\theta \pi_\theta(s, a) \\
+\end{aligned}
+\]</span></p>
+<p>The first term comes from Off-PAC and only concerns the chosen action <span class="math inline">\(\hat{a}\)</span> from the behavior policy. The actual return <span class="math inline">\(R(s, a)\)</span> is compared to its estimate <span class="math inline">\(Q_\varphi(s, \hat{a})\)</span> in order to reduce its variance. The second term <span class="math inline">\(\sum_a Q_\varphi(s, a) \, \nabla_\theta \pi_\theta(s, a)\)</span> depends on all available actions in <span class="math inline">\(s\)</span>. Its role is to reduce the bias of the first term, without adding any variance as it is only based on estimates. As the value of the state is defined by <span class="math inline">\(V^\pi(s) = \sum_a \pi(s, a) \, Q^\pi(s, a)\)</span>, maximizing this term maximizes the value of the state, i.e. the associated returns. This rule is called <strong>leave-one-out</strong> (LOO), as one action is left out from the sum and estimated from actual returns instead of other estimates.</p>
+<p>For a better control on the variance, the behavior probability <span class="math inline">\(b(s, a)\)</span> is replaced by a parameter <span class="math inline">\(\beta\)</span>:</p>
+<p><span class="math display">\[
+    \nabla_\theta J(\theta) = \beta \, (R(s, \hat{a}) - Q_\varphi(s, \hat{a})) \, \nabla_\theta \pi_\theta(s, \hat{a}) + \sum_a Q_\varphi(s, a) \, \nabla_\theta \pi_\theta(s, a)
+\]</span></p>
+<p><span class="math inline">\(\beta\)</span> is defined as <span class="math inline">\(\min (c, \frac{1}{b(s, \hat{a})})\)</span>, where <span class="math inline">\(c&gt;1\)</span> is a constant. This truncated term is similar to what was used in ACER. The rule is now called <strong><span class="math inline">\(\beta\)</span>-LOO</strong> and is a novel proposition of the Reactor.</p>
+<p>The second importance contribution of the Reactor is how to combine the Retrace algorithm (Section <a href="#sec:retrace">4.3.3</a>, <span class="citation" data-cites="Munos2016">Munos et al. (<a href="#ref-Munos2016" role="doc-biblioref">2016</a>)</span>) for estimating the return <span class="math inline">\(R(s, \hat{a})\)</span> on multiple steps, with the distributional learning method of Categorical DQN. As Retrace uses n-steps returns iteratively, the n-step distributional Bellman target can updated using the <span class="math inline">\(n\)</span> future rewards:</p>
+<p><span class="math display">\[
+    z_i^n = \mathcal{T}^n \, z_i = \sum_{k=t}^{t+n} \gamma^{k-t} r_k + \gamma^n \, z_i
+\]</span></p>
+<p>We leave out the details on how Retrace is combined with these distributional Bellman updates: the notation is complicated but the idea is simple. The last importance contribution of the paper is the use of <strong>prioritized sequence replay</strong>. Prioritized experience replay allows to select in priority transitions from the replay buffer which are the most surprising, i.e. where the TD error is the highest. These transitions are the ones carrying the most information. A similar principle can be applied to sequences of transitions, which are needed by the n-step updates. They devised a specific sampling algorithm in order to achieve this and reduce the variance of the samples.</p>
+<p>The last particularities of the Reactor is that it uses a LSTM layer to make the problem Markovian (instead of stacking four frames as in DQN) and train multiple actor-learners as in A3C. The algorithm is trained on CPU, with 10 or 20 actor-learners. The Reactor outperforms DQN and its variants, A3C and ACER on Atari games. Importantly, Reactor only needs one day of training on CPU, compared to the 8 days of GPU training needed by DQN.</p>
+<!--PAGEBREAK-->
+<h2 id="sec:miscellaneous-model-free-algorithm"><span class="header-section-number">4.8</span> Miscellaneous model-free algorithm</h2>
 <h3 id="sec:stochastic-value-gradient-svg"><span class="header-section-number">4.8.1</span> Stochastic Value Gradient (SVG)</h3>
 <p><span class="citation" data-cites="Heess2015">Heess et al. (<a href="#ref-Heess2015" role="doc-biblioref">2015</a>)</span></p>
 <h3 id="sec:q-prop"><span class="header-section-number">4.8.2</span> Q-Prop</h3>
@@ -2087,7 +2191,7 @@
 <li>Worse sample efficiency (but it is getting better).</li>
 </ul>
 <h2 id="sec:gradient-free-policy-search"><span class="header-section-number">4.10</span> Gradient-free policy search</h2>
-<p>The policy gradient methods presented above rely on backpropagation and gradient descent/ascent to update the parameters of the policy and maximize the objective function. Gradient descent is generally slow, sample inefficient and subject to local minima, but is nevertheless the go-to method in neural networks. However, it is not the only optimization that can be used in deep RL. This section presents some of the alternatives.</p>
+<p>The policy gradient methods presented above rely on backpropagation and gradient descent/ascent to update the parameters of the policy and maximize the objective function. Gradient descent is generally slow, sample inefficient and subject to local minima, but is nevertheless the go-to method in neural networks. However, it is not the only optimization that can be used in deep RL. This section presents quickly some of the alternatives.</p>
 <h3 id="sec:cross-entropy-method-cem"><span class="header-section-number">4.10.1</span> Cross-entropy Method (CEM)</h3>
 <p><span class="citation" data-cites="Szita2006">Szita and Lörincz (<a href="#ref-Szita2006" role="doc-biblioref">2006</a>)</span></p>
 <h3 id="sec:evolutionary-search-es"><span class="header-section-number">4.10.2</span> Evolutionary Search (ES)</h3>
@@ -2095,11 +2199,7 @@
 <p>Explanations from OpenAI: <a href="https://blog.openai.com/evolution-strategies/" class="uri">https://blog.openai.com/evolution-strategies/</a></p>
 <p>Deep neuroevolution at Uber: <a href="https://eng.uber.com/deep-neuroevolution/" class="uri">https://eng.uber.com/deep-neuroevolution/</a></p>
 <!--PAGEBREAK-->
-<h1 id="sec:recurrent-attention-models"><span class="header-section-number">5</span> Recurrent Attention Models</h1>
-<p><strong>Work in progress</strong></p>
-<p><span class="citation" data-cites="Mnih2014">Mnih et al. (<a href="#ref-Mnih2014" role="doc-biblioref">2014</a>)</span>, <span class="citation" data-cites="Ba2014">Ba et al. (<a href="#ref-Ba2014" role="doc-biblioref">2014</a>)</span>. <span class="citation" data-cites="Stollenga2014">Stollenga et al. (<a href="#ref-Stollenga2014" role="doc-biblioref">2014</a>)</span></p>
-<!--PAGEBREAK-->
-<h1 id="sec:model-based-rl"><span class="header-section-number">6</span> Model-based RL</h1>
+<h1 id="sec:model-based-rl"><span class="header-section-number">5</span> Model-based RL</h1>
 <p><strong>work in progress</strong></p>
 <p>Model-free: The future is cached into values.</p>
 <p>Two problems of model-free:</p>
@@ -2109,10 +2209,10 @@
 </ol>
 <p>Model-based uses an internal model to reason about the future (imagination).</p>
 <p>Works only when the model is fixed (AlphaGo) or easy to learn (symbolic, low-dimensional). Not robust yet against model imperfection.</p>
-<h2 id="sec:dyna-q"><span class="header-section-number">6.1</span> Dyna-Q</h2>
+<h2 id="sec:dyna-q"><span class="header-section-number">5.1</span> Dyna-Q</h2>
 <p><span class="citation" data-cites="Sutton1990a">(Sutton, <a href="#ref-Sutton1990a" role="doc-biblioref">1990</a>)</span></p>
 <p><a href="https://medium.com/@ranko.mosic/online-planning-agent-dyna-q-algorithm-and-dyna-maze-example-sutton-and-barto-2016-7ad84a6dc52b" class="uri">https://medium.com/@ranko.mosic/online-planning-agent-dyna-q-algorithm-and-dyna-maze-example-sutton-and-barto-2016-7ad84a6dc52b</a></p>
-<h2 id="sec:unsorted-references"><span class="header-section-number">6.2</span> Unsorted references</h2>
+<h2 id="sec:unsorted-references"><span class="header-section-number">5.2</span> Unsorted references</h2>
 <p>Embed to Control: A Locally Linear Latent Dynamics Model for Control from Raw Images <span class="citation" data-cites="Watter2015">(Watter et al., <a href="#ref-Watter2015" role="doc-biblioref">2015</a>)</span></p>
 <p>Efficient Model-Based Deep Reinforcement Learning with Variational State Tabulation <span class="citation" data-cites="Corneil2018">(Corneil et al., <a href="#ref-Corneil2018" role="doc-biblioref">2018</a>)</span></p>
 <p>Model-Based Value Estimation for Efficient Model-Free Reinforcement Learning <span class="citation" data-cites="Feinberg2018">(Feinberg et al., <a href="#ref-Feinberg2018" role="doc-biblioref">2018</a>)</span></p>
@@ -2128,27 +2228,11 @@
 <p>Deep Dyna-Q: Integrating Planning for Task-Completion Dialogue Policy Learning <span class="citation" data-cites="Peng2018">(Peng et al., <a href="#ref-Peng2018" role="doc-biblioref">2018</a>)</span></p>
 <p>Q-map: a Convolutional Approach for Goal-Oriented Reinforcement Learning <span class="citation" data-cites="Pardo2018">(Pardo et al., <a href="#ref-Pardo2018" role="doc-biblioref">2018</a>)</span></p>
 <!--PAGEBREAK-->
-<h1 id="sec:hierarchical-reinforcement-learning"><span class="header-section-number">7</span> Hierarchical Reinforcement Learning</h1>
-<p><strong>work in progress</strong></p>
-<p><span class="citation" data-cites="Nachum2018">Nachum et al. (<a href="#ref-Nachum2018" role="doc-biblioref">2018</a>)</span></p>
-<p><span class="citation" data-cites="Haarnoja2018">Haarnoja et al. (<a href="#ref-Haarnoja2018" role="doc-biblioref">2018</a><a href="#ref-Haarnoja2018" role="doc-biblioref">a</a>)</span></p>
-<p><span class="citation" data-cites="Co-Reyes2018">Co-Reyes et al. (<a href="#ref-Co-Reyes2018" role="doc-biblioref">2018</a>)</span></p>
-<!--PAGEBREAK-->
-<h1 id="sec:inverse-reinforcement-learning"><span class="header-section-number">8</span> Inverse Reinforcement Learning</h1>
-<p><strong>work in progress</strong></p>
-<p>Hindsight experience replay: <span class="citation" data-cites="Andrychowicz2017">Andrychowicz et al. (<a href="#ref-Andrychowicz2017" role="doc-biblioref">2017</a>)</span></p>
-<p>Goal-conditioned inverse RL: <span class="citation" data-cites="Ding2019">Ding et al. (<a href="#ref-Ding2019" role="doc-biblioref">2019</a>)</span></p>
-<!--PAGEBREAK-->
-<h1 id="sec:deep-rl-for-robotics"><span class="header-section-number">9</span> Deep RL for robotics</h1>
-<p><strong>Work in progress</strong></p>
-<p><span class="citation" data-cites="Agrawal2016">Agrawal et al. (<a href="#ref-Agrawal2016" role="doc-biblioref">2016</a>)</span>, <span class="citation" data-cites="Dosovitskiy2016">Dosovitskiy and Koltun (<a href="#ref-Dosovitskiy2016" role="doc-biblioref">2016</a>)</span>, <span class="citation" data-cites="Gu2017">Gu et al. (<a href="#ref-Gu2017" role="doc-biblioref">2017</a>)</span>, <span class="citation" data-cites="Levine2016">Levine et al. (<a href="#ref-Levine2016" role="doc-biblioref">2016</a><a href="#ref-Levine2016" role="doc-biblioref">a</a>)</span>, <span class="citation" data-cites="Levine2016a">Levine et al. (<a href="#ref-Levine2016a" role="doc-biblioref">2016</a><a href="#ref-Levine2016a" role="doc-biblioref">b</a>)</span>, <span class="citation" data-cites="Zhang2015">Zhang et al. (<a href="#ref-Zhang2015" role="doc-biblioref">2015</a>)</span></p>
-<p>State of the art: <span class="citation" data-cites="Amarjyoti2017">Amarjyoti (<a href="#ref-Amarjyoti2017" role="doc-biblioref">2017</a>)</span></p>
-<!--PAGEBREAK-->
-<h1 id="sec:deep-rl-in-practice"><span class="header-section-number">10</span> Deep RL in practice</h1>
-<h2 id="sec:limitations"><span class="header-section-number">10.1</span> Limitations</h2>
+<h1 id="sec:deep-rl-in-practice"><span class="header-section-number">6</span> Deep RL in practice</h1>
+<h2 id="sec:limitations"><span class="header-section-number">6.1</span> Limitations</h2>
 <p>Excellent blog post from Alex Irpan on the limitations of deep RL: <a href="https://www.alexirpan.com/2018/02/14/rl-hard.html" class="uri">https://www.alexirpan.com/2018/02/14/rl-hard.html</a></p>
 <p>Another documented critic on deep RL: <a href="https://thegradient.pub/why-rl-is-flawed/" class="uri">https://thegradient.pub/why-rl-is-flawed/</a></p>
-<h2 id="sec:simulation-environments"><span class="header-section-number">10.2</span> Simulation environments</h2>
+<h2 id="sec:simulation-environments"><span class="header-section-number">6.2</span> Simulation environments</h2>
 <p>Standard RL environments are needed to better compare the performance of RL algorithms. Below is a list of the most popular ones.</p>
 <ul>
 <li>OpenAI Gym <a href="https://gym.openai.com" class="uri">https://gym.openai.com</a>: a standard toolkit for comparing RL algorithms provided by the OpenAI foundation. It provides many environments, from the classical toy problems in RL (GridWorld, pole-balancing) to more advanced problems (Mujoco simulated robots, Atari games, Minecraft…). The main advantage is the simplicity of the interface: the user only needs to select which task he wants to solve, and a simple for loop allows to perform actions and observe their consequences:</li>
@@ -2168,7 +2252,7 @@
 <li><p>Deepmind Lab <a href="https://github.com/deepmind/lab" class="uri">https://github.com/deepmind/lab</a>: a 3D learning environment based on id Software’s Quake III Arena via ioquake3 and other open source software.</p></li>
 <li><p>AnimalAI Olympics <a href="https://github.com/beyretb/AnimalAI-Olympics" class="uri">https://github.com/beyretb/AnimalAI-Olympics</a>, a gym-like environment aimed at confronting RL algorithms to typical tasks in the animal cognition literature.</p></li>
 </ul>
-<h2 id="sec:algorithm-implementations"><span class="header-section-number">10.3</span> Algorithm implementations</h2>
+<h2 id="sec:algorithm-implementations"><span class="header-section-number">6.3</span> Algorithm implementations</h2>
 <p>State-of-the-art algorithms in deep RL are already implemented and freely available on the internet. Below is a preliminary list of the most popular ones. Most of them rely on tensorflow or keras for training the neural networks and interact directly with gym-like interfaces.</p>
 <ul>
 <li><p><a href="https://github.com/ShangtongZhang/reinforcement-learning-an-introduction" class="uri">https://github.com/ShangtongZhang/reinforcement-learning-an-introduction</a>: all the exercises in Python of the <span class="citation" data-cites="Sutton2017">(Sutton and Barto, <a href="#ref-Sutton2017" role="doc-biblioref">2017</a>)</span> book.</p></li>
@@ -2182,17 +2266,8 @@
 <!--PAGEBREAK-->
 <h1 id="sec:references" class="unnumbered">References</h1>
 <div id="refs" class="references" role="doc-bibliography">
-<div id="ref-Agrawal2016">
-<p>Agrawal, P., Nair, A., Abbeel, P., Malik, J., and Levine, S. (2016). Learning to Poke by Poking: Experiential Learning of Intuitive Physics. Available at: <a href="http://arxiv.org/abs/1606.07419">http://arxiv.org/abs/1606.07419</a>.</p>
-</div>
 <div id="ref-Amari1998">
 <p>Amari, S.-I. (1998). Natural gradient works efficiently in learning. <em>Neural Computation</em> 10, 251–276.</p>
-</div>
-<div id="ref-Amarjyoti2017">
-<p>Amarjyoti, S. (2017). Deep Reinforcement Learning for Robotic Manipulation-The state of the art. Available at: <a href="http://arxiv.org/abs/1701.08878">http://arxiv.org/abs/1701.08878</a>.</p>
-</div>
-<div id="ref-Andrychowicz2017">
-<p>Andrychowicz, M., Wolski, F., Ray, A., Schneider, J., Fong, R., Welinder, P., et al. (2017). Hindsight Experience Replay. Available at: <a href="http://arxiv.org/abs/1707.01495">http://arxiv.org/abs/1707.01495</a>.</p>
 </div>
 <div id="ref-Anschel2016">
 <p>Anschel, O., Baram, N., and Shimkin, N. (2016). Averaged-DQN: Variance Reduction and Stabilization for Deep Reinforcement Learning. Available at: <a href="http://arxiv.org/abs/1611.01929">http://arxiv.org/abs/1611.01929</a>.</p>
@@ -2202,9 +2277,6 @@
 </div>
 <div id="ref-Arulkumaran2017">
 <p>Arulkumaran, K., Deisenroth, M. P., Brundage, M., and Bharath, A. A. (2017). A Brief Survey of Deep Reinforcement Learning. Available at: <a href="https://arxiv.org/pdf/1708.05866.pdf">https://arxiv.org/pdf/1708.05866.pdf</a>.</p>
-</div>
-<div id="ref-Ba2014">
-<p>Ba, J., Mnih, V., and Kavukcuoglu, K. (2014). Multiple Object Recognition with Visual Attention. Available at: <a href="http://arxiv.org/abs/1412.7755">http://arxiv.org/abs/1412.7755</a>.</p>
 </div>
 <div id="ref-Baird1993">
 <p>Baird, L. C. (1993). Advantage updating. Wright-Patterson Air Force Base Available at: <a href="http://leemon.com/papers/1993b.pdf">http://leemon.com/papers/1993b.pdf</a>.</p>
@@ -2227,20 +2299,14 @@
 <div id="ref-Clavera2018">
 <p>Clavera, I., Nagabandi, A., Fearing, R. S., Abbeel, P., Levine, S., and Finn, C. (2018). Learning to Adapt: Meta-Learning for Model-Based Control. Available at: <a href="http://arxiv.org/abs/1803.11347">http://arxiv.org/abs/1803.11347</a>.</p>
 </div>
-<div id="ref-Co-Reyes2018">
-<p>Co-Reyes, J. D., Liu, Y., Gupta, A., Eysenbach, B., Abbeel, P., and Levine, S. (2018). Self-Consistent Trajectory Autoencoder: Hierarchical Reinforcement Learning with Trajectory Embeddings.</p>
-</div>
 <div id="ref-Corneil2018">
 <p>Corneil, D., Gerstner, W., and Brea, J. (2018). Efficient Model-Based Deep Reinforcement Learning with Variational State Tabulation. Available at: <a href="http://arxiv.org/abs/1802.04325">http://arxiv.org/abs/1802.04325</a>.</p>
 </div>
+<div id="ref-Dabney2017">
+<p>Dabney, W., Rowland, M., Bellemare, M. G., and Munos, R. (2017). Distributional Reinforcement Learning with Quantile Regression. <em>arXiv:1710.10044 [cs, stat]</em>. Available at: <a href="http://arxiv.org/abs/1710.10044">http://arxiv.org/abs/1710.10044</a> [Accessed June 28, 2019].</p>
+</div>
 <div id="ref-Degris2012">
 <p>Degris, T., White, M., and Sutton, R. S. (2012). Linear Off-Policy Actor-Critic. in <em>Proceedings of the 2012 International Conference on Machine Learning</em> Available at: <a href="http://arxiv.org/abs/1205.4839">http://arxiv.org/abs/1205.4839</a>.</p>
-</div>
-<div id="ref-Ding2019">
-<p>Ding, Y., Florensa, C., Phielipp, M., and Abbeel, P. (2019). Goal-conditioned Imitation Learning. in <em>International Conference on Machine Learning (ICML)</em> (Long Beach, California: PMLR), 8. Available at: <a href="https://openreview.net/pdf?id=HkglHcSj2N">https://openreview.net/pdf?id=HkglHcSj2N</a>.</p>
-</div>
-<div id="ref-Dosovitskiy2016">
-<p>Dosovitskiy, A., and Koltun, V. (2016). Learning to Act by Predicting the Future. Available at: <a href="http://arxiv.org/abs/1611.01779">http://arxiv.org/abs/1611.01779</a>.</p>
 </div>
 <div id="ref-Duan2016">
 <p>Duan, Y., Chen, X., Houthooft, R., Schulman, J., and Abbeel, P. (2016). Benchmarking Deep Reinforcement Learning for Continuous Control. Available at: <a href="http://arxiv.org/abs/1604.06778">http://arxiv.org/abs/1604.06778</a>.</p>
@@ -2275,14 +2341,11 @@
 <div id="ref-Ha2018">
 <p>Ha, D., and Schmidhuber, J. (2018). World Models. doi:<a href="https://doi.org/10.5281/zenodo.1207631">10.5281/zenodo.1207631</a>.</p>
 </div>
-<div id="ref-Haarnoja2018">
-<p>Haarnoja, T., Hartikainen, K., Abbeel, P., and Levine, S. (2018a). Latent Space Policies for Hierarchical Reinforcement Learning. Available at: <a href="http://arxiv.org/abs/1804.02808">http://arxiv.org/abs/1804.02808</a>.</p>
-</div>
 <div id="ref-Haarnoja2017">
 <p>Haarnoja, T., Tang, H., Abbeel, P., and Levine, S. (2017). Reinforcement Learning with Deep Energy-Based Policies. <em>arXiv:1702.08165 [cs]</em>. Available at: <a href="http://arxiv.org/abs/1702.08165">http://arxiv.org/abs/1702.08165</a> [Accessed February 13, 2019].</p>
 </div>
 <div id="ref-Haarnoja2018a">
-<p>Haarnoja, T., Zhou, A., Abbeel, P., and Levine, S. (2018b). Soft Actor-Critic: Off-Policy Maximum Entropy Deep Reinforcement Learning with a Stochastic Actor. Available at: <a href="http://arxiv.org/abs/1801.01290">http://arxiv.org/abs/1801.01290</a>.</p>
+<p>Haarnoja, T., Zhou, A., Abbeel, P., and Levine, S. (2018). Soft Actor-Critic: Off-Policy Maximum Entropy Deep Reinforcement Learning with a Stochastic Actor. Available at: <a href="http://arxiv.org/abs/1801.01290">http://arxiv.org/abs/1801.01290</a>.</p>
 </div>
 <div id="ref-Hafner2011">
 <p>Hafner, R., and Riedmiller, M. (2011). Reinforcement learning in feedback control. <em>Machine Learning</em> 84, 137–169. doi:<a href="https://doi.org/10.1007/s10994-011-5235-x">10.1007/s10994-011-5235-x</a>.</p>
@@ -2341,14 +2404,8 @@
 <div id="ref-Krizhevsky2012">
 <p>Krizhevsky, A., Sutskever, I., and Hinton, G. E. (2012). ImageNet Classification with Deep Convolutional Neural Networks. in <em>Advances in Neural Information Processing Systems (NIPS)</em> Available at: <a href="https://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf">https://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf</a>.</p>
 </div>
-<div id="ref-Levine2016">
-<p>Levine, S., Finn, C., Darrell, T., and Abbeel, P. (2016a). End-to-End Training of Deep Visuomotor Policies. <em>JMLR</em> 17. Available at: <a href="http://arxiv.org/abs/1504.00702">http://arxiv.org/abs/1504.00702</a>.</p>
-</div>
 <div id="ref-Levine2013">
 <p>Levine, S., and Koltun, V. (2013). Guided Policy Search. in <em>Proceedings of Machine Learning Research</em>, 1–9. Available at: <a href="http://proceedings.mlr.press/v28/levine13.html">http://proceedings.mlr.press/v28/levine13.html</a>.</p>
-</div>
-<div id="ref-Levine2016a">
-<p>Levine, S., Pastor, P., Krizhevsky, A., and Quillen, D. (2016b). Learning Hand-Eye Coordination for Robotic Grasping with Deep Learning and Large-Scale Data Collection. in <em>Proc. ISER</em> Available at: <a href="http://arxiv.org/abs/1603.02199">http://arxiv.org/abs/1603.02199</a>.</p>
 </div>
 <div id="ref-Li2017">
 <p>Li, Y. (2017). Deep Reinforcement Learning: An Overview. Available at: <a href="http://arxiv.org/abs/1701.07274">http://arxiv.org/abs/1701.07274</a>.</p>
@@ -2371,9 +2428,6 @@
 <div id="ref-Mnih2016">
 <p>Mnih, V., Badia, A. P., Mirza, M., Graves, A., Lillicrap, T. P., Harley, T., et al. (2016). Asynchronous Methods for Deep Reinforcement Learning. in <em>Proc. ICML</em> Available at: <a href="http://arxiv.org/abs/1602.01783">http://arxiv.org/abs/1602.01783</a>.</p>
 </div>
-<div id="ref-Mnih2014">
-<p>Mnih, V., Heess, N., Graves, A., and Kavukcuoglu, K. (2014). Recurrent Models of Visual Attention. Available at: <a href="http://arxiv.org/abs/1406.6247">http://arxiv.org/abs/1406.6247</a>.</p>
-</div>
 <div id="ref-Mnih2013">
 <p>Mnih, V., Kavukcuoglu, K., Silver, D., Graves, A., Antonoglou, I., Wierstra, D., et al. (2013). Playing Atari with Deep Reinforcement Learning. Available at: <a href="http://arxiv.org/abs/1312.5602">http://arxiv.org/abs/1312.5602</a>.</p>
 </div>
@@ -2385,9 +2439,6 @@
 </div>
 <div id="ref-Munos2016">
 <p>Munos, R., Stepleton, T., Harutyunyan, A., and Bellemare, M. G. (2016). Safe and Efficient Off-Policy Reinforcement Learning. Available at: <a href="http://arxiv.org/abs/1606.02647">http://arxiv.org/abs/1606.02647</a>.</p>
-</div>
-<div id="ref-Nachum2018">
-<p>Nachum, O., Gu, S., Lee, H., and Levine, S. (2018). Data-Efficient Hierarchical Reinforcement Learning. Available at: <a href="http://arxiv.org/abs/1805.08296">http://arxiv.org/abs/1805.08296</a>.</p>
 </div>
 <div id="ref-Nachum2017">
 <p>Nachum, O., Norouzi, M., Xu, K., and Schuurmans, D. (2017). Bridging the Gap Between Value and Policy Based Reinforcement Learning. <em>arXiv:1702.08892 [cs, stat]</em>. Available at: <a href="http://arxiv.org/abs/1702.08892">http://arxiv.org/abs/1702.08892</a> [Accessed June 12, 2019].</p>
@@ -2467,9 +2518,6 @@
 <div id="ref-Srinivas2018">
 <p>Srinivas, A., Jabri, A., Abbeel, P., Levine, S., and Finn, C. (2018). Universal Planning Networks. Available at: <a href="http://arxiv.org/abs/1804.00645">http://arxiv.org/abs/1804.00645</a>.</p>
 </div>
-<div id="ref-Stollenga2014">
-<p>Stollenga, M., Masci, J., Gomez, F., and Schmidhuber, J. (2014). Deep Networks with Internal Selective Attention through Feedback Connections. Available at: <a href="http://arxiv.org/abs/1407.3068">http://arxiv.org/abs/1407.3068</a>.</p>
-</div>
 <div id="ref-Sutton1990a">
 <p>Sutton, R. S. (1990). Integrated Architectures for Learning, Planning, and Reacting Based on Approximating Dynamic Programming. <em>Machine Learning Proceedings 1990</em>, 216–224. doi:<a href="https://doi.org/10.1016/B978-1-55860-141-3.50030-4">10.1016/B978-1-55860-141-3.50030-4</a>.</p>
 </div>
@@ -2526,9 +2574,6 @@
 </div>
 <div id="ref-Williams1991">
 <p>Williams, R. J., and Peng, J. (1991). Function optimization using connectionist reinforcement learning algorithms. <em>Connection Science</em> 3, 241–268.</p>
-</div>
-<div id="ref-Zhang2015">
-<p>Zhang, F., Leitner, J., Milford, M., Upcroft, B., and Corke, P. (2015). Towards Vision-Based Deep Reinforcement Learning for Robotic Motion Control. in <em>Proc. Acra</em> Available at: <a href="http://arxiv.org/abs/1511.03791">http://arxiv.org/abs/1511.03791</a>.</p>
 </div>
 <div id="ref-Ziebart2008">
 <p>Ziebart, B. D., Maas, A., Bagnell, J. A., and Dey, A. K. (2008). Maximum Entropy Inverse Reinforcement Learning. in <em>AAAI Conference on Artificial Intelligence</em>, 6.</p>

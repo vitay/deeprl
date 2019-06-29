@@ -14,12 +14,14 @@ files:
     - 3.3-ImportanceSampling.md
     - 3.4-DPG.md
     - 3.5-NaturalGradient.md
-    - 3.6-OtherPolicyGradient.md
-    - 4-RAM.md
+    - 3.6-EntropyRL.md
+    - 3.7-DistributionalRL.md
+    - 3.8-OtherPolicyGradient.md
+    # - 4-RAM.md
     - 5-ModelBased.md
-    - 6-Hierarchical.md
-    - 7-Inverse.md
-    - 8-Robotics.md
+    # - 6-Hierarchical.md
+    # - 7-Inverse.md
+    # - 8-Robotics.md
     - 9-Practice.md
     - 10-References.md
 
