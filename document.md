@@ -2820,11 +2820,11 @@ $$
 
 The projected Bellman update plays the role of the one-hot encoded target vector in classification (except that it is not one-hot encoded). DQN performs a regression on the Q-values (mse loss), while categorical DQN performs a classification (cross-entropy loss). Apart from the way the target is computed, categorical DQN is very similar to DQN: architecture, experience replay memory, target networks, etc.
 
-@fig:categoricaldqn illustrates how the predicted value distribution changes when playing Space invaders, also have a look at the Youtube video. C51 outperforms DQN on most Atari games, both in terms of the achieved performance and the sample complexity.
+@fig:categoricaldqn illustrates how the predicted value distribution changes when playing Space invaders (also have a look at the Youtube video at <https://www.youtube.com/watch?v=yFBwyPuO2Vg>). C51 outperforms DQN on most Atari games, both in terms of the achieved performance and the sample complexity.
 
 ![Evolution of the value distribution for the categorical DQN playing Space Invaders. Animation taken from <https://deepmind.com/blog/going-beyond-average-reinforcement-learning/>](img/categoricaldqn.gif){#fig:categoricaldqn width=100%}
 
-<iframe width="989" height="371" src="https://www.youtube.com/embed/yFBwyPuO2Vg" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe width="600" height="300" src="https://www.youtube.com/embed/yFBwyPuO2Vg" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 **Additional resources:**
 

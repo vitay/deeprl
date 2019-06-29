@@ -202,11 +202,11 @@
     \mathcal{L}(\theta) =  - \sum_i (\Phi \, \mathcal{T} \, \mathcal{Z}_{\theta&#39;}(s, a))_i \log p_i (s, a; \theta)
 \]</span></p>
 <p>The projected Bellman update plays the role of the one-hot encoded target vector in classification (except that it is not one-hot encoded). DQN performs a regression on the Q-values (mse loss), while categorical DQN performs a classification (cross-entropy loss). Apart from the way the target is computed, categorical DQN is very similar to DQN: architecture, experience replay memory, target networks, etc.</p>
-<p>Fig. <a href="#fig:categoricaldqn">37</a> illustrates how the predicted value distribution changes when playing Space invaders, also have a look at the Youtube video. C51 outperforms DQN on most Atari games, both in terms of the achieved performance and the sample complexity.</p>
+<p>Fig. <a href="#fig:categoricaldqn">37</a> illustrates how the predicted value distribution changes when playing Space invaders (also have a look at the Youtube video at <a href="https://www.youtube.com/watch?v=yFBwyPuO2Vg" class="uri">https://www.youtube.com/watch?v=yFBwyPuO2Vg</a>). C51 outperforms DQN on most Atari games, both in terms of the achieved performance and the sample complexity.</p>
 <figure>
 <img src="img/categoricaldqn.gif" alt="Figure 37: Evolution of the value distribution for the categorical DQN playing Space Invaders. Animation taken from https://deepmind.com/blog/going-beyond-average-reinforcement-learning/" id="fig:categoricaldqn" style="width:100.0%" /><figcaption>Figure 37: Evolution of the value distribution for the categorical DQN playing Space Invaders. Animation taken from <a href="https://deepmind.com/blog/going-beyond-average-reinforcement-learning/" class="uri">https://deepmind.com/blog/going-beyond-average-reinforcement-learning/</a></figcaption>
 </figure>
-<iframe width="989" height="371" src="https://www.youtube.com/embed/yFBwyPuO2Vg" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+<iframe width="600" height="300" src="https://www.youtube.com/embed/yFBwyPuO2Vg" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
 </iframe>
 <p><strong>Additional resources:</strong></p>
 <ul>
