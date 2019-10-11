@@ -10,7 +10,7 @@
 
   <link rel="stylesheet" href="assets/syntax.css">
   <link rel="stylesheet" href="assets/github.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+  <script src="/usr/share/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
   <!--[if lt IE 9]>
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
   <![endif]-->
@@ -186,7 +186,7 @@
 <p>The main drawback of this approach is that several actions have to be sampled in the next state in order to estimate its current soft V-value, what makes it hard to implement in practice. The policy also has to be sampled from the Q-values, what is not practical for continuous action spaces.</p>
 <p>But the real interesting thing is the policies that are learned in multi-goal settings, as in Fig. <a href="#fig:softql">33</a>. The agent starts in the middle of the environment and can obtain one of the four rewards (north, south, west, east). A regular RL agent would very quickly select only one of the rewards and stick to it. With soft Q-learning, the policy stays stochastic and the four rewards can be obtained even after convergence. This indicates that the soft agent has learned much more about its environment than its hard equivalent, thanks to its maximum entropy formulation.</p>
 <figure>
-<img src="img/softQL.png" alt="Figure 33: Policy learned by Soft Q-learning in a multi-goal setting. Taken from Haarnoja et al. (2017)." id="fig:softql" /><figcaption>Figure 33: Policy learned by Soft Q-learning in a multi-goal setting. Taken from <span class="citation" data-cites="Haarnoja2017">Haarnoja et al. (<a href="References.html#ref-Haarnoja2017" role="doc-biblioref">2017</a>)</span>.</figcaption>
+<img src="img/softQL.png" id="fig:softql" alt="" /><figcaption>Figure 33: Policy learned by Soft Q-learning in a multi-goal setting. Taken from <span class="citation" data-cites="Haarnoja2017">Haarnoja et al. (<a href="References.html#ref-Haarnoja2017" role="doc-biblioref">2017</a>)</span>.</figcaption>
 </figure>
 <h3 id="sec:soft-actor-critic-sac"><span class="header-section-number">4.6.3</span> Soft Actor-Critic (SAC)</h3>
 <p><span class="citation" data-cites="Haarnoja2018a">Haarnoja et al. (<a href="References.html#ref-Haarnoja2018a" role="doc-biblioref">2018</a>)</span> proposed the <strong>Soft Actor-Critic</strong> (SAC), an off-policy actor-critic which allows to have a stochastic actor (contrary to DDPG) while being more optimal and sample efficient than on-policy methods such as A3C or PPO. It is also less sensible to hyperparameters than all these methods.</p>

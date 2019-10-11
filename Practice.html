@@ -10,7 +10,7 @@
 
   <link rel="stylesheet" href="assets/syntax.css">
   <link rel="stylesheet" href="assets/github.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+  <script src="/usr/share/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
   <!--[if lt IE 9]>
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
   <![endif]-->
@@ -137,13 +137,13 @@
 <ul>
 <li>OpenAI Gym <a href="https://gym.openai.com" class="uri">https://gym.openai.com</a>: a standard toolkit for comparing RL algorithms provided by the OpenAI foundation. It provides many environments, from the classical toy problems in RL (GridWorld, pole-balancing) to more advanced problems (Mujoco simulated robots, Atari games, Minecraft…). The main advantage is the simplicity of the interface: the user only needs to select which task he wants to solve, and a simple for loop allows to perform actions and observe their consequences:</li>
 </ul>
-<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb1-1" title="1"><span class="im">import</span> gym</a>
-<a class="sourceLine" id="cb1-2" title="2">env <span class="op">=</span> gym.make(<span class="st">&quot;Taxi-v1&quot;</span>)</a>
-<a class="sourceLine" id="cb1-3" title="3">observation <span class="op">=</span> env.reset()</a>
-<a class="sourceLine" id="cb1-4" title="4"><span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1000</span>):</a>
-<a class="sourceLine" id="cb1-5" title="5">    env.render()</a>
-<a class="sourceLine" id="cb1-6" title="6">    action <span class="op">=</span> env.action_space.sample()</a>
-<a class="sourceLine" id="cb1-7" title="7">    observation, reward, done, info <span class="op">=</span> env.step(action)</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="im">import</span> gym</span>
+<span id="cb1-2"><a href="#cb1-2"></a>env <span class="op">=</span> gym.make(<span class="st">&quot;Taxi-v1&quot;</span>)</span>
+<span id="cb1-3"><a href="#cb1-3"></a>observation <span class="op">=</span> env.reset()</span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1000</span>):</span>
+<span id="cb1-5"><a href="#cb1-5"></a>    env.render()</span>
+<span id="cb1-6"><a href="#cb1-6"></a>    action <span class="op">=</span> env.action_space.sample()</span>
+<span id="cb1-7"><a href="#cb1-7"></a>    observation, reward, done, info <span class="op">=</span> env.step(action)</span></code></pre></div>
 <ul>
 <li><p>OpenAI Universe <a href="https://universe.openai.com" class="uri">https://universe.openai.com</a>: a similar framework from OpenAI, but to control realistic video games (GTA V, etc).</p></li>
 <li><p>Darts environment <a href="https://github.com/DartEnv/dart-env" class="uri">https://github.com/DartEnv/dart-env</a>: a fork of gym to use the Darts simulator instead of Mujoco.</p></li>

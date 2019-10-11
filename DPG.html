@@ -10,7 +10,7 @@
 
   <link rel="stylesheet" href="assets/syntax.css">
   <link rel="stylesheet" href="assets/github.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+  <script src="/usr/share/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
   <!--[if lt IE 9]>
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
   <![endif]-->
@@ -166,7 +166,7 @@
 \]</span></p>
 <p>Fig. <a href="#fig:dpg">25</a> outlines the actor-critic architecture of the DPG (deterministic policy gradient) method, to compare with the actor-critic architecture of the stochastic policy gradient (Fig. <a href="#fig:actorcriticpolicy">21</a>).</p>
 <figure>
-<img src="img/dpg.png" alt="Figure 25: Architecture of the DPG (deterministic policy gradient) method." id="fig:dpg" style="width:65.0%" /><figcaption>Figure 25: Architecture of the DPG (deterministic policy gradient) method.</figcaption>
+<img src="img/dpg.png" id="fig:dpg" style="width:65.0%" alt="" /><figcaption>Figure 25: Architecture of the DPG (deterministic policy gradient) method.</figcaption>
 </figure>
 <p><span class="citation" data-cites="Silver2014">Silver et al. (<a href="References.html#ref-Silver2014" role="doc-biblioref">2014</a>)</span> investigated the performance of DPG using linear function approximators and showed that it compared positively to stochastic algorithms in high-dimensional or continuous action spaces. However, non-linear function approximators such as deep NN would not work yet.</p>
 <h3 id="sec:deep-deterministic-policy-gradient-ddpg"><span class="header-section-number">4.4.2</span> Deep Deterministic Policy Gradient (DDPG)</h3>
@@ -193,11 +193,11 @@
 <p><span class="math display">\[ dx_t = \theta (\mu - x_t) dt + \sigma dW_t \qquad \text{with} \qquad dW_t = \mathcal{N}(0, dt)\]</span></p>
 <p><span class="math inline">\(\mu\)</span> is the mean of the process (usually 0), <span class="math inline">\(\theta\)</span> is the friction (how fast it varies with noise) and <span class="math inline">\(\sigma\)</span> controls the amount of noise. Fig. <a href="#fig:OU">26</a> shows three independent runs of a Ornstein-Uhlenbeck process: successive values of the variable <span class="math inline">\(x_t\)</span> vary randomly but coherently over time.</p>
 <figure>
-<img src="img/OU.png" alt="Figure 26: Three independent runs of an Ornstein-Uhlenbeck process with \mu=0, \sigma=0.3, \theta=0.15 and dt=0.1. The code is adapted from https://gist.github.com/jimfleming/9a62b2f7ed047ff78e95b5398e955b9e" id="fig:OU" style="width:80.0%" /><figcaption>Figure 26: Three independent runs of an Ornstein-Uhlenbeck process with <span class="math inline">\(\mu=0\)</span>, <span class="math inline">\(\sigma=0.3\)</span>, <span class="math inline">\(\theta=0.15\)</span> and <span class="math inline">\(dt=0.1\)</span>. The code is adapted from <a href="https://gist.github.com/jimfleming/9a62b2f7ed047ff78e95b5398e955b9e" class="uri">https://gist.github.com/jimfleming/9a62b2f7ed047ff78e95b5398e955b9e</a></figcaption>
+<img src="img/OU.png" id="fig:OU" style="width:80.0%" alt="" /><figcaption>Figure 26: Three independent runs of an Ornstein-Uhlenbeck process with <span class="math inline">\(\mu=0\)</span>, <span class="math inline">\(\sigma=0.3\)</span>, <span class="math inline">\(\theta=0.15\)</span> and <span class="math inline">\(dt=0.1\)</span>. The code is adapted from <a href="https://gist.github.com/jimfleming/9a62b2f7ed047ff78e95b5398e955b9e" class="uri">https://gist.github.com/jimfleming/9a62b2f7ed047ff78e95b5398e955b9e</a></figcaption>
 </figure>
 <p>The architecture of the DDPG algorithm is depicted on Fig. <a href="#fig:ddpg">27</a>.</p>
 <figure>
-<img src="img/ddpg.png" alt="Figure 27: Architecture of the DDPG (deep deterministic policy gradient) algorithm." id="fig:ddpg" style="width:70.0%" /><figcaption>Figure 27: Architecture of the DDPG (deep deterministic policy gradient) algorithm.</figcaption>
+<img src="img/ddpg.png" id="fig:ddpg" style="width:70.0%" alt="" /><figcaption>Figure 27: Architecture of the DDPG (deep deterministic policy gradient) algorithm.</figcaption>
 </figure>
 <p>The pseudo-algorithm is as follows:</p>
 <hr />
