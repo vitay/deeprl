@@ -48,3 +48,4 @@ header-includes:
     - \usepackage{titling}
     - \pretitle{\begin{center}\begin{bfseries}\begin{huge}}
     - \posttitle{\end{huge}\end{bfseries}\end{center}\vspace{2cm}}
+    - \renewcommand{\linethickness}{0.4pt}

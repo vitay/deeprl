@@ -49,6 +49,7 @@ header-includes:
     - \usepackage{titling}
     - \pretitle{\begin{center}\begin{bfseries}\begin{huge}}
     - \posttitle{\end{huge}\end{bfseries}\end{center}\vspace{2cm}}
+    - \renewcommand{\linethickness}{0.4pt}
 ---
 
 # Introduction
@@ -773,7 +774,7 @@ DQN was initially applied to solve various Atari 2600 games. Video frames were u
 
 The problem of partial observability is solved by concatenating the four last video frames into a single tensor used as input to the CNN. The convolutional layers become able through learning to extract the speed information from it. Some of the Atari games (Pinball, Breakout) were solved with a performance well above human level, especially when they are mostly reactive. Games necessitating more long-term planning (Montezuma' Revenge) were still poorly learned, though.
 
-Beside being able to learn using delayed and sparse rewards in highly dimensional input spaces, the true *tour de force* of DQN is that it was able to learn the 49 Atari games in a row, using the same architecture and hyperparameters, and without resetting the weights between two games: knowledge acquired in one game could be reused for the next game. This created great excitement, as the ability to reuse knowledge over different tasks is a fundamental property of true intelligence.
+Beside being able to learn using delayed and sparse rewards in highly dimensional input spaces, the true *tour de force* of DQN is that it was able to learn the 49 Atari games using the same architecture and hyperparameters, showing the generality of the approach. 
 
 ## Double DQN
 
