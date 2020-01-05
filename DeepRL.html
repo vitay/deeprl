@@ -777,14 +777,13 @@
 \]</span></p>
 <p>Monte-Carlo sampling could be used to estimate the objective function. One basically would have to sample multiple trajectories <span class="math inline">\(\{\tau_i\}\)</span> and average the obtained returns:</p>
 <p><span class="math display">\[
-    J(\theta) \approx \frac{1}{N} \, \sum_i \rho_\theta(\tau_i) \, R(\tau_i)
+    J(\theta) \approx \frac{1}{N} \, \sum_{i=1}^N  R(\tau_i)
 \]</span></p>
 <p>However, this approach would suffer from several problems:</p>
 <ol type="1">
 <li>The trajectory space is extremely huge, so one would need a lot of sampled trajectories to have a correct estimate of the objective function (<strong>high variance</strong>).</li>
 <li>For stability reasons, only small changes can be made to the policy at each iteration, so it would necessitate a lot of episodes (<strong>sample complexity</strong>).</li>
-<li>The probability of a trajectory is difficult to estimate: the initial probability distribution <span class="math inline">\(p_0\)</span> has to be known, as well as the dynamics of the MDP (<span class="math inline">\(p(s_{t+1} | s_t, a_t)\)</span>). Those could be approximated or learned (<em>model-based RL</em>), but it would limit the applicability of the method and approximation errors would accumulate quickly over a trajectory.</li>
-<li>For continuing tasks (<span class="math inline">\(T = \infty\)</span>), the return can not be estimated.</li>
+<li>For continuing tasks (<span class="math inline">\(T = \infty\)</span>), the return can not be estimated as the episode never ends.</li>
 </ol>
 <p>The policy search methods presented in this section are called <strong>policy gradient methods</strong>. As we are going to apply gradient ascent on the weights <span class="math inline">\(\theta\)</span> in order to maximize <span class="math inline">\(J(\theta)\)</span>, all we actually need is the gradient <span class="math inline">\(\nabla_\theta J(\theta)\)</span> of the objective function w.r.t the weights:</p>
 <p><span class="math display">\[
