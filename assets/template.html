@@ -9,7 +9,9 @@
 
 
   <link rel="stylesheet" href="assets/syntax.css">
+  <link rel="stylesheet" href="assets/menu.css">
   <link rel="stylesheet" href="%(css)s">
+  <script src="assets/menu.js" type="text/javascript"></script>
   <script src="%(mathjax)s" type="text/javascript"></script>
   <!--[if lt IE 9]>
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
@@ -19,23 +21,24 @@
 
 <body class="markdown-body">
 
-<header>
-  <h1 class="title"><strong>%(title)s</strong></h1>
-  <p class="author">%(author)s - <a href="mailto:%(email)s">%(email)s</a></p>
-</header>
-
+<div class="navbar">
+  <div class="dropdown" id="dropdown">
+    <button class="dropbtn">
+      <div class="dropicon-first"></div>
+      <div class="dropicon"></div>
+      <div class="dropicon"></div>
+      <i class="fa fa-caret-down"></i>
+    </button> 
+    <span class="navbar-title">%(title)s - %(author)s</span>
+    <div class="dropdown-content">
+%(toc)s
+    </div>
+  </div>
+</div>
 
 <article>
-
-<nav id="TOC" class ="toc">
-  <h2><strong>%(title)s</strong></h2>
-  <p class="author">%(author)s</p>
-%(toc)s
-</nav>
-
-
 %(body)s
-
 </article>
+
 </body>
 </html>

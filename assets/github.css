@@ -8,30 +8,31 @@
   color: #24292e;
   font-family: "Roboto", Helvetica, Arial, sans-serif;
   /*font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";*/
-  font-size: 18px;
+  font-size: 16px;
   line-height: 1.65;
   word-wrap: break-word;
-  width: 50%;
+  width: 80%;
   text-align: justify;
   margin: 0 auto;
   /*overflow:hidden;*/
 }
 
 .markdown-body article {
-  height:100%;
+  margin-top: 75px;
   /*overflow:auto;*/
 }
 
 /*TOC*/
-.markdown-body .toc {
-  position: fixed;
+.markdown-body toc {
+  /*position: fixed;*/
+  display: none;
   max-height: 100%;
-  overflow-y: scroll;
-  width: 20%;
+  /*overflow-y: scroll;*/
+  width: 80%;
   left: 1em;
   top: 0em;
   padding-right: 1em;
-  font-size: 80%;
+  font-size: 100%;
 }
 
 .markdown-body .toc h2 {

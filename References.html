@@ -9,8 +9,10 @@
 
 
   <link rel="stylesheet" href="assets/syntax.css">
+  <link rel="stylesheet" href="assets/menu.css">
   <link rel="stylesheet" href="assets/github.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+  <script src="assets/menu.js" type="text/javascript"></script>
+  <script src="/usr/share/mathjax2/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
   <!--[if lt IE 9]>
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
   <![endif]-->
@@ -19,17 +21,16 @@
 
 <body class="markdown-body">
 
-<header>
-  <h1 class="title"><strong>Deep Reinforcement Learning</strong></h1>
-  <p class="author">Julien Vitay - <a href="mailto:julien.vitay@informatik.tu-chemnitz.de">julien.vitay@informatik.tu-chemnitz.de</a></p>
-</header>
-
-
-<article>
-
-<nav id="TOC" class ="toc">
-  <h2><strong>Deep Reinforcement Learning</strong></h2>
-  <p class="author">Julien Vitay</p>
+<div class="navbar">
+  <div class="dropdown" id="dropdown">
+    <button class="dropbtn">
+      <div class="dropicon-first"></div>
+      <div class="dropicon"></div>
+      <div class="dropicon"></div>
+      <i class="fa fa-caret-down"></i>
+    </button> 
+    <span class="navbar-title">Deep Reinforcement Learning - Julien Vitay</span>
+    <div class="dropdown-content">
 
 <ul>
 <li><a href="./Introduction.html#sec:introduction"><span class="toc-section-number">1</span> Introduction</a></li>
@@ -124,9 +125,11 @@
 </ul>
 
 
-</nav>
+    </div>
+  </div>
+</div>
 
-
+<article>
 
 <h1 id="sec:references" class="unnumbered">References</h1>
 <div id="refs" class="references" role="doc-bibliography">
@@ -404,7 +407,7 @@
 <p>Todorov, E. (2008). General duality between optimal control and estimation. in <em>2008 47th IEEE Conference on Decision and Control</em>, 4286–4292. doi:<a href="https://doi.org/10.1109/CDC.2008.4739438">10.1109/CDC.2008.4739438</a>.</p>
 </div>
 <div id="ref-Toussaint2009">
-<p>Toussaint, M. (2009). Robot Trajectory Optimization Using Approximate Inference. in <em>Proceedings of the 26th Annual International Conference on Machine Learning</em> ICML ’09. (New York, NY, USA: ACM), 1049–1056. doi:<a href="https://doi.org/10.1145/1553374.1553508">10.1145/1553374.1553508</a>.</p>
+<p>Toussaint, M. (2009). Robot Trajectory Optimization Using Approximate Inference. in <em>Proceedings of the 26th Annual International Conference on Machine Learning</em> ICML ’09. (Montreal, Quebec, Canada: ACM), 1049–1056. doi:<a href="https://doi.org/10.1145/1553374.1553508">10.1145/1553374.1553508</a>.</p>
 </div>
 <div id="ref-Uhlenbeck1930">
 <p>Uhlenbeck, G. E., and Ornstein, L. S. (1930). On the Theory of the Brownian Motion. <em>Physical Review</em> 36. doi:<a href="https://doi.org/10.1103/PhysRev.36.823">10.1103/PhysRev.36.823</a>.</p>
@@ -450,7 +453,7 @@
 <a href="#" class="next">Next &raquo;</a>
 </div>
 
-
 </article>
+
 </body>
 </html>

@@ -9,8 +9,10 @@
 
 
   <link rel="stylesheet" href="assets/syntax.css">
+  <link rel="stylesheet" href="assets/menu.css">
   <link rel="stylesheet" href="assets/github.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+  <script src="assets/menu.js" type="text/javascript"></script>
+  <script src="/usr/share/mathjax2/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
   <!--[if lt IE 9]>
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
   <![endif]-->
@@ -19,17 +21,16 @@
 
 <body class="markdown-body">
 
-<header>
-  <h1 class="title"><strong>Deep Reinforcement Learning</strong></h1>
-  <p class="author">Julien Vitay - <a href="mailto:julien.vitay@informatik.tu-chemnitz.de">julien.vitay@informatik.tu-chemnitz.de</a></p>
-</header>
-
-
-<article>
-
-<nav id="TOC" class ="toc">
-  <h2><strong>Deep Reinforcement Learning</strong></h2>
-  <p class="author">Julien Vitay</p>
+<div class="navbar">
+  <div class="dropdown" id="dropdown">
+    <button class="dropbtn">
+      <div class="dropicon-first"></div>
+      <div class="dropicon"></div>
+      <div class="dropicon"></div>
+      <i class="fa fa-caret-down"></i>
+    </button> 
+    <span class="navbar-title">Deep Reinforcement Learning - Julien Vitay</span>
+    <div class="dropdown-content">
 
 <ul>
 <li><a href="./Introduction.html#sec:introduction"><span class="toc-section-number">1</span> Introduction</a></li>
@@ -124,9 +125,11 @@
 </ul>
 
 
-</nav>
+    </div>
+  </div>
+</div>
 
-
+<article>
 
 <h2 id="sec:maximum-entropy-rl"><span class="header-section-number">4.6</span> Maximum Entropy RL</h2>
 <p>All the methods seen sofar focus on finding a policy (or value functions) that maximizes the obtained return. This corresponds to the <strong>exploitation</strong> part of RL: we care only about the optimal policy. The <strong>exploration</strong> is ensured by external mechanisms, such as <span class="math inline">\(\epsilon\)</span>-greedy or softmax policies in value based methods, or adding exploratory noise to the actions as in DDPG. Exploration mechanisms typically add yet another free parameter (<span class="math inline">\(\epsilon\)</span>, softmax temperature, etc) that additionally need to be scheduled (more exploration at the beginning of learning than at the end).</p>
@@ -241,7 +244,7 @@
 <a href="DistributionalRL.html" class="next">Next &raquo;</a>
 </div>
 
-
 </article>
+
 </body>
 </html>

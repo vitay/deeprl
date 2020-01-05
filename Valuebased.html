@@ -9,8 +9,10 @@
 
 
   <link rel="stylesheet" href="assets/syntax.css">
+  <link rel="stylesheet" href="assets/menu.css">
   <link rel="stylesheet" href="assets/github.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+  <script src="assets/menu.js" type="text/javascript"></script>
+  <script src="/usr/share/mathjax2/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
   <!--[if lt IE 9]>
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
   <![endif]-->
@@ -19,17 +21,16 @@
 
 <body class="markdown-body">
 
-<header>
-  <h1 class="title"><strong>Deep Reinforcement Learning</strong></h1>
-  <p class="author">Julien Vitay - <a href="mailto:julien.vitay@informatik.tu-chemnitz.de">julien.vitay@informatik.tu-chemnitz.de</a></p>
-</header>
-
-
-<article>
-
-<nav id="TOC" class ="toc">
-  <h2><strong>Deep Reinforcement Learning</strong></h2>
-  <p class="author">Julien Vitay</p>
+<div class="navbar">
+  <div class="dropdown" id="dropdown">
+    <button class="dropbtn">
+      <div class="dropicon-first"></div>
+      <div class="dropicon"></div>
+      <div class="dropicon"></div>
+      <i class="fa fa-caret-down"></i>
+    </button> 
+    <span class="navbar-title">Deep Reinforcement Learning - Julien Vitay</span>
+    <div class="dropdown-content">
 
 <ul>
 <li><a href="./Introduction.html#sec:introduction"><span class="toc-section-number">1</span> Introduction</a></li>
@@ -124,9 +125,11 @@
 </ul>
 
 
-</nav>
+    </div>
+  </div>
+</div>
 
-
+<article>
 
 <h1 id="sec:value-based-methods"><span class="header-section-number">3</span> Value-based methods</h1>
 <h2 id="sec:limitations-of-deep-neural-networks-for-function-approximation"><span class="header-section-number">3.1</span> Limitations of deep neural networks for function approximation</h2>
@@ -304,7 +307,7 @@
 <p>Building on previous ideas from the Schmidhuber’s group <span class="citation" data-cites="Bakker2001 Wierstra2007">(Bakker, <a href="References.html#ref-Bakker2001" role="doc-biblioref">2001</a>; Wierstra et al., <a href="References.html#ref-Wierstra2007" role="doc-biblioref">2007</a>)</span>, <span class="citation" data-cites="Hausknecht2015">Hausknecht and Stone (<a href="References.html#ref-Hausknecht2015" role="doc-biblioref">2015</a>)</span> replaced one of the fully-connected layers of the DQN network by a LSTM layer (see Section <a href="./DeepLearning.html#sec:recurrent-neural-networks">2.2.3</a>) while using single frames as inputs. The resulting <strong>deep recurrent q-learning</strong> (DRQN) network became able to solve POMDPs thanks to the astonishing learning abilities of LSTMs: the LSTM layer learn to remember which part of the sensory information will be useful to take decisions later.</p>
 <p>However, LSTMs are not a magical solution either. They are trained using <em>truncated BPTT</em>, i.e. on a limited history of states. Long-term dependencies exceeding the truncation horizon cannot be learned. Additionally, all states in that horizon (i.e. all frames) have to be stored in the ERM to train the network, increasing drastically its size. Despite these limitations, DRQN is a much more elegant solution to the partial observability problem, letting the network decide which horizon it needs to solve long-term dependencies.</p>
 <h2 id="sec:other-variants-of-dqn"><span class="header-section-number">3.8</span> Other variants of DQN</h2>
-<p>Double duelling DQN with prioritized replay is currently the state-of-the-art method for value-based deep RL (see <span class="citation" data-cites="Hessel2017">Hessel et al. (<a href="References.html#ref-Hessel2017" role="doc-biblioref">2017</a>)</span> for an experimental study of the contribution of each mechanism and the corresponding <strong>Rainbow</strong> DQN network). Several improvements have been proposed since the corresponding milestone papers. This section provides some short explanations and links to the original papers (to be organized and extended).</p>
+<p>Double duelling DQN with prioritized replay was the state-of-the-art method for value-based deep RL (see <span class="citation" data-cites="Hessel2017">Hessel et al. (<a href="References.html#ref-Hessel2017" role="doc-biblioref">2017</a>)</span> for an experimental study of the contribution of each mechanism and the corresponding <strong>Rainbow</strong> DQN network, using in addition distributional learning, see Section <a href="./DistributionalRL.html#sec:categorical-dqn">4.7.1</a>). Several improvements have been proposed since the corresponding milestone papers. This section provides some short explanations and links to the original papers (to be organized and extended).</p>
 <p><strong>Average-DQN</strong> proposes to increase the stability and performance of DQN by replacing the single target network (a copy of the trained network) by an average of the last parameter values, in other words an average of many past target networks <span class="citation" data-cites="Anschel2016">(Anschel et al., <a href="References.html#ref-Anschel2016" role="doc-biblioref">2016</a>)</span>.</p>
 <p><span class="citation" data-cites="He2016">He et al. (<a href="References.html#ref-He2016" role="doc-biblioref">2016</a>)</span> proposed <strong>fast reward propagation</strong> through optimality tightening to speedup learning: when rewards are sparse, they require a lot of episodes to propagate these rare rewards to all actions leading to it. Their method combines immediate rewards (single steps) with actual returns (as in Monte-Carlo) via a constrained optimization approach.</p>
 
@@ -314,7 +317,7 @@
 <a href="PolicyGradient.html" class="next">Next &raquo;</a>
 </div>
 
-
 </article>
+
 </body>
 </html>
