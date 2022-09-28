@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.1.251">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Deep Reinforcement Learning - 6&nbsp; Off-policy Actor-Critic</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./3.4-DPG.html" rel="next">
+<link href="./3.2-ActorCritic.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Off-policy Actor-Critic</span></h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Deep Reinforcement Learning</a> 
+    </div>
+      </div>
+      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">Overview</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./1.1-BasicRL.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Basics</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./1.2-DeepLearning.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Deep learning</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./2-Valuebased.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Value-based methods</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./3.1-PolicyGradient.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Policy Gradient methods</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./3.2-ActorCritic.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Advantage Actor-Critic methods</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./3.3-ImportanceSampling.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Off-policy Actor-Critic</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./3.4-DPG.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Deterministic Policy Gradient (DPG)</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./3.5-NaturalGradient.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Natural Gradients</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./3.6-EntropyRL.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Maximum Entropy RL</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./3.7-DistributionalRL.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Distributional learning</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./3.8-OtherPolicyGradient.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Miscellaneous model-free algorithm</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./4-RAM.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Recurrent Attention Models</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./5-ModelBased.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Model-based RL</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./6-Hierarchical.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Hierarchical Reinforcement Learning</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./7-Inverse.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Inverse Reinforcement Learning</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./8-Robotics.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Deep RL for robotics</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./9-Practice.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Deep RL in practice</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">References</a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#importance-sampling" id="toc-importance-sampling" class="nav-link active" data-scroll-target="#importance-sampling"><span class="toc-section-number">6.0.1</span>  Importance sampling</a></li>
+  <li><a href="#linear-off-policy-actor-critic-off-pac" id="toc-linear-off-policy-actor-critic-off-pac" class="nav-link" data-scroll-target="#linear-off-policy-actor-critic-off-pac"><span class="toc-section-number">6.0.2</span>  Linear Off-Policy Actor-Critic (Off-PAC)</a></li>
+  <li><a href="#retrace" id="toc-retrace" class="nav-link" data-scroll-target="#retrace"><span class="toc-section-number">6.0.3</span>  Retrace</a></li>
+  <li><a href="#self-imitation-learning-sil" id="toc-self-imitation-learning-sil" class="nav-link" data-scroll-target="#self-imitation-learning-sil"><span class="toc-section-number">6.0.4</span>  Self-Imitation Learning (SIL)</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Off-policy Actor-Critic</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+    
+  </div>
+  
+
+</header>
+
+<p>Actor-critic architectures are generally <strong>on-policy</strong> algorithms: the actions used to explore the environment must have been generated by the actor, otherwise the feedback provided by the critic (the advantage) will introduce a huge bias (i.e.&nbsp;an error) in the policy gradient. This comes from the definition of the policy gradient theorem:</p>
+<p><span class="math display">\[
+    \nabla_\theta J(\theta) =  \mathbb{E}_{s \sim \rho^\pi, a \sim \pi_\theta}[\nabla_\theta \log \pi_\theta(s, a) \, Q^{\pi_\theta}(s, a)]
+\]</span></p>
+<p>The state distribution <span class="math inline">\(\rho^\pi\)</span> defines the ensemble of states that can be visited using the actor policy <span class="math inline">\(\pi_\theta\)</span>. If, during Monte-Carlo sampling of the policy gradient, the states <span class="math inline">\(s\)</span> do not come from this state distribution, the approximated policy gradient will be wrong (high bias) and the resulting policy will be suboptimal.</p>
+<p>The major drawback of on-policy methods is their sample complexity: it is difficult to ensure that the <em>“interesting”</em> regions of the policy are actually discovered by the actor (see <a href="#fig-onlinepolicyexploration">Figure&nbsp;<span>6.1</span></a>). If the actor is initialized in a flat region of the reward space (where there is not a lot of rewards), policy gradient updates will only change slightly the policy and it may take a lot of iterations until interesting policies are discovered and fine-tuned.</p>
+<div id="fig-onlinepolicyexploration" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="img/onpolicyexploration.png" class="img-fluid figure-img" style="width:50.0%"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;6.1: Illustration of the sample complexity inherent to on-policy methods, where the actor has only two parameters <span class="math inline">\(\theta_1\)</span> and <span class="math inline">\(\theta_2\)</span>. If only very small regions of the actor parameters are associated with high rewards, the policy might wander randomly for a very long time before “hitting”the interesting regions.</figcaption><p></p>
+</figure>
+</div>
+<p>The problem becomes even worse when the state or action spaces are highly dimensional, or when rewards are sparse. Imagine the scenario where you are searching for your lost keys at home (a sparse reward is delivered only once you find them): you could spend hours trying randomly each action at your disposal (looking in your jackets, on your counter, but also jumping around, cooking something, watching TV…) until finally you explore the action “look behind the curtains” and find them. (Note: with deep RL, you would even have to do that one million times in order to allow gradient descent to train your brain…). If you had somebody telling you “if I were you, I would first search in your jackets, then on your counter and finally behind the curtains, but forget about watching TV, you will never find anything by doing that”, this would certainly reduce your exploration time.</p>
+<p>This is somehow the idea behind <strong>off-policy</strong> algorithms: they use a <strong>behavior policy</strong> <span class="math inline">\(b(s, a)\)</span> to explore the environment and train the <strong>target policy</strong> <span class="math inline">\(\pi(s, a)\)</span> to reproduce the best ones by estimating how good they are. This does not come without caveats: if the behavior policy does not explore the optimal actions, the target policy will likely not be able to find it by itself, except by chance. But if the behavior policy is good enough, this can drastically reduce the amount of exploration needed to obtain a satisfying policy. <span class="citation" data-cites="Sutton2017">Sutton and Barto (<a href="references.html#ref-Sutton2017" role="doc-biblioref">2017</a>)</span> noted that:</p>
+<p><em>“On-policy methods are generally simpler and are considered first. Off-policy methods require additional concepts and notation, and because the data is due to a different policy, off-policy methods are often of greater variance and are slower to converge.”</em></p>
+<p>The most famous off-policy method is Q-learning. The reason why it is off-policy is that it does not use the next executed action (<span class="math inline">\(a_{t+1}\)</span>) to update the value of an action, but the greedy action in the next state, which is independent from exploration:</p>
+<p><span class="math display">\[
+    \delta = r(s, a, s') + \gamma \, \max_{a'} Q^\pi(s', a') - Q^\pi(s, a)
+\]</span></p>
+<p>The only condition for Q-learning to work (in the tabular case) is that the behavior policy <span class="math inline">\(b(s,a)\)</span> must be able to explore actions which are selected by the target policy:</p>
+<p><span id="eq-qlearningcondition"><span class="math display">\[
+    \pi(s, a) &gt; 0 \rightarrow b(s, a) &gt; 0
+\tag{6.1}\]</span></span></p>
+<p>Actions which would be selected by the target policy should be selected at least from time to time by the behavior policy in order to allow their update: if the target policy thinks this action should be executed, the behavior policy should try it to confirm or infirm this assumption. In mathematical terms, there is an assumption of <em>coverage</em> of <span class="math inline">\(\pi\)</span> by <span class="math inline">\(b\)</span> (the support of <span class="math inline">\(b\)</span> includes the one of <span class="math inline">\(\pi\)</span>).</p>
+<p>There are mostly two ways to create the behavior policy:</p>
+<ol type="1">
+<li><p><em>Use expert knowledge / human demonstrations</em>. Not all available actions should be explored: the programmer already knows they do not belong to the optimal policy. When an agent learns to play chess, for example, the behavior policy could consist of the moves typically played by human experts: if chess masters play this move, it is likely to be a good action, so it should be tried out, valued and possibly incorporated into the target policy (if it is indeed a good action, experts might be wrong). A similar idea was used to bootstrap early versions of AlphaGo <span class="citation" data-cites="Silver2016">(<a href="references.html#ref-Silver2016" role="doc-biblioref">Silver et al., 2016</a>)</span>. In robotics, one could for example use “classical” engineering methods to control the exploration of the robot, while learning (hopefully) a better policy. It is also possible to perform <em>imitation learning</em>, where the agent learns from human demonstrations (e.g. <span class="citation" data-cites="Levine2013">Levine and Koltun (<a href="references.html#ref-Levine2013" role="doc-biblioref">2013</a>)</span>).</p></li>
+<li><p><em>Derive it from the target policy</em>. In Q-learning, the target policy can be <strong>deterministic</strong>, i.e.&nbsp;always select the greedy action (with the maximum Q-value). The behavior policy can be derived from the target policy by making it <em><span class="math inline">\(\epsilon\)</span>-soft</em>, for example using a <span class="math inline">\(\epsilon\)</span>-greedy or softmax action selection scheme on the Q-values learned by the target policy.</p></li>
+</ol>
+<p>The second option allows to control the level of exploration during learning (by controlling <span class="math inline">\(\epsilon\)</span> or the softmax temperature) while making sure that the target policy (the one used in production) is deterministic and optimal. It furthermore makes sure that <a href="#eq-qlearningcondition">Equation&nbsp;<span>6.1</span></a> is respected: the greedy action of the target policy always has a non-zero probability of being selected by an <span class="math inline">\(\epsilon\)</span>-greedy or softmax action selection. This is harder to ensure using expert knowledge.</p>
+<p>Q-learning methods such as DQN use this second option. The target policy in DQN is actually a greedy policy with respect to the Q-values (i.e.&nbsp;the action with the maximum Q-value will be deterministically chosen), but an <span class="math inline">\(\epsilon\)</span>-soft behavior policy is derived from it to ensure exploration. This explains now the following comment in the description of the DQN algorithm:</p>
+<ul>
+<li>Select the action <span class="math inline">\(a_t\)</span> based on the behavior policy derived from <span class="math inline">\(Q_\theta(s_t, a)\)</span> (e.g.&nbsp;softmax).</li>
+</ul>
+<p>Off-policy learning furthermore allows the use of an <strong>experience replay memory</strong>: in this case, the transitions used for training the target policy were generated by an older version of it (sometimes much older). Only off-policy methods can work with replay buffers. A3C is for example on-policy: it relies on multiple parallel learners to fight against the correlation of inputs and outputs.</p>
+<section id="importance-sampling" class="level3" data-number="6.0.1">
+<h3 data-number="6.0.1" class="anchored" data-anchor-id="importance-sampling"><span class="header-section-number">6.0.1</span> Importance sampling</h3>
+<p>Off-policy methods learn a target policy <span class="math inline">\(\pi(s,a)\)</span> while exploring with a behavior policy <span class="math inline">\(b(s,a)\)</span>. The environment is sampled using the behavior policy to form estimates of the state or action values (for value-based methods) or of the policy gradient (for policy gradient methods). But is it mathematically correct?</p>
+<p>In policy gradient methods, we want to maximize the expected return of trajectories:</p>
+<p><span class="math display">\[
+    J(\theta) = \mathbb{E}_{\tau \sim \rho_\theta}[R(\tau)] = \int_\tau \rho_\theta(\tau) \, R(\tau) \, d\tau \approx \frac{1}{N} \sum_{i=1}^N R(\tau_i)
+\]</span></p>
+<p>where <span class="math inline">\(\rho_\theta\)</span> is the distribution of trajectories <span class="math inline">\(\tau\)</span> generated by the <strong>target</strong> policy <span class="math inline">\(\pi_\theta\)</span>. Mathematical expectations can be approximating by an average of enough samples of the estimator (Monte-Carlo). In policy gradient, we estimate the gradient, but let’s consider we sample the objective function for now. If we use a behavior policy to generate the trajectories, what we are actually estimating is:</p>
+<p><span class="math display">\[
+    \hat{J}(\theta) = \mathbb{E}_{\tau \sim \rho_b}[R(\tau)] = \int_\tau \rho_b(\tau) \, R(\tau) \, d\tau
+\]</span></p>
+<p>where <span class="math inline">\(\rho_b\)</span> is the distribution of trajectories generated by the <strong>behavior</strong> policy. In the general case, there is no reason why <span class="math inline">\(\hat{J}(\theta)\)</span> should be close from <span class="math inline">\(J(\theta)\)</span>, even when taking their gradient.</p>
+<p><strong>Importance sampling</strong> is a classical statistical method used to estimate properties of a distribution (here the expected return of the trajectories of the target policy) while only having samples generated from a different distribution (here the trajectories of the behavior policy). See for example <a href="https://statweb.stanford.edu/~owen/mc/Ch-var-is.pdf" class="uri">https://statweb.stanford.edu/~owen/mc/Ch-var-is.pdf</a> and <a href="http://timvieira.github.io/blog/post/2014/12/21/importance-sampling" class="uri">http://timvieira.github.io/blog/post/2014/12/21/importance-sampling</a> for more generic explanations.</p>
+<p>The trick is simply to rewrite the objective function as:</p>
+<p><span class="math display">\[
+\begin{aligned}
+    J(\theta) &amp; = \mathbb{E}_{\tau \sim \rho_\theta}[R(\tau)]  \\
+              &amp; = \int_\tau \rho_\theta(\tau) \, R(\tau) \, d\tau \\
+              &amp; = \int_\tau \frac{\rho_b(\tau)}{\rho_b(\tau)} \, \rho_\theta(\tau) \, R(\tau) \, d\tau \\
+              &amp; = \int_\tau \rho_b(\tau) \frac{\rho_\theta(\tau)}{\rho_b(\tau)} \, R(\tau) \, d\tau \\
+              &amp; = \mathbb{E}_{\tau \sim \rho_b}[\frac{\rho_\theta(\tau)}{\rho_b(\tau)} \, R(\tau)]  \\
+\end{aligned}
+\]</span></p>
+<p>The ratio <span class="math inline">\(\frac{\rho_\theta(\tau)}{\rho_b(\tau)}\)</span> is called the <strong>importance sampling weight</strong> for the trajectory. If a trajectory generated by <span class="math inline">\(b\)</span> is associated with a lot of rewards <span class="math inline">\(R(\tau)\)</span> (with <span class="math inline">\(\rho_b(\tau)\)</span> significantly high), the actor should learn to reproduce that trajectory with a high probability <span class="math inline">\(\rho_\theta(\tau)\)</span>, as its goal is to maximize <span class="math inline">\(J(\theta)\)</span>. Conversely, if the associated reward is low (<span class="math inline">\(R(\tau)\approx 0\)</span>), the target policy can forget about it (by setting <span class="math inline">\(\rho_\theta(\tau) = 0\)</span>), even though the behavior policy still generates it!</p>
+<p>The problem is now to estimate the importance sampling weight. Using the definition of the likelihood of a trajectory, the importance sampling weight only depends on the policies, not the dynamics of the environment (they cancel out):</p>
+<p><span class="math display">\[
+    \frac{\rho_\theta(\tau)}{\rho_b(\tau)} = \frac{p_0 (s_0) \, \prod_{t=0}^T \pi_\theta(s_t, a_t) p(s_{t+1} | s_t, a_t)}{p_0 (s_0) \, \prod_{t=0}^T b(s_t, a_t) p(s_{t+1} | s_t, a_t)} = \frac{\prod_{t=0}^T \pi_\theta(s_t, a_t)}{\prod_{t=0}^T b(s_t, a_t)} = \prod_{t=0}^T \frac{\pi_\theta(s_t, a_t)}{b(s_t, a_t)}
+\]</span></p>
+<p>This allows to estimate the objective function <span class="math inline">\(J(\theta)\)</span> using Monte Carlo sampling <span class="citation" data-cites="Meuleau2000 Peshkin2002">(<a href="references.html#ref-Meuleau2000" role="doc-biblioref">Meuleau et al., 2000</a>; <a href="references.html#ref-Peshkin2002" role="doc-biblioref">Peshkin and Shelton, 2002</a>)</span>:</p>
+<p><span class="math display">\[
+  J(\theta) \approx \frac{1}{m} \, \sum_{i=1}^m \frac{\rho_\theta(\tau_i)}{\rho_b(\tau_i)} \, R(\tau_i)
+\]</span></p>
+<p>All one needs to do is to repeatedly apply the following algorithm:</p>
+<hr>
+<ol type="1">
+<li><p>Generate <span class="math inline">\(m\)</span> trajectories <span class="math inline">\(\tau_i\)</span> using the behavior policy:</p>
+<ul>
+<li><p>For each transition <span class="math inline">\((s_t, a_t, s_{t+1})\)</span> of each trajectory, store:</p>
+<ol type="1">
+<li><p>The received reward <span class="math inline">\(r_{t+1}\)</span>.</p></li>
+<li><p>The probability <span class="math inline">\(b(s_t, a_t)\)</span> that the behavior policy generates this transition.</p></li>
+<li><p>The probability <span class="math inline">\(\pi_\theta(s_t, a_t)\)</span> that the target policy generates this transition.</p></li>
+</ol></li>
+</ul></li>
+<li><p>Estimate the objective function with:</p></li>
+</ol>
+<p><span class="math display">\[
+  \hat{J}(\theta) = \frac{1}{m} \, \sum_{i=1}^m \left(\prod_{t=0}^T \frac{\pi_\theta(s_t, a_t)}{b(s_t, a_t)} \right) \, \left(\sum_{t=0}^T \gamma^t \, r_{t+1} \right)
+\]</span></p>
+<ol start="3" type="1">
+<li>Update the target policy to maximize <span class="math inline">\(\hat{J}(\theta)\)</span>.</li>
+</ol>
+<hr>
+<p><span class="citation" data-cites="Tang2010">Tang and Abbeel (<a href="references.html#ref-Tang2010" role="doc-biblioref">2010</a>)</span> showed that the same idea can be applied to the policy gradient, under assumptions often met in practice:</p>
+<p><span class="math display">\[
+    \nabla_\theta J(\theta) =  \mathbb{E}_{\tau \sim \rho_b}[ \nabla_\theta \log \rho_\theta(\tau) \, \frac{\rho_\theta(\tau)}{\rho_b(\tau)} \, R(\tau)]
+\]</span></p>
+<p>When decomposing the policy gradient for each state encountered, one can also use the <strong>causality</strong> principle to simplify the terms:</p>
+<ol type="1">
+<li><p>The return after being in a state <span class="math inline">\(s_t\)</span> only depends on future states.</p></li>
+<li><p>The importance sampling weight (relative probability of arriving in <span class="math inline">\(s_t\)</span> using the behavior and target policies) only depends on the past weights.</p></li>
+</ol>
+<p>This gives the following approximation of the policy gradient, used for example in Guided policy search <span class="citation" data-cites="Levine2013">(<a href="references.html#ref-Levine2013" role="doc-biblioref">Levine and Koltun, 2013</a>)</span>:</p>
+<p><span class="math display">\[
+    \nabla_\theta J(\theta) =  \mathbb{E}_{\tau \sim \rho_b}[ \sum_{t=0}^T \nabla_\theta \log \pi_\theta(s_t, a_t) \, \left(\prod_{t'=0}^t \frac{\pi_\theta(s_{t'}, a_{t'})}{b(s_{t'}, a_{t'})} \right) \, \left(\sum_{t'=t}^T \gamma^{t'-t} \, r(s_{t'}, a_{t'}) \right)]
+\]</span></p>
+</section>
+<section id="linear-off-policy-actor-critic-off-pac" class="level3" data-number="6.0.2">
+<h3 data-number="6.0.2" class="anchored" data-anchor-id="linear-off-policy-actor-critic-off-pac"><span class="header-section-number">6.0.2</span> Linear Off-Policy Actor-Critic (Off-PAC)</h3>
+<p>The first off-policy actor-critic method was proposed by <span class="citation" data-cites="Degris2012">Degris et al. (<a href="references.html#ref-Degris2012" role="doc-biblioref">2012</a>)</span> for linear approximators. Another way to express the objective function in policy search is by using the Bellman equation (here in the off-policy setting):</p>
+<p><span class="math display">\[
+    J(\theta) = \mathbb{E}_{s \sim \rho_b} [V^{\pi_\theta}(s)] = \mathbb{E}_{s \sim \rho_b} [\sum_{a\in\mathcal{A}} \pi(s, a) \, Q^{\pi_\theta}(s, a)]
+\]</span></p>
+<p>Maximizing the value of all states reachable by the policy is the same as finding the optimal policy: the encoutered states bring the maximum return. The policy gradient becomes:</p>
+<p><span class="math display">\[
+    \nabla_\theta J(\theta) = \mathbb{E}_{s \sim \rho_b} [\sum_{a\in\mathcal{A}} \nabla_\theta  (\pi_\theta(s, a) \, Q^{\pi_\theta}(s, a))]
+\]</span></p>
+<p>Because both <span class="math inline">\(\pi(s, a)\)</span> and <span class="math inline">\(Q^\pi(s, a)\)</span> depend on the target policy <span class="math inline">\(\pi_\theta\)</span> (hence its parameters <span class="math inline">\(\theta\)</span>), one should normally write:</p>
+<p><span class="math display">\[
+    \nabla_\theta  (\pi_\theta(s, a) \, Q^{\pi_\theta}(s, a)) = Q^{\pi_\theta}(s, a) \, \nabla_\theta  \pi_\theta(s, a) + \pi_\theta(s, a) \, \nabla_\theta Q^{\pi_\theta}(s, a)
+\]</span></p>
+<p>The second term depends on <span class="math inline">\(\nabla_\theta Q^{\pi_\theta}(s, a)\)</span>, which is very difficult to estimate. <span class="citation" data-cites="Degris2012">Degris et al. (<a href="references.html#ref-Degris2012" role="doc-biblioref">2012</a>)</span> showed that when the Q-values are estimated by an unbiased <strong>critic</strong> <span class="math inline">\(Q_\varphi(s, a)\)</span>, this second term can be omitted. Using the log-trick and importance sampling, the policy gradient can be expressed as:</p>
+<p><span class="math display">\[
+\begin{aligned}
+    \nabla_\theta J(\theta) &amp; = \mathbb{E}_{s \sim \rho_b} [\sum_{a\in\mathcal{A}} Q_\varphi(s, a) \, \nabla_\theta \pi_\theta(s, a)] \\
+                            &amp; = \mathbb{E}_{s \sim \rho_b} [\sum_{a\in\mathcal{A}} b(s, a) \, \frac{\pi_\theta(s, a)}{b(s, a)} \, Q_\varphi(s, a) \, \frac{\nabla_\theta \pi_\theta(s, a)}{\pi_\theta(s, a)}] \\
+                            &amp; = \mathbb{E}_{s,a \sim \rho_b} [\frac{\pi_\theta(s, a)}{b(s, a)} \, Q_\varphi(s, a) \, \nabla_\theta \log \pi_\theta(s, a)] \\
+\end{aligned}
+\]</span></p>
+<p>We now have an <strong>actor-critic</strong> architecture (actor <span class="math inline">\(\pi_\theta(s, a)\)</span>, critic <span class="math inline">\(Q_\varphi(s, a)\)</span>) able to learn from single transitions <span class="math inline">\((s,a)\)</span> (<strong>online update</strong> instead of complete trajectories) generated <strong>off-policy</strong> (behavior policy <span class="math inline">\(b(s,a)\)</span> and importance sampling weight <span class="math inline">\(\frac{\pi_\theta(s, a)}{b(s, a)}\)</span>). The off-policy actor-critic (Off-PAC) algorithm of <span class="citation" data-cites="Degris2012">Degris et al. (<a href="references.html#ref-Degris2012" role="doc-biblioref">2012</a>)</span> furthermore uses <strong>eligibility traces</strong> to stabilize learning. However, it was limited to linear function approximators because its variance is too high to train deep neural networks.</p>
+</section>
+<section id="retrace" class="level3" data-number="6.0.3">
+<h3 data-number="6.0.3" class="anchored" data-anchor-id="retrace"><span class="header-section-number">6.0.3</span> Retrace</h3>
+<p>For a good deep RL algorithm, we need the two following properties:</p>
+<ol type="1">
+<li><p><strong>Off-policy</strong> learning: it allows to learn from transitions stored in a replay buffer (i.e.&nbsp;generated with an older policy). As NN need many iterations to converge, it is important to be able to re-use old transitions for its training, instead of constantly sampling new ones (sample complexity). Multiple parallel actors as in A3C allow to mitigate this problem, but it is still too complex.</p></li>
+<li><p><strong>Multi-step returns</strong>: the two extremes of RL are TD (using a single “real” reward for the update, the rest is estimated) and Monte-Carlo (use only “real” rewards, no estimation). TD has a smaller variance, but a high bias (errors in estimates propagate to all other values), while MC has a small bias but a high variance (learns from many real rewards, but the returns may vary a lot between two almost identical episodes). Eligibility traces and n-step returns (used in A3C) are the most common trade-off between TD and MC.</p></li>
+</ol>
+<p>The <strong>Retrace</strong> algorithm <span class="citation" data-cites="Munos2016">(<a href="references.html#ref-Munos2016" role="doc-biblioref">Munos et al., 2016</a>)</span> is designed to exhibit both properties when learning Q-values. It can therefore be used to train the critic (instead of classical Q-learning) and provide the actor with safe, efficient and low-variance values.</p>
+<p>In the generic form, Q-learning updates the Q-value of a transition <span class="math inline">\((s_t, a_t)\)</span> using the TD error:</p>
+<p><span class="math display">\[
+    \Delta Q^\pi(s_t, a_t) = \alpha \, \delta_t = \alpha \, (r_{t+1} + \gamma \, \max_a Q^\pi(s_{t+1}, a_{t+1}) - Q^\pi(s_t, a_t))
+\]</span></p>
+<p>When using eligibility traces in the forward view, the change in Q-value depends also on the TD error of future transitions at times <span class="math inline">\(t' &gt; t\)</span>. A parameter <span class="math inline">\(\lambda\)</span> ensures the stability of the update:</p>
+<p><span class="math display">\[
+    \Delta Q^\pi(s_t, a_t) = \alpha \, \sum_{t'=t}^T (\gamma \lambda)^{t'-t} \delta_{t'}
+\]</span></p>
+<p>The Retrace algorithm proposes to generalize this formula using a parameter <span class="math inline">\(c_s\)</span> for each time step between <span class="math inline">\(t\)</span> and <span class="math inline">\(t'\)</span>:</p>
+<p><span class="math display">\[
+    \Delta Q^\pi(s_t, a_t) = \alpha \, \sum_{t'=t}^T (\gamma)^{t'-t} \left(\prod_{s=t+1}^{t'} c_s \right) \, \delta_{t'}
+\]</span></p>
+<p>Depending on the choice of <span class="math inline">\(c_s\)</span>, the formula covers different existing methods:</p>
+<ol type="1">
+<li><span class="math inline">\(c_s = \lambda\)</span> is the classical <strong>eligibility trace</strong> mechanism (<span class="math inline">\(Q(\lambda)\)</span>) in its forward view, which is not safe: the behavior policy <span class="math inline">\(b\)</span> must be very close from the target policy <span class="math inline">\(\tau\)</span>:</li>
+</ol>
+<p><span class="math display">\[
+    || \pi - b ||_1 \leq \frac{1 - \gamma}{\lambda \gamma}
+\]</span></p>
+<p>As <span class="math inline">\(\gamma\)</span> is typically chosen very close from 1 (e.g.&nbsp;0.99), this does not leave much room for the target policy to differ from the behavior policy <span class="citation" data-cites="Harutyunyan2016">(see <a href="references.html#ref-Harutyunyan2016" role="doc-biblioref">Harutyunyan et al., 2016</a> for the proof)</span>.</p>
+<ol start="2" type="1">
+<li><p><span class="math inline">\(c_s = \frac{\pi(s_s, a_s)}{b(s_s, a_s)}\)</span> is the importance sampling weight. Importance sampling is unbiased in off-policy settings, but can have a very large variance: the product of ratios <span class="math inline">\(\prod_{s=t+1}^{t'} \frac{\pi(s_s, a_s)}{b(s_s, a_s)}\)</span> can quickly vary between two episodes.</p></li>
+<li><p><span class="math inline">\(c_s = \pi(s_s, a_s)\)</span> corresponds to the tree-backup algorithm <span class="math inline">\(TB(\lambda)\)</span> <span class="citation" data-cites="Precup2000">(<a href="references.html#ref-Precup2000" role="doc-biblioref">Precup et al., 2000</a>)</span>. It has the advantage to work for arbitrary policies <span class="math inline">\(\pi\)</span> and <span class="math inline">\(b\)</span>, but the product of such probabilities decays very fast to zero when the time difference <span class="math inline">\(t' - t\)</span> increases: TD errors will be efficiently shared over a couple of steps only.</p></li>
+</ol>
+<p>For Retrace, <span class="citation" data-cites="Munos2016">Munos et al. (<a href="references.html#ref-Munos2016" role="doc-biblioref">2016</a>)</span> showed that a much better value for <span class="math inline">\(c_s\)</span> is:</p>
+<p><span class="math display">\[
+    c_s = \lambda \min (1, \frac{\pi(s_s, a_s)}{b(s_s, a_s)})
+\]</span></p>
+<p>The importance sampling weight is clipped to 1, and decays exponentially with the parameter <span class="math inline">\(\lambda\)</span>. It can be seen as a trade-off between importance sampling and eligibility traces. The authors showed that Retrace(<span class="math inline">\(\lambda\)</span>) has a low variance (as it uses multiple returns), is safe (works for all <span class="math inline">\(\pi\)</span> and <span class="math inline">\(b\)</span>) and efficient (it can propagate rewards over many time steps). They used retrace to learn Atari games and compared it positively with DQN, both in terms of optimality and speed of learning. These properties make Retrace particularly suited for deep RL and actor-critic architectures: it is for example used in ACER and the Reactor.</p>
+<p>Rémi Munos uploaded some slides explaining Retrace in a simpler manner than in the original paper: <a href="https://ewrl.files.wordpress.com/2016/12/munos.pdf" class="uri">https://ewrl.files.wordpress.com/2016/12/munos.pdf</a>.</p>
+</section>
+<section id="self-imitation-learning-sil" class="level3" data-number="6.0.4">
+<h3 data-number="6.0.4" class="anchored" data-anchor-id="self-imitation-learning-sil"><span class="header-section-number">6.0.4</span> Self-Imitation Learning (SIL)</h3>
+<p>We have discussed or now only strictly on-policy or off-policy methods. Off-policy methods are much more stable and efficient, but they learn generally a deterministic policy, what can be problematic in stochastic environments (e.g.&nbsp;two players games: being predictable is clearly an issue). Hybrid methods combining on- and off-policy mechanisms have clearly a great potential.</p>
+<p><span class="citation" data-cites="Oh2018">Oh et al. (<a href="references.html#ref-Oh2018" role="doc-biblioref">2018</a>)</span> proposed a <strong>Self-Imitation Learning</strong> (SIL) method that can extend on-policy actor-critic algorithms (e.g.&nbsp;A2C) with a replay buffer able to feed past <em>good</em> experiences to the NN to speed up learning.</p>
+<p>The main idea is to use <strong>prioritized experience replay</strong> (<span class="citation" data-cites="Schaul2015">Schaul et al. (<a href="references.html#ref-Schaul2015" role="doc-biblioref">2015</a>)</span>) to select only transitions whose actual return is higher than their current expected value. This defines two additional losses for the actor and the critic:</p>
+<p><span class="math display">\[
+    \mathcal{L}^\text{SIL}_\text{actor}(\theta) = \mathbb{E}_{s, a \in \mathcal{D}}[\log \pi_\theta(s, a) \, (R(s, a) - V_\varphi(s))^+]
+\]</span> <span class="math display">\[
+    \mathcal{L}^\text{SIL}_\text{critic}(\varphi) = \mathbb{E}_{s, a \in \mathcal{D}}[((R(s, a) - V_\varphi(s))^+)^2]
+\]</span></p>
+<p>where <span class="math inline">\((x)^+ = \max(0, x)\)</span> is the positive function. Transitions sampled from the replay buffer will participate to the off-policy learning only if their return is higher that the current value of the state, i.e.&nbsp;if they are good experiences compared to what is currently known (<span class="math inline">\(V_\varphi(s)\)</span>). The pseudo-algorithm is actually quite simple and simply extends the A2C procedure:</p>
+<hr>
+<ul>
+<li><p>Initialize the actor <span class="math inline">\(\pi_\theta\)</span> and the critic <span class="math inline">\(V_\varphi\)</span> with random weights.</p></li>
+<li><p>Initialize the prioritized experience replay buffer <span class="math inline">\(\mathcal{D}\)</span>.</p></li>
+<li><p>Observe the initial state <span class="math inline">\(s_0\)</span>.</p></li>
+<li><p>for <span class="math inline">\(t \in [0, T_\text{total}]\)</span>:</p>
+<ul>
+<li><p>Initialize empty episode minibatch.</p></li>
+<li><p>for <span class="math inline">\(k \in [0, n]\)</span>: # Sample episode</p>
+<ul>
+<li><p>Select a action <span class="math inline">\(a_k\)</span> using the actor <span class="math inline">\(\pi_\theta\)</span>.</p></li>
+<li><p>Perform the action <span class="math inline">\(a_k\)</span> and observe the next state <span class="math inline">\(s_{k+1}\)</span> and the reward <span class="math inline">\(r_{k+1}\)</span>.</p></li>
+<li><p>Store <span class="math inline">\((s_k, a_k, r_{k+1})\)</span> in the episode minibatch.</p></li>
+</ul></li>
+<li><p>if <span class="math inline">\(s_n\)</span> is not terminal: set <span class="math inline">\(R_n = V_\varphi(s_n)\)</span> with the critic, else <span class="math inline">\(R_n=0\)</span>.</p></li>
+<li><p>for <span class="math inline">\(k \in [n-1, 0]\)</span>: # Backwards iteration over the episode</p>
+<ul>
+<li>Update the discounted sum of rewards <span class="math inline">\(R_k = r_k + \gamma \, R_{k+1}\)</span> <strong>and store it in the replay buffer <span class="math inline">\(\mathcal{D}\)</span></strong>.</li>
+</ul></li>
+<li><p>Update the actor and the critic <strong>on-policy</strong> with the episode:</p></li>
+</ul>
+<p><span class="math display">\[
+      \theta \leftarrow \theta + \eta \, \sum_k \nabla_\theta \log \pi_\theta(s_k, a_k) \, (R_k - V_\varphi(s_k))
+  \]</span></p>
+<p><span class="math display">\[
+      \varphi \leftarrow \varphi + \eta \, \sum_k \nabla_\varphi (R - V_\varphi(s_k))^2
+  \]</span></p>
+<ul>
+<li><p>for <span class="math inline">\(m \in [0, M]\)</span>:</p>
+<ul>
+<li><p>Sample a minibatch of K transitions <span class="math inline">\((s_k, a_k, R_k)\)</span> from the replay buffer <span class="math inline">\(\mathcal{D}\)</span> prioritized with high <span class="math inline">\((R_k - V_\varphi(s_k))\)</span>.</p></li>
+<li><p>Update the actor and the critic <strong>off-policy</strong> with self-imitation.</p></li>
+</ul>
+<p><span class="math display">\[
+      \theta \leftarrow \theta + \eta \, \sum_k \nabla_\theta \log \pi_\theta(s_k, a_k) \, (R_k - V_\varphi(s_k))^+
+  \]</span></p>
+<p><span class="math display">\[
+      \varphi \leftarrow \varphi + \eta \, \sum_k \nabla_\varphi ((R_k - V_\varphi(s_k))^+)^2
+  \]</span></p></li>
+</ul></li>
+</ul>
+<hr>
+<p>In the paper, they furthermore used entropy regularization as in A3C. They showed that A2C+SIL has a better performance both on Atari games and continuous control problems (Mujoco) than state-of-the art methods (A3C, TRPO, Reactor, PPO). It shows that self-imitation learning can be very useful in problems where exploration is hard: a proper level of exploitation of past experiences actually fosters a deeper exploration of environment.</p>
+
+
+<div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography" style="display: none">
+<div id="ref-Degris2012" class="csl-entry" role="doc-biblioentry">
+Degris, T., White, M., and Sutton, R. S. (2012). Linear <span>Off-Policy Actor-Critic</span>. in <em>Proceedings of the 2012 <span>International Conference</span> on <span>Machine Learning</span></em> Available at: <a href="http://arxiv.org/abs/1205.4839">http://arxiv.org/abs/1205.4839</a>.
+</div>
+<div id="ref-Harutyunyan2016" class="csl-entry" role="doc-biblioentry">
+Harutyunyan, A., Bellemare, M. G., Stepleton, T., and Munos, R. (2016). Q(λ) with off-policy corrections. Available at: <a href="http://arxiv.org/abs/1602.04951">http://arxiv.org/abs/1602.04951</a>.
+</div>
+<div id="ref-Levine2013" class="csl-entry" role="doc-biblioentry">
+Levine, S., and Koltun, V. (2013). Guided <span>Policy Search</span>. in <em>Proceedings of <span>Machine Learning Research</span></em>, 1–9. Available at: <a href="http://proceedings.mlr.press/v28/levine13.html">http://proceedings.mlr.press/v28/levine13.html</a>.
+</div>
+<div id="ref-Meuleau2000" class="csl-entry" role="doc-biblioentry">
+Meuleau, N., Peshkin, L., Kaelbling, L. P., and Kim, K. (2000). Off-<span>Policy Policy Search</span>. Available at: <a href="http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.28.894">http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.28.894</a>.
+</div>
+<div id="ref-Munos2016" class="csl-entry" role="doc-biblioentry">
+Munos, R., Stepleton, T., Harutyunyan, A., and Bellemare, M. G. (2016). Safe and <span>Efficient Off-Policy Reinforcement Learning</span>. Available at: <a href="http://arxiv.org/abs/1606.02647">http://arxiv.org/abs/1606.02647</a>.
+</div>
+<div id="ref-Oh2018" class="csl-entry" role="doc-biblioentry">
+Oh, J., Guo, Y., Singh, S., and Lee, H. (2018). Self-<span>Imitation Learning</span>. Available at: <a href="http://arxiv.org/abs/1806.05635">http://arxiv.org/abs/1806.05635</a>.
+</div>
+<div id="ref-Peshkin2002" class="csl-entry" role="doc-biblioentry">
+Peshkin, L., and Shelton, C. R. (2002). Learning from <span>Scarce Experience</span>. Available at: <a href="http://arxiv.org/abs/cs/0204043">http://arxiv.org/abs/cs/0204043</a>.
+</div>
+<div id="ref-Precup2000" class="csl-entry" role="doc-biblioentry">
+Precup, D., Sutton, R. S., and Singh, S. (2000). Eligibility traces for off-policy policy evaluation. in <em>Proceedings of the <span>Seventeenth International Conference</span> on <span>Machine Learning</span>.</em>
+</div>
+<div id="ref-Schaul2015" class="csl-entry" role="doc-biblioentry">
+Schaul, T., Quan, J., Antonoglou, I., and Silver, D. (2015). Prioritized <span>Experience Replay</span>. Available at: <a href="http://arxiv.org/abs/1511.05952">http://arxiv.org/abs/1511.05952</a>.
+</div>
+<div id="ref-Silver2016" class="csl-entry" role="doc-biblioentry">
+Silver, D., Huang, A., Maddison, C. J., Guez, A., Sifre, L., van den Driessche, G., et al. (2016). Mastering the game of <span>Go</span> with deep neural networks and tree search. <em>Nature</em> 529, 484–489. doi:<a href="https://doi.org/10.1038/nature16961">10.1038/nature16961</a>.
+</div>
+<div id="ref-Sutton2017" class="csl-entry" role="doc-biblioentry">
+Sutton, R. S., and Barto, A. G. (2017). <em>Reinforcement <span>Learning</span>: <span>An Introduction</span></em>. 2nd ed. <span>Cambridge, MA</span>: <span>MIT Press</span> Available at: <a href="http://incompleteideas.net/book/the-book-2nd.html">http://incompleteideas.net/book/the-book-2nd.html</a>.
+</div>
+<div id="ref-Tang2010" class="csl-entry" role="doc-biblioentry">
+Tang, J., and Abbeel, P. (2010). On a <span>Connection</span> between <span>Importance Sampling</span> and the <span>Likelihood Ratio Policy Gradient</span>. in <em>Adv. <span>Neural</span> inf. <span>Process</span>. <span>Syst</span>.</em> Available at: <a href="http://rll.berkeley.edu/~jietang/pubs/nips10_Tang.pdf">http://rll.berkeley.edu/~jietang/pubs/nips10_Tang.pdf</a>.
+</div>
+</div>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./3.2-ActorCritic.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Advantage Actor-Critic methods</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./3.4-DPG.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Deterministic Policy Gradient (DPG)</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>

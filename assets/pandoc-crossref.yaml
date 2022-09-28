@@ -1,9 +1,0 @@
-numberSections: true
-autoSectionLabels: true 
-secPrefix: Section
-figPrefix: Fig.
-eqnPrefix: Eq.
-figureTitle: Figure
-linkReferences: true
-link-citations: true
-autoEqnLabels: false
