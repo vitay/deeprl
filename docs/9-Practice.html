@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.1.251">
+<meta name="generator" content="quarto-1.2.269">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -298,6 +298,7 @@ div.csl-indent {
 <div class="quarto-title-meta">
 
     
+  
     
   </div>
   
@@ -335,17 +336,17 @@ div.csl-indent {
 <h2 data-number="17.3" class="anchored" data-anchor-id="algorithm-implementations"><span class="header-section-number">17.3</span> Algorithm implementations</h2>
 <p>State-of-the-art algorithms in deep RL are already implemented and freely available on the internet. Below is a preliminary list of the most popular ones. Most of them rely on tensorflow or keras for training the neural networks and interact directly with gym-like interfaces.</p>
 <ul>
-<li><p><a href="https://github.com/ShangtongZhang/reinforcement-learning-an-introduction" class="uri">https://github.com/ShangtongZhang/reinforcement-learning-an-introduction</a>: all the exercises in Python of the <span class="citation" data-cites="Sutton2017">(<a href="references.html#ref-Sutton2017" role="doc-biblioref">Sutton and Barto, 2017</a>)</span> book.</p></li>
+<li><p><a href="https://github.com/ShangtongZhang/reinforcement-learning-an-introduction" class="uri">https://github.com/ShangtongZhang/reinforcement-learning-an-introduction</a>: all the exercises in Python of the <span class="citation" data-cites="Sutton2017">(<a href="#ref-Sutton2017" role="doc-biblioref">Sutton and Barto, 2017</a>)</span> book.</p></li>
 <li><p><code>rl-code</code> <a href="https://github.com/rlcode/reinforcement-learning" class="uri">https://github.com/rlcode/reinforcement-learning</a>: many code samples for simple RL problems (GridWorld, Cartpole, Atari Games). The code samples are mostly for educational purpose (Policy Iteration, Value Iteration, Monte-Carlo, SARSA, Q-learning, REINFORCE, DQN, A2C, A3C).</p></li>
 <li><p><code>keras-rl</code> <a href="https://github.com/matthiasplappert/keras-rl" class="uri">https://github.com/matthiasplappert/keras-rl</a>: many deep RL algorithms implemented directly in keras: DQN, DDQN, DDPG, Continuous DQN (CDQN or NAF), Cross-Entropy Method (CEM), Dueling DQN, Deep SARSA…</p></li>
 <li><p><code>Coach</code> <a href="https://github.com/NervanaSystems/coach" class="uri">https://github.com/NervanaSystems/coach</a> from Intel Nervana also provides many state-of-the-art algorithms: DQN, DDQN, Dueling DQN, Mixed Monte Carlo (MMC), Persistent Advantage Learning (PAL), Distributional Deep Q Network, Bootstrapped Deep Q Network, N-Step Q Learning, Neural Episodic Control (NEC), Normalized Advantage Functions (NAF), Policy Gradients (PG), A3C, DDPG, Proximal Policy Optimization (PPO), Clipped Proximal Policy Optimization, Direct Future Prediction (DFP)…</p></li>
 <li><p><code>OpenAI Baselines</code> <a href="https://github.com/openai/baselines" class="uri">https://github.com/openai/baselines</a> from OpenAI too: A2C, ACER, ACKTR, DDPG, DQN, PPO, TRPO…</p></li>
-<li><p><code>rlkit</code> <a href="https://github.com/vitchyr/rlkit" class="uri">https://github.com/vitchyr/rlkit</a> from Vitchyr Pong (PhD student at Berkeley) with in particular model-based algorithms (TDM, <span class="citation" data-cites="Pong2018">Pong et al. (<a href="references.html#ref-Pong2018" role="doc-biblioref">2018</a>)</span>).</p></li>
+<li><p><code>rlkit</code> <a href="https://github.com/vitchyr/rlkit" class="uri">https://github.com/vitchyr/rlkit</a> from Vitchyr Pong (PhD student at Berkeley) with in particular model-based algorithms (TDM, <span class="citation" data-cites="Pong2018">Pong et al. (<a href="#ref-Pong2018" role="doc-biblioref">2018</a>)</span>).</p></li>
 <li><p><code>chainer-rl</code> <a href="https://github.com/chainer/chainerrl" class="uri">https://github.com/chainer/chainerrl</a> implemented in Chainer (an alternative to tensorflow): A3C, ACER, Categorical DQN; DQN (including Double DQN, Persistent Advantage Learning (PAL), Double PAL, Dynamic Policy Programming (DPP)), DDPG, , PGT (Policy Gradient Theorem), PCL (Path Consistency Learning), PPO, TRPO.</p></li>
 </ul>
 
 
-<div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography" style="display: none">
+<div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography">
 <div id="ref-Pong2018" class="csl-entry" role="doc-biblioentry">
 Pong, V., Gu, S., Dalal, M., and Levine, S. (2018). Temporal <span>Difference Models</span>: <span>Model-Free Deep RL</span> for <span>Model-Based Control</span>. Available at: <a href="http://arxiv.org/abs/1802.09081">http://arxiv.org/abs/1802.09081</a>.
 </div>
@@ -397,7 +398,24 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     button.classList.add('code-copy-button-checked');
     var currentTitle = button.getAttribute("title");
     button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
     setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
       button.setAttribute("title", currentTitle);
       button.classList.remove('code-copy-button-checked');
     }, 1000);
@@ -433,24 +451,42 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       return note.innerHTML;
     });
   }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
   var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
   for (var i=0; i<bibliorefs.length; i++) {
     const ref = bibliorefs[i];
-    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
-    tippyHover(ref, function() {
-      var popup = window.document.createElement('div');
-      cites.forEach(function(cite) {
-        var citeDiv = window.document.createElement('div');
-        citeDiv.classList.add('hanging-indent');
-        citeDiv.classList.add('csl-entry');
-        var biblioDiv = window.document.getElementById('ref-' + cite);
-        if (biblioDiv) {
-          citeDiv.innerHTML = biblioDiv.innerHTML;
-        }
-        popup.appendChild(citeDiv);
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
       });
-      return popup.innerHTML;
-    });
+    }
   }
 });
 </script>

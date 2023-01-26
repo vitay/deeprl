@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.1.251">
+<meta name="generator" content="quarto-1.2.269">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -244,20 +244,21 @@ div.csl-indent {
 <div class="quarto-title-meta">
 
     
+  
     
   </div>
   
 
 </header>
 
-<p>Deep reinforcement learning (deep RL) is the integration of deep learning methods, classically used in supervised or unsupervised learning contexts, with reinforcement learning (RL), a well-studied adaptive control method used in problems with delayed and partial feedback <span class="citation" data-cites="Sutton1998">(<a href="references.html#ref-Sutton1998" role="doc-biblioref">Sutton and Barto, 1998</a>)</span>. This section starts with the basics of RL, mostly to set the notations, and provides a quick overview of deep neural networks.</p>
+<p>Deep reinforcement learning (deep RL) is the integration of deep learning methods, classically used in supervised or unsupervised learning contexts, with reinforcement learning (RL), a well-studied adaptive control method used in problems with delayed and partial feedback <span class="citation" data-cites="Sutton1998">(<a href="#ref-Sutton1998" role="doc-biblioref">Sutton and Barto, 1998</a>)</span>. This section starts with the basics of RL, mostly to set the notations, and provides a quick overview of deep neural networks.</p>
 <section id="reinforcement-learning-and-markov-decision-process" class="level2" data-number="1.1">
 <h2 data-number="1.1" class="anchored" data-anchor-id="reinforcement-learning-and-markov-decision-process"><span class="header-section-number">1.1</span> Reinforcement learning and Markov Decision Process</h2>
-<p>RL methods apply to problems where an agent interacts with an environment in discrete time steps (<a href="#fig-agentenv">Figure&nbsp;<span>1.1</span></a>). At time <span class="math inline">\(t\)</span>, the agent is in state <span class="math inline">\(s_t\)</span> and decides to perform an action <span class="math inline">\(a_t\)</span>. At the next time step, it arrives in the state <span class="math inline">\(s_{t+1}\)</span> and obtains the reward <span class="math inline">\(r_{t+1}\)</span>. The goal of the agent is to maximize the reward obtained on the long term. The textbook by <span class="citation" data-cites="Sutton1998">Sutton and Barto (<a href="references.html#ref-Sutton1998" role="doc-biblioref">1998</a>)</span> (updated in <span class="citation" data-cites="Sutton2017">Sutton and Barto (<a href="references.html#ref-Sutton2017" role="doc-biblioref">2017</a>)</span>) defines the field extensively.</p>
+<p>RL methods apply to problems where an agent interacts with an environment in discrete time steps (<a href="#fig-agentenv">Figure&nbsp;<span class="quarto-unresolved-ref">fig-agentenv</span></a>). At time <span class="math inline">\(t\)</span>, the agent is in state <span class="math inline">\(s_t\)</span> and decides to perform an action <span class="math inline">\(a_t\)</span>. At the next time step, it arrives in the state <span class="math inline">\(s_{t+1}\)</span> and obtains the reward <span class="math inline">\(r_{t+1}\)</span>. The goal of the agent is to maximize the reward obtained on the long term. The textbook by <span class="citation" data-cites="Sutton1998">Sutton and Barto (<a href="#ref-Sutton1998" role="doc-biblioref">1998</a>)</span> (updated in <span class="citation" data-cites="Sutton2017">Sutton and Barto (<a href="#ref-Sutton2017" role="doc-biblioref">2017</a>)</span>) defines the field extensively.</p>
 <div id="fig-agentenv" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="img/rl-agent.jpg" class="img-fluid figure-img" style="width:50.0%"></p>
-<p></p><figcaption class="figure-caption">Figure&nbsp;1.1: Interaction between an agent and its environment. Taken from <span class="citation" data-cites="Sutton1998">Sutton and Barto (<a href="references.html#ref-Sutton1998" role="doc-biblioref">1998</a>)</span>.</figcaption><p></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;1.1: Interaction between an agent and its environment. Taken from <span class="citation" data-cites="Sutton1998">Sutton and Barto (<a href="#ref-Sutton1998" role="doc-biblioref">1998</a>)</span>.</figcaption><p></p>
 </figure>
 </div>
 <p>Reinforcement learning problems are described as <strong>Markov Decision Processes</strong> (MDP) defined by five quantities:</p>
@@ -317,7 +318,7 @@ div.csl-indent {
     Q^{\pi}(s, a) = \sum_{s' \in \mathcal{S}} p(s'|s, a) [r(s, a, s') + \gamma \, V^\pi(s')]
 \tag{1.3}\]</span></span></p>
 <p>The value of an action depends on which state you arrive in (<span class="math inline">\(s'\)</span>), with which probability (<span class="math inline">\(p(s'|s, a)\)</span>) this transition occurs, how much reward you receive immediately (<span class="math inline">\(r(s, a, s')\)</span>) and how much you will receive later (summarized by <span class="math inline">\(V^\pi(s')\)</span>).</p>
-<p>Putting together <a href="#eq-v-value">Equation&nbsp;<span>1.1</span></a> and <a href="#eq-q-value">Equation&nbsp;<span>1.3</span></a>, we obtain the <strong>Bellman equations</strong>:</p>
+<p>Putting together <a href="#eq-v-value">Equation&nbsp;<span class="quarto-unresolved-ref">eq-v-value</span></a> and <a href="#eq-q-value">Equation&nbsp;<span class="quarto-unresolved-ref">eq-q-value</span></a>, we obtain the <strong>Bellman equations</strong>:</p>
 <p><span class="math display">\[
     V^{\pi}(s) = \sum_{a \in \mathcal{A}} \pi(s, a) \, \sum_{s' \in \mathcal{S}} p(s'|s, a) [r(s, a, s') + \gamma \, V^\pi(s')]
 \]</span></p>
@@ -328,7 +329,7 @@ div.csl-indent {
 <div id="fig-backup" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="img/backup.png" class="img-fluid figure-img" style="width:50.0%"></p>
-<p></p><figcaption class="figure-caption">Figure&nbsp;1.2: Backup diagrams corresponding to the Bellman equations. Taken from <span class="citation" data-cites="Sutton1998">Sutton and Barto (<a href="references.html#ref-Sutton1998" role="doc-biblioref">1998</a>)</span>.</figcaption><p></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;1.2: Backup diagrams corresponding to the Bellman equations. Taken from <span class="citation" data-cites="Sutton1998">Sutton and Barto (<a href="#ref-Sutton1998" role="doc-biblioref">1998</a>)</span>.</figcaption><p></p>
 </figure>
 </div>
 </section>
@@ -339,7 +340,7 @@ div.csl-indent {
 <div id="fig-dynamicprogramming" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="img/dynamicprogramming.png" class="img-fluid figure-img" style="width:20.0%"></p>
-<p></p><figcaption class="figure-caption">Figure&nbsp;1.3: Dynamic programming alternates between policy evaluation and policy improvement. Taken from <span class="citation" data-cites="Sutton1998">Sutton and Barto (<a href="references.html#ref-Sutton1998" role="doc-biblioref">1998</a>)</span>.</figcaption><p></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;1.3: Dynamic programming alternates between policy evaluation and policy improvement. Taken from <span class="citation" data-cites="Sutton1998">Sutton and Barto (<a href="#ref-Sutton1998" role="doc-biblioref">1998</a>)</span>.</figcaption><p></p>
 </figure>
 </div>
 <p><strong>Dynamic programming</strong> (DP) alternates between policy evaluation and policy improvement. If the problem is Markov, it can be shown that DP converges to the <em>optimal policy</em> <span class="math inline">\(\pi^*\)</span>, i.e.&nbsp;the policy where the expected return is maximal in all states.</p>
@@ -362,7 +363,7 @@ div.csl-indent {
 <div id="fig-mc" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="img/unifiedreturn.png" class="img-fluid figure-img" style="width:50.0%"></p>
-<p></p><figcaption class="figure-caption">Figure&nbsp;1.4: Monte-Carlo methods accumulate rewards over a complete episode. Taken from <span class="citation" data-cites="Sutton1998">Sutton and Barto (<a href="references.html#ref-Sutton1998" role="doc-biblioref">1998</a>)</span>.</figcaption><p></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;1.4: Monte-Carlo methods accumulate rewards over a complete episode. Taken from <span class="citation" data-cites="Sutton1998">Sutton and Barto (<a href="#ref-Sutton1998" role="doc-biblioref">1998</a>)</span>.</figcaption><p></p>
 </figure>
 </div>
 <p>When the environment is <em>a priori</em> unknown, it has to be explored in order to build estimates of the V or Q value functions. The key idea of <strong>Monte-Carlo</strong> sampling (MC) is rather simple:</p>
@@ -407,7 +408,7 @@ div.csl-indent {
 </section>
 <section id="temporal-difference" class="level3" data-number="1.1.5">
 <h3 data-number="1.1.5" class="anchored" data-anchor-id="temporal-difference"><span class="header-section-number">1.1.5</span> Temporal Difference</h3>
-<p>The main drawback of Monte-Carlo methods is that the task must be composed of finite episodes. Not only is it not always possible, but value updates have to wait for the end of the episode, what slows learning down. <strong>Temporal difference</strong> methods simply replace the actual return obtained after a state or an action, by an estimation composed of the reward immediately received plus the value of the next state or action, as in <a href="#eq-return">Equation&nbsp;<span>1.2</span></a>:</p>
+<p>The main drawback of Monte-Carlo methods is that the task must be composed of finite episodes. Not only is it not always possible, but value updates have to wait for the end of the episode, what slows learning down. <strong>Temporal difference</strong> methods simply replace the actual return obtained after a state or an action, by an estimation composed of the reward immediately received plus the value of the next state or action, as in <a href="#eq-return">Equation&nbsp;<span class="quarto-unresolved-ref">eq-return</span></a>:</p>
 <p><span class="math display">\[
     R_t \approx r(s, a, s') + \gamma \, V^\pi(s') \approx r + \gamma \, Q^\pi(s', a')
 \]</span></p>
@@ -436,7 +437,7 @@ div.csl-indent {
 <div id="fig-td" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="img/backup-TD.png" class="img-fluid figure-img" style="width:3.0%"></p>
-<p></p><figcaption class="figure-caption">Figure&nbsp;1.5: Temporal difference algorithms update values after a single transition. Taken from <span class="citation" data-cites="Sutton1998">Sutton and Barto (<a href="references.html#ref-Sutton1998" role="doc-biblioref">1998</a>)</span>.</figcaption><p></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;1.5: Temporal difference algorithms update values after a single transition. Taken from <span class="citation" data-cites="Sutton1998">Sutton and Barto (<a href="#ref-Sutton1998" role="doc-biblioref">1998</a>)</span>.</figcaption><p></p>
 </figure>
 </div>
 <p>When learning Q-values directly, the question is which next action <span class="math inline">\(a'\)</span> should be used in the update rule: the action that will actually be taken for the next transition (defined by <span class="math inline">\(\pi(s', a')\)</span>), or the greedy action (<span class="math inline">\(a^* = \text{argmax}_a Q^\pi(s', a)\)</span>). This relates to the <em>on-policy / off-policy</em> distinction already seen for MC methods:</p>
@@ -447,7 +448,7 @@ div.csl-indent {
     \delta = r(s, a, s') + \gamma \, Q^\pi(s', \pi(s')) - Q^\pi(s, a)
 \]</span></p>
 <ul>
-<li><strong>Off-policy</strong> TD learning is called <strong>Q-learning</strong> <span class="citation" data-cites="Watkins1989">(<a href="references.html#ref-Watkins1989" role="doc-biblioref">Watkins, 1989</a>)</span>. The greedy action in the next state (the one with the highest Q-value) is used to update the current transition. It does not mean that the greedy action will actually have to be selected for the next transition. The learned policy can therefore also be deterministic:</li>
+<li><strong>Off-policy</strong> TD learning is called <strong>Q-learning</strong> <span class="citation" data-cites="Watkins1989">(<a href="#ref-Watkins1989" role="doc-biblioref">Watkins, 1989</a>)</span>. The greedy action in the next state (the one with the highest Q-value) is used to update the current transition. It does not mean that the greedy action will actually have to be selected for the next transition. The learned policy can therefore also be deterministic:</li>
 </ul>
 <p><span class="math display">\[
     \delta = r(s, a, s') + \gamma \, \max_{a'} Q^\pi(s', a') - Q^\pi(s, a)
@@ -459,14 +460,14 @@ div.csl-indent {
 <h3 data-number="1.1.6" class="anchored" data-anchor-id="eligibility-traces"><span class="header-section-number">1.1.6</span> Eligibility traces</h3>
 <p>The main drawback of TD learning is that learning can be slow and necessitate many transitions to converge (sample complexity). This is particularly true when the problem provides <strong>sparse rewards</strong> (as opposed to dense rewards). For example in a game like chess, a reward is given only at the end of a game (+1 for winning, -1 for losing). All other actions receive a reward of 0, although they are as important as the last one in order to win.</p>
 <p>Imagine you initialize all Q-values to 0 and apply Q-learning. During the first episode, all actions but the last one will receive a reward <span class="math inline">\(r(s, a, s')\)</span> of 0 and arrive in a state where the greedy action has a value <span class="math inline">\(Q^\pi(s', a')\)</span> of 0, so the TD error <span class="math inline">\(\delta\)</span> is 0 and their Q-value will not change. Only the very last action will receive a non-zero reward and update its value slightly (because of the learning rate <span class="math inline">\(\alpha\)</span>). When this episode is performed again, the last action will again be updated, but also the one just before: <span class="math inline">\(Q^\pi(s', a')\)</span> is now different from 0 for this action, so the TD error is now different from 0. It is straightforward to see that if the episode has a length of 100 moves, the agent will need at least 100 episodes to “backpropagate” the final sparse reward to the first action of the episode. In practice, this is even worse: the learning rate <span class="math inline">\(\alpha\)</span> and the discount rate <span class="math inline">\(\gamma\)</span> will slow learning down even more. MC methods suffer less from this problem, as the first action of the episode would be updated using the actual return, which contains the final reward (although it is discounted by <span class="math inline">\(\gamma\)</span>).</p>
-<p><strong>Eligibility traces</strong> can be seen a trick to mix the advantages of MC (faster updates) with the ones of TD (online learning, smaller variance). The idea is that the TD error at time <span class="math inline">\(t\)</span> (<span class="math inline">\(\delta_t\)</span>) will be used not only to update the action taken at time <span class="math inline">\(t\)</span> (<span class="math inline">\(\Delta Q(s_t, a_t) = \alpha \, \delta_t\)</span>), but also all the preceding actions, which are also responsible for the success or failure of the action taken at time <span class="math inline">\(t\)</span>. A parameter <span class="math inline">\(\lambda\)</span> between 0 and 1 (decaying factor) controls how far back in time a single TD error influences past actions. This is important when the policy is mostly exploratory: initial actions may be mostly random and finally find the the reward by chance. They should learn less from the reward than the last one, otherwise they would be systematically reproduced. <a href="#fig-eligibilitytraces">Figure&nbsp;<span>1.6</span></a> shows the principle of eligibility traces in a simple Gridworld environment.</p>
+<p><strong>Eligibility traces</strong> can be seen a trick to mix the advantages of MC (faster updates) with the ones of TD (online learning, smaller variance). The idea is that the TD error at time <span class="math inline">\(t\)</span> (<span class="math inline">\(\delta_t\)</span>) will be used not only to update the action taken at time <span class="math inline">\(t\)</span> (<span class="math inline">\(\Delta Q(s_t, a_t) = \alpha \, \delta_t\)</span>), but also all the preceding actions, which are also responsible for the success or failure of the action taken at time <span class="math inline">\(t\)</span>. A parameter <span class="math inline">\(\lambda\)</span> between 0 and 1 (decaying factor) controls how far back in time a single TD error influences past actions. This is important when the policy is mostly exploratory: initial actions may be mostly random and finally find the the reward by chance. They should learn less from the reward than the last one, otherwise they would be systematically reproduced. <a href="#fig-eligibilitytraces">Figure&nbsp;<span class="quarto-unresolved-ref">fig-eligibilitytraces</span></a> shows the principle of eligibility traces in a simple Gridworld environment.</p>
 <div id="fig-eligibilitytraces" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="img/gridworld-lambda.png" class="img-fluid figure-img" style="width:80.0%"></p>
-<p></p><figcaption class="figure-caption">Figure&nbsp;1.6: Principle of eligibility traces applied to the Gridworld problem using SARSA(<span class="math inline">\(\lambda\)</span>). Taken from <span class="citation" data-cites="Sutton1998">Sutton and Barto (<a href="references.html#ref-Sutton1998" role="doc-biblioref">1998</a>)</span>.</figcaption><p></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;1.6: Principle of eligibility traces applied to the Gridworld problem using SARSA(<span class="math inline">\(\lambda\)</span>). Taken from <span class="citation" data-cites="Sutton1998">Sutton and Barto (<a href="#ref-Sutton1998" role="doc-biblioref">1998</a>)</span>.</figcaption><p></p>
 </figure>
 </div>
-<p>There are many possible implementations of eligibility traces (Watkin’s, Peng, Tree Backup, etc. See the Chapter 12 of <span class="citation" data-cites="Sutton2017">Sutton and Barto (<a href="references.html#ref-Sutton2017" role="doc-biblioref">2017</a>)</span>). Generally, one distinguished a forward and a backward view of eligibility traces.</p>
+<p>There are many possible implementations of eligibility traces (Watkin’s, Peng, Tree Backup, etc. See the Chapter 12 of <span class="citation" data-cites="Sutton2017">Sutton and Barto (<a href="#ref-Sutton2017" role="doc-biblioref">2017</a>)</span>). Generally, one distinguished a forward and a backward view of eligibility traces.</p>
 <ul>
 <li>The <em>forward view</em> considers that one transition <span class="math inline">\((s_t, a_t)\)</span> gathers the TD errors made at future time steps <span class="math inline">\(t'\)</span> and discounts them with the parameter <span class="math inline">\(\lambda\)</span>:</li>
 </ul>
@@ -507,7 +508,7 @@ div.csl-indent {
 <div id="fig-actorcritic" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="img/actorcritic.png" class="img-fluid figure-img" style="width:30.0%"></p>
-<p></p><figcaption class="figure-caption">Figure&nbsp;1.7: Actor-critic architecture <span class="citation" data-cites="Sutton1998">(<a href="references.html#ref-Sutton1998" role="doc-biblioref">Sutton and Barto, 1998</a>)</span>.</figcaption><p></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;1.7: Actor-critic architecture <span class="citation" data-cites="Sutton1998">(<a href="#ref-Sutton1998" role="doc-biblioref">Sutton and Barto, 1998</a>)</span>.</figcaption><p></p>
 </figure>
 </div>
 <p><strong>Actor-critic</strong> architectures have been proposed to solve this problem:</p>
@@ -544,7 +545,7 @@ div.csl-indent {
 <p></p><figcaption class="figure-caption">Figure&nbsp;1.8: Function approximators can either take a state-action pair as input and output the Q-value, or simply take a state as input and output the Q-values of all possible actions.</figcaption><p></p>
 </figure>
 </div>
-<p>There are basically two options regarding the structure of the function approximator (<a href="#fig-functionapprox">Figure&nbsp;<span>1.8</span></a>):</p>
+<p>There are basically two options regarding the structure of the function approximator (<a href="#fig-functionapprox">Figure&nbsp;<span class="quarto-unresolved-ref">fig-functionapprox</span></a>):</p>
 <ol type="1">
 <li>The approximator takes a state-action pair <span class="math inline">\((s, a)\)</span> as input and returns a single Q-value <span class="math inline">\(Q(s, a)\)</span>.</li>
 <li>It takes a state <span class="math inline">\(s\)</span> as input and returns the Q-value of all possible actions in that state.</li>
@@ -587,7 +588,7 @@ div.csl-indent {
 <p>In short, the learned policy <span class="math inline">\(\pi_\theta\)</span> should only produce trajectories <span class="math inline">\(\tau\)</span> where each state is associated to a high return <span class="math inline">\(R_t\)</span> and avoid trajectories with low returns. Although this objective function leads to the desired behavior, it is not computationally tractable as we would need to integrate over all possible trajectories. The methods presented in Section <a href="./3.1-PolicyGradient.html">PolicyGradient</a> will provide estimates of the gradient of this objective function.</p>
 
 
-<div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography" style="display: none">
+<div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography">
 <div id="ref-Sutton1998" class="csl-entry" role="doc-biblioentry">
 Sutton, R. S., and Barto, A. G. (1998). <em>Reinforcement <span>Learning</span>: <span>An</span> introduction</em>. <span>Cambridge, MA</span>: <span>MIT press</span>.
 </div>
@@ -644,7 +645,24 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     button.classList.add('code-copy-button-checked');
     var currentTitle = button.getAttribute("title");
     button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
     setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
       button.setAttribute("title", currentTitle);
       button.classList.remove('code-copy-button-checked');
     }, 1000);
@@ -680,24 +698,42 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       return note.innerHTML;
     });
   }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
   var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
   for (var i=0; i<bibliorefs.length; i++) {
     const ref = bibliorefs[i];
-    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
-    tippyHover(ref, function() {
-      var popup = window.document.createElement('div');
-      cites.forEach(function(cite) {
-        var citeDiv = window.document.createElement('div');
-        citeDiv.classList.add('hanging-indent');
-        citeDiv.classList.add('csl-entry');
-        var biblioDiv = window.document.getElementById('ref-' + cite);
-        if (biblioDiv) {
-          citeDiv.innerHTML = biblioDiv.innerHTML;
-        }
-        popup.appendChild(citeDiv);
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
       });
-      return popup.innerHTML;
-    });
+    }
   }
 });
 </script>

@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.1.251">
+<meta name="generator" content="quarto-1.2.269">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -227,6 +227,7 @@ div.csl-indent {
 <div class="quarto-title-meta">
 
     
+  
     
   </div>
   
@@ -234,12 +235,12 @@ div.csl-indent {
 </header>
 
 <p><strong>Work in progress</strong></p>
-<p><span class="citation" data-cites="Agrawal2016">Agrawal et al. (<a href="references.html#ref-Agrawal2016" role="doc-biblioref">2016</a>)</span>, <span class="citation" data-cites="Dosovitskiy2016">Dosovitskiy and Koltun (<a href="references.html#ref-Dosovitskiy2016" role="doc-biblioref">2016</a>)</span>, <span class="citation" data-cites="Gu2017">Gu et al. (<a href="references.html#ref-Gu2017" role="doc-biblioref">2017</a>)</span>, <span class="citation" data-cites="Levine2016">Levine et al. (<a href="references.html#ref-Levine2016" role="doc-biblioref">2016a</a>)</span>, <span class="citation" data-cites="Levine2016a">Levine et al. (<a href="references.html#ref-Levine2016a" role="doc-biblioref">2016b</a>)</span>, <span class="citation" data-cites="Zhang2015">Zhang et al. (<a href="references.html#ref-Zhang2015" role="doc-biblioref">2015</a>)</span></p>
-<p>Deep Reinforcement Learning for Industrial Insertion Tasks with Visual Inputs and Natural Rewards <span class="citation" data-cites="Schoettler2019">(<a href="references.html#ref-Schoettler2019" role="doc-biblioref">Schoettler et al., 2019</a>)</span></p>
-<p>State of the art: <span class="citation" data-cites="Amarjyoti2017">Amarjyoti (<a href="references.html#ref-Amarjyoti2017" role="doc-biblioref">2017</a>)</span></p>
+<p><span class="citation" data-cites="Agrawal2016">Agrawal et al. (<a href="#ref-Agrawal2016" role="doc-biblioref">2016</a>)</span>, <span class="citation" data-cites="Dosovitskiy2016">Dosovitskiy and Koltun (<a href="#ref-Dosovitskiy2016" role="doc-biblioref">2016</a>)</span>, <span class="citation" data-cites="Gu2017">Gu et al. (<a href="#ref-Gu2017" role="doc-biblioref">2017</a>)</span>, <span class="citation" data-cites="Levine2016">Levine et al. (<a href="#ref-Levine2016" role="doc-biblioref">2016a</a>)</span>, <span class="citation" data-cites="Levine2016a">Levine et al. (<a href="#ref-Levine2016a" role="doc-biblioref">2016b</a>)</span>, <span class="citation" data-cites="Zhang2015">Zhang et al. (<a href="#ref-Zhang2015" role="doc-biblioref">2015</a>)</span></p>
+<p>Deep Reinforcement Learning for Industrial Insertion Tasks with Visual Inputs and Natural Rewards <span class="citation" data-cites="Schoettler2019">(<a href="#ref-Schoettler2019" role="doc-biblioref">Schoettler et al., 2019</a>)</span></p>
+<p>State of the art: <span class="citation" data-cites="Amarjyoti2017">Amarjyoti (<a href="#ref-Amarjyoti2017" role="doc-biblioref">2017</a>)</span></p>
 
 
-<div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography" style="display: none">
+<div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography">
 <div id="ref-Agrawal2016" class="csl-entry" role="doc-biblioentry">
 Agrawal, P., Nair, A., Abbeel, P., Malik, J., and Levine, S. (2016). Learning to <span>Poke</span> by <span>Poking</span>: <span>Experiential Learning</span> of <span>Intuitive Physics</span>. Available at: <a href="http://arxiv.org/abs/1606.07419">http://arxiv.org/abs/1606.07419</a>.
 </div>
@@ -308,7 +309,24 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     button.classList.add('code-copy-button-checked');
     var currentTitle = button.getAttribute("title");
     button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
     setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
       button.setAttribute("title", currentTitle);
       button.classList.remove('code-copy-button-checked');
     }, 1000);
@@ -344,24 +362,42 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       return note.innerHTML;
     });
   }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
   var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
   for (var i=0; i<bibliorefs.length; i++) {
     const ref = bibliorefs[i];
-    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
-    tippyHover(ref, function() {
-      var popup = window.document.createElement('div');
-      cites.forEach(function(cite) {
-        var citeDiv = window.document.createElement('div');
-        citeDiv.classList.add('hanging-indent');
-        citeDiv.classList.add('csl-entry');
-        var biblioDiv = window.document.getElementById('ref-' + cite);
-        if (biblioDiv) {
-          citeDiv.innerHTML = biblioDiv.innerHTML;
-        }
-        popup.appendChild(citeDiv);
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
       });
-      return popup.innerHTML;
-    });
+    }
   }
 });
 </script>

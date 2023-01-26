@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.1.251">
+<meta name="generator" content="quarto-1.2.269">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -235,6 +235,7 @@ div.csl-indent {
 <div class="quarto-title-meta">
 
     
+  
     
   </div>
   
@@ -249,15 +250,15 @@ div.csl-indent {
 <p>However, this is only true when playing <strong>long enough</strong>. If, after learning, one is only allowed one try on that game, it is obviously safer (but less fun) to choose the first action, as one wins at worse 10, while it is -10 with the second action. Knowing the distribution of the returns can allow to distinguish risky choices from safe ones more easily and adapt the behavior. Another advantage would be that by learning the distribution of the returns instead of just their mean, one actually gathers more information about the environment dynamics: it can only help the convergence of the algorithm towards the optimal policy.</p>
 <section id="categorical-dqn" class="level3" data-number="10.0.1">
 <h3 data-number="10.0.1" class="anchored" data-anchor-id="categorical-dqn"><span class="header-section-number">10.0.1</span> Categorical DQN</h3>
-<p><span class="citation" data-cites="Bellemare2017">Bellemare et al. (<a href="references.html#ref-Bellemare2017" role="doc-biblioref">2017</a>)</span> proposed to learn the <strong>value distribution</strong> (the probability distribution of the returns) through a modification of the Bellman equation. They show that learning the complete distribution of rewards instead of their mean leads to performance improvements on Atari games over modern variants of DQN.</p>
-<p>Their proposed <strong>categorical DQN</strong> (also called C51) has an architecture based on DQN, but where the output layer predicts the distribution of the returns for each action <span class="math inline">\(a\)</span> in state <span class="math inline">\(s\)</span>, instead of its mean <span class="math inline">\(Q^\pi(s, a)\)</span>. In practice, each action <span class="math inline">\(a\)</span> is represented by <span class="math inline">\(N\)</span> output neurons, who encode the support of the distribution of returns. If the returns take values between <span class="math inline">\(V_\text{min}\)</span> and <span class="math inline">\(V_\text{max}\)</span>, one can represent their distribution <span class="math inline">\(\mathcal{Z}\)</span> by taking <span class="math inline">\(N\)</span> discrete “bins” (called <em>atoms</em> in the paper) in that range. <a href="#fig-distributionallearning">Figure&nbsp;<span>10.1</span></a> shows how the distribution of returns between -10 and 10 can be represented using 21 atoms.</p>
+<p><span class="citation" data-cites="Bellemare2017">Bellemare et al. (<a href="#ref-Bellemare2017" role="doc-biblioref">2017</a>)</span> proposed to learn the <strong>value distribution</strong> (the probability distribution of the returns) through a modification of the Bellman equation. They show that learning the complete distribution of rewards instead of their mean leads to performance improvements on Atari games over modern variants of DQN.</p>
+<p>Their proposed <strong>categorical DQN</strong> (also called C51) has an architecture based on DQN, but where the output layer predicts the distribution of the returns for each action <span class="math inline">\(a\)</span> in state <span class="math inline">\(s\)</span>, instead of its mean <span class="math inline">\(Q^\pi(s, a)\)</span>. In practice, each action <span class="math inline">\(a\)</span> is represented by <span class="math inline">\(N\)</span> output neurons, who encode the support of the distribution of returns. If the returns take values between <span class="math inline">\(V_\text{min}\)</span> and <span class="math inline">\(V_\text{max}\)</span>, one can represent their distribution <span class="math inline">\(\mathcal{Z}\)</span> by taking <span class="math inline">\(N\)</span> discrete “bins” (called <em>atoms</em> in the paper) in that range. <a href="#fig-distributionallearning">Figure&nbsp;<span class="quarto-unresolved-ref">fig-distributionallearning</span></a> shows how the distribution of returns between -10 and 10 can be represented using 21 atoms.</p>
 <div id="fig-distributionallearning" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="img/distributionallearning.png" class="img-fluid figure-img" style="width:80.0%"></p>
 <p></p><figcaption class="figure-caption">Figure&nbsp;10.1: Example of a value distribution using 21 atoms between -10 and 10. The average return is 3, but its variance is explicitly represented.</figcaption><p></p>
 </figure>
 </div>
-<p>Of course, the main problem is to know in advance the range of returns <span class="math inline">\([V_\text{min}, V_\text{max}]\)</span> (it depends largely on the choice of the discount rate <span class="math inline">\(\gamma\)</span>), but you can infer it from training another algorithm such as DQN beforehand. <span class="citation" data-cites="Dabney2017">Dabney et al. (<a href="references.html#ref-Dabney2017" role="doc-biblioref">2017</a>)</span> got rid of this problem with quantile regression. In the paper, the authors found out experimentally that 51 is the most efficient number of atoms (hence the name C51).</p>
+<p>Of course, the main problem is to know in advance the range of returns <span class="math inline">\([V_\text{min}, V_\text{max}]\)</span> (it depends largely on the choice of the discount rate <span class="math inline">\(\gamma\)</span>), but you can infer it from training another algorithm such as DQN beforehand. <span class="citation" data-cites="Dabney2017">Dabney et al. (<a href="#ref-Dabney2017" role="doc-biblioref">2017</a>)</span> got rid of this problem with quantile regression. In the paper, the authors found out experimentally that 51 is the most efficient number of atoms (hence the name C51).</p>
 <p>Let’s note <span class="math inline">\(z_i\)</span> these atoms with <span class="math inline">\(1 \leq i &lt; N\)</span>. The atom probability that the return associated to a state-action pair <span class="math inline">\((s, a)\)</span> lies within the bin associated to the atom <span class="math inline">\(z_i\)</span> is noted <span class="math inline">\(p_i(s, a)\)</span>. These probabilities can be predicted by a neural network, typically by using a softmax function over outputs <span class="math inline">\(f_i(s, a; \theta)\)</span>:</p>
 <p><span class="math display">\[
     p_i(s, a; \theta) = \frac{\exp f_i(s, a; \theta)}{\sum_{j=1}^{N} \exp f_j(s, a; \theta)}
@@ -287,7 +288,7 @@ div.csl-indent {
 <p><span class="math display">\[
     \mathcal{T} \, z_i = r + \gamma \, z_i
 \]</span></p>
-<p>and clip the obtained value to <span class="math inline">\([V_\text{min}, V_\text{max}]\)</span>. The reward <span class="math inline">\(r\)</span> translates the distribution of atoms, while the discount rate <span class="math inline">\(\gamma\)</span> scales it. <a href="#fig-distributionallearning2">Figure&nbsp;<span>10.2</span></a> shows the distribution of <span class="math inline">\(\mathcal{T} \, \mathcal{Z}_\theta(s, a)\)</span> compared to <span class="math inline">\(\mathcal{Z}_\theta(s, a)\)</span>. Note that the atoms of the two distributions are not aligned.</p>
+<p>and clip the obtained value to <span class="math inline">\([V_\text{min}, V_\text{max}]\)</span>. The reward <span class="math inline">\(r\)</span> translates the distribution of atoms, while the discount rate <span class="math inline">\(\gamma\)</span> scales it. <a href="#fig-distributionallearning2">Figure&nbsp;<span class="quarto-unresolved-ref">fig-distributionallearning2</span></a> shows the distribution of <span class="math inline">\(\mathcal{T} \, \mathcal{Z}_\theta(s, a)\)</span> compared to <span class="math inline">\(\mathcal{Z}_\theta(s, a)\)</span>. Note that the atoms of the two distributions are not aligned.</p>
 <div id="fig-distributionallearning2" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="img/distributionallearning2.png" class="img-fluid figure-img" style="width:80.0%"></p>
@@ -302,7 +303,7 @@ div.csl-indent {
 \]</span> <span class="math display">\[
     \Delta p_{u}(s', a'; \theta) = p_{b}(s', a'; \theta) \, (l - b)
 \]</span></p>
-<p><a href="#fig-distributionallearning3">Figure&nbsp;<span>10.3</span></a> shows how the projected update distribution <span class="math inline">\(\Phi \, \mathcal{T} \, \mathcal{Z}_\theta(s, a)\)</span> now matches the support of <span class="math inline">\(\mathcal{Z}_\theta(s, a)\)</span></p>
+<p><a href="#fig-distributionallearning3">Figure&nbsp;<span class="quarto-unresolved-ref">fig-distributionallearning3</span></a> shows how the projected update distribution <span class="math inline">\(\Phi \, \mathcal{T} \, \mathcal{Z}_\theta(s, a)\)</span> now matches the support of <span class="math inline">\(\mathcal{Z}_\theta(s, a)\)</span></p>
 <div id="fig-distributionallearning3" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="img/distributionallearning3.png" class="img-fluid figure-img" style="width:80.0%"></p>
@@ -325,7 +326,7 @@ div.csl-indent {
     \mathcal{L}(\theta) =  - \sum_i (\Phi \, \mathcal{T} \, \mathcal{Z}_{\theta'}(s, a))_i \log p_i (s, a; \theta)
 \]</span></p>
 <p>The projected Bellman update plays the role of the one-hot encoded target vector in classification (except that it is not one-hot encoded). DQN performs a regression on the Q-values (mse loss), while categorical DQN performs a classification (cross-entropy loss). Apart from the way the target is computed, categorical DQN is very similar to DQN: architecture, experience replay memory, target networks, etc.</p>
-<p><a href="#fig-categoricaldqn">Figure&nbsp;<span>10.4</span></a> illustrates how the predicted value distribution changes when playing Space invaders (also have a look at the Youtube video at <a href="https://www.youtube.com/watch?v=yFBwyPuO2Vg" class="uri">https://www.youtube.com/watch?v=yFBwyPuO2Vg</a>). C51 outperforms DQN on most Atari games, both in terms of the achieved performance and the sample complexity.</p>
+<p><a href="#fig-categoricaldqn">Figure&nbsp;<span class="quarto-unresolved-ref">fig-categoricaldqn</span></a> illustrates how the predicted value distribution changes when playing Space invaders (also have a look at the Youtube video at <a href="https://www.youtube.com/watch?v=yFBwyPuO2Vg" class="uri">https://www.youtube.com/watch?v=yFBwyPuO2Vg</a>). C51 outperforms DQN on most Atari games, both in terms of the achieved performance and the sample complexity.</p>
 <div id="fig-categoricaldqn" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="img/categoricaldqn.gif" class="img-fluid figure-img" style="width:100.0%"></p>
@@ -343,7 +344,7 @@ div.csl-indent {
 </section>
 <section id="the-reactor" class="level3" data-number="10.0.2">
 <h3 data-number="10.0.2" class="anchored" data-anchor-id="the-reactor"><span class="header-section-number">10.0.2</span> The Reactor</h3>
-<p>The <strong>Reactor</strong> (Retrace Actor) of <span class="citation" data-cites="Gruslys2017">Gruslys et al. (<a href="references.html#ref-Gruslys2017" role="doc-biblioref">2017</a>)</span> combines many architectural and algorithmic contributions seen until now in order to provide an algorithm that is both sample efficient and with a good run-time performance. A3C has for example a better run-time performance (smaller wall-clock time for the training) than DQN or categorical DQN thanks to the use of multiple actor-learners in parallel, but its sample complexity is actually higher (as it is on-policy).</p>
+<p>The <strong>Reactor</strong> (Retrace Actor) of <span class="citation" data-cites="Gruslys2017">Gruslys et al. (<a href="#ref-Gruslys2017" role="doc-biblioref">2017</a>)</span> combines many architectural and algorithmic contributions seen until now in order to provide an algorithm that is both sample efficient and with a good run-time performance. A3C has for example a better run-time performance (smaller wall-clock time for the training) than DQN or categorical DQN thanks to the use of multiple actor-learners in parallel, but its sample complexity is actually higher (as it is on-policy).</p>
 <p>The Reactor combines and improves on:</p>
 <ul>
 <li>An actor-critic architecture using policy gradient with importance sampling,</li>
@@ -365,7 +366,7 @@ div.csl-indent {
     \nabla_\theta J(\theta) = \beta \, (R(s, \hat{a}) - Q_\varphi(s, \hat{a})) \, \nabla_\theta \pi_\theta(s, \hat{a}) + \sum_a Q_\varphi(s, a) \, \nabla_\theta \pi_\theta(s, a)
 \]</span></p>
 <p><span class="math inline">\(\beta\)</span> is defined as <span class="math inline">\(\min (c, \frac{1}{b(s, \hat{a})})\)</span>, where <span class="math inline">\(c&gt;1\)</span> is a constant. This truncated term is similar to what was used in ACER. The rule is now called <strong><span class="math inline">\(\beta\)</span>-LOO</strong> and is a novel proposition of the Reactor.</p>
-<p>The second importance contribution of the Reactor is how to combine the Retrace algorithm (<span class="citation" data-cites="Munos2016">Munos et al. (<a href="references.html#ref-Munos2016" role="doc-biblioref">2016</a>)</span>) for estimating the return <span class="math inline">\(R(s, \hat{a})\)</span> on multiple steps, with the distributional learning method of Categorical DQN. As Retrace uses n-steps returns iteratively, the n-step distributional Bellman target can updated using the <span class="math inline">\(n\)</span> future rewards:</p>
+<p>The second importance contribution of the Reactor is how to combine the Retrace algorithm (<span class="citation" data-cites="Munos2016">Munos et al. (<a href="#ref-Munos2016" role="doc-biblioref">2016</a>)</span>) for estimating the return <span class="math inline">\(R(s, \hat{a})\)</span> on multiple steps, with the distributional learning method of Categorical DQN. As Retrace uses n-steps returns iteratively, the n-step distributional Bellman target can updated using the <span class="math inline">\(n\)</span> future rewards:</p>
 <p><span class="math display">\[
     z_i^n = \mathcal{T}^n \, z_i = \sum_{k=t}^{t+n} \gamma^{k-t} r_k + \gamma^n \, z_i
 \]</span></p>
@@ -373,7 +374,7 @@ div.csl-indent {
 <p>The last particularities of the Reactor is that it uses a LSTM layer to make the problem Markovian (instead of stacking four frames as in DQN) and train multiple actor-learners as in A3C. The algorithm is trained on CPU, with 10 or 20 actor-learners. The Reactor outperforms DQN and its variants, A3C and ACER on Atari games. Importantly, Reactor only needs one day of training on CPU, compared to the 8 days of GPU training needed by DQN.</p>
 
 
-<div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography" style="display: none">
+<div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography">
 <div id="ref-Bellemare2017" class="csl-entry" role="doc-biblioentry">
 Bellemare, M. G., Dabney, W., and Munos, R. (2017). A <span>Distributional Perspective</span> on <span>Reinforcement Learning</span>. Available at: <a href="http://arxiv.org/abs/1707.06887">http://arxiv.org/abs/1707.06887</a>.
 </div>
@@ -431,7 +432,24 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     button.classList.add('code-copy-button-checked');
     var currentTitle = button.getAttribute("title");
     button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
     setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
       button.setAttribute("title", currentTitle);
       button.classList.remove('code-copy-button-checked');
     }, 1000);
@@ -467,24 +485,42 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       return note.innerHTML;
     });
   }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
   var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
   for (var i=0; i<bibliorefs.length; i++) {
     const ref = bibliorefs[i];
-    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
-    tippyHover(ref, function() {
-      var popup = window.document.createElement('div');
-      cites.forEach(function(cite) {
-        var citeDiv = window.document.createElement('div');
-        citeDiv.classList.add('hanging-indent');
-        citeDiv.classList.add('csl-entry');
-        var biblioDiv = window.document.getElementById('ref-' + cite);
-        if (biblioDiv) {
-          citeDiv.innerHTML = biblioDiv.innerHTML;
-        }
-        popup.appendChild(citeDiv);
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
       });
-      return popup.innerHTML;
-    });
+    }
   }
 });
 </script>

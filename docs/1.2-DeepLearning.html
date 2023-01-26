@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.1.251">
+<meta name="generator" content="quarto-1.2.269">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -236,20 +236,21 @@ div.csl-indent {
 <div class="quarto-title-meta">
 
     
+  
     
   </div>
   
 
 </header>
 
-<p>Deep RL uses deep neural networks as function approximators, allowing complex representations of the value of state-action pairs to be learned. This section provides a very quick overview of deep learning. For additional details, refer to the excellent book of <span class="citation" data-cites="Goodfellow2016">Goodfellow et al. (<a href="references.html#ref-Goodfellow2016" role="doc-biblioref">2016</a>)</span>.</p>
+<p>Deep RL uses deep neural networks as function approximators, allowing complex representations of the value of state-action pairs to be learned. This section provides a very quick overview of deep learning. For additional details, refer to the excellent book of <span class="citation" data-cites="Goodfellow2016">Goodfellow et al. (<a href="#ref-Goodfellow2016" role="doc-biblioref">2016</a>)</span>.</p>
 <section id="deep-neural-networks" class="level3" data-number="2.0.1">
 <h3 data-number="2.0.1" class="anchored" data-anchor-id="deep-neural-networks"><span class="header-section-number">2.0.1</span> Deep neural networks</h3>
-<p>A deep neural network (DNN) consists of one input layer <span class="math inline">\(\mathbf{x}\)</span>, one or several hidden layers <span class="math inline">\(\mathbf{h_1}, \mathbf{h_2}, \ldots, \mathbf{h_n}\)</span> and one output layer <span class="math inline">\(\mathbf{y}\)</span> (<a href="#fig-dnn">Figure&nbsp;<span>2.1</span></a>).</p>
+<p>A deep neural network (DNN) consists of one input layer <span class="math inline">\(\mathbf{x}\)</span>, one or several hidden layers <span class="math inline">\(\mathbf{h_1}, \mathbf{h_2}, \ldots, \mathbf{h_n}\)</span> and one output layer <span class="math inline">\(\mathbf{y}\)</span> (<a href="#fig-dnn">Figure&nbsp;<span class="quarto-unresolved-ref">fig-dnn</span></a>).</p>
 <div id="fig-dnn" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="img/dnn.png" class="img-fluid figure-img" style="width:60.0%"></p>
-<p></p><figcaption class="figure-caption">Figure&nbsp;2.1: Architecture of a deep neural network. Figure taken from <span class="citation" data-cites="Nielsen2015">Nielsen (<a href="references.html#ref-Nielsen2015" role="doc-biblioref">2015</a>)</span>, CC-BY-NC.</figcaption><p></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;2.1: Architecture of a deep neural network. Figure taken from <span class="citation" data-cites="Nielsen2015">Nielsen (<a href="#ref-Nielsen2015" role="doc-biblioref">2015</a>)</span>, CC-BY-NC.</figcaption><p></p>
 </figure>
 </div>
 <p>Each layer <span class="math inline">\(k\)</span> (called <em>fully-connected</em>) transforms the activity of the previous layer (the vector <span class="math inline">\(\mathbf{h_{k-1}}\)</span>) into another vector <span class="math inline">\(\mathbf{h_{k}}\)</span> by multiplying it with a <strong>weight matrix</strong> <span class="math inline">\(W_k\)</span>, adding a <strong>bias</strong> vector <span class="math inline">\(\mathbf{b_k}\)</span> and applying a non-linear <strong>activation function</strong> <span class="math inline">\(f\)</span>.</p>
@@ -281,7 +282,7 @@ div.csl-indent {
 <p><span class="math display">\[
     \frac{\partial \mathcal{L}(\theta)}{\partial W_k} = \frac{\partial \mathcal{L}(\theta)}{\partial \mathbf{y}} \times \frac{\partial \mathbf{y}}{\partial \mathbf{h_n}} \times \frac{\partial \mathbf{h_n}}{\partial \mathbf{h_{n-1}}} \times \ldots \times \frac{\partial \mathbf{h_k}}{\partial W_k}
 \]</span></p>
-<p>Each layer of the network adds a contribution to the gradient when going <strong>backwards</strong> from the loss function to the parameters. Importantly, all functions used in a NN are differentiable, i.e.&nbsp;those partial derivatives exist (and are easy to compute). For the fully connected layer represented by <a href="#eq-fullyconnected">Equation&nbsp;<span>2.1</span></a>, the partial derivative is given by:</p>
+<p>Each layer of the network adds a contribution to the gradient when going <strong>backwards</strong> from the loss function to the parameters. Importantly, all functions used in a NN are differentiable, i.e.&nbsp;those partial derivatives exist (and are easy to compute). For the fully connected layer represented by <a href="#eq-fullyconnected">Equation&nbsp;<span class="quarto-unresolved-ref">eq-fullyconnected</span></a>, the partial derivative is given by:</p>
 <p><span class="math display">\[
     \frac{\partial \mathbf{h_{k}}}{\partial \mathbf{h_{k-1}}} = f'(W_k \times \mathbf{h_{k-1}} + \mathbf{b_k}) \, W_k
 \]</span></p>
@@ -305,9 +306,9 @@ div.csl-indent {
 <li>Adam</li>
 <li>Many others. Check the doc of keras to see what is available: <a href="https://keras.io/optimizers" class="uri">https://keras.io/optimizers</a></li>
 </ul>
-<p>See this useful post for a comparison of the different optimizers: <a href="http://ruder.io/optimizing-gradient-descent" class="uri">http://ruder.io/optimizing-gradient-descent</a> <span class="citation" data-cites="Ruder2016">(<a href="references.html#ref-Ruder2016" role="doc-biblioref">Ruder, 2016</a>)</span>. The common wisdom is that SGD with Nesterov momentum works best (i.e.&nbsp;it finds a better minimum) but its meta-parameters (learning rate, momentum) are hard to find, while Adam works out-of-the-box, at the cost of a slightly worse minimum. For deep RL, Adam is usually preferred, as the goal is to quickly find a working solution, not to optimize it to the last decimal.</p>
+<p>See this useful post for a comparison of the different optimizers: <a href="http://ruder.io/optimizing-gradient-descent" class="uri">http://ruder.io/optimizing-gradient-descent</a> <span class="citation" data-cites="Ruder2016">(<a href="#ref-Ruder2016" role="doc-biblioref">Ruder, 2016</a>)</span>. The common wisdom is that SGD with Nesterov momentum works best (i.e.&nbsp;it finds a better minimum) but its meta-parameters (learning rate, momentum) are hard to find, while Adam works out-of-the-box, at the cost of a slightly worse minimum. For deep RL, Adam is usually preferred, as the goal is to quickly find a working solution, not to optimize it to the last decimal.</p>
 <!-- ![Comparison of different optimizers. Source: @Ruder2016, <http://ruder.io/optimizing-gradient-descent>.](img/optimizers.gif){#fig-optimizers width=50%} -->
-<p>Additional regularization mechanisms are now typically part of DNNs in order to avoid overfitting (learning by heart the training set but failing to generalize): L1/L2 regularization, dropout, batch normalization, etc. Refer to <span class="citation" data-cites="Goodfellow2016">Goodfellow et al. (<a href="references.html#ref-Goodfellow2016" role="doc-biblioref">2016</a>)</span> for further details.</p>
+<p>Additional regularization mechanisms are now typically part of DNNs in order to avoid overfitting (learning by heart the training set but failing to generalize): L1/L2 regularization, dropout, batch normalization, etc. Refer to <span class="citation" data-cites="Goodfellow2016">Goodfellow et al. (<a href="#ref-Goodfellow2016" role="doc-biblioref">2016</a>)</span> for further details.</p>
 </section>
 <section id="convolutional-networks" class="level3" data-number="2.0.2">
 <h3 data-number="2.0.2" class="anchored" data-anchor-id="convolutional-networks"><span class="header-section-number">2.0.2</span> Convolutional networks</h3>
@@ -326,19 +327,19 @@ div.csl-indent {
 <p></p><figcaption class="figure-caption">Figure&nbsp;2.3: Max-pooling layer. Source: Stanford’s CS231n course <a href="http://cs231n.github.io/convolutional-networks" class="uri">http://cs231n.github.io/convolutional-networks</a></figcaption><p></p>
 </figure>
 </div>
-<p>A convolutional neural network is simply a sequence of convolutional layers and max-pooling layers (sometime two convolutional layers are applied in a row before max-pooling, as in VGG <span class="citation" data-cites="Simonyan2015">(<a href="references.html#ref-Simonyan2015" role="doc-biblioref">Simonyan and Zisserman, 2015</a>)</span>), followed by a couple of fully-connected layers and a softmax output layer. <a href="#fig-alexnet">Figure&nbsp;<span>2.4</span></a> shows the architecture of AlexNet, the winning architecture of the ImageNet challenge in 2012 <span class="citation" data-cites="Krizhevsky2012">(<a href="references.html#ref-Krizhevsky2012" role="doc-biblioref">Krizhevsky et al., 2012</a>)</span>.</p>
+<p>A convolutional neural network is simply a sequence of convolutional layers and max-pooling layers (sometime two convolutional layers are applied in a row before max-pooling, as in VGG <span class="citation" data-cites="Simonyan2015">(<a href="#ref-Simonyan2015" role="doc-biblioref">Simonyan and Zisserman, 2015</a>)</span>), followed by a couple of fully-connected layers and a softmax output layer. <a href="#fig-alexnet">Figure&nbsp;<span class="quarto-unresolved-ref">fig-alexnet</span></a> shows the architecture of AlexNet, the winning architecture of the ImageNet challenge in 2012 <span class="citation" data-cites="Krizhevsky2012">(<a href="#ref-Krizhevsky2012" role="doc-biblioref">Krizhevsky et al., 2012</a>)</span>.</p>
 <div id="fig-alexnet" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="img/alexnet.png" class="img-fluid figure-img"></p>
-<p></p><figcaption class="figure-caption">Figure&nbsp;2.4: Architecture of the AlexNet CNN. Taken from <span class="citation" data-cites="Krizhevsky2012">Krizhevsky et al. (<a href="references.html#ref-Krizhevsky2012" role="doc-biblioref">2012</a>)</span>.</figcaption><p></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;2.4: Architecture of the AlexNet CNN. Taken from <span class="citation" data-cites="Krizhevsky2012">Krizhevsky et al. (<a href="#ref-Krizhevsky2012" role="doc-biblioref">2012</a>)</span>.</figcaption><p></p>
 </figure>
 </div>
-<p>Many improvements have been proposed since 2012 (e.g.&nbsp;ResNets <span class="citation" data-cites="He2015">(<a href="references.html#ref-He2015" role="doc-biblioref">He et al., 2015</a>)</span>) but the idea stays similar. Generally, convolutional and max-pooling layers are alternated until the spatial dimensions are so reduced (around 10x10) that they can be put into a single vector and fed into a fully-connected layer. This is <strong>NOT</strong> the case in deep RL! Contrary to object classification, spatial information is crucial in deep RL: position of the ball, position of the body, etc. It matters whether the ball is to the right or to the left of your paddle when you decide how to move it. Max-pooling layers are therefore omitted and the CNNs only consist of convolutional and fully-connected layers. This greatly increases the number of weights in the networks, hence the number of training examples needed to train the network. This is still the main limitation of using CNNs in deep RL.</p>
+<p>Many improvements have been proposed since 2012 (e.g.&nbsp;ResNets <span class="citation" data-cites="He2015">(<a href="#ref-He2015" role="doc-biblioref">He et al., 2015</a>)</span>) but the idea stays similar. Generally, convolutional and max-pooling layers are alternated until the spatial dimensions are so reduced (around 10x10) that they can be put into a single vector and fed into a fully-connected layer. This is <strong>NOT</strong> the case in deep RL! Contrary to object classification, spatial information is crucial in deep RL: position of the ball, position of the body, etc. It matters whether the ball is to the right or to the left of your paddle when you decide how to move it. Max-pooling layers are therefore omitted and the CNNs only consist of convolutional and fully-connected layers. This greatly increases the number of weights in the networks, hence the number of training examples needed to train the network. This is still the main limitation of using CNNs in deep RL.</p>
 </section>
 <section id="recurrent-neural-networks" class="level3" data-number="2.0.3">
 <h3 data-number="2.0.3" class="anchored" data-anchor-id="recurrent-neural-networks"><span class="header-section-number">2.0.3</span> Recurrent neural networks</h3>
 <p>Feedforward neural networks learn to efficiently map static inputs <span class="math inline">\(\mathbf{x}\)</span> to outputs <span class="math inline">\(\mathbf{y}\)</span> but have no memory or context: the output at time <span class="math inline">\(t\)</span> does not depend on the inputs at time <span class="math inline">\(t-1\)</span> or <span class="math inline">\(t-2\)</span>, only the one at time <span class="math inline">\(t\)</span>. This is problematic when dealing with video sequences for example: if the task is to classify videos into happy/sad, a frame by frame analysis is going to be inefficient (most frames a neutral). Concatenating all frames in a giant input vector would increase dramatically the complexity of the classifier and no generalization can be expected.</p>
-<p>Recurrent Neural Networks (RNN) are designed to deal with time-varying inputs, where the relevant information to take a decision at time <span class="math inline">\(t\)</span> may have happened at different times in the past. The general structure of a RNN is depicted on <a href="#fig-rnn">Figure&nbsp;<span>2.5</span></a>:</p>
+<p>Recurrent Neural Networks (RNN) are designed to deal with time-varying inputs, where the relevant information to take a decision at time <span class="math inline">\(t\)</span> may have happened at different times in the past. The general structure of a RNN is depicted on <a href="#fig-rnn">Figure&nbsp;<span class="quarto-unresolved-ref">fig-rnn</span></a>:</p>
 <div id="fig-rnn" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="img/RNN-unrolled.png" class="img-fluid figure-img" style="width:90.0%"></p>
@@ -350,8 +351,8 @@ div.csl-indent {
     \mathbf{h}_t = f(W_x \, \mathbf{x}_{t} + W_h \, \mathbf{h}_{t-1} + \mathbf{b})
 \]</span></p>
 <p>Once unrolled, a RNN is equivalent to a deep network, with <span class="math inline">\(t\)</span> layers of weights between the first input <span class="math inline">\(\mathbf{x}_0\)</span> and the current output <span class="math inline">\(\mathbf{h}_t\)</span>. The only difference with a feedforward network is that weights are reused between two time steps / layers. <strong>Backpropagation though time</strong> (BPTT) can be used to propagate the gradient of the loss function backwards in time and learn the weights <span class="math inline">\(W_x\)</span> and <span class="math inline">\(W_h\)</span> using the usual optimizer (SGD, Adam…).</p>
-<p>However, this kind of RNN can only learn short-term dependencies because of the <strong>vanishing gradient problem</strong> <span class="citation" data-cites="Hochreiter1991">(<a href="references.html#ref-Hochreiter1991" role="doc-biblioref">Hochreiter, 1991</a>)</span>. When the gradient of the loss function travels backwards from <span class="math inline">\(\mathbf{h}_t\)</span> to <span class="math inline">\(\mathbf{x}_0\)</span>, it will be multiplied <span class="math inline">\(t\)</span> times by the recurrent weights <span class="math inline">\(W_h\)</span>. If <span class="math inline">\(|W_h| &gt; 1\)</span>, the gradient will explode with increasing <span class="math inline">\(t\)</span>, while if <span class="math inline">\(|W_h| &lt; 1\)</span>, the gradient will vanish to 0.</p>
-<p>The solution to this problem is provided by <strong>long short-term memory networks</strong> [LSTM;<span class="citation" data-cites="Hochreiter1997">Hochreiter and Schmidhuber (<a href="references.html#ref-Hochreiter1997" role="doc-biblioref">1997</a>)</span>]. LSTM layers maintain additionally a state <span class="math inline">\(\mathbf{C}_t\)</span> (also called context or memory) which is manipulated by three learnable gates (input, forget and output gates). As in regular RNNs, a <em>candidate state</em> <span class="math inline">\(\tilde{\mathbf{C}_t}\)</span> is computed based on the current input and the previous output:</p>
+<p>However, this kind of RNN can only learn short-term dependencies because of the <strong>vanishing gradient problem</strong> <span class="citation" data-cites="Hochreiter1991">(<a href="#ref-Hochreiter1991" role="doc-biblioref">Hochreiter, 1991</a>)</span>. When the gradient of the loss function travels backwards from <span class="math inline">\(\mathbf{h}_t\)</span> to <span class="math inline">\(\mathbf{x}_0\)</span>, it will be multiplied <span class="math inline">\(t\)</span> times by the recurrent weights <span class="math inline">\(W_h\)</span>. If <span class="math inline">\(|W_h| &gt; 1\)</span>, the gradient will explode with increasing <span class="math inline">\(t\)</span>, while if <span class="math inline">\(|W_h| &lt; 1\)</span>, the gradient will vanish to 0.</p>
+<p>The solution to this problem is provided by <strong>long short-term memory networks</strong> [LSTM;<span class="citation" data-cites="Hochreiter1997">Hochreiter and Schmidhuber (<a href="#ref-Hochreiter1997" role="doc-biblioref">1997</a>)</span>]. LSTM layers maintain additionally a state <span class="math inline">\(\mathbf{C}_t\)</span> (also called context or memory) which is manipulated by three learnable gates (input, forget and output gates). As in regular RNNs, a <em>candidate state</em> <span class="math inline">\(\tilde{\mathbf{C}_t}\)</span> is computed based on the current input and the previous output:</p>
 <p><span class="math display">\[
     \tilde{\mathbf{C}_t} = f(W_x \, \mathbf{x}_{t} + W_h \, \mathbf{h}_{t-1} + \mathbf{b})
 \]</span></p>
@@ -391,11 +392,11 @@ div.csl-indent {
     \mathbf{h}_t = \mathbf{o}_t \odot \tanh \mathbf{C}_t
 \]</span></p>
 <p>The architecture may seem complex, but everything is differentiable: backpropagation though time can be used to learn not only the input and recurrent weights for the candidate state, but also the weights and and biases of the gates. The main advantage of LSTMs is that they solve the vanishing gradient problem: if the input at time <span class="math inline">\(t=0\)</span> is important to produce a response at time <span class="math inline">\(t\)</span>, the input gate will learn to put it into the memory and the forget gate will learn to maintain in the current state until it is not needed anymore. During this “working memory” phase, the gradient is multiplied by exactly one as nothing changes: the dependency can be learned with arbitrary time delays!</p>
-<p>There are alternatives to the classical LSTM layer such as the gated recurrent unit [GRU; <span class="citation" data-cites="Cho2014">Cho et al. (<a href="references.html#ref-Cho2014" role="doc-biblioref">2014</a>)</span>] or peephole connections <span class="citation" data-cites="Gers2001">(<a href="references.html#ref-Gers2001" role="doc-biblioref">Gers, 2001</a>)</span>. See <a href="http://colah.github.io/posts/2015-08-Understanding-LSTMs" class="uri">http://colah.github.io/posts/2015-08-Understanding-LSTMs</a>, <a href="https://medium.com/mlreview/understanding-lstm-and-its-diagrams-37e2f46f1714" class="uri">https://medium.com/mlreview/understanding-lstm-and-its-diagrams-37e2f46f1714</a> or <a href="http://blog.echen.me/2017/05/30/exploring-lstms/" class="uri">http://blog.echen.me/2017/05/30/exploring-lstms/</a> for more visual explanations of LSTMs and their variants.</p>
+<p>There are alternatives to the classical LSTM layer such as the gated recurrent unit [GRU; <span class="citation" data-cites="Cho2014">Cho et al. (<a href="#ref-Cho2014" role="doc-biblioref">2014</a>)</span>] or peephole connections <span class="citation" data-cites="Gers2001">(<a href="#ref-Gers2001" role="doc-biblioref">Gers, 2001</a>)</span>. See <a href="http://colah.github.io/posts/2015-08-Understanding-LSTMs" class="uri">http://colah.github.io/posts/2015-08-Understanding-LSTMs</a>, <a href="https://medium.com/mlreview/understanding-lstm-and-its-diagrams-37e2f46f1714" class="uri">https://medium.com/mlreview/understanding-lstm-and-its-diagrams-37e2f46f1714</a> or <a href="http://blog.echen.me/2017/05/30/exploring-lstms/" class="uri">http://blog.echen.me/2017/05/30/exploring-lstms/</a> for more visual explanations of LSTMs and their variants.</p>
 <p>RNNs are particularly useful for deep RL when considering POMDPs, i.e.&nbsp;partially observable problems. If an observation does not contain enough information about the underlying state (e.g.&nbsp;a single image does not contain speed information), LSTM can integrate these observations over time and learn to implicitly represent speed in its context vector, allowing efficient policies to be learned.</p>
 
 
-<div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography" style="display: none">
+<div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography">
 <div id="ref-Cho2014" class="csl-entry" role="doc-biblioentry">
 Cho, K., van Merrienboer, B., Gulcehre, C., Bahdanau, D., Bougares, F., Schwenk, H., et al. (2014). Learning <span>Phrase Representations</span> using <span>RNN Encoder-Decoder</span> for <span>Statistical Machine Translation</span>. Available at: <a href="http://arxiv.org/abs/1406.1078">http://arxiv.org/abs/1406.1078</a>.
 </div>
@@ -471,7 +472,24 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     button.classList.add('code-copy-button-checked');
     var currentTitle = button.getAttribute("title");
     button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
     setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
       button.setAttribute("title", currentTitle);
       button.classList.remove('code-copy-button-checked');
     }, 1000);
@@ -507,24 +525,42 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       return note.innerHTML;
     });
   }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
   var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
   for (var i=0; i<bibliorefs.length; i++) {
     const ref = bibliorefs[i];
-    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
-    tippyHover(ref, function() {
-      var popup = window.document.createElement('div');
-      cites.forEach(function(cite) {
-        var citeDiv = window.document.createElement('div');
-        citeDiv.classList.add('hanging-indent');
-        citeDiv.classList.add('csl-entry');
-        var biblioDiv = window.document.getElementById('ref-' + cite);
-        if (biblioDiv) {
-          citeDiv.innerHTML = biblioDiv.innerHTML;
-        }
-        popup.appendChild(citeDiv);
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
       });
-      return popup.innerHTML;
-    });
+    }
   }
 });
 </script>
