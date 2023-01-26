@@ -277,12 +277,12 @@ div.csl-indent {
 <p><span class="math display">\[
     \theta \leftarrow \theta + \eta \, \nabla_\theta J(\theta)
 \]</span></p>
-<p>The rest of this section basically presents methods allowing to estimate the policy gradient (REINFORCE, DPG) and to improve the sample complexity. See <a href="http://www.scholarpedia.org/article/Policy_gradient_methods" class="uri">http://www.scholarpedia.org/article/Policy_gradient_methods</a> for an more detailed overview of policy gradient methods, <a href="https://lilianweng.github.io/lil-log/2018/04/08/policy-gradient-algorithms.html" class="uri">https://lilianweng.github.io/lil-log/2018/04/08/policy-gradient-algorithms.html</a> and <a href="http://karpathy.github.io/2016/05/31/rl/" class="uri">http://karpathy.github.io/2016/05/31/rl/</a> for excellent tutorials from Lilian Weng and Andrej Karpathy. The article by <span class="citation" data-cites="Peters2008">Peters and Schaal (<a href="#ref-Peters2008" role="doc-biblioref">2008</a>)</span> is also a good overview of policy gradient methods.</p>
+<p>The rest of this section basically presents methods allowing to estimate the policy gradient (REINFORCE, DPG) and to improve the sample complexity. See <a href="http://www.scholarpedia.org/article/Policy_gradient_methods" class="uri">http://www.scholarpedia.org/article/Policy_gradient_methods</a> for an more detailed overview of policy gradient methods, <a href="https://lilianweng.github.io/lil-log/2018/04/08/policy-gradient-algorithms.html" class="uri">https://lilianweng.github.io/lil-log/2018/04/08/policy-gradient-algorithms.html</a> and <a href="http://karpathy.github.io/2016/05/31/rl/" class="uri">http://karpathy.github.io/2016/05/31/rl/</a> for excellent tutorials from Lilian Weng and Andrej Karpathy. The article by <span class="citation" data-cites="Peters2008">Peters and Schaal (<a href="references.html#ref-Peters2008" role="doc-biblioref">2008</a>)</span> is also a good overview of policy gradient methods.</p>
 <section id="reinforce" class="level2" data-number="4.1">
 <h2 data-number="4.1" class="anchored" data-anchor-id="reinforce"><span class="header-section-number">4.1</span> REINFORCE</h2>
 <section id="estimating-the-policy-gradient" class="level3" data-number="4.1.1">
 <h3 data-number="4.1.1" class="anchored" data-anchor-id="estimating-the-policy-gradient"><span class="header-section-number">4.1.1</span> Estimating the policy gradient</h3>
-<p><span class="citation" data-cites="Williams1992">Williams (<a href="#ref-Williams1992" role="doc-biblioref">1992</a>)</span> proposed a useful estimate of the policy gradient. Considering that the return <span class="math inline">\(R(\tau)\)</span> of a trajectory does not depend on the parameters <span class="math inline">\(\theta\)</span>, one can simplify the policy gradient in the following way:</p>
+<p><span class="citation" data-cites="Williams1992">Williams (<a href="references.html#ref-Williams1992" role="doc-biblioref">1992</a>)</span> proposed a useful estimate of the policy gradient. Considering that the return <span class="math inline">\(R(\tau)\)</span> of a trajectory does not depend on the parameters <span class="math inline">\(\theta\)</span>, one can simplify the policy gradient in the following way:</p>
 <p><span class="math display">\[
     \nabla_\theta J(\theta) = \nabla_\theta \int_\tau \rho_\theta (\tau) \, R(\tau) \, d\tau =  \int_\tau (\nabla_\theta \rho_\theta (\tau)) \, R(\tau) \, d\tau
 \]</span></p>
@@ -303,7 +303,7 @@ div.csl-indent {
     \nabla_\theta J(\theta) =  \mathbb{E}_{\tau \sim \rho_\theta}[ \nabla_\theta \log \rho_\theta (\tau) \, R(\tau) ]
 \]</span></p>
 <p>This means that we can obtain an estimate of the policy gradient by simply sampling different trajectories <span class="math inline">\(\{\tau_i\}\)</span> and averaging <span class="math inline">\(\nabla_\theta \log \rho_\theta (\tau_i) \, R(\tau_i)\)</span> (Monte-Carlo sampling).</p>
-<p>Let’s now look further at how the gradient of the log-likelihood of a trajectory <span class="math inline">\(\log \pi_\theta (\tau)\)</span> look like. Through its definition (<a href="#eq-likelihood_trajectory">Equation&nbsp;<span class="quarto-unresolved-ref">eq-likelihood_trajectory</span></a>), the log-likelihood of a trajectory is:</p>
+<p>Let’s now look further at how the gradient of the log-likelihood of a trajectory <span class="math inline">\(\log \pi_\theta (\tau)\)</span> look like. Through its definition (<a href="#eq-likelihood_trajectory">Equation&nbsp;<span>4.1</span></a>), the log-likelihood of a trajectory is:</p>
 <p><span id="eq-loglikelihood_trajectory"><span class="math display">\[
     \log \rho_\theta(\tau) = \log p_0 (s_0) + \sum_{t=0}^T \log \pi_\theta(s_t, a_t) + \sum_{t=0}^T \log p(s_{t+1} | s_t, a_t)
 \tag{4.2}\]</span></span></p>
@@ -316,7 +316,7 @@ div.csl-indent {
 <p><span class="math display">\[
     \nabla_\theta J(\theta) =  \mathbb{E}_{\tau \sim \rho_\theta}[\sum_{t=0}^T \nabla_\theta \log \pi_\theta(s_t, a_t) \, R(\tau) ] =  \mathbb{E}_{\tau \sim \rho_\theta}[ \sum_{t=0}^T \nabla_\theta \log \pi_\theta(s_t, a_t) \, (\sum_{t=0}^T \gamma^t r_{t+1})]
 \]</span></p>
-<p>Estimating the policy gradient now becomes straightforward using Monte-Carlo sampling. The resulting algorithm is called the <strong>REINFORCE</strong> algorithm <span class="citation" data-cites="Williams1992">(<a href="#ref-Williams1992" role="doc-biblioref">Williams, 1992</a>)</span>:</p>
+<p>Estimating the policy gradient now becomes straightforward using Monte-Carlo sampling. The resulting algorithm is called the <strong>REINFORCE</strong> algorithm <span class="citation" data-cites="Williams1992">(<a href="references.html#ref-Williams1992" role="doc-biblioref">Williams, 1992</a>)</span>:</p>
 <hr>
 <ul>
 <li><p>while not converged:</p>
@@ -384,7 +384,7 @@ div.csl-indent {
 </ul></li>
 </ul>
 <hr>
-<p>This obviously solves the reward scaling problem, and reduces the variance of the gradients. But are we allowed to do this (i.e.&nbsp;does it introduce a bias to the gradient)? <span class="citation" data-cites="Williams1992">Williams (<a href="#ref-Williams1992" role="doc-biblioref">1992</a>)</span> showed that subtracting a constant <span class="math inline">\(b\)</span> from the returns still leads to an unbiased estimate of the gradient:</p>
+<p>This obviously solves the reward scaling problem, and reduces the variance of the gradients. But are we allowed to do this (i.e.&nbsp;does it introduce a bias to the gradient)? <span class="citation" data-cites="Williams1992">Williams (<a href="references.html#ref-Williams1992" role="doc-biblioref">1992</a>)</span> showed that subtracting a constant <span class="math inline">\(b\)</span> from the returns still leads to an unbiased estimate of the gradient:</p>
 <p><span class="math display">\[
     \nabla_\theta J(\theta) =  \mathbb{E}_{\tau \sim \rho_\theta}[\nabla_\theta \log \rho_\theta (\tau) \, (R(\tau) -b) ]
 \]</span></p>
@@ -392,7 +392,7 @@ div.csl-indent {
 <p><span class="math display">\[
     \mathbb{E}_{\tau \sim \rho_\theta}[\nabla_\theta \log \rho_\theta (\tau) \, b ] = \int_\tau \rho_\theta (\tau) \nabla_\theta \log \rho_\theta (\tau) \, b \, d\tau = \int_\tau \nabla_\theta  \rho_\theta (\tau) \, b \, d\tau = b \, \nabla_\theta \int_\tau \rho_\theta (\tau) \, d\tau =  b \, \nabla_\theta 1 = 0
 \]</span></p>
-<p>As long as the constant <span class="math inline">\(b\)</span> does not depend on <span class="math inline">\(\theta\)</span>, the estimator is unbiased. The resulting algorithm is called <strong>REINFORCE with baseline</strong>. <span class="citation" data-cites="Williams1992">Williams (<a href="#ref-Williams1992" role="doc-biblioref">1992</a>)</span> has actually showed that the best baseline (the one which also reduces the variance) is the mean return weighted by the square of the gradient of the log-likelihood:</p>
+<p>As long as the constant <span class="math inline">\(b\)</span> does not depend on <span class="math inline">\(\theta\)</span>, the estimator is unbiased. The resulting algorithm is called <strong>REINFORCE with baseline</strong>. <span class="citation" data-cites="Williams1992">Williams (<a href="references.html#ref-Williams1992" role="doc-biblioref">1992</a>)</span> has actually showed that the best baseline (the one which also reduces the variance) is the mean return weighted by the square of the gradient of the log-likelihood:</p>
 <p><span class="math display">\[
     b = \frac{\mathbb{E}_{\tau \sim \rho_\theta}[(\nabla_\theta \log \rho_\theta (\tau))^2 \, R(\tau)]}{\mathbb{E}_{\tau \sim \rho_\theta}[(\nabla_\theta \log \rho_\theta (\tau))^2]}
 \]</span></p>
@@ -418,23 +418,23 @@ div.csl-indent {
 <p><span class="math display">\[
 \nabla_\theta J(\theta) \approx \frac{1}{N} \sum_{i=1}^N \sum_{t=0}^T \nabla_\theta \log \pi_\theta(s_t, a_t) \, \hat{Q}(s_t, a_t)
 \]</span></p>
-<p><span class="citation" data-cites="Sutton1999">Sutton et al. (<a href="#ref-Sutton1999" role="doc-biblioref">1999</a>)</span> showed that the policy gradient can be estimated by replacing the return of the sampled trajectory with the Q-value of each action, what leads to the <strong>policy gradient theorem</strong> (<a href="#eq-policygradienttheorem">Equation&nbsp;<span class="quarto-unresolved-ref">eq-policygradienttheorem</span></a>):</p>
+<p><span class="citation" data-cites="Sutton1999">Sutton et al. (<a href="references.html#ref-Sutton1999" role="doc-biblioref">1999</a>)</span> showed that the policy gradient can be estimated by replacing the return of the sampled trajectory with the Q-value of each action, what leads to the <strong>policy gradient theorem</strong> (<a href="#eq-policygradienttheorem">Equation&nbsp;<span>4.4</span></a>):</p>
 <p><span id="eq-policygradienttheorem"><span class="math display">\[
     \nabla_\theta J(\theta) =  \mathbb{E}_{s \sim \rho_\theta, a \sim \pi_\theta}[\nabla_\theta \log \pi_\theta(s, a) \, Q^{\pi_\theta}(s, a)]
 \tag{4.4}\]</span></span></p>
 <p>where <span class="math inline">\(\rho_\theta\)</span> is the distribution of states reachable under the policy <span class="math inline">\(\pi_\theta\)</span>. Because the actual return <span class="math inline">\(R(\tau)\)</span> is replaced by its expectation <span class="math inline">\(Q^{\pi_\theta}(s, a)\)</span>, the policy gradient is now a mathematical expectation over <strong>single transitions</strong> instead of complete trajectories, allowing <strong>bootstrapping</strong> as in temporal difference methods.</p>
 <p>One clearly sees that REINFORCE is actually a special case of the policy gradient theorem, where the Q-value of an action replaces the return obtained during the corresponding trajectory.</p>
-<p>The problem is of course that the true Q-value of the actions is as unknown as the policy. However, <span class="citation" data-cites="Sutton1999">Sutton et al. (<a href="#ref-Sutton1999" role="doc-biblioref">1999</a>)</span> showed that it is possible to estimate the Q-values with a function approximator <span class="math inline">\(Q_\varphi(s, a)\)</span> with parameters <span class="math inline">\(\varphi\)</span> and obtain an unbiased estimation:</p>
+<p>The problem is of course that the true Q-value of the actions is as unknown as the policy. However, <span class="citation" data-cites="Sutton1999">Sutton et al. (<a href="references.html#ref-Sutton1999" role="doc-biblioref">1999</a>)</span> showed that it is possible to estimate the Q-values with a function approximator <span class="math inline">\(Q_\varphi(s, a)\)</span> with parameters <span class="math inline">\(\varphi\)</span> and obtain an unbiased estimation:</p>
 <p><span id="eq-policygradienttheoremapprox"><span class="math display">\[
     \nabla_\theta J(\theta) =  \mathbb{E}_{s \sim \rho_\theta, a \sim \pi_\theta}[\nabla_\theta \log \pi_\theta(s, a) \, Q_\varphi(s, a))]
 \tag{4.5}\]</span></span></p>
 <p>Formally, the Q-value approximator must respect the Compatible Function Approximation Theorem, which states that the value approximator must be compatible with the policy (<span class="math inline">\(\nabla_\varphi Q_\varphi(s, a) = \nabla_\theta \log \pi_\theta(s, a)\)</span>) and minimize the mean-square error with the true Q-values <span class="math inline">\(\mathbb{E}_{s \sim \rho^\pi, a \sim \pi_\theta} [(Q^{\pi_\theta}(s, a) - Q_\varphi(s, a))^2]\)</span>. In the algorithms presented in this section, these conditions are either met or neglected.</p>
 <p>The resulting algorithm belongs to the <strong>actor-critic</strong> class, in the sense that:</p>
 <ul>
-<li>The <strong>actor</strong> <span class="math inline">\(\pi_\theta(s, a)\)</span> learns to approximate the policy by maximizing <a href="#eq-policygradienttheoremapprox">Equation&nbsp;<span class="quarto-unresolved-ref">eq-policygradienttheoremapprox</span></a>.</li>
+<li>The <strong>actor</strong> <span class="math inline">\(\pi_\theta(s, a)\)</span> learns to approximate the policy by maximizing <a href="#eq-policygradienttheoremapprox">Equation&nbsp;<span>4.5</span></a>.</li>
 <li>The <strong>critic</strong> <span class="math inline">\(Q_\varphi(s, a)\)</span> learns to estimate the policy by minimizing the mse with the true Q-values.</li>
 </ul>
-<p><a href="#fig-actorcriticpolicy">Figure&nbsp;<span class="quarto-unresolved-ref">fig-actorcriticpolicy</span></a> shows the architecture of the algorithm. The only problem left is to provide the critic with the true Q-values.</p>
+<p><a href="#fig-actorcriticpolicy">Figure&nbsp;<span>4.2</span></a> shows the architecture of the algorithm. The only problem left is to provide the critic with the true Q-values.</p>
 <div id="fig-actorcriticpolicy" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="img/policygradient.png" class="img-fluid figure-img" style="width:80.0%"></p>
@@ -449,7 +449,7 @@ div.csl-indent {
 </ul>
 
 
-<div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography">
+<div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography" style="display: none">
 <div id="ref-Peters2008" class="csl-entry" role="doc-biblioentry">
 Peters, J., and Schaal, S. (2008). Reinforcement learning of motor skills with policy gradients. <em>Neural Networks</em> 21, 682–697. doi:<a href="https://doi.org/10.1016/j.neunet.2008.02.003">10.1016/j.neunet.2008.02.003</a>.
 </div>
