@@ -1,0 +1,17 @@
+---
+title: Preface
+---
+
+The goal of this webbook is to keep track of the state-of-the-art in deep reinforcement learning. It starts with basics in reinforcement learning and deep learning to introduce the notations. It then covers different classes of deep RL methods, value-based or policy-based, model-free or model-based, etc. Later sections focus on more advanced topics.
+
+This document is meant to stay *work in progress* forever, as new algorithms will be added as they are published. Feel free to comment, correct, suggest, pull request by writing to <julien.vitay@gmail.com>.
+
+Some figures are taken from the original publication ("Source:" in the caption). Their copyright stays to the respective authors, naturally. The rest is my own work and can be distributed, reproduced and modified under CC-BY-SA-NC 4.0.
+
+:::{.callout-tip}
+## License
+
+![](https://mirrors.creativecommons.org/presskit/buttons/88x31/svg/by-nc-sa.svg)
+
+Except where otherwise noted, this work is licensed under a [Creative Commons Attribution-Non Commercial-ShareAlike 4.0 International License](http://creativecommons.org/licenses/by-nc-sa/4.0).
+:::

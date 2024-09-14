@@ -1,0 +1,10 @@
+# Introduction {-}
+
+Deep reinforcement learning (deep RL) is the integration of deep learning methods, classically used in supervised or unsupervised learning contexts, with reinforcement learning (RL), a well-studied adaptive control method used in problems with delayed and partial feedback.
+
+The book "Reinforcement learning: An introduction"  (1st and 2nd editions) [@Sutton1998;@Sutton2017] contains everything you need to know about the basics of RL. The second edition can be found here:
+
+<http://incompleteideas.net/book/the-book-2nd.html>
+
+When do you need RL?
+

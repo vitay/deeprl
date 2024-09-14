@@ -1,0 +1,67 @@
+project:
+  type: book
+  output-dir: ./docs
+
+book:
+  title: "Deep Reinforcement Learning"
+  author:
+    - name: Dr. Julien Vitay 
+      email: julien.vitay@gmail.com
+      url: https://julien-vitay.net
+      orcid: 0000-0001-5229-2349
+  
+  page-navigation: true
+  bread-crumbs: false
+
+  sidebar:
+    style: docked
+    background: white
+
+  page-footer:
+    center: |
+      [Creative Commons BY-NC-SA 4.0](http://creativecommons.org/licenses/by-nc-sa/4.0). Author [Julien Vitay](mailto:julien.vitay@gmail.com)
+
+  chapters:
+    - index.qmd
+    - src/0-Introduction.qmd
+    - part: src/1-TabularRL.qmd
+      chapters:
+        - src/1.1-Bandits.qmd
+        - src/1.2-MDP.qmd
+        - src/1.3-DP.qmd
+        - src/1.4-MC.qmd
+        - src/1.5-TD.qmd
+    - part: src/2-DeepRL.qmd
+      chapters:
+        - src/2.1-FunctionApproximation.qmd
+        - src/2.2-DeepNetworks.qmd
+        - src/2.3-DQN.qmd
+    - part: "Policy-gradient methods"
+      chapters:
+        - src/3.1-PolicyGradient.qmd
+        - src/3.2-ActorCritic.qmd
+        - src/3.3-ImportanceSampling.qmd
+        - src/3.4-DPG.qmd
+        - src/3.5-NaturalGradient.qmd
+        - src/3.6-EntropyRL.qmd
+        - src/3.7-DistributionalRL.qmd
+        - src/3.8-OtherPolicyGradient.qmd
+    - src/5-ModelBased.qmd
+    - src/references.qmd
+
+bibliography: 
+    - ReinforcementLearning.bib
+    - DeepLearning.bib
+csl: assets/frontiers.csl
+
+format:
+  html:
+    theme: [sandstone, "assets/webpage.scss"]
+    #page-layout: full
+    number-sections: false
+    toc: true
+    smooth-scroll: true
+    html-math-method: katex
+    highlight-style: github
+    code-line-numbers: false
+
