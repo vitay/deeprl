@@ -50,7 +50,7 @@ div.csl-indent {
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
 <link href="../src/1.3-DP.html" rel="next">
-<link href="../src/1.1-Bandits.html" rel="prev">
+<link href="../src/0-Introduction.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -135,7 +135,7 @@ window.Quarto = {
 
 </head>
 
-<body class="nav-sidebar docked">
+<body class="nav-sidebar floating">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -156,10 +156,13 @@ window.Quarto = {
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="../">Deep Reinforcement Learning</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/vitay/deeprl" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-github"></i></a>
+</div>
     </div>
       </div>
         <div class="mt-2 flex-shrink-0 align-items-center">
@@ -182,18 +185,13 @@ window.Quarto = {
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="../src/1-TabularRL.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Tabular RL</span></a>
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text"><strong>Basic RL</strong></span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../src/1.1-Bandits.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Bandits</span></a>
-  </div>
-</li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../src/1.2-MDP.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">Markov Decision Process</span></a>
@@ -218,8 +216,8 @@ window.Quarto = {
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="../src/2-DeepRL.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Value-based Deep RL</span></a>
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text"><strong>Value-based deep RL</strong></span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -245,7 +243,7 @@ window.Quarto = {
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
- <span class="menu-text">Policy-gradient methods</span></a>
+ <span class="menu-text"><strong>Policy-gradient methods</strong></span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -295,7 +293,7 @@ window.Quarto = {
   </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/5-ModelBased.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Model-based RL</span></a>
+  <a href="../src/4-ModelBased.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Model-based RL</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -341,14 +339,14 @@ window.Quarto = {
 </header>
 
 
-<p>RL methods apply to problems where an agent interacts with an environment in discrete time steps (<a href="#fig-agentenv" class="quarto-xref">Figure&nbsp;<span>3.1</span></a>). At time <span class="math inline">t</span>, the agent is in state <span class="math inline">s_t</span> and decides to perform an action <span class="math inline">a_t</span>. At the next time step, it arrives in the state <span class="math inline">s_{t+1}</span> and obtains the reward <span class="math inline">r_{t+1}</span>. The goal of the agent is to maximize the reward obtained on the long term. The textbook by <span class="citation" data-cites="Sutton1998">Sutton and Barto (<a href="references.html#ref-Sutton1998" role="doc-biblioref">1998</a>)</span> (updated in <span class="citation" data-cites="Sutton2017">Sutton and Barto (<a href="references.html#ref-Sutton2017" role="doc-biblioref">2017</a>)</span>) defines the field extensively.</p>
+<p>RL methods apply to problems where an agent interacts with an environment in discrete time steps (<a href="#fig-agentenv" class="quarto-xref">Figure&nbsp;<span>2.1</span></a>). At time <span class="math inline">t</span>, the agent is in state <span class="math inline">s_t</span> and decides to perform an action <span class="math inline">a_t</span>. At the next time step, it arrives in the state <span class="math inline">s_{t+1}</span> and obtains the reward <span class="math inline">r_{t+1}</span>. The goal of the agent is to maximize the reward obtained on the long term. The textbook by <span class="citation" data-cites="Sutton1998">Sutton and Barto (<a href="references.html#ref-Sutton1998" role="doc-biblioref">1998</a>)</span> (updated in <span class="citation" data-cites="Sutton2017">Sutton and Barto (<a href="references.html#ref-Sutton2017" role="doc-biblioref">2017</a>)</span>) defines the field extensively.</p>
 <div id="fig-agentenv" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-agentenv-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="img/rl-agent.jpg" class="img-fluid figure-img" style="width:50.0%">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-agentenv-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;3.1: Interaction between an agent and its environment. Taken from <span class="citation" data-cites="Sutton1998">Sutton and Barto (<a href="references.html#ref-Sutton1998" role="doc-biblioref">1998</a>)</span>.
+Figure&nbsp;2.1: Interaction between an agent and its environment. Taken from <span class="citation" data-cites="Sutton1998">Sutton and Barto (<a href="references.html#ref-Sutton1998" role="doc-biblioref">1998</a>)</span>.
 </figcaption>
 </figure>
 </div>
@@ -398,18 +396,18 @@ Figure&nbsp;3.1: Interaction between an agent and its environment. Taken from <s
 <p>The V- and Q-values are obviously linked with each other. The value of state depend on the value of the actions possible in that state, modulated by the probability that an action will be taken (i.e.&nbsp;the policy):</p>
 <p><span id="eq-v-value"><span class="math display">
     V^{\pi}(s) = \sum_{a \in \mathcal{A}} \pi(s, a) \, Q^\pi(s,a)
-\tag{3.1}</span></span></p>
+\tag{2.1}</span></span></p>
 <p>For a deterministic policy (<span class="math inline">\pi(s, a) = 1</span> if <span class="math inline">a=a^*</span> and <span class="math inline">0</span> otherwise), the value of a state is the same as the value of the action that will be systematically taken.</p>
 <p>Noting that:</p>
 <p><span id="eq-return"><span class="math display">
     R_t = r_{t+1} + \gamma R_{t+1}
-\tag{3.2}</span></span></p>
+\tag{2.2}</span></span></p>
 <p>i.e.&nbsp;that the return at time <span class="math inline">t</span> is the sum of the immediate reward received during the next transition <span class="math inline">r_{t+1}</span> and of the return at the next state (<span class="math inline">R_{t+1}</span>, discounted by <span class="math inline">\gamma</span>), we can also write:</p>
 <p><span id="eq-q-value"><span class="math display">
     Q^{\pi}(s, a) = \sum_{s' \in \mathcal{S}} p(s'|s, a) [r(s, a, s') + \gamma \, V^\pi(s')]
-\tag{3.3}</span></span></p>
+\tag{2.3}</span></span></p>
 <p>The value of an action depends on which state you arrive in (<span class="math inline">s'</span>), with which probability (<span class="math inline">p(s'|s, a)</span>) this transition occurs, how much reward you receive immediately (<span class="math inline">r(s, a, s')</span>) and how much you will receive later (summarized by <span class="math inline">V^\pi(s')</span>).</p>
-<p>Putting together <a href="#eq-v-value" class="quarto-xref">Equation&nbsp;<span>3.1</span></a> and <a href="#eq-q-value" class="quarto-xref">Equation&nbsp;<span>3.3</span></a>, we obtain the <strong>Bellman equations</strong>:</p>
+<p>Putting together <a href="#eq-v-value" class="quarto-xref">Equation&nbsp;<span>2.1</span></a> and <a href="#eq-q-value" class="quarto-xref">Equation&nbsp;<span>2.3</span></a>, we obtain the <strong>Bellman equations</strong>:</p>
 <p><span class="math display">
     V^{\pi}(s) = \sum_{a \in \mathcal{A}} \pi(s, a) \, \sum_{s' \in \mathcal{S}} p(s'|s, a) [r(s, a, s') + \gamma \, V^\pi(s')]
 </span></p>
@@ -423,7 +421,7 @@ Figure&nbsp;3.1: Interaction between an agent and its environment. Taken from <s
 <img src="img/backup.png" class="img-fluid figure-img" style="width:50.0%">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-backup-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;3.2: Backup diagrams corresponding to the Bellman equations. Taken from <span class="citation" data-cites="Sutton1998">Sutton and Barto (<a href="references.html#ref-Sutton1998" role="doc-biblioref">1998</a>)</span>.
+Figure&nbsp;2.2: Backup diagrams corresponding to the Bellman equations. Taken from <span class="citation" data-cites="Sutton1998">Sutton and Barto (<a href="references.html#ref-Sutton1998" role="doc-biblioref">1998</a>)</span>.
 </figcaption>
 </figure>
 </div>
@@ -862,8 +860,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../src/1.1-Bandits.html" class="pagination-link" aria-label="Bandits">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">Bandits</span></span>
+      <a href="../src/0-Introduction.html" class="pagination-link" aria-label="Introduction">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Introduction</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">

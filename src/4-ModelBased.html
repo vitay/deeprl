@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Value-based Deep RL – Deep Reinforcement Learning</title>
+<title>Model-based RL – Deep Reinforcement Learning</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,7 +20,26 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -30,8 +49,8 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../src/2.1-FunctionApproximation.html" rel="next">
-<link href="../src/1.5-TD.html" rel="prev">
+<link href="../src/references.html" rel="next">
+<link href="../src/3.8-OtherPolicyGradient.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -73,7 +92,7 @@ ul.task-list li input[type="checkbox"] {
 
 </head>
 
-<body class="nav-sidebar docked">
+<body class="nav-sidebar floating">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -83,7 +102,7 @@ ul.task-list li input[type="checkbox"] {
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
         <a class="flex-grow-1 no-decor" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-          <h1 class="quarto-secondary-nav-title">Value-based Deep RL</h1>
+          <h1 class="quarto-secondary-nav-title"><span class="chapter-title">Model-based RL</span></h1>
         </a>     
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
         <i class="bi bi-search"></i>
@@ -94,10 +113,13 @@ ul.task-list li input[type="checkbox"] {
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="../">Deep Reinforcement Learning</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/vitay/deeprl" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-github"></i></a>
+</div>
     </div>
       </div>
         <div class="mt-2 flex-shrink-0 align-items-center">
@@ -120,18 +142,13 @@ ul.task-list li input[type="checkbox"] {
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="../src/1-TabularRL.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Tabular RL</span></a>
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text"><strong>Basic RL</strong></span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../src/1.1-Bandits.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Bandits</span></a>
-  </div>
-</li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../src/1.2-MDP.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Markov Decision Process</span></a>
@@ -156,8 +173,8 @@ ul.task-list li input[type="checkbox"] {
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="../src/2-DeepRL.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">Value-based Deep RL</span></a>
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text"><strong>Value-based deep RL</strong></span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -183,7 +200,7 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
- <span class="menu-text">Policy-gradient methods</span></a>
+ <span class="menu-text"><strong>Policy-gradient methods</strong></span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -233,7 +250,7 @@ ul.task-list li input[type="checkbox"] {
   </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/5-ModelBased.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Model-based RL</span></a>
+  <a href="../src/4-ModelBased.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">Model-based RL</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -247,15 +264,22 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#dyna-q" id="toc-dyna-q" class="nav-link active" data-scroll-target="#dyna-q">Dyna-Q</a></li>
+  <li><a href="#unsorted-references" id="toc-unsorted-references" class="nav-link" data-scroll-target="#unsorted-references">Unsorted references</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title d-none d-lg-block">Value-based Deep RL</h1>
+<h1 class="title d-none d-lg-block"><span class="chapter-title">Model-based RL</span></h1>
 </div>
 
 
@@ -272,9 +296,86 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>TODO</p>
+<p><strong>work in progress</strong></p>
+<p>Model-free: The future is cached into values.</p>
+<p>Two problems of model-free:</p>
+<ol type="1">
+<li>Needs a lot of samples</li>
+<li>Cannot adapt to novel tasks in the same environment.</li>
+</ol>
+<p>Model-based uses an internal model to reason about the future (imagination).</p>
+<p>Works only when the model is fixed (AlphaGo) or easy to learn (symbolic, low-dimensional). Not robust yet against model imperfection.</p>
+<section id="dyna-q" class="level2">
+<h2 class="anchored" data-anchor-id="dyna-q">Dyna-Q</h2>
+<p><span class="citation" data-cites="Sutton1990a">(<a href="references.html#ref-Sutton1990a" role="doc-biblioref">Sutton and Barto, 1990</a>)</span></p>
+<p><a href="https://medium.com/@ranko.mosic/online-planning-agent-dyna-q-algorithm-and-dyna-maze-example-sutton-and-barto-2016-7ad84a6dc52b" class="uri">https://medium.com/@ranko.mosic/online-planning-agent-dyna-q-algorithm-and-dyna-maze-example-sutton-and-barto-2016-7ad84a6dc52b</a></p>
+</section>
+<section id="unsorted-references" class="level2">
+<h2 class="anchored" data-anchor-id="unsorted-references">Unsorted references</h2>
+<p>Embed to Control: A Locally Linear Latent Dynamics Model for Control from Raw Images <span class="citation" data-cites="Watter2015">(<a href="references.html#ref-Watter2015" role="doc-biblioref">Watter et al., 2015</a>)</span></p>
+<p>Efficient Model-Based Deep Reinforcement Learning with Variational State Tabulation <span class="citation" data-cites="Corneil2018">(<a href="references.html#ref-Corneil2018" role="doc-biblioref">Corneil et al., 2018</a>)</span></p>
+<p>Model-Based Value Estimation for Efficient Model-Free Reinforcement Learning <span class="citation" data-cites="Feinberg2018">(<a href="references.html#ref-Feinberg2018" role="doc-biblioref">Feinberg et al., 2018</a>)</span></p>
+<p>Imagination-Augmented Agents for Deep Reinforcement Learning <span class="citation" data-cites="Weber2017">(<a href="references.html#ref-Weber2017" role="doc-biblioref">Weber et al., 2017</a>)</span>.</p>
+<p>Temporal Difference Model TDM <span class="citation" data-cites="Pong2018">(<a href="references.html#ref-Pong2018" role="doc-biblioref">Pong et al., 2018</a>)</span>: <a href="http://bair.berkeley.edu/blog/2018/04/26/tdm/" class="uri">http://bair.berkeley.edu/blog/2018/04/26/tdm/</a></p>
+<p>Learning to Adapt: Meta-Learning for Model-Based Control, <span class="citation" data-cites="Clavera2018">(<a href="references.html#ref-Clavera2018" role="doc-biblioref">Clavera et al., 2018</a>)</span></p>
+<p>The Predictron: End-To-End Learning and Planning <span class="citation" data-cites="Silver2016a">(<a href="references.html#ref-Silver2016a" role="doc-biblioref">Silver et al., 2016</a>)</span></p>
+<p>Model-Based Planning with Discrete and Continuous Actions <span class="citation" data-cites="Henaff2017">(<a href="references.html#ref-Henaff2017" role="doc-biblioref">Henaff et al., 2017</a>)</span></p>
+<p>Schema Networks: Zero-shot Transfer with a Generative Causal Model of Intuitive Physics <span class="citation" data-cites="Kansky2017">(<a href="references.html#ref-Kansky2017" role="doc-biblioref">Kansky et al., 2017</a>)</span></p>
+<p>Universal Planning Networks <span class="citation" data-cites="Srinivas2018">(<a href="references.html#ref-Srinivas2018" role="doc-biblioref">Srinivas et al., 2018</a>)</span></p>
+<p>World models <a href="https://worldmodels.github.io/" class="uri">https://worldmodels.github.io/</a> <span class="citation" data-cites="Ha2018">(<a href="references.html#ref-Ha2018" role="doc-biblioref">Ha and Schmidhuber, 2018</a>)</span></p>
+<p>Recall Traces: Backtracking Models for Efficient Reinforcement Learning <span class="citation" data-cites="Goyal2018">(<a href="references.html#ref-Goyal2018" role="doc-biblioref">Goyal et al., 2018</a>)</span></p>
+<p>Deep Dyna-Q: Integrating Planning for Task-Completion Dialogue Policy Learning <span class="citation" data-cites="Peng2018">(<a href="references.html#ref-Peng2018" role="doc-biblioref">Peng et al., 2018</a>)</span></p>
+<p>Q-map: a Convolutional Approach for Goal-Oriented Reinforcement Learning <span class="citation" data-cites="Pardo2018">(<a href="references.html#ref-Pardo2018" role="doc-biblioref">Pardo et al., 2018</a>)</span></p>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
+<div id="ref-Clavera2018" class="csl-entry" role="listitem">
+Clavera, I., Nagabandi, A., Fearing, R. S., Abbeel, P., Levine, S., and Finn, C. (2018). Learning to <span>Adapt</span>: <span>Meta-Learning</span> for <span>Model-Based Control</span>. Available at: <a href="http://arxiv.org/abs/1803.11347">http://arxiv.org/abs/1803.11347</a>.
+</div>
+<div id="ref-Corneil2018" class="csl-entry" role="listitem">
+Corneil, D., Gerstner, W., and Brea, J. (2018). Efficient <span>Model-Based Deep Reinforcement Learning</span> with <span>Variational State Tabulation</span>. Available at: <a href="http://arxiv.org/abs/1802.04325">http://arxiv.org/abs/1802.04325</a>.
+</div>
+<div id="ref-Feinberg2018" class="csl-entry" role="listitem">
+Feinberg, V., Wan, A., Stoica, I., Jordan, M. I., Gonzalez, J. E., and Levine, S. (2018). Model-<span>Based Value Estimation</span> for <span>Efficient Model-Free Reinforcement Learning</span>. Available at: <a href="http://arxiv.org/abs/1803.00101">http://arxiv.org/abs/1803.00101</a>.
+</div>
+<div id="ref-Goyal2018" class="csl-entry" role="listitem">
+Goyal, A., Brakel, P., Fedus, W., Lillicrap, T., Levine, S., Larochelle, H., et al. (2018). Recall <span>Traces</span>: <span>Backtracking Models</span> for <span>Efficient Reinforcement Learning</span>. Available at: <a href="http://arxiv.org/abs/1804.00379">http://arxiv.org/abs/1804.00379</a>.
+</div>
+<div id="ref-Ha2018" class="csl-entry" role="listitem">
+Ha, D., and Schmidhuber, J. (2018). World <span>Models</span>. doi:<a href="https://doi.org/10.5281/zenodo.1207631">10.5281/zenodo.1207631</a>.
+</div>
+<div id="ref-Henaff2017" class="csl-entry" role="listitem">
+Henaff, M., Whitney, W. F., and LeCun, Y. (2017). Model-<span>Based Planning</span> with <span>Discrete</span> and <span>Continuous Actions</span>. Available at: <a href="http://arxiv.org/abs/1705.07177">http://arxiv.org/abs/1705.07177</a>.
+</div>
+<div id="ref-Kansky2017" class="csl-entry" role="listitem">
+Kansky, K., Silver, T., Mély, D. A., Eldawy, M., Lázaro-Gredilla, M., Lou, X., et al. (2017). Schema <span>Networks</span>: <span class="nocase">Zero-shot Transfer</span> with a <span>Generative Causal Model</span> of <span>Intuitive Physics</span>. Available at: <a href="http://arxiv.org/abs/1706.04317">http://arxiv.org/abs/1706.04317</a> [Accessed January 10, 2019].
+</div>
+<div id="ref-Pardo2018" class="csl-entry" role="listitem">
+Pardo, F., Levdik, V., and Kormushev, P. (2018). Q-map: A <span>Convolutional Approach</span> for <span>Goal-Oriented Reinforcement Learning</span>. Available at: <a href="http://arxiv.org/abs/1810.02927">http://arxiv.org/abs/1810.02927</a>.
+</div>
+<div id="ref-Peng2018" class="csl-entry" role="listitem">
+Peng, B., Li, X., Gao, J., Liu, J., Wong, K.-F., and Su, S.-Y. (2018). Deep <span>Dyna-Q</span>: <span>Integrating Planning</span> for <span>Task-Completion Dialogue Policy Learning</span>. Available at: <a href="http://arxiv.org/abs/1801.06176">http://arxiv.org/abs/1801.06176</a>.
+</div>
+<div id="ref-Pong2018" class="csl-entry" role="listitem">
+Pong, V., Gu, S., Dalal, M., and Levine, S. (2018). Temporal <span>Difference Models</span>: <span>Model-Free Deep RL</span> for <span>Model-Based Control</span>. Available at: <a href="http://arxiv.org/abs/1802.09081">http://arxiv.org/abs/1802.09081</a>.
+</div>
+<div id="ref-Silver2016a" class="csl-entry" role="listitem">
+Silver, D., van Hasselt, H., Hessel, M., Schaul, T., Guez, A., Harley, T., et al. (2016). The <span>Predictron</span>: <span>End-To-End Learning</span> and <span>Planning</span>. Available at: <a href="http://arxiv.org/abs/1612.08810">http://arxiv.org/abs/1612.08810</a>.
+</div>
+<div id="ref-Srinivas2018" class="csl-entry" role="listitem">
+Srinivas, A., Jabri, A., Abbeel, P., Levine, S., and Finn, C. (2018). Universal <span>Planning Networks</span>. Available at: <a href="http://arxiv.org/abs/1804.00645">http://arxiv.org/abs/1804.00645</a>.
+</div>
+<div id="ref-Sutton1990a" class="csl-entry" role="listitem">
+Sutton, R. S., and Barto, A. G. (1990). <span>“Time-derivative models of <span>Pavlovian</span> reinforcement,”</span> in <em>Learning and <span>Computational Neuroscience</span>: <span>Foundations</span> of <span>Adaptive Networks</span></em> (MIT Press), 497–537. Available at: <a href="http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.81.98">http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.81.98</a>.
+</div>
+<div id="ref-Watter2015" class="csl-entry" role="listitem">
+Watter, M., Springenberg, J. T., Boedecker, J., and Riedmiller, M. (2015). Embed to <span>Control</span>: <span>A Locally Linear Latent Dynamics Model</span> for <span>Control</span> from <span>Raw Images</span>. Available at: <a href="https://arxiv.org/pdf/1506.07365.pdf">https://arxiv.org/pdf/1506.07365.pdf</a>.
+</div>
+<div id="ref-Weber2017" class="csl-entry" role="listitem">
+Weber, T., Racanière, S., Reichert, D. P., Buesing, L., Guez, A., Rezende, D. J., et al. (2017). Imagination-<span>Augmented Agents</span> for <span>Deep Reinforcement Learning</span>. Available at: <a href="http://arxiv.org/abs/1707.06203">http://arxiv.org/abs/1707.06203</a>.
+</div>
+</div>
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -699,13 +800,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../src/1.5-TD.html" class="pagination-link" aria-label="Temporal Difference algorithm">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">Temporal Difference algorithm</span></span>
+      <a href="../src/3.8-OtherPolicyGradient.html" class="pagination-link" aria-label="Miscellaneous model-free algorithm">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">Miscellaneous model-free algorithm</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../src/2.1-FunctionApproximation.html" class="pagination-link" aria-label="Function approximation">
-        <span class="nav-page-text"><span class="chapter-title">Function approximation</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../src/references.html" class="pagination-link" aria-label="References">
+        <span class="nav-page-text">References</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

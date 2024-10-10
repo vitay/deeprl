@@ -49,7 +49,7 @@ div.csl-indent {
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../src/1-TabularRL.html" rel="next">
+<link href="../src/1.2-MDP.html" rel="next">
 <link href="../index.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
@@ -92,7 +92,7 @@ div.csl-indent {
 
 </head>
 
-<body class="nav-sidebar docked">
+<body class="nav-sidebar floating">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -113,10 +113,13 @@ div.csl-indent {
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="../">Deep Reinforcement Learning</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/vitay/deeprl" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-github"></i></a>
+</div>
     </div>
       </div>
         <div class="mt-2 flex-shrink-0 align-items-center">
@@ -139,18 +142,13 @@ div.csl-indent {
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="../src/1-TabularRL.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Tabular RL</span></a>
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text"><strong>Basic RL</strong></span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../src/1.1-Bandits.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Bandits</span></a>
-  </div>
-</li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../src/1.2-MDP.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Markov Decision Process</span></a>
@@ -175,8 +173,8 @@ div.csl-indent {
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="../src/2-DeepRL.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Value-based Deep RL</span></a>
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text"><strong>Value-based deep RL</strong></span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -202,7 +200,7 @@ div.csl-indent {
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
- <span class="menu-text">Policy-gradient methods</span></a>
+ <span class="menu-text"><strong>Policy-gradient methods</strong></span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -252,7 +250,7 @@ div.csl-indent {
   </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/5-ModelBased.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Model-based RL</span></a>
+  <a href="../src/4-ModelBased.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Model-based RL</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -291,10 +289,28 @@ div.csl-indent {
 </header>
 
 
-<p>Deep reinforcement learning (deep RL) is the integration of deep learning methods, classically used in supervised or unsupervised learning contexts, with reinforcement learning (RL), a well-studied adaptive control method used in problems with delayed and partial feedback.</p>
+<p>Deep reinforcement learning (Deep RL) is the integration of deep learning methods, classically used in supervised or unsupervised learning contexts, to reinforcement learning (RL), a well-studied adaptive control framework used in problems with delayed and partial feedback.</p>
+<p><strong>Supervised learning</strong> trains a discriminative model (classification or regression) by utilising the correct answer (ground truth) in a training set to compute a prediction error. For neural networks, the prediction error (typically the difference between the ground truth and the predicted output) is used by the backpropagation algorithm to adapt the parameters of the model so that the prediction error is iteratively reduced.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="img/slulrl.png" class="img-fluid figure-img"></p>
+<figcaption>Three types of machine learning: Supervised learning uses a ground truth to comnpute a prediciton error that drives learning. Unsupervised learning extracts statistical properties from raw data. Reinforcement learning uses a reward signal from the environment to assess the correctness of an action.</figcaption>
+</figure>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="Sutton and Barto. Reinforcement learning: An introduction">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sutton and Barto. Reinforcement learning: An introduction
+</div>
+</div>
+<div class="callout-body-container callout-body">
 <p>The book “Reinforcement learning: An introduction” (1st and 2nd editions) <span class="citation" data-cites="Sutton1998 Sutton2017">(<a href="references.html#ref-Sutton1998" role="doc-biblioref">Sutton and Barto, 1998</a>, <a href="references.html#ref-Sutton2017" role="doc-biblioref">2017</a>)</span> contains everything you need to know about the basics of RL. The second edition can be found here:</p>
 <p><a href="http://incompleteideas.net/book/the-book-2nd.html" class="uri">http://incompleteideas.net/book/the-book-2nd.html</a></p>
-<p>When do you need RL?</p>
+</div>
+</div>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
@@ -734,8 +750,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../src/1-TabularRL.html" class="pagination-link" aria-label="Tabular RL">
-        <span class="nav-page-text">Tabular RL</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../src/1.2-MDP.html" class="pagination-link" aria-label="Markov Decision Process">
+        <span class="nav-page-text"><span class="chapter-title">Markov Decision Process</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

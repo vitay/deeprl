@@ -135,7 +135,7 @@ window.Quarto = {
 
 </head>
 
-<body class="nav-sidebar docked">
+<body class="nav-sidebar floating">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -156,10 +156,13 @@ window.Quarto = {
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="../">Deep Reinforcement Learning</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/vitay/deeprl" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-github"></i></a>
+</div>
     </div>
       </div>
         <div class="mt-2 flex-shrink-0 align-items-center">
@@ -182,18 +185,13 @@ window.Quarto = {
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="../src/1-TabularRL.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Tabular RL</span></a>
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text"><strong>Basic RL</strong></span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../src/1.1-Bandits.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Bandits</span></a>
-  </div>
-</li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../src/1.2-MDP.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Markov Decision Process</span></a>
@@ -218,8 +216,8 @@ window.Quarto = {
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="../src/2-DeepRL.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Value-based Deep RL</span></a>
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text"><strong>Value-based deep RL</strong></span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -245,7 +243,7 @@ window.Quarto = {
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
- <span class="menu-text">Policy-gradient methods</span></a>
+ <span class="menu-text"><strong>Policy-gradient methods</strong></span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -295,7 +293,7 @@ window.Quarto = {
   </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/5-ModelBased.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Model-based RL</span></a>
+  <a href="../src/4-ModelBased.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Model-based RL</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -371,9 +369,9 @@ window.Quarto = {
 </ul>
 <p><span id="eq-a2c"><span class="math display">
     \nabla_\theta J(\theta) =  \mathbb{E}_{s_t \sim \rho^\pi, a_t \sim \pi_\theta}[\nabla_\theta \log \pi_\theta(s_t, a_t) \, ( \sum_{k=0}^{n-1} \gamma^{k} \, r_{t+k+1} + \gamma^n \, V_\varphi(s_{t+n+1}) - V_\varphi(s_t))]
-\tag{11.1}</span></span></p>
+\tag{10.1}</span></span></p>
 <p>TD can be therefore be seen as a 1-step algorithm. For sparse rewards (mostly zero, +1 or -1 at the end of a game for example), this allows to update the <span class="math inline">n</span> last actions which lead to a win/loss, instead of only the last one in TD, speeding up learning. However, there is no need for finite episodes as in MC. In other words, n-step estimation ensures a trade-off between bias (wrong updates based on estimated values as in TD) and variance (variability of the obtained returns as in MC). An alternative to n-step updating is the use of <em>eligibility traces</em> (see <span class="citation" data-cites="Sutton1998">Sutton and Barto (<a href="references.html#ref-Sutton1998" role="doc-biblioref">1998</a>)</span>).</p>
-<p>A2C has an actor-critic architecture (<a href="#fig-a3c" class="quarto-xref">Figure&nbsp;<span>11.1</span></a>):</p>
+<p>A2C has an actor-critic architecture (<a href="#fig-a3c" class="quarto-xref">Figure&nbsp;<span>10.1</span></a>):</p>
 <ul>
 <li>The actor outputs the policy <span class="math inline">\pi_\theta</span> for a state <span class="math inline">s</span>, i.e.&nbsp;a vector of probabilities for each action.</li>
 <li>The critic outputs the value <span class="math inline">V_\varphi(s)</span> of a state <span class="math inline">s</span>.</li>
@@ -384,7 +382,7 @@ window.Quarto = {
 <img src="img/a3c.png" class="img-fluid figure-img" style="width:70.0%">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-a3c-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;11.1: Advantage actor-critic architecture.
+Figure&nbsp;10.1: Advantage actor-critic architecture.
 </figcaption>
 </figure>
 </div>
@@ -397,7 +395,7 @@ Figure&nbsp;11.1: Advantage actor-critic architecture.
     R_t = \sum_{k=0}^{n-1} \gamma^{k} \, r_{t+k+1} + \gamma^n \, V_\varphi(s_{t+n+1})
 </span></p>
 <ol start="3" type="1">
-<li>Update the actor using <a href="#eq-a2c" class="quarto-xref">Equation&nbsp;<span>11.1</span></a>.</li>
+<li>Update the actor using <a href="#eq-a2c" class="quarto-xref">Equation&nbsp;<span>10.1</span></a>.</li>
 </ol>
 <p><span class="math display">
     \nabla_\theta J(\theta) =  \sum_t \nabla_\theta \log \pi_\theta(s_t, a_t) \, (R_t - V_\varphi(s_t))
@@ -445,7 +443,7 @@ Figure&nbsp;11.1: Advantage actor-critic architecture.
 <hr>
 <p>Note that not all states are updated with the same horizon <span class="math inline">n</span>: the last action encountered in the sampled episode will only use the last reward and the value of the final state (TD learning), while the very first action will use the <span class="math inline">n</span> accumulated rewards. In practice it does not really matter, but the choice of the discount rate <span class="math inline">\gamma</span> will have a significant influence on the results.</p>
 <p>As many actor-critic methods, A2C performs online learning: a couple of transitions are explored using the current policy, which is immediately updated. As for value-based networks (e.g.&nbsp;DQN), the underlying NN will be affected by the correlated inputs and outputs: a single batch contains similar states and action (e.g.&nbsp;consecutive frames of a video game). The solution retained in A2C and A3C does not depend on an <em>experience replay memory</em> as DQN, but rather on the use of <strong>multiple parallel actors and learners</strong>.</p>
-<p>The idea is depicted on <a href="#fig-a3carchi" class="quarto-xref">Figure&nbsp;<span>11.2</span></a> (actually for A3C, but works with A2C). The actor and critic are stored in a global network. Multiple instances of the environment are created in different parallel threads (the <strong>workers</strong> or <strong>actor-learners</strong>). At the beginning of an episode, each worker receives a copy of the actor and critic weights from the global network. Each worker samples an episode (starting from different initial states, so the episodes are uncorrelated), computes the accumulated gradients and sends them back to the global network. The global networks merges the gradients and uses them to update the parameters of the policy and critic networks. The new parameters are send to each worker again, until it converges.</p>
+<p>The idea is depicted on <a href="#fig-a3carchi" class="quarto-xref">Figure&nbsp;<span>10.2</span></a> (actually for A3C, but works with A2C). The actor and critic are stored in a global network. Multiple instances of the environment are created in different parallel threads (the <strong>workers</strong> or <strong>actor-learners</strong>). At the beginning of an episode, each worker receives a copy of the actor and critic weights from the global network. Each worker samples an episode (starting from different initial states, so the episodes are uncorrelated), computes the accumulated gradients and sends them back to the global network. The global networks merges the gradients and uses them to update the parameters of the policy and critic networks. The new parameters are send to each worker again, until it converges.</p>
 <hr>
 <ul>
 <li>Initialize the actor <span class="math inline">\pi_\theta</span> and the critic <span class="math inline">V_\varphi</span> in the global network.</li>
@@ -473,7 +471,7 @@ Figure&nbsp;11.1: Advantage actor-critic architecture.
 <img src="img/A3C_architecture.png" class="img-fluid figure-img" style="width:70.0%">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-a3carchi-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;11.2: Architecture of A3C. A master network interacts asynchronously with several workers, each having a copy of the network and interacting with a separate environment. At the end of an episode, the accumulated gradients are sent back to the master network, and a new value of the parameters is sent to the workers. Taken from <a href="https://medium.com/emergent-future/simple-reinforcement-learning-with-tensorflow-part-8-asynchronous-actor-critic-agents-a3c-c88f72a5e9f2" class="uri">https://medium.com/emergent-future/simple-reinforcement-learning-with-tensorflow-part-8-asynchronous-actor-critic-agents-a3c-c88f72a5e9f2</a>.
+Figure&nbsp;10.2: Architecture of A3C. A master network interacts asynchronously with several workers, each having a copy of the network and interacting with a separate environment. At the end of an episode, the accumulated gradients are sent back to the master network, and a new value of the parameters is sent to the workers. Taken from <a href="https://medium.com/emergent-future/simple-reinforcement-learning-with-tensorflow-part-8-asynchronous-actor-critic-agents-a3c-c88f72a5e9f2" class="uri">https://medium.com/emergent-future/simple-reinforcement-learning-with-tensorflow-part-8-asynchronous-actor-critic-agents-a3c-c88f72a5e9f2</a>.
 </figcaption>
 </figure>
 </div>
@@ -502,7 +500,7 @@ Figure&nbsp;11.2: Architecture of A3C. A master network interacts asynchronously
 <p>In A3C, the authors added an <strong>entropy regularization</strong> term <span class="citation" data-cites="Williams1991">(<a href="references.html#ref-Williams1991" role="doc-biblioref">Williams and Peng, 1991</a>)</span> to the policy gradient update:</p>
 <p><span id="eq-a3c_entropy"><span class="math display">
     \nabla_\theta J(\theta) =  \mathbb{E}_{s_t \sim \rho^\pi, a_t \sim \pi_\theta}[\nabla_\theta \log \pi_\theta(s_t, a_t) \, ( R_t - V_\varphi(s_t)) + \beta \, \nabla_\theta H(\pi_\theta(s_t))]
-\tag{11.2}</span></span></p>
+\tag{10.2}</span></span></p>
 <p>For discrete actions, the entropy of the policy for a state <span class="math inline">s_t</span> is simple to compute: <span class="math inline">H(\pi_\theta(s_t)) = - \sum_a \pi_\theta(s_t, a) \, \log \pi_\theta(s_t, a)</span>. For continuous actions, replace the sum with an integral. It measures the “randomness” of the policy: if the policy is fully deterministic (the same action is systematically selected), the entropy is zero as it carries no information. If the policy is completely random, the entropy is maximal. Maximizing the entropy at the same time as the returns improves exploration by forcing the policy to be as non-deterministic as possible.</p>
 <p>The parameter <span class="math inline">\beta</span> controls the level of regularization: we do not want the entropy to dominate either, as a purely random policy does not bring much reward. If <span class="math inline">\beta</span> is chosen too low, the entropy won’t play a significant role in the optimization and we may obtain a suboptimal deterministic policy early during training as there was not enough exploration. If <span class="math inline">\beta</span> is too high, the policy will be random. Entropy regularization adds yet another hyperparameter to the problem, but can be really useful for convergence when adequately chosen.</p>
 </section>

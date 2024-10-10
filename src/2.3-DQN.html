@@ -135,7 +135,7 @@ window.Quarto = {
 
 </head>
 
-<body class="nav-sidebar docked">
+<body class="nav-sidebar floating">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -156,10 +156,13 @@ window.Quarto = {
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="../">Deep Reinforcement Learning</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/vitay/deeprl" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-github"></i></a>
+</div>
     </div>
       </div>
         <div class="mt-2 flex-shrink-0 align-items-center">
@@ -182,18 +185,13 @@ window.Quarto = {
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="../src/1-TabularRL.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Tabular RL</span></a>
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text"><strong>Basic RL</strong></span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../src/1.1-Bandits.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Bandits</span></a>
-  </div>
-</li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../src/1.2-MDP.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Markov Decision Process</span></a>
@@ -218,8 +216,8 @@ window.Quarto = {
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="../src/2-DeepRL.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Value-based Deep RL</span></a>
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text"><strong>Value-based deep RL</strong></span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -245,7 +243,7 @@ window.Quarto = {
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
- <span class="menu-text">Policy-gradient methods</span></a>
+ <span class="menu-text"><strong>Policy-gradient methods</strong></span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -295,7 +293,7 @@ window.Quarto = {
   </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/5-ModelBased.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Model-based RL</span></a>
+  <a href="../src/4-ModelBased.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Model-based RL</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -351,14 +349,14 @@ window.Quarto = {
 
 <section id="limitations-of-deep-neural-networks-for-function-approximation" class="level2">
 <h2 class="anchored" data-anchor-id="limitations-of-deep-neural-networks-for-function-approximation">Limitations of deep neural networks for function approximation</h2>
-<p>The goal of value-based deep RL is to approximate the Q-value of each possible state-action pair using a deep (convolutional) neural network. As shown on <a href="#fig-functionapprox" class="quarto-xref">Figure&nbsp;<span>9.1</span></a>, the network can either take a state-action pair as input and return a single output value, or take only the state as input and return the Q-value of all possible actions (only possible if the action space is discrete), In both cases, the goal is to learn estimates <span class="math inline">Q_\theta(s, a)</span> with a NN with parameters <span class="math inline">\theta</span>.</p>
+<p>The goal of value-based deep RL is to approximate the Q-value of each possible state-action pair using a deep (convolutional) neural network. As shown on <a href="#fig-functionapprox" class="quarto-xref">Figure&nbsp;<span>8.1</span></a>, the network can either take a state-action pair as input and return a single output value, or take only the state as input and return the Q-value of all possible actions (only possible if the action space is discrete), In both cases, the goal is to learn estimates <span class="math inline">Q_\theta(s, a)</span> with a NN with parameters <span class="math inline">\theta</span>.</p>
 <div id="fig-functionapprox" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-functionapprox-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="img/functionapprox.png" class="img-fluid figure-img" style="width:60.0%">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-functionapprox-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;9.1: Function approximators can either associate a state-action pair <span class="math inline">(s, a)</span> to its Q-value (left), or associate a state <span class="math inline">s</span> to the Q-values of all actions possible in that state (right).
+Figure&nbsp;8.1: Function approximators can either associate a state-action pair <span class="math inline">(s, a)</span> to its Q-value (left), or associate a state <span class="math inline">s</span> to the Q-values of all actions possible in that state (right).
 </figcaption>
 </figure>
 </div>
@@ -405,7 +403,7 @@ Figure&nbsp;9.1: Function approximators can either associate a state-action pair
 <img src="img/ERM.png" class="img-fluid figure-img" style="width:40.0%">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-erm-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;9.2: Experience replay memory. Interactions with the environment are stored in the ERM. Random minibatches are sampled from it to train the DQN value network.
+Figure&nbsp;8.2: Experience replay memory. Interactions with the environment are stored in the ERM. Random minibatches are sampled from it to train the DQN value network.
 </figcaption>
 </figure>
 </div>
@@ -447,14 +445,14 @@ Figure&nbsp;9.2: Experience replay memory. Interactions with the environment are
 </span></p>
 <p>If this rule is applied after each step with a very small rate <span class="math inline">\tau</span>, the target network will slowly track the learned network, but never be the same.</p>
 <p>These two facts make DQN extremely slow to learn: millions of transitions are needed to obtain a satisfying policy. This is called the <strong>sample complexity</strong>, i.e.&nbsp;the number of transitions needed to obtain a satisfying performance. DQN finds very good policies, but at the cost of a very long training time.</p>
-<p>DQN was initially applied to solve various Atari 2600 games. Video frames were used as observations and the set of possible discrete actions was limited (left/right/up/down, shoot, etc). The CNN used is depicted on <a href="#fig-dqn" class="quarto-xref">Figure&nbsp;<span>9.3</span></a>. It has two convolutional layers, no max-pooling, 2 fully-connected layer and one output layer representing the Q-value of all possible actions in the games.</p>
+<p>DQN was initially applied to solve various Atari 2600 games. Video frames were used as observations and the set of possible discrete actions was limited (left/right/up/down, shoot, etc). The CNN used is depicted on <a href="#fig-dqn" class="quarto-xref">Figure&nbsp;<span>8.3</span></a>. It has two convolutional layers, no max-pooling, 2 fully-connected layer and one output layer representing the Q-value of all possible actions in the games.</p>
 <div id="fig-dqn" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-dqn-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="img/dqn.png" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-dqn-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;9.3: Architecture of the CNN used in the original DQN paper. Taken from <span class="citation" data-cites="Mnih2015">Mnih et al. (<a href="references.html#ref-Mnih2015" role="doc-biblioref">2015</a>)</span>.
+Figure&nbsp;8.3: Architecture of the CNN used in the original DQN paper. Taken from <span class="citation" data-cites="Mnih2015">Mnih et al. (<a href="references.html#ref-Mnih2015" role="doc-biblioref">2015</a>)</span>.
 </figcaption>
 </figure>
 </div>
@@ -504,7 +502,7 @@ Figure&nbsp;9.3: Architecture of the CNN used in the original DQN paper. Taken f
 <p>This leads to the definition of the <strong>advantage</strong> <span class="math inline">A^\pi(s,a)</span> of an action:</p>
 <p><span id="eq-advantagefunction"><span class="math display">
     A^\pi(s, a) = Q^\pi(s, a) - V^\pi(s)
-\tag{9.1}</span></span></p>
+\tag{8.1}</span></span></p>
 <p>The advantage of the optimal action in <span class="math inline">s</span> is equal to zero: the expected return in <span class="math inline">s</span> is the same as the expected return when being in <span class="math inline">s</span> and taking <span class="math inline">a</span>, as the optimal policy will choose <span class="math inline">a</span> in <span class="math inline">s</span> anyway. The advantage of all other actions is negative: they bring less reward than the optimal action (by definition), so they are less advantageous. Note that this is only true if your estimate of <span class="math inline">V^\pi(s)</span> is correct.</p>
 <p><span class="citation" data-cites="Baird1993">Baird (<a href="references.html#ref-Baird1993" role="doc-biblioref">1993</a>)</span> has shown that it is advantageous to decompose the Q-value of an action into the value of the state and the advantage of the action (<em>advantage updating</em>):</p>
 <p><span class="math display">
@@ -518,11 +516,11 @@ Figure&nbsp;9.3: Architecture of the CNN used in the original DQN paper. Taken f
 <img src="img/duelling.png" class="img-fluid figure-img" style="width:60.0%">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-duelling-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;9.4: Duelling network architecture. Top: classical feedforward architecture to predict Q-values. Bottom: Duelling networks predicting state values and advantage functions to form the Q-values. Taken from <span class="citation" data-cites="Wang2016">Wang et al. (<a href="references.html#ref-Wang2016" role="doc-biblioref">2016</a>)</span>.
+Figure&nbsp;8.4: Duelling network architecture. Top: classical feedforward architecture to predict Q-values. Bottom: Duelling networks predicting state values and advantage functions to form the Q-values. Taken from <span class="citation" data-cites="Wang2016">Wang et al. (<a href="references.html#ref-Wang2016" role="doc-biblioref">2016</a>)</span>.
 </figcaption>
 </figure>
 </div>
-<p><span class="citation" data-cites="Wang2016">Wang et al. (<a href="references.html#ref-Wang2016" role="doc-biblioref">2016</a>)</span> incorporated the idea of <em>advantage updating</em> in a double DQN architecture with prioritized replay (<a href="#fig-duelling" class="quarto-xref">Figure&nbsp;<span>9.4</span></a>). As in DQN, the last layer represents the Q-values of the possible actions and has to minimize the mse loss:</p>
+<p><span class="citation" data-cites="Wang2016">Wang et al. (<a href="references.html#ref-Wang2016" role="doc-biblioref">2016</a>)</span> incorporated the idea of <em>advantage updating</em> in a double DQN architecture with prioritized replay (<a href="#fig-duelling" class="quarto-xref">Figure&nbsp;<span>8.4</span></a>). As in DQN, the last layer represents the Q-values of the possible actions and has to minimize the mse loss:</p>
 <p><span class="math display">
     \mathcal{L}(\theta) = \mathbb{E}_\pi([r(s, a, s') + \gamma \, Q_{\theta', \alpha', \beta'}(s', \text{argmax}_{a'} Q_{\theta, \alpha, \beta} (s', a')) - Q_{\theta, \alpha, \beta}(s, a)]^2)
 </span></p>
@@ -567,14 +565,14 @@ Figure&nbsp;9.4: Duelling network architecture. Top: classical feedforward archi
 <li><strong>Noisy DQN</strong> <span class="citation" data-cites="Fortunato2017">(<a href="references.html#ref-Fortunato2017" role="doc-biblioref">Fortunato et al., 2017</a>)</span> ensures exploration by adding noise to the parameters of the network instead of a softmax / <span class="math inline">\epsilon</span>-greedy action selection over the Q-values.</li>
 </ul>
 <p>All these improvements exceed the performance of vanilla DQN on most if not all Atari game. But which ones are the most important?</p>
-<p><span class="citation" data-cites="Hessel2017">Hessel et al. (<a href="references.html#ref-Hessel2017" role="doc-biblioref">2017</a>)</span> designed a <strong>Rainbow DQN</strong> integrating all these improvements. Not only does the combined network outperform all the DQN variants, but each of its components is important for its performance as shown by ablation studies (apart from double learning and duelling networks), see <a href="#fig-rainbow" class="quarto-xref">Figure&nbsp;<span>9.5</span></a>.</p>
+<p><span class="citation" data-cites="Hessel2017">Hessel et al. (<a href="references.html#ref-Hessel2017" role="doc-biblioref">2017</a>)</span> designed a <strong>Rainbow DQN</strong> integrating all these improvements. Not only does the combined network outperform all the DQN variants, but each of its components is important for its performance as shown by ablation studies (apart from double learning and duelling networks), see <a href="#fig-rainbow" class="quarto-xref">Figure&nbsp;<span>8.5</span></a>.</p>
 <div id="fig-rainbow" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-rainbow-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="img/rainbow.png" class="img-fluid figure-img" style="width:90.0%">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-rainbow-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;9.5: Performance of the Rainbow DQN compared to other DQN variants (left) and ablation studies. Figures taken from <span class="citation" data-cites="Hessel2017">Hessel et al. (<a href="references.html#ref-Hessel2017" role="doc-biblioref">2017</a>)</span>.
+Figure&nbsp;8.5: Performance of the Rainbow DQN compared to other DQN variants (left) and ablation studies. Figures taken from <span class="citation" data-cites="Hessel2017">Hessel et al. (<a href="references.html#ref-Hessel2017" role="doc-biblioref">2017</a>)</span>.
 </figcaption>
 </figure>
 </div>
@@ -593,7 +591,7 @@ Figure&nbsp;9.5: Performance of the Rainbow DQN compared to other DQN variants (
 <img src="img/gorila-global.png" class="img-fluid figure-img" style="width:90.0%">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-gorila-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;9.6: GORILA architecture. Multiple actors interact with multiple copies of the environment and store their experiences in a (distributed) experience replay memory. Multiple DQN learners sample from the ERM and compute the gradient of the loss function w.r.t the parameters <span class="math inline">\theta</span>. A master network (parameter server, possibly distributed) gathers the gradients, apply weight updates and synchronizes regularly both the actors and the learners with new parameters. Taken from <span class="citation" data-cites="Nair2015">Nair et al. (<a href="references.html#ref-Nair2015" role="doc-biblioref">2015</a>)</span>.
+Figure&nbsp;8.6: GORILA architecture. Multiple actors interact with multiple copies of the environment and store their experiences in a (distributed) experience replay memory. Multiple DQN learners sample from the ERM and compute the gradient of the loss function w.r.t the parameters <span class="math inline">\theta</span>. A master network (parameter server, possibly distributed) gathers the gradients, apply weight updates and synchronizes regularly both the actors and the learners with new parameters. Taken from <span class="citation" data-cites="Nair2015">Nair et al. (<a href="references.html#ref-Nair2015" role="doc-biblioref">2015</a>)</span>.
 </figcaption>
 </figure>
 </div>
