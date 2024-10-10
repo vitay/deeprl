@@ -1,6 +1,0 @@
-
----
-title: Tabular RL
----
-
-The first part of this book will focus on tabular reinforcement learning.

@@ -825,6 +825,19 @@
   file = {/Users/vitay/Documents/Zotero/storage/CAZ6MMIT/Chenu_et_al_2022_Divide_&_Conquer_Imitation_Learning.pdf;/Users/vitay/Documents/Zotero/storage/5EXF7PQU/2204.html}
 }
 
+@online{Chi2023,
+  title = {Diffusion {{Policy}}: {{Visuomotor Policy Learning}} via {{Action Diffusion}}},
+  shorttitle = {Diffusion {{Policy}}},
+  author = {Chi, Cheng and Xu, Zhenjia and Feng, Siyuan and Cousineau, Eric and Du, Yilun and Burchfiel, Benjamin and Tedrake, Russ and Song, Shuran},
+  date = {2023-03-07},
+  url = {https://arxiv.org/abs/2303.04137v5},
+  urldate = {2024-10-09},
+  abstract = {This paper introduces Diffusion Policy, a new way of generating robot behavior by representing a robot's visuomotor policy as a conditional denoising diffusion process. We benchmark Diffusion Policy across 12 different tasks from 4 different robot manipulation benchmarks and find that it consistently outperforms existing state-of-the-art robot learning methods with an average improvement of 46.9\%. Diffusion Policy learns the gradient of the action-distribution score function and iteratively optimizes with respect to this gradient field during inference via a series of stochastic Langevin dynamics steps. We find that the diffusion formulation yields powerful advantages when used for robot policies, including gracefully handling multimodal action distributions, being suitable for high-dimensional action spaces, and exhibiting impressive training stability. To fully unlock the potential of diffusion models for visuomotor policy learning on physical robots, this paper presents a set of key technical contributions including the incorporation of receding horizon control, visual conditioning, and the time-series diffusion transformer. We hope this work will help motivate a new generation of policy learning techniques that are able to leverage the powerful generative modeling capabilities of diffusion models. Code, data, and training details is publicly available diffusion-policy.cs.columbia.edu},
+  langid = {english},
+  organization = {arXiv.org},
+  file = {/Users/vitay/Documents/Zotero/storage/KF2ZQTWU/Chi et al. - 2023 - Diffusion Policy Visuomotor Policy Learning via Action Diffusion.pdf}
+}
+
 @unpublished{Chitnis2020,
   title = {{{GLIB}}: {{Exploration}} via {{Goal-Literal Babbling}} for {{Lifted Operator Learning}}},
   shorttitle = {{{GLIB}}},
@@ -3938,6 +3951,18 @@ Subject\_term\_id: cognitive-neuroscience;learning-algorithms;learning-and-memor
   abstract = {We seek to align agent behavior with a user's objectives in a reinforcement learning setting with unknown dynamics, an unknown reward function, and unknown unsafe states. The user knows the rewards and unsafe states, but querying the user is expensive. To address this challenge, we propose an algorithm that safely and interactively learns a model of the user's reward function. We start with a generative model of initial states and a forward dynamics model trained on off-policy data. Our method uses these models to synthesize hypothetical behaviors, asks the user to label the behaviors with rewards, and trains a neural network to predict the rewards. The key idea is to actively synthesize the hypothetical behaviors from scratch by maximizing tractable proxies for the value of information, without interacting with the environment. We call this method reward query synthesis via trajectory optimization (ReQueST). We evaluate ReQueST with simulated users on a state-based 2D navigation task and the image-based Car Racing video game. The results show that ReQueST significantly outperforms prior methods in learning reward models that transfer to new environments with different initial state distributions. Moreover, ReQueST safely trains the reward model to detect unsafe states, and corrects reward hacking before deploying the agent.},
   keywords = {Computer Science - Computers and Society,Computer Science - Machine Learning,Statistics - Machine Learning},
   file = {/Users/vitay/Documents/Zotero/storage/AF2934J7/Reddy_et_al_2019_Learning_Human_Objectives_by_Evaluating_Hypothetical_Behavior.pdf;/Users/vitay/Documents/Zotero/storage/B7QD6ZC6/1912.html}
+}
+
+@online{Ren2024,
+  title = {Diffusion {{Policy Policy Optimization}}},
+  author = {Ren, Allen Z. and Lidard, Justin and Ankile, Lars L. and Simeonov, Anthony and Agrawal, Pulkit and Majumdar, Anirudha and Burchfiel, Benjamin and Dai, Hongkai and Simchowitz, Max},
+  date = {2024-09-01},
+  url = {https://arxiv.org/abs/2409.00588v1},
+  urldate = {2024-10-10},
+  abstract = {We introduce Diffusion Policy Policy Optimization, DPPO, an algorithmic framework including best practices for fine-tuning diffusion-based policies (e.g. Diffusion Policy) in continuous control and robot learning tasks using the policy gradient (PG) method from reinforcement learning (RL). PG methods are ubiquitous in training RL policies with other policy parameterizations; nevertheless, they had been conjectured to be less efficient for diffusion-based policies. Surprisingly, we show that DPPO achieves the strongest overall performance and efficiency for fine-tuning in common benchmarks compared to other RL methods for diffusion-based policies and also compared to PG fine-tuning of other policy parameterizations. Through experimental investigation, we find that DPPO takes advantage of unique synergies between RL fine-tuning and the diffusion parameterization, leading to structured and on-manifold exploration, stable training, and strong policy robustness. We further demonstrate the strengths of DPPO in a range of realistic settings, including simulated robotic tasks with pixel observations, and via zero-shot deployment of simulation-trained policies on robot hardware in a long-horizon, multi-stage manipulation task. Website with code: diffusion-ppo.github.io},
+  langid = {english},
+  organization = {arXiv.org},
+  file = {/Users/vitay/Documents/Zotero/storage/8PMBWKPF/Ren et al. - 2024 - Diffusion Policy Policy Optimization.pdf}
 }
 
 @unpublished{Rohde2018,
