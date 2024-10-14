@@ -165,7 +165,7 @@ Deepmind and OpenAI recognized this difference and started applying deep RL meth
 
 ### Process control
 
-In 2016, Deepmind applied its RL algorithms to the control of the cooling systems in Google's datacenters. The system learned passively from observations of the current cooling sytem what the optimal policy was. When they gave control to the RL agent, it instantly led to a 40% reduction of energy consumption, which, for Google's data centers, represents a huge amount of money.
+In 2016, Deepmind applied its RL algorithms to the control of the cooling systems in Google's datacenters. The system learned passively from observations of the current cooling sytem what the optimal policy was. When they gave control to the RL agent, it instantly led to a 40% reduction of energy consumption, which, for Google's data centers, represents a huge amount of money. See @Luo2022 for a recent review of RL controlling cooling systems.
 
 ![Source: <https://deepmind.com/blog/deepmind-ai-reduces-google-data-centre-cooling-bill-40/>](img/googledatacenter_1.png){#fig-googledatacenter}
 
@@ -173,7 +173,7 @@ This showed that the progress in deep RL was not limited to toy problems or vide
 
 ![Magnetic control of tokamak plasmas through deep reinforcement learning. Source: @Degrave2022](img/tokamak.webp){#fig-tokamak}
 
-Another recent illustration is how RL can be used in the design of silicon chips [@Roy2022].
+Another recent illustration is how RL can be used in the design of silicon chips by Nvidia [@Roy2022].
 
 ![Optimization of Parallel Prefix Circuits using Deep Reinforcement Learning. @Roy2022](img/chipdesign.png){#fig-chipdesign}
 
@@ -219,3 +219,6 @@ RL can also be used to fine-tune **generative AI** models, such as diffusion mod
 ![Source: <https://openai.com/blog/chatgpt/>](img/ChatGPT.svg){#fig-chatgpt}
 
 
+### and many more...
+
+RL finds applications in virtually any field involving sequential decision making, including finance technology [@Malibari2023], inventory management [@Madeka2022], missile guidance [@Li2022a] or healthcare [@Yu2020b].
