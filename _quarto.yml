@@ -49,7 +49,7 @@ book:
         - src/3.6-EntropyRL.qmd
         - src/3.7-DistributionalRL.qmd
         - src/3.8-OtherPolicyGradient.qmd
-    - src/4-ModelBased.qmd
+    #- src/4-ModelBased.qmd
     - src/references.qmd
 
 bibliography: 
@@ -59,7 +59,9 @@ csl: assets/frontiers.csl
 
 format:
   html:
-    theme: [flatly, "assets/webpage.scss"]
+    mainfont: Roboto
+    
+    theme: [lumen, "assets/webpage.scss"]
     #page-layout: full
     number-sections: false
     toc: true
