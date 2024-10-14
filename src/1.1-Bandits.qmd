@@ -163,6 +163,8 @@ For estimators with a high variance, we will need a lot of samples (trial and er
 One usually talks of a **bias/variance** trade-off: if you have a small bias, you will have a high variance, or vice versa. There is a sweet spot balancing the two. 
 In machine learning, bias corresponds to underfitting, variance to overfitting.
 
+
+
 ## Sampling-based evaluation
 
 ![Samples and expected reward over time.](img/bandit-samples2.png){#fig-bandit-samples2}
