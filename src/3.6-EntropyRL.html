@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Maximum Entropy RL – Deep Reinforcement Learning</title>
+<title>Maximum Entropy RL (SAC) – Deep Reinforcement Learning</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -60,6 +60,9 @@ div.csl-indent {
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -145,7 +148,7 @@ window.Quarto = {
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
         <a class="flex-grow-1 no-decor" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-          <h1 class="quarto-secondary-nav-title"><span class="chapter-title">Maximum Entropy RL</span></h1>
+          <h1 class="quarto-secondary-nav-title"><span class="chapter-title">Maximum Entropy RL (SAC)</span></h1>
         </a>     
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
         <i class="bi bi-search"></i>
@@ -262,7 +265,8 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/3.2-ActorCritic.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Advantage Actor-Critic methods</span></a>
+  <a href="../src/3.2-ActorCritic.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Asynchronous Advantage Actor-Critic (A3C)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -272,17 +276,17 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/3.4-DPG.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Deterministic Policy Gradient (DPG)</span></a>
+  <a href="../src/3.4-DPG.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Deep Deterministic Policy Gradient (DDPG)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/3.5-NaturalGradient.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Natural Gradients</span></a>
+  <a href="../src/3.5-NaturalGradient.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Policy Optimization (TRPO, PPO)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/3.6-EntropyRL.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">Maximum Entropy RL</span></a>
+  <a href="../src/3.6-EntropyRL.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">Maximum Entropy RL (SAC)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -292,7 +296,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/3.8-OtherPolicyGradient.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Miscellaneous model-free algorithm</span></a>
+  <a href="../src/3.8-OtherPolicyGradient.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Miscellaneous model-free algorithms</span></a>
   </div>
 </li>
       </ul>
@@ -324,7 +328,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title d-none d-lg-block"><span class="chapter-title">Maximum Entropy RL</span></h1>
+<h1 class="title d-none d-lg-block"><span class="chapter-title">Maximum Entropy RL (SAC)</span></h1>
 </div>
 
 
@@ -343,12 +347,12 @@ window.Quarto = {
 
 <p>All the methods seen sofar focus on finding a policy (or value functions) that maximizes the obtained return. This corresponds to the <strong>exploitation</strong> part of RL: we care only about the optimal policy. The <strong>exploration</strong> is ensured by external mechanisms, such as <span class="math inline">\epsilon</span>-greedy or softmax policies in value based methods, or adding exploratory noise to the actions as in DDPG. Exploration mechanisms typically add yet another free parameter (<span class="math inline">\epsilon</span>, softmax temperature, etc) that additionally need to be scheduled (more exploration at the beginning of learning than at the end).</p>
 <p>The idea behind <strong>maximum entropy RL</strong> is to let the algorithm learn by itself how much exploration it needs to learn appropriately. There are several approaches to this problem (see for example <span class="citation" data-cites="Machado2018">(<a href="references.html#ref-Machado2018" role="doc-biblioref">Machado et al., 2018</a>)</span> for an approach using successor representations), we focus first on methods using <strong>entropy regularization</strong>, a concept already seen briefly in A3C, before looking at soft methods such as Soft Q-learning and SAC.</p>
-<section id="entropy-regularization" class="level3">
-<h3 class="anchored" data-anchor-id="entropy-regularization">Entropy regularization</h3>
+<section id="entropy-regularization" class="level2">
+<h2 class="anchored" data-anchor-id="entropy-regularization">Entropy regularization</h2>
 <p><strong>Entropy regularization</strong> <span class="citation" data-cites="Williams1991">(<a href="references.html#ref-Williams1991" role="doc-biblioref">Williams and Peng, 1991</a>)</span> adds a regularization term to the objective function:</p>
 <p><span id="eq-entropy_reg"><span class="math display">
     J(\theta) =  \mathbb{E}_{s_t \sim \rho^\pi, a_t \sim \pi_\theta}[ R(s_t, a_t) + \beta \,  H(\pi_\theta(s_t))]
-\tag{14.1}</span></span></p>
+\tag{13.1}</span></span></p>
 <p>We will neglect here how the objective function is sampled (policy gradient, etc.) and focus on the second part.</p>
 <p>The entropy of a discrete policy <span class="math inline">\pi_\theta</span> in a state <span class="math inline">s_t</span> is given by:</p>
 <p><span class="math display">
@@ -365,12 +369,12 @@ window.Quarto = {
 <p>Another way to view the interest of entropy regularization is to realize that learning a deterministic policy only leads to a single optimal solution to the problem. Learning a stochastic policy forces the agent to learn <strong>many</strong> optimal solutions to the same problem: the agent is somehow forced to learn as much information as possible for the experienced transitions, potentially reducing the sample complexity.</p>
 <p>Entropy regularization is nowadays used very commonly used in deep RL networks <span class="citation" data-cites="ODonoghue2016">(e.g. <a href="references.html#ref-ODonoghue2016" role="doc-biblioref">O’Donoghue et al., 2016</a>)</span>, as it is “only” an additional term to set in the objective function passed to the NN, adding a single hyperparameter <span class="math inline">\beta</span>.</p>
 </section>
-<section id="soft-q-learning" class="level3">
-<h3 class="anchored" data-anchor-id="soft-q-learning">Soft Q-learning</h3>
+<section id="soft-q-learning" class="level2">
+<h2 class="anchored" data-anchor-id="soft-q-learning">Soft Q-learning</h2>
 <p>Entropy regularization greedily maximizes the entropy of the policy in each state (the objective is the return plus the entropy in the current state). Building on the maximum entropy RL framework <span class="citation" data-cites="Ziebart2008 Schulman2017a Nachum2017">(<a href="references.html#ref-Nachum2017" role="doc-biblioref">Nachum et al., 2017</a>; <a href="references.html#ref-Schulman2017a" role="doc-biblioref">Schulman et al., 2017</a>; <a href="references.html#ref-Ziebart2008" role="doc-biblioref">Ziebart et al., 2008</a>)</span>, <span class="citation" data-cites="Haarnoja2017">Haarnoja et al. (<a href="references.html#ref-Haarnoja2017" role="doc-biblioref">2017</a>)</span> proposed a version of <strong>soft-Q-learning</strong> by extending the definition of the objective:</p>
 <p><span id="eq-softQ"><span class="math display">
     J(\theta) =  \sum_t \mathbb{E}_{s_t \sim \rho^\pi, a_t \sim \pi_\theta}[ r(s_t, a_t) + \beta \,  H(\pi_\theta(s_t))]
-\tag{14.2}</span></span></p>
+\tag{13.2}</span></span></p>
 <p>In this formulation based on trajectories, the agent seeks a policy that maximizes the entropy of the complete trajectories rather than the entropy of the policy in each state. This is a very important distinction: the agent does not only search a policy with a high entropy, but a policy that brings into states with a high entropy, i.e.&nbsp;where the agent is the most uncertain. This allows for very efficient exploration strategies, where the agent will try to reduce its uncertainty about the world and gather a lot more information than when simply searching for a good policy.</p>
 <p>Note that it is always possible to fall back to classical Q-learning by setting <span class="math inline">\beta=0</span> and that it is possible to omit this hyperparameter by scaling the rewards with <span class="math inline">\frac{1}{\beta}</span>. The discount rate <span class="math inline">\gamma</span> is omitted here for simplicity, but it should be added back when the task has an infinite horizon.</p>
 <p>In soft Q-learning, the policy can be defined by a softmax over the soft Q-values <span class="math inline">Q_\text{soft}(s, a)</span>, where <span class="math inline">\beta</span> plays the role of the temperature parameter:</p>
@@ -381,38 +385,38 @@ window.Quarto = {
 <p>The soft Q-values are defined by the following Bellman equation:</p>
 <p><span id="eq-softQ_update"><span class="math display">
     Q_\text{soft}(s_t, a_t) = r(s_t, a_t) + \gamma \, \mathbb{E}_{s_{t+1} \in \rho} [V_\text{soft}(s_{t+1})]
-\tag{14.3}</span></span></p>
+\tag{13.3}</span></span></p>
 <p>This is the regular Bellman equation that can be turned into an update rule for the soft Q-values (minimizing the mse between the l.h.s and the r.h.s). The soft value of a state is given by:</p>
 <p><span id="eq-softV_update"><span class="math display">
     V_\text{soft}(s_t) = \mathbb{E}_{a_{t} \in \pi} [Q_\text{soft}(s_{t}, a_{t}) - \log \, \pi(s_t, a_t)]
-\tag{14.4}</span></span></p>
-<p>The notation in <span class="citation" data-cites="Haarnoja2017">Haarnoja et al. (<a href="references.html#ref-Haarnoja2017" role="doc-biblioref">2017</a>)</span> is much more complex than that (the paper includes the theoretical proofs), but it boils down to this in <span class="citation" data-cites="Haarnoja2018a">Haarnoja et al. (<a href="references.html#ref-Haarnoja2018a" role="doc-biblioref">2018</a>)</span>. When <a href="#eq-softQ_update" class="quarto-xref">Equation&nbsp;<span>14.3</span></a> is applied repeatedly with the definition of <a href="#eq-softV_update" class="quarto-xref">Equation&nbsp;<span>14.4</span></a>, it converges to the optimal solution of <a href="#eq-softQ" class="quarto-xref">Equation&nbsp;<span>14.2</span></a>, at least in the tabular case.</p>
+\tag{13.4}</span></span></p>
+<p>The notation in <span class="citation" data-cites="Haarnoja2017">Haarnoja et al. (<a href="references.html#ref-Haarnoja2017" role="doc-biblioref">2017</a>)</span> is much more complex than that (the paper includes the theoretical proofs), but it boils down to this in <span class="citation" data-cites="Haarnoja2018a">Haarnoja et al. (<a href="references.html#ref-Haarnoja2018a" role="doc-biblioref">2018</a>)</span>. When <a href="#eq-softQ_update" class="quarto-xref">Equation&nbsp;<span>13.3</span></a> is applied repeatedly with the definition of <a href="#eq-softV_update" class="quarto-xref">Equation&nbsp;<span>13.4</span></a>, it converges to the optimal solution of <a href="#eq-softQ" class="quarto-xref">Equation&nbsp;<span>13.2</span></a>, at least in the tabular case.</p>
 <p>The soft V-value of a state is the expectation of the Q-values in that state (as in regular RL) minus the log probability of each action. This last term measures the entropy of the policy in each state (when expanding the expectation over the policy, we obtain <span class="math inline">- \pi \log \pi</span>, which is the entropy).</p>
 <p>In a nutshell, the soft Q-learning algorithm is:</p>
 <ul>
 <li>Sample transitions <span class="math inline">(s, a, r, s')</span> and store them in a replay memory.</li>
 <li>For each transition <span class="math inline">(s, a, r, s')</span> in a minibatch of the replay memory:
 <ul>
-<li>Estimate <span class="math inline">V_\text{soft}(s')</span> with <a href="#eq-softV_update" class="quarto-xref">Equation&nbsp;<span>14.4</span></a> by sampling several actions.</li>
-<li>Update the soft Q-value of <span class="math inline">(s,a)</span> with <a href="#eq-softQ_update" class="quarto-xref">Equation&nbsp;<span>14.3</span></a>.</li>
+<li>Estimate <span class="math inline">V_\text{soft}(s')</span> with <a href="#eq-softV_update" class="quarto-xref">Equation&nbsp;<span>13.4</span></a> by sampling several actions.</li>
+<li>Update the soft Q-value of <span class="math inline">(s,a)</span> with <a href="#eq-softQ_update" class="quarto-xref">Equation&nbsp;<span>13.3</span></a>.</li>
 <li>Update the policy (if not using the softmax over soft Q-values directly).</li>
 </ul></li>
 </ul>
 <p>The main drawback of this approach is that several actions have to be sampled in the next state in order to estimate its current soft V-value, what makes it hard to implement in practice. The policy also has to be sampled from the Q-values, what is not practical for continuous action spaces.</p>
-<p>But the real interesting thing is the policies that are learned in multi-goal settings, as in <a href="#fig-softql" class="quarto-xref">Figure&nbsp;<span>14.1</span></a>. The agent starts in the middle of the environment and can obtain one of the four rewards (north, south, west, east). A regular RL agent would very quickly select only one of the rewards and stick to it. With soft Q-learning, the policy stays stochastic and the four rewards can be obtained even after convergence. This indicates that the soft agent has learned much more about its environment than its hard equivalent, thanks to its maximum entropy formulation.</p>
+<p>But the real interesting thing is the policies that are learned in multi-goal settings, as in <a href="#fig-softql" class="quarto-xref">Figure&nbsp;<span>13.1</span></a>. The agent starts in the middle of the environment and can obtain one of the four rewards (north, south, west, east). A regular RL agent would very quickly select only one of the rewards and stick to it. With soft Q-learning, the policy stays stochastic and the four rewards can be obtained even after convergence. This indicates that the soft agent has learned much more about its environment than its hard equivalent, thanks to its maximum entropy formulation.</p>
 <div id="fig-softql" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-softql-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="img/softQL.png" class="img-fluid figure-img">
+<a href="img/softQL.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;13.1: Policy learned by Soft Q-learning in a multi-goal setting. Source: @Haarnoja2017."><img src="img/softQL.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-softql-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;14.1: Policy learned by Soft Q-learning in a multi-goal setting. Taken from <span class="citation" data-cites="Haarnoja2017">Haarnoja et al. (<a href="references.html#ref-Haarnoja2017" role="doc-biblioref">2017</a>)</span>.
+Figure&nbsp;13.1: Policy learned by Soft Q-learning in a multi-goal setting. Source: <span class="citation" data-cites="Haarnoja2017">Haarnoja et al. (<a href="references.html#ref-Haarnoja2017" role="doc-biblioref">2017</a>)</span>.
 </figcaption>
 </figure>
 </div>
 </section>
-<section id="soft-actor-critic-sac" class="level3">
-<h3 class="anchored" data-anchor-id="soft-actor-critic-sac">Soft Actor-Critic (SAC)</h3>
+<section id="soft-actor-critic-sac" class="level2">
+<h2 class="anchored" data-anchor-id="soft-actor-critic-sac">Soft Actor-Critic (SAC)</h2>
 <p><span class="citation" data-cites="Haarnoja2018a">Haarnoja et al. (<a href="references.html#ref-Haarnoja2018a" role="doc-biblioref">2018</a>)</span> proposed the <strong>Soft Actor-Critic</strong> (SAC), an off-policy actor-critic which allows to have a stochastic actor (contrary to DDPG) while being more optimal and sample efficient than on-policy methods such as A3C or PPO. It is also less sensible to hyperparameters than all these methods.</p>
 <p>SAC builds on soft Q-learning to achieve these improvements. It relies on three different function approximators:</p>
 <ul>
@@ -421,7 +425,7 @@ Figure&nbsp;14.1: Policy learned by Soft Q-learning in a multi-goal setting. Tak
 <li>a stochastic policy <span class="math inline">\pi_\theta(s, a)</span>.</li>
 </ul>
 <p>The paper uses a different notation for the parameters <span class="math inline">\theta, \varphi, \psi</span>, but I choose to be consistent with the rest of this document.</p>
-<p>The soft state-value function <span class="math inline">V_\varphi(s)</span> is learned using <a href="#eq-softV_update" class="quarto-xref">Equation&nbsp;<span>14.4</span></a> which is turned into a loss function:</p>
+<p>The soft state-value function <span class="math inline">V_\varphi(s)</span> is learned using <a href="#eq-softV_update" class="quarto-xref">Equation&nbsp;<span>13.4</span></a> which is turned into a loss function:</p>
 <p><span class="math display">
     \mathcal{L}(\varphi) = \mathbb{E}_{s_t \in \mathcal{D}} [\mathbb{E}_{a_{t} \in \pi} [(Q_\psi(s_{t}, a_{t}) - \log \, \pi_\theta(s_t, a_t)] - V_\varphi(s_t) )^2]
 </span></p>
@@ -917,8 +921,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../src/3.5-NaturalGradient.html" class="pagination-link" aria-label="Natural Gradients">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">Natural Gradients</span></span>
+      <a href="../src/3.5-NaturalGradient.html" class="pagination-link" aria-label="Policy Optimization (TRPO, PPO)">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">Policy Optimization (TRPO, PPO)</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
@@ -941,6 +945,38 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     </div>
   </div>
 </footer>
+<script>var lightboxQuarto = GLightbox({"descPosition":"bottom","openEffect":"zoom","loop":false,"selector":".lightbox","closeEffect":"zoom"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
 
 
 

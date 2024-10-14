@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Deterministic Policy Gradient (DPG) – Deep Reinforcement Learning</title>
+<title>Deep Deterministic Policy Gradient (DDPG) – Deep Reinforcement Learning</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -60,6 +60,9 @@ div.csl-indent {
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -145,7 +148,7 @@ window.Quarto = {
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
         <a class="flex-grow-1 no-decor" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-          <h1 class="quarto-secondary-nav-title"><span class="chapter-title">Deterministic Policy Gradient (DPG)</span></h1>
+          <h1 class="quarto-secondary-nav-title"><span class="chapter-title">Deep Deterministic Policy Gradient (DDPG)</span></h1>
         </a>     
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
         <i class="bi bi-search"></i>
@@ -262,7 +265,8 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/3.2-ActorCritic.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Advantage Actor-Critic methods</span></a>
+  <a href="../src/3.2-ActorCritic.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Asynchronous Advantage Actor-Critic (A3C)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -272,17 +276,17 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/3.4-DPG.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">Deterministic Policy Gradient (DPG)</span></a>
+  <a href="../src/3.4-DPG.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">Deep Deterministic Policy Gradient (DDPG)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/3.5-NaturalGradient.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Natural Gradients</span></a>
+  <a href="../src/3.5-NaturalGradient.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Policy Optimization (TRPO, PPO)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/3.6-EntropyRL.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Maximum Entropy RL</span></a>
+  <a href="../src/3.6-EntropyRL.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Maximum Entropy RL (SAC)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -292,7 +296,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/3.8-OtherPolicyGradient.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Miscellaneous model-free algorithm</span></a>
+  <a href="../src/3.8-OtherPolicyGradient.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Miscellaneous model-free algorithms</span></a>
   </div>
 </li>
       </ul>
@@ -324,7 +328,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title d-none d-lg-block"><span class="chapter-title">Deterministic Policy Gradient (DPG)</span></h1>
+<h1 class="title d-none d-lg-block"><span class="chapter-title">Deep Deterministic Policy Gradient (DDPG)</span></h1>
 </div>
 
 
@@ -349,8 +353,8 @@ window.Quarto = {
 </ol>
 <p>Successful value-based methods such as DQN produce a <strong>deterministic policy</strong>, where the action to be executed after learning is simply the greedy action <span class="math inline">a^*_t = \text{argmax}_a Q_\theta(s_t, a)</span>. Exploration is enforced by forcing the behavior policy (the one used to generate the sample) to be stochastic (<span class="math inline">\epsilon</span>-greedy), but the learned policy is itself deterministic. This is <strong>off-policy</strong> learning, allowing to use a different policy than the learned one to explore. When using an experience replay memory, the behavior policy is simply an older version of the learning policy (as samples stored in the ERM were generated by an older version of the actor).</p>
 <p>In this section, we will see the now state-of-the-art method DDPG (Deep Deterministic Policy Gradient), which tries to combine the advantages of policy gradient methods (actor-critic, continuous or highly dimensional outputs, stability) with those of value-based methods (sample efficiency, off-policy).</p>
-<section id="deterministic-policy-gradient-theorem" class="level3">
-<h3 class="anchored" data-anchor-id="deterministic-policy-gradient-theorem">Deterministic policy gradient theorem</h3>
+<section id="deterministic-policy-gradient-theorem" class="level2">
+<h2 class="anchored" data-anchor-id="deterministic-policy-gradient-theorem">Deterministic policy gradient theorem</h2>
 <p>We now assume that we want to learn a parameterized <strong>deterministic policy</strong> <span class="math inline">\mu_\theta(s)</span>. As for the stochastic policy gradient theorem, the goal is to maximize the expectation over all states reachable by the policy of the reward to-go (return) after each action:</p>
 <p><span class="math display">
     J(\theta) =  \mathbb{E}_{s \sim \rho_\mu}[R(s, \mu_\theta(s))]
@@ -377,21 +381,21 @@ window.Quarto = {
 </span> <span class="math display">
     J(\varphi) = \mathbb{E}_{s \sim \rho_\mu}[(Q^\mu(s, \mu_\theta(s)) - Q_\varphi(s, \mu_\theta(s)))^2]
 </span></p>
-<p><a href="#fig-dpg" class="quarto-xref">Figure&nbsp;<span>12.1</span></a> outlines the actor-critic architecture of the DPG (deterministic policy gradient) method, to compare with the actor-critic architecture of the stochastic policy gradient (<a href="3.1-PolicyGradient.html#fig-actorcriticpolicy" class="quarto-xref">Figure&nbsp;<span>9.2</span></a>).</p>
+<p><a href="#fig-dpg" class="quarto-xref">Figure&nbsp;<span>11.1</span></a> outlines the actor-critic architecture of the DPG (deterministic policy gradient) method, to compare with the actor-critic architecture of the stochastic policy gradient (<a href="3.1-PolicyGradient.html#fig-actorcriticpolicy" class="quarto-xref">Figure&nbsp;<span>9.2</span></a>).</p>
 <div id="fig-dpg" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-dpg-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="img/dpg.png" class="img-fluid figure-img" style="width:95.0%">
+<a href="img/dpg.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;11.1: Architecture of the DPG (deterministic policy gradient) method."><img src="img/dpg.png" class="img-fluid figure-img" style="width:95.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-dpg-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;12.1: Architecture of the DPG (deterministic policy gradient) method.
+Figure&nbsp;11.1: Architecture of the DPG (deterministic policy gradient) method.
 </figcaption>
 </figure>
 </div>
 <p><span class="citation" data-cites="Silver2014">Silver et al. (<a href="references.html#ref-Silver2014" role="doc-biblioref">2014</a>)</span> investigated the performance of DPG using linear function approximators and showed that it compared positively to stochastic algorithms in high-dimensional or continuous action spaces. However, non-linear function approximators such as deep NN would not work yet.</p>
 </section>
-<section id="deep-deterministic-policy-gradient-ddpg" class="level3">
-<h3 class="anchored" data-anchor-id="deep-deterministic-policy-gradient-ddpg">Deep Deterministic Policy Gradient (DDPG)</h3>
+<section id="deep-deterministic-policy-gradient-ddpg" class="level2">
+<h2 class="anchored" data-anchor-id="deep-deterministic-policy-gradient-ddpg">Deep Deterministic Policy Gradient (DDPG)</h2>
 <p><span class="citation" data-cites="Lillicrap2015">Lillicrap et al. (<a href="references.html#ref-Lillicrap2015" role="doc-biblioref">2015</a>)</span> extended the DPG approach to work with non-linear function approximators. In fact, they combined ideas from DQN and DPG to create a very successful algorithm able to solve continuous problems off-policy, the <strong>deep deterministic policy gradient</strong> (DDPG) algorithm..</p>
 <p>The key ideas borrowed from DQN are:</p>
 <ul>
@@ -413,25 +417,25 @@ Figure&nbsp;12.1: Architecture of the DPG (deterministic policy gradient) method
 </span></p>
 <p>This additive noise could be anything, but the most practical choice is to use an <strong>Ornstein-Uhlenbeck</strong> process <span class="citation" data-cites="Uhlenbeck1930">(<a href="references.html#ref-Uhlenbeck1930" role="doc-biblioref">Uhlenbeck and Ornstein, 1930</a>)</span> to generate temporally correlated noise with zero mean. Ornstein-Uhlenbeck processes are used in physics to model the velocity of Brownian particles with friction. It updates a variable <span class="math inline">x_t</span> using a stochastic differential equation (SDE):</p>
 <p><span class="math display"> dx_t = \theta (\mu - x_t) dt + \sigma dW_t \qquad \text{with} \qquad dW_t = \mathcal{N}(0, dt)</span></p>
-<p><span class="math inline">\mu</span> is the mean of the process (usually 0), <span class="math inline">\theta</span> is the friction (how fast it varies with noise) and <span class="math inline">\sigma</span> controls the amount of noise. <a href="#fig-OU" class="quarto-xref">Figure&nbsp;<span>12.2</span></a> shows three independent runs of a Ornstein-Uhlenbeck process: successive values of the variable <span class="math inline">x_t</span> vary randomly but coherently over time.</p>
+<p><span class="math inline">\mu</span> is the mean of the process (usually 0), <span class="math inline">\theta</span> is the friction (how fast it varies with noise) and <span class="math inline">\sigma</span> controls the amount of noise. <a href="#fig-OU" class="quarto-xref">Figure&nbsp;<span>11.2</span></a> shows three independent runs of a Ornstein-Uhlenbeck process: successive values of the variable <span class="math inline">x_t</span> vary randomly but coherently over time.</p>
 <div id="fig-OU" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-OU-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="img/OU.png" class="img-fluid figure-img" style="width:80.0%">
+<a href="img/OU.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Figure&nbsp;11.2: Three independent runs of an Ornstein-Uhlenbeck process with \mu=0, \sigma=0.3, \theta=0.15 and dt=0.1. The code is adapted from https://gist.github.com/jimfleming/9a62b2f7ed047ff78e95b5398e955b9e"><img src="img/OU.png" class="img-fluid figure-img" style="width:80.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-OU-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;12.2: Three independent runs of an Ornstein-Uhlenbeck process with <span class="math inline">\mu=0</span>, <span class="math inline">\sigma=0.3</span>, <span class="math inline">\theta=0.15</span> and <span class="math inline">dt=0.1</span>. The code is adapted from <a href="https://gist.github.com/jimfleming/9a62b2f7ed047ff78e95b5398e955b9e" class="uri">https://gist.github.com/jimfleming/9a62b2f7ed047ff78e95b5398e955b9e</a>
+Figure&nbsp;11.2: Three independent runs of an Ornstein-Uhlenbeck process with <span class="math inline">\mu=0</span>, <span class="math inline">\sigma=0.3</span>, <span class="math inline">\theta=0.15</span> and <span class="math inline">dt=0.1</span>. The code is adapted from <a href="https://gist.github.com/jimfleming/9a62b2f7ed047ff78e95b5398e955b9e" class="uri">https://gist.github.com/jimfleming/9a62b2f7ed047ff78e95b5398e955b9e</a>
 </figcaption>
 </figure>
 </div>
-<p>The architecture of the DDPG algorithm is depicted on <a href="#fig-ddpg" class="quarto-xref">Figure&nbsp;<span>12.3</span></a>.</p>
+<p>The architecture of the DDPG algorithm is depicted on <a href="#fig-ddpg" class="quarto-xref">Figure&nbsp;<span>11.3</span></a>.</p>
 <div id="fig-ddpg" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-ddpg-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="img/ddpg.png" class="img-fluid figure-img" style="width:70.0%">
+<a href="img/ddpg.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Figure&nbsp;11.3: Architecture of the DDPG (deep deterministic policy gradient) algorithm."><img src="img/ddpg.png" class="img-fluid figure-img" style="width:70.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ddpg-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;12.3: Architecture of the DDPG (deep deterministic policy gradient) algorithm.
+Figure&nbsp;11.3: Architecture of the DDPG (deep deterministic policy gradient) algorithm.
 </figcaption>
 </figure>
 </div>
@@ -474,8 +478,8 @@ Figure&nbsp;12.3: Architecture of the DDPG (deep deterministic policy gradient) 
 <p>DDPG has rapidly become the state-of-the-art model-free method for continuous action spaces (although now PPO is preferred). It is able to learn efficent policies on most contiuous problems, either pixel-based or using individual state variables. In the original DDPG paper, they showed that <em>batch normalization</em> <span class="citation" data-cites="Ioffe2015">(<a href="references.html#ref-Ioffe2015" role="doc-biblioref">Ioffe and Szegedy, 2015</a>)</span> is crucial in stabilizing the training of deep networks on such problems. Its main limitation is its high sample complexity. Distributed versions of DDPG have been proposed to speed up learning, similarly to the parallel actor learners of A3C <span class="citation" data-cites="Lotzsch2017 Popov2017 Barth-Maron2018">(<a href="references.html#ref-Barth-Maron2018" role="doc-biblioref">Barth-Maron et al., 2018</a>; <a href="references.html#ref-Lotzsch2017" role="doc-biblioref">Lötzsch et al., 2017</a>; <a href="references.html#ref-Popov2017" role="doc-biblioref">Popov et al., 2017</a>)</span>.</p>
 <p><strong>Additional references:</strong> see <a href="http://pemami4911.github.io/blog/2016/08/21/ddpg-rl.html" class="uri">http://pemami4911.github.io/blog/2016/08/21/ddpg-rl.html</a> for additional explanations and step-by-step tensorflow code and <a href="https://lilianweng.github.io/lil-log/2018/04/08/policy-gradient-algorithms.html" class="uri">https://lilianweng.github.io/lil-log/2018/04/08/policy-gradient-algorithms.html</a> for contextual explanations.</p>
 </section>
-<section id="distributed-distributional-ddpg-d4pg" class="level3">
-<h3 class="anchored" data-anchor-id="distributed-distributional-ddpg-d4pg">Distributed Distributional DDPG (D4PG)</h3>
+<section id="distributed-distributional-ddpg-d4pg" class="level2">
+<h2 class="anchored" data-anchor-id="distributed-distributional-ddpg-d4pg">Distributed Distributional DDPG (D4PG)</h2>
 <p>Similarly to the Rainbow DQN for DQN. Distributed Distributional DDPG <span class="citation" data-cites="Barth-Maron2018">(D4PG, <a href="references.html#ref-Barth-Maron2018" role="doc-biblioref">Barth-Maron et al., 2018</a>)</span> proposed several improvements on DDPG to make it more efficient:</p>
 <ol type="1">
 <li><p>The critic is trained using <strong>distributional learning</strong> (<span class="citation" data-cites="Bellemare2017">Bellemare et al. (<a href="references.html#ref-Bellemare2017" role="doc-biblioref">2017</a>)</span>) instead of classical Q-learning to improve the stability of learning in the actor (less variance).</p></li>
@@ -950,8 +954,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../src/3.5-NaturalGradient.html" class="pagination-link" aria-label="Natural Gradients">
-        <span class="nav-page-text"><span class="chapter-title">Natural Gradients</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../src/3.5-NaturalGradient.html" class="pagination-link" aria-label="Policy Optimization (TRPO, PPO)">
+        <span class="nav-page-text"><span class="chapter-title">Policy Optimization (TRPO, PPO)</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
@@ -969,6 +973,38 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     </div>
   </div>
 </footer>
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","openEffect":"zoom","loop":false,"selector":".lightbox"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
 
 
 

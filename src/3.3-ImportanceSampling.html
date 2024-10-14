@@ -60,6 +60,9 @@ div.csl-indent {
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -262,7 +265,8 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/3.2-ActorCritic.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Advantage Actor-Critic methods</span></a>
+  <a href="../src/3.2-ActorCritic.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Asynchronous Advantage Actor-Critic (A3C)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -272,17 +276,17 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/3.4-DPG.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Deterministic Policy Gradient (DPG)</span></a>
+  <a href="../src/3.4-DPG.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Deep Deterministic Policy Gradient (DDPG)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/3.5-NaturalGradient.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Natural Gradients</span></a>
+  <a href="../src/3.5-NaturalGradient.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Policy Optimization (TRPO, PPO)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/3.6-EntropyRL.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Maximum Entropy RL</span></a>
+  <a href="../src/3.6-EntropyRL.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Maximum Entropy RL (SAC)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -292,7 +296,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/3.8-OtherPolicyGradient.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Miscellaneous model-free algorithm</span></a>
+  <a href="../src/3.8-OtherPolicyGradient.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Miscellaneous model-free algorithms</span></a>
   </div>
 </li>
       </ul>
@@ -347,14 +351,14 @@ window.Quarto = {
     \nabla_\theta J(\theta) =  \mathbb{E}_{s \sim \rho^\pi, a \sim \pi_\theta}[\nabla_\theta \log \pi_\theta(s, a) \, Q^{\pi_\theta}(s, a)]
 </span></p>
 <p>The state distribution <span class="math inline">\rho^\pi</span> defines the ensemble of states that can be visited using the actor policy <span class="math inline">\pi_\theta</span>. If, during Monte-Carlo sampling of the policy gradient, the states <span class="math inline">s</span> do not come from this state distribution, the approximated policy gradient will be wrong (high bias) and the resulting policy will be suboptimal.</p>
-<p>The major drawback of on-policy methods is their sample complexity: it is difficult to ensure that the <em>“interesting”</em> regions of the policy are actually discovered by the actor (see <a href="#fig-onlinepolicyexploration" class="quarto-xref">Figure&nbsp;<span>11.1</span></a>). If the actor is initialized in a flat region of the reward space (where there is not a lot of rewards), policy gradient updates will only change slightly the policy and it may take a lot of iterations until interesting policies are discovered and fine-tuned.</p>
+<p>The major drawback of on-policy methods is their sample complexity: it is difficult to ensure that the <em>“interesting”</em> regions of the policy are actually discovered by the actor (see <a href="#fig-onlinepolicyexploration" class="quarto-xref">Figure&nbsp;<span>10.1</span></a>). If the actor is initialized in a flat region of the reward space (where there is not a lot of rewards), policy gradient updates will only change slightly the policy and it may take a lot of iterations until interesting policies are discovered and fine-tuned.</p>
 <div id="fig-onlinepolicyexploration" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-onlinepolicyexploration-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="img/onpolicyexploration.png" class="img-fluid figure-img" style="width:50.0%">
+<a href="img/onpolicyexploration.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;10.1: Illustration of the sample complexity inherent to on-policy methods, where the actor has only two parameters \theta_1 and \theta_2. If only very small regions of the actor parameters are associated with high rewards, the policy might wander randomly for a very long time before “hitting”the interesting regions."><img src="img/onpolicyexploration.png" class="img-fluid figure-img" style="width:50.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-onlinepolicyexploration-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;11.1: Illustration of the sample complexity inherent to on-policy methods, where the actor has only two parameters <span class="math inline">\theta_1</span> and <span class="math inline">\theta_2</span>. If only very small regions of the actor parameters are associated with high rewards, the policy might wander randomly for a very long time before “hitting”the interesting regions.
+Figure&nbsp;10.1: Illustration of the sample complexity inherent to on-policy methods, where the actor has only two parameters <span class="math inline">\theta_1</span> and <span class="math inline">\theta_2</span>. If only very small regions of the actor parameters are associated with high rewards, the policy might wander randomly for a very long time before “hitting”the interesting regions.
 </figcaption>
 </figure>
 </div>
@@ -368,14 +372,14 @@ Figure&nbsp;11.1: Illustration of the sample complexity inherent to on-policy me
 <p>The only condition for Q-learning to work (in the tabular case) is that the behavior policy <span class="math inline">b(s,a)</span> must be able to explore actions which are selected by the target policy:</p>
 <p><span id="eq-qlearningcondition"><span class="math display">
     \pi(s, a) &gt; 0 \rightarrow b(s, a) &gt; 0
-\tag{11.1}</span></span></p>
+\tag{10.1}</span></span></p>
 <p>Actions which would be selected by the target policy should be selected at least from time to time by the behavior policy in order to allow their update: if the target policy thinks this action should be executed, the behavior policy should try it to confirm or infirm this assumption. In mathematical terms, there is an assumption of <em>coverage</em> of <span class="math inline">\pi</span> by <span class="math inline">b</span> (the support of <span class="math inline">b</span> includes the one of <span class="math inline">\pi</span>).</p>
 <p>There are mostly two ways to create the behavior policy:</p>
 <ol type="1">
 <li><p><em>Use expert knowledge / human demonstrations</em>. Not all available actions should be explored: the programmer already knows they do not belong to the optimal policy. When an agent learns to play chess, for example, the behavior policy could consist of the moves typically played by human experts: if chess masters play this move, it is likely to be a good action, so it should be tried out, valued and possibly incorporated into the target policy (if it is indeed a good action, experts might be wrong). A similar idea was used to bootstrap early versions of AlphaGo <span class="citation" data-cites="Silver2016">(<a href="references.html#ref-Silver2016" role="doc-biblioref">Silver et al., 2016</a>)</span>. In robotics, one could for example use “classical” engineering methods to control the exploration of the robot, while learning (hopefully) a better policy. It is also possible to perform <em>imitation learning</em>, where the agent learns from human demonstrations (e.g. <span class="citation" data-cites="Levine2013">Levine and Koltun (<a href="references.html#ref-Levine2013" role="doc-biblioref">2013</a>)</span>).</p></li>
 <li><p><em>Derive it from the target policy</em>. In Q-learning, the target policy can be <strong>deterministic</strong>, i.e.&nbsp;always select the greedy action (with the maximum Q-value). The behavior policy can be derived from the target policy by making it <em><span class="math inline">\epsilon</span>-soft</em>, for example using a <span class="math inline">\epsilon</span>-greedy or softmax action selection scheme on the Q-values learned by the target policy.</p></li>
 </ol>
-<p>The second option allows to control the level of exploration during learning (by controlling <span class="math inline">\epsilon</span> or the softmax temperature) while making sure that the target policy (the one used in production) is deterministic and optimal. It furthermore makes sure that <a href="#eq-qlearningcondition" class="quarto-xref">Equation&nbsp;<span>11.1</span></a> is respected: the greedy action of the target policy always has a non-zero probability of being selected by an <span class="math inline">\epsilon</span>-greedy or softmax action selection. This is harder to ensure using expert knowledge.</p>
+<p>The second option allows to control the level of exploration during learning (by controlling <span class="math inline">\epsilon</span> or the softmax temperature) while making sure that the target policy (the one used in production) is deterministic and optimal. It furthermore makes sure that <a href="#eq-qlearningcondition" class="quarto-xref">Equation&nbsp;<span>10.1</span></a> is respected: the greedy action of the target policy always has a non-zero probability of being selected by an <span class="math inline">\epsilon</span>-greedy or softmax action selection. This is harder to ensure using expert knowledge.</p>
 <p>Q-learning methods such as DQN use this second option. The target policy in DQN is actually a greedy policy with respect to the Q-values (i.e.&nbsp;the action with the maximum Q-value will be deterministically chosen), but an <span class="math inline">\epsilon</span>-soft behavior policy is derived from it to ensure exploration. This explains now the following comment in the description of the DQN algorithm:</p>
 <ul>
 <li>Select the action <span class="math inline">a_t</span> based on the behavior policy derived from <span class="math inline">Q_\theta(s_t, a)</span> (e.g.&nbsp;softmax).</li>
@@ -1030,13 +1034,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../src/3.2-ActorCritic.html" class="pagination-link" aria-label="Advantage Actor-Critic methods">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">Advantage Actor-Critic methods</span></span>
+      <a href="../src/3.2-ActorCritic.html" class="pagination-link" aria-label="Asynchronous Advantage Actor-Critic (A3C)">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Asynchronous Advantage Actor-Critic (A3C)</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../src/3.4-DPG.html" class="pagination-link" aria-label="Deterministic Policy Gradient (DPG)">
-        <span class="nav-page-text"><span class="chapter-title">Deterministic Policy Gradient (DPG)</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../src/3.4-DPG.html" class="pagination-link" aria-label="Deep Deterministic Policy Gradient (DDPG)">
+        <span class="nav-page-text"><span class="chapter-title">Deep Deterministic Policy Gradient (DDPG)</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
@@ -1054,6 +1058,38 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     </div>
   </div>
 </footer>
+<script>var lightboxQuarto = GLightbox({"openEffect":"zoom","loop":false,"selector":".lightbox","closeEffect":"zoom","descPosition":"bottom"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
 
 
 

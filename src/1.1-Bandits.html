@@ -41,6 +41,9 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -243,7 +246,8 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/3.2-ActorCritic.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Advantage Actor-Critic methods</span></a>
+  <a href="../src/3.2-ActorCritic.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Asynchronous Advantage Actor-Critic (A3C)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -253,17 +257,17 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/3.4-DPG.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Deterministic Policy Gradient (DPG)</span></a>
+  <a href="../src/3.4-DPG.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Deep Deterministic Policy Gradient (DDPG)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/3.5-NaturalGradient.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Natural Gradients</span></a>
+  <a href="../src/3.5-NaturalGradient.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Policy Optimization (TRPO, PPO)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/3.6-EntropyRL.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Maximum Entropy RL</span></a>
+  <a href="../src/3.6-EntropyRL.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Maximum Entropy RL (SAC)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -273,7 +277,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/3.8-OtherPolicyGradient.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Miscellaneous model-free algorithm</span></a>
+  <a href="../src/3.8-OtherPolicyGradient.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Miscellaneous model-free algorithms</span></a>
   </div>
 </li>
       </ul>
@@ -343,7 +347,7 @@ window.Quarto = {
 <div id="fig-bandit" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-bandit-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="img/bandit-example.png" class="img-fluid figure-img">
+<a href="img/bandit-example.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;1: Example of a bandit with 10 actions. The mean and the variance of each reward distribution are depicted."><img src="img/bandit-example.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-bandit-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;1: Example of a bandit with 10 actions. The mean and the variance of each reward distribution are depicted.
@@ -362,7 +366,7 @@ Figure&nbsp;1: Example of a bandit with 10 actions. The mean and the variance of
 <div id="fig-bandit-sample" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-bandit-sample-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="img/bandit-samples.png" class="img-fluid figure-img">
+<a href="img/bandit-samples.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Figure&nbsp;2: Sampled reward over time for the same action."><img src="img/bandit-samples.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-bandit-sample-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;2: Sampled reward over time for the same action.
@@ -394,7 +398,7 @@ Figure&nbsp;2: Sampled reward over time for the same action.
 <div id="fig-samplingnormal" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-samplingnormal-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="img/normaldistribution.svg" class="img-fluid figure-img">
+<a href="img/normaldistribution.svg" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Figure&nbsp;3: Samples from the normal distribution are centered around its expected value."><img src="img/normaldistribution.svg" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-samplingnormal-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;3: Samples from the normal distribution are centered around its expected value.
@@ -457,7 +461,7 @@ Central Limit Theorem
 <div id="fig-clt" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-clt-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="img/IllustrationCentralTheorem.png" class="img-fluid figure-img">
+<a href="img/IllustrationCentralTheorem.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="Figure&nbsp;4: Illustration of the central limit theorem. Source:: https://en.wikipedia.org/wiki/Central_limit_theorem"><img src="img/IllustrationCentralTheorem.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-clt-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;4: Illustration of the central limit theorem. Source:: <a href="https://en.wikipedia.org/wiki/Central_limit_theorem" class="uri">https://en.wikipedia.org/wiki/Central_limit_theorem</a>
@@ -474,7 +478,7 @@ Figure&nbsp;4: Illustration of the central limit theorem. Source:: <a href="http
 <div id="fig-thermometer" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-thermometer-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="img/estimators-temperature.png" class="img-fluid figure-img">
+<a href="img/estimators-temperature.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5" title="Figure&nbsp;5: Thermometer and temperature."><img src="img/estimators-temperature.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-thermometer-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;5: Thermometer and temperature.
@@ -485,7 +489,7 @@ Figure&nbsp;5: Thermometer and temperature.
 <div id="fig-thermometer2" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-thermometer2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="img/estimators-temperature2.png" class="img-fluid figure-img">
+<a href="img/estimators-temperature2.png" class="lightbox" data-gallery="quarto-lightbox-gallery-6" title="Figure&nbsp;6: Distribution of the sampling averages."><img src="img/estimators-temperature2.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-thermometer2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;6: Distribution of the sampling averages.
@@ -509,7 +513,7 @@ Figure&nbsp;6: Distribution of the sampling averages.
 <div id="fig-biasvariance" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-biasvariance-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="img/biasvariance3.png" class="img-fluid figure-img">
+<a href="img/biasvariance3.png" class="lightbox" data-gallery="quarto-lightbox-gallery-7" title="Figure&nbsp;7: Bias-variance trade-off. Source: https://www.machinelearningplus.com/machine-learning/bias-variance-tradeoff/"><img src="img/biasvariance3.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-biasvariance-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;7: Bias-variance trade-off. Source: <a href="https://www.machinelearningplus.com/machine-learning/bias-variance-tradeoff/" class="uri">https://www.machinelearningplus.com/machine-learning/bias-variance-tradeoff/</a>
@@ -524,7 +528,7 @@ Figure&nbsp;7: Bias-variance trade-off. Source: <a href="https://www.machinelear
 <div id="fig-bandit-samples2" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-bandit-samples2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="img/bandit-samples2.png" class="img-fluid figure-img">
+<a href="img/bandit-samples2.png" class="lightbox" data-gallery="quarto-lightbox-gallery-8" title="Figure&nbsp;8: Samples and expected reward over time."><img src="img/bandit-samples2.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-bandit-samples2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;8: Samples and expected reward over time.
@@ -567,7 +571,7 @@ Figure&nbsp;8: Samples and expected reward over time.
 <div id="fig-nonstationary" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-nonstationary-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="img/bandit-nonstationary1.png" id="fig-nonstationary" class="img-fluid figure-img">
+<a href="img/bandit-nonstationary1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-9" title="Figure&nbsp;9: "><img src="img/bandit-nonstationary1.png" id="fig-nonstationary" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-nonstationary-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;9
@@ -585,7 +589,7 @@ Figure&nbsp;9
 <div id="fig-nonstationary2" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-nonstationary2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="img/bandit-nonstationary2.png" id="fig-nonstationary2" class="img-fluid figure-img">
+<a href="img/bandit-nonstationary2.png" class="lightbox" data-gallery="quarto-lightbox-gallery-10" title="Figure&nbsp;10: "><img src="img/bandit-nonstationary2.png" id="fig-nonstationary2" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-nonstationary2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;10
@@ -620,7 +624,7 @@ Figure&nbsp;10
 <div id="fig-greedy" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-greedy-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="img/bandit-estimates-greedy.png" class="img-fluid figure-img">
+<a href="img/bandit-estimates-greedy.png" class="lightbox" data-gallery="quarto-lightbox-gallery-11" title="Figure&nbsp;11: Greedy action selection. The action with the highest expected value is selected all the time."><img src="img/bandit-estimates-greedy.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-greedy-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;11: Greedy action selection. The action with the highest expected value is selected all the time.
@@ -636,7 +640,7 @@ Figure&nbsp;11: Greedy action selection. The action with the highest expected va
 </span></p>
 <p>The greedy policy is <strong>deterministic</strong>: the action taken is always the same for a fixed <span class="math inline">Q_t</span>.</p>
 <p>However, the greedy action selection scheme only works when the estimates are good enough. Imagine that estimates are initially bad (e.g.&nbsp;0), and an action is sampled randomly. If the received reward is positive, the new Q-value of that action becomes positive, so it becomes the greedy action. At the next step, greedy action selection will always select that action, although the second one could have been better but it was never explored.</p>
-<p><img src="img/bandit-greedy.gif" class="img-fluid"></p>
+<p><a href="img/bandit-greedy.gif" class="lightbox" data-gallery="quarto-lightbox-gallery-12"><img src="img/bandit-greedy.gif" class="img-fluid"></a></p>
 <p>This <strong>exploration-exploitation</strong> dilemma is the hardest problem in RL:</p>
 <ul>
 <li><strong>Exploitation</strong> is using the current estimates to select an action: they might be wrong!</li>
@@ -650,7 +654,7 @@ Figure&nbsp;11: Greedy action selection. The action with the highest expected va
 <div id="fig-exploitationexploration" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-exploitationexploration-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="img/exploration_vs_exploitation.png" class="img-fluid figure-img">
+<a href="img/exploration_vs_exploitation.png" class="lightbox" data-gallery="quarto-lightbox-gallery-13" title="Figure&nbsp;12: Source: UC Berkeley AI course slides, lecture 11"><img src="img/exploration_vs_exploitation.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-exploitationexploration-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;12: Source: UC Berkeley AI course <a href="http://ai.berkeley.edu/lecture_slides.html">slides</a>, <a href="http://ai.berkeley.edu/slides/Lecture%2011%20--%20Reinforcement%20Learning%20II/SP14%20CS188%20Lecture%2011%20--%20Reinforcement%20Learning%20II.pptx">lecture 11</a>
@@ -667,7 +671,7 @@ Figure&nbsp;12: Source: UC Berkeley AI course <a href="http://ai.berkeley.edu/le
 <div id="fig-epsilongreedy" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-epsilongreedy-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="img/bandit-estimates-epsilongreedy.png" class="img-fluid figure-img">
+<a href="img/bandit-estimates-epsilongreedy.png" class="lightbox" data-gallery="quarto-lightbox-gallery-14" title="Figure&nbsp;13: \epsilon-greedy action selection. The greedy action is selected most of the time, but the other actions might be selected from time to time."><img src="img/bandit-estimates-epsilongreedy.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-epsilongreedy-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;13: <span class="math inline">\epsilon</span>-greedy action selection. The greedy action is selected most of the time, but the other actions might be selected from time to time.
@@ -675,7 +679,7 @@ Figure&nbsp;13: <span class="math inline">\epsilon</span>-greedy action selectio
 </figure>
 </div>
 <p>The parameter <span class="math inline">\epsilon</span> controls the level of exploration: the higher <span class="math inline">\epsilon</span>, the more exploration. One can set <span class="math inline">\epsilon</span> high at the beginning of learning and progressively reduce it to exploit more. However, it chooses equally among all actions: the worst action is as likely to be selected as the next-to-best action.</p>
-<p><img src="img/bandit-egreedy.gif" class="img-fluid"></p>
+<p><a href="img/bandit-egreedy.gif" class="lightbox" data-gallery="quarto-lightbox-gallery-15"><img src="img/bandit-egreedy.gif" class="img-fluid"></a></p>
 </section>
 <section id="softmax-action-selection" class="level3">
 <h3 class="anchored" data-anchor-id="softmax-action-selection">Softmax action selection</h3>
@@ -687,7 +691,7 @@ Figure&nbsp;13: <span class="math inline">\epsilon</span>-greedy action selectio
 <div id="fig-softmax1" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-softmax1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="img/bandit-estimates-softmax.png" class="img-fluid figure-img">
+<a href="img/bandit-estimates-softmax.png" class="lightbox" data-gallery="quarto-lightbox-gallery-16" title="Figure&nbsp;14: Softmax action selection."><img src="img/bandit-estimates-softmax.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-softmax1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;14: Softmax action selection.
@@ -702,14 +706,14 @@ Figure&nbsp;14: Softmax action selection.
 <div id="fig-softmax2" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-softmax2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="img/bandit-estimates-softmax2.png" class="img-fluid figure-img">
+<a href="img/bandit-estimates-softmax2.png" class="lightbox" data-gallery="quarto-lightbox-gallery-17" title="Figure&nbsp;15: Influence of the temperature parameter."><img src="img/bandit-estimates-softmax2.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-softmax2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;15: Influence of the temperature parameter.
 </figcaption>
 </figure>
 </div>
-<p><img src="img/bandit-softmax.gif" class="img-fluid"></p>
+<p><a href="img/bandit-softmax.gif" class="lightbox" data-gallery="quarto-lightbox-gallery-18"><img src="img/bandit-softmax.gif" class="img-fluid"></a></p>
 <div class="callout callout-style-default callout-tip no-icon callout-titled" title="Exploration schedule">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -721,7 +725,7 @@ Exploration schedule
 </div>
 <div class="callout-body-container callout-body">
 <p>A useful technique to cope with the <strong>exploration-exploitation dilemma</strong> is to slowly decrease the value of <span class="math inline">\epsilon</span> or <span class="math inline">\tau</span> with the number of plays. This allows for more exploration at the beginning of learning and more exploitation towards the end. It is however hard to find the right <strong>decay rate</strong> for the exploration parameters.</p>
-<p><img src="img/bandit-scheduling.png" class="img-fluid"></p>
+<p><a href="img/bandit-scheduling.png" class="lightbox" data-gallery="quarto-lightbox-gallery-19"><img src="img/bandit-scheduling.png" class="img-fluid"></a></p>
 </div>
 </div>
 </section>
@@ -737,7 +741,7 @@ Exploration schedule
 \end{aligned}
 </span></p>
 <p>The influence of <span class="math inline">Q_0</span> on <span class="math inline">Q_t</span> <strong>fades</strong> quickly with <span class="math inline">(1-\alpha)^t</span>, but that can be lost time or lead to a suboptimal policy. However, we can use this at our advantage with <strong>optimistic initialization</strong>. By choosing very high initial values for the estimates (they can only decrease), one can ensure that all possible actions will be selected during learning by the greedy method, solving the <strong>exploration problem</strong>. This leads however to an <strong>overestimation</strong> of the value of other actions.</p>
-<p><img src="img/bandit-optimistic.gif" class="img-fluid"></p>
+<p><a href="img/bandit-optimistic.gif" class="lightbox" data-gallery="quarto-lightbox-gallery-20"><img src="img/bandit-optimistic.gif" class="img-fluid"></a></p>
 </section>
 <section id="reinforcement-comparison" class="level3">
 <h3 class="anchored" data-anchor-id="reinforcement-comparison">Reinforcement comparison</h3>
@@ -758,7 +762,7 @@ Exploration schedule
 <p><span class="math display">
     \pi_t (a) = \dfrac{\exp p_t(a)}{ \displaystyle\sum_{a'} \exp p_t(a')}
 </span></p>
-<p><img src="img/bandit-reinforcementcomparison.gif" class="img-fluid"></p>
+<p><a href="img/bandit-reinforcementcomparison.gif" class="lightbox" data-gallery="quarto-lightbox-gallery-21"><img src="img/bandit-reinforcementcomparison.gif" class="img-fluid"></a></p>
 <p>Reinforcement comparison can be very effective, as it does not rely only on the rewards received, but also on their comparison with a <strong>baseline</strong>, the average reward. This idea is at the core of <strong>actor-critic</strong> architectures which we will see later. The initial average reward <span class="math inline">\tilde{r}_{0}</span> can be set optimistically to encourage exploration.</p>
 </section>
 <section id="gradient-bandit-algorithm" class="level3">
@@ -780,7 +784,7 @@ Exploration schedule
     \tilde{r}_{t+1} =  \tilde{r}_t + \alpha \, (r_t - \tilde{r}_t)
 </span></p>
 <p>The preference can increase become quite high, making the policy greedy towards the end. No need for a temperature parameter!</p>
-<p><img src="img/bandit-gradientbandit.gif" class="img-fluid"></p>
+<p><a href="img/bandit-gradientbandit.gif" class="lightbox" data-gallery="quarto-lightbox-gallery-22"><img src="img/bandit-gradientbandit.gif" class="img-fluid"></a></p>
 </section>
 <section id="upper-confidence-bound-action-selection" class="level3">
 <h3 class="anchored" data-anchor-id="upper-confidence-bound-action-selection">Upper-Confidence-Bound action selection</h3>
@@ -801,7 +805,7 @@ Exploration schedule
 <p><span class="math display">
     a^*_t = \text{argmax}_{a} \left[ Q_t(a) + c \, \sqrt{\frac{\ln t}{N_t(a)}} \right]
 </span></p>
-<p><img src="img/bandit-ucb.gif" class="img-fluid"></p>
+<p><a href="img/bandit-ucb.gif" class="lightbox" data-gallery="quarto-lightbox-gallery-23"><img src="img/bandit-ucb.gif" class="img-fluid"></a></p>
 
 
 </section>
@@ -1254,6 +1258,38 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     </div>
   </div>
 </footer>
+<script>var lightboxQuarto = GLightbox({"selector":".lightbox","descPosition":"bottom","loop":false,"openEffect":"zoom","closeEffect":"zoom"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
 
 
 

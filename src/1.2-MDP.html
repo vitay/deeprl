@@ -60,6 +60,9 @@ div.csl-indent {
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -262,7 +265,8 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/3.2-ActorCritic.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Advantage Actor-Critic methods</span></a>
+  <a href="../src/3.2-ActorCritic.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Asynchronous Advantage Actor-Critic (A3C)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -272,17 +276,17 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/3.4-DPG.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Deterministic Policy Gradient (DPG)</span></a>
+  <a href="../src/3.4-DPG.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Deep Deterministic Policy Gradient (DDPG)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/3.5-NaturalGradient.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Natural Gradients</span></a>
+  <a href="../src/3.5-NaturalGradient.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Policy Optimization (TRPO, PPO)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/3.6-EntropyRL.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Maximum Entropy RL</span></a>
+  <a href="../src/3.6-EntropyRL.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Maximum Entropy RL (SAC)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -292,7 +296,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/3.8-OtherPolicyGradient.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Miscellaneous model-free algorithm</span></a>
+  <a href="../src/3.8-OtherPolicyGradient.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Miscellaneous model-free algorithms</span></a>
   </div>
 </li>
       </ul>
@@ -313,7 +317,8 @@ window.Quarto = {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#policy-and-value-functions" id="toc-policy-and-value-functions" class="nav-link active" data-scroll-target="#policy-and-value-functions">Policy and value functions</a></li>
+  <li><a href="#markov-decision-process" id="toc-markov-decision-process" class="nav-link active" data-scroll-target="#markov-decision-process">Markov Decision Process</a></li>
+  <li><a href="#policy-and-value-functions" id="toc-policy-and-value-functions" class="nav-link" data-scroll-target="#policy-and-value-functions">Policy and value functions</a></li>
   <li><a href="#bellman-equations" id="toc-bellman-equations" class="nav-link" data-scroll-target="#bellman-equations">Bellman equations</a></li>
   </ul>
 </nav>
@@ -340,14 +345,16 @@ window.Quarto = {
 </header>
 
 
+<section id="markov-decision-process" class="level2">
+<h2 class="anchored" data-anchor-id="markov-decision-process">Markov Decision Process</h2>
 <p>RL methods apply to problems where an agent interacts with an environment in discrete time steps (<a href="#fig-agentenv" class="quarto-xref">Figure&nbsp;<span>2.1</span></a>). At time <span class="math inline">t</span>, the agent is in state <span class="math inline">s_t</span> and decides to perform an action <span class="math inline">a_t</span>. At the next time step, it arrives in the state <span class="math inline">s_{t+1}</span> and obtains the reward <span class="math inline">r_{t+1}</span>. The goal of the agent is to maximize the reward obtained on the long term. The textbook by <span class="citation" data-cites="Sutton1998">Sutton and Barto (<a href="references.html#ref-Sutton1998" role="doc-biblioref">1998</a>)</span> (updated in <span class="citation" data-cites="Sutton2017">Sutton and Barto (<a href="references.html#ref-Sutton2017" role="doc-biblioref">2017</a>)</span>) defines the field extensively.</p>
 <div id="fig-agentenv" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-agentenv-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="img/rl-agent.jpg" class="img-fluid figure-img" style="width:50.0%">
+<a href="img/rl-agent.jpg" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;2.1: Interaction between an agent and its environment. Source: @Sutton1998."><img src="img/rl-agent.jpg" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-agentenv-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;2.1: Interaction between an agent and its environment. Taken from <span class="citation" data-cites="Sutton1998">Sutton and Barto (<a href="references.html#ref-Sutton1998" role="doc-biblioref">1998</a>)</span>.
+Figure&nbsp;2.1: Interaction between an agent and its environment. Source: <span class="citation" data-cites="Sutton1998">Sutton and Barto (<a href="references.html#ref-Sutton1998" role="doc-biblioref">1998</a>)</span>.
 </figcaption>
 </figure>
 </div>
@@ -367,8 +374,9 @@ Figure&nbsp;2.1: Interaction between an agent and its environment. Taken from <s
 <p>i.e.&nbsp;you do not need the full history of the agent to predict where it will arrive after an action. In simple problems, this is just a question of providing enough information to the description of a state: if a transition depends on what happened in the past, just put that information in the state description.</p>
 <p>If the Markov property is not met, RL methods may not converge (or poorly). In many problems, one does not have access to the true states of the agent, but one can only indirectly observe them. For example, in a video game, the true state is defined by a couple of variables: coordinates <span class="math inline">(x, y)</span> of the two players, position of the ball, speed, etc. However, all you have access to are the raw pixels: sometimes the ball may be hidden behind a wall or a tree, but it still exists in the state space. Speed information is also not observable in a single frame.</p>
 <p>In a <strong>Partially Observable Markov Decision Process</strong> (POMDP), observations <span class="math inline">o_t</span> come from a space <span class="math inline">\mathcal{O}</span> and are linked to underlying states using the density function <span class="math inline">p(o_t| s_t)</span>. Observations are usually not Markov, so the full history of observations <span class="math inline">h_t = (o_0, a_0, \dots o_t, a_t)</span> is needed to solve the problem.</p>
-<section id="policy-and-value-functions" class="level3">
-<h3 class="anchored" data-anchor-id="policy-and-value-functions">Policy and value functions</h3>
+</section>
+<section id="policy-and-value-functions" class="level2">
+<h2 class="anchored" data-anchor-id="policy-and-value-functions">Policy and value functions</h2>
 <p>The policy defines the behavior of the agent: which action should be taken in each state. One distinguishes two kinds of policies:</p>
 <ul>
 <li>a stochastic policy <span class="math inline">\pi : \mathcal{S} \rightarrow P(\mathcal{A})</span> defines the probability distribution <span class="math inline">P(\mathcal{A})</span> of performing an action.</li>
@@ -392,8 +400,8 @@ Figure&nbsp;2.1: Interaction between an agent and its environment. Taken from <s
 </span></p>
 <p>Obviously, these quantities depend on the states/actions themselves (some chessboard configurations are intrinsically better than others, i.e.&nbsp;you are more likely to win from that state), but also on the policy (if you can kill your opponent in one move - meaning you are in an intrinsically good state - but systematically take the wrong decision and lose, this is actually a bad state).</p>
 </section>
-<section id="bellman-equations" class="level3">
-<h3 class="anchored" data-anchor-id="bellman-equations">Bellman equations</h3>
+<section id="bellman-equations" class="level2">
+<h2 class="anchored" data-anchor-id="bellman-equations">Bellman equations</h2>
 <p>The V- and Q-values are obviously linked with each other. The value of state depend on the value of the actions possible in that state, modulated by the probability that an action will be taken (i.e.&nbsp;the policy):</p>
 <p><span id="eq-v-value"><span class="math display">
     V^{\pi}(s) = \sum_{a \in \mathcal{A}} \pi(s, a) \, Q^\pi(s,a)
@@ -419,10 +427,10 @@ Figure&nbsp;2.1: Interaction between an agent and its environment. Taken from <s
 <div id="fig-backup" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-backup-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="img/backup.png" class="img-fluid figure-img" style="width:50.0%">
+<a href="img/backup.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Figure&nbsp;2.2: Backup diagrams corresponding to the Bellman equations. Source: @Sutton1998."><img src="img/backup.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-backup-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;2.2: Backup diagrams corresponding to the Bellman equations. Taken from <span class="citation" data-cites="Sutton1998">Sutton and Barto (<a href="references.html#ref-Sutton1998" role="doc-biblioref">1998</a>)</span>.
+Figure&nbsp;2.2: Backup diagrams corresponding to the Bellman equations. Source: <span class="citation" data-cites="Sutton1998">Sutton and Barto (<a href="references.html#ref-Sutton1998" role="doc-biblioref">1998</a>)</span>.
 </figcaption>
 </figure>
 </div>
@@ -885,6 +893,38 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     </div>
   </div>
 </footer>
+<script>var lightboxQuarto = GLightbox({"selector":".lightbox","loop":false,"descPosition":"bottom","closeEffect":"zoom","openEffect":"zoom"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
 
 
 

@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Natural Gradients – Deep Reinforcement Learning</title>
+<title>Policy Optimization (TRPO, PPO) – Deep Reinforcement Learning</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -60,6 +60,9 @@ div.csl-indent {
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -145,7 +148,7 @@ window.Quarto = {
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
         <a class="flex-grow-1 no-decor" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-          <h1 class="quarto-secondary-nav-title"><span class="chapter-title">Natural Gradients</span></h1>
+          <h1 class="quarto-secondary-nav-title"><span class="chapter-title">Policy Optimization (TRPO, PPO)</span></h1>
         </a>     
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
         <i class="bi bi-search"></i>
@@ -262,7 +265,8 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/3.2-ActorCritic.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Advantage Actor-Critic methods</span></a>
+  <a href="../src/3.2-ActorCritic.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Asynchronous Advantage Actor-Critic (A3C)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -272,17 +276,17 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/3.4-DPG.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Deterministic Policy Gradient (DPG)</span></a>
+  <a href="../src/3.4-DPG.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Deep Deterministic Policy Gradient (DDPG)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/3.5-NaturalGradient.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">Natural Gradients</span></a>
+  <a href="../src/3.5-NaturalGradient.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">Policy Optimization (TRPO, PPO)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/3.6-EntropyRL.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Maximum Entropy RL</span></a>
+  <a href="../src/3.6-EntropyRL.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Maximum Entropy RL (SAC)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -292,7 +296,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/3.8-OtherPolicyGradient.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Miscellaneous model-free algorithm</span></a>
+  <a href="../src/3.8-OtherPolicyGradient.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Miscellaneous model-free algorithms</span></a>
   </div>
 </li>
       </ul>
@@ -326,7 +330,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title d-none d-lg-block"><span class="chapter-title">Natural Gradients</span></h1>
+<h1 class="title d-none d-lg-block"><span class="chapter-title">Policy Optimization (TRPO, PPO)</span></h1>
 </div>
 
 
@@ -364,14 +368,14 @@ window.Quarto = {
 <div id="fig-naturalgradient" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-naturalgradient-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="img/naturalgradient.png" class="img-fluid figure-img" style="width:80.0%">
+<a href="img/naturalgradient.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;12.1: Euclidian distances in the parameter space do not represent well the statistical distance between probability distributions. The two Gaussians on the left (\mathcal{N}(0, 0.2) and \mathcal{N}(1, 0.2)) have the same Euclidian distance in the parameter space (d = \sqrt{(\mu_0 - \mu_1)^2+(\sigma_0 - \sigma_1)^2}) than the two Gaussians on the right (\mathcal{N}(0, 10) and \mathcal{N}(1, 10)). However, the Gaussians on the right are much more similar than the two on the left: if you have a single sample, you could not say from which distribution it comes for the Gaussians on the right, while it is obvious for the Gaussians on the left."><img src="img/naturalgradient.png" class="img-fluid figure-img" style="width:80.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-naturalgradient-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;13.1: Euclidian distances in the parameter space do not represent well the statistical distance between probability distributions. The two Gaussians on the left (<span class="math inline">\mathcal{N}(0, 0.2)</span> and <span class="math inline">\mathcal{N}(1, 0.2)</span>) have the same Euclidian distance in the parameter space (<span class="math inline">d = \sqrt{(\mu_0 - \mu_1)^2+(\sigma_0 - \sigma_1)^2}</span>) than the two Gaussians on the right (<span class="math inline">\mathcal{N}(0, 10)</span> and <span class="math inline">\mathcal{N}(1, 10)</span>). However, the Gaussians on the right are much more similar than the two on the left: if you have a single sample, you could not say from which distribution it comes for the Gaussians on the right, while it is obvious for the Gaussians on the left.
+Figure&nbsp;12.1: Euclidian distances in the parameter space do not represent well the statistical distance between probability distributions. The two Gaussians on the left (<span class="math inline">\mathcal{N}(0, 0.2)</span> and <span class="math inline">\mathcal{N}(1, 0.2)</span>) have the same Euclidian distance in the parameter space (<span class="math inline">d = \sqrt{(\mu_0 - \mu_1)^2+(\sigma_0 - \sigma_1)^2}</span>) than the two Gaussians on the right (<span class="math inline">\mathcal{N}(0, 10)</span> and <span class="math inline">\mathcal{N}(1, 10)</span>). However, the Gaussians on the right are much more similar than the two on the left: if you have a single sample, you could not say from which distribution it comes for the Gaussians on the right, while it is obvious for the Gaussians on the left.
 </figcaption>
 </figure>
 </div>
-<p>Consider the two Gaussian distributions in the left part of <a href="#fig-naturalgradient" class="quarto-xref">Figure&nbsp;<span>13.1</span></a> (<span class="math inline">\mathcal{N}(0, 0.2)</span> and <span class="math inline">\mathcal{N}(1, 0.2)</span>) and the two on the right (<span class="math inline">\mathcal{N}(0, 10)</span> and <span class="math inline">\mathcal{N}(1, 10)</span>). In both cases, the distance in the Euclidian space of parameters <span class="math inline">d = \sqrt{(\mu_0 - \mu_1)^2+(\sigma_0 - \sigma_1)^2}</span> is the same between the two Gaussians. Obviously, the two distributions on the left are however further away from each other than the two on the the right. This indicates that the Euclidian distance in the parameter space (which is what <em>regular</em> gradients act on) is not a correct measurement of the statistical distance between two distributions (which what we want to minimize between two iterations of PG).</p>
+<p>Consider the two Gaussian distributions in the left part of <a href="#fig-naturalgradient" class="quarto-xref">Figure&nbsp;<span>12.1</span></a> (<span class="math inline">\mathcal{N}(0, 0.2)</span> and <span class="math inline">\mathcal{N}(1, 0.2)</span>) and the two on the right (<span class="math inline">\mathcal{N}(0, 10)</span> and <span class="math inline">\mathcal{N}(1, 10)</span>). In both cases, the distance in the Euclidian space of parameters <span class="math inline">d = \sqrt{(\mu_0 - \mu_1)^2+(\sigma_0 - \sigma_1)^2}</span> is the same between the two Gaussians. Obviously, the two distributions on the left are however further away from each other than the two on the the right. This indicates that the Euclidian distance in the parameter space (which is what <em>regular</em> gradients act on) is not a correct measurement of the statistical distance between two distributions (which what we want to minimize between two iterations of PG).</p>
 <p>In statistics, a common measurement of the statistical distance between two distributions <span class="math inline">p</span> and <span class="math inline">q</span> is the <strong>Kullback-Leibler (KL) divergence</strong> <span class="math inline">D_{KL}(p||q)</span>, also called relative entropy or information gain. It is defined as:</p>
 <p><span class="math display">
     D_{KL}(p || q) = \mathbb{E}_{x \sim p} [\log \frac{p(x)}{q(x)}]  = \int p(x) \, \log \frac{p(x)}{q(x)} \, dx
@@ -386,14 +390,14 @@ Figure&nbsp;13.1: Euclidian distances in the parameter space do not represent we
 <div id="fig-riemannian" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-riemannian-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="img/riemannian.png" class="img-fluid figure-img" style="width:50.0%">
+<a href="img/riemannian.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Figure&nbsp;12.2: Naive illustration of the Riemannian metric. The Euclidian distance between p(x; \theta) and p(x; \theta + \Delta \theta) depends on the Euclidian distance between \theta and \theta + \Delta\theta, i.e.&nbsp;\Delta \theta. Riemannian metrics follow the geometry of the manifold to compute that distance, depending on its curvature. This figure is only for illustration: Riemannian metrics are purely local, \Delta \theta should be much smaller."><img src="img/riemannian.png" class="img-fluid figure-img" style="width:50.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-riemannian-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;13.2: Naive illustration of the Riemannian metric. The Euclidian distance between <span class="math inline">p(x; \theta)</span> and <span class="math inline">p(x; \theta + \Delta \theta)</span> depends on the Euclidian distance between <span class="math inline">\theta</span> and <span class="math inline">\theta + \Delta\theta</span>, i.e.&nbsp;<span class="math inline">\Delta \theta</span>. Riemannian metrics follow the geometry of the manifold to compute that distance, depending on its curvature. This figure is only for illustration: Riemannian metrics are purely local, <span class="math inline">\Delta \theta</span> should be much smaller.
+Figure&nbsp;12.2: Naive illustration of the Riemannian metric. The Euclidian distance between <span class="math inline">p(x; \theta)</span> and <span class="math inline">p(x; \theta + \Delta \theta)</span> depends on the Euclidian distance between <span class="math inline">\theta</span> and <span class="math inline">\theta + \Delta\theta</span>, i.e.&nbsp;<span class="math inline">\Delta \theta</span>. Riemannian metrics follow the geometry of the manifold to compute that distance, depending on its curvature. This figure is only for illustration: Riemannian metrics are purely local, <span class="math inline">\Delta \theta</span> should be much smaller.
 </figcaption>
 </figure>
 </div>
-<p>Let’s consider a parameterized distribution <span class="math inline">p(x; \theta)</span> and its new value <span class="math inline">p(x; \theta + \Delta \theta)</span> after applying a small parameter change <span class="math inline">\Delta \theta</span>. As depicted on <a href="#fig-riemannian" class="quarto-xref">Figure&nbsp;<span>13.2</span></a>, the Euclidian metric in the parameter space (<span class="math inline">||\theta + \Delta \theta - \theta||^2</span>) does not take the structure of the statistical manifold into account. We need to define a <strong>Riemannian metric</strong> which accounts locally for the curvature of the manifold between <span class="math inline">\theta</span> and <span class="math inline">\theta + \Delta \theta</span>. The Riemannian distance is defined by the dot product:</p>
+<p>Let’s consider a parameterized distribution <span class="math inline">p(x; \theta)</span> and its new value <span class="math inline">p(x; \theta + \Delta \theta)</span> after applying a small parameter change <span class="math inline">\Delta \theta</span>. As depicted on <a href="#fig-riemannian" class="quarto-xref">Figure&nbsp;<span>12.2</span></a>, the Euclidian metric in the parameter space (<span class="math inline">||\theta + \Delta \theta - \theta||^2</span>) does not take the structure of the statistical manifold into account. We need to define a <strong>Riemannian metric</strong> which accounts locally for the curvature of the manifold between <span class="math inline">\theta</span> and <span class="math inline">\theta + \Delta \theta</span>. The Riemannian distance is defined by the dot product:</p>
 <p><span class="math display">
     ||\Delta \theta||^2 = &lt; \Delta \theta , F(\theta) \, \Delta \theta &gt;
 </span></p>
@@ -488,7 +492,7 @@ Figure&nbsp;13.2: Naive illustration of the Riemannian metric. The Euclidian dis
 <p>Let’s now suppose that we can find its maximum, i.e.&nbsp;a policy <span class="math inline">\pi'</span> that maximizes the advantage of each state-action pair over <span class="math inline">\pi_{\theta_\text{old}}</span>. There would be no guarantee that <span class="math inline">\pi'</span> and <span class="math inline">\pi_{\theta_\text{old}}</span> are close enough so that the assumption stands. We could therefore make only a small step in its direction and hope for the best:</p>
 <p><span id="eq-linesearch"><span class="math display">
     \pi_\theta(s, a) = (1-\alpha) \, \pi_{\theta_\text{old}}(s, a) + \alpha \, \pi'(s,a)
-\tag{13.1}</span></span></p>
+\tag{12.1}</span></span></p>
 <p>This is the conservative policy iteration method of <span class="citation" data-cites="Kakade2002">Kakade and Langford (<a href="references.html#ref-Kakade2002" role="doc-biblioref">2002</a>)</span>, where a bound on the difference between <span class="math inline">\eta(\pi_{\theta_\text{old}})</span> and <span class="math inline">J_{\theta_\text{old}}(\theta)</span> can be derived.</p>
 <p><span class="citation" data-cites="Schulman2015">Schulman et al. (<a href="references.html#ref-Schulman2015" role="doc-biblioref">2015</a>)</span> propose to penalize instead the objective function by the KL divergence between the new and old policies. There are basically two ways to penalize an optimization problem:</p>
 <ol type="1">
@@ -519,14 +523,14 @@ Figure&nbsp;13.2: Naive illustration of the Riemannian metric. The Euclidian dis
 <div id="fig-trustregion" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-trustregion-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="img/trustregion.png" class="img-fluid figure-img" style="width:70.0%">
+<a href="img/trustregion.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Figure&nbsp;12.3: Graphical illustration of trust regions. From the current parameters \theta_\text{old}, we search for the maximum \theta^* of the real objective \eta(\theta). The unconstrained objective J_{\theta_\text{old}}(\theta) is locally similar to \eta(\theta) but quickly diverge as \pi_\theta and \pi_{\theta_\text{old}} become very different. The surrogate objective L(\theta) = J_{\theta_\text{old}} (\theta) - C \,  D_{KL}(\pi_{\theta_\text{old}} || \pi_\theta) is always smaller than \eta(\theta) and has a maximum close to \theta^* which keeps \pi_\theta and \pi_{\theta_\text{old}} close from each other in terms of KL divergence. The region around \theta_\text{old} where big optimization steps can be taken without changing the policy too much is called the trust region."><img src="img/trustregion.png" class="img-fluid figure-img" style="width:70.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-trustregion-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;13.3: Graphical illustration of trust regions. From the current parameters <span class="math inline">\theta_\text{old}</span>, we search for the maximum <span class="math inline">\theta^*</span> of the real objective <span class="math inline">\eta(\theta)</span>. The unconstrained objective <span class="math inline">J_{\theta_\text{old}}(\theta)</span> is locally similar to <span class="math inline">\eta(\theta)</span> but quickly diverge as <span class="math inline">\pi_\theta</span> and <span class="math inline">\pi_{\theta_\text{old}}</span> become very different. The surrogate objective <span class="math inline">L(\theta) = J_{\theta_\text{old}} (\theta) - C \,  D_{KL}(\pi_{\theta_\text{old}} || \pi_\theta)</span> is always smaller than <span class="math inline">\eta(\theta)</span> and has a maximum close to <span class="math inline">\theta^*</span> which keeps <span class="math inline">\pi_\theta</span> and <span class="math inline">\pi_{\theta_\text{old}}</span> close from each other in terms of KL divergence. The region around <span class="math inline">\theta_\text{old}</span> where big optimization steps can be taken without changing the policy too much is called the trust region.
+Figure&nbsp;12.3: Graphical illustration of trust regions. From the current parameters <span class="math inline">\theta_\text{old}</span>, we search for the maximum <span class="math inline">\theta^*</span> of the real objective <span class="math inline">\eta(\theta)</span>. The unconstrained objective <span class="math inline">J_{\theta_\text{old}}(\theta)</span> is locally similar to <span class="math inline">\eta(\theta)</span> but quickly diverge as <span class="math inline">\pi_\theta</span> and <span class="math inline">\pi_{\theta_\text{old}}</span> become very different. The surrogate objective <span class="math inline">L(\theta) = J_{\theta_\text{old}} (\theta) - C \,  D_{KL}(\pi_{\theta_\text{old}} || \pi_\theta)</span> is always smaller than <span class="math inline">\eta(\theta)</span> and has a maximum close to <span class="math inline">\theta^*</span> which keeps <span class="math inline">\pi_\theta</span> and <span class="math inline">\pi_{\theta_\text{old}}</span> close from each other in terms of KL divergence. The region around <span class="math inline">\theta_\text{old}</span> where big optimization steps can be taken without changing the policy too much is called the trust region.
 </figcaption>
 </figure>
 </div>
-<p>Before diving further into how these optimization problems can be solved, let’s wonder why the algorithm is called <strong>trust region policy optimization</strong> using the regularized objective. <a href="#fig-trustregion" class="quarto-xref">Figure&nbsp;<span>13.3</span></a> illustrates the idea. The “real” objective function <span class="math inline">\eta(\theta)</span> should be maximized (with gradient descent or similar) starting from the parameters <span class="math inline">\theta_\text{old}</span>. We cannot estimate the objective function directly, so we build a surrogate objective function <span class="math inline">L(\theta) = J_{\theta_\text{old}} (\theta) - C \,  D_{KL}(\pi_{\theta_\text{old}} || \pi_\theta)</span>. We know that:</p>
+<p>Before diving further into how these optimization problems can be solved, let’s wonder why the algorithm is called <strong>trust region policy optimization</strong> using the regularized objective. <a href="#fig-trustregion" class="quarto-xref">Figure&nbsp;<span>12.3</span></a> illustrates the idea. The “real” objective function <span class="math inline">\eta(\theta)</span> should be maximized (with gradient descent or similar) starting from the parameters <span class="math inline">\theta_\text{old}</span>. We cannot estimate the objective function directly, so we build a surrogate objective function <span class="math inline">L(\theta) = J_{\theta_\text{old}} (\theta) - C \,  D_{KL}(\pi_{\theta_\text{old}} || \pi_\theta)</span>. We know that:</p>
 <ol type="1">
 <li>The two objectives have the same value in <span class="math inline">\theta_\text{old}</span>: <span class="math display">L(\theta_\text{old}) = J_{\theta_\text{old}}(\theta_\text{old}) - C \,  D_{KL}(\pi_{\theta_\text{old}} || \pi_{\theta_\text{old}}) = \eta(\theta_\text{old})</span></li>
 <li>Their gradient w.r.t <span class="math inline">\theta</span> are the same in <span class="math inline">\theta_\text{old}</span>: <span class="math display">\nabla_\theta L(\theta)|_{\theta = \theta_\text{old}} = \nabla_\theta \eta(\theta)|_{\theta = \theta_\text{old}}</span></li>
@@ -588,7 +592,7 @@ Figure&nbsp;13.3: Graphical illustration of trust regions. From the current para
     \Delta \theta  = \frac{1}{\lambda} \, F(\theta_\text{old})^{-1} \,  \nabla_\theta J_{\theta_\text{old}}(\theta)
 </span></p>
 <p>which is the <strong>natural gradient descent</strong>! The size of the step <span class="math inline">\frac{1}{\lambda}</span> still has to be determined, but it can also be replaced by a fixed hyperparameter.</p>
-<p>The main problem is now to compute and inverse the Fisher information matrix, which is quadratic with the number of parameters <span class="math inline">\theta</span>, i.e.&nbsp;with the number of weights in the NN. <span class="citation" data-cites="Schulman2015">Schulman et al. (<a href="references.html#ref-Schulman2015" role="doc-biblioref">2015</a>)</span> proposes to used <strong>conjugate gradients</strong> to iteratively approximate the Fisher, a second-order method which will not be presented here (see <a href="https://www.cs.cmu.edu/~quake-papers/painless-conjugate-gradient.pdf" class="uri">https://www.cs.cmu.edu/~quake-papers/painless-conjugate-gradient.pdf</a> for a detailed introduction). After the conjugate gradient optimization step, the constraint <span class="math inline">D_{KL}(\pi_{\theta_\text{old}} || \pi_\theta) \leq \delta</span> is however not ensured anymore, so a line search is made as in <a href="#eq-linesearch" class="quarto-xref">Equation&nbsp;<span>13.1</span></a> until that criteria is met.</p>
+<p>The main problem is now to compute and inverse the Fisher information matrix, which is quadratic with the number of parameters <span class="math inline">\theta</span>, i.e.&nbsp;with the number of weights in the NN. <span class="citation" data-cites="Schulman2015">Schulman et al. (<a href="references.html#ref-Schulman2015" role="doc-biblioref">2015</a>)</span> proposes to used <strong>conjugate gradients</strong> to iteratively approximate the Fisher, a second-order method which will not be presented here (see <a href="https://www.cs.cmu.edu/~quake-papers/painless-conjugate-gradient.pdf" class="uri">https://www.cs.cmu.edu/~quake-papers/painless-conjugate-gradient.pdf</a> for a detailed introduction). After the conjugate gradient optimization step, the constraint <span class="math inline">D_{KL}(\pi_{\theta_\text{old}} || \pi_\theta) \leq \delta</span> is however not ensured anymore, so a line search is made as in <a href="#eq-linesearch" class="quarto-xref">Equation&nbsp;<span>12.1</span></a> until that criteria is met.</p>
 </section>
 <section id="summary" class="level4 unnumbered">
 <h4 class="unnumbered anchored" data-anchor-id="summary">Summary</h4>
@@ -620,14 +624,14 @@ Figure&nbsp;13.3: Graphical illustration of trust regions. From the current para
 <p><span class="math display">
     L^\text{CLIP}(\theta) = \mathbb{E}_{t} [ \min (\rho_t(\theta) \, A_{\pi_{\theta_\text{old}}}(s_t, a_t), \text{clip}(\rho_t(\theta) , 1- \epsilon, 1+\epsilon) \,  A_{\pi_{\theta_\text{old}}}(s_t, a_t)]
 </span></p>
-<p>The left part of the min operator is the surrogate objective of TRPO <span class="math inline">L^\text{CPI}(\theta)</span>. The right part restricts the importance sampling weight between <span class="math inline">1-\epsilon</span> and <span class="math inline">1 +\epsilon</span>. Let’s consider two cases (depicted on <a href="#fig-ppo" class="quarto-xref">Figure&nbsp;<span>13.4</span></a>):</p>
+<p>The left part of the min operator is the surrogate objective of TRPO <span class="math inline">L^\text{CPI}(\theta)</span>. The right part restricts the importance sampling weight between <span class="math inline">1-\epsilon</span> and <span class="math inline">1 +\epsilon</span>. Let’s consider two cases (depicted on <a href="#fig-ppo" class="quarto-xref">Figure&nbsp;<span>12.4</span></a>):</p>
 <div id="fig-ppo" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-ppo-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="img/ppo.png" class="img-fluid figure-img" style="width:80.0%">
+<a href="img/ppo.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="Figure&nbsp;12.4: Illustration of the effect of clipping the importance sampling weight. Source: @Schulman2017."><img src="img/ppo.png" class="img-fluid figure-img" style="width:80.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ppo-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;13.4: Illustration of the effect of clipping the importance sampling weight. Taken from <span class="citation" data-cites="Schulman2017">Schulman et al. (<a href="references.html#ref-Schulman2017" role="doc-biblioref">2017</a>)</span>.
+Figure&nbsp;12.4: Illustration of the effect of clipping the importance sampling weight. Source: <span class="citation" data-cites="Schulman2017">Schulman et al. (<a href="references.html#ref-Schulman2017" role="doc-biblioref">2017</a>)</span>.
 </figcaption>
 </figure>
 </div>
@@ -721,14 +725,14 @@ Figure&nbsp;13.4: Illustration of the effect of clipping the importance sampling
 <li><p>The <strong>actor</strong> <span class="math inline">\pi_\theta</span> takes a state <span class="math inline">s</span> as input and outputs a vector of probabilities <span class="math inline">\pi_\theta</span> for each available action.</p></li>
 <li><p>The <strong>critic</strong> <span class="math inline">Q_\varphi</span> takes a state <span class="math inline">s</span> as input and outputs a vector of Q-values.</p></li>
 </ul>
-<p>This is different from the architecture of A3C, where the critic “only” had to output the value of a state <span class="math inline">V_\varphi(s)</span>: it is now a vector of Q-values. Note that the actor and the critic can share most of their parameters: the network only needs to output two different vectors <span class="math inline">\pi_\theta(s)</span> and <span class="math inline">Q_\varphi(s)</span> for each input state <span class="math inline">s</span> (<a href="#fig-acer" class="quarto-xref">Figure&nbsp;<span>13.5</span></a>). This makes a “two heads” NN, similar to the <strong>duelling architecture</strong> of <span class="citation" data-cites="Wang2016">(<a href="references.html#ref-Wang2016" role="doc-biblioref">Wang et al., 2016</a>)</span>.</p>
+<p>This is different from the architecture of A3C, where the critic “only” had to output the value of a state <span class="math inline">V_\varphi(s)</span>: it is now a vector of Q-values. Note that the actor and the critic can share most of their parameters: the network only needs to output two different vectors <span class="math inline">\pi_\theta(s)</span> and <span class="math inline">Q_\varphi(s)</span> for each input state <span class="math inline">s</span> (<a href="#fig-acer" class="quarto-xref">Figure&nbsp;<span>12.5</span></a>). This makes a “two heads” NN, similar to the <strong>duelling architecture</strong> of <span class="citation" data-cites="Wang2016">(<a href="references.html#ref-Wang2016" role="doc-biblioref">Wang et al., 2016</a>)</span>.</p>
 <div id="fig-acer" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-acer-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="img/acer.png" class="img-fluid figure-img" style="width:90.0%">
+<a href="img/acer.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5" title="Figure&nbsp;12.5: Architecture of the ACER actor-critic."><img src="img/acer.png" class="img-fluid figure-img" style="width:90.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-acer-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;13.5: Architecture of the ACER actor-critic.
+Figure&nbsp;12.5: Architecture of the ACER actor-critic.
 </figcaption>
 </figure>
 </div>
@@ -1307,13 +1311,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../src/3.4-DPG.html" class="pagination-link" aria-label="Deterministic Policy Gradient (DPG)">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">Deterministic Policy Gradient (DPG)</span></span>
+      <a href="../src/3.4-DPG.html" class="pagination-link" aria-label="Deep Deterministic Policy Gradient (DDPG)">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">Deep Deterministic Policy Gradient (DDPG)</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../src/3.6-EntropyRL.html" class="pagination-link" aria-label="Maximum Entropy RL">
-        <span class="nav-page-text"><span class="chapter-title">Maximum Entropy RL</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../src/3.6-EntropyRL.html" class="pagination-link" aria-label="Maximum Entropy RL (SAC)">
+        <span class="nav-page-text"><span class="chapter-title">Maximum Entropy RL (SAC)</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
@@ -1331,6 +1335,38 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     </div>
   </div>
 </footer>
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","loop":false,"descPosition":"bottom","selector":".lightbox","openEffect":"zoom"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
 
 
 
