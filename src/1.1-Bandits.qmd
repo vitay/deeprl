@@ -3,324 +3,202 @@
 
 ## n-armed bandits
         
-The **n-armed bandit**  (or multi-armed bandit) is the simplest form of learning by trial and error.  Learning and action selection take place in the same single state. The $n$ actions have different reward distributions. The goal is to find out through trial and error which action provides the most reward on average.
+The **n-armed bandit**  (or multi-armed bandit) is the simplest form of learning by trial and error.  Learning and action selection take place in the same single state, with $n$ available actions having different reward distributions. The goal is to find out through trial and error which action provides the most reward on average.
 
+![Example of a bandit with 10 actions. The mean and the variance of each reward distribution are depicted.](img/bandit-example.png){#fig-bandit}
 
-![](img/narmedbandit2.jpg)
+We have the choice between $N$ different actions $(a_1, ..., a_N)$. Each action $a$ taken at time $t$ provides a **reward** $r_t$ drawn from the action-specific probability distribution $r(a)$.
 
-![](img/bandit-example.png)
-
-We have the choice between $N$ different actions $(a_1, ..., a_N)$.
-
-* Each action $a$ taken at time $t$ provides a **reward** $r_t$ drawn from the action-specific probability distribution $r(a)$.
-
-* The mathematical expectation of that distribution is the **expected reward**, called the **true value** of the action $Q^*(a)$.
+The mathematical expectation of that distribution is the **expected reward**, called the **true value** of the action $Q^*(a)$.
 
 $$
     Q^*(a) = \mathbb{E} [r(a)]
 $$
 
-:::
-:::
-
-
-* The reward distribution also has a **variance**: we usually ignore it in RL, as all we care about is the **optimal action** $a^*$ (but see distributional RL later).
+The reward distribution also has a **variance**: we usually ignore it in RL, as all we care about is the **optimal action** $a^*$ (but see distributional RL later).
 
 $$a^* = \text{argmax}_a \, Q^*(a)$$
 
-* If we take the optimal action an infinity of times, we maximize the reward intake **on average**.
-
-
-
-# n-armed bandits
-
-* The question is how to find out the optimal action through **trial and error**, i.e. without knowing the exact reward distribution $r(a)$.
-
-::: {.columns}
-::: {.column width=50%}
-
-
-![](img/bandit-samples.png)
-
-:::
-::: {.column width=50%}
-
-
-* We only have access to **samples** of $r(a)$ by taking the action $a$ at time $t$ (a **trial**, **play** or **step**).
+If we take the optimal action an infinity of times, we maximize the reward intake **on average**.
+The question is how to find out the optimal action through **trial and error**, i.e. without knowing the exact reward distribution $r(a)$. We only have access to **samples** of $r(a)$ by taking the action $a$ at time $t$ (a **trial**, **play** or **step**).
 
 $$r_t \sim r(a)$$
 
-* The received rewards $r_t$ vary around the true value over time.
 
-* We need to build **estimates** $Q_t(a)$ of the value of each action based on the samples.
+![Sampled reward over time for the same action.](img/bandit-samples.png){#fig-bandit-sample}
 
-* These estimates will be very wrong at the beginning, but should get better over time.
+The received rewards $r_t$ vary around the true value over time.
+We need to build **estimates** $Q_t(a)$ of the value of each action based on the samples.
+These estimates will be very wrong at the beginning, but should get better over time.
 
-:::
-:::
+##  Random sampling
 
+### Expectation
 
-# 2 - Random sampling
-
-# Mathematical expectation
-
-:::columns
-:::{.column width=70%}
-
-* An important metric for a random variable is its **mathematical expectation** or expected value.
-
-* For discrete distributions, it is the "mean" realization / outcome weighted by the corresponding probabilities:
+An important metric for a random variable is its **mathematical expectation** or expected value.
+For discrete distributions, it is the "mean" realization / outcome weighted by the corresponding probabilities:
 
 $$
     \mathbb{E}[X] = \sum_{i=1}^n P(X = x_i) \, x_i
 $$
 
-:::
-:::{.column width=30%}
 
-![Source: <https://en.wikipedia.org/wiki/Normal_distribution>](img/normaldistribution.png)
-
-:::
-:::
-
-* For continuous distributions, one needs to integrate the **probability density function** (pdf) instead of the probabilities:
+For continuous distributions, one needs to integrate the **probability density function** (pdf) instead of the probabilities:
 
 $$
     \mathbb{E}[X] = \int_{x \in \mathcal{D}_X} f(x) \, x \, dx
 $$
 
-* One can also compute the expectation of a function of a random variable:
+One can also compute the expectation of a function of a random variable:
 
 $$
     \mathbb{E}[g(X)] = \int_{x \in \mathcal{D}_X} f(x) \, g(x) \, dx
 $$
 
-# Random sampling / Monte Carlo sampling
+### Random sampling
 
-* In ML and RL, we deal with random variables whose exact probability distribution is unknown, but we are interested in their expectation or variance anyway.
+In ML and RL, we deal with random variables whose exact probability distribution is unknown, but we are interested in their expectation or variance anyway.
 
-![](img/normaldistribution.svg){width=50%}
+![Samples from the normal distribution are centered around its expected value.](img/normaldistribution.svg){#fig-samplingnormal}
 
+**Random sampling** or **Monte Carlo sampling** (MC) consists of taking $N$ samples $x_i$ out of the distribution $X$ (discrete or continuous) and computing the **sample average**:
 
-* **Random sampling** or **Monte Carlo sampling** (MC) consists of taking $N$ samples $x_i$ out of the distribution $X$ (discrete or continuous) and computing the **sample average**:
 $$
     \mathbb{E}[X] = \mathbb{E}_{x \sim X} [x] \approx \frac{1}{N} \, \sum_{i=1}^N x_i
 $$
 
+More samples will be obtained where $f(x)$ is high ($x$ is probable), so the average of the sampled data will be close to the expected value of the distribution.
 
-* More samples will be obtained where $f(x)$ is high ($x$ is probable), so the average of the sampled data will be close to the expected value of the distribution.
+:::{.callout-tip icon="false" title="Law of big numbers"}
 
-# Random sampling / Monte Carlo sampling
+As the number of identically distributed, randomly generated variables increases, their sample mean (average) approaches their theoretical mean.
+:::
 
-**Law of big numbers**
+MC estimates are only correct when: 
 
-> As the number of identically distributed, randomly generated variables increases, their sample mean (average) approaches their theoretical mean.
+1. the samples are **i.i.d** (independent and identically distributed):
 
+    * independent: the samples must be unrelated with each other.
+    * identically distributed: the samples must come from the same distribution $X$.
 
-* MC estimates are only correct when: 
+2. the number of samples is large enough.
 
-    * the samples are **i.i.d** (independent and identically distributed):
-
-        * independent: the samples must be unrelated with each other.
-
-        * identically distributed: the samples must come from the same distribution $X$.
-
-    * the number of samples is large enough.
-
-# Monte-carlo sampling
-
-* One can estimate any function of the random variable with random sampling:
+One can estimate any function of the random variable with random sampling:
 
 $$
     \mathbb{E}[f(X)] = \mathbb{E}_{x \sim X} [f(x)] \approx \frac{1}{N} \, \sum_{i=1}^N f(x_i)
 $$
 
-* Example of Monte Carlo sampling to estimate $\pi/4$: $f(x_i) = 1$ if $||x_i|| \leq 1$, $0$ otherwise.
 
-::: {.columns}
-::: {.column width=33%}
+### Central limit theorem
 
-![](img/montecarlo-1.jpeg)
-
-:::
-::: {.column width=33%}
-
-![](img/montecarlo-2.jpeg)
-:::
-::: {.column width=33%}
-
-![](img/montecarlo-3.jpeg)
-:::
-:::
-
-
-::: footer
-Source: <https://towardsdatascience.com/an-overview-of-monte-carlo-methods-675384eb1694>
-:::
-
-# Central limit theorem
-
-* Suppose we have an unknown distribution $X$ with expected value $\mu = \mathbb{E}[X]$ and variance $\sigma^2$.
-
-* We can take randomly $N$ samples from $X$ to compute the sample average:
+Suppose we have an unknown distribution $X$ with expected value $\mu = \mathbb{E}[X]$ and variance $\sigma^2$. We can take randomly $N$ samples from $X$ to compute the sample average:
 
 $$
     S_N = \frac{1}{N} \, \sum_{i=1}^N x_i
 $$ 
 
-* The **Central Limit Theorem** (CLT) states that:
 
-> The distribution of sample averages is normally distributed with mean $\mu$ and variance $\frac{\sigma^2}{N}$.
+:::{.callout-tip icon="false" title="Central Limit Theorem"}
+
+The distribution of sample averages is normally distributed with mean $\mu$ and variance $\frac{\sigma^2}{N}$.
 
 $$S_N \sim \mathcal{N}(\mu, \frac{\sigma}{\sqrt{N}})$$
+:::
 
-# Central limit theorem
+If we perform the sampling multiple times, even with few samples, the average of the sampling averages will be very close to the expected value. The more samples we get, the smaller the variance of the estimates. Although the distribution $X$ can be anything, the sampling averages are normally distributed.
 
-* If we perform the sampling multiple times, even with few samples, the average of the sampling averages will be very close to the expected value.
-
-* The more samples we get, the smaller the variance of the estimates.
-
-* Although the distribution $X$ can be anything, the sampling averages are normally distributed.
-
-![Source:: <https://en.wikipedia.org/wiki/Central_limit_theorem>](img/IllustrationCentralTheorem.png){width=70%}
+![Illustration of the central limit theorem. Source:: <https://en.wikipedia.org/wiki/Central_limit_theorem>](img/IllustrationCentralTheorem.png){#fig-clt}
 
 
-# Estimators
-
-* CLT shows that the sampling average is an **unbiased estimator** of the expected value of a distribution:
+CLT shows that the sampling average is an **unbiased estimator** of the expected value of a distribution:
 
 $$\mathbb{E}(S_N) = \mathbb{E}(X)$$
 
-* An estimator is a random variable used to measure parameters of a distribution (e.g. its expectation). The problem is that estimators can generally be **biased**.
+An estimator is a random variable used to measure parameters of a distribution (e.g. its expectation). The problem is that estimators can generally be **biased**.
 
-* Take the example of a thermometer $M$ measuring the temperature $T$. $T$ is a random variable (normally distributed with $\mu=20$ and $\sigma=10$) and the measurements $M$ relate to the temperature with the relation:
+Take the example of a thermometer $M$ measuring the temperature $T$. $T$ is a random variable (normally distributed with $\mu=20$ and $\sigma=10$) and the measurements $M$ relate to the temperature with the relation:
 
 $$
     M = 0.95 \, T + 0.65
 $$
 
-![](img/estimators-temperature.png){width=60%}
+![Thermometer and temperature.](img/estimators-temperature.png){#fig-thermometer}
 
-# Estimators
+The thermometer is not perfect, but do random measurements allow us to estimate the expected value of the temperature?
+We could repeatedly take 100 random samples of the thermometer and see how the distribution of sample averages look like:
 
-* The thermometer is not perfect, but do random measurements allow us to estimate the expected value of the temperature?
+![Distribution of the sampling averages.](img/estimators-temperature2.png){#fig-thermometer2}
 
-* We could repeatedly take 100 random samples of the thermometer and see how the distribution of sample averages look like:
-
-![](img/estimators-temperature2.png){width=40%}
-
-
-* But, as the expectation is linear, we actually have:
+But, as the expectation is linear, we actually have:
 
 $$
     \mathbb{E}[M] = \mathbb{E}[0.95 \, T + 0.65] = 0.95 \, \mathbb{E}[T] + 0.65 = 19.65 \neq \mathbb{E}[T]
 $$
 
-* The thermometer is a **biased estimator** of the temperature.
+The thermometer is a **biased estimator** of the temperature.
 
-# Estimators
-
-* Let's note $\theta$ a parameter of a probability distribution $X$ that we want to estimate (it does not have to be its mean).
-
-* An **estimator** $\hat{\theta}$ is a random variable mapping the sample space of $X$ to a set of sample estimates.
-
-* The **bias** of an estimator is the mean error made by the estimator:
+Let's note $\theta$ a parameter of a probability distribution $X$ that we want to estimate (it does not have to be its mean). 
+An **estimator** $\hat{\theta}$ is a random variable mapping the sample space of $X$ to a set of sample estimates.
+The **bias** of an estimator is the mean error made by the estimator:
 
 $$
     \mathcal{B}(\hat{\theta}) = \mathbb{E}[\hat{\theta} - \theta] = \mathbb{E}[\hat{\theta}] - \theta
 $$
 
-* The **variance** of an estimator is the deviation of the samples around the expected value:
+The **variance** of an estimator is the deviation of the samples around the expected value:
 
 $$
     \text{Var}(\hat{\theta}) = \mathbb{E}[(\hat{\theta} - \mathbb{E}[\hat{\theta}] )^2]
 $$
 
-* Ideally, we would like estimators with:
-
-    * **low bias**: the estimations are correct on average (= equal to the true parameter).
-
-    * **low variance**: we do not need many estimates to get a correct estimate (CLT: $\frac{\sigma}{\sqrt{N}}$)
-
-# Estimators: bias and variance
-
-::: {.columns}
-::: {.column width=60%}
-
-![](img/biasvariance3.png)
-
-:::
-::: {.column width=40%}
-
-* Unfortunately, the perfect estimator does not exist. 
-
-* Estimators will have a bias and a variance:
-
-    * **Bias**: the estimated values will be wrong, and the policy not optimal.
-
-    * **Variance**: we will need a lot of samples (trial and error) to have correct estimates.
-
-* One usually talks of a **bias/variance** trade-off: if you have a small bias, you will have a high variance, or vice versa. 
-
-* In machine learning, bias corresponds to underfitting, variance to overfitting.
-
-:::
-:::
-
-# 3 - Sampling-based evaluation
-
-# Sampling-based evaluation
-
-::: {.columns}
-::: {.column width=50%}
+Ideally, we would like estimators with a **low bias**, as the estimations would be correct on average (= equal to the true parameter) and a **low variance**, as we would not need many estimates to get a correct estimate (CLT: $\frac{\sigma}{\sqrt{N}}$)
 
 
-![](img/bandit-samples2.png)
+![Bias-variance trade-off. Source: <https://www.machinelearningplus.com/machine-learning/bias-variance-tradeoff/>](img/biasvariance3.png){#fig-biasvariance}
 
-:::
-::: {.column width=50%}
+Unfortunately, the perfect estimator does not exist.  Estimators will have a bias and a variance. 
+For estimators with a high bias, the estimated values will be wrong, and the policy not optimal.
+For estimators with a high variance, we will need a lot of samples (trial and error) to have correct estimates.
+One usually talks of a **bias/variance** trade-off: if you have a small bias, you will have a high variance, or vice versa. There is a sweet spot balancing the two. 
+In machine learning, bias corresponds to underfitting, variance to overfitting.
 
+## Sampling-based evaluation
 
-* The expectation of the reward distribution can be approximated by the **mean** of its samples:
+![Samples and expected reward over time.](img/bandit-samples2.png){#fig-bandit-samples2}
+
+The expectation of the reward distribution can be approximated by the **mean** of its samples:
 
 $$
     \mathbb{E} [r(a)] \approx  \frac{1}{N} \sum_{t=1}^N r_t |_{a_t = a}
 $$ 
 
-* Suppose that the action $a$ had been selected $t$ times, producing rewards 
+Suppose that the action $a$ had been selected $t$ times, producing rewards 
 
 $$
     (r_1, r_2, ..., r_t)
 $$
 
-
-* The estimated value of action $a$ at play $t$ is then:
+The estimated value of action $a$ at play $t$ is then:
 
 $$
     Q_t (a) = \frac{r_1 + r_2 + ... + r_t }{t}
 $$
 
 
-:::
-:::
-
-
-* Over time, the estimated action-value converges to the true action-value:
+Over time, the estimated action-value converges to the true action-value:
 
 $$
    \lim_{t \to \infty} Q_t (a) = Q^* (a)
 $$
 
-
-# Online evaluation
-
-* The drawback of maintaining the mean of the received rewards is that it consumes a lot of memory:
+The drawback of maintaining the mean of the received rewards is that it consumes a lot of memory:
 
 $$
     Q_t (a) = \frac{r_1 + r_2 + ... + r_t }{t} = \frac{1}{t} \, \sum_{i=1}^{t} r_i
 $$
 
-* It is possible to update an estimate of the mean in an **online** or incremental manner:
+It is possible to update an estimate of the mean in an **online** or incremental manner:
 
 $$
 \begin{aligned}
@@ -330,26 +208,18 @@ $$
 \end{aligned} 
 $$
 
-* The estimate at time $t+1$ depends on the previous estimate at time $t$ and the last reward $r_{t+1}$:
+The estimate at time $t+1$ depends on the previous estimate at time $t$ and the last reward $r_{t+1}$:
 
 $$
     Q_{t+1}(a) = Q_t(a) + \frac{1}{t+1} \, (r_{t+1} - Q_t(a)) 
 $$
 
-# Online evaluation
+The problem with the exact mean is that it is only exact when the reward distribution is **stationary**, i.e. when the probability distribution does not change over time.
+If the reward distribution is **non-stationary**, the $\frac{1}{t+1}$ term will become very small and prevent rapid updates of the mean.
 
-* The problem with the exact mean is that it is only exact when the reward distribution is **stationary**, i.e. when the probability distribution does not change over time.
+![](img/bandit-nonstationary1.png){#fig-nonstationary}
 
-* If the reward distribution is **non-stationary**, the $\frac{1}{t+1}$ term will become very small and prevent rapid updates of the mean.
-
-![](img/bandit-nonstationary1.png)
-
-# Online evaluation
-
-:::columns
-:::column
-
-* The solution is to replace $\frac{1}{t+1}$ with a fixed parameter called the **learning rate** (or **step size**) $\alpha$:
+The solution is to replace $\frac{1}{t+1}$ with a fixed parameter called the **learning rate** (or **step size**) $\alpha$:
 
 $$
 \begin{aligned}
@@ -360,30 +230,10 @@ $$
 $$
 
 
-:::
-:::column
+![](img/bandit-nonstationary2.png){#fig-nonstationary2}
 
-![](img/bandit-nonstationary2.png)
+The computed value is called an **exponentially moving average** (or sliding average), as if one used only a small window of the past history. 
 
-:::
-:::
-
-
-* The computed value is called an **exponentially moving average** (or sliding average), as if one used only a small window of the past history. 
-
-# Online evaluation
-
-::: {.columns}
-::: {.column width=50%}
-
-
-![](img/bandit-nonstationary2.png)
-
-:::
-::: {.column width=50%}
-
-
-* Moving average:
 
 $$
     Q_{t+1}(a) = Q_t(a) + \alpha \, (r_{t+1} - Q_t(a)) 
@@ -395,67 +245,42 @@ $$
     \Delta Q(a) = \alpha \, (r_{t+1} - Q_t(a)) 
 $$
 
+The moving average adapts very fast to changes in the reward distribution and should be used in **non-stationary problems**. 
+It is however not exact and sensible to noise.
+Choosing the right value for $\alpha$ can be difficult.
 
-* The moving average adapts very fast to changes in the reward distribution and should be used in **non-stationary problems**. 
-
-* It is however not exact and sensible to noise.
-
-* Choosing the right value for $\alpha$ can be difficult.
-
-:::
-:::
-
-
-* The form of this **update rule** is very important to remember:
+The form of this **update rule** is very important to remember:
 
 $$
     \text{new estimate} = \text{current estimate} + \alpha \, (\text{target} - \text{current estimate}) 
 $$
 
-* Estimates following this update rule track the mean of their sampled target values.
-
-* $\text{target} - \text{current estimate}$ is the **prediction error** between the target and the estimate.
-
-# 3 - Action selection
-
-# Action selection
+Estimates following this update rule track the mean of their sampled target values. $\text{target} - \text{current estimate}$ is the **prediction error** between the target and the estimate.
 
 
 
-* Let's suppose we have formed reasonable estimates of the Q-values $Q_t(a)$ at time $t$.
+## Action selection
 
-* Which action should we do next?
-
-* If we select the next action $a_{t+1}$ randomly (**random agent**), we do not maximize the rewards we receive, but we can continue learning the Q-values.
-
-* Choosing the action to perform next is called **action selection** and several schemes are possible.
-
-
-![](img/bandit-estimates.png)
+Let's suppose we have formed reasonable estimates of the Q-values $Q_t(a)$ at time $t$.
+Which action should we do next?
+If we select the next action $a_{t+1}$ randomly (**random agent**), we do not maximize the rewards we receive, but we can continue learning the Q-values.
+Choosing the action to perform next is called **action selection** and several schemes are possible.
 
 
+### Greedy action selection
 
-# Greedy action selection
-
-
-* The **greedy action** is the action whose estimated value is **maximal** at time $t$ based on our current estimates: 
+The **greedy action** is the action whose expected value is **maximal** at time $t$ based on our current estimates: 
 
 $$
     a^*_t = \text{argmax}_{a} Q_t(a)
 $$
 
-* If our estimates $Q_t$ are correct (i.e. close from $Q^*$), the greedy action is the **optimal action** and we maximize the rewards on average.
+If our estimates $Q_t$ are correct (i.e. close from $Q^*$), the greedy action is the **optimal action** and we maximize the rewards on average.
+If our estimates are wrong, the agent will perform **sub-optimally**.
 
-* If our estimates are wrong, the agent will perform **sub-optimally**.
+![Greedy action selection. The action with the highest expected value is selected all the time.](img/bandit-estimates-greedy.png){#fig-greedy}
 
-![](img/bandit-estimates-greedy.png)
-
-
-# Greedy action selection
-
-
-
-* This defines the **greedy policy**, where the probability of taking the greedy action is 1 and the probability of selecting another action is 0:
+This defines the **greedy policy**, where the probability of taking the greedy action is 1 and the probability of selecting another action is 0:
 
 $$
     \pi(a) = \begin{cases} 
@@ -464,84 +289,48 @@ $$
             \end{cases}
 $$
 
-* The greedy policy is **deterministic**: the action taken is always the same for a fixed $Q_t$.
+The greedy policy is **deterministic**: the action taken is always the same for a fixed $Q_t$.
+
+However, the greedy action selection scheme only works when the estimates are good enough. Imagine that estimates are initially bad (e.g. 0), and an action is sampled randomly. If the received reward is positive, the new Q-value of that action becomes positive, so it becomes the greedy action. At the next step, greedy action selection will always select that action, although the second one could have been better but it was never explored.
+
+![](img/bandit-greedy.gif)
+
+This **exploration-exploitation** dilemma is the hardest problem in RL:
+
+* **Exploitation** is using the current estimates to select an action: they might be wrong!
+* **Exploration** is selecting non-greedy actions in order to improve their estimates: they might not be optimal!
+
+One has to balance exploration and exploitation over the course of learning:
+
+* More exploration at the beginning of learning, as the estimates are initially wrong.
+* More exploitation at the end of learning, as the estimates get better.
 
 
-![](img/bandit-estimates-greedy.png)
+![Source: UC Berkeley AI course [slides](http://ai.berkeley.edu/lecture_slides.html), [lecture 11](http://ai.berkeley.edu/slides/Lecture%2011%20--%20Reinforcement%20Learning%20II/SP14%20CS188%20Lecture%2011%20--%20Reinforcement%20Learning%20II.pptx)](img/exploration_vs_exploitation.png){#fig-exploitationexploration}
 
 
-# Problem with greedy action selection
+### $\epsilon$-greedy action selection
 
-* Greedy action selection only works when the estimates are good enough.
-
-![](img/bandit-estimates-greedy-problem1.png)
-
-# Problem with greedy action selection
-
-* Estimates are initially bad (e.g. 0 here), so an action is sampled randomly and a reward is received.
-
-![](img/bandit-estimates-greedy-problem2.png)
-
-# Problem with greedy action selection
-
-* The Q-value of that action becomes positive, so it becomes the greedy action.
-
-![](img/bandit-estimates-greedy-problem3.png)
-
-# Problem with greedy action selection
-
-* Greedy action selection will always select that action, although the second one would have been better.
-
-![](img/bandit-estimates-greedy-problem4.png)
-
-# Exploration-exploitation dilemma
-
-* This **exploration-exploitation** dilemma is the hardest problem in RL:
-
-    * **Exploitation** is using the current estimates to select an action: they might be wrong!
-
-    * **Exploration** is selecting non-greedy actions in order to improve their estimates: they might not be optimal!
-
-* One has to balance exploration and exploitation over the course of learning:
-
-    * More exploration at the beginning of learning, as the estimates are initially wrong.
-
-    * More exploitation at the end of learning, as the estimates get better.
-
-
-![Source: UC Berkeley AI course [slides](http://ai.berkeley.edu/lecture_slides.html), [lecture 11](http://ai.berkeley.edu/slides/Lecture%2011%20--%20Reinforcement%20Learning%20II/SP14%20CS188%20Lecture%2011%20--%20Reinforcement%20Learning%20II.pptx)](img/exploration_vs_exploitation.png){width=45%}
-
-
-# $\epsilon$-greedy action selection
-
-* **$\epsilon$-greedy action selection** ensures a trade-off between exploitation and exploration.
-
-* The greedy action is selected with probability $1 - \epsilon$ (with $0 < \epsilon <1$), the others with probability $\epsilon$:
+**$\epsilon$-greedy action selection** ensures a trade-off between exploitation and exploration.
+The greedy action is selected with probability $1 - \epsilon$ (with $0 < \epsilon <1$), the others with probability $\epsilon$:
 
 $$
     \pi(a) = \begin{cases} 1 - \epsilon \; \text{if} \; a = a_t^* \\ \frac{\epsilon}{|\mathcal{A}| - 1} \; \text{otherwise.} \end{cases}
 $$
 
 
-![](img/bandit-estimates-epsilongreedy.png)
+![$\epsilon$-greedy action selection. The greedy action is selected most of the time, but the other actions might be selected from time to time.](img/bandit-estimates-epsilongreedy.png){#fig-epsilongreedy}
 
-
-# $\epsilon$-greedy action selection
-
-* The parameter $\epsilon$ controls the level of exploration: the higher $\epsilon$, the more exploration.
-
-* One can set $\epsilon$ high at the beginning of learning and progressively reduce it to exploit more.
-
-* However, it chooses equally among all actions: the worst action is as likely to be selected as the next-to-best action.
+The parameter $\epsilon$ controls the level of exploration: the higher $\epsilon$, the more exploration.
+One can set $\epsilon$ high at the beginning of learning and progressively reduce it to exploit more.
+However, it chooses equally among all actions: the worst action is as likely to be selected as the next-to-best action.
     
+![](img/bandit-egreedy.gif)
 
-![](img/bandit-estimates-epsilongreedy.png)
+### Softmax action selection
     
-# Softmax action selection
-    
-* **Softmax action selection**  defines the probability of choosing an action using all estimated value.
-
-* It represents the policy using a Gibbs (or Boltzmann) distribution:
+**Softmax action selection**  defines the probability of choosing an action using all estimated value.
+It represents the policy using a Gibbs (or Boltzmann) distribution:
 
 $$
     \pi(a) = \dfrac{\exp \dfrac{Q_t(a)}{\tau}}{ \displaystyle\sum_{a'} \exp \dfrac{Q_t(a')}{\tau}}
@@ -550,155 +339,35 @@ $$
 where $\tau$ is a positive parameter called the **temperature**.
 
 
-![](img/bandit-estimates-softmax.png)
+![Softmax action selection.](img/bandit-estimates-softmax.png){#fig-softmax1}
 
-# Softmax action selection
+Just as $\epsilon$, the temperature $\tau$ controls the level of exploration:
 
-* Just as $\epsilon$, the temperature $\tau$ controls the level of exploration:
-
-    * High temperature causes the actions to be nearly equiprobable (**random agent**).
-
-    * Low temperature causes the greediest actions only to be selected (**greedy agent**).
+* High temperature causes the actions to be nearly equiprobable (**random agent**).
+* Low temperature causes the greediest actions only to be selected (**greedy agent**).
     
 
-![](img/bandit-estimates-softmax2.png)
+![Influence of the temperature parameter.](img/bandit-estimates-softmax2.png){#fig-softmax2}
     
-# Example of action selection for the 10-armed bandit
-
-
-**Procedure as in (Sutton and Barto, 2017):**
-    
-* N = 10 possible actions with Q-values $Q^*(a_1), ... , Q^*(a_{10})$ randomly chosen in $\mathcal{N}(0, 1)$.
-
-* Each reward $r_t$ is drawn from a normal distribution $\mathcal{N}(Q^*(a), 1)$ depending on the selected action.
-
-* Estimates $Q_t(a)$ are initialized to 0.
-
-* The algorithms run for 1000 plays, and the results are averaged 200 times.
-    
-::: {}
-
-![](img/narmedbandit2.jpg){width=50%}
-
-:::
-
-# Greedy action selection
-
-* Greedy action selection allows to get rid quite early of the actions with negative rewards.
-
-* However, it may stick with the first positive action it founds, probably not the optimal one.
-
-* The more actions you have, the more likely you will get stuck in a **suboptimal policy**.
-
-![](img/bandit-greedy.gif)
-
-# $\epsilon$-greedy action selection
-
-* $\epsilon$-greedy action selection continues to explore after finding a good (but often suboptimal) action.
-
-* It is not always able to recognize the optimal action (it depends on the variance of the rewards).
-
-![](img/bandit-egreedy.gif)
-
-# Softmax action selection
-
-* Softmax action selection explores more consistently the available actions. 
-
-* The estimated Q-values are much closer to the true values than with ($\epsilon$-)greedy methods.
-
 ![](img/bandit-softmax.gif)
 
-# Greedy vs. $\epsilon$-greedy
+:::{.callout-tip icon="false" title="Exploration schedule"}
 
-::: {.columns}
-::: {.column width=50%}
-
-
-![](img/bandit-comparison1.png)
-
-:::
-::: {.column width=50%}
-
-
-![](img/bandit-comparison2.png)
-
-:::
-:::
-
-    
-* The **greedy** method learns faster at the beginning, but get stuck in the long-term by choosing **suboptimal** actions (50\% of trials).
-
-* $\epsilon$-greedy methods perform better on the long term, because they continue to explore. 
-
-* High values for $\epsilon$ provide more exploration, hence find the optimal action earlier, but also tend to deselect it more often: with a limited number of plays, it may collect less reward than smaller values of $\epsilon$.
-
-# Softmax vs. $\epsilon$-greedy
-
-::: {.columns}
-::: {.column width=50%}
-
-
-![](img/bandit-comparison3.png)
-
-:::
-::: {.column width=50%}
-
-
-![](img/bandit-comparison4.png)
-
-:::
-:::
-
-
-* The softmax does not necessarily find a better solution than $\epsilon$-greedy, but it tends to find it **faster** (depending on $\epsilon$ or $\tau$), as it does not lose time exploring obviously bad solutions.
-
-* $\epsilon$-greedy or softmax methods work best when the variance of rewards is high. 
-
-* If the variance is zero (always the same reward value), the greedy method would find the optimal action more rapidly: the agent only needs to try each action once.
-
-# Exploration schedule
-
-* A useful technique to cope with the **exploration-exploitation dilemma** is to slowly decrease the value of $\epsilon$ or $\tau$ with the number of plays.
-
-* This allows for more exploration at the beginning of learning and more exploitation towards the end.
-
-* It is however hard to find the right **decay rate** for the exploration parameters. 
+A useful technique to cope with the **exploration-exploitation dilemma** is to slowly decrease the value of $\epsilon$ or $\tau$ with the number of plays.
+This allows for more exploration at the beginning of learning and more exploitation towards the end.
+It is however hard to find the right **decay rate** for the exploration parameters. 
     
 
 ![](img/bandit-scheduling.png)
 
-# Exploration schedule
-
-
-
-* The performance is worse at the beginning, as the agent explores with a high temperature.
-
-* But as the agent becomes greedier and greedier, the performance become more **optimal** than with a fixed temperature.
-
-
-::: {.columns}
-::: {.column width=50%}
-
-
-![](img/bandit-comparison5.png)
-
 :::
-::: {.column width=50%}
 
-
-![](img/bandit-comparison6.png)
-
-:::
-:::
     
-<!--
-# Optimistic initial values
+### Optimistic initial values
 
-* The problem with online evaluation is that it depends a lot on the initial estimates $Q_0$.
-
-    * If the initial estimates are already quite good (expert knowledge), the Q-values will converge very fast.
-
-    * If the initial estimates are very wrong, we will need a lot of updates to correctly estimate the true values.
+The problem with online evaluation is that it depends a lot on the initial estimates $Q_0$.
+If the initial estimates are already quite good (e.g. using expert knowledge), the Q-values will converge very fast.
+If the initial estimates are very wrong, we will need a lot of updates to correctly estimate the true values. This problem is called **bootstrapping**: the better your initial estimates, the better (and faster) the results. 
 
 $$
 \begin{aligned}
@@ -709,30 +378,19 @@ $$
 \end{aligned}
 $$
 
-* The influence of $Q_0$ on $Q_t$ **fades** quickly with $(1-\alpha)^t$, but that can be lost time or lead to a suboptimal policy.
+The influence of $Q_0$ on $Q_t$ **fades** quickly with $(1-\alpha)^t$, but that can be lost time or lead to a suboptimal policy.
+However, we can use this at our advantage with **optimistic initialization**.
+By choosing very high initial values for the estimates (they can only decrease), one can ensure that all possible actions will be selected during learning by the greedy method, solving the **exploration problem**.
+This leads however to an **overestimation** of the value of other actions.
 
-* However, we can use this at our advantage with **optimistic initialization**.
-
-
-# Optimistic initial values
-    
-
-* By choosing very high initial values for the estimates (they can only decrease), one can ensure that all possible actions will be selected during learning by the greedy method, solving the **exploration problem**.
-
-* This leads however to an **overestimation** of the value of other actions.
-
-    
 ![](img/bandit-optimistic.gif)
 
-# Reinforcement comparison
+### Reinforcement comparison
     
-* Actions followed by large rewards should be made more likely to reoccur, whereas actions followed by small rewards should be made less likely to reoccur. 
-
-* But what is a large/small reward? Is a reward of 5 large or small?
-
-* **Reinforcement comparison** methods only maintain a **preference** $p_t(a)$ for each action, which is not exactly its Q-value. 
-
-* The preference for an action is updated after each play, according to the update rule:
+Actions followed by large rewards should be made more likely to reoccur, whereas actions followed by small rewards should be made less likely to reoccur. 
+But what is a large/small reward? Is a reward of 5 large or small?
+**Reinforcement comparison** methods only maintain a **preference** $p_t(a)$ for each action, which is not exactly its Q-value. 
+The preference for an action is updated after each play, according to the update rule:
 
 $$
     p_{t+1}(a_t) =    p_{t}(a_t) + \beta \, (r_t - \tilde{r}_t)
@@ -744,22 +402,17 @@ $$
     \tilde{r}_{t+1} =  \tilde{r}_t + \alpha \, (r_t - \tilde{r}_t)
 $$
 
-* If an action brings more reward than usual (**good surprise**), we increase the preference for that action.
+If an action brings more reward than usual (**good surprise**), we increase the preference for that action.
+If an action brings less reward than usual (**bad surprise**), we decrease the preference for that action.
+$\beta > 0$ and $0 < \alpha < 1$ are two constant parameters.
 
-* If an action brings less reward than usual (**bad surprise**), we decrease the preference for that action.
-
-* $\beta > 0$ and $0 < \alpha < 1$ are two constant parameters.
-
-
-# Reinforcement comparison
-
-* Preferences are updated by replacing the action-dependent Q-values by a baseline $\tilde{r}_t$:
+Preferences are updated by replacing the action-dependent Q-values by a baseline $\tilde{r}_t$:
 
 $$
     p_{t+1}(a_t) =    p_{t}(a_t) + \beta \, (r_t - \tilde{r}_t)
 $$
 
-* The preferences can be used to select the action using the softmax method just as the Q-values (without temperature):
+The preferences can be used to select the action using the softmax method just as the Q-values (without temperature):
 
 $$
     \pi_t (a) = \dfrac{\exp p_t(a)}{ \displaystyle\sum_{a'} \exp p_t(a')}
@@ -767,129 +420,75 @@ $$
 
 ![](img/bandit-reinforcementcomparison.gif)
 
-# Reinforcement comparison
-
-* Reinforcement comparison can be very effective, as it does not rely only on the rewards received, but also on their comparison with a **baseline**, the average reward. 
-
-* This idea is at the core of **actor-critic** architectures which we will see later.
-
-* The initial average reward $\tilde{r}_{0}$ can be set optimistically to encourage exploration.
+Reinforcement comparison can be very effective, as it does not rely only on the rewards received, but also on their comparison with a **baseline**, the average reward. 
+This idea is at the core of **actor-critic** architectures which we will see later.
+The initial average reward $\tilde{r}_{0}$ can be set optimistically to encourage exploration.
     
 
-::: {.columns}
-::: {.column width=50%}
+### Gradient bandit algorithm
 
-
-![](img/bandit-comparison7.png)
-
-:::
-::: {.column width=50%}
-
-
-![](img/bandit-comparison8.png)
-
-:::
-:::
-
-
-# Gradient bandit algorithm
-
-* Instead of only increasing the preference for the executed action if it brings more reward than usual, we could also decrease the preference for the other actions.
-
-* The preferences are used to select an action $a_t$ *via* softmax:
+Instead of only increasing the preference for the executed action if it brings more reward than usual, we could also decrease the preference for the other actions.
+The preferences are used to select an action $a_t$ *via* softmax:
 
 $$
     \pi_t (a) = \dfrac{\exp p_t(a)}{ \displaystyle\sum_{a'} \exp p_t(a')}
 $$  
 
-* Update rule for the **action taken** $a_t$:
+Update rule for the **action taken** $a_t$:
 
 $$
     p_{t+1}(a_t) =    p_{t}(a_t) + \beta \, (r_t - \tilde{r}_t) \, (1 - \pi_t(a_t))
 $$
 
-* Update rule for the **other actions** $a \neq a_t$:
+Update rule for the **other actions** $a \neq a_t$:
 
 $$
     p_{t+1}(a) =    p_{t}(a) - \beta \, (r_t - \tilde{r}_t) \, \pi_t(a)
 $$
 
-* Update of the reward **baseline**:
+Update of the reward **baseline**:
 
 $$
     \tilde{r}_{t+1} =  \tilde{r}_t + \alpha \, (r_t - \tilde{r}_t)
 $$
 
 
-# Gradient bandit algorithm
-
-* The preference can increase become quite high, making the policy greedy towards the end.
-
-* No need for a temperature parameter!
+The preference can increase become quite high, making the policy greedy towards the end. No need for a temperature parameter!
 
 ![](img/bandit-gradientbandit.gif)
 
 
-# Gradient bandit algorithm
 
-* Gradient bandit is not always better than reinforcement comparison, but learns initially faster (depending on the parameters $\alpha$ and $\beta$).
-
-::: {.columns}
-::: {.column width=50%}
-
-
-![](img/bandit-comparison9.png)
-
-:::
-::: {.column width=50%}
-
-
-![](img/bandit-comparison10.png)
-
-:::
-:::
-
-
-# Upper-Confidence-Bound action selection
+### Upper-Confidence-Bound action selection
     
-* In the previous methods, **exploration** is controlled by an external parameter ($\epsilon$ or $\tau$) which is **global** to each action an must be scheduled.
+In the previous methods, **exploration** is controlled by an external parameter ($\epsilon$ or $\tau$) which is **global** to each action an must be scheduled.
+A much better approach would be to decide whether to explore an action based on the **uncertainty** about its Q-value:
+If we are certain about the value of an action, there is no need to explore it further, we only have to exploit it if it is good.
 
-* A much better approach would be to decide whether to explore an action based on the **uncertainty** about its Q-value:
+The **central limit theorem** tells us that the variance of a sampling estimator decreases with the number of samples:
 
-    * If we are certain about the value of an action, there is no need to explore it further, we only have to exploit it if it is good.
-
-* The **central limit theorem** tells us that the variance of a sampling estimator decreases with the number of samples:
-
-    * The distribution of sample averages is normally distributed with mean $\mu$ and variance $\frac{\sigma^2}{N}$.
+> The distribution of sample averages is normally distributed with mean $\mu$ and variance $\frac{\sigma^2}{N}$.
 
 $$S_N \sim \mathcal{N}(\mu, \frac{\sigma}{\sqrt{N}})$$
 
-* The more you explore an action $a$, the smaller the variance of $Q_t(a)$, the more certain you are about the estimation, the less you need to explore it.
+The more you explore an action $a$, the smaller the variance of $Q_t(a)$, the more certain you are about the estimation, the less you need to explore it.
 
 
-# Upper-Confidence-Bound action selection
-
-* **Upper-Confidence-Bound** (UCB) action selection is a **greedy** action selection method that uses an **exploration** bonus:
+**Upper-Confidence-Bound** (UCB) action selection is a **greedy** action selection method that uses an **exploration** bonus:
 
 $$
     a^*_t = \text{argmax}_{a} \left[ Q_t(a) + c \, \sqrt{\frac{\ln t}{N_t(a)}} \right]
 $$
 
-* $Q_t(a)$ is the current estimated value of $a$ and $N_t(a)$ is the number of times the action $a$ has already been selected.
+$Q_t(a)$ is the current estimated value of $a$ and $N_t(a)$ is the number of times the action $a$ has already been selected.
 
-* It realizes a balance between trusting the estimates $Q_t(a)$ and exploring uncertain actions which have not been explored much yet.
-
-* The term $\sqrt{\frac{\ln t}{N_t(a)}}$ is an estimate of the variance of $Q_t(a)$. The sum of both terms is an **upper-bound** of the true value $\mu + \sigma$.
-
-* When an action has not been explored much yet, the uncertainty term will dominate and the action be explored, although its estimated value might be low.
-
-* When an action has been sufficiently explored, the uncertainty term goes to 0 and we greedily follow $Q_t(a)$.
+It realizes a balance between trusting the estimates $Q_t(a)$ and exploring uncertain actions which have not been explored much yet.
+The term $\sqrt{\frac{\ln t}{N_t(a)}}$ is an estimate of the variance of $Q_t(a)$. The sum of both terms is an **upper-bound** of the true value $\mu + \sigma$.
+When an action has not been explored much yet, the uncertainty term will dominate and the action be explored, although its estimated value might be low.
+When an action has been sufficiently explored, the uncertainty term goes to 0 and we greedily follow $Q_t(a)$.
 
 
-
-# Upper-Confidence-Bound action selection
-
-* The **exploration-exploitation** trade-off is automatically adjusted by counting visits to an action.
+The **exploration-exploitation** trade-off is automatically adjusted by counting visits to an action.
 
 $$
     a^*_t = \text{argmax}_{a} \left[ Q_t(a) + c \, \sqrt{\frac{\ln t}{N_t(a)}} \right]
@@ -897,45 +496,3 @@ $$
 
 ![](img/bandit-ucb.gif)
 
-
-
-# Upper-Confidence-Bound action selection
-
-* The "smart" exploration of UCB allows to find the optimal action faster.
-
-::: {.columns}
-::: {.column width=50%}
-
-
-![](img/bandit-comparison11.png)
-
-:::
-::: {.column width=50%}
-
-
-![](img/bandit-comparison12.png)
-
-:::
-:::
-
--->
-
-# Summary of evaluative feedback methods
-
-* Other methods such as reinforcement comparison, gradient bandit and UCB exist, see [@Sutton2017] and the second exercise on bandits.
-    
-* The methods  all have their own advantages and disadvantages depending on the type of problem: stationary or not, high or low reward variance, etc...
-
-* These simple techniques are the most useful ones for bandit-like problems: more sophisticated ones exist, but they either make too restrictive assumptions, or are computationally intractable. 
-
-* Take home messages:
-
-    1. RL tries to **estimate values** based on sampled rewards.
-
-    2. One has to balance **exploitation and exploration** throughout learning with the right **action selection scheme**.
-
-    3. Methods exploring more find **better policies**, but are initially slower.
-
-
-# References
-    

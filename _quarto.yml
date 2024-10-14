@@ -29,7 +29,7 @@ book:
     - src/0-Introduction.qmd
     - part: "**Basic RL**"
       chapters:
-        #- src/1.1-Bandits.qmd
+        - src/1.1-Bandits.qmd
         - src/1.2-MDP.qmd
         - src/1.3-DP.qmd
         - src/1.4-MC.qmd
