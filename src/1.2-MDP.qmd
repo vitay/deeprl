@@ -1,10 +1,10 @@
----
-title: Markov Decision Process
----
+# Markov Decision Process
+
+## Markov Decision Process
 
 RL methods apply to problems where an agent interacts with an environment in discrete time steps (@fig-agentenv). At time $t$, the agent is in state $s_t$ and decides to perform an action $a_t$. At the next time step, it arrives in the state $s_{t+1}$ and obtains the reward $r_{t+1}$. The goal of the agent is to maximize the reward obtained on the long term. The textbook by @Sutton1998 (updated in @Sutton2017) defines the field extensively.
 
-![Interaction between an agent and its environment. Taken from @Sutton1998.](img/rl-agent.jpg){#fig-agentenv width=50%}
+![Interaction between an agent and its environment. Source: @Sutton1998.](img/rl-agent.jpg){#fig-agentenv}
 
 Reinforcement learning problems are described as **Markov Decision Processes** (MDP) defined by five quantities:
 
@@ -29,7 +29,7 @@ If the Markov property is not met, RL methods may not converge (or poorly). In m
 
 In a **Partially Observable Markov Decision Process** (POMDP), observations $o_t$ come from a space $\mathcal{O}$ and are linked to underlying states using the density function $p(o_t| s_t)$. Observations are usually not Markov, so the full history of observations $h_t = (o_0, a_0, \dots o_t, a_t)$ is needed to solve the problem.
 
-### Policy and value functions
+## Policy and value functions
 
 The policy defines the behavior of the agent: which action should be taken in each state. One distinguishes two kinds of policies:
 
@@ -64,7 +64,7 @@ $$
 
 Obviously, these quantities depend on the states/actions themselves (some chessboard configurations are intrinsically better than others, i.e. you are more likely to win from that state), but also on the policy (if you can kill your opponent in one move - meaning you are in an intrinsically good state - but systematically take the wrong decision and lose, this is actually a bad state).
 
-### Bellman equations
+## Bellman equations
 
 The V- and Q-values are obviously linked with each other. The value of state depend on the value of the actions possible in that state, modulated by the probability that an action will be taken (i.e. the policy):
 
@@ -100,4 +100,4 @@ $$
 
 The Bellman equations mean that the value of a state (resp. state-action pair) depends on the value of all other states (resp. state-action pairs), the current policy $\pi$ and the dynamics of the MDP ($p(s'|s, a)$ and $r(s, a, s')$).
 
-![Backup diagrams corresponding to the Bellman equations. Taken from @Sutton1998.](img/backup.png){#fig-backup width=50%}
+![Backup diagrams corresponding to the Bellman equations. Source: @Sutton1998.](img/backup.png){#fig-backup}

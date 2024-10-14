@@ -1,6 +1,8 @@
-## Advantage Actor-Critic methods
+# Asynchronous Advantage Actor-Critic (A3C) {-}
 
-The *policy gradient theorem* provides an actor-critic architecture able to learn parameterized policies. In comparison to REINFORCE, the policy gradient depends on the Q-values of the actions taken during the trajectory rather than on the obtained returns $R(\tau)$. Quite obviously, it will also suffer from the high variance of the gradient, requiring the use of baselines. In this section, the baseline is state-dependent and chosen equal to the value of the state $V^\pi(s)$, so the factor multiplying the log-likelihood of the policy is:
+## Actor-critic algorithms
+
+The **policy gradient theorem** provides an actor-critic architecture able to learn parameterized policies. In comparison to REINFORCE, the policy gradient depends on the Q-values of the actions taken during the trajectory rather than on the obtained returns $R(\tau)$. Quite obviously, it will also suffer from the high variance of the gradient, requiring the use of baselines. In this section, the baseline is state-dependent and chosen equal to the value of the state $V^\pi(s)$, so the factor multiplying the log-likelihood of the policy is:
 
 $$
     A^{\pi}(s, a) = Q^{\pi}(s, a) - V^\pi(s)
@@ -28,7 +30,7 @@ Different methods could be used to compute the advantage estimate:
 
 The most popular approach is the n-step advantage, which is at the core of the methods A2C and A3C, and can be understood as a trade-off between MC and TD. MC and TD advantages could be used as well, but come with the respective disadvantages of MC (need for finite episodes, slow updates) and TD (unstable). Generalized Advantage Estimation (GAE) takes another interesting approach to estimate the advantage.
 
-*Note:* A2C is actually derived from the A3C algorithm presented later, but it is simpler to explain it first. See <https://blog.openai.com/baselines-acktr-a2c/> for an explanation of the reasons. A good explanation of A2C and A3C with Python code is available at <https://cgnicholls.github.io/reinforcement-learning/2017/03/27/a3c.html>.
+*Note:* A2C is actually derived from the A3C algorithm presented later, but it is simpler to explain it first. See <https://openai.com/index/openai-baselines-acktr-a2c/> for an explanation of the reasons. A good explanation of A2C and A3C with Python code is available at <https://cgnicholls.github.io/reinforcement-learning/2017/03/27/a3c.html>.
 
 ### Advantage Actor-Critic (A2C)
 
@@ -45,7 +47,7 @@ $${#eq-a2c}
 
 TD can be therefore be seen as a 1-step algorithm. For sparse rewards (mostly zero, +1 or -1 at the end of a game for example), this allows to update the $n$ last actions which lead to a win/loss, instead of only the last one in TD, speeding up learning. However, there is no need for finite episodes as in MC. In other words, n-step estimation ensures a trade-off between bias (wrong updates based on estimated values as in TD) and variance (variability of the obtained returns as in MC). An alternative to n-step updating is the use of *eligibility traces* (see @Sutton1998).
 
-A2C has an actor-critic architecture (@fig-a3c):
+A2C has an actor-critic architecture:
 
 * The actor outputs the policy $\pi_\theta$ for a state $s$, i.e. a vector of probabilities for each action.
 * The critic outputs the value $V_\varphi(s)$ of a state $s$.
@@ -134,7 +136,7 @@ This solves the problem of correlated inputs and outputs, as each worker explore
 
 ### Asynchronous Advantage Actor-Critic (A3C)
 
-![Architecture of A3C. A master network interacts asynchronously with several workers, each having a copy of the network and interacting with a separate environment. At the end of an episode, the accumulated gradients are sent back to the master network, and a new value of the parameters is sent to the workers.  Taken from <https://medium.com/emergent-future/simple-reinforcement-learning-with-tensorflow-part-8-asynchronous-actor-critic-agents-a3c-c88f72a5e9f2>.](img/A3C_architecture.png){#fig-a3carchi width=70%}
+![Architecture of A3C. A master network interacts asynchronously with several workers, each having a copy of the network and interacting with a separate environment. At the end of an episode, the accumulated gradients are sent back to the master network, and a new value of the parameters is sent to the workers.  Source: <https://medium.com/emergent-future/simple-reinforcement-learning-with-tensorflow-part-8-asynchronous-actor-critic-agents-a3c-c88f72a5e9f2>.](img/A3C_architecture.png){#fig-a3carchi width=70%}
 
 Asynchronous Advantage Actor-Critic [A3C,@Mnih2016] extends the approach of A2C by removing the need of synchronization between the workers at the end of each episode before applying the gradients. The rationale behind this is that each worker may need different times to complete its task, so they need to be synchronized. Some workers might then be idle most of the time, what is a waste of resources. Gradient merging and parameter updates are sequential operations, so no significant speedup is to be expected even if one increases the number of workers.
 
@@ -291,7 +293,7 @@ $$
     \nabla_\mu \log \pi_\theta (s, a) = \frac{a - \mu_\theta(s)}{\sigma_\theta(s)^2} \qquad \nabla_\sigma \log \pi_\theta (s, a) = \frac{(a - \mu_\theta(s))^2}{\sigma_\theta(s)^3} - \frac{1}{\sigma_\theta(s)}
 $$
 
-and use the chain rule to obtain the score function. The *re-parameterization trick* is a cool trick to apply backpropagation on stochastic problems: it is for example used in the variational auto-encoders [VAE;@Kingma2013].
+and use the chain rule to obtain the score function. The *reparameterization trick* is a cool trick to apply backpropagation on stochastic problems: it is for example used in the variational auto-encoders [VAE; @Kingma2013].
 
 Depending on the problem, one could use: 1) a fixed $\sigma$ for the whole action space, 2) a fixed $\sigma$ per DoF, 3) a learnable $\sigma$ per DoF (assuming all action dimensions to be mutually independent) or even 4) a covariance matrix $\Sigma$ when the action dimensions are dependent.
 

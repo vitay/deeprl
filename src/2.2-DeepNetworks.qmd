@@ -8,7 +8,7 @@ Deep RL uses deep neural networks as function approximators, allowing complex re
 
 A deep neural network (DNN) consists of one input layer $\mathbf{x}$, one or several hidden layers $\mathbf{h_1}, \mathbf{h_2}, \ldots, \mathbf{h_n}$ and one output layer $\mathbf{y}$ (@fig-dnn).
 
-![Architecture of a deep neural network. Figure taken from @Nielsen2015, CC-BY-NC.](img/dnn.png){#fig-dnn width=60%}
+![Architecture of a deep neural network. Figure Source: @Nielsen2015, CC-BY-NC.](img/dnn.png){#fig-dnn width=60%}
 
 Each layer $k$ (called *fully-connected*) transforms the activity of the previous layer (the vector $\mathbf{h_{k-1}}$) into another vector $\mathbf{h_{k}}$ by multiplying it with a **weight matrix** $W_k$, adding a **bias** vector $\mathbf{b_k}$ and applying a non-linear **activation function** $f$.
 
@@ -101,7 +101,7 @@ After a convolutional layer, the spatial dimensions are preserved. In classifica
 
 A convolutional neural network is simply a sequence of convolutional layers and max-pooling layers (sometime two convolutional layers are applied in a row before max-pooling, as in VGG [@Simonyan2015]), followed by a couple of fully-connected layers and a softmax output layer. @fig-alexnet shows the architecture of AlexNet, the winning architecture of the ImageNet challenge in 2012 [@Krizhevsky2012].
 
-![Architecture of the AlexNet CNN. Taken from @Krizhevsky2012.](img/alexnet.png){#fig-alexnet}
+![Architecture of the AlexNet CNN. Source: @Krizhevsky2012.](img/alexnet.png){#fig-alexnet}
 
 Many improvements have been proposed since 2012 (e.g. ResNets [@He2015]) but the idea stays similar. Generally, convolutional and max-pooling layers are alternated until the spatial dimensions are so reduced (around 10x10) that they can be put into a single vector and fed into a fully-connected layer. This is **NOT** the case in deep RL! Contrary to object classification, spatial information is crucial in deep RL: position of the ball, position of the body, etc. It matters whether the ball is to the right or to the left of your paddle when you decide how to move it. Max-pooling layers are therefore omitted and the CNNs only consist of convolutional and fully-connected layers. This greatly increases the number of weights in the networks, hence the number of training examples needed to train the network. This is still the main limitation of using CNNs in deep RL.
 
@@ -111,7 +111,7 @@ Feedforward neural networks learn to efficiently map static inputs $\mathbf{x}$ 
 
 Recurrent Neural Networks (RNN) are designed to deal with time-varying inputs, where the relevant information to take a decision at time $t$ may have happened at different times in the past. The general structure of a RNN is depicted on @fig-rnn:
 
-![Architecture of a RNN. Left: recurrent architecture. Right: unrolled network, showing that a RNN is equivalent to a deep network. Taken from <http://colah.github.io/posts/2015-08-Understanding-LSTMs>.](img/RNN-unrolled.png){#fig-rnn width=90%}
+![Architecture of a RNN. Left: recurrent architecture. Right: unrolled network, showing that a RNN is equivalent to a deep network. Source: <http://colah.github.io/posts/2015-08-Understanding-LSTMs>.](img/RNN-unrolled.png){#fig-rnn width=90%}
 
 The output $\mathbf{h}_t$ of the RNN at time $t$ depends on its current input $\mathbf{x}_t$, but also on its previous output $\mathbf{h}_{t-1}$, which, by recursion, depends on the whole history of inputs $(x_0, x_1, \ldots, x_t)$.
 
@@ -129,7 +129,7 @@ $$
     \tilde{\mathbf{C}_t} = f(W_x \, \mathbf{x}_{t} + W_h \, \mathbf{h}_{t-1} + \mathbf{b})
 $$
 
-![Architecture of a LSTM layer. Taken from <http://colah.github.io/posts/2015-08-Understanding-LSTMs>.](img/LSTM.png){#fig-lstm width=40%}
+![Architecture of a LSTM layer. Source: <http://colah.github.io/posts/2015-08-Understanding-LSTMs>.](img/LSTM.png){#fig-lstm width=40%}
 
 The activation function $f$ is usually a tanh function. The input and forget learn to decide how the candidate state should be used to update the current state:
 

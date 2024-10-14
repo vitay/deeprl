@@ -69,4 +69,5 @@ format:
     html-math-method: katex
     highlight-style: github
     code-line-numbers: false
+    lightbox: true
 

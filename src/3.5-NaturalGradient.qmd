@@ -1,4 +1,4 @@
-## Natural Gradients
+# Policy Optimization (TRPO, PPO)
 
 The deep networks used as function approximators in the methods presented until now were all optimized (trained) using **stochastic gradient descent** (SGD) or any of its variants (RMSProp, Adam, etc). The basic idea is to change the parameters $\theta$ in the opposite direction of the gradient of the loss function (or the same direction as the policy gradient, in which case it is called gradient ascent), proportionally to a small learning rate $\eta$:
 
@@ -354,7 +354,7 @@ $$
 
 The left part of the min operator is the surrogate objective of TRPO $L^\text{CPI}(\theta)$. The right part restricts the importance sampling weight between $1-\epsilon$ and $1 +\epsilon$.  Let's consider two cases (depicted on @fig-ppo):
 
-![Illustration of the effect of clipping the importance sampling weight. Taken from @Schulman2017.](img/ppo.png){#fig-ppo width=80%}
+![Illustration of the effect of clipping the importance sampling weight. Source: @Schulman2017.](img/ppo.png){#fig-ppo width=80%}
 
 1. the transition $s_t, a_t$ has a positive advantage, i.e. it is a better action than expected. The probability of selecting that action again should be increased, i.e. $\pi_\theta(s_t, a_t) > \pi_{\theta_\text{old}}(s_t, a_t)$. However, the importance sampling weight could become very high (a change from 0.01 to 0.05 is a ration of $\rho_t(\theta) = 5$). In that case, $\rho_t(\theta)$ will be clipped to $1+\epsilon$, for example 1.2. As a consequence, the parameters $\theta$ will move in the right direction, but the distance between the new and the old policies will stay small.
 

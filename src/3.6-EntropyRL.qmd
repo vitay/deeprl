@@ -1,11 +1,10 @@
-
-## Maximum Entropy RL
+# Maximum Entropy RL (SAC)
 
 All the methods seen sofar focus on finding a policy (or value functions) that maximizes the obtained return. This corresponds to the **exploitation** part of RL: we care only about the optimal policy. The **exploration** is ensured by external mechanisms, such as $\epsilon$-greedy or softmax policies in value based methods, or adding exploratory noise to the actions as in DDPG. Exploration mechanisms typically add yet another free parameter ($\epsilon$, softmax temperature, etc) that additionally need to be scheduled (more exploration at the beginning of learning than at the end).
 
 The idea behind **maximum entropy RL** is to let the algorithm learn by itself how much exploration it needs to learn appropriately. There are several approaches to this problem (see for example [@Machado2018] for an approach using successor representations), we focus first on methods using **entropy regularization**, a concept already seen briefly in A3C, before looking at soft methods such as Soft Q-learning and SAC.
 
-### Entropy regularization
+## Entropy regularization
 
 **Entropy regularization** [@Williams1991] adds a regularization term to the objective function:
 
@@ -36,7 +35,7 @@ Another way to view the interest of entropy regularization is to realize that le
 
 Entropy regularization is nowadays used very commonly used in deep RL networks [e.g. @ODonoghue2016], as it is "only" an additional term to set in the objective function passed to the NN, adding a single hyperparameter $\beta$.
 
-### Soft Q-learning
+## Soft Q-learning
 
 Entropy regularization greedily maximizes the entropy of the policy in each state (the objective is the return plus the entropy in the current state). Building on the maximum entropy RL framework [@Ziebart2008;@Schulman2017a;@Nachum2017], @Haarnoja2017 proposed a version of **soft-Q-learning** by extending the definition of the objective:
 
@@ -84,10 +83,10 @@ The main drawback of this approach is that several actions have to be sampled in
 
 But the real interesting thing is the policies that are learned in multi-goal settings, as in @fig-softql. The agent starts in the middle of the environment and can obtain one of the four rewards (north, south, west, east). A regular RL agent would very quickly select only one of the rewards and stick to it. With soft Q-learning, the policy stays stochastic and the four rewards can be obtained even after convergence. This indicates that the soft agent has learned much more about its environment than its hard equivalent, thanks to its maximum entropy formulation.
 
-![Policy learned by Soft Q-learning in a multi-goal setting. Taken from @Haarnoja2017.](img/softQL.png){#fig-softql}
+![Policy learned by Soft Q-learning in a multi-goal setting. Source: @Haarnoja2017.](img/softQL.png){#fig-softql}
 
 
-### Soft Actor-Critic (SAC)
+## Soft Actor-Critic (SAC)
 
 @Haarnoja2018a proposed the **Soft Actor-Critic** (SAC), an off-policy actor-critic which allows to have a stochastic actor (contrary to DDPG) while being more optimal and sample efficient than on-policy methods such as A3C or PPO. It is also less sensible to hyperparameters than all these methods.
 

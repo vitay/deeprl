@@ -1,4 +1,4 @@
-## Deterministic Policy Gradient (DPG)
+# Deep Deterministic Policy Gradient (DDPG)
 
 So far, the actor produces a stochastic policy $\pi_\theta(s)$ assigning probabilities to each discrete action or necessitating sampling in some distribution for continuous actions. The main advantage is that stochastic policies ensure **exploration** of the state-action space: as most actions have a non-zero probability of being selected, we should not miss any important reward which should be ignored if the greedy action is always selected (exploration/exploitation dilemma).
 
@@ -12,7 +12,7 @@ Successful value-based methods such as DQN produce a **deterministic policy**, w
 In this section, we will see the now state-of-the-art method DDPG (Deep Deterministic Policy Gradient), which tries to combine the advantages of policy gradient methods (actor-critic, continuous or highly dimensional outputs, stability) with those of value-based methods (sample efficiency, off-policy).
 
 
-### Deterministic policy gradient theorem
+## Deterministic policy gradient theorem
 
 We now assume that we want to learn a parameterized **deterministic policy** $\mu_\theta(s)$. As for the stochastic policy gradient theorem, the goal is to maximize the expectation over all states reachable by the policy of the reward to-go (return) after each action:
 
@@ -63,7 +63,7 @@ $$
 
 @Silver2014 investigated the performance of DPG using linear function approximators and showed that it compared positively to stochastic algorithms in high-dimensional or continuous action spaces. However, non-linear function approximators such as deep NN would not work yet.
 
-### Deep Deterministic Policy Gradient (DDPG)
+## Deep Deterministic Policy Gradient (DDPG)
 
 @Lillicrap2015 extended the DPG approach to work with non-linear function approximators. In fact, they combined ideas from DQN and DPG to create a very successful algorithm able to solve continuous problems off-policy, the **deep deterministic policy gradient** (DDPG) algorithm..
 
@@ -152,7 +152,7 @@ DDPG has rapidly become the state-of-the-art model-free method for continuous ac
 
 **Additional references:** see <http://pemami4911.github.io/blog/2016/08/21/ddpg-rl.html> for additional explanations and step-by-step tensorflow code and <https://lilianweng.github.io/lil-log/2018/04/08/policy-gradient-algorithms.html> for contextual explanations.
 
-### Distributed Distributional DDPG (D4PG)
+## Distributed Distributional DDPG (D4PG)
 
 Similarly to the Rainbow DQN for DQN. Distributed Distributional DDPG [D4PG,@Barth-Maron2018] proposed several improvements on DDPG to make it more efficient:
 

@@ -38,7 +38,7 @@ is called the **reward-prediction error** (RPE) or **TD error**: it defines the 
 
 The main advantage of this learning method is that the update of the V- or Q-value can be applied immediately after a transition: no need to wait until the end of an episode, or even to have episodes at all: this is called **online learning** and allows very fast learning from single transitions. The main drawback is that the updates depend on other estimates, which are initially wrong: it will take a while before all estimates are correct.
 
-![Temporal difference algorithms update values after a single transition. Taken from @Sutton1998.](img/backup-TD.png){#fig-td width=3%}
+![Temporal difference algorithms update values after a single transition. Source: @Sutton1998.](img/backup-TD.png){#fig-td width=3%}
 
 When learning Q-values directly, the question is which next action $a'$ should be used in the update rule: the action that will actually be taken for the next transition (defined by $\pi(s', a')$), or the greedy action ($a^* = \text{argmax}_a Q^\pi(s', a)$). This relates to the *on-policy / off-policy* distinction already seen for MC methods:
 
@@ -66,7 +66,7 @@ Imagine you initialize all Q-values to 0 and apply Q-learning. During the first 
 
 **Eligibility traces** can be seen a trick to mix the advantages of MC (faster updates) with the ones of TD (online learning, smaller variance). The idea is that the TD error at time $t$ ($\delta_t$) will be used not only to update the action taken at time $t$ ($\Delta Q(s_t, a_t) = \alpha \, \delta_t$), but also all the preceding actions, which are also responsible for the success or failure of the action taken at time $t$. A parameter $\lambda$ between 0 and 1 (decaying factor) controls how far back in time a single TD error influences past actions. This is important when the policy is mostly exploratory: initial actions may be mostly random and finally find the the reward by chance. They should learn less from the reward than the last one, otherwise they would be systematically reproduced. @fig-eligibilitytraces shows the principle of eligibility traces in a simple Gridworld environment.
 
-![Principle of eligibility traces applied to the Gridworld problem using SARSA($\lambda$). Taken from @Sutton1998.](img/gridworld-lambda.png){#fig-eligibilitytraces width=80%}
+![Principle of eligibility traces applied to the Gridworld problem using SARSA($\lambda$). Source: @Sutton1998.](img/gridworld-lambda.png){#fig-eligibilitytraces width=80%}
 
 There are many possible implementations of eligibility traces (Watkin's, Peng, Tree Backup, etc. See the Chapter 12 of @Sutton2017). Generally, one distinguished a forward and a backward view of eligibility traces.
 

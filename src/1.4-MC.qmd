@@ -2,7 +2,7 @@
 title: Monte-Carlo methods
 ---
 
-![Monte-Carlo methods accumulate rewards over a complete episode. Taken from @Sutton1998.](img/unifiedreturn.png){#fig-mc width=50%}
+![Monte-Carlo methods accumulate rewards over a complete episode. Source: @Sutton1998.](img/unifiedreturn.png){#fig-mc width=50%}
 
 When the environment is *a priori* unknown, it has to be explored in order to build estimates of the V or Q value functions. The key idea of **Monte-Carlo** sampling (MC) is rather simple:
 

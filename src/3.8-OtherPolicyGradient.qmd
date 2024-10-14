@@ -1,23 +1,9 @@
+# Miscellaneous model-free algorithms
 
-## Miscellaneous model-free algorithm
-
-### Stochastic Value Gradient (SVG)
-
-@Heess2015
-
-
-### Q-Prop
-
-@Gu2016
-
-### Normalized Advantage Function (NAF)
-
-@Gu2016a
-
-
-### Fictitious Self-Play (FSP)
-
-@Heinrich2015 @Heinrich2016
+* Stochastic Value Gradient (SVG) [@Heess2015]
+* Q-Prop [@Gu2016]
+* Normalized Advantage Function (NAF) [@Gu2016a]
+* Fictitious Self-Play (FSP) [@Heinrich2015;@Heinrich2016]
 
 
 ## Comparison between value-based and policy gradient methods
@@ -38,15 +24,10 @@ Disadvantages of PG:
 
 ## Gradient-free policy search
 
-The policy gradient methods presented above rely on backpropagation and gradient descent/ascent to update the parameters of the policy and maximize the objective function. Gradient descent is generally slow, sample inefficient and subject to local minima, but is nevertheless the go-to method in neural networks. However, it is not the only optimization that can be used in deep RL. This section presents quickly some of the alternatives.
+The policy gradient methods presented above rely on backpropagation and gradient descent/ascent to update the parameters of the policy and maximize the objective function. Gradient descent is generally slow, sample inefficient and subject to local minima, but is nevertheless the go-to method in neural networks. However, it is not the only optimization that can be used in deep RL. Here are some of the alternatives.
 
-### Cross-entropy Method (CEM)
-
-@Szita2006
-
-### Evolutionary Search (ES)
-
-@Salimans2017
+* Cross-entropy Method (CEM) [@Szita2006]
+* Evolutionary Search (ES) [@Salimans2017]
 
 Explanations from OpenAI: <https://blog.openai.com/evolution-strategies/>
 
