@@ -89,6 +89,49 @@ div.csl-indent {
 }</script>
 <style>html{ scroll-behavior: smooth; }</style>
 
+  <script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+ var mathElements = document.getElementsByClassName("math");
+ var macros = [];
+ for (var i = 0; i < mathElements.length; i++) {
+  var texText = mathElements[i].firstChild;
+  if (mathElements[i].tagName == "SPAN") {
+   katex.render(texText.data, mathElements[i], {
+    displayMode: mathElements[i].classList.contains('display'),
+    throwOnError: false,
+    macros: macros,
+    fleqn: false
+   });
+}}});
+  </script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css">
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -250,11 +293,6 @@ div.csl-indent {
   </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/4-ModelBased.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Model-based RL</span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
   <a href="../src/references.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">References</span></a>
   </div>
@@ -264,8 +302,24 @@ div.csl-indent {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#what-is-reinforcement-learning" id="toc-what-is-reinforcement-learning" class="nav-link active" data-scroll-target="#what-is-reinforcement-learning">What is Reinforcement Learning?</a></li>
+  <li><a href="#applications-of-reinforcement-learning" id="toc-applications-of-reinforcement-learning" class="nav-link" data-scroll-target="#applications-of-reinforcement-learning">Applications of Reinforcement Learning</a>
+  <ul class="collapse">
+  <li><a href="#optimal-control" id="toc-optimal-control" class="nav-link" data-scroll-target="#optimal-control">Optimal control</a></li>
+  <li><a href="#atari-games" id="toc-atari-games" class="nav-link" data-scroll-target="#atari-games">Atari games</a></li>
+  <li><a href="#alphago" id="toc-alphago" class="nav-link" data-scroll-target="#alphago">AlphaGo</a></li>
+  <li><a href="#openai-five-and-alphastar" id="toc-openai-five-and-alphastar" class="nav-link" data-scroll-target="#openai-five-and-alphastar">OpenAI Five and AlphaStar</a></li>
+  <li><a href="#process-control" id="toc-process-control" class="nav-link" data-scroll-target="#process-control">Process control</a></li>
+  <li><a href="#robotics" id="toc-robotics" class="nav-link" data-scroll-target="#robotics">Robotics</a></li>
+  <li><a href="#chatgpt" id="toc-chatgpt" class="nav-link" data-scroll-target="#chatgpt">ChatGPT</a></li>
+  </ul></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -290,20 +344,66 @@ div.csl-indent {
 
 
 <p>Deep reinforcement learning (Deep RL) is the integration of deep learning methods, classically used in supervised or unsupervised learning contexts, to reinforcement learning (RL), a well-studied adaptive control framework used in problems with delayed and partial feedback.</p>
-<p><strong>Supervised learning</strong> trains a discriminative model (classification or regression) by utilising the correct answer (ground truth) in a training set to compute a prediction error. For neural networks, the prediction error (typically the difference between the ground truth and the predicted output) is used by the backpropagation algorithm to adapt the parameters of the model so that the prediction error is iteratively reduced.</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="img/slulrl.png" class="img-fluid figure-img"></p>
-<figcaption>Three types of machine learning: Supervised learning uses a ground truth to comnpute a prediciton error that drives learning. Unsupervised learning extracts statistical properties from raw data. Reinforcement learning uses a reward signal from the environment to assess the correctness of an action.</figcaption>
+<section id="what-is-reinforcement-learning" class="level2">
+<h2 class="anchored" data-anchor-id="what-is-reinforcement-learning">What is Reinforcement Learning?</h2>
+<div id="fig-sulrl" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-sulrl-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="img/slulrl.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-sulrl-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Three types of machine learning: Supervised learning uses a ground truth to compute a prediction error that drives learning. Unsupervised learning extracts statistical properties from raw data. Reinforcement learning uses a reward signal from the environment to assess the correctness of an action.
+</figcaption>
 </figure>
 </div>
-<div class="callout callout-style-default callout-tip callout-titled" title="Sutton and Barto. Reinforcement learning: An introduction">
+<p><strong>Supervised learning</strong> (SL) trains a discriminative model (classification or regression) by comparing the correct answer (ground truth) available in a training set to compute a prediction error. For neural networks, the prediction error (typically the difference between the ground truth and the predicted output) is used by the backpropagation algorithm to adapt the parameters of the model so that the prediction error is iteratively reduced. Typical examples are convolutional neural networks (CNN) predicting the label associated to an image, a recurrent neural network (RNN) predicting autoregressively the future of a time series, or a fully-connected network performing credit scoring. The major drawback of SL methods is that they typically require a lot of annotated data, which are very expensive to produce.</p>
+<p><strong>Unsupervised learning</strong> (UL) only deals with raw data, trying to extract statistical properties without any additional information. One application of UL is dimensionality reduction, which searches how to project highly dimensional data (e.g.&nbsp;images) onto smaller spaces without losing too much information. Algorithms like PCA (Principal Components Analysis) or neural architectures like autoencoders are typically used. Another approach to UL is <strong>generative modelling</strong>, i.e.&nbsp;learning a model of the distribution of the data allowing to generate new samples. Generative AI (ChatGPT, Midjourney, etc) relies on learning the distribution of vast amounts of text or images in order to generate novel high-quality samples. Self-supervised learning relies on using supervised learning algorithms on raw data by using self-generated pretext tasks, such as masking part of the data in the input and learning to predict it, or guessing the next item in a sequence.</p>
+<p><strong>Reinforcement learning</strong> (RL) lies somehow in between: the model makes a prediction (an action), but there is no ground truth to compare with. The only feedback it gets from the environment is a unidimensional <strong>reward signal</strong> that informs how good (or bad) the action was. In the extreme case, this partial feedback can be binary, like winning or losing a game after a sequence of dozens of actions.</p>
+<p>RL setups follow the <strong>agent-environment</strong> interface <span class="citation" data-cites="Sutton1998">(<a href="references.html#ref-Sutton1998" role="doc-biblioref">Sutton and Barto, 1998</a>)</span>. The agent (for example a robot) is in a given state <span class="math inline">s_t</span> at time <span class="math inline">t</span>. This state represents the perception of the robot (camera, internal sensors) but also its position inside the environment, and generally anything relevant information for the task. The agent selects an action <span class="math inline">a_t</span> according to its policy (or strategy). This action modifies the environment (or world), what brings the agent in a new state <span class="math inline">s_{t+1}</span>. Furthermore, a reward <span class="math inline">r_{t+1}</span> is delivered to the agent to valuate the executed action. This interaction loop continues over time, leading to episodes or trajectories of various lengths until a terminal state is reached. The goal of the agent is to find a policy that maximizes the sum of the rewards received over time (more on that later).</p>
+<div id="fig-agentenv" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-agentenv-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="img/agent-environment-robot.png" class="img-fluid figure-img" style="width:80.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-agentenv-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: Agent-environment interface. Images generated by ChatGPT.
+</figcaption>
+</figure>
+</div>
+<p>The key concept in RL is <strong>trial and error</strong> learning: trying out actions until their outcome is good. The agent selects an <strong>action</strong> from its repertoire and observes the outcome. If the outcome is positive (reward), the action is reinforced (it becomes more likely to occur again). If the outcome is negative (punishment), the action will be avoided in the future. After enough interactions, the agent has <strong>learned</strong> which action to perform in a given situation.</p>
+<div id="fig-trialerror" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-trialerror-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="img/trialanderror.png" class="img-fluid figure-img" style="width:80.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-trialerror-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3: Trial and error learning. Top: classical trial and error learning, where the agent tries different actions until the outcome is satisfying. Bottom: the outcome of the trial influences via learning whether the corresponding action will be reinforced or avoided in the future.
+</figcaption>
+</figure>
+</div>
+<p>The agent has to <strong>explore</strong> its environment via trial-and-error in order to gain knowledge. The agent’s behavior then is roughly divided into two phases:</p>
+<ol type="1">
+<li>The <strong>exploration</strong> phase, where it gathers knowledge about its environment.</li>
+<li>The <strong>exploitation</strong> phase, where this knowledge is used to collect as many rewards as possible.</li>
+</ol>
+<p>The biggest issue with this approach is that exploring large action spaces might necessitate a <strong>lot</strong> of trials (a problem referred to as <strong>sample complexity</strong>). The modern techniques we will see in this book try to reduce the sample complexity.</p>
+<div id="fig-cockpit" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-cockpit-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="img/cockpit.webp" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-cockpit-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4: Sample complexity: learning to control a modern plane through trial and error might be too long and dangerous. Image generated by ChatGPT.
+</figcaption>
+</figure>
+</div>
+<div class="callout callout-style-default callout-tip no-icon callout-titled" title="Sutton and Barto. Reinforcement learning: An Introduction">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
-<i class="callout-icon"></i>
+<i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Sutton and Barto. Reinforcement learning: An introduction
+Sutton and Barto. Reinforcement learning: An Introduction
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -311,9 +411,173 @@ Sutton and Barto. Reinforcement learning: An introduction
 <p><a href="http://incompleteideas.net/book/the-book-2nd.html" class="uri">http://incompleteideas.net/book/the-book-2nd.html</a></p>
 </div>
 </div>
+</section>
+<section id="applications-of-reinforcement-learning" class="level2">
+<h2 class="anchored" data-anchor-id="applications-of-reinforcement-learning">Applications of Reinforcement Learning</h2>
+<p>RL can be used in many control problems, ranging from simple problems to complex robotics, video games or even plasma control.</p>
+<section id="optimal-control" class="level3">
+<h3 class="anchored" data-anchor-id="optimal-control">Optimal control</h3>
+<p>The most basic problems on which RL can be applied are simple control environments with a few degrees of freedom. The <code>gymnasium</code> library (formerly <code>gym</code>) maintained by the Farama foundation provides an API for RL environments as well as the reference implementation of the most popular ones, including control problems, Mujoco robotic simulations and Atari games:</p>
+<p><a href="https://gymnasium.farama.org" class="uri">https://gymnasium.farama.org</a></p>
+<p>Some examples:</p>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Pendulum
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Goal: maintaining the pendulum vertical by changing the applied torque.</p>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><strong>Before</strong></p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="img/pendulum-before.gif" class="img-fluid figure-img" style="width:60.0%"></p>
+<figcaption>Source: <a href="https://keras.io/examples/rl/ddpg_pendulum/" class="uri">https://keras.io/examples/rl/ddpg_pendulum/</a></figcaption>
+</figure>
+</div>
+</div><div class="column" style="width:50%;">
+<p><strong>After</strong></p>
+<p><img src="img/pendulum-after.gif" class="img-fluid" style="width:60.0%"></p>
+</div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Cartpole
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Goal: maintaining the pole vertical by moving the cart.</p>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><strong>Before</strong></p>
+<p><img src="img/cartpole-before.gif" class="img-fluid" style="width:60.0%"></p>
+</div><div class="column" style="width:50%;">
+<p><strong>After</strong></p>
+<p><img src="img/cartpole-after.gif" class="img-fluid" style="width:60.0%"></p>
+</div>
+</div>
+<p>Source: <a href="https://towardsdatascience.com/cartpole-introduction-to-reinforcement-learning-ed0eb5b58288" class="uri">https://towardsdatascience.com/cartpole-introduction-to-reinforcement-learning-ed0eb5b58288</a></p>
+<p>See the Cartpole learning in real life (Deisenroth and Rasmussen, 2011):</p>
+<div class="quarto-video ratio ratio-16x9"><iframe data-external="1" src="https://www.youtube.com/embed/XiigTGKZfks" title="Cartpole" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe></div>
+</div>
+</div>
+</section>
+<section id="atari-games" class="level3">
+<h3 class="anchored" data-anchor-id="atari-games">Atari games</h3>
+<p>These toy control problems were used for decades to test various RL algorithms, although serious applications existed. The big breakthrough in (deep) reinforcement learning occurred in 2013, as a small startup in London, DeepMind Technologies Limited (now Google Deepmind), led by Demis Hassabis, successfully coupled reinforcement learning with deep neural networks for the first time. Their proposed algorithm, the deep Q-network <span class="citation" data-cites="Mnih2013 Mnih2015">(DQN, <a href="references.html#ref-Mnih2013" role="doc-biblioref">Mnih et al., 2013</a>, <a href="references.html#ref-Mnih2015" role="doc-biblioref">2015</a>)</span>, used a convolutional neural network (CNN) to learn to play many Atari games by trial and error, without any prior information about the game and only using raw images as inputs.</p>
+<div class="quarto-video ratio ratio-16x9"><iframe data-external="1" src="https://www.youtube.com/embed/rQIShnTz1kU" title="DQN - Atari" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe></div>
+<p>Similar pixel-based games were quickly mastered, such as the TORCS simulator with the A3C algporithm <span class="citation" data-cites="Mnih2016">(<a href="references.html#ref-Mnih2016" role="doc-biblioref">Mnih et al., 2016</a>)</span>:</p>
+<div class="quarto-video ratio ratio-16x9"><iframe data-external="1" src="https://www.youtube.com/embed/0xo1Ldx3L5Q" title="A3C - TOCS" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe></div>
+<p>Simulated robotics were addressed by similar techniques:</p>
+<div class="quarto-video ratio ratio-16x9"><iframe data-external="1" src="https://www.youtube.com/embed/faDKMMwOS2Q" title="A3C - Parkour" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe></div>
+</section>
+<section id="alphago" class="level3">
+<h3 class="anchored" data-anchor-id="alphago">AlphaGo</h3>
+<p>The next major breakthrough for Deep RL happened in 2016, as AlphaGo, also created by Deepmind, was able to beat Lee Sedol, world champion of the game of Go. AlphaGo coupled the power of deep neural networks and RL with Monte Carlo Tree Search (MCTS), a popular tree-based search algorithm, to learn through self-play the optimal strategy for the game of Go. This performance was extremely commented, as such a dominance of an AI system was not expected before decades.</p>
+<div class="quarto-video ratio ratio-16x9"><iframe data-external="1" src="https://www.youtube.com/embed/8tq1C8spV_g" title="AlphaGo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe></div>
+</section>
+<section id="openai-five-and-alphastar" class="level3">
+<h3 class="anchored" data-anchor-id="openai-five-and-alphastar">OpenAI Five and AlphaStar</h3>
+<p>Despite its complexity, the game of Go is actually quite simple for a computer: there is full observability (the entire state of the game is known to the players), the number of possible actions is quite limited, the consequence of an action is fully predictable, and planning is only necessary over a few dozens of plays. On the contrary, modern video games like DotA 2 or Starcraft have partial observability (the player only sees its immediate surroundings), hundreds of hierarchical actions can be made at each time step, the dynamics of the game are largely unknown, and a game can last hours. In some sense, it is much more difficult to become good at DotA than it is at chess or Go.</p>
+<p>Deepmind and OpenAI recognized this difference and started applying deep RL methods to Starcraft II and DotA 2, respectively, between 2017 and 2020. They managed to beat teams of professional players under limited conditions, but eventually stopped because of the huge training costs (and they had to work on LLMs…).</p>
+<div class="quarto-video ratio ratio-16x9"><iframe data-external="1" src="https://www.youtube.com/embed/eHipy_j29Xw" title="OpenAI Five" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe></div>
+<div class="quarto-video ratio ratio-16x9"><iframe data-external="1" src="https://www.youtube.com/embed/UuhECwm31dM" title="OpenAI Five" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe></div>
+</section>
+<section id="process-control" class="level3">
+<h3 class="anchored" data-anchor-id="process-control">Process control</h3>
+<p>In 2016, Deepmind applied its RL algorithms to the control of the cooling systems in Google’s datacenters. The system learned passively from observations of the current cooling sytem what the optimal policy was. When they gave control to the RL agent, it instantly led to a 40% reduction of energy consumption, which, for Google’s data centers, represents a huge amount of money.</p>
+<div id="fig-googledatacenter" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-googledatacenter-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="img/googledatacenter_1.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-googledatacenter-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5: Source: <a href="https://deepmind.com/blog/deepmind-ai-reduces-google-data-centre-cooling-bill-40/" class="uri">https://deepmind.com/blog/deepmind-ai-reduces-google-data-centre-cooling-bill-40/</a>
+</figcaption>
+</figure>
+</div>
+<p>This showed that the progress in deep RL was not limited to toy problems or video games, but could be relevant for complex process control problems. An amazing illustration of that idea is the magnetic control of tokamak plasmas by <span class="citation" data-cites="Degrave2022">Degrave et al. (<a href="references.html#ref-Degrave2022" role="doc-biblioref">2022</a>)</span>.</p>
+<div id="fig-tokamak" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-tokamak-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="img/tokamak.webp" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-tokamak-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;6: Magnetic control of tokamak plasmas through deep reinforcement learning. Source: <span class="citation" data-cites="Degrave2022">Degrave et al. (<a href="references.html#ref-Degrave2022" role="doc-biblioref">2022</a>)</span>
+</figcaption>
+</figure>
+</div>
+<p>Another recent illustration is how RL can be used in the design of silicon chips <span class="citation" data-cites="Roy2022">(<a href="references.html#ref-Roy2022" role="doc-biblioref">Roy et al., 2022</a>)</span>.</p>
+<div id="fig-chipdesign" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-chipdesign-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="img/chipdesign.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-chipdesign-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;7: Optimization of Parallel Prefix Circuits using Deep Reinforcement Learning. <span class="citation" data-cites="Roy2022">Roy et al. (<a href="references.html#ref-Roy2022" role="doc-biblioref">2022</a>)</span>
+</figcaption>
+</figure>
+</div>
+</section>
+<section id="robotics" class="level3">
+<h3 class="anchored" data-anchor-id="robotics">Robotics</h3>
+<p>A natural application of RL is in the domain of (autonomous) robotics, where agents / robots can autonomously solve tasks by themselves. A very influential lab working on robotics and Deep RL is RAIL lab of <strong>Sergey Levine</strong> at Berkeley.</p>
+<div class="quarto-video ratio ratio-16x9"><iframe data-external="1" src="https://www.youtube.com/embed/l8zKZLqkfII" title="OpenAI Five" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe></div>
+<p>OpenAI worked on dexterity tasks.</p>
+<div class="quarto-video ratio ratio-16x9"><iframe data-external="1" src="https://www.youtube.com/embed/jwSbzNHGflM" title="OpenAI Dexterity" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe></div>
+<p>Autonomous driving is another promising field of application for deep RL. The english startup Wayve made for example a very exciting demo of their system (see <span class="citation" data-cites="Kendall2018">Kendall et al. (<a href="references.html#ref-Kendall2018" role="doc-biblioref">2018</a>)</span> and <a href="https://wayve.ai/blog/learning-to-drive-in-a-day-with-reinforcement-learning" class="uri">https://wayve.ai/blog/learning-to-drive-in-a-day-with-reinforcement-learning</a>).</p>
+<div class="quarto-video ratio ratio-16x9"><iframe data-external="1" src="https://www.youtube.com/embed/eRwTbRtnT1I" title="Wayve" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe></div>
+<p>A recent contribution by the UZH Robotics and Perception Group leveraged deep RL to control drones flying at high speeds <span class="citation" data-cites="Kaufmann2023">(<a href="references.html#ref-Kaufmann2023" role="doc-biblioref">Kaufmann et al., 2023</a>)</span>.</p>
+<div class="quarto-video ratio ratio-16x9"><iframe data-external="1" src="https://www.youtube.com/embed/fBiataDpGIo" title="Drone racing" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe></div>
+</section>
+<section id="chatgpt" class="level3">
+<h3 class="anchored" data-anchor-id="chatgpt">ChatGPT</h3>
+<p>RL can also be used to fine-tune <strong>generative AI</strong> models, such as diffusion models or large language models such as ChatGPT. Generative models typically learn from raw data using pretext tasks: predicting missing parts of the data, or predicting the next item in a sequence. While this allows to learn a world model, it does not lead to meaningful behaviors for a task at hand. Using RL allows to fine-tune the model so that its outputs align with the task. Such a model alignment is central to the acceptance of LLMs.</p>
+<div id="fig-chatgpt" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-chatgpt-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="img/ChatGPT.svg" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-chatgpt-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;8: Source: <a href="https://openai.com/blog/chatgpt/" class="uri">https://openai.com/blog/chatgpt/</a>
+</figcaption>
+</figure>
+</div>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
+<div id="ref-Degrave2022" class="csl-entry" role="listitem">
+Degrave, J., Felici, F., Buchli, J., Neunert, M., Tracey, B., Carpanese, F., et al. (2022). Magnetic control of tokamak plasmas through deep reinforcement learning. <em>Nature</em> 602, 414–419. doi:<a href="https://doi.org/10.1038/s41586-021-04301-9">10.1038/s41586-021-04301-9</a>.
+</div>
+<div id="ref-Kaufmann2023" class="csl-entry" role="listitem">
+Kaufmann, E., Bauersfeld, L., Loquercio, A., Müller, M., Koltun, V., and Scaramuzza, D. (2023). Champion-level drone racing using deep reinforcement learning. <em>Nature</em> 620, 982–987. doi:<a href="https://doi.org/10.1038/s41586-023-06419-4">10.1038/s41586-023-06419-4</a>.
+</div>
+<div id="ref-Kendall2018" class="csl-entry" role="listitem">
+Kendall, A., Hawke, J., Janz, D., Mazur, P., Reda, D., Allen, J.-M., et al. (2018). Learning to <span>Drive</span> in a <span>Day</span>. Available at: <a href="http://arxiv.org/abs/1807.00412">http://arxiv.org/abs/1807.00412</a> [Accessed December 19, 2018].
+</div>
+<div id="ref-Mnih2016" class="csl-entry" role="listitem">
+Mnih, V., Badia, A. P., Mirza, M., Graves, A., Lillicrap, T. P., Harley, T., et al. (2016). Asynchronous <span>Methods</span> for <span>Deep Reinforcement Learning</span>. in <em>Proc. <span>ICML</span></em> Available at: <a href="http://arxiv.org/abs/1602.01783">http://arxiv.org/abs/1602.01783</a>.
+</div>
+<div id="ref-Mnih2013" class="csl-entry" role="listitem">
+Mnih, V., Kavukcuoglu, K., Silver, D., Graves, A., Antonoglou, I., Wierstra, D., et al. (2013). Playing <span>Atari</span> with <span>Deep Reinforcement Learning</span>. Available at: <a href="http://arxiv.org/abs/1312.5602">http://arxiv.org/abs/1312.5602</a>.
+</div>
+<div id="ref-Mnih2015" class="csl-entry" role="listitem">
+Mnih, V., Kavukcuoglu, K., Silver, D., Rusu, A. A., Veness, J., Bellemare, M. G., et al. (2015). Human-level control through deep reinforcement learning. <em>Nature</em> 518, 529–533. doi:<a href="https://doi.org/10.1038/nature14236">10.1038/nature14236</a>.
+</div>
+<div id="ref-Roy2022" class="csl-entry" role="listitem">
+Roy, R., Raiman, J., Kant, N., Elkin, I., Kirby, R., Siu, M., et al. (2022). <span>PrefixRL</span>: <span>Optimization</span> of <span>Parallel Prefix Circuits</span> using <span>Deep Reinforcement Learning</span>. doi:<a href="https://doi.org/10.1109/DAC18074.2021.9586094">10.1109/DAC18074.2021.9586094</a>.
+</div>
 <div id="ref-Sutton1998" class="csl-entry" role="listitem">
 Sutton, R. S., and Barto, A. G. (1998). <em>Reinforcement <span>Learning</span>: <span>An</span> introduction</em>. Cambridge, MA: MIT press.
 </div>
@@ -321,6 +585,8 @@ Sutton, R. S., and Barto, A. G. (1998). <em>Reinforcement <span>Learning</span>:
 Sutton, R. S., and Barto, A. G. (2017). <em>Reinforcement <span>Learning</span>: <span>An Introduction</span></em>. 2nd ed. Cambridge, MA: MIT Press Available at: <a href="http://incompleteideas.net/book/the-book-2nd.html">http://incompleteideas.net/book/the-book-2nd.html</a>.
 </div>
 </div>
+</section>
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
