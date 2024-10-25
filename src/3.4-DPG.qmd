@@ -104,7 +104,7 @@ $\mu$ is the mean of the process (usually 0), $\theta$ is the friction (how fast
 
 The architecture of the DDPG algorithm is depicted on @fig-ddpg.
 
-![Architecture of the DDPG (deep deterministic policy gradient) algorithm.](img/ddpg.png){#fig-ddpg width=70%}
+![Architecture of the DDPG (deep deterministic policy gradient) algorithm.](img/ddpg.png){#fig-ddpg}
 
 The pseudo-algorithm is as follows:
 

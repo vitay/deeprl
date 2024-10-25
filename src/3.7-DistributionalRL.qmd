@@ -1,4 +1,4 @@
-# Distributional learning
+# Distributional learning {#sec-distributionalrl}
 
 
 All RL methods based on the Bellman equations use the expectation operator to average returns and compute the values of states and actions:

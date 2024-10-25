@@ -52,7 +52,7 @@ A2C has an actor-critic architecture:
 * The actor outputs the policy $\pi_\theta$ for a state $s$, i.e. a vector of probabilities for each action.
 * The critic outputs the value $V_\varphi(s)$ of a state $s$.
 
-![Advantage actor-critic architecture.](img/a3c.png){#fig-a3c width=70%}
+![Advantage actor-critic architecture.](img/a2c.png){#fig-a3c width=100%}
 
 Having a computable formula for the policy gradient, the algorithm is rather simple:
 
