@@ -49,7 +49,7 @@ div.csl-indent {
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../src/1.3-DP.html" rel="next">
+<link href="../src/1.4-MC.html" rel="next">
 <link href="../src/1.1-Bandits.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
@@ -208,11 +208,6 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/1.3-DP.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Dynamic programming</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
   <a href="../src/1.4-MC.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Monte-Carlo methods</span></a>
   </div>
 </li>
@@ -317,9 +312,26 @@ window.Quarto = {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#markov-decision-process" id="toc-markov-decision-process" class="nav-link active" data-scroll-target="#markov-decision-process">Markov Decision Process</a></li>
-  <li><a href="#policy-and-value-functions" id="toc-policy-and-value-functions" class="nav-link" data-scroll-target="#policy-and-value-functions">Policy and value functions</a></li>
-  <li><a href="#bellman-equations" id="toc-bellman-equations" class="nav-link" data-scroll-target="#bellman-equations">Bellman equations</a></li>
+  <li><a href="#markov-decision-process" id="toc-markov-decision-process" class="nav-link active" data-scroll-target="#markov-decision-process">Markov Decision Process</a>
+  <ul class="collapse">
+  <li><a href="#definition" id="toc-definition" class="nav-link" data-scroll-target="#definition">Definition</a></li>
+  <li><a href="#markov-property" id="toc-markov-property" class="nav-link" data-scroll-target="#markov-property">Markov property</a></li>
+  <li><a href="#rewards-and-returns" id="toc-rewards-and-returns" class="nav-link" data-scroll-target="#rewards-and-returns">Rewards and returns</a></li>
+  <li><a href="#policy" id="toc-policy" class="nav-link" data-scroll-target="#policy">Policy</a></li>
+  </ul></li>
+  <li><a href="#value-functions" id="toc-value-functions" class="nav-link" data-scroll-target="#value-functions">Value functions</a></li>
+  <li><a href="#bellman-equations" id="toc-bellman-equations" class="nav-link" data-scroll-target="#bellman-equations">Bellman equations</a>
+  <ul class="collapse">
+  <li><a href="#relationship-between-v-and-q" id="toc-relationship-between-v-and-q" class="nav-link" data-scroll-target="#relationship-between-v-and-q">Relationship between V and Q</a></li>
+  <li><a href="#bellman-equations-1" id="toc-bellman-equations-1" class="nav-link" data-scroll-target="#bellman-equations-1">Bellman equations</a></li>
+  <li><a href="#optimal-bellman-equations" id="toc-optimal-bellman-equations" class="nav-link" data-scroll-target="#optimal-bellman-equations">Optimal Bellman equations</a></li>
+  </ul></li>
+  <li><a href="#dynamic-programming" id="toc-dynamic-programming" class="nav-link" data-scroll-target="#dynamic-programming">Dynamic programming</a>
+  <ul class="collapse">
+  <li><a href="#policy-iteration" id="toc-policy-iteration" class="nav-link" data-scroll-target="#policy-iteration">Policy iteration</a></li>
+  <li><a href="#value-iteration" id="toc-value-iteration" class="nav-link" data-scroll-target="#value-iteration">Value iteration</a></li>
+  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary">Summary</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -347,103 +359,859 @@ window.Quarto = {
 
 <section id="markov-decision-process" class="level2">
 <h2 class="anchored" data-anchor-id="markov-decision-process">Markov Decision Process</h2>
-<p>RL methods apply to problems where an agent interacts with an environment in discrete time steps (<a href="#fig-agentenv" class="quarto-xref">Figure&nbsp;<span>2.1</span></a>). At time <span class="math inline">t</span>, the agent is in state <span class="math inline">s_t</span> and decides to perform an action <span class="math inline">a_t</span>. At the next time step, it arrives in the state <span class="math inline">s_{t+1}</span> and obtains the reward <span class="math inline">r_{t+1}</span>. The goal of the agent is to maximize the reward obtained on the long term. The textbook by <span class="citation" data-cites="Sutton1998">Sutton and Barto (<a href="references.html#ref-Sutton1998" role="doc-biblioref">1998</a>)</span> (updated in <span class="citation" data-cites="Sutton2017">Sutton and Barto (<a href="references.html#ref-Sutton2017" role="doc-biblioref">2017</a>)</span>) defines the field extensively.</p>
+<section id="definition" class="level3">
+<h3 class="anchored" data-anchor-id="definition">Definition</h3>
+<p>Reinforcement Learning methods apply to problems where an agent interacts with an environment in discrete time steps (<a href="#fig-agentenv" class="quarto-xref">Figure&nbsp;<span>2.1</span></a>). At time <span class="math inline">t</span>, the agent is in state <span class="math inline">s_t</span> and decides to perform an action <span class="math inline">a_t</span>. At the next time step, it arrives in the state <span class="math inline">s_{t+1}</span> and obtains the reward <span class="math inline">r_{t+1}</span>. In the genral case, transitions can be stochastic (there is a probability of arriving in a given state after an action), as well as the rewards (as in the bandits previously seen). The goal of the agent is to maximize the reward obtained on the long term.</p>
 <div id="fig-agentenv" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-agentenv-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/rl-agent.jpg" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;2.1: Interaction between an agent and its environment. Source: @Sutton1998."><img src="img/rl-agent.jpg" class="img-fluid figure-img"></a>
+<a href="img/rl-agent.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;2.1: Interaction between an agent and its environment. Source: @Sutton1998."><img src="img/rl-agent.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-agentenv-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;2.1: Interaction between an agent and its environment. Source: <span class="citation" data-cites="Sutton1998">Sutton and Barto (<a href="references.html#ref-Sutton1998" role="doc-biblioref">1998</a>)</span>.
 </figcaption>
 </figure>
 </div>
-<p>Reinforcement learning problems are described as <strong>Markov Decision Processes</strong> (MDP) defined by five quantities:</p>
-<ul>
-<li>a state space <span class="math inline">\mathcal{S}</span> where each state <span class="math inline">s</span> respects the Markov property. It can be finite or infinite.</li>
-<li>an action space <span class="math inline">\mathcal{A}</span> of actions <span class="math inline">a</span>, which can be finite or infinite, discrete or continuous.</li>
-<li>an initial state distribution <span class="math inline">p_0(s_0)</span> (from which states is the agent likely to start).</li>
-<li>a transition dynamics model with density <span class="math inline">p(s'|s, a)</span>, sometimes noted <span class="math inline">\mathcal{P}_{ss'}^a</span>. It defines the probability of arriving in the state <span class="math inline">s'</span> at time <span class="math inline">t+1</span> when being in the state <span class="math inline">s</span> and performing the action <span class="math inline">a</span>.</li>
-<li>a reward function <span class="math inline">r(s, a, s') : \mathcal{S}\times\mathcal{A}\times\mathcal{S} \rightarrow \Re</span> defining the (stochastic) reward obtained after performing <span class="math inline">a</span> in state <span class="math inline">s</span> and arriving in <span class="math inline">s'</span>.</li>
-</ul>
+<p>These problems are formalized as <strong>Markov Decision Processes</strong> (MDP) and defined by six quantities <span class="math inline">&lt;\mathcal{S}, \mathcal{A}, p_0, \mathcal{P}, \mathcal{R}, \gamma&gt;</span>. For a finite MDP, we have:</p>
+<ol type="1">
+<li><p>The <strong>state space</strong> <span class="math inline">\mathcal{S} = \{ s_i\}_{i=1}^N</span>, where each state respects the Markov property.</p></li>
+<li><p>The <strong>action space</strong> <span class="math inline">\mathcal{A} = \{ a_i\}_{i=1}^M</span>.</p></li>
+<li><p>An <strong>initial state distribution</strong> <span class="math inline">p_0(s_0)</span> (from which states the agent is most likely to start).</p></li>
+<li><p>The <strong>state transition probability function</strong>, defining the probability of arriving in the state <span class="math inline">s'</span> at time <span class="math inline">t+1</span> after being in the state <span class="math inline">s</span> and performing the action <span class="math inline">a</span> at time <span class="math inline">t</span>:</p></li>
+</ol>
+<p><span class="math display">
+\begin{aligned}
+    \mathcal{P}: \mathcal{S} \times \mathcal{A} \rightarrow &amp; P(\mathcal{S}) \\
+    p(s' | s, a) &amp; =  P (s_{t+1} = s' | s_t = s, a_t = a) \\
+\end{aligned}
+</span></p>
+<ol start="5" type="1">
+<li>The <strong>expected reward function</strong> defining the (stochastic) reward obtained after performing <span class="math inline">a</span> in state <span class="math inline">s</span> and arriving in <span class="math inline">s'</span>:</li>
+</ol>
+<p><span class="math display">
+\begin{aligned}
+    \mathcal{R}: \mathcal{S} \times \mathcal{A} \times \mathcal{S} \rightarrow &amp; \Re \\
+    r(s, a, s') &amp;=  \mathbb{E} (r_{t+1} | s_t = s, a_t = a, s_{t+1} = s') \\
+\end{aligned}
+</span></p>
+<ol start="6" type="1">
+<li>The <strong>discount factor</strong> <span class="math inline">\gamma \in [0, 1]</span>.</li>
+</ol>
+<p>In deep RL, the state and action spaces can be infinite, but let’s focus on finite MDPs for now.</p>
 <p>The behavior of the agent over time is a <strong>trajectory</strong> (also called episode, history or roll-out) <span class="math inline">\tau = (s_0, a_0, s_1, a_, \ldots, s_T, a_T)</span> defined by the dynamics of the MDP. Each transition occurs with a probability <span class="math inline">p(s'|s, a)</span> and provides a certain amount of reward defined by <span class="math inline">r(s, a, s')</span>. In episodic tasks, the horizon <span class="math inline">T</span> is finite, while in continuing tasks <span class="math inline">T</span> is infinite.</p>
+</section>
+<section id="markov-property" class="level3">
+<h3 class="anchored" data-anchor-id="markov-property">Markov property</h3>
+<p>The state of the agent represents all the information needed to take decisions and solve the task. For a robot navigating in an environment, this may include all its sensors, its positions as tracked by a GPS, but also the relative position of all objects / persons it may interact with. For a board game, the description of the board is usually enough.</p>
 <p>Importantly, the <strong>Markov property</strong> states that:</p>
+<blockquote class="blockquote">
+<p>The future is independent of the past given the present.</p>
+</blockquote>
+<p>In mathematical terms for a transition <span class="math inline">(s_t, a_t, s_{t+1})</span>:</p>
 <p><span class="math display">
     p(s_{t+1}|s_t, a_t) = p(s_{t+1}|s_t, a_t, s_{t-1}, a_{t-1}, \dots s_0, a_0)
 </span></p>
 <p>i.e.&nbsp;you do not need the full history of the agent to predict where it will arrive after an action. In simple problems, this is just a question of providing enough information to the description of a state: if a transition depends on what happened in the past, just put that information in the state description.</p>
-<p>If the Markov property is not met, RL methods may not converge (or poorly). In many problems, one does not have access to the true states of the agent, but one can only indirectly observe them. For example, in a video game, the true state is defined by a couple of variables: coordinates <span class="math inline">(x, y)</span> of the two players, position of the ball, speed, etc. However, all you have access to are the raw pixels: sometimes the ball may be hidden behind a wall or a tree, but it still exists in the state space. Speed information is also not observable in a single frame.</p>
-<p>In a <strong>Partially Observable Markov Decision Process</strong> (POMDP), observations <span class="math inline">o_t</span> come from a space <span class="math inline">\mathcal{O}</span> and are linked to underlying states using the density function <span class="math inline">p(o_t| s_t)</span>. Observations are usually not Markov, so the full history of observations <span class="math inline">h_t = (o_0, a_0, \dots o_t, a_t)</span> is needed to solve the problem.</p>
+<p>A state representation with the Markov property should therefore not only contain all the important information available at time <span class="math inline">t</span>, but also information from the past that is necessary to take a decision.</p>
+<p>If the Markov property is not met, RL methods may not converge (or poorly). In many problems, one does not have access to the true states of the agent, but one can only indirectly observe them. For example, in a video game, the true state is defined by a couple of variables: coordinates <span class="math inline">(x, y)</span> of the two players, position of the ball, speed, etc. However, in Atari games all you have access to are the raw pixels: sometimes the ball may be hidden behind a wall or a tree, but it still exists in the state space. Speed information is also not observable in a single frame.</p>
+<p>In a <strong>Partially Observable Markov Decision Process</strong> (POMDP), observations <span class="math inline">o_t</span> come from a space <span class="math inline">\mathcal{O}</span> and are linked to underlying states using the density function <span class="math inline">p(o_t| s_t)</span>. Observations are usually not Markov, so the full history of observations <span class="math inline">h_t = (o_0, a_0, \dots o_t, a_t)</span> is needed to solve the problem. We will see later how recurrent neural networks can help with POMDPs.</p>
 </section>
-<section id="policy-and-value-functions" class="level2">
-<h2 class="anchored" data-anchor-id="policy-and-value-functions">Policy and value functions</h2>
-<p>The policy defines the behavior of the agent: which action should be taken in each state. One distinguishes two kinds of policies:</p>
-<ul>
-<li>a stochastic policy <span class="math inline">\pi : \mathcal{S} \rightarrow P(\mathcal{A})</span> defines the probability distribution <span class="math inline">P(\mathcal{A})</span> of performing an action.</li>
-<li>a deterministic policy <span class="math inline">\mu(s_t)</span> is a discrete mapping of <span class="math inline">\mathcal{S} \rightarrow \mathcal{A}</span>.</li>
-</ul>
-<p>The policy can be used to explore the environment and generate trajectories of states, rewards and actions. The performance of a policy is determined by estimating the <strong>discounted return</strong>, i.e.&nbsp;the sum of all rewards received from time step <span class="math inline">t</span> onwards:</p>
-<p><span class="math display">
-    R_t = \sum_{k=0}^{T} \gamma^k \, r_{t+k+1}
-</span></p>
-<p>where <span class="math inline">0 &lt; \gamma \leq 1</span> is the discount rate and <span class="math inline">r_{t+1}</span> represents the reward obtained during the transition from <span class="math inline">s_t</span> to <span class="math inline">s_{t+1}</span>.</p>
-<p>The <strong>discount rate</strong> <span class="math inline">\gamma</span> is a critical hyperparameter of RL: chosen too small, only immediate rewards will matter (i.e.&nbsp;participate to <span class="math inline">R_t</span>) and the agent will be greedy. Chosen too close from 1, hypothetical rewards delivered in one year from now will count as much as slightly smaller rewards delivered for certain now.</p>
-<p>If the task is episodic (<span class="math inline">T</span> is finite, the trajectories ends after a finite number of transitions), <span class="math inline">\gamma</span> can be set to 1, but if the task is continuing (<span class="math inline">T=\infty</span>, trajectories have no end), <span class="math inline">\gamma</span> must be chosen smaller than 1.</p>
-<p>The Q-value of a state-action pair <span class="math inline">(s, a)</span> is defined as the expected discounted return received if the agent takes <span class="math inline">a</span> from a state <span class="math inline">s</span> and follows the policy distribution <span class="math inline">\pi</span> thereafter:</p>
-<p><span class="math display">
-    Q^{\pi}(s, a) = \mathbb{E}_{\pi}[R_t | s_t = s, a_t=a]
-</span></p>
-<p>More precisely, the Q-value of a state-action pair is the mathematical expectation of the return over all trajectories starting in <span class="math inline">(s, a)</span> defined by the policy <span class="math inline">\pi</span>.</p>
-<p>Similarly, the value of a state <span class="math inline">s</span> is the expected discounted return received if the agent starts in <span class="math inline">s</span> and thereafter follows its policy <span class="math inline">\pi</span>.</p>
-<p><span class="math display">
-    V^{\pi}(s) = \mathbb{E}_{\pi}[R_t | s_t = s]
-</span></p>
-<p>Obviously, these quantities depend on the states/actions themselves (some chessboard configurations are intrinsically better than others, i.e.&nbsp;you are more likely to win from that state), but also on the policy (if you can kill your opponent in one move - meaning you are in an intrinsically good state - but systematically take the wrong decision and lose, this is actually a bad state).</p>
-</section>
-<section id="bellman-equations" class="level2">
-<h2 class="anchored" data-anchor-id="bellman-equations">Bellman equations</h2>
-<p>The V- and Q-values are obviously linked with each other. The value of state depend on the value of the actions possible in that state, modulated by the probability that an action will be taken (i.e.&nbsp;the policy):</p>
-<p><span id="eq-v-value"><span class="math display">
-    V^{\pi}(s) = \sum_{a \in \mathcal{A}} \pi(s, a) \, Q^\pi(s,a)
-\tag{2.1}</span></span></p>
-<p>For a deterministic policy (<span class="math inline">\pi(s, a) = 1</span> if <span class="math inline">a=a^*</span> and <span class="math inline">0</span> otherwise), the value of a state is the same as the value of the action that will be systematically taken.</p>
-<p>Noting that:</p>
-<p><span id="eq-return"><span class="math display">
-    R_t = r_{t+1} + \gamma R_{t+1}
-\tag{2.2}</span></span></p>
-<p>i.e.&nbsp;that the return at time <span class="math inline">t</span> is the sum of the immediate reward received during the next transition <span class="math inline">r_{t+1}</span> and of the return at the next state (<span class="math inline">R_{t+1}</span>, discounted by <span class="math inline">\gamma</span>), we can also write:</p>
-<p><span id="eq-q-value"><span class="math display">
-    Q^{\pi}(s, a) = \sum_{s' \in \mathcal{S}} p(s'|s, a) [r(s, a, s') + \gamma \, V^\pi(s')]
-\tag{2.3}</span></span></p>
-<p>The value of an action depends on which state you arrive in (<span class="math inline">s'</span>), with which probability (<span class="math inline">p(s'|s, a)</span>) this transition occurs, how much reward you receive immediately (<span class="math inline">r(s, a, s')</span>) and how much you will receive later (summarized by <span class="math inline">V^\pi(s')</span>).</p>
-<p>Putting together <a href="#eq-v-value" class="quarto-xref">Equation&nbsp;<span>2.1</span></a> and <a href="#eq-q-value" class="quarto-xref">Equation&nbsp;<span>2.3</span></a>, we obtain the <strong>Bellman equations</strong>:</p>
-<p><span class="math display">
-    V^{\pi}(s) = \sum_{a \in \mathcal{A}} \pi(s, a) \, \sum_{s' \in \mathcal{S}} p(s'|s, a) [r(s, a, s') + \gamma \, V^\pi(s')]
-</span></p>
-<p><span class="math display">
-    Q^{\pi}(s, a) = \sum_{s' \in \mathcal{S}} p(s'|s, a) [r(s, a, s') + \gamma \, \sum_{a' \in \mathcal{A}} \pi(s', a') \, Q^\pi(s',a')]
-</span></p>
-<p>The Bellman equations mean that the value of a state (resp. state-action pair) depends on the value of all other states (resp. state-action pairs), the current policy <span class="math inline">\pi</span> and the dynamics of the MDP (<span class="math inline">p(s'|s, a)</span> and <span class="math inline">r(s, a, s')</span>).</p>
-<div id="fig-backup" class="quarto-float quarto-figure quarto-figure-center anchored">
+<section id="rewards-and-returns" class="level3">
+<h3 class="anchored" data-anchor-id="rewards-and-returns">Rewards and returns</h3>
+<p>As with n-armed bandits, we only care about the <strong>expected reward</strong> received during a transition <span class="math inline">s \rightarrow s'</span> (<em>on average</em>), but the actual reward received <span class="math inline">r_{t+1}</span> may vary around the expected value with some unknown variance. In hard RL, we only care about the expected reward and ignore its variance, as we suppose that we can take actions an infinity of times. However, distributional RL investigates the role of this variance (see Section <a href="3.7-DistributionalRL.html" class="quarto-xref"><span>Distributional learning</span></a>).</p>
+<p><span class="math display">r(s, a, s') =  \mathbb{E} (r_{t+1} | s_t = s, a_t = a, s_{t+1} = s')</span></p>
+<div id="fig-rewarddistribution" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-backup-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/backup.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Figure&nbsp;2.2: Backup diagrams corresponding to the Bellman equations. Source: @Sutton1998."><img src="img/backup.png" class="img-fluid figure-img"></a>
+<div aria-describedby="fig-rewarddistribution-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="img/bandit-example.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Figure&nbsp;2.2: Reward distributions for several actions in a single state."><img src="img/bandit-example.png" class="img-fluid figure-img"></a>
 </div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-backup-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;2.2: Backup diagrams corresponding to the Bellman equations. Source: <span class="citation" data-cites="Sutton1998">Sutton and Barto (<a href="references.html#ref-Sutton1998" role="doc-biblioref">1998</a>)</span>.
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-rewarddistribution-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2.2: Reward distributions for several actions in a single state.
 </figcaption>
 </figure>
 </div>
+<p>An important distinction in practice is between <strong>sparse vs.&nbsp;dense rewards</strong>. Sparse rewards take non-zero values only during certain transitions: game won/lost, goal achieved, timeout, etc. Dense rewards provide non-zero values during each transition: distance to goal, energy consumption, speed of the robot, etc. As we will see later, MDPs with sparse rewards are much harder to learn.</p>
+<div id="fig-sparserewards" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-sparserewards-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="img/sparse-dense.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Figure&nbsp;2.3: Dense vs.&nbsp;sparse rewradsSource: https://forns.lmu.build/classes/spring-2020/cmsi-432/lecture-13-2.html"><img src="img/sparse-dense.png" class="img-fluid figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-sparserewards-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2.3: Dense vs.&nbsp;sparse rewradsSource: <a href="https://forns.lmu.build/classes/spring-2020/cmsi-432/lecture-13-2.html" class="uri">https://forns.lmu.build/classes/spring-2020/cmsi-432/lecture-13-2.html</a>
+</figcaption>
+</figure>
+</div>
+<p>Over time, the MDP will be in a sequence of states (possibly infinite):</p>
+<p><span class="math display">s_0 \rightarrow s_1 \rightarrow s_2  \rightarrow \ldots \rightarrow s_T</span></p>
+<p>and collect a sequence of rewards:</p>
+<p><span class="math display">r_1 \rightarrow r_2 \rightarrow r_3  \rightarrow \ldots \rightarrow r_{T}</span></p>
+<div id="fig-rl-sequence" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-rl-sequence-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="img/rl-sequence.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="Figure&nbsp;2.4: Sequence of states over time in a MDP."><img src="img/rl-sequence.png" class="img-fluid figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-rl-sequence-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2.4: Sequence of states over time in a MDP.
+</figcaption>
+</figure>
+</div>
+<p>In a MDP, we are interested in maximizing the <strong>return</strong> <span class="math inline">R_t</span>, i.e.&nbsp;the discounted sum of <strong>future</strong> rewards after the step <span class="math inline">t</span>:</p>
+<p><span class="math display">
+    R_t = r_{t+1} + \gamma \, r_{t+2} + \gamma^2 \, r_{t+3} + \ldots = \sum_{k=0}^\infty \gamma^k \, r_{t+k+1}
+</span></p>
+<p>The return is sometimes called the <strong>reward-to-go</strong>: how much reward will I collect from now on? Of course, you can never know the return at time <span class="math inline">t</span>: transitions and rewards are probabilistic, so the received rewards in the future are not exactly predictable at <span class="math inline">t</span>. <span class="math inline">R_t</span> is therefore purely theoretical: RL is all about <strong>estimating</strong> the return.</p>
+<p>More generally, for a trajectory (episode) <span class="math inline">\tau = (s_0, a_0, r_1, s_1, a_1, \ldots, s_T)</span>, one can define its return as:</p>
+<p><span class="math display"> R(\tau) = \sum_{t=0}^{T} \gamma^t \, r_{t+1} </span></p>
+<p>The <strong>discount factor</strong> (or discount rate, or discount) <span class="math inline">\gamma \in [0, 1]</span> is a very important parameter in RL: It defines the <strong>present value of future rewards</strong>. Receiving 10 euros now has a higher <strong>value</strong> than receiving 10 euros in ten years, although the reward is the same: you do not have to wait. The value of receiving a reward <span class="math inline">r</span> after <span class="math inline">k+1</span> time steps is <span class="math inline">\gamma^k \, r</span>, meaning that immediate rewards are better than delayed rewards.</p>
+<p>When <span class="math inline">\gamma &lt; 1</span>, <span class="math inline">\gamma^k</span> tends to 0 when <span class="math inline">k</span> goes to infinity: this makes sure that the return is always <strong>finite</strong>.</p>
+<p><span class="math display">
+    R_t = r_{t+1} + \gamma \, r_{t+2} + \gamma^2 \, r_{t+3} + \ldots = \sum_{k=0}^\infty \gamma^k \, r_{t+k+1}
+</span></p>
+<div id="fig-decayinggamma" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-decayinggamma-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="img/decayinggamma.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5" title="Figure&nbsp;2.5: The value of \gamma^k decays over time. The closer \gamma is to 1, the slower the decay."><img src="img/decayinggamma.png" class="img-fluid figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-decayinggamma-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2.5: The value of <span class="math inline">\gamma^k</span> decays over time. The closer <span class="math inline">\gamma</span> is to 1, the slower the decay.
+</figcaption>
+</figure>
+</div>
+<p>For <strong>episodic tasks</strong> (which break naturally into finite episodes of length <span class="math inline">T</span>, e.g.&nbsp;plays of a game, trips through a maze), the return is always finite and easy to compute at the end of the episode. The discount factor can be set to 1.</p>
+<p><span class="math display">
+    R_t = \sum_{k=0}^{T} r_{t+k+1}
+</span></p>
+<p>For <strong>continuing tasks</strong> (which can not be split into episodes), the return could become infinite if <span class="math inline">\gamma = 1</span>. The discount factor has to be smaller than 1.</p>
+<p><span class="math display">
+    R_t = \sum_{k=0}^{\infty} \gamma^k \, r_{t+k+1}
+</span></p>
+<p>The discount rate <span class="math inline">\gamma</span> determines the relative importance of future rewards for the behavior:</p>
+<ul>
+<li>if <span class="math inline">\gamma</span> is close to 0, only the immediately available rewards will count: the agent is greedy or <strong>myopic</strong>.</li>
+<li>if <span class="math inline">\gamma</span> is close to 1, even far-distance rewards will be taken into account: the agent is <strong>farsighted</strong>.</li>
+</ul>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Why the reward on the long term?
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div id="fig-returnexample" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-returnexample-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="img/return-example.svg" class="lightbox" data-gallery="quarto-lightbox-gallery-6" title="Figure&nbsp;2.6: Example of a MDP with two actions in state s_1, lading to two different returns. The states s_5 and s_6 are terminal states, where no reward is received anymore."><img src="img/return-example.svg" class="img-fluid figure-img" style="width:60.0%"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-returnexample-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2.6: Example of a MDP with two actions in state <span class="math inline">s_1</span>, lading to two different returns. The states <span class="math inline">s_5</span> and <span class="math inline">s_6</span> are terminal states, where no reward is received anymore.
+</figcaption>
+</figure>
+</div>
+<p>In the MDP above, selecting the action <span class="math inline">a_1</span> in <span class="math inline">s_1</span> does not bring reward immediately (<span class="math inline">r_1 = 0</span>) but allows to reach <span class="math inline">s_5</span> in the future and get a reward of 10. Selecting <span class="math inline">a_2</span> in <span class="math inline">s_1</span> brings immediately a reward of 1, but that will be all.</p>
+<p>Depending on the value of <span class="math inline">\gamma</span>, the optimal action might be <span class="math inline">a_1</span> or <span class="math inline">a_2</span>, depnding on which one brings more reward <strong>on the long term</strong>.</p>
+<p>When selecting <span class="math inline">a_1</span> in <span class="math inline">s_1</span>, the discounted return is:</p>
+<p><span class="math display">
+    R = 0 + \gamma \, 0 + \gamma^2 \, 0 + \gamma^3 \, 10 + \ldots = 10 \, \gamma^3
+</span></p>
+<p>while it is <span class="math inline">R= 1</span> for the action <span class="math inline">a_2</span>.</p>
+<p>For high values of <span class="math inline">\gamma</span>, <span class="math inline">10\, \gamma^3</span> is higher than one, so the action <span class="math inline">a_1</span> is the optimal action. For small values of <span class="math inline">\gamma</span>, <span class="math inline">10\, \gamma^3</span> becomes smaller than one, and the action <span class="math inline">a_2</span> becomes the optimal action. The discount rate <span class="math inline">\gamma</span> can totally change the optimal behavior of the agent, that is why it is part of the MDP definition and not just a hyperparameter.</p>
+</div>
+</div>
+</section>
+<section id="policy" class="level3">
+<h3 class="anchored" data-anchor-id="policy">Policy</h3>
+<p>The probability that an agent selects a particular action <span class="math inline">a</span> in a given state <span class="math inline">s</span> is called the <strong>policy</strong> <span class="math inline">\pi</span>.</p>
+<p><span class="math display">
+\begin{align}
+    \pi &amp;: \mathcal{S} \times \mathcal{A} \rightarrow P(\mathcal{S})\\
+    (s, a) &amp;\rightarrow \pi(s, a)  = P(a_t = a | s_t = s) \\
+\end{align}
+</span></p>
+<p>The policy can be <strong>deterministic</strong> (one action has a probability of 1, the others 0) or <strong>stochastic</strong>. In all cases, the sum of the probabilities in a given state must be one:</p>
+<p><span class="math display">
+    \sum_{a \in \mathcal{A}(s)} \pi(s, a) = 1
+</span></p>
+<p>The goal of an agent is to find a policy that maximizes the sum of received rewards on the long term, i.e.&nbsp;the return <span class="math inline">R_t</span> at each each time step. This policy is called the <strong>optimal policy</strong> <span class="math inline">\pi^*</span>. It maximizes the following objective function:</p>
+<p><span class="math display">
+    \pi^* = \text{argmax} \, \mathcal{J}(\pi) = \text{argmax} \,  \mathbb{E}_{\tau \sim \rho_\pi} [R(\tau)]
+</span></p>
+<p>where <span class="math inline">\rho_\pi</span> is the density distribution of the trajectories generated by the policy <span class="math inline">\pi</span>.</p>
+<p>In summary, RL is an <strong>adaptive optimal control</strong> method for Markov Decision Processes using (sparse) rewards as a partial feedback. At each time step <span class="math inline">t</span>, the agent observes its Markov state <span class="math inline">s_t \in \mathcal{S}</span>, produces an action <span class="math inline">a_t \in \mathcal{A}(s_t)</span>, receives a reward according to this action <span class="math inline">r_{t+1} \in \Re</span> and updates its state: <span class="math inline">s_{t+1} \in \mathcal{S}</span>. The agent generates trajectories <span class="math inline">\tau = (s_0, a_0, r_1, s_1, a_1, \ldots, s_T)</span> depending on its policy <span class="math inline">\pi(s ,a)</span>. The goal is to find the <strong>optimal policy</strong> <span class="math inline">\pi^* (s, a)</span> that maximizes in expectation the return of each possible trajectory under that policy.</p>
+</section>
+</section>
+<section id="value-functions" class="level2">
+<h2 class="anchored" data-anchor-id="value-functions">Value functions</h2>
+<p>A central notion in RL is to estimate the <strong>value</strong> (or <strong>utility</strong>) of every state and action of the MDP. The <strong>state-value</strong> <span class="math inline">V^{\pi} (s)</span> of a state <span class="math inline">s</span> is defined as the mathematical expectation of the return when starting from that state and thereafter following the agent’s current policy <span class="math inline">\pi</span>:</p>
+<p><span class="math display">  V^{\pi} (s) = \mathbb{E}_{\rho_\pi} ( R_t | s_t = s) = \mathbb{E}_{\rho_\pi} ( \sum_{k=0}^{\infty} \gamma^k r_{t+k+1} |s_t=s ) </span></p>
+<p>The mathematical expectation operator <span class="math inline">\mathbb{E}(\cdot)</span> is indexed by <span class="math inline">\rho_\pi</span>, the probability distribution of states achievable with <span class="math inline">\pi</span>. Indeed, several trajectories are possible after the state <span class="math inline">s</span>:</p>
+<ul>
+<li>The state transition probability function <span class="math inline">p(s' | s, a)</span> leads to different states <span class="math inline">s'</span>, even if the same actions are taken.</li>
+<li>The expected reward function <span class="math inline">r(s, a, s')</span> provides stochastic rewards, even if the transition <span class="math inline">(s, a, s')</span> is the same.</li>
+<li>The policy <span class="math inline">\pi</span> itself is stochastic.</li>
+</ul>
+<p>Only rewards that are obtained using the policy <span class="math inline">\pi</span> should be taken into account, not the complete distribution of states and rewards.</p>
+<p>The value of a state is not intrinsic to the state itself, it depends on the policy: One could be in a state which is very close to the goal (only one action left to win the game), but if the policy is very bad, the “good” action will not be chosen and the state will have a small value.</p>
+<p>The value of taking an action <span class="math inline">a</span> in a state <span class="math inline">s</span> under policy <span class="math inline">\pi</span> is the expected return starting</p>
+<p>Similarly, the <strong>action-value</strong> (or <strong>Q-value</strong>) for a state-action pair <span class="math inline">(s, a)</span> under the policy <span class="math inline">\pi</span> is defined as:</p>
+<p><span class="math display">
+\begin{align}
+    Q^{\pi} (s, a)  &amp; = \mathbb{E}_{\rho_\pi} ( R_t | s_t = s, a_t =a) \\
+                    &amp; = \mathbb{E}_{\rho_\pi} ( \sum_{k=0}^{\infty} \gamma^k r_{t+k+1} |s_t=s, a_t=a) \\
+\end{align}
+</span></p>
+<p>The Q-value of an action is sometimes called its <strong>utility</strong>: is it worth taking this action?</p>
+</section>
+<section id="bellman-equations" class="level2">
+<h2 class="anchored" data-anchor-id="bellman-equations">Bellman equations</h2>
+<section id="relationship-between-v-and-q" class="level3">
+<h3 class="anchored" data-anchor-id="relationship-between-v-and-q">Relationship between V and Q</h3>
+<p>The value of a state <span class="math inline">V^{\pi}(s)</span> depends on the value <span class="math inline">Q^{\pi} (s, a)</span> of the action that will be chosen by the policy <span class="math inline">\pi</span> in <span class="math inline">s</span>:</p>
+<p><span class="math display">
+        V^{\pi}(s) = \mathbb{E}_{a \sim \pi(s,a)} [Q^{\pi} (s, a)] = \sum_{a \in \mathcal{A}(s)} \pi(s, a) \, Q^{\pi} (s, a)
+</span></p>
+<p>If the policy <span class="math inline">\pi</span> is deterministic (the same action is chosen every time), the value of the state is the same as the value of that action (same expected return). If the policy <span class="math inline">\pi</span> is stochastic (actions are chosen with different probabilities), the value of the state is the weighted average (i.e.&nbsp;expectation) of the value of the actions.</p>
+<p>➡️ If the Q-values are known, the V-values can be found easily.</p>
+<p>We can note that the return at time <span class="math inline">t</span> depends on the <strong>immediate reward</strong> <span class="math inline">r_{t+1}</span> and the return at the next time step <span class="math inline">t+1</span>:</p>
+<p><span class="math display">
+\begin{aligned}
+    R_t &amp;= r_{t+1} + \gamma \, r_{t+2} +  \gamma^2  \, r_{t+3} + \dots + \gamma^k \, r_{t+k+1} + \dots \\
+        &amp;= r_{t+1} + \gamma \, ( r_{t+2} +  \gamma \, r_{t+3} + \dots + \gamma^{k-1} \, r_{t+k+1} + \dots) \\
+        &amp;= r_{t+1} + \gamma \,  R_{t+1} \\
+\end{aligned}
+</span></p>
+<p>When taking the mathematical expectation of that identity, we obtain:</p>
+<p><span class="math display">
+    \mathbb{E}_{\rho_\pi}[R_t] = r(s_t, a_t, s_{t+1}) + \gamma \, \mathbb{E}_{\rho_\pi}[R_{t+1}]
+</span></p>
+<p>It becomes clear that the value of an action depends on the immediate reward received just after the action, as well as the value of the next state:</p>
+<p><span class="math display">
+        Q^{\pi}(s_t, a_t) = r(s_t, a_t, s_{t+1}) + \gamma \,  V^{\pi} (s_{t+1})
+</span></p>
+<p>However, this is only for a fixed <span class="math inline">(s_t, a_t, s_{t+1})</span> transition. Taking transition probabilities into account, one can obtain the Q-values through the equation:</p>
+<p><span class="math display">
+    Q^{\pi}(s, a) = \mathbb{E}_{s' \sim p(s'|s, a)} [ r(s, a, s') + \gamma \, V^{\pi} (s') ] = \sum_{s' \in \mathcal{S}} p(s' | s, a) \, [ r(s, a, s') + \gamma \, V^{\pi} (s') ]
+</span></p>
+<p>The value of an action depends on:</p>
+<ul>
+<li>the states <span class="math inline">s'</span> one can arrive after the action (with a probability <span class="math inline">p(s' | s, a)</span>).</li>
+<li>the value of that state <span class="math inline">V^{\pi} (s')</span>, weighted by <span class="math inline">\gamma</span> as it is one step in the future.</li>
+<li>the reward received immediately after taking that action <span class="math inline">r(s, a, s')</span> (as it is not included in the value of <span class="math inline">s'</span>).</li>
+</ul>
+<p>➡️ If the V-values are known, the Q-values can be found easily by a <strong>1-step look-ahead</strong>, i.e.&nbsp;looking at the achievable states.</p>
+</section>
+<section id="bellman-equations-1" class="level3">
+<h3 class="anchored" data-anchor-id="bellman-equations-1">Bellman equations</h3>
+<p>Putting together those two equations, a fundamental property of value functions used throughout reinforcement learning is that they satisfy a particular recursive relationship:</p>
+<p><span class="math display">
+\begin{aligned}
+        V^{\pi}(s)  &amp;= \sum_{a \in \mathcal{A}(s)} \pi(s, a) \, Q^{\pi} (s, a)\\
+                    &amp;= \sum_{a \in \mathcal{A}(s)} \pi(s, a) \, \sum_{s' \in \mathcal{S}} p(s' | s, a) \, [ r(s, a, s') + \gamma \, V^{\pi} (s') ]
+\end{aligned}
+</span></p>
+<p>This equation is called the <strong>Bellman equation</strong> for <span class="math inline">V^{\pi}</span>. It expresses the relationship between the value of a state <span class="math inline">V^\pi(s)</span> and the value of its successors <span class="math inline">V^\pi(s')</span>, depending on the dynamics of the MDP (<span class="math inline">p(s' | s, a)</span> and <span class="math inline">r(s, a, s')</span>) and the current policy <span class="math inline">\pi</span>. The interesting property of the Bellman equation for RL is that it admits one and only one solution <span class="math inline">V^{\pi}(s)</span>.</p>
+<p>The same recursive relationship stands for <span class="math inline">Q^{\pi}(s, a)</span>:</p>
+<p><span class="math display">
+\begin{aligned}
+        Q^{\pi}(s, a)  &amp;= \sum_{s' \in \mathcal{S}} p(s' | s, a) \, [ r(s, a, s') + \gamma \, V^{\pi} (s') ] \\
+                    &amp;=  \sum_{s' \in \mathcal{S}} p(s' | s, a) \, [ r(s, a, s') + \gamma \, \sum_{a' \in \mathcal{A}(s')} \pi(s', a') \, Q^{\pi} (s', a')]
+\end{aligned}
+</span></p>
+<p>which is called the <strong>Bellman equation</strong> for <span class="math inline">Q^{\pi}</span>.</p>
+</section>
+<section id="optimal-bellman-equations" class="level3">
+<h3 class="anchored" data-anchor-id="optimal-bellman-equations">Optimal Bellman equations</h3>
+<p>The optimal policy is the policy that gathers the maximum of reward on the long term. Value functions define a partial ordering over policies:</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Partial ordering
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>A policy <span class="math inline">\pi</span> is better than another policy <span class="math inline">\pi'</span> if its expected return is greater or equal than that of <span class="math inline">\pi'</span> for all states <span class="math inline">s</span>.</p>
+<p><span class="math display">
+        \pi \geq \pi' \Leftrightarrow V^{\pi}(s) \geq V^{\pi'}(s) \quad \forall s \in \mathcal{S}
+</span></p>
+</div>
+</div>
+<p>For a MDP, there exists at least one policy that is better than all the others: this is the <strong>optimal policy</strong> <span class="math inline">\pi^*</span>. We note <span class="math inline">V^*(s)</span> and <span class="math inline">Q^*(s, a)</span> the optimal value of the different states and actions under <span class="math inline">\pi^*</span>.</p>
+<p><span class="math display">
+   V^* (s) = \max_{\pi} V^{\pi}(s) \quad \forall s \in \mathcal{S}
+</span></p>
+<p><span class="math display">
+    Q^* (s, a) = \max_{\pi} Q^{\pi}(s, a) \quad \forall s \in \mathcal{S}, \quad \forall a \in \mathcal{A}
+</span></p>
+<p>When the policy is optimal <span class="math inline">\pi^*</span>, the link between the V and Q values is even easier. The V and Q values are maximal for the optimal policy: there is no better alternative.</p>
+<p>The optimal action <span class="math inline">a^*</span> to perform in the state <span class="math inline">s</span> is the one with the highest optimal Q-value <span class="math inline">Q^*(s, a)</span>.</p>
+<p><span class="math display">
+    a^* = \text{argmax}_a \, Q^*(s, a)
+</span></p>
+<p>By definition, this action will bring the maximal return when starting in <span class="math inline">s</span>. The optimal policy is therefore <strong>greedy</strong> with respect to <span class="math inline">Q^*(s, a)</span>, i.e.&nbsp;<strong>deterministic</strong>.</p>
+<p><span class="math display">
+    \pi^*(s, a) = \begin{cases}
+                1 \; \text{if} \; a = a^* \\
+                0 \; \text{otherwise.}
+                \end{cases}
+</span></p>
+<p>As the optimal policy is deterministic, the optimal value of a state is equal to the value of the optimal action:</p>
+<p><span class="math display">
+    V^* (s)  = \max_{a \in \mathcal{A}(s)} Q^{\pi^*} (s, a)
+</span></p>
+<p>The expected return after being in <span class="math inline">s</span> is the same as the expected return after being in <span class="math inline">s</span> and choosing the optimal action <span class="math inline">a^*</span>, as this is the only action that can be taken. This allows to define the <strong>Bellman optimality equation</strong> for <span class="math inline">V^*</span>:</p>
+<p><span class="math display">
+    V^* (s)  = \max_{a \in \mathcal{A}(s)} \sum_{s' \in \mathcal{S}}  p(s' | s, a) \, [ r(s, a, s') + \gamma \, V^{*} (s') ]
+</span></p>
+<p>The same Bellman optimality equation stands for <span class="math inline">Q^*</span>:</p>
+<p><span class="math display">
+    Q^* (s, a)  = \sum_{s' \in \mathcal{S}} p(s' | s, a) \, [r(s, a, s')  + \gamma \max_{a' \in \mathcal{A}(s')} Q^* (s', a') ]
+</span></p>
+<p>The optimal value of <span class="math inline">(s, a)</span> depends on the optimal action in the next state <span class="math inline">s'</span>.</p>
+<!--
+# Bellman optimality equations
+
+
+* The Bellman optimality equations for $V^*$ form a system of equations:
+
+    * If there are $N$ states $s$, there are $N$ Bellman equations with $N$ unknowns $V^*(s)$.
+
+$$
+    V^* (s)  = \max_{a \in \mathcal{A}(s)} \sum_{s' \in \mathcal{S}}  p(s' | s, a) \, [ r(s, a, s') + \gamma \, V^{*} (s') ]
+$$
+
+* If the dynamics of the environment are known ($p(s' | s, a)$ and $r(s, a, s')$), then in principle one can solve this system of equations using linear algebra.
+
+* For finite MDPs, the Bellman optimality equation for $V^*$ has a unique solution (one and only one).
+
+    * This is the principle of **dynamic programming**.
+
+* The same is true for the Bellman optimality equation for $Q^*$:
+
+    * If there are $N$ states and $M$ actions available, there are $N\times M$ equations with $N\times M$ unknowns $Q^*(s, a)$.
+
+$$
+    Q^* (s, a)  = \sum_{s' \in \mathcal{S}} p(s' | s, a) \, [r(s, a, s')  + \gamma \max_{a' \in \mathcal{A}(s')} Q^* (s', a') ]
+$$
+
+# Obtaining the optimal policy from the optimal values
+
+::: {.columns}
+::: {.column width=70%}
+
+* $V^*$ and $Q^*$ are interdependent: one needs only to compute one of them.
+
+$$V^* (s)  = \max_{a \in \mathcal{A}(s)} \, Q^{*} (s, a)$$
+
+$$Q^* (s, a)  = \sum_{s' \in \mathcal{S}} \, p(s' | s, a) \, [r(s, a, s') + \gamma V^*(s') ] $$
+
+:::
+::: {.column width=30%}
+
+![](img/fullvi.png)
+
+:::
+:::
+
+
+* If you only have $V^*(s)$, you need to perform a **one-step-ahead** search using the dynamics of the MDP:
+
+$$
+    Q^* (s, a)  = \sum_{s' \in \mathcal{S}} \, p(s' | s, a) \, [r(s, a, s') + \gamma V^*(s') ]
+$$
+
+and then select the optimal action with the highest $Q^*$-value.
+
+* Using the $V^*(s)$ values is called **model-based**: you need to know the model of the environment to act, at least locally.
+
+
+# Bellman optimality equations for $V^*$ or $Q^*$?
+
+::: {.columns}
+::: {.column width=70%}
+
+* If you have all $Q^*(s, a)$, the optimal policy is straightforward:
+
+$$
+    \pi^*(s, a) = \begin{cases}
+                1 \; \text{if} \; a = \text{argmax}_a \, Q^*(s, a) \\
+                0 \; \text{otherwise.}
+                \end{cases}
+$$
+
+:::
+::: {.column width=30%}
+
+![](img/fullvi.png)
+
+:::
+:::
+
+
+* Finding $Q^*$ makes the selection of optimal actions easy:
+
+    * no need to iterate over all actions and to know the dynamics $p(s' | s, a)$ and $r(s, a, s')$.
+
+    * for any state $s$, it can simply find the action that maximizes $Q^*(s,a)$.
+
+* The action-value function effectively **caches** the results of all one-step-ahead searches into a single value: **model-free**.
+
+* At the cost of representing a function of all state-action pairs, the optimal action-value function allows optimal actions to be selected without having to know anything about the environment's dynamics.
+
+* But there are $N \times M$ equations to solve instead of just $N$... 
+
+# How to solve the Bellman equations?
+
+* Finding an optimal policy by solving the **Bellman optimality equations** requires the following:
+
+    - accurate knowledge of environment dynamics $p(s' | s, a)$ and $r(s, a, s')$ for all transitions;
+
+    - enough memory and time to do the computations;
+
+    - the Markov property.
+
+* How much space and time do we need? A solution requires an exhaustive search, looking ahead at all possibilities, computing their probabilities of occurrence and their desirability in terms of expected rewards.
+
+* The number of states is often huge or astronomical (e.g., Go has about $10^{170}$ states).
+
+* **Dynamic programming** solves exactly the Bellman equations.
+
+* **Monte-Carlo** and **temporal-difference** methods approximate them.
+
+-->
+</section>
+</section>
+<section id="dynamic-programming" class="level2">
+<h2 class="anchored" data-anchor-id="dynamic-programming">Dynamic programming</h2>
+<p>In general, RL algorithms iterate over two steps:</p>
+<ol type="1">
+<li><p><strong>Policy evaluation</strong></p>
+<ul>
+<li>For a given policy <span class="math inline">\pi</span>, the value of all states <span class="math inline">V^\pi(s)</span> or all state-action pairs <span class="math inline">Q^\pi(s, a)</span> is calculated or estimated.</li>
+</ul></li>
+<li><p><strong>Policy improvement</strong></p>
+<ul>
+<li>From the current estimated values <span class="math inline">V^\pi(s)</span> or <span class="math inline">Q^\pi(s, a)</span>, a new <strong>better</strong> policy <span class="math inline">\pi</span> is derived.</li>
+</ul></li>
+</ol>
+<p>After enough iterations, the policy converges to the <strong>optimal policy</strong> (if the states are Markov).</p>
+<p>This alternation between policy evaluation and policy improvement is called <strong>generalized policy iteration</strong> (GPI). One particular form of GPI is <strong>dynamic programming</strong>, where the Bellman equations are used to evaluate a policy.</p>
+<p>Let’s note <span class="math inline">\mathcal{P}_{ss'}^\pi</span> the transition probability between <span class="math inline">s</span> and <span class="math inline">s'</span> (dependent on the policy <span class="math inline">\pi</span>) and <span class="math inline">\mathcal{R}_{s}^\pi</span> the expected reward in <span class="math inline">s</span> (also dependent):</p>
+<p><span class="math display">
+  \mathcal{P}_{ss'}^\pi = \sum_{a \in \mathcal{A}(s)} \pi(s, a) \, p(s' | s, a)
+</span></p>
+<p><span class="math display">
+  \mathcal{R}_{s}^\pi = \sum_{a \in \mathcal{A}(s)} \pi(s, a) \, \sum_{s' \in \mathcal{S}} \, p(s' | s, a) \ r(s, a, s')
+</span></p>
+<p>The Bellman equation becomes <span class="math inline">V^{\pi} (s)  = \mathcal{R}_{s}^\pi + \gamma \, \displaystyle\sum_{s' \in \mathcal{S}} \, \mathcal{P}_{ss'}^\pi \, V^{\pi} (s')</span>. As we have a fixed policy during the evaluation, the Bellman equation is simplified.</p>
+<p>Let’s now put the Bellman equations in a matrix-vector form.</p>
+<p><span class="math display">
+      V^{\pi} (s)  = \mathcal{R}_{s}^\pi + \gamma \, \sum_{s' \in \mathcal{S}} \, \mathcal{P}_{ss'}^\pi \, V^{\pi} (s')
+</span></p>
+<p>We first define the vector of state values <span class="math inline">\mathbf{V}^\pi</span>:</p>
+<p><span class="math display">
+  \mathbf{V}^\pi = \begin{bmatrix}
+      V^\pi(s_1) \\ V^\pi(s_2) \\ \vdots \\ V^\pi(s_n) \\
+  \end{bmatrix}
+</span></p>
+<p>and the vector of expected reward <span class="math inline">\mathbf{R}^\pi</span>:</p>
+<p><span class="math display">
+  \mathbf{R}^\pi = \begin{bmatrix}
+      \mathcal{R}^\pi(s_1) \\ \mathcal{R}^\pi(s_2) \\ \vdots \\ \mathcal{R}^\pi(s_n) \\
+  \end{bmatrix}
+</span></p>
+<p>The state transition matrix <span class="math inline">\mathcal{P}^\pi</span> is defined as:</p>
+<p><span class="math display">
+  \mathcal{P}^\pi = \begin{bmatrix}
+      \mathcal{P}_{s_1 s_1}^\pi &amp; \mathcal{P}_{s_1 s_2}^\pi &amp; \ldots &amp; \mathcal{P}_{s_1 s_n}^\pi \\
+      \mathcal{P}_{s_2 s_1}^\pi &amp; \mathcal{P}_{s_2 s_2}^\pi &amp; \ldots &amp; \mathcal{P}_{s_2 s_n}^\pi \\
+      \vdots &amp; \vdots &amp; \vdots &amp; \vdots \\
+      \mathcal{P}_{s_n s_1}^\pi &amp; \mathcal{P}_{s_n s_2}^\pi &amp; \ldots &amp; \mathcal{P}_{s_n s_n}^\pi \\
+  \end{bmatrix}
+</span></p>
+<p>You can simply check that:</p>
+<p><span class="math display">
+  \begin{bmatrix}
+      V^\pi(s_1) \\ V^\pi(s_2) \\ \vdots \\ V^\pi(s_n) \\
+  \end{bmatrix} =
+  \begin{bmatrix}
+      \mathcal{R}^\pi(s_1) \\ \mathcal{R}^\pi(s_2) \\ \vdots \\ \mathcal{R}^\pi(s_n) \\
+  \end{bmatrix}
+  + \gamma \, \begin{bmatrix}
+      \mathcal{P}_{s_1 s_1}^\pi &amp; \mathcal{P}_{s_1 s_2}^\pi &amp; \ldots &amp; \mathcal{P}_{s_1 s_n}^\pi \\
+      \mathcal{P}_{s_2 s_1}^\pi &amp; \mathcal{P}_{s_2 s_2}^\pi &amp; \ldots &amp; \mathcal{P}_{s_2 s_n}^\pi \\
+      \vdots &amp; \vdots &amp; \vdots &amp; \vdots \\
+      \mathcal{P}_{s_n s_1}^\pi &amp; \mathcal{P}_{s_n s_2}^\pi &amp; \ldots &amp; \mathcal{P}_{s_n s_n}^\pi \\
+  \end{bmatrix} \times \begin{bmatrix}
+      V^\pi(s_1) \\ V^\pi(s_2) \\ \vdots \\ V^\pi(s_n) \\
+  \end{bmatrix}
+</span></p>
+<p>leads to the same equations as:</p>
+<p><span class="math display">
+      V^{\pi} (s)  = \mathcal{R}_{s}^\pi + \gamma \, \sum_{s' \in \mathcal{S}} \, \mathcal{P}_{ss'}^\pi \, V^{\pi} (s')
+</span></p>
+<p>for all states <span class="math inline">s</span>. The Bellman equations for all states <span class="math inline">s</span> can therefore be written with a matrix-vector notation as:</p>
+<p><span class="math display">
+  \mathbf{V}^\pi = \mathbf{R}^\pi + \gamma \, \mathcal{P}^\pi \, \mathbf{V}^\pi
+</span></p>
+<p>If we know <span class="math inline">\mathcal{P}^\pi</span> and <span class="math inline">\mathbf{R}^\pi</span> (dynamics of the MDP for the policy <span class="math inline">\pi</span>), we can simply obtain the state values:</p>
+<p><span class="math display">
+  (\mathbb{I} - \gamma \, \mathcal{P}^\pi ) \times \mathbf{V}^\pi = \mathbf{R}^\pi
+</span></p>
+<p>where <span class="math inline">\mathbb{I}</span> is the identity matrix, what gives:</p>
+<p><span class="math display">
+  \mathbf{V}^\pi = (\mathbb{I} - \gamma \, \mathcal{P}^\pi )^{-1} \times \mathbf{R}^\pi
+</span></p>
+<p>If we have <span class="math inline">n</span> states, the matrix <span class="math inline">\mathcal{P}^\pi</span> has <span class="math inline">n^2</span> elements. Inverting <span class="math inline">\mathbb{I} - \gamma \, \mathcal{P}^\pi</span> requires at least <span class="math inline">\mathcal{O}(n^{2.37})</span> operations. Forget it if you have more than a thousand states (<span class="math inline">1000^{2.37} \approx 13</span> million operations). In dynamic programming, we will use iterative methods to estimate <span class="math inline">\mathbf{V}^\pi</span>.</p>
+<section id="policy-iteration" class="level3">
+<h3 class="anchored" data-anchor-id="policy-iteration">Policy iteration</h3>
+<p>The idea of <strong>iterative policy evaluation</strong> (IPE) is to consider a sequence of consecutive state-value functions which should converge from initially wrong estimates <span class="math inline">V_0(s)</span> towards the real state-value function <span class="math inline">V^{\pi}(s)</span>.</p>
+<p><span class="math display">
+      V_0 \rightarrow V_1 \rightarrow V_2 \rightarrow \ldots \rightarrow V_k \rightarrow V_{k+1} \rightarrow \ldots \rightarrow V^\pi
+</span></p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="img/iterativepolicyevaluation2.png" class="lightbox" data-gallery="quarto-lightbox-gallery-7" title="Iterative policy estimaiton. Source: David Silver. http://www0.cs.ucl.ac.uk/staff/d.silver/web/Teaching.html"><img src="img/iterativepolicyevaluation2.png" class="img-fluid figure-img" style="width:80.0%" alt="Iterative policy estimaiton. Source: David Silver. http://www0.cs.ucl.ac.uk/staff/d.silver/web/Teaching.html"></a></p>
+<figcaption>Iterative policy estimaiton. Source: David Silver. <a href="http://www0.cs.ucl.ac.uk/staff/d.silver/web/Teaching.html" class="uri">http://www0.cs.ucl.ac.uk/staff/d.silver/web/Teaching.html</a></figcaption>
+</figure>
+</div>
+<p>The value function at step <span class="math inline">k+1</span> <span class="math inline">V_{k+1}(s)</span> is computed using the previous estimates <span class="math inline">V_{k}(s)</span> and the Bellman equation transformed into an <strong>update rule</strong>.</p>
+<p><span class="math display">
+  \mathbf{V}_{k+1} = \mathbf{R}^\pi + \gamma \, \mathcal{P}^\pi \, \mathbf{V}_k
+</span></p>
+<p><span class="math inline">V_\infty = V^{\pi}</span> is a fixed point of this update rule because of the uniqueness of the solution to the Bellman equation.</p>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Iterative policy evaluation
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li><p>For a fixed policy <span class="math inline">\pi</span>, initialize <span class="math inline">V(s)=0 \; \forall s \in \mathcal{S}</span>.</p></li>
+<li><p><strong>while</strong> not converged:</p>
+<ul>
+<li><p><strong>for</strong> all states <span class="math inline">s</span>:</p>
+<ul>
+<li><span class="math inline">V_\text{target}(s) = \sum_{a \in \mathcal{A}(s)} \pi(s, a) \, \sum_{s' \in \mathcal{S}} p(s' | s, a) \, [ r(s, a, s') + \gamma \, V (s') ]</span></li>
+</ul></li>
+<li><p><span class="math inline">\delta =0</span></p></li>
+<li><p><strong>for</strong> all states <span class="math inline">s</span>:</p>
+<ul>
+<li><p><span class="math inline">\delta = \max(\delta, |V(s) - V_\text{target}(s)|)</span></p></li>
+<li><p><span class="math inline">V(s) = V_\text{target}(s)</span></p></li>
+</ul></li>
+<li><p><strong>if</strong> <span class="math inline">\delta &lt; \delta_\text{threshold}</span>:</p>
+<ul>
+<li>converged = True</li>
+</ul></li>
+</ul></li>
+</ul>
+</div>
+</div>
+<p>For each state <span class="math inline">s</span>, we would like to know if we should deterministically choose an action <span class="math inline">a \neq \pi(s)</span> or not in order to improve the policy. The value of an action <span class="math inline">a</span> in the state <span class="math inline">s</span> for the policy <span class="math inline">\pi</span> is given by:</p>
+<p><span class="math display">
+     Q^{\pi} (s, a) = \sum_{s' \in \mathcal{S}} p(s' | s, a) \, [r(s, a, s') + \gamma \, V^{\pi}(s') ]
+</span></p>
+<p>If the Q-value of an action <span class="math inline">a</span> is higher than the one currently selected by the <strong>deterministic</strong> policy:</p>
+<p><span class="math display">Q^{\pi} (s, a) &gt; Q^{\pi} (s, \pi(s)) = V^{\pi}(s)</span></p>
+<p>then it is better to select <span class="math inline">a</span> once in <span class="math inline">s</span> and thereafter follow <span class="math inline">\pi</span>.</p>
+<ul>
+<li><p>If there is no better action, we keep the previous policy for this state.</p></li>
+<li><p>This corresponds to a <strong>greedy</strong> action selection over the Q-values, defining a <strong>deterministic</strong> policy <span class="math inline">\pi(s)</span>:</p></li>
+</ul>
+<p><span class="math display">\pi(s) \leftarrow \text{argmax}_a \, Q^{\pi} (s, a) = \sum_{s' \in \mathcal{S}} p(s' | s, a) \, [r(s, a, s') + \gamma \, V^{\pi}(s') ]</span></p>
+<p>After the policy improvement, the Q-value of each deterministic action <span class="math inline">\pi(s)</span> has increased or stayed the same.</p>
+<p><span class="math display">\text{argmax}_a \; Q^{\pi} (s, a) = \sum_{s' \in \mathcal{S}} p(s' | s, a) \, [r(s, a, s') + \gamma \, V^{\pi}(s') ] \geq Q^\pi(s, \pi(s))</span></p>
+<p>This defines an improved policy <span class="math inline">\pi'</span>, where all states and actions have a higher value than previously. <strong>Greedy action selection</strong> over the state value function implements policy improvement:</p>
+<p><span class="math display">\pi' \leftarrow \text{Greedy}(V^\pi)</span></p>
+<div class="callout callout-style-default callout-tip no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Greedy policy improvement:
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li><p><strong>for</strong> each state <span class="math inline">s \in \mathcal{S}</span>:</p>
+<ul>
+<li><span class="math inline">\pi(s) \leftarrow \text{argmax}_a \sum_{s' \in \mathcal{S}} p(s' | s, a) \, [r(s, a, s') + \gamma \, V^{\pi}(s') ]</span></li>
+</ul></li>
+</ul>
+</div>
+</div>
+<p>Once a policy <span class="math inline">\pi</span> has been improved using <span class="math inline">V^{\pi}</span> to yield a better policy <span class="math inline">\pi'</span>, we can then compute <span class="math inline">V^{\pi'}</span> and improve it again to yield an even better policy <span class="math inline">\pi''</span>. The algorithm <strong>policy iteration</strong> successively uses <strong>policy evaluation</strong> and <strong>policy improvement</strong> to find the optimal policy.</p>
+<p><span class="math display">
+  \pi_0 \xrightarrow[]{E} V^{\pi_0} \xrightarrow[]{I} \pi_1 \xrightarrow[]{E} V^{\pi^1} \xrightarrow[]{I}  ... \xrightarrow[]{I} \pi^* \xrightarrow[]{E} V^{*}
+</span></p>
+<p>The <strong>optimal policy</strong> being deterministic, policy improvement can be greedy over the state-action values. If the policy does not change after policy improvement, the optimal policy has been found.</p>
+<div class="callout callout-style-default callout-tip no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Policy iteration
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li><p>Initialize a deterministic policy <span class="math inline">\pi(s)</span> and set <span class="math inline">V(s)=0 \; \forall s \in \mathcal{S}</span>.</p></li>
+<li><p><strong>while</strong> <span class="math inline">\pi</span> is not optimal:</p>
+<ul>
+<li><p><strong>while</strong> not converged: <em># Policy evaluation</em></p>
+<ul>
+<li><p><strong>for</strong> all states <span class="math inline">s</span>:</p>
+<ul>
+<li><span class="math inline">V_\text{target}(s) = \sum_{a \in \mathcal{A}(s)} \pi(s, a) \, \sum_{s' \in \mathcal{S}} p(s' | s, a) \, [ r(s, a, s') + \gamma \, V (s') ]</span></li>
+</ul></li>
+<li><p><strong>for</strong> all states <span class="math inline">s</span>:</p>
+<ul>
+<li><span class="math inline">V(s) = V_\text{target}(s)</span></li>
+</ul></li>
+</ul></li>
+<li><p><strong>for</strong> each state <span class="math inline">s \in \mathcal{S}</span>: <em># Policy improvement</em></p>
+<ul>
+<li><span class="math inline">\pi(s) \leftarrow \text{argmax}_a \sum_{s' \in \mathcal{S}} p(s' | s, a) \, [r(s, a, s') + \gamma \, V^{\pi}(s') ]</span></li>
+</ul></li>
+<li><p><strong>if</strong> <span class="math inline">\pi</span> has not changed: <strong>break</strong></p></li>
+</ul></li>
+</ul>
+</div>
+</div>
+<!--
+# Small Gridworld example
+
+![Source: David Silver. <http://www0.cs.ucl.ac.uk/staff/d.silver/web/Teaching.html>](img/dp-gridworld1.png){width=80%}
+
+* **Gridworld** is an undiscounted MDP (we can take $\gamma=1$).
+
+* The states are the position in the grid, the actions are up, down, left, right. Transitions to a wall leave in the same state.
+
+* The reward is always -1, except after being in the terminal states in gray ($r=0$).
+
+* The initial policy is random:
+
+$$\pi(s, \text{up}) = \pi(s, \text{down})= \pi(s, \text{left}) = \pi(s, \text{right}) = 0.25$$
+
+
+
+# Small Gridworld example
+
+::: {.columns}
+::: {.column width=60%}
+
+![](img/dp-gridworld2.png)
+
+
+:::
+::: {.column width=40%}
+
+* $k=0$: 
+  
+  * The initial values $V_0$ are set to 0 as the initial policy is random. 
+
+* $k=1$: 
+
+  * The random policy is evaluated: all states get the value of the average immediate reward in that state. -1, except the terminal states (0). 
+
+  * The greedy policy is already an improvement over the random policy: adjacent states to the terminal states would decide to go there systematically, as the value is 0 instead of -1. 
+
+
+:::
+:::
+
+
+
+* $k=2$: The previous estimates propagate: states adjacent to the terminal states get a higher value, as there will be less punishments after these states. 
+
+
+# Small Gridworld example
+
+::: {.columns}
+::: {.column width=60%}
+
+![](img/dp-gridworld3.png)
+
+
+:::
+::: {.column width=40%}
+
+* $k=3$: 
+
+  * The values continue to propagate. 
+
+  * The greedy policy at that step of policy evaluation is already optimal.
+
+* $k>3$:
+
+  * The values continue to converge towards the true values.
+
+  * The greedy policy does not change. In this simple example, it is already the optimal policy.
+
+:::
+:::
+
+
+* Two things to notice:
+
+  * There is no actually no need to wait until the end of policy evaluation to improve the policy, as the greedy policy might already be optimal.
+
+  * There can be more than one optimal policy: some actions may have the same Q-value: choosing one or other is equally optimal.
+-->
+</section>
+<section id="value-iteration" class="level3">
+<h3 class="anchored" data-anchor-id="value-iteration">Value iteration</h3>
+<p>One drawback of <strong>policy iteration</strong> is that it uses a full policy evaluation, which can be computationally exhaustive as the convergence of <span class="math inline">V_k</span> is only at the limit and the number of states can be huge. The idea of <strong>value iteration</strong> is to interleave policy evaluation and policy improvement, so that the policy is improved after EACH iteration of policy evaluation, not after complete convergence.</p>
+<ul>
+<li>As policy improvement returns a deterministic greedy policy, updating of the value of a state is then simpler:</li>
+</ul>
+<p><span class="math display">
+  V_{k+1}(s) = \max_a \sum_{s'} p(s' | s,a) [r(s, a, s') + \gamma \, V_k(s') ]
+</span></p>
+<ul>
+<li><p>Note that this is equivalent to turning the <strong>Bellman optimality equation</strong> into an update rule.</p></li>
+<li><p>Value iteration converges to <span class="math inline">V^*</span>, faster than policy iteration, and should be stopped when the values do not change much anymore.</p></li>
+</ul>
+<div class="callout callout-style-default callout-tip no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Value iteration
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li><p>Initialize a deterministic policy <span class="math inline">\pi(s)</span> and set <span class="math inline">V(s)=0 \; \forall s \in \mathcal{S}</span>.</p></li>
+<li><p><strong>while</strong> not converged:</p>
+<ul>
+<li><p><strong>for</strong> all states <span class="math inline">s</span>:</p>
+<ul>
+<li><span class="math inline">V_\text{target}(s) = \max_a \, \sum_{s' \in \mathcal{S}} p(s' | s, a) \, [ r(s, a, s') + \gamma \, V (s') ]</span></li>
+</ul></li>
+<li><p><span class="math inline">\delta = 0</span></p></li>
+<li><p><strong>for</strong> all states <span class="math inline">s</span>:</p>
+<ul>
+<li><p><span class="math inline">\delta = \max(\delta, |V(s) - V_\text{target}(s)|)</span></p></li>
+<li><p><span class="math inline">V(s) = V_\text{target}(s)</span></p></li>
+</ul></li>
+<li><p><strong>if</strong> <span class="math inline">\delta &lt; \delta_\text{threshold}</span>:</p>
+<ul>
+<li>converged = True</li>
+</ul></li>
+</ul></li>
+</ul>
+</div>
+</div>
+<!--
+
+# Comparison of Policy- and Value-iteration
+
+**Full policy-evaluation backup**
+
+$$
+    V_{k+1} (s) \leftarrow \sum_{a \in \mathcal{A}(s)} \pi(s, a) \, \sum_{s' \in \mathcal{S}} p(s' | s, a) \, [ r(s, a, s') + \gamma \, V_k (s') ]
+$$
+
+![](img/fullpe.png){width=20%}
+
+**Full value-iteration backup**
+
+$$
+    V_{k+1} (s) \leftarrow \max_{a \in \mathcal{A}(s)} \sum_{s' \in \mathcal{S}} p(s' | s, a) \, [ r(s, a, s') + \gamma \, V_k (s') ]
+$$
+
+![](img/fullvi.png){width=20%}
+
+
+# Asynchronous dynamic programming
+
+
+* Synchronous DP requires exhaustive sweeps of the entire state set (**synchronous backups**).
+
+    * **while** not converged: 
+
+        * **for** all states $s$:
+
+            * $V_\text{target}(s) =  \max_a \,  \sum_{s' \in \mathcal{S}} p(s' | s, a) \, [ r(s, a, s') + \gamma \, V (s') ]$  
+
+        * **for** all states $s$:
+
+            * $V(s) = V_\text{target}(s)$
+
+* Asynchronous DP updates instead each state independently and asynchronously (**in-place**):
+
+    * **while** not converged: 
+
+        * Pick a state $s$ randomly (or following a heuristic).
+    
+        * Update the value of this state.
+
+        $$
+          V(s) =  \max_a \,  \sum_{s' \in \mathcal{S}} p(s' | s, a) \, [ r(s, a, s') + \gamma \, V (s') ]
+        $$
+
+* We must still ensure that all states are visited, but their frequency and order is irrelevant.
+-->
+<!--
+# Asynchronous dynamic programming
+
+* Is it possible to select the states to backup intelligently? 
+
+* **Prioritized sweeping** selects in priority the states with the largest remaining **Bellman error**:
+
+$$\delta = |\max_a \,  \sum_{s' \in \mathcal{S}} p(s' | s, a) \, [ r(s, a, s') + \gamma \, V (s') ] - V(s) |$$
+
+* A large Bellman error means that the current estimate $V(s)$ is very different from the **target** $y$: 
+
+$$y = \max_a \,  \sum_{s' \in \mathcal{S}} p(s' | s, a) \, [ r(s, a, s') + \gamma \, V (s') ]$$
+
+* States with a high Bellman error should be updated in priority. 
+
+* If the Bellman error is small, this means that the current estimate $V(s)$ is already close to what it should be, there is no hurry in evaluating this state. 
+
+* The main advantage is that the DP algorithm can be applied as the agent is actually experiencing its environment (no need for the dynamics of environment to be fully known). 
+-->
+</section>
+<section id="summary" class="level3">
+<h3 class="anchored" data-anchor-id="summary">Summary</h3>
+<div id="fig-gpi" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-gpi-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="img/gpi-scheme.png" class="lightbox" data-gallery="quarto-lightbox-gallery-8" title="Figure&nbsp;2.7: Generalized Policy Iteration. Source: @Sutton1998."><img src="img/gpi-scheme.png" class="img-fluid figure-img" style="width:40.0%"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-gpi-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2.7: Generalized Policy Iteration. Source: <span class="citation" data-cites="Sutton1998">Sutton and Barto (<a href="references.html#ref-Sutton1998" role="doc-biblioref">1998</a>)</span>.
+</figcaption>
+</figure>
+</div>
+<p>Policy-iteration and value-iteration consist of alternations between policy evaluation and policy improvement, and converge to the optimal policy. This principle is called <strong>Generalized Policy Iteration</strong> (GPI). Solving the <strong>Bellman equations</strong> requires the following:</p>
+<ul>
+<li>accurate knowledge of environment dynamics <span class="math inline">p(s' | s, a)</span> and <span class="math inline">r(s, a, s')</span> for all transitions;</li>
+<li>enough memory and time to do the computations;</li>
+<li>the Markov property.</li>
+</ul>
+<p>Finding an optimal policy is polynomial in the number of states and actions: <span class="math inline">\mathcal{O}(N^2 \, M)</span> (<span class="math inline">N</span> is the number of states, <span class="math inline">M</span> the number of actions). The number of states is often astronomical (e.g., Go has about <span class="math inline">10^{170}</span> states), often growing exponentially with the number of state variables (what Bellman called <strong>“the curse of dimensionality”</strong>). In practice, classical DP can only be applied to problems with a few millions of states.</p>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
 <div id="ref-Sutton1998" class="csl-entry" role="listitem">
 Sutton, R. S., and Barto, A. G. (1998). <em>Reinforcement <span>Learning</span>: <span>An</span> introduction</em>. Cambridge, MA: MIT press.
 </div>
-<div id="ref-Sutton2017" class="csl-entry" role="listitem">
-Sutton, R. S., and Barto, A. G. (2017). <em>Reinforcement <span>Learning</span>: <span>An Introduction</span></em>. 2nd ed. Cambridge, MA: MIT Press Available at: <a href="http://incompleteideas.net/book/the-book-2nd.html">http://incompleteideas.net/book/the-book-2nd.html</a>.
 </div>
-</div>
+</section>
 </section>
 
 </main> <!-- /main -->
@@ -874,8 +1642,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../src/1.3-DP.html" class="pagination-link" aria-label="Dynamic programming">
-        <span class="nav-page-text"><span class="chapter-title">Dynamic programming</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../src/1.4-MC.html" class="pagination-link" aria-label="Monte-Carlo methods">
+        <span class="nav-page-text"><span class="chapter-title">Monte-Carlo methods</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
@@ -893,7 +1661,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     </div>
   </div>
 </footer>
-<script>var lightboxQuarto = GLightbox({"selector":".lightbox","loop":false,"closeEffect":"zoom","descPosition":"bottom","openEffect":"zoom"});
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","selector":".lightbox","descPosition":"bottom","loop":false,"openEffect":"zoom"});
 (function() {
   let previousOnload = window.onload;
   window.onload = () => {

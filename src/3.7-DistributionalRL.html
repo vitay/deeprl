@@ -148,7 +148,7 @@ window.Quarto = {
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
         <a class="flex-grow-1 no-decor" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-          <h1 class="quarto-secondary-nav-title"><span class="chapter-title">Distributional learning</span></h1>
+          <h1 class="quarto-secondary-nav-title"><span id="sec-distributionalrl" class="quarto-section-identifier"><span class="chapter-title">Distributional learning</span></span></h1>
         </a>     
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
         <i class="bi bi-search"></i>
@@ -204,11 +204,6 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../src/1.2-MDP.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Markov Decision Process</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../src/1.3-DP.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Dynamic programming</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -327,7 +322,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title d-none d-lg-block"><span class="chapter-title">Distributional learning</span></h1>
+<h1 class="title d-none d-lg-block"><span id="sec-distributionalrl" class="quarto-section-identifier"><span class="chapter-title">Distributional learning</span></span></h1>
 </div>
 
 
@@ -353,14 +348,14 @@ window.Quarto = {
 <section id="categorical-dqn" class="level2">
 <h2 class="anchored" data-anchor-id="categorical-dqn">Categorical DQN</h2>
 <p><span class="citation" data-cites="Bellemare2017">Bellemare et al. (<a href="references.html#ref-Bellemare2017" role="doc-biblioref">2017</a>)</span> proposed to learn the <strong>value distribution</strong> (the probability distribution of the returns) through a modification of the Bellman equation. They show that learning the complete distribution of rewards instead of their mean leads to performance improvements on Atari games over modern variants of DQN.</p>
-<p>Their proposed <strong>categorical DQN</strong> (also called C51) has an architecture based on DQN, but where the output layer predicts the distribution of the returns for each action <span class="math inline">a</span> in state <span class="math inline">s</span>, instead of its mean <span class="math inline">Q^\pi(s, a)</span>. In practice, each action <span class="math inline">a</span> is represented by <span class="math inline">N</span> output neurons, who encode the support of the distribution of returns. If the returns take values between <span class="math inline">V_\text{min}</span> and <span class="math inline">V_\text{max}</span>, one can represent their distribution <span class="math inline">\mathcal{Z}</span> by taking <span class="math inline">N</span> discrete “bins” (called <em>atoms</em> in the paper) in that range. <a href="#fig-distributionallearning" class="quarto-xref">Figure&nbsp;<span>14.1</span></a> shows how the distribution of returns between -10 and 10 can be represented using 21 atoms.</p>
+<p>Their proposed <strong>categorical DQN</strong> (also called C51) has an architecture based on DQN, but where the output layer predicts the distribution of the returns for each action <span class="math inline">a</span> in state <span class="math inline">s</span>, instead of its mean <span class="math inline">Q^\pi(s, a)</span>. In practice, each action <span class="math inline">a</span> is represented by <span class="math inline">N</span> output neurons, who encode the support of the distribution of returns. If the returns take values between <span class="math inline">V_\text{min}</span> and <span class="math inline">V_\text{max}</span>, one can represent their distribution <span class="math inline">\mathcal{Z}</span> by taking <span class="math inline">N</span> discrete “bins” (called <em>atoms</em> in the paper) in that range. <a href="#fig-distributionallearning" class="quarto-xref">Figure&nbsp;<span>13.1</span></a> shows how the distribution of returns between -10 and 10 can be represented using 21 atoms.</p>
 <div id="fig-distributionallearning" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-distributionallearning-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/distributionallearning.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;14.1: Example of a value distribution using 21 atoms between -10 and 10. The average return is 3, but its variance is explicitly represented."><img src="img/distributionallearning.png" class="img-fluid figure-img" style="width:80.0%"></a>
+<a href="img/distributionallearning.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;13.1: Example of a value distribution using 21 atoms between -10 and 10. The average return is 3, but its variance is explicitly represented."><img src="img/distributionallearning.png" class="img-fluid figure-img" style="width:80.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-distributionallearning-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;14.1: Example of a value distribution using 21 atoms between -10 and 10. The average return is 3, but its variance is explicitly represented.
+Figure&nbsp;13.1: Example of a value distribution using 21 atoms between -10 and 10. The average return is 3, but its variance is explicitly represented.
 </figcaption>
 </figure>
 </div>
@@ -394,14 +389,14 @@ Figure&nbsp;14.1: Example of a value distribution using 21 atoms between -10 and
 <p><span class="math display">
     \mathcal{T} \, z_i = r + \gamma \, z_i
 </span></p>
-<p>and clip the obtained value to <span class="math inline">[V_\text{min}, V_\text{max}]</span>. The reward <span class="math inline">r</span> translates the distribution of atoms, while the discount rate <span class="math inline">\gamma</span> scales it. <a href="#fig-distributionallearning2" class="quarto-xref">Figure&nbsp;<span>14.2</span></a> shows the distribution of <span class="math inline">\mathcal{T} \, \mathcal{Z}_\theta(s, a)</span> compared to <span class="math inline">\mathcal{Z}_\theta(s, a)</span>. Note that the atoms of the two distributions are not aligned.</p>
+<p>and clip the obtained value to <span class="math inline">[V_\text{min}, V_\text{max}]</span>. The reward <span class="math inline">r</span> translates the distribution of atoms, while the discount rate <span class="math inline">\gamma</span> scales it. <a href="#fig-distributionallearning2" class="quarto-xref">Figure&nbsp;<span>13.2</span></a> shows the distribution of <span class="math inline">\mathcal{T} \, \mathcal{Z}_\theta(s, a)</span> compared to <span class="math inline">\mathcal{Z}_\theta(s, a)</span>. Note that the atoms of the two distributions are not aligned.</p>
 <div id="fig-distributionallearning2" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-distributionallearning2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/distributionallearning2.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Figure&nbsp;14.2: Computation of the Bellman update \mathcal{T} \, \mathcal{Z}_\theta(s, a). The atoms of the two distributions are not aligned."><img src="img/distributionallearning2.png" class="img-fluid figure-img" style="width:80.0%"></a>
+<a href="img/distributionallearning2.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Figure&nbsp;13.2: Computation of the Bellman update \mathcal{T} \, \mathcal{Z}_\theta(s, a). The atoms of the two distributions are not aligned."><img src="img/distributionallearning2.png" class="img-fluid figure-img" style="width:80.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-distributionallearning2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;14.2: Computation of the Bellman update <span class="math inline">\mathcal{T} \, \mathcal{Z}_\theta(s, a)</span>. The atoms of the two distributions are not aligned.
+Figure&nbsp;13.2: Computation of the Bellman update <span class="math inline">\mathcal{T} \, \mathcal{Z}_\theta(s, a)</span>. The atoms of the two distributions are not aligned.
 </figcaption>
 </figure>
 </div>
@@ -413,14 +408,14 @@ Figure&nbsp;14.2: Computation of the Bellman update <span class="math inline">\m
 </span> <span class="math display">
     \Delta p_{u}(s', a'; \theta) = p_{b}(s', a'; \theta) \, (l - b)
 </span></p>
-<p><a href="#fig-distributionallearning3" class="quarto-xref">Figure&nbsp;<span>14.3</span></a> shows how the projected update distribution <span class="math inline">\Phi \, \mathcal{T} \, \mathcal{Z}_\theta(s, a)</span> now matches the support of <span class="math inline">\mathcal{Z}_\theta(s, a)</span></p>
+<p><a href="#fig-distributionallearning3" class="quarto-xref">Figure&nbsp;<span>13.3</span></a> shows how the projected update distribution <span class="math inline">\Phi \, \mathcal{T} \, \mathcal{Z}_\theta(s, a)</span> now matches the support of <span class="math inline">\mathcal{Z}_\theta(s, a)</span></p>
 <div id="fig-distributionallearning3" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-distributionallearning3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/distributionallearning3.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Figure&nbsp;14.3: Projected update \Phi \, \mathcal{T} \, \mathcal{Z}_\theta(s, a) on the support of \mathcal{Z}_\theta(s, a). The atoms are now aligned, the statistical distance between the two distributions can be minimized."><img src="img/distributionallearning3.png" class="img-fluid figure-img" style="width:80.0%"></a>
+<a href="img/distributionallearning3.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Figure&nbsp;13.3: Projected update \Phi \, \mathcal{T} \, \mathcal{Z}_\theta(s, a) on the support of \mathcal{Z}_\theta(s, a). The atoms are now aligned, the statistical distance between the two distributions can be minimized."><img src="img/distributionallearning3.png" class="img-fluid figure-img" style="width:80.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-distributionallearning3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;14.3: Projected update <span class="math inline">\Phi \, \mathcal{T} \, \mathcal{Z}_\theta(s, a)</span> on the support of <span class="math inline">\mathcal{Z}_\theta(s, a)</span>. The atoms are now aligned, the statistical distance between the two distributions can be minimized.
+Figure&nbsp;13.3: Projected update <span class="math inline">\Phi \, \mathcal{T} \, \mathcal{Z}_\theta(s, a)</span> on the support of <span class="math inline">\mathcal{Z}_\theta(s, a)</span>. The atoms are now aligned, the statistical distance between the two distributions can be minimized.
 </figcaption>
 </figure>
 </div>
@@ -440,14 +435,14 @@ Figure&nbsp;14.3: Projected update <span class="math inline">\Phi \, \mathcal{T}
     \mathcal{L}(\theta) =  - \sum_i (\Phi \, \mathcal{T} \, \mathcal{Z}_{\theta'}(s, a))_i \log p_i (s, a; \theta)
 </span></p>
 <p>The projected Bellman update plays the role of the one-hot encoded target vector in classification (except that it is not one-hot encoded). DQN performs a regression on the Q-values (mse loss), while categorical DQN performs a classification (cross-entropy loss). Apart from the way the target is computed, categorical DQN is very similar to DQN: architecture, experience replay memory, target networks, etc.</p>
-<p><a href="#fig-categoricaldqn" class="quarto-xref">Figure&nbsp;<span>14.4</span></a> illustrates how the predicted value distribution changes when playing Space invaders (also have a look at the Youtube video at <a href="https://www.youtube.com/watch?v=yFBwyPuO2Vg" class="uri">https://www.youtube.com/watch?v=yFBwyPuO2Vg</a>). C51 outperforms DQN on most Atari games, both in terms of the achieved performance and the sample complexity.</p>
+<p><a href="#fig-categoricaldqn" class="quarto-xref">Figure&nbsp;<span>13.4</span></a> illustrates how the predicted value distribution changes when playing Space invaders (also have a look at the Youtube video at <a href="https://www.youtube.com/watch?v=yFBwyPuO2Vg" class="uri">https://www.youtube.com/watch?v=yFBwyPuO2Vg</a>). C51 outperforms DQN on most Atari games, both in terms of the achieved performance and the sample complexity.</p>
 <div id="fig-categoricaldqn" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-categoricaldqn-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/categoricaldqn.gif" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="Figure&nbsp;14.4: Evolution of the value distribution for the categorical DQN playing Space Invaders. Animation Source: https://deepmind.com/blog/going-beyond-average-reinforcement-learning/"><img src="img/categoricaldqn.gif" class="img-fluid figure-img" style="width:100.0%"></a>
+<a href="img/categoricaldqn.gif" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="Figure&nbsp;13.4: Evolution of the value distribution for the categorical DQN playing Space Invaders. Animation Source: https://deepmind.com/blog/going-beyond-average-reinforcement-learning/"><img src="img/categoricaldqn.gif" class="img-fluid figure-img" style="width:100.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-categoricaldqn-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;14.4: Evolution of the value distribution for the categorical DQN playing Space Invaders. Animation Source: <a href="https://deepmind.com/blog/going-beyond-average-reinforcement-learning/" class="uri">https://deepmind.com/blog/going-beyond-average-reinforcement-learning/</a>
+Figure&nbsp;13.4: Evolution of the value distribution for the categorical DQN playing Space Invaders. Animation Source: <a href="https://deepmind.com/blog/going-beyond-average-reinforcement-learning/" class="uri">https://deepmind.com/blog/going-beyond-average-reinforcement-learning/</a>
 </figcaption>
 </figure>
 </div>
@@ -955,7 +950,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     </div>
   </div>
 </footer>
-<script>var lightboxQuarto = GLightbox({"loop":false,"closeEffect":"zoom","descPosition":"bottom","openEffect":"zoom","selector":".lightbox"});
+<script>var lightboxQuarto = GLightbox({"openEffect":"zoom","selector":".lightbox","closeEffect":"zoom","loop":false,"descPosition":"bottom"});
 (function() {
   let previousOnload = window.onload;
   window.onload = () => {

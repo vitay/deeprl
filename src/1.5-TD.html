@@ -208,11 +208,6 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/1.3-DP.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Dynamic programming</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
   <a href="../src/1.4-MC.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Monte-Carlo methods</span></a>
   </div>
 </li>
@@ -344,7 +339,7 @@ window.Quarto = {
 </header>
 
 
-<p>The main drawback of Monte-Carlo methods is that the task must be composed of finite episodes. Not only is it not always possible, but value updates have to wait for the end of the episode, what slows learning down. <strong>Temporal difference</strong> methods simply replace the actual return obtained after a state or an action, by an estimation composed of the reward immediately received plus the value of the next state or action, as in <a href="1.2-MDP.html#eq-return" class="quarto-xref">Equation&nbsp;<span>2.2</span></a>:</p>
+<p>The main drawback of Monte-Carlo methods is that the task must be composed of finite episodes. Not only is it not always possible, but value updates have to wait for the end of the episode, what slows learning down. <strong>Temporal difference</strong> methods simply replace the actual return obtained after a state or an action, by an estimation composed of the reward immediately received plus the value of the next state or action:</p>
 <p><span class="math display">
     R_t \approx r(s, a, s') + \gamma \, V^\pi(s') \approx r + \gamma \, Q^\pi(s', a')
 </span></p>
@@ -373,10 +368,10 @@ window.Quarto = {
 <div id="fig-td" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-td-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/backup-TD.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;5.1: Temporal difference algorithms update values after a single transition. Source: @Sutton1998."><img src="img/backup-TD.png" class="img-fluid figure-img" style="width:3.0%"></a>
+<a href="img/backup-TD.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;4.1: Temporal difference algorithms update values after a single transition. Source: @Sutton1998."><img src="img/backup-TD.png" class="img-fluid figure-img" style="width:3.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-td-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;5.1: Temporal difference algorithms update values after a single transition. Source: <span class="citation" data-cites="Sutton1998">Sutton and Barto (<a href="references.html#ref-Sutton1998" role="doc-biblioref">1998</a>)</span>.
+Figure&nbsp;4.1: Temporal difference algorithms update values after a single transition. Source: <span class="citation" data-cites="Sutton1998">Sutton and Barto (<a href="references.html#ref-Sutton1998" role="doc-biblioref">1998</a>)</span>.
 </figcaption>
 </figure>
 </div>
@@ -399,14 +394,14 @@ Figure&nbsp;5.1: Temporal difference algorithms update values after a single tra
 <h3 class="anchored" data-anchor-id="eligibility-traces">Eligibility traces</h3>
 <p>The main drawback of TD learning is that learning can be slow and necessitate many transitions to converge (sample complexity). This is particularly true when the problem provides <strong>sparse rewards</strong> (as opposed to dense rewards). For example in a game like chess, a reward is given only at the end of a game (+1 for winning, -1 for losing). All other actions receive a reward of 0, although they are as important as the last one in order to win.</p>
 <p>Imagine you initialize all Q-values to 0 and apply Q-learning. During the first episode, all actions but the last one will receive a reward <span class="math inline">r(s, a, s')</span> of 0 and arrive in a state where the greedy action has a value <span class="math inline">Q^\pi(s', a')</span> of 0, so the TD error <span class="math inline">\delta</span> is 0 and their Q-value will not change. Only the very last action will receive a non-zero reward and update its value slightly (because of the learning rate <span class="math inline">\alpha</span>). When this episode is performed again, the last action will again be updated, but also the one just before: <span class="math inline">Q^\pi(s', a')</span> is now different from 0 for this action, so the TD error is now different from 0. It is straightforward to see that if the episode has a length of 100 moves, the agent will need at least 100 episodes to “backpropagate” the final sparse reward to the first action of the episode. In practice, this is even worse: the learning rate <span class="math inline">\alpha</span> and the discount rate <span class="math inline">\gamma</span> will slow learning down even more. MC methods suffer less from this problem, as the first action of the episode would be updated using the actual return, which contains the final reward (although it is discounted by <span class="math inline">\gamma</span>).</p>
-<p><strong>Eligibility traces</strong> can be seen a trick to mix the advantages of MC (faster updates) with the ones of TD (online learning, smaller variance). The idea is that the TD error at time <span class="math inline">t</span> (<span class="math inline">\delta_t</span>) will be used not only to update the action taken at time <span class="math inline">t</span> (<span class="math inline">\Delta Q(s_t, a_t) = \alpha \, \delta_t</span>), but also all the preceding actions, which are also responsible for the success or failure of the action taken at time <span class="math inline">t</span>. A parameter <span class="math inline">\lambda</span> between 0 and 1 (decaying factor) controls how far back in time a single TD error influences past actions. This is important when the policy is mostly exploratory: initial actions may be mostly random and finally find the the reward by chance. They should learn less from the reward than the last one, otherwise they would be systematically reproduced. <a href="#fig-eligibilitytraces" class="quarto-xref">Figure&nbsp;<span>5.2</span></a> shows the principle of eligibility traces in a simple Gridworld environment.</p>
+<p><strong>Eligibility traces</strong> can be seen a trick to mix the advantages of MC (faster updates) with the ones of TD (online learning, smaller variance). The idea is that the TD error at time <span class="math inline">t</span> (<span class="math inline">\delta_t</span>) will be used not only to update the action taken at time <span class="math inline">t</span> (<span class="math inline">\Delta Q(s_t, a_t) = \alpha \, \delta_t</span>), but also all the preceding actions, which are also responsible for the success or failure of the action taken at time <span class="math inline">t</span>. A parameter <span class="math inline">\lambda</span> between 0 and 1 (decaying factor) controls how far back in time a single TD error influences past actions. This is important when the policy is mostly exploratory: initial actions may be mostly random and finally find the the reward by chance. They should learn less from the reward than the last one, otherwise they would be systematically reproduced. <a href="#fig-eligibilitytraces" class="quarto-xref">Figure&nbsp;<span>4.2</span></a> shows the principle of eligibility traces in a simple Gridworld environment.</p>
 <div id="fig-eligibilitytraces" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-eligibilitytraces-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/gridworld-lambda.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Figure&nbsp;5.2: Principle of eligibility traces applied to the Gridworld problem using SARSA(\lambda). Source: @Sutton1998."><img src="img/gridworld-lambda.png" class="img-fluid figure-img" style="width:80.0%"></a>
+<a href="img/gridworld-lambda.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Figure&nbsp;4.2: Principle of eligibility traces applied to the Gridworld problem using SARSA(\lambda). Source: @Sutton1998."><img src="img/gridworld-lambda.png" class="img-fluid figure-img" style="width:80.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-eligibilitytraces-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;5.2: Principle of eligibility traces applied to the Gridworld problem using SARSA(<span class="math inline">\lambda</span>). Source: <span class="citation" data-cites="Sutton1998">Sutton and Barto (<a href="references.html#ref-Sutton1998" role="doc-biblioref">1998</a>)</span>.
+Figure&nbsp;4.2: Principle of eligibility traces applied to the Gridworld problem using SARSA(<span class="math inline">\lambda</span>). Source: <span class="citation" data-cites="Sutton1998">Sutton and Barto (<a href="references.html#ref-Sutton1998" role="doc-biblioref">1998</a>)</span>.
 </figcaption>
 </figure>
 </div>
@@ -451,10 +446,10 @@ Figure&nbsp;5.2: Principle of eligibility traces applied to the Gridworld proble
 <div id="fig-actorcritic" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-actorcritic-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/actorcritic.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Figure&nbsp;5.3: Actor-critic architecture [@Sutton1998]."><img src="img/actorcritic.png" class="img-fluid figure-img" style="width:30.0%"></a>
+<a href="img/actorcritic.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Figure&nbsp;4.3: Actor-critic architecture [@Sutton1998]."><img src="img/actorcritic.png" class="img-fluid figure-img" style="width:30.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-actorcritic-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;5.3: Actor-critic architecture <span class="citation" data-cites="Sutton1998">(<a href="references.html#ref-Sutton1998" role="doc-biblioref">Sutton and Barto, 1998</a>)</span>.
+Figure&nbsp;4.3: Actor-critic architecture <span class="citation" data-cites="Sutton1998">(<a href="references.html#ref-Sutton1998" role="doc-biblioref">Sutton and Barto, 1998</a>)</span>.
 </figcaption>
 </figure>
 </div>
@@ -939,7 +934,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     </div>
   </div>
 </footer>
-<script>var lightboxQuarto = GLightbox({"loop":false,"descPosition":"bottom","closeEffect":"zoom","selector":".lightbox","openEffect":"zoom"});
+<script>var lightboxQuarto = GLightbox({"openEffect":"zoom","selector":".lightbox","descPosition":"bottom","loop":false,"closeEffect":"zoom"});
 (function() {
   let previousOnload = window.onload;
   window.onload = () => {

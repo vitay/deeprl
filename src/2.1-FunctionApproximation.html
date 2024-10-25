@@ -189,11 +189,6 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/1.3-DP.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Dynamic programming</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
   <a href="../src/1.4-MC.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Monte-Carlo methods</span></a>
   </div>
 </li>
@@ -327,14 +322,14 @@ window.Quarto = {
 <div id="fig-functionapprox" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-functionapprox-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/functionapprox.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;6.1: Function approximators can either take a state-action pair as input and output the Q-value, or simply take a state as input and output the Q-values of all possible actions."><img src="img/functionapprox.png" class="img-fluid figure-img" style="width:50.0%"></a>
+<a href="img/functionapprox.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;5.1: Function approximators can either take a state-action pair as input and output the Q-value, or simply take a state as input and output the Q-values of all possible actions."><img src="img/functionapprox.png" class="img-fluid figure-img" style="width:50.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-functionapprox-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;6.1: Function approximators can either take a state-action pair as input and output the Q-value, or simply take a state as input and output the Q-values of all possible actions.
+Figure&nbsp;5.1: Function approximators can either take a state-action pair as input and output the Q-value, or simply take a state as input and output the Q-values of all possible actions.
 </figcaption>
 </figure>
 </div>
-<p>There are basically two options regarding the structure of the function approximator (<a href="2.3-DQN.html#fig-functionapprox" class="quarto-xref">Figure&nbsp;<span>8.1</span></a>):</p>
+<p>There are basically two options regarding the structure of the function approximator (<a href="2.3-DQN.html#fig-functionapprox" class="quarto-xref">Figure&nbsp;<span>7.1</span></a>):</p>
 <ol type="1">
 <li>The approximator takes a state-action pair <span class="math inline">(s, a)</span> as input and returns a single Q-value <span class="math inline">Q(s, a)</span>.</li>
 <li>It takes a state <span class="math inline">s</span> as input and returns the Q-value of all possible actions in that state.</li>
@@ -826,7 +821,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     </div>
   </div>
 </footer>
-<script>var lightboxQuarto = GLightbox({"openEffect":"zoom","closeEffect":"zoom","selector":".lightbox","loop":false,"descPosition":"bottom"});
+<script>var lightboxQuarto = GLightbox({"selector":".lightbox","descPosition":"bottom","loop":false,"openEffect":"zoom","closeEffect":"zoom"});
 (function() {
   let previousOnload = window.onload;
   window.onload = () => {

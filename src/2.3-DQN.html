@@ -208,11 +208,6 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/1.3-DP.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Dynamic programming</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
   <a href="../src/1.4-MC.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Monte-Carlo methods</span></a>
   </div>
 </li>
@@ -354,14 +349,14 @@ window.Quarto = {
 
 <section id="limitations-of-deep-neural-networks-for-function-approximation" class="level2">
 <h2 class="anchored" data-anchor-id="limitations-of-deep-neural-networks-for-function-approximation">Limitations of deep neural networks for function approximation</h2>
-<p>The goal of value-based deep RL is to approximate the Q-value of each possible state-action pair using a deep (convolutional) neural network. As shown on <a href="#fig-functionapprox" class="quarto-xref">Figure&nbsp;<span>8.1</span></a>, the network can either take a state-action pair as input and return a single output value, or take only the state as input and return the Q-value of all possible actions (only possible if the action space is discrete), In both cases, the goal is to learn estimates <span class="math inline">Q_\theta(s, a)</span> with a NN with parameters <span class="math inline">\theta</span>.</p>
+<p>The goal of value-based deep RL is to approximate the Q-value of each possible state-action pair using a deep (convolutional) neural network. As shown on <a href="#fig-functionapprox" class="quarto-xref">Figure&nbsp;<span>7.1</span></a>, the network can either take a state-action pair as input and return a single output value, or take only the state as input and return the Q-value of all possible actions (only possible if the action space is discrete), In both cases, the goal is to learn estimates <span class="math inline">Q_\theta(s, a)</span> with a NN with parameters <span class="math inline">\theta</span>.</p>
 <div id="fig-functionapprox" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-functionapprox-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/functionapprox.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;8.1: Function approximators can either associate a state-action pair (s, a) to its Q-value (left), or associate a state s to the Q-values of all actions possible in that state (right)."><img src="img/functionapprox.png" class="img-fluid figure-img" style="width:60.0%"></a>
+<a href="img/functionapprox.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;7.1: Function approximators can either associate a state-action pair (s, a) to its Q-value (left), or associate a state s to the Q-values of all actions possible in that state (right)."><img src="img/functionapprox.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-functionapprox-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;8.1: Function approximators can either associate a state-action pair <span class="math inline">(s, a)</span> to its Q-value (left), or associate a state <span class="math inline">s</span> to the Q-values of all actions possible in that state (right).
+Figure&nbsp;7.1: Function approximators can either associate a state-action pair <span class="math inline">(s, a)</span> to its Q-value (left), or associate a state <span class="math inline">s</span> to the Q-values of all actions possible in that state (right).
 </figcaption>
 </figure>
 </div>
@@ -405,10 +400,10 @@ Figure&nbsp;8.1: Function approximators can either associate a state-action pair
 <div id="fig-erm" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-erm-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/ERM.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Figure&nbsp;8.2: Experience replay memory. Interactions with the environment are stored in the ERM. Random minibatches are sampled from it to train the DQN value network."><img src="img/ERM.png" class="img-fluid figure-img" style="width:40.0%"></a>
+<a href="img/ERM.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Figure&nbsp;7.2: Experience replay memory. Interactions with the environment are stored in the ERM. Random minibatches are sampled from it to train the DQN value network."><img src="img/ERM.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-erm-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;8.2: Experience replay memory. Interactions with the environment are stored in the ERM. Random minibatches are sampled from it to train the DQN value network.
+Figure&nbsp;7.2: Experience replay memory. Interactions with the environment are stored in the ERM. Random minibatches are sampled from it to train the DQN value network.
 </figcaption>
 </figure>
 </div>
@@ -450,14 +445,14 @@ Figure&nbsp;8.2: Experience replay memory. Interactions with the environment are
 </span></p>
 <p>If this rule is applied after each step with a very small rate <span class="math inline">\tau</span>, the target network will slowly track the learned network, but never be the same.</p>
 <p>These two facts make DQN extremely slow to learn: millions of transitions are needed to obtain a satisfying policy. This is called the <strong>sample complexity</strong>, i.e.&nbsp;the number of transitions needed to obtain a satisfying performance. DQN finds very good policies, but at the cost of a very long training time.</p>
-<p>DQN was initially applied to solve various Atari 2600 games. Video frames were used as observations and the set of possible discrete actions was limited (left/right/up/down, shoot, etc). The CNN used is depicted on <a href="#fig-dqn" class="quarto-xref">Figure&nbsp;<span>8.3</span></a>. It has two convolutional layers, no max-pooling, 2 fully-connected layer and one output layer representing the Q-value of all possible actions in the games.</p>
+<p>DQN was initially applied to solve various Atari 2600 games. Video frames were used as observations and the set of possible discrete actions was limited (left/right/up/down, shoot, etc). The CNN used is depicted on <a href="#fig-dqn" class="quarto-xref">Figure&nbsp;<span>7.3</span></a>. It has two convolutional layers, no max-pooling, 2 fully-connected layer and one output layer representing the Q-value of all possible actions in the games.</p>
 <div id="fig-dqn" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-dqn-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/dqn.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Figure&nbsp;8.3: Architecture of the CNN used in the original DQN paper. Source: @Mnih2015."><img src="img/dqn.png" class="img-fluid figure-img"></a>
+<a href="img/dqn.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Figure&nbsp;7.3: Architecture of the CNN used in the original DQN paper. Source: @Mnih2015."><img src="img/dqn.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-dqn-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;8.3: Architecture of the CNN used in the original DQN paper. Source: <span class="citation" data-cites="Mnih2015">Mnih et al. (<a href="references.html#ref-Mnih2015" role="doc-biblioref">2015</a>)</span>.
+Figure&nbsp;7.3: Architecture of the CNN used in the original DQN paper. Source: <span class="citation" data-cites="Mnih2015">Mnih et al. (<a href="references.html#ref-Mnih2015" role="doc-biblioref">2015</a>)</span>.
 </figcaption>
 </figure>
 </div>
@@ -507,7 +502,7 @@ Figure&nbsp;8.3: Architecture of the CNN used in the original DQN paper. Source:
 <p>This leads to the definition of the <strong>advantage</strong> <span class="math inline">A^\pi(s,a)</span> of an action:</p>
 <p><span id="eq-advantagefunction"><span class="math display">
     A^\pi(s, a) = Q^\pi(s, a) - V^\pi(s)
-\tag{8.1}</span></span></p>
+\tag{7.1}</span></span></p>
 <p>The advantage of the optimal action in <span class="math inline">s</span> is equal to zero: the expected return in <span class="math inline">s</span> is the same as the expected return when being in <span class="math inline">s</span> and taking <span class="math inline">a</span>, as the optimal policy will choose <span class="math inline">a</span> in <span class="math inline">s</span> anyway. The advantage of all other actions is negative: they bring less reward than the optimal action (by definition), so they are less advantageous. Note that this is only true if your estimate of <span class="math inline">V^\pi(s)</span> is correct.</p>
 <p><span class="citation" data-cites="Baird1993">Baird (<a href="references.html#ref-Baird1993" role="doc-biblioref">1993</a>)</span> has shown that it is advantageous to decompose the Q-value of an action into the value of the state and the advantage of the action (<em>advantage updating</em>):</p>
 <p><span class="math display">
@@ -518,14 +513,14 @@ Figure&nbsp;8.3: Architecture of the CNN used in the original DQN paper. Source:
 <div id="fig-duelling" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-duelling-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/duelling.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="Figure&nbsp;8.4: Duelling network architecture. Top: classical feedforward architecture to predict Q-values. Bottom: Duelling networks predicting state values and advantage functions to form the Q-values. Source: @Wang2016."><img src="img/duelling.png" class="img-fluid figure-img" style="width:60.0%"></a>
+<a href="img/duelling.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="Figure&nbsp;7.4: Duelling network architecture. Top: classical feedforward architecture to predict Q-values. Bottom: Duelling networks predicting state values and advantage functions to form the Q-values. Source: @Wang2016."><img src="img/duelling.png" class="img-fluid figure-img" style="width:60.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-duelling-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;8.4: Duelling network architecture. Top: classical feedforward architecture to predict Q-values. Bottom: Duelling networks predicting state values and advantage functions to form the Q-values. Source: <span class="citation" data-cites="Wang2016">Wang et al. (<a href="references.html#ref-Wang2016" role="doc-biblioref">2016</a>)</span>.
+Figure&nbsp;7.4: Duelling network architecture. Top: classical feedforward architecture to predict Q-values. Bottom: Duelling networks predicting state values and advantage functions to form the Q-values. Source: <span class="citation" data-cites="Wang2016">Wang et al. (<a href="references.html#ref-Wang2016" role="doc-biblioref">2016</a>)</span>.
 </figcaption>
 </figure>
 </div>
-<p><span class="citation" data-cites="Wang2016">Wang et al. (<a href="references.html#ref-Wang2016" role="doc-biblioref">2016</a>)</span> incorporated the idea of <em>advantage updating</em> in a double DQN architecture with prioritized replay (<a href="#fig-duelling" class="quarto-xref">Figure&nbsp;<span>8.4</span></a>). As in DQN, the last layer represents the Q-values of the possible actions and has to minimize the mse loss:</p>
+<p><span class="citation" data-cites="Wang2016">Wang et al. (<a href="references.html#ref-Wang2016" role="doc-biblioref">2016</a>)</span> incorporated the idea of <em>advantage updating</em> in a double DQN architecture with prioritized replay (<a href="#fig-duelling" class="quarto-xref">Figure&nbsp;<span>7.4</span></a>). As in DQN, the last layer represents the Q-values of the possible actions and has to minimize the mse loss:</p>
 <p><span class="math display">
     \mathcal{L}(\theta) = \mathbb{E}_\pi([r(s, a, s') + \gamma \, Q_{\theta', \alpha', \beta'}(s', \text{argmax}_{a'} Q_{\theta, \alpha, \beta} (s', a')) - Q_{\theta, \alpha, \beta}(s, a)]^2)
 </span></p>
@@ -570,14 +565,14 @@ Figure&nbsp;8.4: Duelling network architecture. Top: classical feedforward archi
 <li><strong>Noisy DQN</strong> <span class="citation" data-cites="Fortunato2017">(<a href="references.html#ref-Fortunato2017" role="doc-biblioref">Fortunato et al., 2017</a>)</span> ensures exploration by adding noise to the parameters of the network instead of a softmax / <span class="math inline">\epsilon</span>-greedy action selection over the Q-values.</li>
 </ul>
 <p>All these improvements exceed the performance of vanilla DQN on most if not all Atari game. But which ones are the most important?</p>
-<p><span class="citation" data-cites="Hessel2017">Hessel et al. (<a href="references.html#ref-Hessel2017" role="doc-biblioref">2017</a>)</span> designed a <strong>Rainbow DQN</strong> integrating all these improvements. Not only does the combined network outperform all the DQN variants, but each of its components is important for its performance as shown by ablation studies (apart from double learning and duelling networks), see <a href="#fig-rainbow" class="quarto-xref">Figure&nbsp;<span>8.5</span></a>.</p>
+<p><span class="citation" data-cites="Hessel2017">Hessel et al. (<a href="references.html#ref-Hessel2017" role="doc-biblioref">2017</a>)</span> designed a <strong>Rainbow DQN</strong> integrating all these improvements. Not only does the combined network outperform all the DQN variants, but each of its components is important for its performance as shown by ablation studies (apart from double learning and duelling networks), see <a href="#fig-rainbow" class="quarto-xref">Figure&nbsp;<span>7.5</span></a>.</p>
 <div id="fig-rainbow" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-rainbow-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/rainbow.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5" title="Figure&nbsp;8.5: Performance of the Rainbow DQN compared to other DQN variants (left) and ablation studies. Figures Source: @Hessel2017."><img src="img/rainbow.png" class="img-fluid figure-img" style="width:90.0%"></a>
+<a href="img/rainbow.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5" title="Figure&nbsp;7.5: Performance of the Rainbow DQN compared to other DQN variants (left) and ablation studies. Figures Source: @Hessel2017."><img src="img/rainbow.png" class="img-fluid figure-img" style="width:90.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-rainbow-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;8.5: Performance of the Rainbow DQN compared to other DQN variants (left) and ablation studies. Figures Source: <span class="citation" data-cites="Hessel2017">Hessel et al. (<a href="references.html#ref-Hessel2017" role="doc-biblioref">2017</a>)</span>.
+Figure&nbsp;7.5: Performance of the Rainbow DQN compared to other DQN variants (left) and ablation studies. Figures Source: <span class="citation" data-cites="Hessel2017">Hessel et al. (<a href="references.html#ref-Hessel2017" role="doc-biblioref">2017</a>)</span>.
 </figcaption>
 </figure>
 </div>
@@ -593,10 +588,10 @@ Figure&nbsp;8.5: Performance of the Rainbow DQN compared to other DQN variants (
 <div id="fig-gorila" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-gorila-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/gorila-global.png" class="lightbox" data-gallery="quarto-lightbox-gallery-6" title="Figure&nbsp;8.6: GORILA architecture. Multiple actors interact with multiple copies of the environment and store their experiences in a (distributed) experience replay memory. Multiple DQN learners sample from the ERM and compute the gradient of the loss function w.r.t the parameters \theta. A master network (parameter server, possibly distributed) gathers the gradients, apply weight updates and synchronizes regularly both the actors and the learners with new parameters. Source: @Nair2015."><img src="img/gorila-global.png" class="img-fluid figure-img" style="width:90.0%"></a>
+<a href="img/gorila-global.png" class="lightbox" data-gallery="quarto-lightbox-gallery-6" title="Figure&nbsp;7.6: GORILA architecture. Multiple actors interact with multiple copies of the environment and store their experiences in a (distributed) experience replay memory. Multiple DQN learners sample from the ERM and compute the gradient of the loss function w.r.t the parameters \theta. A master network (parameter server, possibly distributed) gathers the gradients, apply weight updates and synchronizes regularly both the actors and the learners with new parameters. Source: @Nair2015."><img src="img/gorila-global.png" class="img-fluid figure-img" style="width:90.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-gorila-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;8.6: GORILA architecture. Multiple actors interact with multiple copies of the environment and store their experiences in a (distributed) experience replay memory. Multiple DQN learners sample from the ERM and compute the gradient of the loss function w.r.t the parameters <span class="math inline">\theta</span>. A master network (parameter server, possibly distributed) gathers the gradients, apply weight updates and synchronizes regularly both the actors and the learners with new parameters. Source: <span class="citation" data-cites="Nair2015">Nair et al. (<a href="references.html#ref-Nair2015" role="doc-biblioref">2015</a>)</span>.
+Figure&nbsp;7.6: GORILA architecture. Multiple actors interact with multiple copies of the environment and store their experiences in a (distributed) experience replay memory. Multiple DQN learners sample from the ERM and compute the gradient of the loss function w.r.t the parameters <span class="math inline">\theta</span>. A master network (parameter server, possibly distributed) gathers the gradients, apply weight updates and synchronizes regularly both the actors and the learners with new parameters. Source: <span class="citation" data-cites="Nair2015">Nair et al. (<a href="references.html#ref-Nair2015" role="doc-biblioref">2015</a>)</span>.
 </figcaption>
 </figure>
 </div>
@@ -1142,7 +1137,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     </div>
   </div>
 </footer>
-<script>var lightboxQuarto = GLightbox({"selector":".lightbox","loop":false,"closeEffect":"zoom","descPosition":"bottom","openEffect":"zoom"});
+<script>var lightboxQuarto = GLightbox({"selector":".lightbox","openEffect":"zoom","descPosition":"bottom","loop":false,"closeEffect":"zoom"});
 (function() {
   let previousOnload = window.onload;
   window.onload = () => {
