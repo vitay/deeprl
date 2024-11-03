@@ -197,8 +197,7 @@ window.Quarto = {
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/1.1-Bandits.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Sampling and Bandits</span></a>
+  <a href="../src/1.1-Bandits.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Sampling and Bandits</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -208,12 +207,12 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/1.4-MC.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Monte-Carlo methods</span></a>
+  <a href="../src/1.4-MC.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Monte Carlo methods</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/1.5-TD.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Temporal Difference algorithm</span></a>
+  <a href="../src/1.5-TD.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Temporal Difference learning</span></a>
   </div>
 </li>
       </ul>
@@ -239,7 +238,12 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/2.3-DQN.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">DQN</span></a>
+  <a href="../src/2.3-DQN.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Deep Q-network (DQN)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/2.4-DQNvariants.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">DQN variants</span></a>
   </div>
 </li>
       </ul>
@@ -292,6 +296,63 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../src/3.8-OtherPolicyGradient.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Miscellaneous model-free algorithms</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text"><strong>Model-based deep RL</strong></span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/4.1-ModelBased.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Model-based RL</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/4.2-WorldModels.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">World models</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/4.3-AlphaGo.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">AlphaGo</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
+ <span class="menu-text"><strong>Advanced topics</strong></span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/5.1-Hierarchical.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Hierarchical Reinforcement Learning</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/5.2-Inverse.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Inverse Reinforcement Learning</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/5.3-OfflineRL.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Offline RL</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/5.4-Meta.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Meta learning</span></a>
   </div>
 </li>
       </ul>
@@ -1095,7 +1156,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     </div>
   </div>
 </footer>
-<script>var lightboxQuarto = GLightbox({"descPosition":"bottom","closeEffect":"zoom","selector":".lightbox","openEffect":"zoom","loop":false});
+<script>var lightboxQuarto = GLightbox({"openEffect":"zoom","selector":".lightbox","loop":false,"closeEffect":"zoom","descPosition":"bottom"});
 (function() {
   let previousOnload = window.onload;
   window.onload = () => {

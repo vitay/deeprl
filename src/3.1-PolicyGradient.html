@@ -50,7 +50,7 @@ div.csl-indent {
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
 <link href="../src/3.2-ActorCritic.html" rel="next">
-<link href="../src/2.3-DQN.html" rel="prev">
+<link href="../src/2.4-DQNvariants.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -148,7 +148,7 @@ window.Quarto = {
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
         <a class="flex-grow-1 no-decor" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-          <h1 class="quarto-secondary-nav-title"><span class="chapter-title">Policy Gradient methods</span></h1>
+          <h1 class="quarto-secondary-nav-title"><span id="sec-policygradient" class="quarto-section-identifier"><span class="chapter-title">Policy Gradient methods</span></span></h1>
         </a>     
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
         <i class="bi bi-search"></i>
@@ -197,8 +197,7 @@ window.Quarto = {
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/1.1-Bandits.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Sampling and Bandits</span></a>
+  <a href="../src/1.1-Bandits.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Sampling and Bandits</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -208,12 +207,12 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/1.4-MC.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Monte-Carlo methods</span></a>
+  <a href="../src/1.4-MC.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Monte Carlo methods</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/1.5-TD.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Temporal Difference algorithm</span></a>
+  <a href="../src/1.5-TD.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Temporal Difference learning</span></a>
   </div>
 </li>
       </ul>
@@ -239,7 +238,12 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/2.3-DQN.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">DQN</span></a>
+  <a href="../src/2.3-DQN.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Deep Q-network (DQN)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/2.4-DQNvariants.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">DQN variants</span></a>
   </div>
 </li>
       </ul>
@@ -296,6 +300,63 @@ window.Quarto = {
 </li>
       </ul>
   </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text"><strong>Model-based deep RL</strong></span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/4.1-ModelBased.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Model-based RL</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/4.2-WorldModels.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">World models</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/4.3-AlphaGo.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">AlphaGo</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
+ <span class="menu-text"><strong>Advanced topics</strong></span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/5.1-Hierarchical.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Hierarchical Reinforcement Learning</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/5.2-Inverse.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Inverse Reinforcement Learning</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/5.3-OfflineRL.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Offline RL</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/5.4-Meta.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Meta learning</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../src/references.html" class="sidebar-item-text sidebar-link">
@@ -326,7 +387,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title d-none d-lg-block"><span class="chapter-title">Policy Gradient methods</span></h1>
+<h1 class="title d-none d-lg-block"><span id="sec-policygradient" class="quarto-section-identifier"><span class="chapter-title">Policy Gradient methods</span></span></h1>
 </div>
 
 
@@ -351,12 +412,12 @@ window.Quarto = {
 <p>The objective function uses the mathematical expectation of the return over all possible trajectories. The likelihood that a trajectory is generated by the policy <span class="math inline">\pi_\theta</span> is noted <span class="math inline">\rho_\theta(\tau)</span> and given by:</p>
 <p><span id="eq-likelihood_trajectory"><span class="math display">
     \rho_\theta(\tau) = p_\theta(s_0, a_0, \ldots, s_T, a_T) = p_0 (s_0) \, \prod_{t=0}^T \pi_\theta(s_t, a_t) p(s_{t+1} | s_t, a_t)
-\tag{8.1}</span></span></p>
+\tag{10.1}</span></span></p>
 <p><span class="math inline">p_0 (s_0)</span> is the initial probability of starting in <span class="math inline">s_0</span> (independent from the policy) and <span class="math inline">p(s_{t+1} | s_t, a_t)</span> is the transition probability defining the MDP. Having the probability distribution of the trajectories, we can expand the mathematical expectation in the objective function:</p>
 <p><span class="math display">
     J(\theta) = \int_\tau \rho_\theta (\tau) \, R(\tau) \, d\tau
 </span></p>
-<p>Monte-Carlo sampling could be used to estimate the objective function. One basically would have to sample multiple trajectories <span class="math inline">\{\tau_i\}</span> and average the obtained returns:</p>
+<p>Monte Carlo sampling could be used to estimate the objective function. One basically would have to sample multiple trajectories <span class="math inline">\{\tau_i\}</span> and average the obtained returns:</p>
 <p><span class="math display">
     J(\theta) \approx \frac{1}{N} \, \sum_{i=1}^N  R(\tau_i)
 </span></p>
@@ -399,21 +460,21 @@ window.Quarto = {
 <p><span class="math display">
     \nabla_\theta J(\theta) =  \mathbb{E}_{\tau \sim \rho_\theta}[ \nabla_\theta \log \rho_\theta (\tau) \, R(\tau) ]
 </span></p>
-<p>This means that we can obtain an estimate of the policy gradient by simply sampling different trajectories <span class="math inline">\{\tau_i\}</span> and averaging <span class="math inline">\nabla_\theta \log \rho_\theta (\tau_i) \, R(\tau_i)</span> (Monte-Carlo sampling).</p>
-<p>Let’s now look further at how the gradient of the log-likelihood of a trajectory <span class="math inline">\log \pi_\theta (\tau)</span> look like. Through its definition (<a href="#eq-likelihood_trajectory" class="quarto-xref">Equation&nbsp;<span>8.1</span></a>), the log-likelihood of a trajectory is:</p>
+<p>This means that we can obtain an estimate of the policy gradient by simply sampling different trajectories <span class="math inline">\{\tau_i\}</span> and averaging <span class="math inline">\nabla_\theta \log \rho_\theta (\tau_i) \, R(\tau_i)</span> (Monte Carlo sampling).</p>
+<p>Let’s now look further at how the gradient of the log-likelihood of a trajectory <span class="math inline">\log \pi_\theta (\tau)</span> look like. Through its definition (<a href="#eq-likelihood_trajectory" class="quarto-xref">Equation&nbsp;<span>10.1</span></a>), the log-likelihood of a trajectory is:</p>
 <p><span id="eq-loglikelihood_trajectory"><span class="math display">
     \log \rho_\theta(\tau) = \log p_0 (s_0) + \sum_{t=0}^T \log \pi_\theta(s_t, a_t) + \sum_{t=0}^T \log p(s_{t+1} | s_t, a_t)
-\tag{8.2}</span></span></p>
+\tag{10.2}</span></span></p>
 <p><span class="math inline">\log p_0 (s_0)</span> and <span class="math inline">\log p(s_{t+1} | s_t, a_t)</span> do not depend on the parameters <span class="math inline">\theta</span> (they are defined by the MDP), so the gradient of the log-likelihood is simply:</p>
 <p><span id="eq-gradloglikelihood_trajectory"><span class="math display">
     \nabla_\theta \log \rho_\theta(\tau) = \sum_{t=0}^T \nabla_\theta \log \pi_\theta(s_t, a_t)
-\tag{8.3}</span></span></p>
+\tag{10.3}</span></span></p>
 <p><span class="math inline">\nabla_\theta \log \pi_\theta(s_t, a_t)</span> is called the <strong>score function</strong>.</p>
 <p>This is the main reason why policy gradient algorithms are used: the gradient is independent from the MDP dynamics, allowing <strong>model-free</strong> learning. The policy gradient is then given by:</p>
 <p><span class="math display">
     \nabla_\theta J(\theta) =  \mathbb{E}_{\tau \sim \rho_\theta}[\sum_{t=0}^T \nabla_\theta \log \pi_\theta(s_t, a_t) \, R(\tau) ] =  \mathbb{E}_{\tau \sim \rho_\theta}[ \sum_{t=0}^T \nabla_\theta \log \pi_\theta(s_t, a_t) \, (\sum_{t=0}^T \gamma^t r_{t+1})]
 </span></p>
-<p>Estimating the policy gradient now becomes straightforward using Monte-Carlo sampling. The resulting algorithm is called the <strong>REINFORCE</strong> algorithm <span class="citation" data-cites="Williams1992">(<a href="references.html#ref-Williams1992" role="doc-biblioref">Williams, 1992</a>)</span>:</p>
+<p>Estimating the policy gradient now becomes straightforward using Monte Carlo sampling. The resulting algorithm is called the <strong>REINFORCE</strong> algorithm <span class="citation" data-cites="Williams1992">(<a href="references.html#ref-Williams1992" role="doc-biblioref">Williams, 1992</a>)</span>:</p>
 <hr>
 <ul>
 <li><p>while not converged:</p>
@@ -509,40 +570,40 @@ window.Quarto = {
 <div id="fig-rewardtogo" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-rewardtogo-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/rewardtogo.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;8.1: The reward to-go is the sum of rewards gathered during a single trajectory after a transition (s, a). The Q-value of the action (s, a) is the expectation of the reward to-go. Source: S. Levine’s lecture http://rll.berkeley.edu/deeprlcourse/."><img src="img/rewardtogo.png" class="img-fluid figure-img" style="width:30.0%"></a>
+<a href="img/rewardtogo.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;10.1: The reward to-go is the sum of rewards gathered during a single trajectory after a transition (s, a). The Q-value of the action (s, a) is the expectation of the reward to-go. Source: S. Levine’s lecture http://rll.berkeley.edu/deeprlcourse/."><img src="img/rewardtogo.png" class="img-fluid figure-img" style="width:30.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-rewardtogo-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;8.1: The reward to-go is the sum of rewards gathered during a single trajectory after a transition <span class="math inline">(s, a)</span>. The Q-value of the action <span class="math inline">(s, a)</span> is the expectation of the reward to-go. Source: S. Levine’s lecture <a href="http://rll.berkeley.edu/deeprlcourse/" class="uri">http://rll.berkeley.edu/deeprlcourse/</a>.
+Figure&nbsp;10.1: The reward to-go is the sum of rewards gathered during a single trajectory after a transition <span class="math inline">(s, a)</span>. The Q-value of the action <span class="math inline">(s, a)</span> is the expectation of the reward to-go. Source: S. Levine’s lecture <a href="http://rll.berkeley.edu/deeprlcourse/" class="uri">http://rll.berkeley.edu/deeprlcourse/</a>.
 </figcaption>
 </figure>
 </div>
 <p><span class="math display">
 \nabla_\theta J(\theta) \approx \frac{1}{N} \sum_{i=1}^N \sum_{t=0}^T \nabla_\theta \log \pi_\theta(s_t, a_t) \, \hat{Q}(s_t, a_t)
 </span></p>
-<p><span class="citation" data-cites="Sutton1999">Sutton et al. (<a href="references.html#ref-Sutton1999" role="doc-biblioref">1999</a>)</span> showed that the policy gradient can be estimated by replacing the return of the sampled trajectory with the Q-value of each action, what leads to the <strong>policy gradient theorem</strong> (<a href="#eq-policygradienttheorem" class="quarto-xref">Equation&nbsp;<span>8.4</span></a>):</p>
+<p><span class="citation" data-cites="Sutton1999">Sutton et al. (<a href="references.html#ref-Sutton1999" role="doc-biblioref">1999</a>)</span> showed that the policy gradient can be estimated by replacing the return of the sampled trajectory with the Q-value of each action, what leads to the <strong>policy gradient theorem</strong> (<a href="#eq-policygradienttheorem" class="quarto-xref">Equation&nbsp;<span>10.4</span></a>):</p>
 <p><span id="eq-policygradienttheorem"><span class="math display">
     \nabla_\theta J(\theta) =  \mathbb{E}_{s \sim \rho_\theta, a \sim \pi_\theta}[\nabla_\theta \log \pi_\theta(s, a) \, Q^{\pi_\theta}(s, a)]
-\tag{8.4}</span></span></p>
+\tag{10.4}</span></span></p>
 <p>where <span class="math inline">\rho_\theta</span> is the distribution of states reachable under the policy <span class="math inline">\pi_\theta</span>. Because the actual return <span class="math inline">R(\tau)</span> is replaced by its expectation <span class="math inline">Q^{\pi_\theta}(s, a)</span>, the policy gradient is now a mathematical expectation over <strong>single transitions</strong> instead of complete trajectories, allowing <strong>bootstrapping</strong> as in temporal difference methods.</p>
 <p>One clearly sees that REINFORCE is actually a special case of the policy gradient theorem, where the Q-value of an action replaces the return obtained during the corresponding trajectory.</p>
 <p>The problem is of course that the true Q-value of the actions is as unknown as the policy. However, <span class="citation" data-cites="Sutton1999">Sutton et al. (<a href="references.html#ref-Sutton1999" role="doc-biblioref">1999</a>)</span> showed that it is possible to estimate the Q-values with a function approximator <span class="math inline">Q_\varphi(s, a)</span> with parameters <span class="math inline">\varphi</span> and obtain an unbiased estimation:</p>
 <p><span id="eq-policygradienttheoremapprox"><span class="math display">
     \nabla_\theta J(\theta) =  \mathbb{E}_{s \sim \rho_\theta, a \sim \pi_\theta}[\nabla_\theta \log \pi_\theta(s, a) \, Q_\varphi(s, a))]
-\tag{8.5}</span></span></p>
+\tag{10.5}</span></span></p>
 <p>Formally, the Q-value approximator must respect the Compatible Function Approximation Theorem, which states that the value approximator must be compatible with the policy (<span class="math inline">\nabla_\varphi Q_\varphi(s, a) = \nabla_\theta \log \pi_\theta(s, a)</span>) and minimize the mean-square error with the true Q-values <span class="math inline">\mathbb{E}_{s \sim \rho^\pi, a \sim \pi_\theta} [(Q^{\pi_\theta}(s, a) - Q_\varphi(s, a))^2]</span>. In the algorithms presented in this section, these conditions are either met or neglected.</p>
 <p>The resulting algorithm belongs to the <strong>actor-critic</strong> class, in the sense that:</p>
 <ul>
-<li>The <strong>actor</strong> <span class="math inline">\pi_\theta(s, a)</span> learns to approximate the policy by maximizing <a href="#eq-policygradienttheoremapprox" class="quarto-xref">Equation&nbsp;<span>8.5</span></a>.</li>
+<li>The <strong>actor</strong> <span class="math inline">\pi_\theta(s, a)</span> learns to approximate the policy by maximizing <a href="#eq-policygradienttheoremapprox" class="quarto-xref">Equation&nbsp;<span>10.5</span></a>.</li>
 <li>The <strong>critic</strong> <span class="math inline">Q_\varphi(s, a)</span> learns to estimate the policy by minimizing the mse with the true Q-values.</li>
 </ul>
-<p><a href="#fig-actorcriticpolicy" class="quarto-xref">Figure&nbsp;<span>8.2</span></a> shows the architecture of the algorithm. The only problem left is to provide the critic with the true Q-values.</p>
+<p><a href="#fig-actorcriticpolicy" class="quarto-xref">Figure&nbsp;<span>10.2</span></a> shows the architecture of the algorithm. The only problem left is to provide the critic with the true Q-values.</p>
 <div id="fig-actorcriticpolicy" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-actorcriticpolicy-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/policygradient.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Figure&nbsp;8.2: Architecture of the policy gradient (PG) method."><img src="img/policygradient.png" class="img-fluid figure-img" style="width:80.0%"></a>
+<a href="img/policygradient.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Figure&nbsp;10.2: Architecture of the policy gradient (PG) method."><img src="img/policygradient.png" class="img-fluid figure-img" style="width:80.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-actorcriticpolicy-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;8.2: Architecture of the policy gradient (PG) method.
+Figure&nbsp;10.2: Architecture of the policy gradient (PG) method.
 </figcaption>
 </figure>
 </div>
@@ -991,8 +1052,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../src/2.3-DQN.html" class="pagination-link" aria-label="DQN">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">DQN</span></span>
+      <a href="../src/2.4-DQNvariants.html" class="pagination-link" aria-label="DQN variants">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">DQN variants</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
@@ -1015,7 +1076,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     </div>
   </div>
 </footer>
-<script>var lightboxQuarto = GLightbox({"descPosition":"bottom","openEffect":"zoom","closeEffect":"zoom","selector":".lightbox","loop":false});
+<script>var lightboxQuarto = GLightbox({"selector":".lightbox","descPosition":"bottom","loop":false,"closeEffect":"zoom","openEffect":"zoom"});
 (function() {
   let previousOnload = window.onload;
   window.onload = () => {

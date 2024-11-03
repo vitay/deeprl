@@ -178,8 +178,7 @@ window.Quarto = {
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/1.1-Bandits.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Sampling and Bandits</span></a>
+  <a href="../src/1.1-Bandits.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Sampling and Bandits</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -189,12 +188,12 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/1.4-MC.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Monte-Carlo methods</span></a>
+  <a href="../src/1.4-MC.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Monte Carlo methods</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/1.5-TD.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Temporal Difference algorithm</span></a>
+  <a href="../src/1.5-TD.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Temporal Difference learning</span></a>
   </div>
 </li>
       </ul>
@@ -220,7 +219,12 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/2.3-DQN.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">DQN</span></a>
+  <a href="../src/2.3-DQN.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Deep Q-network (DQN)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/2.4-DQNvariants.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">DQN variants</span></a>
   </div>
 </li>
       </ul>
@@ -277,6 +281,63 @@ window.Quarto = {
 </li>
       </ul>
   </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text"><strong>Model-based deep RL</strong></span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/4.1-ModelBased.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Model-based RL</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/4.2-WorldModels.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">World models</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/4.3-AlphaGo.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">AlphaGo</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
+ <span class="menu-text"><strong>Advanced topics</strong></span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/5.1-Hierarchical.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Hierarchical Reinforcement Learning</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/5.2-Inverse.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Inverse Reinforcement Learning</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/5.3-OfflineRL.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Offline RL</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/5.4-Meta.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Meta learning</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../src/references.html" class="sidebar-item-text sidebar-link">
@@ -288,8 +349,15 @@ window.Quarto = {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#value-based-function-approximation" id="toc-value-based-function-approximation" class="nav-link active" data-scroll-target="#value-based-function-approximation">Value-based function approximation</a></li>
+  <li><a href="#policy-based-function-approximation" id="toc-policy-based-function-approximation" class="nav-link" data-scroll-target="#policy-based-function-approximation">Policy-based function approximation</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -316,20 +384,20 @@ window.Quarto = {
 <p>All the methods presented before are <em>tabular methods</em>, as one needs to store one value per state-action pair: either the Q-value of the action or a preference for that action. In most useful applications, the number of values to store would quickly become prohibitive: when working on raw images, the number of possible states alone is untractable. Moreover, these algorithms require that each state-action pair is visited a sufficient number of times to converge towards the optimal policy: if a single state-action pair is never visited, there is no guarantee that the optimal policy will be found. The problem becomes even more obvious when considering <em>continuous</em> state or action spaces.</p>
 <p>However, in a lot of applications, the optimal action to perform in two very close states is likely to be the same: changing one pixel in a video game does not change which action should be applied. It would therefore be very useful to be able to <em>interpolate</em> Q-values between different states: only a subset of all state-action pairs has to explored; the others will be “guessed” depending on the proximity between the states and/or the actions. The problem is now <strong>generalization</strong>, i.e.&nbsp;transferring acquired knowledge to unseen but similar situations.</p>
 <p>This is where <strong>function approximation</strong> becomes useful: the Q-values or the policy are not stored in a table, but rather learned by a function approximator. The type of function approximator does not really matter here: in deep RL we are of course interested in deep neural networks, but any kind of regressor theoretically works (linear algorithms, radial-basis function network, SVR…).</p>
-<section id="value-based-function-approximation" class="level4 unnumbered">
-<h4 class="unnumbered anchored" data-anchor-id="value-based-function-approximation">Value-based function approximation</h4>
+<section id="value-based-function-approximation" class="level2">
+<h2 class="anchored" data-anchor-id="value-based-function-approximation">Value-based function approximation</h2>
 <p>In <strong>value-based</strong> methods, we want to approximate the Q-values <span class="math inline">Q^\pi(s,a)</span> of all possible state-action pairs for a given policy. The function approximator depends on a set of parameters <span class="math inline">\theta</span>. <span class="math inline">\theta</span> can for example represent all the weights and biases of a neural network. The approximated Q-value can now be noted <span class="math inline">Q(s, a ;\theta)</span> or <span class="math inline">Q_\theta(s, a)</span>. As the parameters will change over time during learning, we can omit the time <span class="math inline">t</span> from the notation. Similarly, action selection is usually <span class="math inline">\epsilon</span>-greedy or softmax, so the policy <span class="math inline">\pi</span> depends directly on the estimated Q-values and can therefore on the parameters: it is noted <span class="math inline">\pi_\theta</span>.</p>
 <div id="fig-functionapprox" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-functionapprox-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/functionapprox.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;5.1: Function approximators can either take a state-action pair as input and output the Q-value, or simply take a state as input and output the Q-values of all possible actions."><img src="img/functionapprox.png" class="img-fluid figure-img" style="width:50.0%"></a>
+<a href="img/functionapprox.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;6.1: Function approximators can either take a state-action pair as input and output the Q-value, or simply take a state as input and output the Q-values of all possible actions."><img src="img/functionapprox.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-functionapprox-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;5.1: Function approximators can either take a state-action pair as input and output the Q-value, or simply take a state as input and output the Q-values of all possible actions.
+Figure&nbsp;6.1: Function approximators can either take a state-action pair as input and output the Q-value, or simply take a state as input and output the Q-values of all possible actions.
 </figcaption>
 </figure>
 </div>
-<p>There are basically two options regarding the structure of the function approximator (<a href="2.3-DQN.html#fig-functionapprox" class="quarto-xref">Figure&nbsp;<span>7.1</span></a>):</p>
+<p>There are basically two options regarding the structure of the function approximator (<a href="2.3-DQN.html#fig-functionapprox" class="quarto-xref">Figure&nbsp;<span>8.1</span></a>):</p>
 <ol type="1">
 <li>The approximator takes a state-action pair <span class="math inline">(s, a)</span> as input and returns a single Q-value <span class="math inline">Q(s, a)</span>.</li>
 <li>It takes a state <span class="math inline">s</span> as input and returns the Q-value of all possible actions in that state.</li>
@@ -337,7 +405,7 @@ Figure&nbsp;5.1: Function approximators can either take a state-action pair as i
 <p>The second option is of course only possible when the action space is discrete, but has the advantage to generalize better over similar states.</p>
 <p>The goal of a function approximator is to minimize a <em>loss function</em> (or cost function) <span class="math inline">\mathcal{L}(\theta)</span>, so that the estimated Q-values converge for all state-pairs towards their target value, depending on the chosen algorithm:</p>
 <ul>
-<li>Monte-Carlo methods: the Q-value of each <span class="math inline">(s, a)</span> pair should converge towards the expected return:</li>
+<li>Monte Carlo methods: the Q-value of each <span class="math inline">(s, a)</span> pair should converge towards the expected return:</li>
 </ul>
 <p><span class="math display">
     \mathcal{L}(\theta) = \mathbb{E}_\pi[(R_t - Q_\theta(s, a))^2]
@@ -363,13 +431,13 @@ Figure&nbsp;5.1: Function approximators can either take a state-action pair as i
 </ul>
 <p>Any function approximator able to minimize these loss functions can be used.</p>
 </section>
-<section id="policy-based-function-approximation" class="level4 unnumbered">
-<h4 class="unnumbered anchored" data-anchor-id="policy-based-function-approximation">Policy-based function approximation</h4>
+<section id="policy-based-function-approximation" class="level2">
+<h2 class="anchored" data-anchor-id="policy-based-function-approximation">Policy-based function approximation</h2>
 <p>In policy-based function approximation, we want to directly learn a policy <span class="math inline">\pi_\theta(s, a)</span> that maximizes the expected return of each possible transition, i.e.&nbsp;the ones which are selected by the policy. The <strong>objective function</strong> to be maximized is defined over all trajectories <span class="math inline">\tau = (s_0, a_0, s_1, a_1, \ldots, s_T, a_T)</span> conditioned by the policy:</p>
 <p><span class="math display">
     J(\theta) = \mathbb{E}_{\tau \sim \rho_\theta} [R_t]
 </span></p>
-<p>In short, the learned policy <span class="math inline">\pi_\theta</span> should only produce trajectories <span class="math inline">\tau</span> where each state is associated to a high return <span class="math inline">R_t</span> and avoid trajectories with low returns. Although this objective function leads to the desired behavior, it is not computationally tractable as we would need to integrate over all possible trajectories. The methods presented in Section <a href="../src/3.1-PolicyGradient.html">PolicyGradient</a> will provide estimates of the gradient of this objective function.</p>
+<p>In short, the learned policy <span class="math inline">\pi_\theta</span> should only produce trajectories <span class="math inline">\tau</span> where each state is associated to a high return <span class="math inline">R_t</span> and avoid trajectories with low returns. Although this objective function leads to the desired behavior, it is not computationally tractable as we would need to integrate over all possible trajectories. The methods presented in Section <a href="3.1-PolicyGradient.html" class="quarto-xref"><span>Policy Gradient methods</span></a> will provide estimates of the gradient of this objective function.</p>
 
 
 </section>
@@ -797,8 +865,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../src/1.5-TD.html" class="pagination-link" aria-label="Temporal Difference algorithm">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">Temporal Difference algorithm</span></span>
+      <a href="../src/1.5-TD.html" class="pagination-link" aria-label="Temporal Difference learning">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">Temporal Difference learning</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
@@ -821,7 +889,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     </div>
   </div>
 </footer>
-<script>var lightboxQuarto = GLightbox({"selector":".lightbox","descPosition":"bottom","loop":false,"openEffect":"zoom","closeEffect":"zoom"});
+<script>var lightboxQuarto = GLightbox({"openEffect":"zoom","selector":".lightbox","descPosition":"bottom","loop":false,"closeEffect":"zoom"});
 (function() {
   let previousOnload = window.onload;
   window.onload = () => {

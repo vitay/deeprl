@@ -197,8 +197,7 @@ window.Quarto = {
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/1.1-Bandits.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Sampling and Bandits</span></a>
+  <a href="../src/1.1-Bandits.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Sampling and Bandits</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -208,12 +207,12 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/1.4-MC.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Monte-Carlo methods</span></a>
+  <a href="../src/1.4-MC.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Monte Carlo methods</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/1.5-TD.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Temporal Difference algorithm</span></a>
+  <a href="../src/1.5-TD.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Temporal Difference learning</span></a>
   </div>
 </li>
       </ul>
@@ -239,7 +238,12 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/2.3-DQN.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">DQN</span></a>
+  <a href="../src/2.3-DQN.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Deep Q-network (DQN)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/2.4-DQNvariants.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">DQN variants</span></a>
   </div>
 </li>
       </ul>
@@ -296,6 +300,63 @@ window.Quarto = {
 </li>
       </ul>
   </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text"><strong>Model-based deep RL</strong></span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/4.1-ModelBased.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Model-based RL</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/4.2-WorldModels.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">World models</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/4.3-AlphaGo.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">AlphaGo</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
+ <span class="menu-text"><strong>Advanced topics</strong></span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/5.1-Hierarchical.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Hierarchical Reinforcement Learning</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/5.2-Inverse.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Inverse Reinforcement Learning</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/5.3-OfflineRL.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Offline RL</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/5.4-Meta.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Meta learning</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../src/references.html" class="sidebar-item-text sidebar-link">
@@ -328,6 +389,7 @@ window.Quarto = {
   </ul></li>
   <li><a href="#dynamic-programming" id="toc-dynamic-programming" class="nav-link" data-scroll-target="#dynamic-programming">Dynamic programming</a>
   <ul class="collapse">
+  <li><a href="#exact-solution" id="toc-exact-solution" class="nav-link" data-scroll-target="#exact-solution">Exact solution</a></li>
   <li><a href="#policy-iteration" id="toc-policy-iteration" class="nav-link" data-scroll-target="#policy-iteration">Policy iteration</a></li>
   <li><a href="#value-iteration" id="toc-value-iteration" class="nav-link" data-scroll-target="#value-iteration">Value iteration</a></li>
   <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary">Summary</a></li>
@@ -361,14 +423,14 @@ window.Quarto = {
 <h2 class="anchored" data-anchor-id="markov-decision-process">Markov Decision Process</h2>
 <section id="definition" class="level3">
 <h3 class="anchored" data-anchor-id="definition">Definition</h3>
-<p>Reinforcement Learning methods apply to problems where an agent interacts with an environment in discrete time steps (<a href="#fig-agentenv" class="quarto-xref">Figure&nbsp;<span>2.1</span></a>). At time <span class="math inline">t</span>, the agent is in state <span class="math inline">s_t</span> and decides to perform an action <span class="math inline">a_t</span>. At the next time step, it arrives in the state <span class="math inline">s_{t+1}</span> and obtains the reward <span class="math inline">r_{t+1}</span>. In the genral case, transitions can be stochastic (there is a probability of arriving in a given state after an action), as well as the rewards (as in the bandits previously seen). The goal of the agent is to maximize the reward obtained on the long term.</p>
+<p>Reinforcement Learning methods apply to problems where an agent interacts with an environment in discrete time steps (<a href="#fig-agentenv" class="quarto-xref">Figure&nbsp;<span>3.1</span></a>). At time <span class="math inline">t</span>, the agent is in state <span class="math inline">s_t</span> and decides to perform an action <span class="math inline">a_t</span>. At the next time step, it arrives in the state <span class="math inline">s_{t+1}</span> and obtains the reward <span class="math inline">r_{t+1}</span>. In the genral case, transitions can be stochastic (there is a probability of arriving in a given state after an action), as well as the rewards (as in the bandits previously seen). The goal of the agent is to maximize the reward obtained on the long term.</p>
 <div id="fig-agentenv" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-agentenv-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/rl-agent.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;2.1: Interaction between an agent and its environment. Source: @Sutton1998."><img src="img/rl-agent.png" class="img-fluid figure-img"></a>
+<a href="img/rl-agent.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;3.1: Interaction between an agent and its environment. Source: @Sutton1998."><img src="img/rl-agent.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-agentenv-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;2.1: Interaction between an agent and its environment. Source: <span class="citation" data-cites="Sutton1998">Sutton and Barto (<a href="references.html#ref-Sutton1998" role="doc-biblioref">1998</a>)</span>.
+Figure&nbsp;3.1: Interaction between an agent and its environment. Source: <span class="citation" data-cites="Sutton1998">Sutton and Barto (<a href="references.html#ref-Sutton1998" role="doc-biblioref">1998</a>)</span>.
 </figcaption>
 </figure>
 </div>
@@ -423,10 +485,10 @@ Figure&nbsp;2.1: Interaction between an agent and its environment. Source: <span
 <div id="fig-rewarddistribution" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-rewarddistribution-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/bandit-example.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Figure&nbsp;2.2: Reward distributions for several actions in a single state."><img src="img/bandit-example.png" class="img-fluid figure-img"></a>
+<a href="img/bandit-example.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Figure&nbsp;3.2: Reward distributions for several actions in a single state."><img src="img/bandit-example.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-rewarddistribution-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;2.2: Reward distributions for several actions in a single state.
+Figure&nbsp;3.2: Reward distributions for several actions in a single state.
 </figcaption>
 </figure>
 </div>
@@ -434,10 +496,10 @@ Figure&nbsp;2.2: Reward distributions for several actions in a single state.
 <div id="fig-sparserewards" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-sparserewards-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/sparse-dense.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Figure&nbsp;2.3: Dense vs.&nbsp;sparse rewradsSource: https://forns.lmu.build/classes/spring-2020/cmsi-432/lecture-13-2.html"><img src="img/sparse-dense.png" class="img-fluid figure-img"></a>
+<a href="img/sparse-dense.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Figure&nbsp;3.3: Dense vs.&nbsp;sparse rewards. Source: https://forns.lmu.build/classes/spring-2020/cmsi-432/lecture-13-2.html"><img src="img/sparse-dense.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-sparserewards-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;2.3: Dense vs.&nbsp;sparse rewradsSource: <a href="https://forns.lmu.build/classes/spring-2020/cmsi-432/lecture-13-2.html" class="uri">https://forns.lmu.build/classes/spring-2020/cmsi-432/lecture-13-2.html</a>
+Figure&nbsp;3.3: Dense vs.&nbsp;sparse rewards. Source: <a href="https://forns.lmu.build/classes/spring-2020/cmsi-432/lecture-13-2.html" class="uri">https://forns.lmu.build/classes/spring-2020/cmsi-432/lecture-13-2.html</a>
 </figcaption>
 </figure>
 </div>
@@ -448,10 +510,10 @@ Figure&nbsp;2.3: Dense vs.&nbsp;sparse rewradsSource: <a href="https://forns.lmu
 <div id="fig-rl-sequence" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-rl-sequence-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/rl-sequence.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="Figure&nbsp;2.4: Sequence of states over time in a MDP."><img src="img/rl-sequence.png" class="img-fluid figure-img"></a>
+<a href="img/rl-sequence.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="Figure&nbsp;3.4: Sequence of transitions over time in a MDP."><img src="img/rl-sequence.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-rl-sequence-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;2.4: Sequence of states over time in a MDP.
+Figure&nbsp;3.4: Sequence of transitions over time in a MDP.
 </figcaption>
 </figure>
 </div>
@@ -463,17 +525,22 @@ Figure&nbsp;2.4: Sequence of states over time in a MDP.
 <p>More generally, for a trajectory (episode) <span class="math inline">\tau = (s_0, a_0, r_1, s_1, a_1, \ldots, s_T)</span>, one can define its return as:</p>
 <p><span class="math display"> R(\tau) = \sum_{t=0}^{T} \gamma^t \, r_{t+1} </span></p>
 <p>The <strong>discount factor</strong> (or discount rate, or discount) <span class="math inline">\gamma \in [0, 1]</span> is a very important parameter in RL: It defines the <strong>present value of future rewards</strong>. Receiving 10 euros now has a higher <strong>value</strong> than receiving 10 euros in ten years, although the reward is the same: you do not have to wait. The value of receiving a reward <span class="math inline">r</span> after <span class="math inline">k+1</span> time steps is <span class="math inline">\gamma^k \, r</span>, meaning that immediate rewards are better than delayed rewards.</p>
-<p>When <span class="math inline">\gamma &lt; 1</span>, <span class="math inline">\gamma^k</span> tends to 0 when <span class="math inline">k</span> goes to infinity: this makes sure that the return is always <strong>finite</strong>.</p>
+<p><span class="math inline">\gamma</span> determines the relative importance of future rewards for the behavior:</p>
+<ul>
+<li>if <span class="math inline">\gamma</span> is close to 0, only the immediately available rewards will count: the agent is greedy or <strong>myopic</strong>.</li>
+<li>if <span class="math inline">\gamma</span> is close to 1, even far-distance rewards will be taken into account: the agent is <strong>farsighted</strong>.</li>
+</ul>
+<p>Another important property is that, when <span class="math inline">\gamma &lt; 1</span>, <span class="math inline">\gamma^k</span> tends to 0 when <span class="math inline">k</span> goes to infinity: this makes sure that the return is always <strong>finite</strong>. We can therefore try to maximize it.</p>
 <p><span class="math display">
     R_t = r_{t+1} + \gamma \, r_{t+2} + \gamma^2 \, r_{t+3} + \ldots = \sum_{k=0}^\infty \gamma^k \, r_{t+k+1}
 </span></p>
 <div id="fig-decayinggamma" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-decayinggamma-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/decayinggamma.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5" title="Figure&nbsp;2.5: The value of \gamma^k decays over time. The closer \gamma is to 1, the slower the decay."><img src="img/decayinggamma.png" class="img-fluid figure-img"></a>
+<a href="img/decayinggamma.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5" title="Figure&nbsp;3.5: The value of \gamma^k decays over time. The closer \gamma is to 1, the slower the decay."><img src="img/decayinggamma.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-decayinggamma-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;2.5: The value of <span class="math inline">\gamma^k</span> decays over time. The closer <span class="math inline">\gamma</span> is to 1, the slower the decay.
+Figure&nbsp;3.5: The value of <span class="math inline">\gamma^k</span> decays over time. The closer <span class="math inline">\gamma</span> is to 1, the slower the decay.
 </figcaption>
 </figure>
 </div>
@@ -485,11 +552,6 @@ Figure&nbsp;2.5: The value of <span class="math inline">\gamma^k</span> decays o
 <p><span class="math display">
     R_t = \sum_{k=0}^{\infty} \gamma^k \, r_{t+k+1}
 </span></p>
-<p>The discount rate <span class="math inline">\gamma</span> determines the relative importance of future rewards for the behavior:</p>
-<ul>
-<li>if <span class="math inline">\gamma</span> is close to 0, only the immediately available rewards will count: the agent is greedy or <strong>myopic</strong>.</li>
-<li>if <span class="math inline">\gamma</span> is close to 1, even far-distance rewards will be taken into account: the agent is <strong>farsighted</strong>.</li>
-</ul>
 <div class="callout callout-style-default callout-note no-icon callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -503,15 +565,15 @@ Why the reward on the long term?
 <div id="fig-returnexample" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-returnexample-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/return-example.svg" class="lightbox" data-gallery="quarto-lightbox-gallery-6" title="Figure&nbsp;2.6: Example of a MDP with two actions in state s_1, lading to two different returns. The states s_5 and s_6 are terminal states, where no reward is received anymore."><img src="img/return-example.svg" class="img-fluid figure-img" style="width:60.0%"></a>
+<a href="img/return-example.svg" class="lightbox" data-gallery="quarto-lightbox-gallery-6" title="Figure&nbsp;3.6: Example of a MDP with two actions in state s_1, lading to two different returns. The states s_5 and s_6 are terminal states, where no reward is received anymore."><img src="img/return-example.svg" class="img-fluid figure-img" style="width:60.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-returnexample-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;2.6: Example of a MDP with two actions in state <span class="math inline">s_1</span>, lading to two different returns. The states <span class="math inline">s_5</span> and <span class="math inline">s_6</span> are terminal states, where no reward is received anymore.
+Figure&nbsp;3.6: Example of a MDP with two actions in state <span class="math inline">s_1</span>, lading to two different returns. The states <span class="math inline">s_5</span> and <span class="math inline">s_6</span> are terminal states, where no reward is received anymore.
 </figcaption>
 </figure>
 </div>
 <p>In the MDP above, selecting the action <span class="math inline">a_1</span> in <span class="math inline">s_1</span> does not bring reward immediately (<span class="math inline">r_1 = 0</span>) but allows to reach <span class="math inline">s_5</span> in the future and get a reward of 10. Selecting <span class="math inline">a_2</span> in <span class="math inline">s_1</span> brings immediately a reward of 1, but that will be all.</p>
-<p>Depending on the value of <span class="math inline">\gamma</span>, the optimal action might be <span class="math inline">a_1</span> or <span class="math inline">a_2</span>, depnding on which one brings more reward <strong>on the long term</strong>.</p>
+<p>Depending on the value of <span class="math inline">\gamma</span>, the optimal action might be <span class="math inline">a_1</span> or <span class="math inline">a_2</span>, depending on which one brings more reward <strong>on the long term</strong>.</p>
 <p>When selecting <span class="math inline">a_1</span> in <span class="math inline">s_1</span>, the discounted return is:</p>
 <p><span class="math display">
     R = 0 + \gamma \, 0 + \gamma^2 \, 0 + \gamma^3 \, 10 + \ldots = 10 \, \gamma^3
@@ -780,13 +842,23 @@ $$
 
 * **Dynamic programming** solves exactly the Bellman equations.
 
-* **Monte-Carlo** and **temporal-difference** methods approximate them.
+* **Monte Carlo** and **temporal-difference** methods approximate them.
 
 -->
 </section>
 </section>
 <section id="dynamic-programming" class="level2">
 <h2 class="anchored" data-anchor-id="dynamic-programming">Dynamic programming</h2>
+<div id="fig-gpi" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-gpi-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="img/gpi-scheme.png" class="lightbox" data-gallery="quarto-lightbox-gallery-7" title="Figure&nbsp;3.7: Generalized Policy Iteration. Source: @Sutton1998."><img src="img/gpi-scheme.png" class="img-fluid figure-img" style="width:40.0%"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-gpi-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3.7: Generalized Policy Iteration. Source: <span class="citation" data-cites="Sutton1998">Sutton and Barto (<a href="references.html#ref-Sutton1998" role="doc-biblioref">1998</a>)</span>.
+</figcaption>
+</figure>
+</div>
 <p>In general, RL algorithms iterate over two steps:</p>
 <ol type="1">
 <li><p><strong>Policy evaluation</strong></p>
@@ -800,6 +872,8 @@ $$
 </ol>
 <p>After enough iterations, the policy converges to the <strong>optimal policy</strong> (if the states are Markov).</p>
 <p>This alternation between policy evaluation and policy improvement is called <strong>generalized policy iteration</strong> (GPI). One particular form of GPI is <strong>dynamic programming</strong>, where the Bellman equations are used to evaluate a policy.</p>
+<section id="exact-solution" class="level3">
+<h3 class="anchored" data-anchor-id="exact-solution">Exact solution</h3>
 <p>Let’s note <span class="math inline">\mathcal{P}_{ss'}^\pi</span> the transition probability between <span class="math inline">s</span> and <span class="math inline">s'</span> (dependent on the policy <span class="math inline">\pi</span>) and <span class="math inline">\mathcal{R}_{s}^\pi</span> the expected reward in <span class="math inline">s</span> (also dependent):</p>
 <p><span class="math display">
   \mathcal{P}_{ss'}^\pi = \sum_{a \in \mathcal{A}(s)} \pi(s, a) \, p(s' | s, a)
@@ -867,6 +941,7 @@ $$
   \mathbf{V}^\pi = (\mathbb{I} - \gamma \, \mathcal{P}^\pi )^{-1} \times \mathbf{R}^\pi
 </span></p>
 <p>If we have <span class="math inline">n</span> states, the matrix <span class="math inline">\mathcal{P}^\pi</span> has <span class="math inline">n^2</span> elements. Inverting <span class="math inline">\mathbb{I} - \gamma \, \mathcal{P}^\pi</span> requires at least <span class="math inline">\mathcal{O}(n^{2.37})</span> operations. Forget it if you have more than a thousand states (<span class="math inline">1000^{2.37} \approx 13</span> million operations). In dynamic programming, we will use iterative methods to estimate <span class="math inline">\mathbf{V}^\pi</span>.</p>
+</section>
 <section id="policy-iteration" class="level3">
 <h3 class="anchored" data-anchor-id="policy-iteration">Policy iteration</h3>
 <p>The idea of <strong>iterative policy evaluation</strong> (IPE) is to consider a sequence of consecutive state-value functions which should converge from initially wrong estimates <span class="math inline">V_0(s)</span> towards the real state-value function <span class="math inline">V^{\pi}(s)</span>.</p>
@@ -875,7 +950,7 @@ $$
 </span></p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><a href="img/iterativepolicyevaluation2.png" class="lightbox" data-gallery="quarto-lightbox-gallery-7" title="Iterative policy estimaiton. Source: David Silver. http://www0.cs.ucl.ac.uk/staff/d.silver/web/Teaching.html"><img src="img/iterativepolicyevaluation2.png" class="img-fluid figure-img" style="width:80.0%" alt="Iterative policy estimaiton. Source: David Silver. http://www0.cs.ucl.ac.uk/staff/d.silver/web/Teaching.html"></a></p>
+<p><a href="img/iterativepolicyevaluation2.png" class="lightbox" data-gallery="quarto-lightbox-gallery-8" title="Iterative policy estimaiton. Source: David Silver. http://www0.cs.ucl.ac.uk/staff/d.silver/web/Teaching.html"><img src="img/iterativepolicyevaluation2.png" class="img-fluid figure-img" style="width:80.0%" alt="Iterative policy estimaiton. Source: David Silver. http://www0.cs.ucl.ac.uk/staff/d.silver/web/Teaching.html"></a></p>
 <figcaption>Iterative policy estimaiton. Source: David Silver. <a href="http://www0.cs.ucl.ac.uk/staff/d.silver/web/Teaching.html" class="uri">http://www0.cs.ucl.ac.uk/staff/d.silver/web/Teaching.html</a></figcaption>
 </figure>
 </div>
@@ -922,11 +997,7 @@ Iterative policy evaluation
 </span></p>
 <p>If the Q-value of an action <span class="math inline">a</span> is higher than the one currently selected by the <strong>deterministic</strong> policy:</p>
 <p><span class="math display">Q^{\pi} (s, a) &gt; Q^{\pi} (s, \pi(s)) = V^{\pi}(s)</span></p>
-<p>then it is better to select <span class="math inline">a</span> once in <span class="math inline">s</span> and thereafter follow <span class="math inline">\pi</span>.</p>
-<ul>
-<li><p>If there is no better action, we keep the previous policy for this state.</p></li>
-<li><p>This corresponds to a <strong>greedy</strong> action selection over the Q-values, defining a <strong>deterministic</strong> policy <span class="math inline">\pi(s)</span>:</p></li>
-</ul>
+<p>then it is better to select <span class="math inline">a</span> once in <span class="math inline">s</span> and thereafter follow <span class="math inline">\pi</span>. If there is no better action, we keep the previous policy for this state. This corresponds to a <strong>greedy</strong> action selection over the Q-values, defining a <strong>deterministic</strong> policy <span class="math inline">\pi(s)</span>:</p>
 <p><span class="math display">\pi(s) \leftarrow \text{argmax}_a \, Q^{\pi} (s, a) = \sum_{s' \in \mathcal{S}} p(s' | s, a) \, [r(s, a, s') + \gamma \, V^{\pi}(s') ]</span></p>
 <p>After the policy improvement, the Q-value of each deterministic action <span class="math inline">\pi(s)</span> has increased or stayed the same.</p>
 <p><span class="math display">\text{argmax}_a \; Q^{\pi} (s, a) = \sum_{s' \in \mathcal{S}} p(s' | s, a) \, [r(s, a, s') + \gamma \, V^{\pi}(s') ] \geq Q^\pi(s, \pi(s))</span></p>
@@ -989,100 +1060,15 @@ Policy iteration
 </ul>
 </div>
 </div>
-<!--
-# Small Gridworld example
-
-![Source: David Silver. <http://www0.cs.ucl.ac.uk/staff/d.silver/web/Teaching.html>](img/dp-gridworld1.png){width=80%}
-
-* **Gridworld** is an undiscounted MDP (we can take $\gamma=1$).
-
-* The states are the position in the grid, the actions are up, down, left, right. Transitions to a wall leave in the same state.
-
-* The reward is always -1, except after being in the terminal states in gray ($r=0$).
-
-* The initial policy is random:
-
-$$\pi(s, \text{up}) = \pi(s, \text{down})= \pi(s, \text{left}) = \pi(s, \text{right}) = 0.25$$
-
-
-
-# Small Gridworld example
-
-::: {.columns}
-::: {.column width=60%}
-
-![](img/dp-gridworld2.png)
-
-
-:::
-::: {.column width=40%}
-
-* $k=0$: 
-  
-  * The initial values $V_0$ are set to 0 as the initial policy is random. 
-
-* $k=1$: 
-
-  * The random policy is evaluated: all states get the value of the average immediate reward in that state. -1, except the terminal states (0). 
-
-  * The greedy policy is already an improvement over the random policy: adjacent states to the terminal states would decide to go there systematically, as the value is 0 instead of -1. 
-
-
-:::
-:::
-
-
-
-* $k=2$: The previous estimates propagate: states adjacent to the terminal states get a higher value, as there will be less punishments after these states. 
-
-
-# Small Gridworld example
-
-::: {.columns}
-::: {.column width=60%}
-
-![](img/dp-gridworld3.png)
-
-
-:::
-::: {.column width=40%}
-
-* $k=3$: 
-
-  * The values continue to propagate. 
-
-  * The greedy policy at that step of policy evaluation is already optimal.
-
-* $k>3$:
-
-  * The values continue to converge towards the true values.
-
-  * The greedy policy does not change. In this simple example, it is already the optimal policy.
-
-:::
-:::
-
-
-* Two things to notice:
-
-  * There is no actually no need to wait until the end of policy evaluation to improve the policy, as the greedy policy might already be optimal.
-
-  * There can be more than one optimal policy: some actions may have the same Q-value: choosing one or other is equally optimal.
--->
 </section>
 <section id="value-iteration" class="level3">
 <h3 class="anchored" data-anchor-id="value-iteration">Value iteration</h3>
 <p>One drawback of <strong>policy iteration</strong> is that it uses a full policy evaluation, which can be computationally exhaustive as the convergence of <span class="math inline">V_k</span> is only at the limit and the number of states can be huge. The idea of <strong>value iteration</strong> is to interleave policy evaluation and policy improvement, so that the policy is improved after EACH iteration of policy evaluation, not after complete convergence.</p>
-<ul>
-<li>As policy improvement returns a deterministic greedy policy, updating of the value of a state is then simpler:</li>
-</ul>
+<p>As policy improvement returns a deterministic greedy policy, updating of the value of a state is then simpler:</p>
 <p><span class="math display">
   V_{k+1}(s) = \max_a \sum_{s'} p(s' | s,a) [r(s, a, s') + \gamma \, V_k(s') ]
 </span></p>
-<ul>
-<li><p>Note that this is equivalent to turning the <strong>Bellman optimality equation</strong> into an update rule.</p></li>
-<li><p>Value iteration converges to <span class="math inline">V^*</span>, faster than policy iteration, and should be stopped when the values do not change much anymore.</p></li>
-</ul>
+<p>Note that this is equivalent to turning the <strong>Bellman optimality equation</strong> into an update rule. Value iteration converges to <span class="math inline">V^*</span>, faster than policy iteration, and should be stopped when the values do not change much anymore.</p>
 <div class="callout callout-style-default callout-tip no-icon callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -1187,16 +1173,6 @@ $$y = \max_a \,  \sum_{s' \in \mathcal{S}} p(s' | s, a) \, [ r(s, a, s') + \gamm
 </section>
 <section id="summary" class="level3">
 <h3 class="anchored" data-anchor-id="summary">Summary</h3>
-<div id="fig-gpi" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-gpi-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/gpi-scheme.png" class="lightbox" data-gallery="quarto-lightbox-gallery-8" title="Figure&nbsp;2.7: Generalized Policy Iteration. Source: @Sutton1998."><img src="img/gpi-scheme.png" class="img-fluid figure-img" style="width:40.0%"></a>
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-gpi-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;2.7: Generalized Policy Iteration. Source: <span class="citation" data-cites="Sutton1998">Sutton and Barto (<a href="references.html#ref-Sutton1998" role="doc-biblioref">1998</a>)</span>.
-</figcaption>
-</figure>
-</div>
 <p>Policy-iteration and value-iteration consist of alternations between policy evaluation and policy improvement, and converge to the optimal policy. This principle is called <strong>Generalized Policy Iteration</strong> (GPI). Solving the <strong>Bellman equations</strong> requires the following:</p>
 <ul>
 <li>accurate knowledge of environment dynamics <span class="math inline">p(s' | s, a)</span> and <span class="math inline">r(s, a, s')</span> for all transitions;</li>
@@ -1638,12 +1614,12 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
       <a href="../src/1.1-Bandits.html" class="pagination-link" aria-label="Sampling and Bandits">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Sampling and Bandits</span>
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">Sampling and Bandits</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../src/1.4-MC.html" class="pagination-link" aria-label="Monte-Carlo methods">
-        <span class="nav-page-text"><span class="chapter-title">Monte-Carlo methods</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../src/1.4-MC.html" class="pagination-link" aria-label="Monte Carlo methods">
+        <span class="nav-page-text"><span class="chapter-title">Monte Carlo methods</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
@@ -1661,7 +1637,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     </div>
   </div>
 </footer>
-<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","selector":".lightbox","descPosition":"bottom","loop":false,"openEffect":"zoom"});
+<script>var lightboxQuarto = GLightbox({"loop":false,"openEffect":"zoom","selector":".lightbox","descPosition":"bottom","closeEffect":"zoom"});
 (function() {
   let previousOnload = window.onload;
   window.onload = () => {
