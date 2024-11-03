@@ -1,4 +1,5 @@
-# Sampling and Bandits {-}
+# Sampling and Bandits {#sec-bandits}
+
 
 
 ## n-armed bandits

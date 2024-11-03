@@ -853,6 +853,21 @@
   file = {/Users/vitay/Documents/Zotero/storage/KF2ZQTWU/Chi et al. - 2023 - Diffusion Policy Visuomotor Policy Learning via Action Diffusion.pdf}
 }
 
+@online{Chi2024,
+  title = {Diffusion {{Policy}}: {{Visuomotor Policy Learning}} via {{Action Diffusion}}},
+  shorttitle = {Diffusion {{Policy}}},
+  author = {Chi, Cheng and Xu, Zhenjia and Feng, Siyuan and Cousineau, Eric and Du, Yilun and Burchfiel, Benjamin and Tedrake, Russ and Song, Shuran},
+  date = {2024-03-14},
+  eprint = {2303.04137},
+  eprinttype = {arXiv},
+  doi = {10.48550/arXiv.2303.04137},
+  url = {http://arxiv.org/abs/2303.04137},
+  urldate = {2024-11-02},
+  abstract = {This paper introduces Diffusion Policy, a new way of generating robot behavior by representing a robot's visuomotor policy as a conditional denoising diffusion process. We benchmark Diffusion Policy across 12 different tasks from 4 different robot manipulation benchmarks and find that it consistently outperforms existing state-of-the-art robot learning methods with an average improvement of 46.9\%. Diffusion Policy learns the gradient of the action-distribution score function and iteratively optimizes with respect to this gradient field during inference via a series of stochastic Langevin dynamics steps. We find that the diffusion formulation yields powerful advantages when used for robot policies, including gracefully handling multimodal action distributions, being suitable for high-dimensional action spaces, and exhibiting impressive training stability. To fully unlock the potential of diffusion models for visuomotor policy learning on physical robots, this paper presents a set of key technical contributions including the incorporation of receding horizon control, visual conditioning, and the time-series diffusion transformer. We hope this work will help motivate a new generation of policy learning techniques that are able to leverage the powerful generative modeling capabilities of diffusion models. Code, data, and training details is publicly available diffusion-policy.cs.columbia.edu},
+  pubstate = {prepublished},
+  file = {/Users/vitay/Documents/Zotero/storage/UCC747YK/Chi et al. - 2024 - Diffusion Policy Visuomotor Policy Learning via Action Diffusion.pdf}
+}
+
 @unpublished{Chitnis2020,
   title = {{{GLIB}}: {{Exploration}} via {{Goal-Literal Babbling}} for {{Lifted Operator Learning}}},
   shorttitle = {{{GLIB}}},
@@ -4742,6 +4757,21 @@ Subject\_term\_id: cognitive-neuroscience;learning-algorithms;learning-and-memor
   abstract = {Likelihood ratio policy gradient methods have been some of the most successful reinforcement learning algorithms, especially for learning on physical systems. We describe how the likelihood ratio policy gradient can be derived from an im-portance sampling perspective. This derivation highlights how likelihood ratio methods under-use past experience by (i) using the past experience to estimate only the gradient of the expected return U (θ) at the current policy parameteri-zation θ, rather than to obtain a more complete estimate of U (θ), and (ii) using past experience under the current policy only rather than using all past experience to improve the estimates. We present a new policy search method, which lever-ages both of these observations as well as generalized baselines—a new technique which generalizes commonly used baseline techniques for policy gradient meth-ods. Our algorithm outperforms standard likelihood ratio policy gradient algo-rithms on several testbeds.}
 }
 
+@online{Tang2024,
+  title = {Deep {{Reinforcement Learning}} for {{Robotics}}: {{A Survey}} of {{Real-World Successes}}},
+  shorttitle = {Deep {{Reinforcement Learning}} for {{Robotics}}},
+  author = {Tang, Chen and Abbatematteo, Ben and Hu, Jiaheng and Chandra, Rohan and Martín-Martín, Roberto and Stone, Peter},
+  date = {2024-09-16},
+  eprint = {2408.03539},
+  eprinttype = {arXiv},
+  doi = {10.48550/arXiv.2408.03539},
+  url = {http://arxiv.org/abs/2408.03539},
+  urldate = {2024-10-29},
+  abstract = {Reinforcement learning (RL), particularly its combination with deep neural networks referred to as deep RL (DRL), has shown tremendous promise across a wide range of applications, suggesting its potential for enabling the development of sophisticated robotic behaviors. Robotics problems, however, pose fundamental difficulties for the application of RL, stemming from the complexity and cost of interacting with the physical world. This article provides a modern survey of DRL for robotics, with a particular focus on evaluating the real-world successes achieved with DRL in realizing several key robotic competencies. Our analysis aims to identify the key factors underlying those exciting successes, reveal underexplored areas, and provide an overall characterization of the status of DRL in robotics. We highlight several important avenues for future work, emphasizing the need for stable and sample-efficient real-world RL paradigms, holistic approaches for discovering and integrating various competencies to tackle complex long-horizon, open-world tasks, and principled development and evaluation procedures. This survey is designed to offer insights for both RL practitioners and roboticists toward harnessing RL's power to create generally capable real-world robotic systems.},
+  pubstate = {prepublished},
+  file = {/Users/vitay/Documents/Zotero/storage/VS8V8Y56/Tang et al. - 2024 - Deep Reinforcement Learning for Robotics A Survey of Real-World Successes.pdf}
+}
+
 @unpublished{Teh2017,
   title = {Distral: {{Robust Multitask Reinforcement Learning}}},
   shorttitle = {Distral},
@@ -5089,6 +5119,21 @@ Subject\_term\_id: cognitive-neuroscience;learning-algorithms;learning-and-memor
   abstract = {There has been rapidly growing interest in meta-learning as a method for increasing the flexibility and sample efficiency of reinforcement learning. One problem in this area of research, however, has been a scarcity of adequate benchmark tasks. In general, the structure underlying past benchmarks has either been too simple to be inherently interesting, or too ill-defined to support principled analysis. In the present work, we introduce a new benchmark for meta-RL research, which combines structural richness with structural transparency. Alchemy is a 3D video game, implemented in Unity, which involves a latent causal structure that is resampled procedurally from episode to episode, affording structure learning, online inference, hypothesis testing and action sequencing based on abstract domain knowledge. We evaluate a pair of powerful RL agents on Alchemy and present an in-depth analysis of one of these agents. Results clearly indicate a frank and specific failure of meta-learning, providing validation for Alchemy as a challenging benchmark for meta-RL. Concurrent with this report, we are releasing Alchemy as public resource, together with a suite of analysis tools and sample agent trajectories.},
   keywords = {Computer Science - Artificial Intelligence,Computer Science - Machine Learning},
   file = {/Users/vitay/Documents/Zotero/storage/X66AUBI8/Wang_et_al_2021_Alchemy.pdf;/Users/vitay/Documents/Zotero/storage/XDUPKRP3/2102.html}
+}
+
+@online{Wang2024,
+  title = {One-{{Step Diffusion Policy}}: {{Fast Visuomotor Policies}} via {{Diffusion Distillation}}},
+  shorttitle = {One-{{Step Diffusion Policy}}},
+  author = {Wang, Zhendong and Li, Zhaoshuo and Mandlekar, Ajay and Xu, Zhenjia and Fan, Jiaojiao and Narang, Yashraj and Fan, Linxi and Zhu, Yuke and Balaji, Yogesh and Zhou, Mingyuan and Liu, Ming-Yu and Zeng, Yu},
+  date = {2024-10-28},
+  eprint = {2410.21257},
+  eprinttype = {arXiv},
+  doi = {10.48550/arXiv.2410.21257},
+  url = {http://arxiv.org/abs/2410.21257},
+  urldate = {2024-11-02},
+  abstract = {Diffusion models, praised for their success in generative tasks, are increasingly being applied to robotics, demonstrating exceptional performance in behavior cloning. However, their slow generation process stemming from iterative denoising steps poses a challenge for real-time applications in resource-constrained robotics setups and dynamically changing environments. In this paper, we introduce the One-Step Diffusion Policy (OneDP), a novel approach that distills knowledge from pre-trained diffusion policies into a single-step action generator, significantly accelerating response times for robotic control tasks. We ensure the distilled generator closely aligns with the original policy distribution by minimizing the Kullback-Leibler (KL) divergence along the diffusion chain, requiring only \$2\textbackslash\%\$-\$10\textbackslash\%\$ additional pre-training cost for convergence. We evaluated OneDP on 6 challenging simulation tasks as well as 4 self-designed real-world tasks using the Franka robot. The results demonstrate that OneDP not only achieves state-of-the-art success rates but also delivers an order-of-magnitude improvement in inference speed, boosting action prediction frequency from 1.5 Hz to 62 Hz, establishing its potential for dynamic and computationally constrained robotic applications. We share the project page at https://research.nvidia.com/labs/dir/onedp/.},
+  pubstate = {prepublished},
+  file = {/Users/vitay/Documents/Zotero/storage/KUMC4R9F/Wang et al. - 2024 - One-Step Diffusion Policy Fast Visuomotor Policies via Diffusion Distillation.pdf}
 }
 
 @thesis{Watkins1989,

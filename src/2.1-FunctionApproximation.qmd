@@ -1,6 +1,4 @@
----
-title: Function approximation
----
+#  Function approximation
 
 All the methods presented before are *tabular methods*, as one needs to store one value per state-action pair: either the Q-value of the action or a preference for that action. In most useful applications, the number of values to store would quickly become prohibitive: when working on raw images, the number of possible states alone is untractable. Moreover, these algorithms require that each state-action pair is visited a sufficient number of times to converge towards the optimal policy: if a single state-action pair is never visited, there is no guarantee that the optimal policy will be found. The problem becomes even more obvious when considering *continuous* state or action spaces.
 
@@ -8,11 +6,11 @@ However, in a lot of applications, the optimal action to perform in two very clo
 
 This is where **function approximation** becomes useful: the Q-values or the policy are not stored in a table, but rather learned by a function approximator. The type of function approximator does not really matter here: in deep RL we are of course interested in deep neural networks, but any kind of regressor theoretically works (linear algorithms, radial-basis function network, SVR...).
 
-#### Value-based function approximation {-}
+## Value-based function approximation
 
 In **value-based** methods, we want to approximate the Q-values $Q^\pi(s,a)$ of all possible state-action pairs for a given policy. The function approximator depends on a set of parameters $\theta$. $\theta$ can for example represent all the weights and biases of a neural network. The approximated Q-value can now be noted $Q(s, a ;\theta)$ or $Q_\theta(s, a)$. As the parameters will change over time during learning, we can omit the time $t$ from the notation. Similarly, action selection is usually $\epsilon$-greedy or softmax, so the policy $\pi$ depends directly on the estimated Q-values and can therefore on the parameters: it is noted $\pi_\theta$.
 
-![Function approximators can either take a state-action pair as input and output the Q-value, or simply take a state as input and output the Q-values of all possible actions.](img/functionapprox.png){#fig-functionapprox width=50%}
+![Function approximators can either take a state-action pair as input and output the Q-value, or simply take a state as input and output the Q-values of all possible actions.](img/functionapprox.png){#fig-functionapprox}
 
 There are basically two options regarding the structure of the function approximator (@fig-functionapprox):
 
@@ -23,7 +21,7 @@ The second option is of course only possible when the action space is discrete, 
 
 The goal of a function approximator is to minimize a *loss function* (or cost function) $\mathcal{L}(\theta)$, so that the estimated Q-values converge for all state-pairs towards their target value, depending on the chosen algorithm:
 
-* Monte-Carlo methods: the Q-value of each $(s, a)$ pair should converge towards the expected return:
+* Monte Carlo methods: the Q-value of each $(s, a)$ pair should converge towards the expected return:
 
 $$
     \mathcal{L}(\theta) = \mathbb{E}_\pi[(R_t - Q_\theta(s, a))^2]
@@ -51,7 +49,7 @@ $$
 
 Any function approximator able to minimize these loss functions can be used.
 
-#### Policy-based function approximation {-}
+## Policy-based function approximation
 
 In policy-based function approximation, we want to directly learn a policy $\pi_\theta(s, a)$ that maximizes the expected return of each possible transition, i.e. the ones which are selected by the policy. The **objective function** to be maximized is defined over all trajectories $\tau = (s_0, a_0, s_1, a_1, \ldots, s_T, a_T)$ conditioned by the policy:
 
@@ -59,4 +57,4 @@ $$
     J(\theta) = \mathbb{E}_{\tau \sim \rho_\theta} [R_t]
 $$
 
-In short, the learned policy $\pi_\theta$ should only produce trajectories $\tau$ where each state is associated to a high return $R_t$ and avoid trajectories with low returns. Although this objective function leads to the desired behavior, it is not computationally tractable as we would need to integrate over all possible trajectories. The methods presented in Section [PolicyGradient](3.1-PolicyGradient.qmd) will provide estimates of the gradient of this objective function.
+In short, the learned policy $\pi_\theta$ should only produce trajectories $\tau$ where each state is associated to a high return $R_t$ and avoid trajectories with low returns. Although this objective function leads to the desired behavior, it is not computationally tractable as we would need to integrate over all possible trajectories. The methods presented in Section @sec-policygradient will provide estimates of the gradient of this objective function.

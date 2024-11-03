@@ -6,9 +6,9 @@ Deep RL uses deep neural networks as function approximators, allowing complex re
 
 ### Deep neural networks
 
-A deep neural network (DNN) consists of one input layer $\mathbf{x}$, one or several hidden layers $\mathbf{h_1}, \mathbf{h_2}, \ldots, \mathbf{h_n}$ and one output layer $\mathbf{y}$ (@fig-dnn).
+A deep neural network (DNN) consists of one input layer $\mathbf{x}$, one or several hidden layers $\mathbf{h_1}, \mathbf{h_2}, \ldots, \mathbf{h_n}$ and one output layer $\mathbf{y}$.
 
-![Architecture of a deep neural network. Figure Source: @Nielsen2015, CC-BY-NC.](img/dnn.png){#fig-dnn width=60%}
+![Architecture of a deep neural network. Figure Source: @Nielsen2015, CC-BY-NC.](img/dnn.png){#fig-dnn}
 
 Each layer $k$ (called *fully-connected*) transforms the activity of the previous layer (the vector $\mathbf{h_{k-1}}$) into another vector $\mathbf{h_{k}}$ by multiplying it with a **weight matrix** $W_k$, adding a **bias** vector $\mathbf{b_k}$ and applying a non-linear **activation function** $f$.
 

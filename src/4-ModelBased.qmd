@@ -1,27 +1,5 @@
 # Model-based RL
 
-**work in progress**
-
-Model-free: The future is cached into values.
-
-Two problems of model-free:
-
-1. Needs a lot of samples
-2. Cannot adapt to novel tasks in the same environment.
-
-Model-based uses an internal model to reason about the future (imagination).
-
-Works only when the model is fixed (AlphaGo) or easy to learn (symbolic, low-dimensional). Not robust yet against model imperfection.
-
-## Dyna-Q
-
-[@Sutton1990a]
-
-<https://medium.com/@ranko.mosic/online-planning-agent-dyna-q-algorithm-and-dyna-maze-example-sutton-and-barto-2016-7ad84a6dc52b>
-
-
-## Unsorted references
-
 Embed to Control: A Locally Linear Latent Dynamics Model for Control from Raw Images [@Watter2015]
 
 Efficient Model-Based Deep Reinforcement Learning with Variational State Tabulation [@Corneil2018]

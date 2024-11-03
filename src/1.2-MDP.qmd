@@ -75,7 +75,7 @@ $$r(s, a, s') =  \mathbb{E} (r_{t+1} | s_t = s, a_t = a, s_{t+1} = s')$$
 
 An important distinction in practice is between **sparse vs. dense rewards**.  Sparse rewards take non-zero values only during certain transitions: game won/lost, goal achieved, timeout, etc. Dense rewards provide non-zero values during each transition: distance to goal, energy consumption, speed of the robot, etc. As we will see later, MDPs with sparse rewards are much harder to learn.
 
-![Dense vs. sparse rewradsSource: <https://forns.lmu.build/classes/spring-2020/cmsi-432/lecture-13-2.html>](img/sparse-dense.png){#fig-sparserewards}
+![Dense vs. sparse rewards. Source: <https://forns.lmu.build/classes/spring-2020/cmsi-432/lecture-13-2.html>](img/sparse-dense.png){#fig-sparserewards}
 
 
 Over time, the MDP will be in a sequence of states (possibly infinite):
@@ -86,7 +86,7 @@ and collect a sequence of rewards:
 
 $$r_1 \rightarrow r_2 \rightarrow r_3  \rightarrow \ldots \rightarrow r_{T}$$
 
-![Sequence of states over time in a MDP.](img/rl-sequence.png){#fig-rl-sequence}
+![Sequence of transitions over time in a MDP.](img/rl-sequence.png){#fig-rl-sequence}
 
 In a MDP, we are interested in maximizing the **return** $R_t$, i.e. the discounted sum of **future** rewards after the step $t$:
 
@@ -107,7 +107,13 @@ The **discount factor** (or discount rate, or discount) $\gamma \in [0, 1]$ is a
 Receiving 10 euros now has a higher **value** than receiving 10 euros in ten years, although the reward is the same: you do not have to wait.
 The value of receiving a reward $r$ after $k+1$ time steps is $\gamma^k \, r$, meaning that immediate rewards are better than delayed rewards.
 
-When $\gamma < 1$, $\gamma^k$ tends to 0 when $k$ goes to infinity: this makes sure that the return is always **finite**. 
+$\gamma$ determines the relative importance of future rewards for the behavior:
+
+* if $\gamma$ is close to 0, only the immediately available rewards will count: the agent is greedy or **myopic**.
+* if $\gamma$ is close to 1, even far-distance rewards will be taken into account: the agent is **farsighted**.
+
+
+Another important property is that, when $\gamma < 1$, $\gamma^k$ tends to 0 when $k$ goes to infinity: this makes sure that the return is always **finite**. We can therefore try to maximize it.
 
 $$
     R_t = r_{t+1} + \gamma \, r_{t+2} + \gamma^2 \, r_{t+3} + \ldots = \sum_{k=0}^\infty \gamma^k \, r_{t+k+1}
@@ -128,10 +134,6 @@ $$
     R_t = \sum_{k=0}^{\infty} \gamma^k \, r_{t+k+1}
 $$
 
-The discount rate $\gamma$ determines the relative importance of future rewards for the behavior:
-
-* if $\gamma$ is close to 0, only the immediately available rewards will count: the agent is greedy or **myopic**.
-* if $\gamma$ is close to 1, even far-distance rewards will be taken into account: the agent is **farsighted**.
 
 
 :::{.callout-note icon="false"}
@@ -142,7 +144,7 @@ The discount rate $\gamma$ determines the relative importance of future rewards 
 In the MDP above, selecting the action $a_1$ in $s_1$ does not bring reward immediately ($r_1 = 0$) but allows to reach $s_5$ in the future and get a reward of 10.
 Selecting $a_2$ in $s_1$ brings immediately a reward of 1, but that will be all.
 
-Depending on the value of $\gamma$, the optimal action might be $a_1$ or $a_2$, depnding on which one brings more reward **on the long term**.
+Depending on the value of $\gamma$, the optimal action might be $a_1$ or $a_2$, depending on which one brings more reward **on the long term**.
 
 When selecting $a_1$ in $s_1$, the discounted return is:
 
@@ -479,11 +481,14 @@ $$
 
 * **Dynamic programming** solves exactly the Bellman equations.
 
-* **Monte-Carlo** and **temporal-difference** methods approximate them.
+* **Monte Carlo** and **temporal-difference** methods approximate them.
 
 -->
 
 ## Dynamic programming
+
+
+![Generalized Policy Iteration. Source: @Sutton1998.](img/gpi-scheme.png){#fig-gpi width=40%}
 
 
 In general, RL algorithms iterate over two steps:
@@ -501,6 +506,8 @@ After enough iterations, the policy converges to the **optimal policy** (if the 
 
 This alternation between policy evaluation and policy improvement is called **generalized policy iteration** (GPI).
 One particular form of GPI is **dynamic programming**, where the Bellman equations are used to evaluate a policy.
+
+### Exact solution
 
 Let's note $\mathcal{P}_{ss'}^\pi$ the transition probability between $s$ and $s'$ (dependent on the policy $\pi$) and $\mathcal{R}_{s}^\pi$ the expected reward in $s$ (also dependent):
 
@@ -658,11 +665,7 @@ If the Q-value of an action $a$ is higher than the one currently selected by the
 
 $$Q^{\pi} (s, a) > Q^{\pi} (s, \pi(s)) = V^{\pi}(s)$$
 
-then it is better to select $a$ once in $s$ and thereafter follow $\pi$.
-
-* If there is no better action, we keep the previous policy for this state.
-
-* This corresponds to a **greedy** action selection over the Q-values, defining a **deterministic** policy $\pi(s)$:
+then it is better to select $a$ once in $s$ and thereafter follow $\pi$. If there is no better action, we keep the previous policy for this state. This corresponds to a **greedy** action selection over the Q-values, defining a **deterministic** policy $\pi(s)$:
 
 
 $$\pi(s) \leftarrow \text{argmax}_a \, Q^{\pi} (s, a) = \sum_{s' \in \mathcal{S}} p(s' | s, a) \, [r(s, a, s') + \gamma \, V^{\pi}(s') ]$$
@@ -722,103 +725,20 @@ If the policy does not change after policy improvement, the optimal policy has b
 :::
 
 
-<!--
-# Small Gridworld example
-
-![Source: David Silver. <http://www0.cs.ucl.ac.uk/staff/d.silver/web/Teaching.html>](img/dp-gridworld1.png){width=80%}
-
-* **Gridworld** is an undiscounted MDP (we can take $\gamma=1$).
-
-* The states are the position in the grid, the actions are up, down, left, right. Transitions to a wall leave in the same state.
-
-* The reward is always -1, except after being in the terminal states in gray ($r=0$).
-
-* The initial policy is random:
-
-$$\pi(s, \text{up}) = \pi(s, \text{down})= \pi(s, \text{left}) = \pi(s, \text{right}) = 0.25$$
-
-
-
-# Small Gridworld example
-
-::: {.columns}
-::: {.column width=60%}
-
-![](img/dp-gridworld2.png)
-
-
-:::
-::: {.column width=40%}
-
-* $k=0$: 
-  
-  * The initial values $V_0$ are set to 0 as the initial policy is random. 
-
-* $k=1$: 
-
-  * The random policy is evaluated: all states get the value of the average immediate reward in that state. -1, except the terminal states (0). 
-
-  * The greedy policy is already an improvement over the random policy: adjacent states to the terminal states would decide to go there systematically, as the value is 0 instead of -1. 
-
-
-:::
-:::
-
-
-
-* $k=2$: The previous estimates propagate: states adjacent to the terminal states get a higher value, as there will be less punishments after these states. 
-
-
-# Small Gridworld example
-
-::: {.columns}
-::: {.column width=60%}
-
-![](img/dp-gridworld3.png)
-
-
-:::
-::: {.column width=40%}
-
-* $k=3$: 
-
-  * The values continue to propagate. 
-
-  * The greedy policy at that step of policy evaluation is already optimal.
-
-* $k>3$:
-
-  * The values continue to converge towards the true values.
-
-  * The greedy policy does not change. In this simple example, it is already the optimal policy.
-
-:::
-:::
-
-
-* Two things to notice:
-
-  * There is no actually no need to wait until the end of policy evaluation to improve the policy, as the greedy policy might already be optimal.
-
-  * There can be more than one optimal policy: some actions may have the same Q-value: choosing one or other is equally optimal.
--->
-
-
 
 ### Value iteration
 
 One drawback of **policy iteration** is that it uses a full policy evaluation, which can be computationally exhaustive as the convergence of $V_k$ is only at the limit and the number of states can be huge.
 The idea of **value iteration** is to interleave policy evaluation and policy improvement, so that the policy is improved after EACH iteration of policy evaluation, not after complete convergence.
 
-* As policy improvement returns a deterministic greedy policy, updating of the value of a state is then simpler:
+As policy improvement returns a deterministic greedy policy, updating of the value of a state is then simpler:
 
 $$
   V_{k+1}(s) = \max_a \sum_{s'} p(s' | s,a) [r(s, a, s') + \gamma \, V_k(s') ]
 $$
 
-* Note that this is equivalent to turning the **Bellman optimality equation** into an update rule.
-
-* Value iteration converges to $V^*$, faster than policy iteration, and should be stopped when the values do not change much anymore.
+Note that this is equivalent to turning the **Bellman optimality equation** into an update rule.
+Value iteration converges to $V^*$, faster than policy iteration, and should be stopped when the values do not change much anymore.
 
 
 
@@ -920,15 +840,13 @@ $$y = \max_a \,  \sum_{s' \in \mathcal{S}} p(s' | s, a) \, [ r(s, a, s') + \gamm
 
 ### Summary
 
-![Generalized Policy Iteration. Source: @Sutton1998.](img/gpi-scheme.png){#fig-gpi width=40%}
-
 Policy-iteration and value-iteration consist of alternations between policy evaluation and policy improvement, and converge to the optimal policy.
 This principle is called **Generalized Policy Iteration** (GPI).
 Solving the **Bellman equations** requires the following:
 
-- accurate knowledge of environment dynamics $p(s' | s, a)$ and $r(s, a, s')$ for all transitions;
-- enough memory and time to do the computations;
-- the Markov property.
+* accurate knowledge of environment dynamics $p(s' | s, a)$ and $r(s, a, s')$ for all transitions;
+* enough memory and time to do the computations;
+* the Markov property.
 
 Finding an optimal policy is polynomial in the number of states and actions: $\mathcal{O}(N^2 \, M)$ ($N$ is the number of states, $M$ the number of actions).
 The number of states is often astronomical (e.g., Go has about $10^{170}$ states), often growing exponentially with the number of state variables (what Bellman called **"the curse of dimensionality"**). In practice, classical DP can only be applied to problems with a few millions of states.
