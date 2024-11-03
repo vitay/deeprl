@@ -38,6 +38,7 @@ book:
         - src/2.1-FunctionApproximation.qmd
         - src/2.2-DeepNetworks.qmd
         - src/2.3-DQN.qmd
+        - src/2.4-DQNvariants.qmd
     - part: "**Policy-gradient methods**"
       chapters:
         - src/3.1-PolicyGradient.qmd
@@ -48,7 +49,17 @@ book:
         - src/3.6-EntropyRL.qmd
         - src/3.7-DistributionalRL.qmd
         - src/3.8-OtherPolicyGradient.qmd
-    #- src/4-ModelBased.qmd
+    - part: "**Model-based deep RL**"
+      chapters:
+        - src/4.1-ModelBased.qmd
+        - src/4.2-WorldModels.qmd
+        - src/4.3-AlphaGo.qmd
+    - part: "**Advanced topics**"
+      chapters:
+        - src/5.1-Hierarchical.qmd
+        - src/5.2-Inverse.qmd
+        - src/5.3-OfflineRL.qmd
+        - src/5.4-Meta.qmd
     - src/references.qmd
 
 bibliography: 
