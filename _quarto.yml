@@ -39,6 +39,7 @@ book:
         - src/2.2-DeepNetworks.qmd
         - src/2.3-DQN.qmd
         - src/2.4-DQNvariants.qmd
+        - src/2.5-DistributedLearning.qmd
     - part: "**Policy-gradient methods**"
       chapters:
         - src/3.1-PolicyGradient.qmd
@@ -46,9 +47,10 @@ book:
         - src/3.3-ImportanceSampling.qmd
         - src/3.4-DPG.qmd
         - src/3.5-NaturalGradient.qmd
-        - src/3.6-EntropyRL.qmd
-        - src/3.7-DistributionalRL.qmd
-        - src/3.8-OtherPolicyGradient.qmd
+        - src/3.6-PPO.qmd
+        - src/3.7-ACER.qmd
+        - src/3.8-EntropyRL.qmd
+        - src/3.9-OtherPolicyGradient.qmd
     - part: "**Model-based deep RL**"
       chapters:
         - src/4.1-ModelBased.qmd

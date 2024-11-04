@@ -485,7 +485,7 @@ $$
 
 -->
 
-## Dynamic programming
+## Dynamic programming {#sec-dp}
 
 
 ![Generalized Policy Iteration. Source: @Sutton1998.](img/gpi-scheme.png){#fig-gpi width=40%}

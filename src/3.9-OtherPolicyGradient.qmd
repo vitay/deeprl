@@ -1,0 +1,6 @@
+# Miscellaneous model-free algorithms
+
+* Stochastic Value Gradient (SVG) [@Heess2015]
+* Q-Prop [@Gu2016]
+* Normalized Advantage Function (NAF) [@Gu2016a]
+* Fictitious Self-Play (FSP) [@Heinrich2015;@Heinrich2016]

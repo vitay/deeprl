@@ -1,24 +1,8 @@
-# Monte Carlo methods
+# Monte Carlo methods {#sec-mc}
 
+In dynamic programming, policy evaluation was done by explicitly solving the Bellman equations. In Monte Carlo (and temporal difference) methods, policy evaluation relies on sampling.
 
-RL algorithms iterate over two steps (**generalized policy iteration** GPI):
-
-1. **Policy evaluation**
-
-    * For a given policy $\pi$, the value of all states $V^\pi(s)$ or all state-action pairs $Q^\pi(s, a)$ is calculated or estimated.
-
-2. **Policy improvement**
-
-    * From the current estimated values $V^\pi(s)$ or $Q^\pi(s, a)$, a new **better** policy $\pi$ is derived.
-
-After enough iterations, the policy converges to the **optimal policy** (if the states are Markov).
-
-
-![Generalized policy iteration. Source: @Sutton1998](img/gpi-scheme.png){width=30%}
-
-In dynamic programming, policy evaluation is done by explicitly solving the Bellman equations. In Monte Carlo (and temporal difference) methods, policy evaluation relies on sampling.
-
-## Monte Carlo control
+## Monte Carlo policy evaluation
 
 When the environment is *a priori* unknown, it has to be explored in order to build estimates of the V or Q value functions. The key idea of **Monte Carlo** sampling (MC) is rather simple: the expected return in state $s$ is approximated by **sampling** $M$ trajectories $\tau_i$ starting from $s$ and computing the sampling average of the obtained returns:
 
@@ -86,7 +70,7 @@ $$
 Another solution is the **Softmax** (or Gibbs distribution) action selection method, which assigns to each action a probability of being selected depending on their relative Q-values:
 
 $$
-    P(s, a) = \frac{\exp Q^\pi(s, a) / \tau}{ \sum_b \exp Q^\pi(s, b) / \tau}
+    P(s, a) = \frac{\exp Q(s, a) / \tau}{ \sum_b \exp Q(s, b) / \tau}
 $$
 
 $\tau$ is a positive parameter called the temperature: high temperatures cause the actions to be nearly equiprobable, while low temperatures cause $\tau$ is a positive parameter called the temperature.

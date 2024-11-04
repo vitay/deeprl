@@ -1,6 +1,5 @@
 
-# DQN variants
-
+# DQN variants (Rainbow)
 
 ## Double DQN
 
@@ -97,6 +96,173 @@ $$
 Apart from this specific output layer, everything works as usual, especially the gradient of the mse loss function can travel backwards using backpropagation to update the weights $\theta$, $\alpha$ and $\beta$. The resulting architecture outperforms double DQN with prioritized replay on most Atari games, particularly games with repetitive actions.
 
 
+## Categorical DQN {#sec-distributionalrl}
+
+All RL methods based on the Bellman equations use the expectation operator to average returns and compute the values of states and actions:
+
+$$
+    Q^\pi(s, a) = \mathbb{E}_{s, a \sim \pi}[R(s, a)]
+$$
+
+The variance of the returns is not considered in the action selection scheme, and most methods actually try to reduce this variance as it impairs the convergence of neural networks. Decision theory states that only the mean should matter on the long-term, but one can imagine tasks where the variance is an important factor for the decision. Imagine you are in a game where you have two actions available: the first one brings returns of 10 and 20, with a probability of 0.5 each (to simplify), while the second one brings returns of -10 and +40 with probability 0.5 too. Both actions have the same Q-value of 15 (a return which is actually never experienced), so one can theoretically pick whatever action, both are optimal in the Bellman's sense. 
+
+However, this is only true when playing **long enough**. If, after learning, one is only allowed one try on that game, it is obviously safer (but less fun) to choose the first action, as one wins at worse 10, while it is -10 with the second action. Knowing the distribution of the returns can allow to distinguish risky choices from safe ones more easily and adapt the behavior. Another advantage would be that by learning the distribution of the returns instead of just their mean, one actually gathers more information about the environment dynamics: it can only help the convergence of the algorithm towards the optimal policy.
+
+
+@Bellemare2017 proposed to learn the **value distribution** (the probability distribution of the returns) through a modification of the Bellman equation. They show that learning the complete distribution of rewards instead of their mean leads to performance improvements on Atari games over modern variants of DQN.
+
+Their proposed **categorical DQN** (also called C51) has an architecture based on DQN, but where the output layer predicts the distribution of the returns for each action $a$ in state $s$, instead of its mean $Q^\pi(s, a)$. In practice, each action $a$ is represented by $N$ output neurons, who encode the support of the distribution of returns. If the returns take values between $V_\text{min}$ and $V_\text{max}$, one can represent their distribution $\mathcal{Z}$ by taking $N$ discrete "bins" (called *atoms* in the paper) in that range. @fig-distributionallearning shows how the distribution of returns between -10 and 10 can be represented using 21 atoms.
+
+![Example of a value distribution using 21 atoms between -10 and 10. The average return is 3, but its variance is explicitly represented.](img/distributionallearning.png){#fig-distributionallearning width=80%}
+
+Of course, the main problem is to know in advance the range of returns $[V_\text{min}, V_\text{max}]$ (it depends largely on the choice of the discount rate $\gamma$), but you can infer it from training another algorithm such as DQN beforehand. @Dabney2017 got rid of this problem with quantile regression. In the paper, the authors found out experimentally that 51 is the most efficient number of atoms (hence the name C51).
+
+Let's note $z_i$ these atoms with $1 \leq i < N$. The atom probability that the return associated to a state-action pair $(s, a)$ lies within the bin associated to the atom $z_i$ is noted $p_i(s, a)$. These probabilities can be predicted by a neural network, typically by using a softmax function over outputs $f_i(s, a; \theta)$:
+
+$$
+    p_i(s, a; \theta) = \frac{\exp f_i(s, a; \theta)}{\sum_{j=1}^{N} \exp f_j(s, a; \theta)}
+$$
+
+The distribution of the returns $\mathcal{Z}$ is simply a sum over the atoms (represented by the Dirac distribution $\delta_{z_i}$):
+
+$$
+    \mathcal{Z}_\theta(s, a) = \sum_{i=1}^{N} p_i(s, a; \theta) \, \delta_{z_i}
+$$
+
+If these probabilities are correctly estimated, the Q-value is easy to compute as the mean of the distribution:
+
+$$
+    Q_\theta(s, a) = \mathbb{E} [\mathcal{Z}_\theta(s, a)] = \sum_{i=1}^{N} p_i(s, a; \theta) \, z_i
+$$
+
+These Q-values can then be used for action selection as in the regular DQN. The problem is now to learn the value distribution $\mathcal{Z}_\theta$, i.e. to find a learning rule / loss function for the $p_i(s, a; \theta)$. Let's consider a single transition $(s, a, r, s')$ and select the greedy action $a'$ in $s'$ using the current policy $\pi_\theta$. The value distribution $\mathcal{Z}_\theta$ can be evaluated by applying recursively the Bellman operator $\mathcal{T}$:
+
+$$
+    \mathcal{T} \, \mathcal{Z}_\theta(s, a) = \mathcal{R}(s, a) + \gamma \, \mathcal{Z}_\theta(s', a')
+$$
+
+where $\mathcal{R}(s, a)$ is the distribution of immediate rewards after $(s, a)$. This use of the Bellman operator is the same as in Q-learning:
+
+$$
+    \mathcal{T} \, \mathcal{Q}_\theta(s, a) = \mathbb{E}[r(s, a)] + \gamma \, \mathcal{Q}_\theta(s', a')
+$$
+
+In Q-learning, one minimizes the difference (mse) between $\mathcal{T} \, \mathcal{Q}_\theta(s, a)$ and $\mathcal{Q}_\theta(s, a)$, which are expectations (so we only manipulate scalars). Here, we will minimize the statistical distance between the distributions $\mathcal{T} \, \mathcal{Z}_\theta(s, a)$ and $\mathcal{Z}_\theta(s, a)$ themselves, using for example the KL divergence, Wasserstein metric, total variation or whatnot.
+
+The problem is mostly that the distributions $\mathcal{T} \, \mathcal{Z}_\theta(s, a)$ and $\mathcal{Z}_\theta(s, a)$ do not have the same support: for a particular atom $z_i$, $\mathcal{T} \, \mathcal{Z}_\theta(s, a)$ can have a non-zero probability $p_i(s, a)$, while $\mathcal{Z}_\theta(s, a)$ has a zero probability. Besides, the probabilities must sum to 1, so one cannot update the $z_i$ independently from one another.
+
+The proposed method consists of three steps:
+
+1. Computation of the Bellman update $\mathcal{T} \, \mathcal{Z}_\theta(s, a)$. They simply compute translated values for each $z_i$ according to:
+
+$$
+    \mathcal{T} \, z_i = r + \gamma \, z_i
+$$
+
+and clip the obtained value to $[V_\text{min}, V_\text{max}]$. The reward $r$ translates the distribution of atoms, while the discount rate $\gamma$ scales it. @fig-distributionallearning2 shows the distribution of $\mathcal{T} \, \mathcal{Z}_\theta(s, a)$ compared to $\mathcal{Z}_\theta(s, a)$. Note that the atoms of the two distributions are not aligned.
+
+
+![Computation of the Bellman update $\mathcal{T} \, \mathcal{Z}_\theta(s, a)$. The atoms of the two distributions are not aligned.](img/distributionallearning2.png){#fig-distributionallearning2 width=80%}
+
+2. Distribution of the probabilities of $\mathcal{T} \, \mathcal{Z}_\theta(s, a)$ on the support of $\mathcal{Z}_\theta(s, a)$. The projected atom $\mathcal{T} \, z_i$ lie between two "real" atoms $z_l$ and $z_u$, with a non-integer index $b$ (for example $b = 3.4$, $l = 3$ and $u=4$). The corresponding probability $p_{b}(s', a'; \theta)$ of the next greedy action $(s', a')$ is "spread" to its neighbors through a local interpolation depending on the distances between $b$, $l$ and $u$:
+
+$$
+    \Delta p_{l}(s', a'; \theta) = p_{b}(s', a'; \theta) \, (b - u)
+$$
+$$
+    \Delta p_{u}(s', a'; \theta) = p_{b}(s', a'; \theta) \, (l - b)
+$$
+
+@fig-distributionallearning3 shows how the projected update distribution $\Phi \, \mathcal{T} \, \mathcal{Z}_\theta(s, a)$ now matches the support of $\mathcal{Z}_\theta(s, a)$
+
+![Projected update $\Phi \, \mathcal{T} \, \mathcal{Z}_\theta(s, a)$ on the support of $\mathcal{Z}_\theta(s, a)$. The atoms are now aligned, the statistical distance between the two distributions can be minimized.](img/distributionallearning3.png){#fig-distributionallearning3 width=80%}
+
+The projection of the Bellman update onto an atom $z_i$ can be summarized by the following equation:
+
+$$
+    (\Phi \, \mathcal{T} \, \mathcal{Z}_\theta(s, a))_i = \sum_{j=1}^N \big [1 - \frac{| [\mathcal{T}\, z_j]_{V_\text{min}}^{V_\text{max}} - z_i|}{\Delta z} \big ]_0^1 \, p_j (s', a'; \theta)
+$$
+
+where $[\cdot]_a^b$ bounds its argument in $[a, b]$ and $\Delta z$ is the step size between two atoms.
+
+3. Minimizing the statistical distance between $\Phi \, \mathcal{T} \, \mathcal{Z}_\theta(s, a)$ and $\mathcal{Z}_\theta(s, a)$. Now that the Bellman update has the same support as the value distribution, we can minimize the KL divergence between the two for a single transition:
+
+$$
+    \mathcal{L}(\theta) = D_\text{KL} (\Phi \, \mathcal{T} \, \mathcal{Z}_{\theta'}(s, a) | \mathcal{Z}_\theta(s, a))
+$$
+
+using a target network $\theta'$ for the target. It is to be noted that minimizing the KL divergence is the same as minimizing the cross-entropy between the two, as in classification tasks:
+
+$$
+    \mathcal{L}(\theta) =  - \sum_i (\Phi \, \mathcal{T} \, \mathcal{Z}_{\theta'}(s, a))_i \log p_i (s, a; \theta)
+$$
+
+The projected Bellman update plays the role of the one-hot encoded target vector in classification (except that it is not one-hot encoded). DQN performs a regression on the Q-values (mse loss), while categorical DQN performs a classification (cross-entropy loss). Apart from the way the target is computed, categorical DQN is very similar to DQN: architecture, experience replay memory, target networks, etc.
+
+@fig-categoricaldqn illustrates how the predicted value distribution changes when playing Space invaders (also have a look at the Youtube video at <https://www.youtube.com/watch?v=yFBwyPuO2Vg>). C51 outperforms DQN on most Atari games, both in terms of the achieved performance and the sample complexity.
+
+![Evolution of the value distribution for the categorical DQN playing Space Invaders. Animation Source: <https://deepmind.com/blog/going-beyond-average-reinforcement-learning/>](img/categoricaldqn.gif){#fig-categoricaldqn width=100%}
+
+<iframe width="600" height="300" src="https://www.youtube.com/embed/yFBwyPuO2Vg" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+**Additional resources:**
+
+* <https://deepmind.com/blog/going-beyond-average-reinforcement-learning>
+* <https://physai.sciencesconf.org/data/pages/distributional_RL_Remi_Munos.pdf>
+* <https://flyyufelix.github.io/2017/10/24/distributional-bellman.html>, with keras code for C51.
+
+
+
+## Noisy DQN
+
+
+DQN and its variants rely on $\epsilon$-greedy action selection over the Q-values to **explore**.
+The exploration parameter $\epsilon$ is **annealed** during training to reach a final minimal value.
+It is preferred to **softmax** action selection, where $\tau$ scales with the unknown Q-values.
+The problem is that it is a global exploration mechanism: well-learned states do not need as much exploration as poorly explored ones. 
+
+$\epsilon$-greedy and softmax add **exploratory noise** to the output of DQN:  The Q-values predict a greedy action, but another action is taken.
+What about adding noise to the **parameters** (weights and biases) of the DQN, what would change the greedy action everytime?
+Controlling the level of noise inside the neural network indirectly controls the exploration level.
+
+
+![Parameter noise. Source: <https://openai.com/blog/better-exploration-with-parameter-noise/>](img/ddpg-parameternoise.png){#fig-noisydqn}
+
+Parameter noise builds on the idea of **Bayesian deep learning**.
+Instead of learning a single value of the parameters:
+
+$$y = \theta_1 \, x + \theta_0$$
+
+we learn the **distribution** of the parameters, for example by assuming they come from a normal distribution:
+
+$$\theta \sim \mathcal{N}(\mu_\theta, \sigma_\theta^2)$$
+
+For each new input, we **sample** a value for the parameter:
+
+$$\theta = \mu_\theta + \sigma_\theta \, \epsilon$$
+
+with $\epsilon \sim \mathcal{N}(0, 1)$ a random variable.
+
+
+The prediction $y$ will vary for the same input depending on the variances:
+
+$$y = (\mu_{\theta_1} + \sigma_{\theta_1} \, \epsilon_1) \, x + \mu_{\theta_0} + \sigma_{\theta_0} \, \epsilon_0$$
+
+The mean and variance of each parameter can be learned through backpropagation!
+As the random variables $\epsilon_i  \sim \mathcal{N}(0, 1)$ are not correlated with anything, the variances $\sigma_\theta^2$ should decay to 0.
+The variances $\sigma_\theta^2$ represent the **uncertainty** about the prediction $y$.
+
+Applied to DQN, this means that a state which has not been visited very often will have a high uncertainty: The predicted Q-values will change a lot between two evaluations and the greedy action might change: **exploration**.
+Conversely, a well-explored state will have a low uncertainty: The greedy action stays the same: **exploitation**.
+
+Noisy DQN [@Fortunato2017] uses **greedy action selection** over noisy Q-values.
+The level of exploration is **learned** by the network on a per-state basis. No need for scheduling!
+**Parameter noise** improves the performance of $\epsilon$-greedy-based methods, including DQN, dueling DQN, A3C, DDPG (see later), etc.
+
+![Results of Noisy DQN. Source: @Fortunato2017](img/noisydqn2.png){#fig-noisydqn-results}
+
+
+
 ## Rainbow DQN
 
 As we have seen. the original formulation of DQN [@Mnih2015] has seen many improvements over the years.
@@ -128,27 +294,8 @@ All these improvements exceed the performance of vanilla DQN on most if not all 
 
 @Hessel2017 designed a **Rainbow DQN** integrating all these improvements. Not only does the combined network outperform all the DQN variants, but each of its components is important for its performance as shown by ablation studies (apart from double learning and duelling networks), see @fig-rainbow.
 
-![Performance of the Rainbow DQN compared to other DQN variants (left) and ablation studies. Figures Source: @Hessel2017.](img/rainbow.png){#fig-rainbow width=90%}
+![Performance of the Rainbow DQN compared to other DQN variants (left) and ablation studies. Figures Source: @Hessel2017.](img/rainbow.png){#fig-rainbow}
 
-## Distributed DQN (GORILA)
-
-The main limitation of deep RL is the slowness of learning, which is mainly influenced by two factors:
-
-* the **sample complexity**, i.e. the number of transitions needed to learn a satisfying policy.
-* the **online interaction** with the environment (states are visited one after the other).
-
-The second factor is particularly critical in real-world applications like robotics: physical robots evolve in real time, so the acquisition speed of transitions will be limited. Even in simulation (video games, robot emulators), the simulator might turn out to be much slower than training the underlying neural network. Google Deepmind proposed the GORILA (General Reinforcement Learning Architecture) framework to speed up the training of DQN networks using distributed actors and learners [@Nair2015]. The framework is quite general and the distribution granularity can change depending on the task.
-
-![GORILA architecture. Multiple actors interact with multiple copies of the environment and store their experiences in a (distributed) experience replay memory. Multiple DQN learners sample from the ERM and compute the gradient of the loss function w.r.t the parameters $\theta$. A master network (parameter server, possibly distributed) gathers the gradients, apply weight updates and synchronizes regularly both the actors and the learners with new parameters. Source: @Nair2015.](img/gorila-global.png){#fig-gorila width=90%}
-
-In GORILA, multiple actors interact with the environment to gather transitions. Each actor has an independent copy of the environment, so they can gather $N$ times more samples per second if there are $N$ actors. This is possible in simulation (starting $N$ instances of the same game in parallel) but much more complicated for real-world systems (but see @Gu2017 for an example where multiple identical robots are used to gather experiences in parallel).
-
-The experienced transitions are sent as in DQN to an experience replay memory, which may be distributed or centralized. Multiple DQN learners will then sample a minibatch from the ERM and compute the DQN loss on this minibatch (also using a target network). All learners start with the same parameters $\theta$ and simply compute the gradient of the loss function $\frac{\partial \mathcal{L}(\theta)}{\partial \theta}$ on the minibatch. The gradients are sent to a parameter server (a master network) which uses the gradients to apply the optimizer (e.g. SGD) and find new values for the parameters $\theta$. Weight updates can also be applied in a distributed manner. This distributed method to train a network using multiple learners is now quite standard in deep learning: on multiple GPU systems, each GPU has a copy of the network and computes gradients on a different minibatch, while a master network integrates these gradients and updates the slaves.
-
-The parameter server regularly updates the actors (to gather samples with the new policy) and the learners (to compute gradients w.r.t the new parameter values). Such a distributed system can greatly accelerate learning, but it can be quite tricky to find the optimum number of actors and learners (too many learners might degrade the stability) or their update rate (if the learners are not updated frequently enough, the gradients might not be correct). 
-
-Further variants of distributed DQN learning include Ape-X [@Horgan2018] and IMPALA [@Espeholt2018]. 
-A similar idea is at the core of the A3C algorithm, which is a policy gradient method.
 
 
 ## Deep Recurrent Q-learning (DRQN)
@@ -160,16 +307,4 @@ The Atari games used as a benchmark for value-based methods are **partially obse
 
 Building on previous ideas from the Schmidhuber's group [@Bakker2001;@Wierstra2007], @Hausknecht2015 replaced one of the fully-connected layers of the DQN network by a LSTM layer  while using single frames as inputs. The resulting **deep recurrent q-learning** (DRQN) network became able to solve POMDPs thanks to the astonishing learning abilities of LSTMs: the LSTM layer learn to remember which part of the sensory information will be useful to take decisions later.
 
-However, LSTMs are not a magical solution either. They are trained using *truncated BPTT*, i.e. on a limited history of states. Long-term dependencies exceeding the truncation horizon cannot be learned. Additionally, all states in that horizon (i.e. all frames) have to be stored in the ERM to train the network, increasing drastically its size. Despite these limitations, DRQN is a much more elegant solution to the partial observability problem, letting the network decide which horizon it needs to solve long-term dependencies.
-
-## Recurrent Replay Distributed DQN (R2D2)
-
-@Kapturowski2019
-
-
-## Other variants of DQN
-
-
-**Average-DQN** [@Anschel2016] proposes to increase the stability and performance of DQN by replacing the single target network (a copy of the trained network) by an average of the last parameter values, in other words an average of many past target networks.
-
-@He2016 proposed **fast reward propagation** through optimality tightening to speedup learning: when rewards are sparse, they require a lot of episodes to propagate these rare rewards to all actions leading to it. Their method combines immediate rewards (single steps) with actual returns (as in Monte Carlo) via a constrained optimization approach.
+However, LSTMs are not a magical solution either. They are trained using ***truncated BPTT**, i.e. on a limited history of states. Long-term dependencies exceeding the truncation horizon cannot be learned. Additionally, all states in that horizon (i.e. all frames) have to be stored in the ERM to train the network, increasing drastically its size. Despite these limitations, DRQN is a much more elegant solution to the partial observability problem, letting the network decide which horizon it needs to solve long-term dependencies.

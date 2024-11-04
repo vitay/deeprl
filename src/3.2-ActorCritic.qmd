@@ -1,4 +1,4 @@
-# Asynchronous Advantage Actor-Critic (A3C) {-}
+# Advantage Actor-Critic (A3C) {-}
 
 ## Actor-critic algorithms
 
@@ -10,7 +10,7 @@ $$
 
 which is the **advantage** of the action $a$ in $s$, as already seen in *duelling networks*.
 
-Now the problem is that the critic would have to approximate two functions: $Q^{\pi}(s, a)$ and $V^{\pi}(s)$. **Advantage actor-critic** methods presented in this section (A2C, A3C, GAE) approximate the advantage of an action:
+Now the problem is that the critic would have to approximate two functions: $Q^{\pi}(s, a)$ and $V^{\pi}(s)$. **Advantage actor-critic** methods approximate the advantage of an action:
 
 $$
     \nabla_\theta J(\theta) =  \mathbb{E}_{s \sim \rho^\pi, a \sim \pi_\theta}[\nabla_\theta \log \pi_\theta(s, a) \, A_\varphi(s, a)]
@@ -28,7 +28,7 @@ Different methods could be used to compute the advantage estimate:
 * $A_\varphi(s, a) =   \sum_{k=0}^{n-1} \gamma^{k} \, r_{t+k+1} + \gamma^n \, V_\varphi(s_{t+n+1}) - V_\varphi(s_t)$ is the **n-step advantage estimate**.
 
 
-The most popular approach is the n-step advantage, which is at the core of the methods A2C and A3C, and can be understood as a trade-off between MC and TD. MC and TD advantages could be used as well, but come with the respective disadvantages of MC (need for finite episodes, slow updates) and TD (unstable). Generalized Advantage Estimation (GAE) takes another interesting approach to estimate the advantage.
+The most popular approach is the n-step advantage, which is at the core of the methods A2C and A3C, and can be understood as a trade-off between MC and TD. MC and TD advantages could be used as well, but come with the respective disadvantages of MC (need for finite episodes, slow updates) and TD (unstable). Generalized Advantage Estimation (, section @sec-GAE) takes another interesting approach to estimate the advantage.
 
 *Note:* A2C is actually derived from the A3C algorithm presented later, but it is simpler to explain it first. See <https://openai.com/index/openai-baselines-acktr-a2c/> for an explanation of the reasons. A good explanation of A2C and A3C with Python code is available at <https://cgnicholls.github.io/reinforcement-learning/2017/03/27/a3c.html>.
 
@@ -185,87 +185,6 @@ The parameter $\beta$ controls the level of regularization: we do not want the e
 
 
 
-### Generalized Advantage Estimation (GAE)
-
-The different versions of the policy gradient seen so far take the form:
-
-$$
-    \nabla_\theta J(\theta) =  \mathbb{E}_{s_t \sim \rho^\pi, a_t \sim \pi_\theta}[\nabla_\theta \log \pi_\theta (s_t, a_t) \, \psi_t ]
-$$
-
-where:
-
-* $\psi_t = R_t$ is the *REINFORCE* algorithm (MC sampling).
-
-* $\psi_t = R_t - b$ is the *REINFORCE with baseline* algorithm.
-
-* $\psi_t = Q^\pi(s_t, a_t)$ is the *policy gradient theorem*.
-
-* $\psi_t = A^\pi(s_t, a_t)$ is the *advantage actor critic*.
-
-* $\psi_t = r_{t+1} + \gamma \, V^\pi(s_{t+1}) - V^\pi(s_t)$ is the *TD actor critic*.
-
-* $\psi_t = \sum_{k=0}^{n-1} \gamma^{k} \, r_{t+k+1} + \gamma^n \, V^\pi(s_{t+n+1}) - V^\pi(s_t)$ is the *n-step algorithm* (A2C).
-
-
-Generally speaking:
-
-* the more $\psi_t$ relies on real rewards (e.g. $R_t$), the more the gradient will be correct on average (small bias), but the more it will vary (high variance). This increases the sample complexity: we need to average more samples to correctly estimate the gradient.
-* the more $\psi_t$ relies on estimations (e.g. the TD error), the more stable the gradient (small variance), but the more incorrect it is (high bias). This can lead to suboptimal policies, i.e. local optima of the objective function.
-
-This is the classical bias/variance trade-off in machine learning. The n-step algorithm used in A2C is an attempt to mitigate between these extrema. @Schulman2015a proposed the **Generalized Advantage Estimate** (GAE) to further control the bias/variance trade-off.
-
-Let's define the n-step advantage:
-
-$$
-    A^{n}_t = \sum_{k=0}^{n-1} \gamma^{k} \, r_{t+k+1} + \gamma^n \, V^\pi(s_{t+n+1}) - V^\pi(s_t)
-$$
-
-It is easy to show recursively that it depends on the TD error $\delta_t = r_{t+1} + \gamma \, V^\pi(s_{t+1}) - V^\pi(s_t)$ of the $n$ next steps:
-
-$$
-    A^{n}_t = \sum_{l=0}^{n-1} \gamma^l \, \delta_{t+l}
-$$
-
-In other words, the prediction error over $n$ steps is the (discounted) sum of the prediction errors between two successive steps. Now, what is the optimal value of $n$? GAE decides not to choose and to simply average all n-step advantages and to weight them with a discount parameter $\lambda$. This defines the **Generalized Advantage Estimator** $A^{\text{GAE}(\gamma, \lambda)}_t$:
-
-$$
-    A^{\text{GAE}(\gamma, \lambda)}_t = (1-\lambda) \, \sum_{l=0}^\infty \lambda^l A^l_t = \sum_{l=0}^\infty (\gamma \lambda)^l \delta_{t+l}
-$$
-
-The GAE is the discounted sum of all n-step advantages. When $\lambda=0$, we have $A^{\text{GAE}(\gamma, 0)}_t = A^{0}_t = \delta_t$, i.e. the TD advantage (high bias, low variance). When $\lambda=1$, we have (at the limit) $A^{\text{GAE}(\gamma, 1)}_t = R_t$, i.e. the MC advantage (low bias, high variance). Choosing the right value of $\lambda$ between 0 and 1 allows to control the bias/variance trade-off.
-
-$\gamma$ and $\lambda$ play different roles in GAE: $\gamma$ determines the scale or horizon of the value functions: how much future rewards rewards are to be taken into account. The higher $\gamma <1$, the smaller the bias, but the higher the variance. Empirically, @Schulman2015a found that small $\lambda$ values introduce less bias than $\gamma$, so $\lambda$ can be chosen smaller than $\gamma$ (which is typically 0.99).
-
-The policy gradient for Generalized Advantage Estimation is therefore:
-
-$$
-    \nabla_\theta J(\theta) =  \mathbb{E}_{s_t \sim \rho^\pi, a_t \sim \pi_\theta}[\nabla_\theta \log \pi_\theta (s_t, a_t) \, \sum_{l=0}^\infty (\gamma \lambda)^l \delta_{t+l} ]
-$$
-
-Note that @Schulman2015a additionally use *trust region optimization* to stabilize learning and further reduce the bias, for now just consider it is a better optimization method than  gradient descent. The GAE algorithm is summarized here:
-
----
-
-* Initialize the actor $\pi_\theta$ and the critic $V_\varphi$ with random weights.
-* for $t \in [0, T_\text{total}]$:
-    * Initialize empty minibatch.
-    * for $k \in [0, n]$:
-        * Select a action $a_k$ using the actor $\pi_\theta$.
-        * Perform the action $a_k$ and observe the next state $s_{k+1}$ and the reward $r_{k+1}$.
-        * Store $(s_k, a_k, r_{k+1})$ in the minibatch.
-
-    * for $k \in [0, n]$:
-        * Compute the TD error $\delta_k = r_{k+1} + \gamma \, V_\varphi(s_{k+1}) - V_\varphi(s_k)$
-
-    * for $k \in [0, n]$:
-        * Compute the GAE advantage $A^{\text{GAE}(\gamma, \lambda)}_k = \sum_{l=0}^\infty (\gamma \lambda)^l \delta_{k+l}$
-
-    * Update the actor using the GAE advantage and natural gradients (TRPO).
-
-    * Update the critic using natural gradients (TRPO)
-
----
 
 ### Stochastic actor-critic for continuous action spaces
 
