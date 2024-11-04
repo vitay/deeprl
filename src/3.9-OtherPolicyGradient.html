@@ -50,7 +50,7 @@ div.csl-indent {
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
 <link href="../src/4.1-ModelBased.html" rel="next">
-<link href="../src/3.7-DistributionalRL.html" rel="prev">
+<link href="../src/3.8-EntropyRL.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -197,7 +197,12 @@ div.csl-indent {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/2.4-DQNvariants.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">DQN variants</span></a>
+  <a href="../src/2.4-DQNvariants.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">DQN variants (Rainbow)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/2.5-DistributedLearning.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Distributed learning</span></a>
   </div>
 </li>
       </ul>
@@ -219,7 +224,7 @@ div.csl-indent {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../src/3.2-ActorCritic.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Asynchronous Advantage Actor-Critic (A3C)</span></a>
+ <span class="menu-text">Advantage Actor-Critic (A3C)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -234,22 +239,27 @@ div.csl-indent {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/3.5-NaturalGradient.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Policy Optimization (TRPO, PPO)</span></a>
+  <a href="../src/3.5-NaturalGradient.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Natural gradients</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/3.6-EntropyRL.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Maximum Entropy RL (SAC)</span></a>
+  <a href="../src/3.6-PPO.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Policy optimization (TRPO, PPO)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/3.7-DistributionalRL.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Distributional learning</span></a>
+  <a href="../src/3.7-ACER.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Actor-Critic with Experience Replay (ACER)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/3.8-OtherPolicyGradient.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">Miscellaneous model-free algorithms</span></a>
+  <a href="../src/3.8-EntropyRL.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Maximum Entropy RL (SAC)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/3.9-OtherPolicyGradient.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">Miscellaneous model-free algorithms</span></a>
   </div>
 </li>
       </ul>
@@ -322,15 +332,8 @@ div.csl-indent {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">Table of contents</h2>
-   
-  <ul>
-  <li><a href="#comparison-between-value-based-and-policy-gradient-methods" id="toc-comparison-between-value-based-and-policy-gradient-methods" class="nav-link active" data-scroll-target="#comparison-between-value-based-and-policy-gradient-methods">Comparison between value-based and policy gradient methods</a></li>
-  <li><a href="#gradient-free-policy-search" id="toc-gradient-free-policy-search" class="nav-link" data-scroll-target="#gradient-free-policy-search">Gradient-free policy search</a></li>
-  </ul>
-</nav>
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+        
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -360,37 +363,9 @@ div.csl-indent {
 <li>Normalized Advantage Function (NAF) <span class="citation" data-cites="Gu2016a">(<a href="references.html#ref-Gu2016a" role="doc-biblioref">Gu et al., 2016a</a>)</span></li>
 <li>Fictitious Self-Play (FSP) <span class="citation" data-cites="Heinrich2015 Heinrich2016">(<a href="references.html#ref-Heinrich2015" role="doc-biblioref">Heinrich et al., 2015</a>; <a href="references.html#ref-Heinrich2016" role="doc-biblioref">Heinrich and Silver, 2016</a>)</span></li>
 </ul>
-<section id="comparison-between-value-based-and-policy-gradient-methods" class="level2">
-<h2 class="anchored" data-anchor-id="comparison-between-value-based-and-policy-gradient-methods">Comparison between value-based and policy gradient methods</h2>
-<p>Having now reviewed both value-based methods (DQN and its variants) and policy gradient methods (A3C, DDPG, PPO), the question is which method to choose? While not much happens right now for value-based methods, policy gradient methods are attracting a lot of attention, as they are able to learn policies in continuous action spaces, what is very important in robotics. <a href="https://flyyufelix.github.io/2017/10/12/dqn-vs-pg.html" class="uri">https://flyyufelix.github.io/2017/10/12/dqn-vs-pg.html</a> summarizes the advantages and inconvenients of policy gradient methods.</p>
-<p>Advantages of PG:</p>
-<ul>
-<li>Better convergence properties, more stable <span class="citation" data-cites="Duan2016">(<a href="references.html#ref-Duan2016" role="doc-biblioref">Duan et al., 2016</a>)</span>.</li>
-<li>Effective in high-dimensional or continuous action spaces.</li>
-<li>Can learn stochastic policies.</li>
-</ul>
-<p>Disadvantages of PG:</p>
-<ul>
-<li>Typically converge to a local rather than global optimum.</li>
-<li>Evaluating a policy is often inefficient and having a high variance.</li>
-<li>Worse sample efficiency (but it is getting better).</li>
-</ul>
-</section>
-<section id="gradient-free-policy-search" class="level2">
-<h2 class="anchored" data-anchor-id="gradient-free-policy-search">Gradient-free policy search</h2>
-<p>The policy gradient methods presented above rely on backpropagation and gradient descent/ascent to update the parameters of the policy and maximize the objective function. Gradient descent is generally slow, sample inefficient and subject to local minima, but is nevertheless the go-to method in neural networks. However, it is not the only optimization that can be used in deep RL. Here are some of the alternatives.</p>
-<ul>
-<li>Cross-entropy Method (CEM) <span class="citation" data-cites="Szita2006">(<a href="references.html#ref-Szita2006" role="doc-biblioref">Szita and Lörincz, 2006</a>)</span></li>
-<li>Evolutionary Search (ES) <span class="citation" data-cites="Salimans2017">(<a href="references.html#ref-Salimans2017" role="doc-biblioref">Salimans et al., 2017</a>)</span></li>
-</ul>
-<p>Explanations from OpenAI: <a href="https://blog.openai.com/evolution-strategies/" class="uri">https://blog.openai.com/evolution-strategies/</a></p>
-<p>Deep neuroevolution at Uber: <a href="https://eng.uber.com/deep-neuroevolution/" class="uri">https://eng.uber.com/deep-neuroevolution/</a></p>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
-<div id="ref-Duan2016" class="csl-entry" role="listitem">
-Duan, Y., Chen, X., Houthooft, R., Schulman, J., and Abbeel, P. (2016). Benchmarking <span>Deep Reinforcement Learning</span> for <span>Continuous Control</span>. Available at: <a href="http://arxiv.org/abs/1604.06778">http://arxiv.org/abs/1604.06778</a>.
-</div>
 <div id="ref-Gu2016a" class="csl-entry" role="listitem">
 Gu, S., Lillicrap, T., Ghahramani, Z., Turner, R. E., and Levine, S. (2016a). Q-<span>Prop</span>: <span>Sample-Efficient Policy Gradient</span> with <span>An Off-Policy Critic</span>. Available at: <a href="http://arxiv.org/abs/1611.02247">http://arxiv.org/abs/1611.02247</a>.
 </div>
@@ -406,14 +381,7 @@ Heinrich, J., Lanctot, M., and Silver, D. (2015). Fictitious <span>Self-Play</sp
 <div id="ref-Heinrich2016" class="csl-entry" role="listitem">
 Heinrich, J., and Silver, D. (2016). Deep <span>Reinforcement Learning</span> from <span>Self-Play</span> in <span>Imperfect-Information Games</span>. Available at: <a href="http://arxiv.org/abs/1603.01121">http://arxiv.org/abs/1603.01121</a>.
 </div>
-<div id="ref-Salimans2017" class="csl-entry" role="listitem">
-Salimans, T., Ho, J., Chen, X., Sidor, S., and Sutskever, I. (2017). Evolution <span>Strategies</span> as a <span>Scalable Alternative</span> to <span>Reinforcement Learning</span>. Available at: <a href="http://arxiv.org/abs/1703.03864">http://arxiv.org/abs/1703.03864</a>.
 </div>
-<div id="ref-Szita2006" class="csl-entry" role="listitem">
-Szita, I., and Lörincz, A. (2006). Learning <span>Tetris Using</span> the <span>Noisy Cross-Entropy Method</span>. <em>Neural Computation</em> 18, 2936–2941. doi:<a href="https://doi.org/10.1162/neco.2006.18.12.2936">10.1162/neco.2006.18.12.2936</a>.
-</div>
-</div>
-</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -838,8 +806,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../src/3.7-DistributionalRL.html" class="pagination-link" aria-label="Distributional learning">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">Distributional learning</span></span>
+      <a href="../src/3.8-EntropyRL.html" class="pagination-link" aria-label="Maximum Entropy RL (SAC)">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">Maximum Entropy RL (SAC)</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">

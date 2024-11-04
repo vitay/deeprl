@@ -243,7 +243,12 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/2.4-DQNvariants.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">DQN variants</span></a>
+  <a href="../src/2.4-DQNvariants.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">DQN variants (Rainbow)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/2.5-DistributedLearning.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Distributed learning</span></a>
   </div>
 </li>
       </ul>
@@ -265,7 +270,7 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../src/3.2-ActorCritic.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Asynchronous Advantage Actor-Critic (A3C)</span></a>
+ <span class="menu-text">Advantage Actor-Critic (A3C)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -280,22 +285,27 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/3.5-NaturalGradient.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Policy Optimization (TRPO, PPO)</span></a>
+  <a href="../src/3.5-NaturalGradient.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Natural gradients</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/3.6-EntropyRL.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Maximum Entropy RL (SAC)</span></a>
+  <a href="../src/3.6-PPO.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Policy optimization (TRPO, PPO)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/3.7-DistributionalRL.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Distributional learning</span></a>
+  <a href="../src/3.7-ACER.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Actor-Critic with Experience Replay (ACER)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/3.8-OtherPolicyGradient.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Miscellaneous model-free algorithms</span></a>
+  <a href="../src/3.8-EntropyRL.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Maximum Entropy RL (SAC)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/3.9-OtherPolicyGradient.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Miscellaneous model-free algorithms</span></a>
   </div>
 </li>
       </ul>
@@ -373,10 +383,13 @@ window.Quarto = {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#temporal-difference" id="toc-temporal-difference" class="nav-link active" data-scroll-target="#temporal-difference">Temporal difference</a>
+  <li><a href="#temporal-difference" id="toc-temporal-difference" class="nav-link active" data-scroll-target="#temporal-difference">Temporal difference</a></li>
+  <li><a href="#actor-critic-methods" id="toc-actor-critic-methods" class="nav-link" data-scroll-target="#actor-critic-methods">Actor-critic methods</a></li>
+  <li><a href="#advantage-estimation" id="toc-advantage-estimation" class="nav-link" data-scroll-target="#advantage-estimation">Advantage estimation</a>
   <ul class="collapse">
+  <li><a href="#n-step-advantages" id="toc-n-step-advantages" class="nav-link" data-scroll-target="#n-step-advantages">n-step advantages</a></li>
   <li><a href="#eligibility-traces" id="toc-eligibility-traces" class="nav-link" data-scroll-target="#eligibility-traces">Eligibility traces</a></li>
-  <li><a href="#actor-critic-architectures" id="toc-actor-critic-architectures" class="nav-link" data-scroll-target="#actor-critic-architectures">Actor-critic architectures</a></li>
+  <li><a href="#sec-GAE" id="toc-sec-GAE" class="nav-link" data-scroll-target="#sec-GAE">Generalized Advantage Estimation (GAE)</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -405,32 +418,27 @@ window.Quarto = {
 
 <section id="temporal-difference" class="level2">
 <h2 class="anchored" data-anchor-id="temporal-difference">Temporal difference</h2>
-<p>The main drawback of Monte Carlo methods is that the task must be composed of finite episodes. Not only is it not always possible, but value updates have to wait for the end of the episode, what slows learning down. <strong>Temporal difference</strong> methods simply replace the actual return obtained after a state or an action, by an estimation composed of the reward immediately received plus the value of the next state or action:</p>
+<p>The main drawback of Monte Carlo methods is that the task must be composed of finite episodes. Not only is it not always possible, but value updates have to wait for the end of the episode, what slows learning down.</p>
+<p><strong>Temporal difference</strong> methods simply replace the actual return obtained after a state or an action, by an estimation composed of the reward immediately received plus the value of the next state or action:</p>
 <p><span class="math display">
-    R_t \approx r(s, a, s') + \gamma \, V^\pi(s') \approx r + \gamma \, Q^\pi(s', a')
+    R_t \approx r(s, a, s') + \gamma \, V^\pi(s')
 </span></p>
-<p>This gives us the following learning rules:</p>
+<p>As seen in Section <a href="1.2-MDP.html#sec-dp" class="quarto-xref"><span>Dynamic programming</span></a>, this comes from the simple relationship <span class="math inline">R_t = r_{t+1}  + \gamma \, R_{t+1}</span>.</p>
+<p>This gives us the following update rule for the value of a state:</p>
 <p><span class="math display">
-    V^\pi(s) \leftarrow V^\pi(s) + \alpha (r(s, a, s') + \gamma \, V^\pi(s') - V^\pi(s))
-</span></p>
-<p><span class="math display">
-    Q^\pi(s, a) \leftarrow Q^\pi(s, a) + \alpha (r(s, a, s') + \gamma \, Q^\pi(s', a') - Q^\pi(s, a))
+    V(s) \leftarrow V(s) + \alpha (r(s, a, s') + \gamma \, V(s') - V(s))
 </span></p>
 <p>The quantity:</p>
 <p><span class="math display">
-\delta = r(s, a, s') + \gamma \, V^\pi(s') - V^\pi(s)
+\delta = r(s, a, s') + \gamma \, V(s') - V(s)
 </span></p>
-<p>or:</p>
-<p><span class="math display">
-    \delta = r(s, a, s') + \gamma \, Q^\pi(s', a') - Q^\pi(s, a)
-</span></p>
-<p>is called the <strong>reward-prediction error</strong> (RPE) or <strong>TD error</strong>: it defines the surprise between the current reward prediction (<span class="math inline">V^\pi(s)</span> or <span class="math inline">Q^\pi(s, a)</span>) and the sum of the immediate reward plus the reward prediction in the next state / after the next action.</p>
+<p>is called the <strong>reward-prediction error</strong> (RPE), <strong>TD error</strong>, or <strong>1-step advantage</strong>: it defines the surprise between the current expected return (<span class="math inline">V(s)</span>) and its sampled target value, estimated as the immediate reward plus the expected return in the next state.</p>
 <ul>
 <li>If <span class="math inline">\delta &gt; 0</span>, the transition was positively surprising: one obtains more reward or lands in a better state than expected. The initial state or action was actually underrated, so its estimated value must be increased.</li>
 <li>If <span class="math inline">\delta &lt; 0</span>, the transition was negatively surprising. The initial state or action was overrated, its value must be decreased.</li>
 <li>If <span class="math inline">\delta = 0</span>, the transition was fully predicted: one obtains as much reward as expected, so the values should stay as they are.</li>
 </ul>
-<p>The main advantage of this learning method is that the update of the V- or Q-value can be applied immediately after a transition: no need to wait until the end of an episode, or even to have episodes at all: this is called <strong>online learning</strong> and allows very fast learning from single transitions. The main drawback is that the updates depend on other estimates, which are initially wrong: it will take a while before all estimates are correct.</p>
+<p>The main advantage of this learning method is that the update of the V-value can be applied immediately after a transition: no need to wait until the end of an episode, or even to have episodes at all: this is called <strong>online learning</strong> and allows very fast learning from single transitions. The main drawback is that the updates depend on other estimates, which are initially wrong: it will take a while before all estimates are correct.</p>
 <div id="fig-td" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-td-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -441,46 +449,325 @@ Figure&nbsp;5.1: Temporal difference algorithms update values after a single tra
 </figcaption>
 </figure>
 </div>
-<p>When learning Q-values directly, the question is which next action <span class="math inline">a'</span> should be used in the update rule: the action that will actually be taken for the next transition (defined by <span class="math inline">\pi(s', a')</span>), or the greedy action (<span class="math inline">a^* = \text{argmax}_a Q^\pi(s', a)</span>). This relates to the <em>on-policy / off-policy</em> distinction already seen for MC methods:</p>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+TD(0) policy evaluation
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>while</strong> True:</p>
+<ul>
+<li><p>Start from an initial state <span class="math inline">s_0</span>.</p></li>
+<li><p><strong>foreach</strong> step <span class="math inline">t</span> of the episode:</p>
+<ul>
+<li><p>Select <span class="math inline">a_t</span> using the current policy <span class="math inline">\pi</span> in state <span class="math inline">s_t</span>.</p></li>
+<li><p>Apply <span class="math inline">a_t</span>, observe <span class="math inline">r_{t+1}</span> and <span class="math inline">s_{t+1}</span>.</p></li>
+<li><p>Compute the TD error:</p></li>
+</ul>
+<p><span class="math display">\delta_t = r_{t+1} + \gamma \, V(s_{t+1}) - V(s_t)</span></p>
+<ul>
+<li>Update the state-value function of <span class="math inline">s_t</span>:</li>
+</ul>
+<p><span class="math display">
+      V(s_t) = V(s_t) + \alpha \, \delta_t
+  </span></p>
+<ul>
+<li><strong>if</strong> <span class="math inline">s_{t+1}</span> is terminal: <strong>break</strong></li>
+</ul></li>
+</ul>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Bias-variance trade-off of TD
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>By using an <strong>estimate of the return</strong> <span class="math inline">R_t</span> instead of directly the return as in MC,</p>
+<ul>
+<li>we <strong>increase the bias</strong> (estimates are always wrong, especially at the beginning of learning)</li>
+<li>but we <strong>reduce the variance</strong>: only <span class="math inline">r(s, a, s')</span> is stochastic, not the value function <span class="math inline">V^\pi</span>.</li>
+</ul>
+<p>We can therefore expect <strong>less optimal solutions</strong>, but we will also need <strong>less samples</strong>. TD has a better <strong>sample efficiency</strong> than MC, but a worse <strong>convergence</strong> (suboptimal).</p>
+</div>
+</div>
+<p>A similar TD update rule can be defined for the Q-values:</p>
+<p><span class="math display">
+    Q(s, a) \leftarrow Q(s, a) + \alpha (r(s, a, s') + \gamma \, Q(s', a') - Q(s, a))
+</span></p>
+<p>When learning Q-values directly, the question is which next action <span class="math inline">a'</span> should be used in the update rule: the action that will actually be taken for the next transition (defined by <span class="math inline">\pi(s', a')</span>), or the greedy action (<span class="math inline">a^* = \text{argmax}_a Q(s', a)</span>).</p>
+<p>This relates to the <em>on-policy / off-policy</em> distinction already seen for MC methods:</p>
 <ul>
 <li><strong>On-policy</strong> TD learning is called <strong>SARSA</strong> (state-action-reward-state-action). It uses the next action sampled from the policy <span class="math inline">\pi(s', a')</span> to update the current transition. This selected action could be noted <span class="math inline">\pi(s')</span> for simplicity. It is required that this next action will actually be performed for the next transition. The policy must be <span class="math inline">\epsilon</span>-soft, for example <span class="math inline">\epsilon</span>-greedy or softmax:</li>
 </ul>
 <p><span class="math display">
-    \delta = r(s, a, s') + \gamma \, Q^\pi(s', \pi(s')) - Q^\pi(s, a)
+    Q(s, a) \leftarrow Q(s, a) + \alpha (r(s, a, s') + \gamma \, Q(s', \pi(s')) - Q(s, a))
 </span></p>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+SARSA
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>while</strong> True:</p>
+<ul>
+<li><p>Start from an initial state <span class="math inline">s_0</span> and select <span class="math inline">a_0</span> using the current policy <span class="math inline">\pi</span>.</p></li>
+<li><p><strong>foreach</strong> step <span class="math inline">t</span> of the episode:</p>
+<ul>
+<li><p>Apply <span class="math inline">a_{t}</span>, observe <span class="math inline">r_{t+1}</span> and <span class="math inline">s_{t+1}</span>.</p></li>
+<li><p>Select <span class="math inline">a_{t+1}</span> using the current <strong>stochastic</strong> policy <span class="math inline">\pi</span>.</p></li>
+<li><p>Update the action-value function of <span class="math inline">(s_t, a_t)</span>:</p></li>
+</ul>
+<p><span class="math display"> Q(s_t, a_t) = Q(s_t, a_t) + \alpha \, (r_{t+1} + \gamma \, Q(s_{t+1}, a_{t+1})  - Q(s_t, a_t)) </span></p>
+<ul>
+<li>Improve the stochastic policy, e.g:</li>
+</ul>
+<p><span class="math display">
+      \pi(s_t, a) = \begin{cases}
+                      1 - \epsilon \; \text{if} \; a = \text{argmax} \, Q(s_t, a) \\
+                      \frac{\epsilon}{|\mathcal{A}(s_t) -1|} \; \text{otherwise.} \\
+                      \end{cases}
+  </span></p>
+<ul>
+<li><strong>if</strong> <span class="math inline">s_{t+1}</span> is terminal: <strong>break</strong></li>
+</ul></li>
+</ul>
+</div>
+</div>
 <ul>
 <li><strong>Off-policy</strong> TD learning is called <strong>Q-learning</strong> <span class="citation" data-cites="Watkins1989">(<a href="references.html#ref-Watkins1989" role="doc-biblioref">Watkins, 1989</a>)</span>. The greedy action in the next state (the one with the highest Q-value) is used to update the current transition. It does not mean that the greedy action will actually have to be selected for the next transition. The learned policy can therefore also be deterministic:</li>
 </ul>
 <p><span class="math display">
-    \delta = r(s, a, s') + \gamma \, \max_{a'} Q^\pi(s', a') - Q^\pi(s, a)
+    Q(s, a) \leftarrow Q(s, a) + \alpha (r(s, a, s') + \gamma \, \max_{a'} Q(s', a') - Q(s, a))
 </span></p>
-<p>In Q-learning, the behavior policy has to ensure exploration, while this is achieved implicitly by the learned policy in SARSA, as it must be <span class="math inline">\epsilon</span>-soft. An easy way of building a behavior policy based on a deterministic learned policy is <span class="math inline">\epsilon</span>-greedy: the deterministic action <span class="math inline">\mu(s_t)</span> is chosen with probability 1 - <span class="math inline">\epsilon</span>, the other actions with probability <span class="math inline">\epsilon</span>. In continuous action spaces, additive noise (e.g.&nbsp;Ohrstein-Uhlenbeck) can be added to the action.</p>
-<p>Alternatively, domain knowledge can be used to create the behavior policy and restrict the search to meaningful actions: compilation of expert moves in games, approximate solutions, etc. Again, the risk is that the behavior policy never explores the actually optimal actions. See <a href="../src/3.3-ImportanceSampling.html">off-policy actor-critic</a> for more details on the difference between on-policy and off-policy methods.</p>
-<section id="eligibility-traces" class="level3">
-<h3 class="anchored" data-anchor-id="eligibility-traces">Eligibility traces</h3>
-<p>The main drawback of TD learning is that learning can be slow and necessitate many transitions to converge (sample complexity). This is particularly true when the problem provides <strong>sparse rewards</strong> (as opposed to dense rewards). For example in a game like chess, a reward is given only at the end of a game (+1 for winning, -1 for losing). All other actions receive a reward of 0, although they are as important as the last one in order to win.</p>
-<p>Imagine you initialize all Q-values to 0 and apply Q-learning. During the first episode, all actions but the last one will receive a reward <span class="math inline">r(s, a, s')</span> of 0 and arrive in a state where the greedy action has a value <span class="math inline">Q^\pi(s', a')</span> of 0, so the TD error <span class="math inline">\delta</span> is 0 and their Q-value will not change. Only the very last action will receive a non-zero reward and update its value slightly (because of the learning rate <span class="math inline">\alpha</span>). When this episode is performed again, the last action will again be updated, but also the one just before: <span class="math inline">Q^\pi(s', a')</span> is now different from 0 for this action, so the TD error is now different from 0. It is straightforward to see that if the episode has a length of 100 moves, the agent will need at least 100 episodes to “backpropagate” the final sparse reward to the first action of the episode. In practice, this is even worse: the learning rate <span class="math inline">\alpha</span> and the discount rate <span class="math inline">\gamma</span> will slow learning down even more. MC methods suffer less from this problem, as the first action of the episode would be updated using the actual return, which contains the final reward (although it is discounted by <span class="math inline">\gamma</span>).</p>
-<p><strong>Eligibility traces</strong> can be seen a trick to mix the advantages of MC (faster updates) with the ones of TD (online learning, smaller variance). The idea is that the TD error at time <span class="math inline">t</span> (<span class="math inline">\delta_t</span>) will be used not only to update the action taken at time <span class="math inline">t</span> (<span class="math inline">\Delta Q(s_t, a_t) = \alpha \, \delta_t</span>), but also all the preceding actions, which are also responsible for the success or failure of the action taken at time <span class="math inline">t</span>. A parameter <span class="math inline">\lambda</span> between 0 and 1 (decaying factor) controls how far back in time a single TD error influences past actions. This is important when the policy is mostly exploratory: initial actions may be mostly random and finally find the the reward by chance. They should learn less from the reward than the last one, otherwise they would be systematically reproduced. <a href="#fig-eligibilitytraces" class="quarto-xref">Figure&nbsp;<span>5.2</span></a> shows the principle of eligibility traces in a simple Gridworld environment.</p>
-<div id="fig-eligibilitytraces" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-eligibilitytraces-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/gridworld-lambda.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Figure&nbsp;5.2: Principle of eligibility traces applied to the Gridworld problem using SARSA(\lambda). Source: @Sutton1998."><img src="img/gridworld-lambda.png" class="img-fluid figure-img" style="width:80.0%"></a>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
 </div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-eligibilitytraces-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;5.2: Principle of eligibility traces applied to the Gridworld problem using SARSA(<span class="math inline">\lambda</span>). Source: <span class="citation" data-cites="Sutton1998">Sutton and Barto (<a href="references.html#ref-Sutton1998" role="doc-biblioref">1998</a>)</span>.
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>while</strong> True:</p>
+<ul>
+<li><p>Start from an initial state <span class="math inline">s_0</span>.</p></li>
+<li><p><strong>foreach</strong> step <span class="math inline">t</span> of the episode:</p>
+<ul>
+<li><p>Select <span class="math inline">a_{t}</span> using the behavior policy <span class="math inline">b</span> (e.g.&nbsp;derived from <span class="math inline">\pi</span>).</p></li>
+<li><p>Apply <span class="math inline">a_t</span>, observe <span class="math inline">r_{t+1}</span> and <span class="math inline">s_{t+1}</span>.</p></li>
+<li><p>Update the action-value function of <span class="math inline">(s_t, a_t)</span>:</p></li>
+</ul>
+<p><span class="math display">Q(s_t, a_t) = Q(s_t, a_t) + \alpha \, (r_{t+1} + \gamma \, \max_a Q(s_{t+1}, a) - Q(s_t, a_t))</span></p>
+<ul>
+<li>Improve greedily the learned policy:</li>
+</ul>
+<p><span class="math display">\pi(s_t, a) = \begin{cases}
+                  1\; \text{if} \; a = \text{argmax} \, Q(s_t, a) \\
+                  0 \; \text{otherwise.} \\
+                  \end{cases}
+  </span></p>
+<ul>
+<li><strong>if</strong> <span class="math inline">s_{t+1}</span> is terminal: <strong>break</strong></li>
+</ul></li>
+</ul>
+</div>
+</div>
+<p>In Q-learning, the behavior policy has to ensure exploration, while this is achieved implicitly by the learned policy in SARSA, as it must be <span class="math inline">\epsilon</span>-soft. An easy way of building a behavior policy based on a deterministic learned policy is <span class="math inline">\epsilon</span>-greedy: the deterministic action <span class="math inline">\mu(s_t)</span> is chosen with probability 1 - <span class="math inline">\epsilon</span>, the other actions with probability <span class="math inline">\epsilon</span>. In continuous action spaces, additive noise (e.g.&nbsp;Ohrstein-Uhlenbeck) can be added to the action.</p>
+<p>Alternatively, domain knowledge can be used to create the behavior policy and restrict the search to meaningful actions: compilation of expert moves in games, approximate solutions, etc. Again, the risk is that the behavior policy never explores the actually optimal actions. See Section <a href="3.3-ImportanceSampling.html" class="quarto-xref"><span>Off-policy Actor-Critic</span></a> for more details on the difference between on-policy and off-policy methods.</p>
+<p>Note that, despite being off-policy, Q-learning does not necessitate importance sampling, as the update rule does not depend on the behavior policy:</p>
+<p><span class="math display">
+    Q^\pi(s, a) = \mathbb{E}_{s_t \sim \rho_b, a_t \sim b}[ r_{t+1} + \gamma \, \max_a Q^\pi(s_{t+1}, a) | s_t = s, a_t=a]
+</span></p>
+<p>but:</p>
+<p><span class="math display">
+    Q^\pi(s, a) \leftarrow Q^\pi(s, a) + \alpha (r(s, a, s') + \gamma \, \max_{a'} Q^\pi(s', a') - Q^\pi(s, a))
+</span></p>
+<p>As we only sample <strong>transitions</strong> using <span class="math inline">b</span> and not episodes, there is no need to correct the returns. The returns use estimates <span class="math inline">Q^\pi</span>, which depend on <span class="math inline">\pi</span> and not <span class="math inline">b</span>. The immediate reward <span class="math inline">r_{t+1}</span> is stochastic, but is the same whether you sample <span class="math inline">a_t</span> from <span class="math inline">\pi</span> or from <span class="math inline">b</span>.</p>
+</section>
+<section id="actor-critic-methods" class="level2">
+<h2 class="anchored" data-anchor-id="actor-critic-methods">Actor-critic methods</h2>
+<p>The TD error after each transition <span class="math inline">(s_t, a_t, r_{t+1}, s_{t+1})</span>:</p>
+<p><span class="math display"> \delta_t = r_{t+1} + \gamma V(s_{t+1}) - V(s_t)</span></p>
+<p>tells us how good the action <span class="math inline">a_t</span> was compared to our expectation <span class="math inline">V(s_t)</span>.</p>
+<p>When the advantage <span class="math inline">\delta_t &gt; 0</span>, this means that the action lead to a better reward or a better state than what was expected by <span class="math inline">V(s_t)</span>, which is a <strong>good surprise</strong>, so the action should be reinforced (selected again) and the value of that state increased. When <span class="math inline">\delta_t &lt; 0</span>, this means that the previous estimation of <span class="math inline">(s_t, a_t)</span> was too high (<strong>bad surprise</strong>), so the action should be avoided in the future and the value of the state reduced.</p>
+<div id="fig-actorcritic" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-actorcritic-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="img/actorcritic.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Figure&nbsp;5.2: Actor-critic architecture. Source: @Sutton1998."><img src="img/actorcritic.png" class="img-fluid figure-img" style="width:60.0%"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-actorcritic-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5.2: Actor-critic architecture. Source: <span class="citation" data-cites="Sutton1998">Sutton and Barto (<a href="references.html#ref-Sutton1998" role="doc-biblioref">1998</a>)</span>.
 </figcaption>
 </figure>
 </div>
-<p>There are many possible implementations of eligibility traces (Watkin’s, Peng, Tree Backup, etc. See the Chapter 12 of <span class="citation" data-cites="Sutton2017">Sutton and Barto (<a href="references.html#ref-Sutton2017" role="doc-biblioref">2017</a>)</span>). Generally, one distinguished a forward and a backward view of eligibility traces.</p>
+<p>Actor-critic methods are TD methods that have a separate memory structure to explicitly represent the policy and the value function. The policy <span class="math inline">\pi</span> is implemented by the <strong>actor</strong>, because it is used to select actions. The estimated values <span class="math inline">V(s)</span> are implemented by the <strong>critic</strong>, because it criticizes the actions made by the actor.</p>
+<p>The critic computes the <strong>TD error</strong> or <strong>1-step advantage</strong>:</p>
+<p><span class="math display">\delta_t = r_{t+1} + \gamma \, V(s_{t+1}) - V(s_t)</span></p>
+<p>This scalar signal is the output of the critic and drives learning in both the actor and the critic. The critic is updated using this scalar signal:</p>
+<p><span class="math display">
+    V(s_t) \leftarrow V(s_t) + \alpha \, \delta_t
+</span></p>
+<p>The actor is updated according to this TD error signal. For example a softmax actor over preferences:</p>
+<p><span class="math display">
+\begin{cases}
+p(s_t, a_t) \leftarrow p(s_t, a_t) + \beta \, \delta_t \\
+\\
+\pi(s, a) = \frac{\exp{p(s, a)}}{\sum_b \exp{p(s, b)}} \\
+\end{cases}
+</span></p>
+<p>When <span class="math inline">\delta_t &gt;0</span>, the preference is increased, so the probability of selecting it again increases. When <span class="math inline">\delta_t &lt;0</span>, the preference is decreased, so the probability of selecting it again decreases.</p>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Actor-critic algorithm with preferences
+</div>
+</div>
+<div class="callout-body-container callout-body">
 <ul>
-<li>The <em>forward view</em> considers that one transition <span class="math inline">(s_t, a_t)</span> gathers the TD errors made at future time steps <span class="math inline">t'</span> and discounts them with the parameter <span class="math inline">\lambda</span>:</li>
+<li><p>Start in <span class="math inline">s_0</span>. Initialize the preferences <span class="math inline">p(s,a)</span> for each state action pair and the critic <span class="math inline">V(s)</span> for each state.</p></li>
+<li><p><strong>foreach</strong> step <span class="math inline">t</span>:</p>
+<ul>
+<li>Select <span class="math inline">a_t</span> using the <strong>actor</strong> <span class="math inline">\pi</span> in state <span class="math inline">s_t</span>:</li>
+</ul>
+<p><span class="math display">\pi(s_t, a) = \frac{\exp{p(s, a)}}{\sum_b \exp{p(s, b)}}</span></p>
+<ul>
+<li><p>Apply <span class="math inline">a_t</span>, observe <span class="math inline">r_{t+1}</span> and <span class="math inline">s_{t+1}</span>.</p></li>
+<li><p>Compute the TD error in <span class="math inline">s_t</span> using the <strong>critic</strong>:</p></li>
 </ul>
 <p><span class="math display">
-    Q^\pi(s_t, a_t) \leftarrow  Q^\pi(s_t, a_t) + \alpha \, \sum_{t'=t}^T (\gamma \lambda)^{t'-t} \delta_{t'}
-</span></p>
-<p>From this equation, <span class="math inline">\gamma</span> and <span class="math inline">\lambda</span> seem to play a relatively similar role, but remember that <span class="math inline">\gamma</span> is also used in the TD error, so they control different aspects of learning. The drawback of this approach is that the future transitions at <span class="math inline">t'&gt;t</span> and their respective TD errors must be known when updating the transition, so this prevents online learning (the episode must be terminated to apply the updates).</p>
+      \delta_t = r_{t+1} + \gamma \, V(s_{t+1}) - V(s_t)
+  </span></p>
 <ul>
-<li>The <em>backward view</em> considers that the TD error made at time <span class="math inline">t</span> is sent backwards in time to all transitions previously executed. The easiest way to implement this is to update an eligibility trace <span class="math inline">e(s,a)</span> for each possible transition, which is incremented every time a transition is visited and otherwise decays exponentially with a speed controlled by <span class="math inline">\lambda</span>:</li>
+<li>Update the <strong>actor</strong>:</li>
+</ul>
+<p><span class="math display">
+      p(s_t, a_t) \leftarrow p(s_t, a_t) + \beta \, \delta_t
+  </span></p>
+<ul>
+<li>Update the <strong>critic</strong>:</li>
+</ul>
+<p><span class="math display">
+      V(s_t) \leftarrow V(s_t) + \alpha \, \delta_t
+  </span></p></li>
+</ul>
+</div>
+</div>
+<p>The advantage of the separation between the actor and the critic is that now the actor can take any form (preferences, linear approximation, deep networks). It requires minimal computation in order to select the actions, in particular when the action space is huge or even continuous. It can learn stochastic policies, which is particularly useful in non-Markov problems.</p>
+<p>However, <strong>it is obligatory to learn on-policy:</strong> the critic must evaluate the actions taken by the current actor, and the actor must learn from the current critic, not “old” V-values.</p>
+<p>Classical TD learning only learn a value function (<span class="math inline">V^\pi(s)</span> or <span class="math inline">Q^\pi(s, a)</span>): these methods are called <strong>value-based</strong> methods. Actor-critic architectures are particularly important in <strong>policy search</strong> methods.</p>
+</section>
+<section id="advantage-estimation" class="level2">
+<h2 class="anchored" data-anchor-id="advantage-estimation">Advantage estimation</h2>
+<section id="n-step-advantages" class="level3">
+<h3 class="anchored" data-anchor-id="n-step-advantages">n-step advantages</h3>
+<div id="fig-biasvariance" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-biasvariance-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="img/biasvariance3.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Figure&nbsp;5.3: Bias-variance trade-off. Source: https://www.machinelearningplus.com/machine-learning/bias-variance-tradeoff/"><img src="img/biasvariance3.png" class="img-fluid figure-img" style="width:80.0%"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-biasvariance-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5.3: Bias-variance trade-off. Source: <a href="https://www.machinelearningplus.com/machine-learning/bias-variance-tradeoff/" class="uri">https://www.machinelearningplus.com/machine-learning/bias-variance-tradeoff/</a>
+</figcaption>
+</figure>
+</div>
+<p>MC methods have <strong>high variance, low bias</strong>: Return estimates are correct on average, as we use real rewards from the environment, but each of them individually is wrong, because of the stochasticity of the policy/environment.</p>
+<p><span class="math display">
+    R_t^\text{MC} = \sum_{k=0}^{\infty} \gamma^k r_{t+k+1}
+</span></p>
+<p>The small bias ensures good convergence properties, as we are more likely to find the optimal policy with correct estimates. The high variance means that we will need many samples to converge. The updates are not very sensitive to initial estimates.</p>
+<p>On the other hand, TD has <strong>low variance, high bias</strong>, as the target returns contain mostly estimates.</p>
+<p><span class="math display">
+    R_t^\text{TD} = r_{t+1} + \gamma \, V^\pi(s_{t+1})
+</span></p>
+<p>The only stochasticity comes from the immediate rewards, which is low, so the targets will not vary much during learning. But because they use other estimates, which are initially wrong, they will always be off. These wrong updates can, more often than not, lead to suboptimal policies. However, convergence will be much faster than with MC methods.</p>
+<p>In order to control the <strong>bias-variance trade-off</strong>, we would like an estimator for the return with intermediate properties between MC and TD. This is what the <strong>n-step return</strong> offers:</p>
+<p><span class="math display">
+    R^n_t = \sum_{k=0}^{n-1} \gamma^{k} \, r_{t+k+1} + \gamma^n \,  V(s_{t+n})
+</span></p>
+<p>The n-step return uses the next <span class="math inline">n</span> real rewards, and completes the rest of the sequence with the value of the state reached <span class="math inline">n</span> steps in the future. Because it uses more real rewards than TD, its bias is smaller, while its variance is lower than MC.</p>
+<div id="fig-nstep" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-nstep-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="img/nstep.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="Figure&nbsp;5.4: n-step returns define a trade-off between TD and MC. Source: @Sutton1998"><img src="img/nstep.png" class="img-fluid figure-img" style="width:80.0%"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-nstep-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5.4: n-step returns define a trade-off between TD and MC. Source: <span class="citation" data-cites="Sutton1998">Sutton and Barto (<a href="references.html#ref-Sutton1998" role="doc-biblioref">1998</a>)</span>
+</figcaption>
+</figure>
+</div>
+<p>The <strong>n-step advantage</strong> at time <span class="math inline">t</span> is defined as the difference between the n-step return and the current estimate:</p>
+<p><span class="math display">
+A^n_t = \sum_{k=0}^{n-1} \gamma^{k} \, r_{t+k+1} + \gamma^n \,  V(s_{t+n}) - V (s_t)
+</span></p>
+<p>It is easy to check that the <strong>TD error</strong> is the 1-step advantage:</p>
+<p><span class="math display">
+    \delta_t = A^1_t = r_{t+1} + \gamma \, V(s_{t+1}) - V(s_t)
+</span></p>
+<p>n-step advantages are going to play an important role in deep RL, as the right choice of <span class="math inline">n</span> will allow us to control the <strong>bias-variance trade-off</strong>: smaller values of <span class="math inline">n</span> decrease the variance (smaller sample complexity) but may lead to suboptimal policies, while higher values of <span class="math inline">n</span> converge to better policies, at the cost of necessitating more samples.</p>
+</section>
+<section id="eligibility-traces" class="level3">
+<h3 class="anchored" data-anchor-id="eligibility-traces">Eligibility traces</h3>
+<p>The main drawback of TD learning is that learning can be slow, especially when the problem provides <strong>sparse rewards</strong> (as opposed to dense rewards). For example in a game like chess, a reward is given only at the end of a game (+1 for winning, -1 for losing). All other actions receive a reward of 0, although they are as important as the last one in order to win.</p>
+<div id="fig-eligibilitytraces" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-eligibilitytraces-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="img/gridworld-lambda.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5" title="Figure&nbsp;5.5: Principle of eligibility traces applied to the Gridworld problem using SARSA(\lambda). Source: @Sutton1998."><img src="img/gridworld-lambda.png" class="img-fluid figure-img" style="width:80.0%"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-eligibilitytraces-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5.5: Principle of eligibility traces applied to the Gridworld problem using SARSA(<span class="math inline">\lambda</span>). Source: <span class="citation" data-cites="Sutton1998">Sutton and Barto (<a href="references.html#ref-Sutton1998" role="doc-biblioref">1998</a>)</span>.
+</figcaption>
+</figure>
+</div>
+<p>Imagine you initialize all Q-values to 0 and apply Q-learning to the Gridworld problem of <a href="#fig-eligibilitytraces" class="quarto-xref">Figure&nbsp;<span>5.5</span></a>. During the first episode, all actions but the last one will receive a reward of 0 and arrive in a state where the greedy action has a value <span class="math inline">Q^\pi(s', a')</span> of 0 (initially), so the TD error <span class="math inline">\delta</span> is 0 and their Q-value will not change. Only the very last action will receive a non-zero reward and update its value slightly (because of the learning rate <span class="math inline">\alpha</span>).</p>
+<p>When this episode is performed again, the last action will again be updated, but also the one just before: <span class="math inline">Q^\pi(s', a')</span> is now different from 0 for this action, so the TD error is now different from 0. It is straightforward to see that if the episode has a length of 100 moves, the agent will need at least 100 episodes to “backpropagate” the final sparse reward to the first action of the episode. In practice, this is even worse: the learning rate <span class="math inline">\alpha</span> and the discount rate <span class="math inline">\gamma</span> will slow learning down even more. MC methods suffer less from this problem, as the first action of the episode would be updated using the actual return, which contains the final reward (although it is discounted by <span class="math inline">\gamma</span>).</p>
+<p><strong>Eligibility traces</strong> can be seen a trick to mix the advantages of MC (faster updates) with the ones of TD (online learning, smaller variance). The idea is that the TD error at time <span class="math inline">t</span> (<span class="math inline">\delta_t</span>) will be used not only to update the action taken at time <span class="math inline">t</span> (<span class="math inline">\Delta Q(s_t, a_t) = \alpha \, \delta_t</span>), but also all the preceding actions, which are also responsible for the success or failure of the action taken at time <span class="math inline">t</span>.</p>
+<div id="fig-eligilitylambdadecay" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-eligilitylambdadecay-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="img/eligibility-forward-decay.png" class="lightbox" data-gallery="quarto-lightbox-gallery-6" title="Figure&nbsp;5.6: The decaying factor \lambda controls how much future TD errors influence learning at the current time step. Source: @Sutton1998."><img src="img/eligibility-forward-decay.png" class="img-fluid figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-eligilitylambdadecay-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5.6: The decaying factor <span class="math inline">\lambda</span> controls how much future TD errors influence learning at the current time step. Source: <span class="citation" data-cites="Sutton1998">Sutton and Barto (<a href="references.html#ref-Sutton1998" role="doc-biblioref">1998</a>)</span>.
+</figcaption>
+</figure>
+</div>
+<p>A parameter <span class="math inline">\lambda</span> between 0 and 1 (decaying factor) controls how far back in time a single TD error influences past actions. This is important when the policy is mostly exploratory: initial actions may be mostly random and finally find the the reward by chance. They should learn less from the reward than the last one, otherwise they would be systematically reproduced. There are many possible implementations of eligibility traces (Watkin’s, Peng, Tree Backup, etc. See the Chapter 12 of <span class="citation" data-cites="Sutton2017">Sutton and Barto (<a href="references.html#ref-Sutton2017" role="doc-biblioref">2017</a>)</span>). Generally, one distinguished a forward and a backward view of eligibility traces.</p>
+<ul>
+<li>The <strong>forward view</strong> considers that one transition <span class="math inline">(s_t, a_t)</span> gathers the TD errors made at future time steps <span class="math inline">t'</span> and discounts them with the parameter <span class="math inline">\lambda</span>:</li>
+</ul>
+<p><span class="math display">
+    R_t^\lambda =  \sum_{k=0}^T (\gamma \lambda)^{k} \delta_{t+k}
+</span></p>
+<p>From this equation, <span class="math inline">\gamma</span> and <span class="math inline">\lambda</span> seem to play a relatively similar role, but remember that <span class="math inline">\gamma</span> is also used inside the TD error, so they control different aspects of learning. The drawback of this approach is that the future transitions and their respective TD errors must be known when updating the transition, so this prevents online learning (the episode must be terminated to apply the updates, like in MC).</p>
+<div id="fig-eligibilityforward" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-eligibilityforward-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="img/eligibility-forward-view.png" class="lightbox" data-gallery="quarto-lightbox-gallery-7" title="Figure&nbsp;5.7: Forward view of the eligibility trace. Source: @Sutton1998."><img src="img/eligibility-forward-view.png" class="img-fluid figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-eligibilityforward-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5.7: Forward view of the eligibility trace. Source: <span class="citation" data-cites="Sutton1998">Sutton and Barto (<a href="references.html#ref-Sutton1998" role="doc-biblioref">1998</a>)</span>.
+</figcaption>
+</figure>
+</div>
+<ul>
+<li>The <strong>backward view</strong> considers that the TD error made at time <span class="math inline">t</span> is sent backwards in time to all transitions previously executed. The easiest way to implement this is to update an eligibility trace <span class="math inline">e(s,a)</span> for each possible transition, which is incremented every time a transition is visited and otherwise decays exponentially with a speed controlled by <span class="math inline">\lambda</span>:</li>
 </ul>
 <p><span class="math display">
     e(s, a) = \begin{cases} e(s, a) + 1 \quad \text{if} \quad s=s_t \quad \text{and} \quad a=a_t \\
@@ -489,58 +776,116 @@ Figure&nbsp;5.2: Principle of eligibility traces applied to the Gridworld proble
 </span></p>
 <p>The Q-value of <strong>all</strong> transitions <span class="math inline">(s, a)</span> (not only the one just executed) is then updated proportionally to the corresponding trace and the current TD error:</p>
 <p><span class="math display">
-    Q^\pi(s, a) \leftarrow  Q^\pi(s, a) + \alpha \, e(s, a) \, \delta_{t} \quad \forall s, a
+    Q(s, a) \leftarrow  Q(s, a) + \alpha \, e(s, a) \, \delta_{t} \quad \forall s, a
 </span></p>
-<p>The forward and backward implementations are equivalent: the first requires to know the future, the second requires to update many transitions at each time step. The best solution will depend on the complexity of the problem.</p>
-<p>TD learning, SARSA and Q-learning can all be efficiently extended using eligibility traces. This gives the algorithms TD(<span class="math inline">\lambda</span>), SARSA(<span class="math inline">\lambda</span>) and Q(<span class="math inline">\lambda</span>), which can learn much faster than their 1-step equivalent, at the cost of more computations.</p>
-</section>
-<section id="actor-critic-architectures" class="level3">
-<h3 class="anchored" data-anchor-id="actor-critic-architectures">Actor-critic architectures</h3>
-<p>Let’s consider the TD error based on state values:</p>
-<p><span class="math display">
-\delta = r(s, a, s') + \gamma \, V^\pi(s') - V^\pi(s)
-</span></p>
-<p>As noted in the previous sections, the TD error represents how surprisingly good (or bad) a transition between two states has been (ergo the corresponding action). It can be used to update the value of the state <span class="math inline">s_t</span>:</p>
-<p><span class="math display">
-    V^\pi(s) \leftarrow V^\pi(s) + \alpha \, \delta
-</span></p>
-<p>This allows to estimate the values of all states for the current policy. However, this does not help to 1) directy select the best action or 2) improve the policy. When only the V-values are given, one can only want to reach the next state <span class="math inline">V^\pi(s')</span> with the highest value: one needs to know which action leads to this better state, i.e.&nbsp;have a model of the environment. Actually, one selects the action with the highest Q-value:</p>
-<p><span class="math display">
-    Q^{\pi}(s, a) = \sum_{s' \in \mathcal{S}} p(s'|s, a) [r(s, a, s') + \gamma \, V^\pi(s')]
-</span></p>
-<p>An action may lead to a high-valued state, but with such a small probability that it is actually not worth it. <span class="math inline">p(s'|s, a)</span> and <span class="math inline">r(s, a, s')</span> therefore have to be known (or at least approximated), what defeats the purpose of sample-based methods.</p>
-<div id="fig-actorcritic" class="quarto-float quarto-figure quarto-figure-center anchored">
+<div id="fig-eligibilitybackwards" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-actorcritic-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/actorcritic.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Figure&nbsp;5.3: Actor-critic architecture [@Sutton1998]."><img src="img/actorcritic.png" class="img-fluid figure-img" style="width:30.0%"></a>
+<div aria-describedby="fig-eligibilitybackwards-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="img/eligibility-backwards.png" class="lightbox" data-gallery="quarto-lightbox-gallery-8" title="Figure&nbsp;5.8: Backward view of the eligibility trace. Source: @Sutton1998."><img src="img/eligibility-backwards.png" class="img-fluid figure-img"></a>
 </div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-actorcritic-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;5.3: Actor-critic architecture <span class="citation" data-cites="Sutton1998">(<a href="references.html#ref-Sutton1998" role="doc-biblioref">Sutton and Barto, 1998</a>)</span>.
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-eligibilitybackwards-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5.8: Backward view of the eligibility trace. Source: <span class="citation" data-cites="Sutton1998">Sutton and Barto (<a href="references.html#ref-Sutton1998" role="doc-biblioref">1998</a>)</span>.
 </figcaption>
 </figure>
 </div>
-<p><strong>Actor-critic</strong> architectures have been proposed to solve this problem:</p>
-<ol type="1">
-<li>The <strong>critic</strong> learns to estimate the value of a state <span class="math inline">V^\pi(s)</span> and compute the RPE <span class="math inline">\delta = r(s, a, s') + \gamma \, V^\pi(s') - V^\pi(s)</span>.</li>
-<li>The <strong>actor</strong> uses the RPE to update a <em>preference</em> for the executed action: action with positive RPEs (positively surprising) should be reinforced (i.e.&nbsp;taken again in the future), while actions with negative RPEs should be avoided in the future.</li>
-</ol>
-<p>The main interest of this architecture is that the actor can take any form (neural network, decision tree), as long as it able to use the RPE for learning. The simplest actor would be a softmax action selection mechanism, which maintains a <em>preference</em> <span class="math inline">p(s, a)</span> for each action and updates it using the TD error:</p>
-<p><span class="math display">
-    p(s, a) \leftarrow p(s, a) + \alpha \, \delta_t
-</span></p>
-<p>The policy uses the softmax rule on these preferences:</p>
-<p><span class="math display">
-    \pi(s, a) = \frac{p(s, a)}{\sum_a p(s, a)}
-</span></p>
-<p>Actor-critic algorithms learn at the same time two aspects of the problem:</p>
+<p>The forward and backward implementations are equivalent: the first requires to know the future, the second requires to update many transitions at each time step. The best solution will depend on the complexity of the problem.</p>
+<p>TD learning, SARSA and Q-learning can all be efficiently extended using eligibility traces. This gives the algorithms TD(<span class="math inline">\lambda</span>), SARSA(<span class="math inline">\lambda</span>) and Q(<span class="math inline">\lambda</span>), which can learn much faster than their 1-step equivalent, at the cost of more computations.</p>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+TD(<span class="math inline">\lambda</span>) algorithm: policy evaluation
+</div>
+</div>
+<div class="callout-body-container callout-body">
 <ul>
-<li>A value function (e.g.&nbsp;<span class="math inline">V^\pi(s)</span>) to compute the TD error in the critic,</li>
-<li>A policy <span class="math inline">\pi</span> in the actor.</li>
+<li><p><strong>foreach</strong> step <span class="math inline">t</span> of the episode:</p>
+<ul>
+<li><p>Select <span class="math inline">a_t</span> using the current policy <span class="math inline">\pi</span> in state <span class="math inline">s_t</span>, observe <span class="math inline">r_{t+1}</span> and <span class="math inline">s_{t+1}</span>.</p></li>
+<li><p>Compute the TD error in <span class="math inline">s_t</span>:</p></li>
 </ul>
-<p>Classical TD learning only learn a value function (<span class="math inline">V^\pi(s)</span> or <span class="math inline">Q^\pi(s, a)</span>): these methods are called <strong>value-based</strong> methods. Actor-critic architectures are particularly important in <strong>policy search</strong> methods.</p>
+<p><span class="math display">
+      \delta_t = r_{t+1} + \gamma \, V_k(s_{t+1}) - V_k(s_t)
+  </span></p>
+<ul>
+<li>Increment the trace of <span class="math inline">s_t</span>:</li>
+</ul>
+<p><span class="math display">
+      e_{t+1}(s_t) = e_t(s_t) + 1
+  </span></p>
+<ul>
+<li><p><strong>foreach</strong> state <span class="math inline">s \in [s_o, \ldots, s_t]</span> in the episode:</p>
+<ul>
+<li>Update the state value function:</li>
+</ul>
+<p><span class="math display">
+      V_{k+1}(s) = V_k(s) + \alpha \, \delta_t \, e_t(s)
+  </span></p>
+<ul>
+<li>Decay the eligibility trace:</li>
+</ul>
+<p><span class="math display">
+      e_{t+1}(s) = \lambda \, \gamma \, e_t(s)
+  </span></p></li>
+<li><p><strong>if</strong> <span class="math inline">s_{t+1}</span> is terminal: <strong>break</strong></p></li>
+</ul></li>
+</ul>
+</div>
+</div>
+</section>
+<section id="sec-GAE" class="level3">
+<h3 class="anchored" data-anchor-id="sec-GAE">Generalized Advantage Estimation (GAE)</h3>
+<p>Let’s recall the n-step advantage:</p>
+<p><span class="math display">
+    A^{n}_t = \sum_{k=0}^{n-1} \gamma^{k} \, r_{t+k+1} + \gamma^n \, V^\pi(s_{t+n+1}) - V^\pi(s_t)
+</span></p>
+<p>It is easy to show recursively that it depends on the TD error <span class="math inline">\delta_t = r_{t+1} + \gamma \, V^\pi(s_{t+1}) - V^\pi(s_t)</span> of the <span class="math inline">n</span> next steps:</p>
+<p><span class="math display">
+    A^{n}_t = \sum_{l=0}^{n-1} \gamma^l \, \delta_{t+l}
+</span></p>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Proof with <span class="math inline">n=2</span>:
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><span class="math display">\begin{aligned}
+A^2_t &amp;= r_{t+1} + \gamma \, r_{t+2} + \gamma^2 \, V(s_{t+2}) - V(s_{t}) \\
+&amp;\\
+&amp;= (r_{t+1} - V(s_t)) + \gamma \, (r_{t+2} + \gamma \, V(s_{t+2}) ) \\
+&amp;\\
+&amp;= (r_{t+1} + \gamma \, V(s_{t+1}) - V(s_t)) + \gamma \, (r_{t+2} + \gamma \, V(s_{t+2}) - V(s_{t+1})) \\
+&amp;\\
+&amp;= \delta_t + \gamma \, \delta_{t+1}
+\end{aligned}
+</span></p>
+</div>
+</div>
+<p>In other words, the prediction error over <span class="math inline">n</span> steps is the (discounted) sum of the prediction errors between two successive steps. Now, what is the optimal value of <span class="math inline">n</span>? GAE decides not to choose and to simply average all n-step advantages and to weight them with a discount parameter <span class="math inline">\lambda</span>.</p>
+<p>This defines the <strong>Generalized Advantage Estimator</strong> <span class="math inline">A^{\text{GAE}(\gamma, \lambda)}_t</span>:</p>
+<p><span class="math display">
+    A^{\text{GAE}(\gamma, \lambda)}_t = (1-\lambda) \, \sum_{l=0}^\infty \lambda^l A^l_t = \sum_{l=0}^\infty (\gamma \lambda)^l \delta_{t+l}
+</span></p>
+<p>The GAE is simply a forward eligibility trace over distant n-step advantages: the 1-step advantage is more important the the 1000-step advantage (too much variance).</p>
+<ul>
+<li>When <span class="math inline">\lambda=0</span>, we have <span class="math inline">A^{\text{GAE}(\gamma, 0)}_t = A^{0}_t = \delta_t</span>, i.e.&nbsp;the TD advantage (high bias, low variance).</li>
+<li>When <span class="math inline">\lambda=1</span>, we have (at the limit) <span class="math inline">A^{\text{GAE}(\gamma, 1)}_t = R_t</span>, i.e.&nbsp;the MC advantage (low bias, high variance).</li>
+</ul>
+<p>Choosing the right value of <span class="math inline">\lambda</span> between 0 and 1 allows to control the bias/variance trade-off.</p>
+<p><span class="math inline">\gamma</span> and <span class="math inline">\lambda</span> play different roles in GAE: <span class="math inline">\gamma</span> determines the scale or horizon of the value functions: how much future rewards rewards are to be taken into account. The higher <span class="math inline">\gamma &lt;1</span>, the smaller the bias, but the higher the variance. Empirically, <span class="citation" data-cites="Schulman2015a">Schulman et al. (<a href="references.html#ref-Schulman2015a" role="doc-biblioref">2015</a>)</span> found that small <span class="math inline">\lambda</span> values introduce less bias than <span class="math inline">\gamma</span>, so <span class="math inline">\lambda</span> can be chosen smaller than <span class="math inline">\gamma</span> (which is typically 0.99).</p>
+<p>In practice, GAE leads to a better estimation than n-step advantages, but is more computationally expensive. It is used in particular in PPO (Section <a href="3.6-PPO.html#sec-PPO" class="quarto-xref"><span>Proximal Policy Optimization (PPO)</span></a>).</p>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
+<div id="ref-Schulman2015a" class="csl-entry" role="listitem">
+Schulman, J., Levine, S., Abbeel, P., Jordan, M., and Moritz, P. (2015). Trust <span>Region Policy Optimization</span>. in <em>Proceedings of the 31 st <span>International Conference</span> on <span>Machine Learning</span></em>, 1889–1897. Available at: <a href="http://proceedings.mlr.press/v37/schulman15.html">http://proceedings.mlr.press/v37/schulman15.html</a>.
+</div>
 <div id="ref-Sutton1998" class="csl-entry" role="listitem">
 Sutton, R. S., and Barto, A. G. (1998). <em>Reinforcement <span>Learning</span>: <span>An</span> introduction</em>. Cambridge, MA: MIT press.
 </div>
@@ -1001,7 +1346,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     </div>
   </div>
 </footer>
-<script>var lightboxQuarto = GLightbox({"loop":false,"selector":".lightbox","closeEffect":"zoom","descPosition":"bottom","openEffect":"zoom"});
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","selector":".lightbox","loop":false,"openEffect":"zoom"});
 (function() {
   let previousOnload = window.onload;
   window.onload = () => {

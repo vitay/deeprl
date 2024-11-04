@@ -243,7 +243,12 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/2.4-DQNvariants.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">DQN variants</span></a>
+  <a href="../src/2.4-DQNvariants.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">DQN variants (Rainbow)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/2.5-DistributedLearning.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Distributed learning</span></a>
   </div>
 </li>
       </ul>
@@ -265,7 +270,7 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../src/3.2-ActorCritic.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Asynchronous Advantage Actor-Critic (A3C)</span></a>
+ <span class="menu-text">Advantage Actor-Critic (A3C)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -280,22 +285,27 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/3.5-NaturalGradient.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Policy Optimization (TRPO, PPO)</span></a>
+  <a href="../src/3.5-NaturalGradient.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Natural gradients</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/3.6-EntropyRL.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Maximum Entropy RL (SAC)</span></a>
+  <a href="../src/3.6-PPO.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Policy optimization (TRPO, PPO)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/3.7-DistributionalRL.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Distributional learning</span></a>
+  <a href="../src/3.7-ACER.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Actor-Critic with Experience Replay (ACER)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/3.8-OtherPolicyGradient.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Miscellaneous model-free algorithms</span></a>
+  <a href="../src/3.8-EntropyRL.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Maximum Entropy RL (SAC)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/3.9-OtherPolicyGradient.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Miscellaneous model-free algorithms</span></a>
   </div>
 </li>
       </ul>
@@ -373,9 +383,11 @@ window.Quarto = {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#deep-neural-networks" id="toc-deep-neural-networks" class="nav-link active" data-scroll-target="#deep-neural-networks">Deep neural networks</a></li>
+  <li><a href="#feedforward-neural-networks" id="toc-feedforward-neural-networks" class="nav-link active" data-scroll-target="#feedforward-neural-networks">Feedforward neural networks</a></li>
   <li><a href="#convolutional-networks" id="toc-convolutional-networks" class="nav-link" data-scroll-target="#convolutional-networks">Convolutional networks</a></li>
   <li><a href="#recurrent-neural-networks" id="toc-recurrent-neural-networks" class="nav-link" data-scroll-target="#recurrent-neural-networks">Recurrent neural networks</a></li>
+  <li><a href="#transformers" id="toc-transformers" class="nav-link" data-scroll-target="#transformers">Transformers</a></li>
+  <li><a href="#diffusion-models" id="toc-diffusion-models" class="nav-link" data-scroll-target="#diffusion-models">Diffusion models</a></li>
   </ul>
 </nav>
     </div>
@@ -402,20 +414,20 @@ window.Quarto = {
 
 
 <p>Deep RL uses deep neural networks as function approximators, allowing complex representations of the value of state-action pairs to be learned. This section provides a very quick overview of deep learning. For additional details, refer to the excellent book of <span class="citation" data-cites="Goodfellow2016">Goodfellow et al. (<a href="references.html#ref-Goodfellow2016" role="doc-biblioref">2016</a>)</span>.</p>
-<section id="deep-neural-networks" class="level3">
-<h3 class="anchored" data-anchor-id="deep-neural-networks">Deep neural networks</h3>
-<p>A deep neural network (DNN) consists of one input layer <span class="math inline">\mathbf{x}</span>, one or several hidden layers <span class="math inline">\mathbf{h_1}, \mathbf{h_2}, \ldots, \mathbf{h_n}</span> and one output layer <span class="math inline">\mathbf{y}</span>.</p>
+<section id="feedforward-neural-networks" class="level2">
+<h2 class="anchored" data-anchor-id="feedforward-neural-networks">Feedforward neural networks</h2>
+<p>A deep neural network (DNN) or multi-layer perceptron (MLP) consists of one input layer <span class="math inline">\mathbf{x}</span>, one or several hidden layers <span class="math inline">\mathbf{h_1}, \mathbf{h_2}, \ldots, \mathbf{h_n}</span> and one output layer <span class="math inline">\mathbf{y}</span>.</p>
 <div id="fig-dnn" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-dnn-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/dnn.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;7.1: Architecture of a deep neural network. Figure Source: @Nielsen2015, CC-BY-NC."><img src="img/dnn.png" class="img-fluid figure-img"></a>
+<a href="img/dnn.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;7.1: Architecture of a deep neural network. Source: @Nielsen2015, CC-BY-NC."><img src="img/dnn.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-dnn-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;7.1: Architecture of a deep neural network. Figure Source: <span class="citation" data-cites="Nielsen2015">Nielsen (<a href="references.html#ref-Nielsen2015" role="doc-biblioref">2015</a>)</span>, CC-BY-NC.
+Figure&nbsp;7.1: Architecture of a deep neural network. Source: <span class="citation" data-cites="Nielsen2015">Nielsen (<a href="references.html#ref-Nielsen2015" role="doc-biblioref">2015</a>)</span>, CC-BY-NC.
 </figcaption>
 </figure>
 </div>
-<p>Each layer <span class="math inline">k</span> (called <em>fully-connected</em>) transforms the activity of the previous layer (the vector <span class="math inline">\mathbf{h_{k-1}}</span>) into another vector <span class="math inline">\mathbf{h_{k}}</span> by multiplying it with a <strong>weight matrix</strong> <span class="math inline">W_k</span>, adding a <strong>bias</strong> vector <span class="math inline">\mathbf{b_k}</span> and applying a non-linear <strong>activation function</strong> <span class="math inline">f</span>.</p>
+<p>Each layer <span class="math inline">k</span> (called <strong>fully-connected</strong> FC layer) transforms the activity of the previous layer (the vector <span class="math inline">\mathbf{h_{k-1}}</span>) into another vector <span class="math inline">\mathbf{h_{k}}</span> by multiplying it with a <strong>weight matrix</strong> <span class="math inline">W_k</span>, adding a <strong>bias</strong> vector <span class="math inline">\mathbf{b_k}</span> and applying a non-linear <strong>activation function</strong> <span class="math inline">f</span>.</p>
 <p><span id="eq-fullyconnected"><span class="math display">
     \mathbf{h_{k}} = f(W_k \times \mathbf{h_{k-1}} + \mathbf{b_k})
 \tag{7.1}</span></span></p>
@@ -472,8 +484,8 @@ Figure&nbsp;7.1: Architecture of a deep neural network. Figure Source: <span cla
 <!-- ![Comparison of different optimizers. Source: @Ruder2016, <http://ruder.io/optimizing-gradient-descent>.](img/optimizers.gif){#fig-optimizers width=50%} -->
 <p>Additional regularization mechanisms are now typically part of DNNs in order to avoid overfitting (learning by heart the training set but failing to generalize): L1/L2 regularization, dropout, batch normalization, etc. Refer to <span class="citation" data-cites="Goodfellow2016">Goodfellow et al. (<a href="references.html#ref-Goodfellow2016" role="doc-biblioref">2016</a>)</span> for further details.</p>
 </section>
-<section id="convolutional-networks" class="level3">
-<h3 class="anchored" data-anchor-id="convolutional-networks">Convolutional networks</h3>
+<section id="convolutional-networks" class="level2">
+<h2 class="anchored" data-anchor-id="convolutional-networks">Convolutional networks</h2>
 <p>Convolutional Neural Networks (CNN) are an adaptation of DNNs to deal with highly dimensional input spaces such as images. The idea is that neurons in the hidden layer reuse (“share”) weights over the input image, as the features learned by early layers are probably local in visual classification tasks: in computer vision, an edge can be detected by the same filter all over the input image.</p>
 <p>A <strong>convolutional layer</strong> learns to extract a given number of features (typically 16, 32, 64, etc) represented by 3x3 or 5x5 matrices. These matrices are then convoluted over the whole input image (or the previous convolutional layer) to produce <strong>feature maps</strong>. If the input image has a size NxMx1 (grayscale) or NxMx3 (colored), the convolutional layer will be a tensor of size NxMxF, where F is the number of extracted features. Padding issues may reduce marginally the spatial dimensions. One important aspect is that the convolutional layer is fully differentiable, so backpropagation and the usual optimizers can be used to learn the filters.</p>
 <div id="fig-convlayer" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -510,8 +522,8 @@ Figure&nbsp;7.4: Architecture of the AlexNet CNN. Source: <span class="citation"
 </div>
 <p>Many improvements have been proposed since 2012 (e.g.&nbsp;ResNets <span class="citation" data-cites="He2015">(<a href="references.html#ref-He2015" role="doc-biblioref">He et al., 2015</a>)</span>) but the idea stays similar. Generally, convolutional and max-pooling layers are alternated until the spatial dimensions are so reduced (around 10x10) that they can be put into a single vector and fed into a fully-connected layer. This is <strong>NOT</strong> the case in deep RL! Contrary to object classification, spatial information is crucial in deep RL: position of the ball, position of the body, etc. It matters whether the ball is to the right or to the left of your paddle when you decide how to move it. Max-pooling layers are therefore omitted and the CNNs only consist of convolutional and fully-connected layers. This greatly increases the number of weights in the networks, hence the number of training examples needed to train the network. This is still the main limitation of using CNNs in deep RL.</p>
 </section>
-<section id="recurrent-neural-networks" class="level3">
-<h3 class="anchored" data-anchor-id="recurrent-neural-networks">Recurrent neural networks</h3>
+<section id="recurrent-neural-networks" class="level2">
+<h2 class="anchored" data-anchor-id="recurrent-neural-networks">Recurrent neural networks</h2>
 <p>Feedforward neural networks learn to efficiently map static inputs <span class="math inline">\mathbf{x}</span> to outputs <span class="math inline">\mathbf{y}</span> but have no memory or context: the output at time <span class="math inline">t</span> does not depend on the inputs at time <span class="math inline">t-1</span> or <span class="math inline">t-2</span>, only the one at time <span class="math inline">t</span>. This is problematic when dealing with video sequences for example: if the task is to classify videos into happy/sad, a frame by frame analysis is going to be inefficient (most frames a neutral). Concatenating all frames in a giant input vector would increase dramatically the complexity of the classifier and no generalization can be expected.</p>
 <p>Recurrent Neural Networks (RNN) are designed to deal with time-varying inputs, where the relevant information to take a decision at time <span class="math inline">t</span> may have happened at different times in the past. The general structure of a RNN is depicted on <a href="#fig-rnn" class="quarto-xref">Figure&nbsp;<span>7.5</span></a>:</p>
 <div id="fig-rnn" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -576,6 +588,14 @@ Figure&nbsp;7.6: Architecture of a LSTM layer. Source: <a href="http://colah.git
 <p>The architecture may seem complex, but everything is differentiable: backpropagation though time can be used to learn not only the input and recurrent weights for the candidate state, but also the weights and and biases of the gates. The main advantage of LSTMs is that they solve the vanishing gradient problem: if the input at time <span class="math inline">t=0</span> is important to produce a response at time <span class="math inline">t</span>, the input gate will learn to put it into the memory and the forget gate will learn to maintain in the current state until it is not needed anymore. During this “working memory” phase, the gradient is multiplied by exactly one as nothing changes: the dependency can be learned with arbitrary time delays!</p>
 <p>There are alternatives to the classical LSTM layer such as the gated recurrent unit [GRU; <span class="citation" data-cites="Cho2014">Cho et al. (<a href="references.html#ref-Cho2014" role="doc-biblioref">2014</a>)</span>] or peephole connections <span class="citation" data-cites="Gers2001">(<a href="references.html#ref-Gers2001" role="doc-biblioref">Gers, 2001</a>)</span>. See <a href="http://colah.github.io/posts/2015-08-Understanding-LSTMs" class="uri">http://colah.github.io/posts/2015-08-Understanding-LSTMs</a>, <a href="https://medium.com/mlreview/understanding-lstm-and-its-diagrams-37e2f46f1714" class="uri">https://medium.com/mlreview/understanding-lstm-and-its-diagrams-37e2f46f1714</a> or <a href="http://blog.echen.me/2017/05/30/exploring-lstms/" class="uri">http://blog.echen.me/2017/05/30/exploring-lstms/</a> for more visual explanations of LSTMs and their variants.</p>
 <p>RNNs are particularly useful for deep RL when considering POMDPs, i.e.&nbsp;partially observable problems. If an observation does not contain enough information about the underlying state (e.g.&nbsp;a single image does not contain speed information), LSTM can integrate these observations over time and learn to implicitly represent speed in its context vector, allowing efficient policies to be learned.</p>
+</section>
+<section id="transformers" class="level2">
+<h2 class="anchored" data-anchor-id="transformers">Transformers</h2>
+<p><strong>Coming soon</strong></p>
+</section>
+<section id="diffusion-models" class="level2">
+<h2 class="anchored" data-anchor-id="diffusion-models">Diffusion models</h2>
+<p><strong>Coming soon</strong></p>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
@@ -1059,7 +1079,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     </div>
   </div>
 </footer>
-<script>var lightboxQuarto = GLightbox({"selector":".lightbox","descPosition":"bottom","loop":false,"openEffect":"zoom","closeEffect":"zoom"});
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","openEffect":"zoom","selector":".lightbox","loop":false,"descPosition":"bottom"});
 (function() {
   let previousOnload = window.onload;
   window.onload = () => {

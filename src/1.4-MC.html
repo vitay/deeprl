@@ -20,26 +20,7 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for citations */
-div.csl-bib-body { }
-div.csl-entry {
-  clear: both;
-}
-.hanging-indent div.csl-entry {
-  margin-left:2em;
-  text-indent:-2em;
-}
-div.csl-left-margin {
-  min-width:2em;
-  float:left;
-}
-div.csl-right-inline {
-  margin-left:2em;
-  padding-left:1em;
-}
-div.csl-indent {
-  margin-left: 2em;
-}</style>
+</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -148,7 +129,7 @@ window.Quarto = {
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
         <a class="flex-grow-1 no-decor" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-          <h1 class="quarto-secondary-nav-title"><span class="chapter-title">Monte Carlo methods</span></h1>
+          <h1 class="quarto-secondary-nav-title"><span id="sec-mc" class="quarto-section-identifier"><span class="chapter-title">Monte Carlo methods</span></span></h1>
         </a>     
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
         <i class="bi bi-search"></i>
@@ -243,7 +224,12 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/2.4-DQNvariants.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">DQN variants</span></a>
+  <a href="../src/2.4-DQNvariants.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">DQN variants (Rainbow)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/2.5-DistributedLearning.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Distributed learning</span></a>
   </div>
 </li>
       </ul>
@@ -265,7 +251,7 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../src/3.2-ActorCritic.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Asynchronous Advantage Actor-Critic (A3C)</span></a>
+ <span class="menu-text">Advantage Actor-Critic (A3C)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -280,22 +266,27 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/3.5-NaturalGradient.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Policy Optimization (TRPO, PPO)</span></a>
+  <a href="../src/3.5-NaturalGradient.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Natural gradients</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/3.6-EntropyRL.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Maximum Entropy RL (SAC)</span></a>
+  <a href="../src/3.6-PPO.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Policy optimization (TRPO, PPO)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/3.7-DistributionalRL.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Distributional learning</span></a>
+  <a href="../src/3.7-ACER.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Actor-Critic with Experience Replay (ACER)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/3.8-OtherPolicyGradient.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Miscellaneous model-free algorithms</span></a>
+  <a href="../src/3.8-EntropyRL.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Maximum Entropy RL (SAC)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/3.9-OtherPolicyGradient.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Miscellaneous model-free algorithms</span></a>
   </div>
 </li>
       </ul>
@@ -373,7 +364,7 @@ window.Quarto = {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#monte-carlo-control" id="toc-monte-carlo-control" class="nav-link active" data-scroll-target="#monte-carlo-control">Monte Carlo control</a></li>
+  <li><a href="#monte-carlo-policy-evaluation" id="toc-monte-carlo-policy-evaluation" class="nav-link active" data-scroll-target="#monte-carlo-policy-evaluation">Monte Carlo policy evaluation</a></li>
   <li><a href="#on-policy-monte-carlo-methods" id="toc-on-policy-monte-carlo-methods" class="nav-link" data-scroll-target="#on-policy-monte-carlo-methods">On-policy Monte Carlo methods</a></li>
   <li><a href="#off-policy-monte-carlo-methods" id="toc-off-policy-monte-carlo-methods" class="nav-link" data-scroll-target="#off-policy-monte-carlo-methods">Off-policy Monte Carlo methods</a>
   <ul class="collapse">
@@ -389,7 +380,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title d-none d-lg-block"><span class="chapter-title">Monte Carlo methods</span></h1>
+<h1 class="title d-none d-lg-block"><span id="sec-mc" class="quarto-section-identifier"><span class="chapter-title">Monte Carlo methods</span></span></h1>
 </div>
 
 
@@ -406,27 +397,9 @@ window.Quarto = {
 </header>
 
 
-<p>RL algorithms iterate over two steps (<strong>generalized policy iteration</strong> GPI):</p>
-<ol type="1">
-<li><p><strong>Policy evaluation</strong></p>
-<ul>
-<li>For a given policy <span class="math inline">\pi</span>, the value of all states <span class="math inline">V^\pi(s)</span> or all state-action pairs <span class="math inline">Q^\pi(s, a)</span> is calculated or estimated.</li>
-</ul></li>
-<li><p><strong>Policy improvement</strong></p>
-<ul>
-<li>From the current estimated values <span class="math inline">V^\pi(s)</span> or <span class="math inline">Q^\pi(s, a)</span>, a new <strong>better</strong> policy <span class="math inline">\pi</span> is derived.</li>
-</ul></li>
-</ol>
-<p>After enough iterations, the policy converges to the <strong>optimal policy</strong> (if the states are Markov).</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><a href="img/gpi-scheme.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Generalized policy iteration. Source: @Sutton1998"><img src="img/gpi-scheme.png" class="img-fluid figure-img" style="width:30.0%" alt="Generalized policy iteration. Source: Sutton and Barto (1998)"></a></p>
-<figcaption>Generalized policy iteration. Source: <span class="citation" data-cites="Sutton1998">Sutton and Barto (<a href="references.html#ref-Sutton1998" role="doc-biblioref">1998</a>)</span></figcaption>
-</figure>
-</div>
-<p>In dynamic programming, policy evaluation is done by explicitly solving the Bellman equations. In Monte Carlo (and temporal difference) methods, policy evaluation relies on sampling.</p>
-<section id="monte-carlo-control" class="level2">
-<h2 class="anchored" data-anchor-id="monte-carlo-control">Monte Carlo control</h2>
+<p>In dynamic programming, policy evaluation was done by explicitly solving the Bellman equations. In Monte Carlo (and temporal difference) methods, policy evaluation relies on sampling.</p>
+<section id="monte-carlo-policy-evaluation" class="level2">
+<h2 class="anchored" data-anchor-id="monte-carlo-policy-evaluation">Monte Carlo policy evaluation</h2>
 <p>When the environment is <em>a priori</em> unknown, it has to be explored in order to build estimates of the V or Q value functions. The key idea of <strong>Monte Carlo</strong> sampling (MC) is rather simple: the expected return in state <span class="math inline">s</span> is approximated by <strong>sampling</strong> <span class="math inline">M</span> trajectories <span class="math inline">\tau_i</span> starting from <span class="math inline">s</span> and computing the sampling average of the obtained returns:</p>
 <p><span class="math display">
     V^{\pi}(s) = \mathbb{E}_{\rho_\pi} (R_t | s_t = s) \approx \frac{1}{M} \sum_{i=1}^M R(\tau_i)
@@ -484,7 +457,7 @@ Monte Carlo policy evaluation
 </span></p>
 <p>Another solution is the <strong>Softmax</strong> (or Gibbs distribution) action selection method, which assigns to each action a probability of being selected depending on their relative Q-values:</p>
 <p><span class="math display">
-    P(s, a) = \frac{\exp Q^\pi(s, a) / \tau}{ \sum_b \exp Q^\pi(s, b) / \tau}
+    P(s, a) = \frac{\exp Q(s, a) / \tau}{ \sum_b \exp Q(s, b) / \tau}
 </span></p>
 <p><span class="math inline">\tau</span> is a positive parameter called the temperature: high temperatures cause the actions to be nearly equiprobable, while low temperatures cause <span class="math inline">\tau</span> is a positive parameter called the temperature.</p>
 <p>In on-policy MC control, each sample episode is generated using the current policy, which ensures exploration, while the control method still converges towards the optimal <span class="math inline">\epsilon</span>-policy.</p>
@@ -532,7 +505,7 @@ On-policy Monte Carlo control
 <p><span class="math inline">\rho_\pi</span> denotes the probability distribution of trajectories achievable using the policy <span class="math inline">\pi</span>. If we generate the trajectories from the behavior policy <span class="math inline">b(s, a)</span>, we end up maximizing something else:</p>
 <p><span class="math display">\mathcal{J}'(\pi) = \mathbb{E}_{\tau \sim \rho_b} [R(\tau)]</span></p>
 <p>The policy that maximizes <span class="math inline">\mathcal{J}'(\pi)</span> is <strong>not</strong> the optimal policy of the MDP.</p>
-<p><a href="img/importancesampling.svg" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img src="img/importancesampling.svg" class="img-fluid"></a></p>
+<p><a href="img/importancesampling.svg" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img src="img/importancesampling.svg" class="img-fluid"></a></p>
 <p>If you try to estimate a parameter of a random distribution <span class="math inline">\pi</span> using samples of another distribution <span class="math inline">b</span>, the sample average will have a strong <strong>bias</strong>. We need to <strong>correct</strong> the samples from <span class="math inline">b</span> in order to be able to estimate the parameters of <span class="math inline">\pi</span> correctly, through <strong>importance sampling</strong> (IS).</p>
 <section id="importance-sampling" class="level3">
 <h3 class="anchored" data-anchor-id="importance-sampling">Importance sampling</h3>
@@ -543,7 +516,7 @@ On-policy Monte Carlo control
 <p>The expectation is the integral over all possible trajectories of their return <span class="math inline">R(\tau</span>), weighted by the likelihood <span class="math inline">\rho_\pi(\tau)</span> that a trajectory <span class="math inline">\tau</span> is generated by the policy <span class="math inline">\pi</span>.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><a href="img/importancesampling2.svg" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Only certain trajectories are likely under a given policy."><img src="img/importancesampling2.svg" class="img-fluid figure-img" style="width:60.0%" alt="Only certain trajectories are likely under a given policy."></a></p>
+<p><a href="img/importancesampling2.svg" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Only certain trajectories are likely under a given policy."><img src="img/importancesampling2.svg" class="img-fluid figure-img" style="width:60.0%" alt="Only certain trajectories are likely under a given policy."></a></p>
 <figcaption>Only certain trajectories are likely under a given policy.</figcaption>
 </figure>
 </div>
@@ -555,7 +528,7 @@ On-policy Monte Carlo control
 <p><span class="math display">\mathcal{J}(\pi) = \mathbb{E}_{\tau \sim \rho_b} [\frac{\rho_\pi(\tau)}{\rho_b(\tau)} \, R(\tau)]</span></p>
 <p>This means that we can sample trajectories from <span class="math inline">b</span>, but we need to <strong>correct</strong> the observed return by the <strong>importance sampling weight</strong> <span class="math inline">\dfrac{\rho_\pi(\tau)}{\rho_b(\tau)}</span>.</p>
 <p>The importance sampling weight corrects the mismatch between <span class="math inline">\pi</span> and <span class="math inline">b</span>.</p>
-<p><a href="img/importancesampling3.svg" class="lightbox" data-gallery="quarto-lightbox-gallery-4"><img src="img/importancesampling3.svg" class="img-fluid"></a></p>
+<p><a href="img/importancesampling3.svg" class="lightbox" data-gallery="quarto-lightbox-gallery-3"><img src="img/importancesampling3.svg" class="img-fluid"></a></p>
 <p>If the two distributions are the same (on-policy), the IS weight is 1, no need to correct the return.</p>
 <ul>
 <li>If a sample is likely under <span class="math inline">b</span> but not under <span class="math inline">\pi</span>, we should not care about its return: <span class="math inline">\dfrac{\rho_\pi(\tau)}{\rho_b(\tau)} &lt;&lt; 1</span></li>
@@ -567,7 +540,7 @@ On-policy Monte Carlo control
 <li>the probability of choosing an action <span class="math inline">a_t</span> in state <span class="math inline">s_t</span>: the <strong>policy</strong> <span class="math inline">\pi(s, a)</span>.</li>
 <li>the probability of arriving in the state <span class="math inline">s_{t+1}</span> from the state <span class="math inline">s_t</span> with the action <span class="math inline">a_t</span>: the <strong>transition probability</strong> <span class="math inline">p(s_{t+1} | s_t, a_t)</span>.</li>
 </ul>
-<p><a href="img/rl-sequence.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5"><img src="img/rl-sequence.png" class="img-fluid"></a></p>
+<p><a href="img/rl-sequence.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4"><img src="img/rl-sequence.png" class="img-fluid"></a></p>
 <p>The <strong>likelihood</strong> of a trajectory <span class="math inline">\tau = (s_0, a_0, s_1, a_1, \ldots, s_T)</span> under a policy <span class="math inline">\pi</span> depends on the policy and the transition probabilities (Markov property):</p>
 <p><span class="math display">
     \rho_\pi(\tau) = p_\pi(s_0, a_0, s_1, a_1, \ldots, s_T) = p(s_0) \, \prod_{t=0}^{T-1} \pi_\theta(s_t, a_t) \, p(s_{t+1} | s_t, a_t)
@@ -638,11 +611,6 @@ Off-policy Monte Carlo control
 <p>Off-policy methods greatly reduce the number of transitions needed to learn a policy: very stupid actions are not even considered, but the estimation policy learns an optimal strategy from the “classical” moves. Drawback: if a good move is not explored by the behavior policy, the learned policy will never try it.</p>
 
 
-<div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
-<div id="ref-Sutton1998" class="csl-entry" role="listitem">
-Sutton, R. S., and Barto, A. G. (1998). <em>Reinforcement <span>Learning</span>: <span>An</span> introduction</em>. Cambridge, MA: MIT press.
-</div>
-</div>
 </section>
 </section>
 
@@ -1093,7 +1061,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     </div>
   </div>
 </footer>
-<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","openEffect":"zoom","selector":".lightbox","loop":false,"descPosition":"bottom"});
+<script>var lightboxQuarto = GLightbox({"descPosition":"bottom","loop":false,"openEffect":"zoom","closeEffect":"zoom","selector":".lightbox"});
 (function() {
   let previousOnload = window.onload;
   window.onload = () => {

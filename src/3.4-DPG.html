@@ -243,7 +243,12 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/2.4-DQNvariants.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">DQN variants</span></a>
+  <a href="../src/2.4-DQNvariants.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">DQN variants (Rainbow)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/2.5-DistributedLearning.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Distributed learning</span></a>
   </div>
 </li>
       </ul>
@@ -265,7 +270,7 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../src/3.2-ActorCritic.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Asynchronous Advantage Actor-Critic (A3C)</span></a>
+ <span class="menu-text">Advantage Actor-Critic (A3C)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -280,22 +285,27 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/3.5-NaturalGradient.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Policy Optimization (TRPO, PPO)</span></a>
+  <a href="../src/3.5-NaturalGradient.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Natural gradients</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/3.6-EntropyRL.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Maximum Entropy RL (SAC)</span></a>
+  <a href="../src/3.6-PPO.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Policy optimization (TRPO, PPO)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/3.7-DistributionalRL.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Distributional learning</span></a>
+  <a href="../src/3.7-ACER.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Actor-Critic with Experience Replay (ACER)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/3.8-OtherPolicyGradient.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Miscellaneous model-free algorithms</span></a>
+  <a href="../src/3.8-EntropyRL.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Maximum Entropy RL (SAC)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/3.9-OtherPolicyGradient.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Miscellaneous model-free algorithms</span></a>
   </div>
 </li>
       </ul>
@@ -437,14 +447,14 @@ window.Quarto = {
 </span> <span class="math display">
     J(\varphi) = \mathbb{E}_{s \sim \rho_\mu}[(Q^\mu(s, \mu_\theta(s)) - Q_\varphi(s, \mu_\theta(s)))^2]
 </span></p>
-<p><a href="#fig-dpg" class="quarto-xref">Figure&nbsp;<span>12.1</span></a> outlines the actor-critic architecture of the DPG (deterministic policy gradient) method, to compare with the actor-critic architecture of the stochastic policy gradient (<a href="3.1-PolicyGradient.html#fig-actorcriticpolicy" class="quarto-xref">Figure&nbsp;<span>10.2</span></a>).</p>
+<p><a href="#fig-dpg" class="quarto-xref">Figure&nbsp;<span>13.1</span></a> outlines the actor-critic architecture of the DPG (deterministic policy gradient) method, to compare with the actor-critic architecture of the stochastic policy gradient (<a href="3.1-PolicyGradient.html#fig-actorcriticpolicy" class="quarto-xref">Figure&nbsp;<span>11.2</span></a>).</p>
 <div id="fig-dpg" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-dpg-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/dpg.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;12.1: Architecture of the DPG (deterministic policy gradient) method."><img src="img/dpg.png" class="img-fluid figure-img" style="width:95.0%"></a>
+<a href="img/dpg.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;13.1: Architecture of the DPG (deterministic policy gradient) method."><img src="img/dpg.png" class="img-fluid figure-img" style="width:95.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-dpg-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;12.1: Architecture of the DPG (deterministic policy gradient) method.
+Figure&nbsp;13.1: Architecture of the DPG (deterministic policy gradient) method.
 </figcaption>
 </figure>
 </div>
@@ -473,25 +483,25 @@ Figure&nbsp;12.1: Architecture of the DPG (deterministic policy gradient) method
 </span></p>
 <p>This additive noise could be anything, but the most practical choice is to use an <strong>Ornstein-Uhlenbeck</strong> process <span class="citation" data-cites="Uhlenbeck1930">(<a href="references.html#ref-Uhlenbeck1930" role="doc-biblioref">Uhlenbeck and Ornstein, 1930</a>)</span> to generate temporally correlated noise with zero mean. Ornstein-Uhlenbeck processes are used in physics to model the velocity of Brownian particles with friction. It updates a variable <span class="math inline">x_t</span> using a stochastic differential equation (SDE):</p>
 <p><span class="math display"> dx_t = \theta (\mu - x_t) dt + \sigma dW_t \qquad \text{with} \qquad dW_t = \mathcal{N}(0, dt)</span></p>
-<p><span class="math inline">\mu</span> is the mean of the process (usually 0), <span class="math inline">\theta</span> is the friction (how fast it varies with noise) and <span class="math inline">\sigma</span> controls the amount of noise. <a href="#fig-OU" class="quarto-xref">Figure&nbsp;<span>12.2</span></a> shows three independent runs of a Ornstein-Uhlenbeck process: successive values of the variable <span class="math inline">x_t</span> vary randomly but coherently over time.</p>
+<p><span class="math inline">\mu</span> is the mean of the process (usually 0), <span class="math inline">\theta</span> is the friction (how fast it varies with noise) and <span class="math inline">\sigma</span> controls the amount of noise. <a href="#fig-OU" class="quarto-xref">Figure&nbsp;<span>13.2</span></a> shows three independent runs of a Ornstein-Uhlenbeck process: successive values of the variable <span class="math inline">x_t</span> vary randomly but coherently over time.</p>
 <div id="fig-OU" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-OU-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/OU.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Figure&nbsp;12.2: Three independent runs of an Ornstein-Uhlenbeck process with \mu=0, \sigma=0.3, \theta=0.15 and dt=0.1. The code is adapted from https://gist.github.com/jimfleming/9a62b2f7ed047ff78e95b5398e955b9e"><img src="img/OU.png" class="img-fluid figure-img" style="width:80.0%"></a>
+<a href="img/OU.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Figure&nbsp;13.2: Three independent runs of an Ornstein-Uhlenbeck process with \mu=0, \sigma=0.3, \theta=0.15 and dt=0.1. The code is adapted from https://gist.github.com/jimfleming/9a62b2f7ed047ff78e95b5398e955b9e"><img src="img/OU.png" class="img-fluid figure-img" style="width:80.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-OU-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;12.2: Three independent runs of an Ornstein-Uhlenbeck process with <span class="math inline">\mu=0</span>, <span class="math inline">\sigma=0.3</span>, <span class="math inline">\theta=0.15</span> and <span class="math inline">dt=0.1</span>. The code is adapted from <a href="https://gist.github.com/jimfleming/9a62b2f7ed047ff78e95b5398e955b9e" class="uri">https://gist.github.com/jimfleming/9a62b2f7ed047ff78e95b5398e955b9e</a>
+Figure&nbsp;13.2: Three independent runs of an Ornstein-Uhlenbeck process with <span class="math inline">\mu=0</span>, <span class="math inline">\sigma=0.3</span>, <span class="math inline">\theta=0.15</span> and <span class="math inline">dt=0.1</span>. The code is adapted from <a href="https://gist.github.com/jimfleming/9a62b2f7ed047ff78e95b5398e955b9e" class="uri">https://gist.github.com/jimfleming/9a62b2f7ed047ff78e95b5398e955b9e</a>
 </figcaption>
 </figure>
 </div>
-<p>The architecture of the DDPG algorithm is depicted on <a href="#fig-ddpg" class="quarto-xref">Figure&nbsp;<span>12.3</span></a>.</p>
+<p>The architecture of the DDPG algorithm is depicted on <a href="#fig-ddpg" class="quarto-xref">Figure&nbsp;<span>13.3</span></a>.</p>
 <div id="fig-ddpg" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-ddpg-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/ddpg.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Figure&nbsp;12.3: Architecture of the DDPG (deep deterministic policy gradient) algorithm."><img src="img/ddpg.png" class="img-fluid figure-img"></a>
+<a href="img/ddpg.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Figure&nbsp;13.3: Architecture of the DDPG (deep deterministic policy gradient) algorithm."><img src="img/ddpg.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ddpg-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;12.3: Architecture of the DDPG (deep deterministic policy gradient) algorithm.
+Figure&nbsp;13.3: Architecture of the DDPG (deep deterministic policy gradient) algorithm.
 </figcaption>
 </figure>
 </div>
@@ -1010,8 +1020,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../src/3.5-NaturalGradient.html" class="pagination-link" aria-label="Policy Optimization (TRPO, PPO)">
-        <span class="nav-page-text"><span class="chapter-title">Policy Optimization (TRPO, PPO)</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../src/3.5-NaturalGradient.html" class="pagination-link" aria-label="Natural gradients">
+        <span class="nav-page-text"><span class="chapter-title">Natural gradients</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
@@ -1029,7 +1039,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     </div>
   </div>
 </footer>
-<script>var lightboxQuarto = GLightbox({"selector":".lightbox","closeEffect":"zoom","openEffect":"zoom","loop":false,"descPosition":"bottom"});
+<script>var lightboxQuarto = GLightbox({"loop":false,"selector":".lightbox","descPosition":"bottom","openEffect":"zoom","closeEffect":"zoom"});
 (function() {
   let previousOnload = window.onload;
   window.onload = () => {

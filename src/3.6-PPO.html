@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Introduction – Deep Reinforcement Learning</title>
+<title>Policy optimization (TRPO, PPO) – Deep Reinforcement Learning</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -49,8 +49,8 @@ div.csl-indent {
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../src/1.1-Bandits.html" rel="next">
-<link href="../index.html" rel="prev">
+<link href="../src/3.7-ACER.html" rel="next">
+<link href="../src/3.5-NaturalGradient.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -148,7 +148,7 @@ window.Quarto = {
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
         <a class="flex-grow-1 no-decor" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-          <h1 class="quarto-secondary-nav-title">Introduction</h1>
+          <h1 class="quarto-secondary-nav-title"><span class="chapter-title">Policy optimization (TRPO, PPO)</span></h1>
         </a>     
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
         <i class="bi bi-search"></i>
@@ -182,7 +182,7 @@ window.Quarto = {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/0-Introduction.html" class="sidebar-item-text sidebar-link active">
+  <a href="../src/0-Introduction.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Introduction</span></a>
   </div>
 </li>
@@ -290,7 +290,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/3.6-PPO.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Policy optimization (TRPO, PPO)</span></a>
+  <a href="../src/3.6-PPO.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">Policy optimization (TRPO, PPO)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -383,18 +383,15 @@ window.Quarto = {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#what-is-reinforcement-learning" id="toc-what-is-reinforcement-learning" class="nav-link active" data-scroll-target="#what-is-reinforcement-learning">What is Reinforcement Learning?</a></li>
-  <li><a href="#applications-of-reinforcement-learning" id="toc-applications-of-reinforcement-learning" class="nav-link" data-scroll-target="#applications-of-reinforcement-learning">Applications of Reinforcement Learning</a>
+  <li><a href="#trust-region-policy-optimization-trpo" id="toc-trust-region-policy-optimization-trpo" class="nav-link active" data-scroll-target="#trust-region-policy-optimization-trpo">Trust Region Policy Optimization (TRPO)</a>
   <ul class="collapse">
-  <li><a href="#optimal-control" id="toc-optimal-control" class="nav-link" data-scroll-target="#optimal-control">Optimal control</a></li>
-  <li><a href="#atari-games" id="toc-atari-games" class="nav-link" data-scroll-target="#atari-games">Atari games</a></li>
-  <li><a href="#alphago" id="toc-alphago" class="nav-link" data-scroll-target="#alphago">AlphaGo</a></li>
-  <li><a href="#openai-five-and-alphastar" id="toc-openai-five-and-alphastar" class="nav-link" data-scroll-target="#openai-five-and-alphastar">OpenAI Five and AlphaStar</a></li>
-  <li><a href="#process-control" id="toc-process-control" class="nav-link" data-scroll-target="#process-control">Process control</a></li>
-  <li><a href="#robotics" id="toc-robotics" class="nav-link" data-scroll-target="#robotics">Robotics</a></li>
-  <li><a href="#chatgpt" id="toc-chatgpt" class="nav-link" data-scroll-target="#chatgpt">ChatGPT</a></li>
-  <li><a href="#and-many-more" id="toc-and-many-more" class="nav-link" data-scroll-target="#and-many-more">and many more…</a></li>
+  <li><a href="#principle" id="toc-principle" class="nav-link" data-scroll-target="#principle">Principle</a></li>
+  <li><a href="#trust-regions" id="toc-trust-regions" class="nav-link" data-scroll-target="#trust-regions">Trust regions</a></li>
+  <li><a href="#sample-based-formulation" id="toc-sample-based-formulation" class="nav-link" data-scroll-target="#sample-based-formulation">Sample-based formulation</a></li>
+  <li><a href="#practical-implementation" id="toc-practical-implementation" class="nav-link" data-scroll-target="#practical-implementation">Practical implementation</a></li>
+  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary">Summary</a></li>
   </ul></li>
+  <li><a href="#sec-PPO" id="toc-sec-PPO" class="nav-link" data-scroll-target="#sec-PPO">Proximal Policy Optimization (PPO)</a></li>
   </ul>
 </nav>
     </div>
@@ -403,7 +400,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title d-none d-lg-block">Introduction</h1>
+<h1 class="title d-none d-lg-block"><span class="chapter-title">Policy optimization (TRPO, PPO)</span></h1>
 </div>
 
 
@@ -420,268 +417,235 @@ window.Quarto = {
 </header>
 
 
-<p>Deep reinforcement learning (Deep RL) is the integration of deep learning methods, classically used in supervised or unsupervised learning contexts, to reinforcement learning (RL), a well-studied adaptive control framework used in problems with delayed and partial feedback.</p>
-<section id="what-is-reinforcement-learning" class="level2">
-<h2 class="anchored" data-anchor-id="what-is-reinforcement-learning">What is Reinforcement Learning?</h2>
-<div id="fig-sulrl" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-sulrl-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/slulrl.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;1: Three types of machine learning: Supervised learning uses a ground truth to compute a prediction error that drives learning. Unsupervised learning extracts statistical properties from raw data. Reinforcement learning uses a reward signal from the environment to assess the correctness of an action."><img src="img/slulrl.png" class="img-fluid figure-img"></a>
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-sulrl-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;1: Three types of machine learning: Supervised learning uses a ground truth to compute a prediction error that drives learning. Unsupervised learning extracts statistical properties from raw data. Reinforcement learning uses a reward signal from the environment to assess the correctness of an action.
-</figcaption>
-</figure>
-</div>
-<p><strong>Supervised learning</strong> (SL) trains a discriminative model (classification or regression) by comparing the correct answer (ground truth) available in a training set to compute a prediction error. For neural networks, the prediction error (typically the difference between the ground truth and the predicted output) is used by the backpropagation algorithm to adapt the parameters of the model so that the prediction error is iteratively reduced. Typical examples are convolutional neural networks (CNN) predicting the label associated to an image, a recurrent neural network (RNN) predicting autoregressively the future of a time series, or a fully-connected network performing credit scoring. The major drawback of SL methods is that they typically require a lot of annotated data, which are very expensive to produce.</p>
-<p><strong>Unsupervised learning</strong> (UL) only deals with raw data, trying to extract statistical properties without any additional information. One application of UL is dimensionality reduction, which searches how to project highly dimensional data (e.g.&nbsp;images) onto smaller spaces without losing too much information. Algorithms like PCA (Principal Components Analysis) or neural architectures like autoencoders are typically used. Another approach to UL is <strong>generative modelling</strong>, i.e.&nbsp;learning a model of the distribution of the data allowing to generate new samples. Generative AI (ChatGPT, Midjourney, etc) relies on learning the distribution of vast amounts of text or images in order to generate novel high-quality samples. Self-supervised learning relies on using supervised learning algorithms on raw data by using self-generated pretext tasks, such as masking part of the data in the input and learning to predict it, or guessing the next item in a sequence.</p>
-<p><strong>Reinforcement learning</strong> (RL) lies somehow in between: the model makes a prediction (an action), but there is no ground truth to compare with. The only feedback it gets from the environment is a unidimensional <strong>reward signal</strong> that informs how good (or bad) the action was. In the extreme case, this partial feedback can be binary, like winning or losing a game after a sequence of dozens of actions.</p>
-<p>RL setups follow the <strong>agent-environment</strong> interface <span class="citation" data-cites="Sutton1998">(<a href="references.html#ref-Sutton1998" role="doc-biblioref">Sutton and Barto, 1998</a>)</span>. The agent (for example a robot) is in a given state <span class="math inline">s_t</span> at time <span class="math inline">t</span>. This state represents the perception of the robot (camera, internal sensors) but also its position inside the environment, and generally anything relevant information for the task. The agent selects an action <span class="math inline">a_t</span> according to its policy (or strategy). This action modifies the environment (or world), what brings the agent in a new state <span class="math inline">s_{t+1}</span>. Furthermore, a reward <span class="math inline">r_{t+1}</span> is delivered to the agent to valuate the executed action. This interaction loop continues over time, leading to episodes or trajectories of various lengths until a terminal state is reached. The goal of the agent is to find a policy that maximizes the sum of the rewards received over time (more on that later).</p>
-<div id="fig-agentenv" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-agentenv-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/agent-environment-robot.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Figure&nbsp;2: Agent-environment interface. Images generated by ChatGPT."><img src="img/agent-environment-robot.png" class="img-fluid figure-img" style="width:80.0%"></a>
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-agentenv-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;2: Agent-environment interface. Images generated by ChatGPT.
-</figcaption>
-</figure>
-</div>
-<p>The key concept in RL is <strong>trial and error</strong> learning: trying out actions until their outcome is good. The agent selects an <strong>action</strong> from its repertoire and observes the outcome. If the outcome is positive (reward), the action is reinforced (it becomes more likely to occur again). If the outcome is negative (punishment), the action will be avoided in the future. After enough interactions, the agent has <strong>learned</strong> which action to perform in a given situation.</p>
-<div id="fig-trialerror" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-trialerror-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/trialanderror.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Figure&nbsp;3: Trial and error learning. Top: classical trial and error learning, where the agent tries different actions until the outcome is satisfying. Bottom: the outcome of the trial influences via learning whether the corresponding action will be reinforced or avoided in the future."><img src="img/trialanderror.png" class="img-fluid figure-img" style="width:80.0%"></a>
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-trialerror-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;3: Trial and error learning. Top: classical trial and error learning, where the agent tries different actions until the outcome is satisfying. Bottom: the outcome of the trial influences via learning whether the corresponding action will be reinforced or avoided in the future.
-</figcaption>
-</figure>
-</div>
-<p>The agent has to <strong>explore</strong> its environment via trial-and-error in order to gain knowledge. The agent’s behavior then is roughly divided into two phases:</p>
+<section id="trust-region-policy-optimization-trpo" class="level2">
+<h2 class="anchored" data-anchor-id="trust-region-policy-optimization-trpo">Trust Region Policy Optimization (TRPO)</h2>
+<section id="principle" class="level3">
+<h3 class="anchored" data-anchor-id="principle">Principle</h3>
+<p><span class="citation" data-cites="Schulman2015">Schulman et al. (<a href="references.html#ref-Schulman2015" role="doc-biblioref">2015</a>)</span> extended the idea of natural gradients to allow their use for non-linear function approximators (e.g.&nbsp;deep networks), as the previous algorithms only worked efficiently for linear approximators. The proposed algorithm, Trust Region Policy Optimization (TRPO), has now been replaced in practice by Proximal Policy Optimization (PPO, see next section) but its novel ideas are important to understand already.</p>
+<p>Let’s note the expected return of a policy <span class="math inline">\pi</span> as:</p>
+<p><span class="math display">
+    \eta(\pi) = \mathbb{E}_{s \sim \rho_\pi, a \sim \pi}[\sum_{t=0}^\infty \gamma^t \, r(s_t, a_t, s_{t+1})]
+</span></p>
+<p>where <span class="math inline">\rho_\pi</span> is the discounted visitation frequency distribution (the probability that a state <span class="math inline">s</span> will be visited at some point in time by the policy <span class="math inline">\pi</span>):</p>
+<p><span class="math display">
+    \rho_\pi(s) = P(s_0=s) + \gamma \, P(s_1=s) + \gamma^2 \, P(s_2=s) + \ldots
+</span></p>
+<p><span class="citation" data-cites="Kakade2002">Kakade and Langford (<a href="references.html#ref-Kakade2002" role="doc-biblioref">2002</a>)</span> had shown that it is possible to relate the expected return of two policies <span class="math inline">\pi_\theta</span> and <span class="math inline">\pi_{\theta_\text{old}}</span> using advantages (omitting <span class="math inline">\pi</span> in the notations):</p>
+<p><span class="math display">
+    \eta(\theta) = \eta(\theta_\text{old}) + \mathbb{E}_{s \sim \rho_{\pi_\theta}, a \sim \pi_\theta} [A_{\pi_{\theta_\text{old}}}(s, a)]
+</span></p>
+<p>The advantage <span class="math inline">A_{\pi_{\theta_\text{old}}}(s, a)</span> denotes the change in the expected return obtained after <span class="math inline">(s, a)</span> when using the new policy <span class="math inline">\pi_\theta</span>, in comparison to the one obtained with the old policy <span class="math inline">\pi_{\theta_\text{old}}</span>. While this formula seems interesting (it measures how good the new policy is with regard to the average performance of the old policy, so we could optimize directly), it is difficult to estimate as the mathematical expectation depends on state-action pairs generated by the new policy : <span class="math inline">s \sim \rho_{\pi_\theta}, a \sim \pi_\theta</span>.</p>
+<p><span class="citation" data-cites="Schulman2015">Schulman et al. (<a href="references.html#ref-Schulman2015" role="doc-biblioref">2015</a>)</span> propose an approximation to this formula, by considering that if the two policies <span class="math inline">\pi_\theta</span> and <span class="math inline">\pi_{\theta_\text{old}}</span> are not very different from another, one can sample the states from the old distribution:</p>
+<p><span class="math display">
+    \eta(\theta) \approx \eta(\theta_\text{old}) + \mathbb{E}_{s \sim \rho_{\pi_{\theta_\text{old}}}, a \sim \pi_\theta} [A_{\pi_{\theta_\text{old}}}(s, a)]
+</span></p>
+<p>One can already recognize the main motivation behind natural gradients: finding a weight update that moves the policy in the right direction (getting more rewards) while keeping the change in the policy distribution as small as possible (to keep the assumption correct).</p>
+<p>Let’s now define the following objective function:</p>
+<p><span class="math display">
+    J_{\theta_\text{old}}(\theta) = \eta(\theta_\text{old}) + \mathbb{E}_{s \sim \rho_{\pi_{\theta_\text{old}}}, a \sim \pi_\theta} [A_{\pi_{\theta_\text{old}}}(s, a)]
+</span></p>
+<p>It is easy to see that <span class="math inline">J_{\theta_\text{old}}(\theta_\text{old}) = \eta(\theta_\text{old})</span> by definition of the advantage, and that its gradient w.r.t to <span class="math inline">\theta</span> taken in <span class="math inline">\theta_\text{old}</span> is the same as the one of <span class="math inline">\eta(\theta_\text{old})</span>:</p>
+<p><span class="math display">
+    \nabla_\theta J_{\theta_\text{old}}(\theta)|_{\theta = \theta_\text{old}} = \nabla_\theta \eta(\theta)|_{\theta = \theta_\text{old}}
+</span></p>
+<p>This means that, at least locally, one maximization step of <span class="math inline">J_{\theta_\text{old}}(\theta)</span> goes in the same direction as maximizing <span class="math inline">\eta(\theta)</span> if we do not go too far. <span class="math inline">J</span> is called a <strong>surrogate objective function</strong>: it is not what we want to optimize, but it leads to the same result. TRPO belongs to the class of <strong>minorization-majorization</strong> algorithms (MM, we first find a local lower bound and then maximize it, iteratively).</p>
+<p>Let’s now suppose that we can find its maximum, i.e.&nbsp;a policy <span class="math inline">\pi'</span> that maximizes the advantage of each state-action pair over <span class="math inline">\pi_{\theta_\text{old}}</span>. There would be no guarantee that <span class="math inline">\pi'</span> and <span class="math inline">\pi_{\theta_\text{old}}</span> are close enough so that the assumption stands. We could therefore make only a small step in its direction and hope for the best:</p>
+<p><span id="eq-linesearch"><span class="math display">
+    \pi_\theta(s, a) = (1-\alpha) \, \pi_{\theta_\text{old}}(s, a) + \alpha \, \pi'(s,a)
+\tag{15.1}</span></span></p>
+<p>This is the conservative policy iteration method of <span class="citation" data-cites="Kakade2002">Kakade and Langford (<a href="references.html#ref-Kakade2002" role="doc-biblioref">2002</a>)</span>, where a bound on the difference between <span class="math inline">\eta(\pi_{\theta_\text{old}})</span> and <span class="math inline">J_{\theta_\text{old}}(\theta)</span> can be derived.</p>
+<p><span class="citation" data-cites="Schulman2015">Schulman et al. (<a href="references.html#ref-Schulman2015" role="doc-biblioref">2015</a>)</span> propose to penalize instead the objective function by the KL divergence between the new and old policies. There are basically two ways to penalize an optimization problem:</p>
 <ol type="1">
-<li>The <strong>exploration</strong> phase, where it gathers knowledge about its environment.</li>
-<li>The <strong>exploitation</strong> phase, where this knowledge is used to collect as many rewards as possible.</li>
+<li>Adding a hard constraint on the KL divergence, leading to a constrained optimization problem (where Lagrange methods can be applied):</li>
 </ol>
-<p>The biggest issue with this approach is that exploring large action spaces might necessitate a <strong>lot</strong> of trials (a problem referred to as <strong>sample complexity</strong>). The modern techniques we will see in this book try to reduce the sample complexity.</p>
-<div id="fig-cockpit" class="quarto-float quarto-figure quarto-figure-center anchored">
+<p><span class="math display">
+    \text{maximize}_\theta \qquad J_{\theta_\text{old}}(\theta) \\
+    \qquad \text{subject to} \qquad D_{KL}(\pi_{\theta_\text{old}} || \pi_\theta) \leq \delta
+</span></p>
+<ol start="2" type="1">
+<li>Regularizing the objective function with the KL divergence:</li>
+</ol>
+<p><span class="math display">
+    \text{maximize}_\theta \qquad L(\theta) = J_{\theta_\text{old}}(\pi_\theta) - C \,  D_{KL}(\pi_{\theta_\text{old}} || \pi_\theta)
+</span></p>
+<p>In the first case, we force the KL divergence to stay below a certain threshold. In the second case, we penalize solutions that would maximize <span class="math inline">J_{\theta_\text{old}}(\theta)</span> but would be too different from the previous policy. In both cases, we want to find a policy <span class="math inline">\pi_\theta</span> maximizing the expected return (the objective), but which is still close (in terms of KL divergence) from the current one. Both methods are however sensible to the choice of the parameters <span class="math inline">\delta</span> and <span class="math inline">C</span>.</p>
+<p>Formally, the KL divergence <span class="math inline">D_{KL}(\pi_{\theta_\text{old}} || \pi_\theta)</span> should be the maximum KL divergence over the state space:</p>
+<p><span class="math display">
+    D^\text{max}_{KL}(\pi_{\theta_\text{old}} || \pi_\theta) = \max_s D_{KL}(\pi_{\theta_\text{old}}(s, .) || \pi_\theta(s, .))
+</span></p>
+<p>This maximum KL divergence over the state space would be very hard to compute. Empirical evaluations showed however that it is safe to use the mean KL divergence, or even to sample it:</p>
+<p><span class="math display">
+    \bar{D}_{KL}(\pi_{\theta_\text{old}} || \pi_\theta) = \mathbb{E}_s [D_{KL}(\pi_{\theta_\text{old}}(s, .) || \pi_\theta(s, .))] \approx \frac{1}{N} \sum_{i=1}^N D_{KL}(\pi_{\theta_\text{old}}(s_i, .) || \pi_\theta(s_i, .))
+</span></p>
+</section>
+<section id="trust-regions" class="level3">
+<h3 class="anchored" data-anchor-id="trust-regions">Trust regions</h3>
+<div id="fig-trustregion" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-cockpit-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/cockpit.webp" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="Figure&nbsp;4: Sample complexity: learning to control a modern plane through trial and error might be too long and dangerous. Image generated by ChatGPT."><img src="img/cockpit.webp" class="img-fluid figure-img"></a>
+<div aria-describedby="fig-trustregion-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="img/trustregion.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;15.1: Graphical illustration of trust regions. From the current parameters \theta_\text{old}, we search for the maximum \theta^* of the real objective \eta(\theta). The unconstrained objective J_{\theta_\text{old}}(\theta) is locally similar to \eta(\theta) but quickly diverge as \pi_\theta and \pi_{\theta_\text{old}} become very different. The surrogate objective L(\theta) = J_{\theta_\text{old}} (\theta) - C \,  D_{KL}(\pi_{\theta_\text{old}} || \pi_\theta) is always smaller than \eta(\theta) and has a maximum close to \theta^* which keeps \pi_\theta and \pi_{\theta_\text{old}} close from each other in terms of KL divergence. The region around \theta_\text{old} where big optimization steps can be taken without changing the policy too much is called the trust region."><img src="img/trustregion.png" class="img-fluid figure-img" style="width:70.0%"></a>
 </div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-cockpit-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;4: Sample complexity: learning to control a modern plane through trial and error might be too long and dangerous. Image generated by ChatGPT.
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-trustregion-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;15.1: Graphical illustration of trust regions. From the current parameters <span class="math inline">\theta_\text{old}</span>, we search for the maximum <span class="math inline">\theta^*</span> of the real objective <span class="math inline">\eta(\theta)</span>. The unconstrained objective <span class="math inline">J_{\theta_\text{old}}(\theta)</span> is locally similar to <span class="math inline">\eta(\theta)</span> but quickly diverge as <span class="math inline">\pi_\theta</span> and <span class="math inline">\pi_{\theta_\text{old}}</span> become very different. The surrogate objective <span class="math inline">L(\theta) = J_{\theta_\text{old}} (\theta) - C \,  D_{KL}(\pi_{\theta_\text{old}} || \pi_\theta)</span> is always smaller than <span class="math inline">\eta(\theta)</span> and has a maximum close to <span class="math inline">\theta^*</span> which keeps <span class="math inline">\pi_\theta</span> and <span class="math inline">\pi_{\theta_\text{old}}</span> close from each other in terms of KL divergence. The region around <span class="math inline">\theta_\text{old}</span> where big optimization steps can be taken without changing the policy too much is called the trust region.
 </figcaption>
 </figure>
 </div>
-<div class="callout callout-style-default callout-tip no-icon callout-titled" title="Sutton and Barto. Reinforcement learning: An Introduction">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Sutton and Barto. Reinforcement learning: An Introduction
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>The book “Reinforcement learning: An introduction” (1st and 2nd editions) <span class="citation" data-cites="Sutton1998 Sutton2017">(<a href="references.html#ref-Sutton1998" role="doc-biblioref">Sutton and Barto, 1998</a>, <a href="references.html#ref-Sutton2017" role="doc-biblioref">2017</a>)</span> contains everything you need to know about the basics of RL. The second edition can be found here:</p>
-<p><a href="http://incompleteideas.net/book/the-book-2nd.html" class="uri">http://incompleteideas.net/book/the-book-2nd.html</a></p>
-</div>
-</div>
+<p>Before diving further into how these optimization problems can be solved, let’s wonder why the algorithm is called <strong>trust region policy optimization</strong> using the regularized objective. <a href="#fig-trustregion" class="quarto-xref">Figure&nbsp;<span>15.1</span></a> illustrates the idea. The “real” objective function <span class="math inline">\eta(\theta)</span> should be maximized (with gradient descent or similar) starting from the parameters <span class="math inline">\theta_\text{old}</span>. We cannot estimate the objective function directly, so we build a surrogate objective function <span class="math inline">L(\theta) = J_{\theta_\text{old}} (\theta) - C \,  D_{KL}(\pi_{\theta_\text{old}} || \pi_\theta)</span>. We know that:</p>
+<ol type="1">
+<li>The two objectives have the same value in <span class="math inline">\theta_\text{old}</span>: <span class="math display">
+L(\theta_\text{old}) = J_{\theta_\text{old}}(\theta_\text{old}) - C \,  D_{KL}(\pi_{\theta_\text{old}} || \pi_{\theta_\text{old}}) = \eta(\theta_\text{old})
+</span></li>
+<li>Their gradient w.r.t <span class="math inline">\theta</span> are the same in <span class="math inline">\theta_\text{old}</span>: <span class="math display">
+\nabla_\theta L(\theta)|_{\theta = \theta_\text{old}} = \nabla_\theta \eta(\theta)|_{\theta = \theta_\text{old}}
+</span></li>
+<li>The surrogate objective is always smaller than the real objective, as the KL divergence is positive: <span class="math display">
+\eta(\theta) \geq J_{\theta_\text{old}}(\theta) - C \,  D_{KL}(\pi_{\theta_\text{old}} || \pi_\theta)
+</span></li>
+</ol>
+<p>Under these conditions, the surrogate objective is also called a <strong>lower bound</strong> of the primary objective. The interesting fact is that the value of <span class="math inline">\theta</span> that maximizes <span class="math inline">L(\theta)</span> is at the same time:</p>
+<ul>
+<li>A big step in the parameter space towards the maximum of <span class="math inline">\eta(\theta)</span>, as <span class="math inline">\theta</span> and <span class="math inline">\theta_\text{old}</span> can be very different.</li>
+<li>A small step in the policy distribution space, as the KL divergence between the previous and the new policies is kept small.</li>
+</ul>
+<p>Exactly what we needed! The parameter region around <span class="math inline">\theta_\text{old}</span> where the KL divergence is kept small is called the <strong>trust region</strong>. This means that we can safely take big optimization steps (e.g.&nbsp;with a high learning rate or even analytically) without risking to violate the initial assumptions.</p>
 </section>
-<section id="applications-of-reinforcement-learning" class="level2">
-<h2 class="anchored" data-anchor-id="applications-of-reinforcement-learning">Applications of Reinforcement Learning</h2>
-<p>RL can be used in many control problems, ranging from simple problems to complex robotics, video games or even plasma control.</p>
-<section id="optimal-control" class="level3">
-<h3 class="anchored" data-anchor-id="optimal-control">Optimal control</h3>
-<p>The most basic problems on which RL can be applied are simple control environments with a few degrees of freedom. The <code>gymnasium</code> library (formerly <code>gym</code>) maintained by the Farama foundation provides an API for RL environments as well as the reference implementation of the most popular ones, including control problems, Mujoco robotic simulations and Atari games:</p>
-<p><a href="https://gymnasium.farama.org" class="uri">https://gymnasium.farama.org</a></p>
-<p>Some examples:</p>
-<div class="callout callout-style-default callout-note no-icon callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Pendulum
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Goal: maintaining the pendulum vertical by changing the applied torque.</p>
-<div class="columns">
-<div class="column" style="width:50%;">
-<p><strong>Before</strong></p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><a href="img/pendulum-before.gif" class="lightbox" data-gallery="quarto-lightbox-gallery-5" title="Source: https://keras.io/examples/rl/ddpg_pendulum/"><img src="img/pendulum-before.gif" class="img-fluid figure-img" style="width:60.0%" alt="Source: https://keras.io/examples/rl/ddpg_pendulum/"></a></p>
-<figcaption>Source: <a href="https://keras.io/examples/rl/ddpg_pendulum/" class="uri">https://keras.io/examples/rl/ddpg_pendulum/</a></figcaption>
-</figure>
-</div>
-</div><div class="column" style="width:50%;">
-<p><strong>After</strong></p>
-<p><a href="img/pendulum-after.gif" class="lightbox" data-gallery="quarto-lightbox-gallery-6"><img src="img/pendulum-after.gif" class="img-fluid" style="width:60.0%"></a></p>
-</div>
-</div>
-</div>
-</div>
-<div class="callout callout-style-default callout-note no-icon callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Cartpole
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Goal: maintaining the pole vertical by moving the cart.</p>
-<div class="columns">
-<div class="column" style="width:50%;">
-<p><strong>Before</strong></p>
-<p><a href="img/cartpole-before.gif" class="lightbox" data-gallery="quarto-lightbox-gallery-7"><img src="img/cartpole-before.gif" class="img-fluid" style="width:60.0%"></a></p>
-</div><div class="column" style="width:50%;">
-<p><strong>After</strong></p>
-<p><a href="img/cartpole-after.gif" class="lightbox" data-gallery="quarto-lightbox-gallery-8"><img src="img/cartpole-after.gif" class="img-fluid" style="width:60.0%"></a></p>
-</div>
-</div>
-<p>Source: <a href="https://towardsdatascience.com/cartpole-introduction-to-reinforcement-learning-ed0eb5b58288" class="uri">https://towardsdatascience.com/cartpole-introduction-to-reinforcement-learning-ed0eb5b58288</a></p>
-<p>See the Cartpole learning in real life (Deisenroth and Rasmussen, 2011):</p>
-<div class="quarto-video ratio ratio-16x9"><iframe data-external="1" src="https://www.youtube.com/embed/XiigTGKZfks" title="Cartpole" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe></div>
-</div>
-</div>
+<section id="sample-based-formulation" class="level3">
+<h3 class="anchored" data-anchor-id="sample-based-formulation">Sample-based formulation</h3>
+<p>Although the theoretical proofs in <span class="citation" data-cites="Schulman2015">Schulman et al. (<a href="references.html#ref-Schulman2015" role="doc-biblioref">2015</a>)</span> used the regularized optimization method, the practical implementation uses the constrained optimization problem:</p>
+<p><span class="math display">
+    \text{maximize}_\theta \qquad J_{\theta_\text{old}}(\theta) = \eta(\theta_\text{old}) + \mathbb{E}_{s \sim \rho_{\pi_{\theta_\text{old}}}, a \sim \pi_\theta} [A_{\pi_{\theta_\text{old}}}(s, a)] \\
+    \qquad \text{subject to} \qquad D_{KL}(\pi_{\theta_\text{old}} || \pi_\theta) \leq \delta
+</span></p>
+<p>The first thing to notice is that <span class="math inline">\eta(\theta_\text{old})</span> does not depend on <span class="math inline">\theta</span>, so it is constant in the optimization problem. We only need to maximize the advantage of the actions taken by <span class="math inline">\pi_\theta</span> in each state visited by <span class="math inline">\pi_{\theta_\text{old}}</span>. The problem is that <span class="math inline">\pi_\theta</span> is what we search, so we can not sample actions from it. The solution is to use <strong>importance sampling</strong> to allow sampling actions from <span class="math inline">\pi_{\theta_\text{old}}</span>. This is possible as long as we correct the objective with the importance sampling weight:</p>
+<p><span class="math display">
+    \text{maximize}_\theta \qquad \mathbb{E}_{s \sim \rho_{\pi_{\theta_\text{old}}}, a \sim \pi_{\theta_\text{old}}} [\frac{\pi_\theta(s, a)}{\pi_{\theta_\text{old}}(s, a)} \, A_{\pi_{\theta_\text{old}}}(s, a)] \\
+    \qquad \text{subject to} \qquad D_{KL}(\pi_{\theta_\text{old}} || \pi_\theta) \leq \delta
+</span></p>
+<p>Now that states and actions are generated by the old policy, we can safely sample many trajectories using <span class="math inline">\pi_{\theta_\text{old}}</span> (<span class="citation" data-cites="Schulman2015">Schulman et al. (<a href="references.html#ref-Schulman2015" role="doc-biblioref">2015</a>)</span> proposes two methods called single path and Vine, but we ignore it here), compute the advantages of all state-action pairs (using real rewards along the trajectories), form the surrogate objective function and optimize it using second-order optimization methods.</p>
+<p>One last thing to notice is that the advantages <span class="math inline">A_{\pi_{\theta_\text{old}}}(s, a) = Q_{\pi_{\theta_\text{old}}}(s, a) - V_{\pi_{\theta_\text{old}}}(s)</span> depend on the value of the states encountered by <span class="math inline">\pi_{\theta_\text{old}}</span>. The state values do not depend on the policies, they are constant for each optimization step, so they can also be safely removed:</p>
+<p><span class="math display">
+    \text{maximize}_\theta \qquad \mathbb{E}_{s \sim \rho_{\pi_{\theta_\text{old}}}, a \sim \pi_{\theta_\text{old}}} [\frac{\pi_\theta(s, a)}{\pi_{\theta_\text{old}}(s, a)} \, Q_{\pi_{\theta_\text{old}}}(s, a)] \\
+    \qquad \text{subject to} \qquad D_{KL}(\pi_{\theta_\text{old}} || \pi_\theta) \leq \delta
+</span></p>
+<p>Here we go, that’s TRPO. It could seem a bit disappointing to come up with such a simple formulation (find a policy which maximizes the Q-value of sampled actions while being not too different from the previous one) after so many mathematical steps, but that is also the beauty of it: not only it works, but it is guaranteed to work. With TRPO, each optimization step brings the policy closer from an optimum, what is called <strong>monotonic improvement</strong>.</p>
 </section>
-<section id="atari-games" class="level3">
-<h3 class="anchored" data-anchor-id="atari-games">Atari games</h3>
-<p>These toy control problems were used for decades to test various RL algorithms, although serious applications existed. The big breakthrough in (deep) reinforcement learning occurred in 2013, as a small startup in London, DeepMind Technologies Limited (now Google Deepmind), led by Demis Hassabis, successfully coupled reinforcement learning with deep neural networks for the first time. Their proposed algorithm, the deep Q-network <span class="citation" data-cites="Mnih2013 Mnih2015">(DQN, <a href="references.html#ref-Mnih2013" role="doc-biblioref">Mnih et al., 2013</a>, <a href="references.html#ref-Mnih2015" role="doc-biblioref">2015</a>)</span>, used a convolutional neural network (CNN) to learn to play many Atari games by trial and error, without any prior information about the game and only using raw images as inputs.</p>
-<div class="quarto-video ratio ratio-16x9"><iframe data-external="1" src="https://www.youtube.com/embed/rQIShnTz1kU" title="DQN - Atari" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe></div>
-<p>Similar pixel-based games were quickly mastered, such as the TORCS simulator with the A3C algporithm <span class="citation" data-cites="Mnih2016">(<a href="references.html#ref-Mnih2016" role="doc-biblioref">Mnih et al., 2016</a>)</span>:</p>
-<div class="quarto-video ratio ratio-16x9"><iframe data-external="1" src="https://www.youtube.com/embed/0xo1Ldx3L5Q" title="A3C - TOCS" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe></div>
-<p>Simulated robotics were addressed by similar techniques:</p>
-<div class="quarto-video ratio ratio-16x9"><iframe data-external="1" src="https://www.youtube.com/embed/faDKMMwOS2Q" title="A3C - Parkour" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe></div>
+<section id="practical-implementation" class="level3">
+<h3 class="anchored" data-anchor-id="practical-implementation">Practical implementation</h3>
+<p>Now, how do we solve the constrained optimization problem? And what is the link with natural gradients?</p>
+<p>To solve constrained optimization problems, we can form a Lagrange function with an additional parameter <span class="math inline">\lambda</span> and search for its maximum:</p>
+<p><span class="math display">
+    \mathcal{L}(\theta, \lambda) = J_{\theta_\text{old}}(\theta)  - \lambda \, (D_{KL}(\pi_{\theta_\text{old}} || \pi_\theta) - \delta)
+</span></p>
+<p>Notice how close the Lagrange function is from the regularized problem used in the theory. We can form a first-order approximation of <span class="math inline">J_{\theta_\text{old}}(\theta)</span>:</p>
+<p><span class="math display">
+    J_{\theta_\text{old}}(\theta) = \nabla_\theta J_{\theta_\text{old}}(\theta) \, (\theta- \theta_\text{old})
+</span></p>
+<p>as <span class="math inline">J_{\theta_\text{old}}(\theta_\text{old}) = 0</span>. <span class="math inline">g = \nabla_\theta J_{\theta_\text{old}}(\theta)</span> is the now familiar <strong>policy gradient</strong> with importance sampling. Higher-order terms do not matter, as they are going to be dominated by the KL divergence term.</p>
+<p>We will use a second-order approximation of the KL divergence term using the Fisher Information Matrix:</p>
+<p><span class="math display">
+    D_{KL}(\pi_{\theta_\text{old}} || \pi_\theta) = (\theta- \theta_\text{old})^T \, F(\theta_\text{old}) \,  (\theta- \theta_\text{old})
+</span></p>
+<p>We get the following Lagrangian function:</p>
+<p><span class="math display">
+    \mathcal{L}(\theta, \lambda) = \nabla_\theta J_{\theta_\text{old}}(\theta) \, (\theta- \theta_\text{old})  - \lambda \, (\theta- \theta_\text{old})^T \, F(\theta_\text{old}) \,  (\theta- \theta_\text{old})
+</span></p>
+<p>which is quadratic in <span class="math inline">\Delta \theta = \theta- \theta_\text{old}</span>. It has therefore a unique maximum, characterized by a first-order derivative equal to 0:</p>
+<p><span class="math display">
+    \nabla_\theta J_{\theta_\text{old}}(\theta) = \lambda \, F(\theta_\text{old}) \,  \Delta \theta
+</span></p>
+<p>or:</p>
+<p><span class="math display">
+    \Delta \theta  = \frac{1}{\lambda} \, F(\theta_\text{old})^{-1} \,  \nabla_\theta J_{\theta_\text{old}}(\theta)
+</span></p>
+<p>which is the <strong>natural gradient descent</strong>! The size of the step <span class="math inline">\frac{1}{\lambda}</span> still has to be determined, but it can also be replaced by a fixed hyperparameter.</p>
+<p>The main problem is now to compute and inverse the Fisher information matrix, which is quadratic with the number of parameters <span class="math inline">\theta</span>, i.e.&nbsp;with the number of weights in the NN. <span class="citation" data-cites="Schulman2015">Schulman et al. (<a href="references.html#ref-Schulman2015" role="doc-biblioref">2015</a>)</span> proposes to used <strong>conjugate gradients</strong> to iteratively approximate the Fisher, a second-order method which will not be presented here (see <a href="https://www.cs.cmu.edu/~quake-papers/painless-conjugate-gradient.pdf" class="uri">https://www.cs.cmu.edu/~quake-papers/painless-conjugate-gradient.pdf</a> for a detailed introduction). After the conjugate gradient optimization step, the constraint <span class="math inline">D_{KL}(\pi_{\theta_\text{old}} || \pi_\theta) \leq \delta</span> is however not ensured anymore, so a line search is made as in <a href="#eq-linesearch" class="quarto-xref">Equation&nbsp;<span>15.1</span></a> until that criteria is met.</p>
 </section>
-<section id="alphago" class="level3">
-<h3 class="anchored" data-anchor-id="alphago">AlphaGo</h3>
-<p>The next major breakthrough for Deep RL happened in 2016, as AlphaGo, also created by Deepmind, was able to beat Lee Sedol, world champion of the game of Go. AlphaGo coupled the power of deep neural networks and RL with Monte Carlo Tree Search (MCTS), a popular tree-based search algorithm, to learn through self-play the optimal strategy for the game of Go. This performance was extremely commented, as such a dominance of an AI system was not expected before decades.</p>
-<div class="quarto-video ratio ratio-16x9"><iframe data-external="1" src="https://www.youtube.com/embed/8tq1C8spV_g" title="AlphaGo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe></div>
+<section id="summary" class="level3">
+<h3 class="anchored" data-anchor-id="summary">Summary</h3>
+<p>TRPO is a policy gradient method using natural gradients to monotonically improve the expected return associated to the policy. As a minorization-maximization (MM) method, it uses a surrogate objective function (a lower bound on the expected return) to iteratively change the parameters of the policy using large steps, but without changing the policy too much (as measured by the KL divergence). Its main advantage over DDPG is that it is much less sensible to the choice of the learning rate.</p>
+<p>However, it has several limitations:</p>
+<ul>
+<li>It is hard to use with neural networks having multiple outputs (e.g.&nbsp;the policy and the value function, as in actor-critic methods) as natural gradients are dependent on the policy distribution and its relationship with the parameters.</li>
+<li>It works well when the NN has only fully-connected layers, but empirically performs poorly on tasks requiring convolutional layers or recurrent layers.</li>
+<li>The use of conjugate gradients makes the implementation much more complicated and less flexible than regular SGD.</li>
+</ul>
+<p><strong>Additional resources</strong></p>
+<ul>
+<li><a href="http://178.79.149.207/posts/trpo.html" class="uri">http://178.79.149.207/posts/trpo.html</a></li>
+<li><a href="https://towardsdatascience.com/introduction-to-various-reinforcement-learning-algorithms-part-ii-trpo-ppo-87f2c5919bb9" class="uri">https://towardsdatascience.com/introduction-to-various-reinforcement-learning-algorithms-part-ii-trpo-ppo-87f2c5919bb9</a></li>
+<li><a href="https://medium.com/@sanketgujar95/trust-region-policy-optimization-trpo-and-proximal-policy-optimization-ppo-e6e7075f39ed" class="uri">https://medium.com/@sanketgujar95/trust-region-policy-optimization-trpo-and-proximal-policy-optimization-ppo-e6e7075f39ed</a></li>
+<li><a href="https://www.depthfirstlearning.com/2018/TRPO" class="uri">https://www.depthfirstlearning.com/2018/TRPO</a></li>
+<li><a href="http://rll.berkeley.edu/deeprlcoursesp17/docs/lec5.pdf" class="uri">http://rll.berkeley.edu/deeprlcoursesp17/docs/lec5.pdf</a></li>
+</ul>
 </section>
-<section id="openai-five-and-alphastar" class="level3">
-<h3 class="anchored" data-anchor-id="openai-five-and-alphastar">OpenAI Five and AlphaStar</h3>
-<p>Despite its complexity, the game of Go is actually quite simple for a computer: there is full observability (the entire state of the game is known to the players), the number of possible actions is quite limited, the consequence of an action is fully predictable, and planning is only necessary over a few dozens of plays. On the contrary, modern video games like DotA 2 or Starcraft have partial observability (the player only sees its immediate surroundings), hundreds of hierarchical actions can be made at each time step, the dynamics of the game are largely unknown, and a game can last hours. In some sense, it is much more difficult to become good at DotA than it is at chess or Go.</p>
-<p>Deepmind and OpenAI recognized this difference and started applying deep RL methods to Starcraft II and DotA 2, respectively, between 2017 and 2020. They managed to beat teams of professional players under limited conditions, but eventually stopped because of the huge training costs (and they had to work on LLMs…).</p>
-<div class="quarto-video ratio ratio-16x9"><iframe data-external="1" src="https://www.youtube.com/embed/eHipy_j29Xw" title="OpenAI Five" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe></div>
-<div class="quarto-video ratio ratio-16x9"><iframe data-external="1" src="https://www.youtube.com/embed/UuhECwm31dM" title="OpenAI Five" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe></div>
 </section>
-<section id="process-control" class="level3">
-<h3 class="anchored" data-anchor-id="process-control">Process control</h3>
-<p>In 2016, Deepmind applied its RL algorithms to the control of the cooling systems in Google’s datacenters. The system learned passively from observations of the current cooling sytem what the optimal policy was. When they gave control to the RL agent, it instantly led to a 40% reduction of energy consumption, which, for Google’s data centers, represents a huge amount of money. See <span class="citation" data-cites="Luo2022">Luo et al. (<a href="references.html#ref-Luo2022" role="doc-biblioref">2022</a>)</span> for a recent review of RL controlling cooling systems.</p>
-<div id="fig-googledatacenter" class="quarto-float quarto-figure quarto-figure-center anchored">
+<section id="sec-PPO" class="level2">
+<h2 class="anchored" data-anchor-id="sec-PPO">Proximal Policy Optimization (PPO)</h2>
+<p>Proximal Policy Optimization (PPO) was proposed by <span class="citation" data-cites="Schulman2017">Schulman et al. (<a href="references.html#ref-Schulman2017" role="doc-biblioref">2017</a>)</span> to overcome the problems of TRPO (complexity, inability to share parameters or to use complex NN architectures) while increasing the range of tasks learnable by the system (compared to DQN) and improving the sample complexity (compared to online PG methods, which perform only one update per step).</p>
+<p>For that, they investigated various surrogate objectives (lower bounds) that could be solved using first-order optimization techniques (gradient descent). Let’s rewrite the surrogate loss of TRPO in the following manner:</p>
+<p><span class="math display">
+    L^\text{CPI}(\theta) = \mathbb{E}_{t} [\frac{\pi_\theta(s_t, a_t)}{\pi_{\theta_\text{old}}(s_t, a_t)} \, A_{\pi_{\theta_\text{old}}}(s_t, a_t)] = \mathbb{E}_{t} [\rho_t(\theta) \, A_{\pi_{\theta_\text{old}}}(s_t, a_t)]
+</span></p>
+<p>by making the dependency over time explicit and noting the importance sampling weight <span class="math inline">\rho_t(\theta)</span>. The superscript CPI refers to conservative policy iteration <span class="citation" data-cites="Kakade2002">(<a href="references.html#ref-Kakade2002" role="doc-biblioref">Kakade and Langford, 2002</a>)</span>. Without a constraint, the maximization of <span class="math inline">L^\text{CPI}</span> would lead to an excessively large policy updates. The authors searched how to modify the objective, in order to penalize changes to the policy that make <span class="math inline">\rho_t(\theta)</span> very different from 1, i.e.&nbsp;where the KL divergence between the new and old policies would become high. They ended up with the following surrogate loss:</p>
+<p><span class="math display">
+    L^\text{CLIP}(\theta) = \mathbb{E}_{t} [ \min (\rho_t(\theta) \, A_{\pi_{\theta_\text{old}}}(s_t, a_t), \text{clip}(\rho_t(\theta) , 1- \epsilon, 1+\epsilon) \,  A_{\pi_{\theta_\text{old}}}(s_t, a_t)]
+</span></p>
+<p>The left part of the min operator is the surrogate objective of TRPO <span class="math inline">L^\text{CPI}(\theta)</span>. The right part restricts the importance sampling weight between <span class="math inline">1-\epsilon</span> and <span class="math inline">1 +\epsilon</span>. Let’s consider two cases (depicted on <a href="#fig-ppo" class="quarto-xref">Figure&nbsp;<span>15.2</span></a>):</p>
+<div id="fig-ppo" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-googledatacenter-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/googledatacenter_1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-9" title="Figure&nbsp;5: Source: https://deepmind.com/blog/deepmind-ai-reduces-google-data-centre-cooling-bill-40/"><img src="img/googledatacenter_1.png" class="img-fluid figure-img"></a>
+<div aria-describedby="fig-ppo-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="img/ppo.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Figure&nbsp;15.2: Illustration of the effect of clipping the importance sampling weight. Source: @Schulman2017."><img src="img/ppo.png" class="img-fluid figure-img" style="width:80.0%"></a>
 </div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-googledatacenter-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;5: Source: <a href="https://deepmind.com/blog/deepmind-ai-reduces-google-data-centre-cooling-bill-40/" class="uri">https://deepmind.com/blog/deepmind-ai-reduces-google-data-centre-cooling-bill-40/</a>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ppo-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;15.2: Illustration of the effect of clipping the importance sampling weight. Source: <span class="citation" data-cites="Schulman2017">Schulman et al. (<a href="references.html#ref-Schulman2017" role="doc-biblioref">2017</a>)</span>.
 </figcaption>
 </figure>
 </div>
-<p>This showed that the progress in deep RL was not limited to toy problems or video games, but could be relevant for complex process control problems. An amazing illustration of that idea is the magnetic control of tokamak plasmas by <span class="citation" data-cites="Degrave2022">Degrave et al. (<a href="references.html#ref-Degrave2022" role="doc-biblioref">2022</a>)</span>.</p>
-<div id="fig-tokamak" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-tokamak-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/tokamak.webp" class="lightbox" data-gallery="quarto-lightbox-gallery-10" title="Figure&nbsp;6: Magnetic control of tokamak plasmas through deep reinforcement learning. Source: @Degrave2022"><img src="img/tokamak.webp" class="img-fluid figure-img"></a>
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-tokamak-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;6: Magnetic control of tokamak plasmas through deep reinforcement learning. Source: <span class="citation" data-cites="Degrave2022">Degrave et al. (<a href="references.html#ref-Degrave2022" role="doc-biblioref">2022</a>)</span>
-</figcaption>
-</figure>
-</div>
-<p>Another recent illustration is how RL can be used in the design of silicon chips by Nvidia <span class="citation" data-cites="Roy2022">(<a href="references.html#ref-Roy2022" role="doc-biblioref">Roy et al., 2022</a>)</span>.</p>
-<div id="fig-chipdesign" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-chipdesign-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/chipdesign.png" class="lightbox" data-gallery="quarto-lightbox-gallery-11" title="Figure&nbsp;7: Optimization of Parallel Prefix Circuits using Deep Reinforcement Learning. @Roy2022"><img src="img/chipdesign.png" class="img-fluid figure-img"></a>
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-chipdesign-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;7: Optimization of Parallel Prefix Circuits using Deep Reinforcement Learning. <span class="citation" data-cites="Roy2022">Roy et al. (<a href="references.html#ref-Roy2022" role="doc-biblioref">2022</a>)</span>
-</figcaption>
-</figure>
-</div>
-</section>
-<section id="robotics" class="level3">
-<h3 class="anchored" data-anchor-id="robotics">Robotics</h3>
-<p>A natural application of RL is in the domain of (autonomous) robotics, where agents / robots can autonomously solve tasks by themselves. A very influential lab working on robotics and Deep RL is RAIL lab of <strong>Sergey Levine</strong> at Berkeley.</p>
-<div class="quarto-video ratio ratio-16x9"><iframe data-external="1" src="https://www.youtube.com/embed/l8zKZLqkfII" title="OpenAI Five" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe></div>
-<p>OpenAI worked on dexterity tasks.</p>
-<div class="quarto-video ratio ratio-16x9"><iframe data-external="1" src="https://www.youtube.com/embed/jwSbzNHGflM" title="OpenAI Dexterity" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe></div>
-<p>Autonomous driving is another promising field of application for deep RL. The english startup Wayve made for example a very exciting demo of their system (see <span class="citation" data-cites="Kendall2018">Kendall et al. (<a href="references.html#ref-Kendall2018" role="doc-biblioref">2018</a>)</span> and <a href="https://wayve.ai/blog/learning-to-drive-in-a-day-with-reinforcement-learning" class="uri">https://wayve.ai/blog/learning-to-drive-in-a-day-with-reinforcement-learning</a>).</p>
-<div class="quarto-video ratio ratio-16x9"><iframe data-external="1" src="https://www.youtube.com/embed/eRwTbRtnT1I" title="Wayve" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe></div>
-<p>A recent contribution by the UZH Robotics and Perception Group leveraged deep RL to control drones flying at high speeds <span class="citation" data-cites="Kaufmann2023">(<a href="references.html#ref-Kaufmann2023" role="doc-biblioref">Kaufmann et al., 2023</a>)</span>.</p>
-<div class="quarto-video ratio ratio-16x9"><iframe data-external="1" src="https://www.youtube.com/embed/fBiataDpGIo" title="Drone racing" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe></div>
-</section>
-<section id="chatgpt" class="level3">
-<h3 class="anchored" data-anchor-id="chatgpt">ChatGPT</h3>
-<p>RL can also be used to fine-tune <strong>generative AI</strong> models, such as diffusion models or large language models such as ChatGPT. Generative models typically learn from raw data using pretext tasks: predicting missing parts of the data, or predicting the next item in a sequence. While this allows to learn a world model, it does not lead to meaningful behaviors for a task at hand. Using RL allows to fine-tune the model so that its outputs align with the task. Such a model alignment is central to the acceptance of LLMs.</p>
-<div id="fig-chatgpt" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-chatgpt-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/ChatGPT.svg" class="lightbox" data-gallery="quarto-lightbox-gallery-12" title="Figure&nbsp;8: Source: https://openai.com/blog/chatgpt/"><img src="img/ChatGPT.svg" class="img-fluid figure-img"></a>
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-chatgpt-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;8: Source: <a href="https://openai.com/blog/chatgpt/" class="uri">https://openai.com/blog/chatgpt/</a>
-</figcaption>
-</figure>
-</div>
-</section>
-<section id="and-many-more" class="level3">
-<h3 class="anchored" data-anchor-id="and-many-more">and many more…</h3>
-<p>RL finds applications in virtually any field involving sequential decision making, including finance technology <span class="citation" data-cites="Malibari2023">(<a href="references.html#ref-Malibari2023" role="doc-biblioref">Malibari et al., 2023</a>)</span>, inventory management <span class="citation" data-cites="Madeka2022">(<a href="references.html#ref-Madeka2022" role="doc-biblioref">Madeka et al., 2022</a>)</span>, missile guidance <span class="citation" data-cites="Li2022a">(<a href="references.html#ref-Li2022a" role="doc-biblioref">Li et al., 2022</a>)</span> or healthcare <span class="citation" data-cites="Yu2020b">(<a href="references.html#ref-Yu2020b" role="doc-biblioref">Yu et al., 2020</a>)</span>.</p>
+<ol type="1">
+<li><p>the transition <span class="math inline">s_t, a_t</span> has a positive advantage, i.e.&nbsp;it is a better action than expected. The probability of selecting that action again should be increased, i.e.&nbsp;<span class="math inline">\pi_\theta(s_t, a_t) &gt; \pi_{\theta_\text{old}}(s_t, a_t)</span>. However, the importance sampling weight could become very high (a change from 0.01 to 0.05 is a ration of <span class="math inline">\rho_t(\theta) = 5</span>). In that case, <span class="math inline">\rho_t(\theta)</span> will be clipped to <span class="math inline">1+\epsilon</span>, for example 1.2. As a consequence, the parameters <span class="math inline">\theta</span> will move in the right direction, but the distance between the new and the old policies will stay small.</p></li>
+<li><p>the transition <span class="math inline">s_t, a_t</span> has a negative advantage, i.e.&nbsp;it is a worse action than expected. Its probability will be decreased and the importance sampling weight might become much smaller than 1. Clipping it to <span class="math inline">1-\epsilon</span> avoids drastic changes to the policy, while still going in the right direction.</p></li>
+</ol>
+<p>Finally, they take the minimum of the clipped and unclipped objective, so that the final objective is a lower bound of the unclipped objective. In the original paper, they use <strong>generalized advantage estimation</strong> (GAE, section <a href="1.5-TD.html#sec-GAE" class="quarto-xref"><span>Generalized Advantage Estimation (GAE)</span></a>) to estimate <span class="math inline">A_{\pi_{\theta_\text{old}}}(s_t, a_t)</span>, but anything could be used (n-steps, etc). Transitions are sampled by multiple actors in parallel, as in A2C.</p>
+<p>The pseudo-algorithm of PPO is as follows:</p>
+<hr>
+<ul>
+<li><p>Initialize an actor <span class="math inline">\pi_\theta</span> and a critic <span class="math inline">V_\varphi</span> with random weights.</p></li>
+<li><p>while not converged :</p>
+<ul>
+<li><p>for <span class="math inline">N</span> actors in parallel:</p>
+<ul>
+<li><p>Collect <span class="math inline">T</span> transitions using <span class="math inline">\pi_\text{old}</span>.</p></li>
+<li><p>Compute the generalized advantage of each transition using the critic.</p></li>
+</ul></li>
+<li><p>for <span class="math inline">K</span> epochs:</p>
+<ul>
+<li><p>Sample <span class="math inline">M</span> transitions from the ones previously collected.</p></li>
+<li><p>Train the actor to maximize the clipped surrogate objective.</p></li>
+<li><p>Train the critic to minimize the mse using TD learning.</p></li>
+</ul></li>
+<li><p><span class="math inline">\theta_\text{old} \leftarrow \theta</span></p></li>
+</ul></li>
+</ul>
+<hr>
+<p>The main advantage of PPO with respect to TRPO is its simplicity: the clipped objective can be directly maximized using first-order methods like stochastic gradient descent or Adam. It does not depend on assumptions about the parameter space: CNNs and RNNs can be used for the policy. It is sample-efficient, as several epochs of parameter updates are performed between two transition samplings: the policy network therefore needs less fresh samples that strictly on-policy algorithms to converge.</p>
+<p>The only drawbacks of PPO is that there no convergence guarantee (although in practice it converges more often than other state-of-the-art methods) and that the right value for <span class="math inline">\epsilon</span> has to be determined. PPO has improved the state-of-the-art on Atari games and Mujoco robotic tasks. It has become the go-to method for continuous control problems.</p>
+<p><strong>Additional resources</strong></p>
+<ul>
+<li>More explanations and demos from OpenAI: <a href="https://blog.openai.com/openai-baselines-ppo" class="uri">https://blog.openai.com/openai-baselines-ppo</a></li>
+</ul>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
-<div id="ref-Degrave2022" class="csl-entry" role="listitem">
-Degrave, J., Felici, F., Buchli, J., Neunert, M., Tracey, B., Carpanese, F., et al. (2022). Magnetic control of tokamak plasmas through deep reinforcement learning. <em>Nature</em> 602, 414–419. doi:<a href="https://doi.org/10.1038/s41586-021-04301-9">10.1038/s41586-021-04301-9</a>.
+<div id="ref-Kakade2002" class="csl-entry" role="listitem">
+Kakade, S., and Langford, J. (2002). Approximately <span>Optimal Approximate Reinforcement Learning</span>. <em>Proc. 19th International Conference on Machine Learning</em>, 267–274. Available at: <a href="http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.7.7601">http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.7.7601</a>.
 </div>
-<div id="ref-Kaufmann2023" class="csl-entry" role="listitem">
-Kaufmann, E., Bauersfeld, L., Loquercio, A., Müller, M., Koltun, V., and Scaramuzza, D. (2023). Champion-level drone racing using deep reinforcement learning. <em>Nature</em> 620, 982–987. doi:<a href="https://doi.org/10.1038/s41586-023-06419-4">10.1038/s41586-023-06419-4</a>.
+<div id="ref-Schulman2017" class="csl-entry" role="listitem">
+Schulman, J., Chen, X., and Abbeel, P. (2017). Equivalence <span>Between Policy Gradients</span> and <span>Soft Q-Learning</span>. Available at: <a href="http://arxiv.org/abs/1704.06440">http://arxiv.org/abs/1704.06440</a> [Accessed June 12, 2019].
 </div>
-<div id="ref-Kendall2018" class="csl-entry" role="listitem">
-Kendall, A., Hawke, J., Janz, D., Mazur, P., Reda, D., Allen, J.-M., et al. (2018). Learning to <span>Drive</span> in a <span>Day</span>. Available at: <a href="http://arxiv.org/abs/1807.00412">http://arxiv.org/abs/1807.00412</a> [Accessed December 19, 2018].
-</div>
-<div id="ref-Li2022a" class="csl-entry" role="listitem">
-Li, W., Zhu, Y., and Zhao, D. (2022). Missile guidance with assisted deep reinforcement learning for head-on interception of maneuvering target. <em>Complex Intell. Syst.</em> 8, 1205–1216. doi:<a href="https://doi.org/10.1007/s40747-021-00577-6">10.1007/s40747-021-00577-6</a>.
-</div>
-<div id="ref-Luo2022" class="csl-entry" role="listitem">
-Luo, J., Paduraru, C., Voicu, O., Chervonyi, Y., Munns, S., Li, J., et al. (2022). Controlling <span>Commercial Cooling Systems Using Reinforcement Learning</span>. doi:<a href="https://doi.org/10.48550/arXiv.2211.07357">10.48550/arXiv.2211.07357</a>.
-</div>
-<div id="ref-Madeka2022" class="csl-entry" role="listitem">
-Madeka, D., Torkkola, K., Eisenach, C., Luo, A., Foster, D. P., and Kakade, S. M. (2022). Deep <span>Inventory Management</span>. doi:<a href="https://doi.org/10.48550/arXiv.2210.03137">10.48550/arXiv.2210.03137</a>.
-</div>
-<div id="ref-Malibari2023" class="csl-entry" role="listitem">
-Malibari, N., Katib, I., and Mehmood, R. (2023). Systematic <span>Review</span> on <span>Reinforcement Learning</span> in the <span>Field</span> of <span>Fintech</span>. doi:<a href="https://doi.org/10.48550/arXiv.2305.07466">10.48550/arXiv.2305.07466</a>.
-</div>
-<div id="ref-Mnih2016" class="csl-entry" role="listitem">
-Mnih, V., Badia, A. P., Mirza, M., Graves, A., Lillicrap, T. P., Harley, T., et al. (2016). Asynchronous <span>Methods</span> for <span>Deep Reinforcement Learning</span>. in <em>Proc. <span>ICML</span></em> Available at: <a href="http://arxiv.org/abs/1602.01783">http://arxiv.org/abs/1602.01783</a>.
-</div>
-<div id="ref-Mnih2013" class="csl-entry" role="listitem">
-Mnih, V., Kavukcuoglu, K., Silver, D., Graves, A., Antonoglou, I., Wierstra, D., et al. (2013). Playing <span>Atari</span> with <span>Deep Reinforcement Learning</span>. Available at: <a href="http://arxiv.org/abs/1312.5602">http://arxiv.org/abs/1312.5602</a>.
-</div>
-<div id="ref-Mnih2015" class="csl-entry" role="listitem">
-Mnih, V., Kavukcuoglu, K., Silver, D., Rusu, A. A., Veness, J., Bellemare, M. G., et al. (2015). Human-level control through deep reinforcement learning. <em>Nature</em> 518, 529–533. doi:<a href="https://doi.org/10.1038/nature14236">10.1038/nature14236</a>.
-</div>
-<div id="ref-Roy2022" class="csl-entry" role="listitem">
-Roy, R., Raiman, J., Kant, N., Elkin, I., Kirby, R., Siu, M., et al. (2022). <span>PrefixRL</span>: <span>Optimization</span> of <span>Parallel Prefix Circuits</span> using <span>Deep Reinforcement Learning</span>. doi:<a href="https://doi.org/10.1109/DAC18074.2021.9586094">10.1109/DAC18074.2021.9586094</a>.
-</div>
-<div id="ref-Sutton1998" class="csl-entry" role="listitem">
-Sutton, R. S., and Barto, A. G. (1998). <em>Reinforcement <span>Learning</span>: <span>An</span> introduction</em>. Cambridge, MA: MIT press.
-</div>
-<div id="ref-Sutton2017" class="csl-entry" role="listitem">
-Sutton, R. S., and Barto, A. G. (2017). <em>Reinforcement <span>Learning</span>: <span>An Introduction</span></em>. 2nd ed. Cambridge, MA: MIT Press Available at: <a href="http://incompleteideas.net/book/the-book-2nd.html">http://incompleteideas.net/book/the-book-2nd.html</a>.
-</div>
-<div id="ref-Yu2020b" class="csl-entry" role="listitem">
-Yu, C., Liu, J., and Nemati, S. (2020). Reinforcement <span>Learning</span> in <span>Healthcare</span>: <span>A Survey</span>. doi:<a href="https://doi.org/10.48550/arXiv.1908.08796">10.48550/arXiv.1908.08796</a>.
+<div id="ref-Schulman2015" class="csl-entry" role="listitem">
+Schulman, J., Moritz, P., Levine, S., Jordan, M., and Abbeel, P. (2015). High-<span>Dimensional Continuous Control Using Generalized Advantage Estimation</span>. Available at: <a href="http://arxiv.org/abs/1506.02438">http://arxiv.org/abs/1506.02438</a>.
 </div>
 </div>
-</section>
 </section>
 
 </main> <!-- /main -->
@@ -1107,13 +1071,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../index.html" class="pagination-link" aria-label="Preface">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">Preface</span></span>
+      <a href="../src/3.5-NaturalGradient.html" class="pagination-link" aria-label="Natural gradients">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">Natural gradients</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../src/1.1-Bandits.html" class="pagination-link" aria-label="Sampling and Bandits">
-        <span class="nav-page-text"><span class="chapter-title">Sampling and Bandits</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../src/3.7-ACER.html" class="pagination-link" aria-label="Actor-Critic with Experience Replay (ACER)">
+        <span class="nav-page-text"><span class="chapter-title">Actor-Critic with Experience Replay (ACER)</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
@@ -1131,7 +1095,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     </div>
   </div>
 </footer>
-<script>var lightboxQuarto = GLightbox({"descPosition":"bottom","closeEffect":"zoom","loop":false,"openEffect":"zoom","selector":".lightbox"});
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","selector":".lightbox","openEffect":"zoom","loop":false});
 (function() {
   let previousOnload = window.onload;
   window.onload = () => {

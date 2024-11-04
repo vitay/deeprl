@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Distributional learning – Deep Reinforcement Learning</title>
+<title>Actor-Critic with Experience Replay (ACER) – Deep Reinforcement Learning</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -49,8 +49,8 @@ div.csl-indent {
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../src/3.8-OtherPolicyGradient.html" rel="next">
-<link href="../src/3.6-EntropyRL.html" rel="prev">
+<link href="../src/3.8-EntropyRL.html" rel="next">
+<link href="../src/3.6-PPO.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -148,7 +148,7 @@ window.Quarto = {
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
         <a class="flex-grow-1 no-decor" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-          <h1 class="quarto-secondary-nav-title"><span id="sec-distributionalrl" class="quarto-section-identifier"><span class="chapter-title">Distributional learning</span></span></h1>
+          <h1 class="quarto-secondary-nav-title"><span class="chapter-title">Actor-Critic with Experience Replay (ACER)</span></h1>
         </a>     
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
         <i class="bi bi-search"></i>
@@ -243,7 +243,12 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/2.4-DQNvariants.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">DQN variants</span></a>
+  <a href="../src/2.4-DQNvariants.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">DQN variants (Rainbow)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/2.5-DistributedLearning.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Distributed learning</span></a>
   </div>
 </li>
       </ul>
@@ -265,7 +270,7 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../src/3.2-ActorCritic.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Asynchronous Advantage Actor-Critic (A3C)</span></a>
+ <span class="menu-text">Advantage Actor-Critic (A3C)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -280,22 +285,27 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/3.5-NaturalGradient.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Policy Optimization (TRPO, PPO)</span></a>
+  <a href="../src/3.5-NaturalGradient.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Natural gradients</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/3.6-EntropyRL.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Maximum Entropy RL (SAC)</span></a>
+  <a href="../src/3.6-PPO.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Policy optimization (TRPO, PPO)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/3.7-DistributionalRL.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">Distributional learning</span></a>
+  <a href="../src/3.7-ACER.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">Actor-Critic with Experience Replay (ACER)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/3.8-OtherPolicyGradient.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Miscellaneous model-free algorithms</span></a>
+  <a href="../src/3.8-EntropyRL.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Maximum Entropy RL (SAC)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/3.9-OtherPolicyGradient.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Miscellaneous model-free algorithms</span></a>
   </div>
 </li>
       </ul>
@@ -373,8 +383,9 @@ window.Quarto = {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#categorical-dqn" id="toc-categorical-dqn" class="nav-link active" data-scroll-target="#categorical-dqn">Categorical DQN</a></li>
-  <li><a href="#the-reactor" id="toc-the-reactor" class="nav-link" data-scroll-target="#the-reactor">The Reactor</a></li>
+  <li><a href="#retrace-evaluation" id="toc-retrace-evaluation" class="nav-link active" data-scroll-target="#retrace-evaluation">Retrace evaluation</a></li>
+  <li><a href="#importance-weight-truncation-with-bias-correction" id="toc-importance-weight-truncation-with-bias-correction" class="nav-link" data-scroll-target="#importance-weight-truncation-with-bias-correction">Importance weight truncation with bias correction</a></li>
+  <li><a href="#efficient-trust-region-policy-optimization" id="toc-efficient-trust-region-policy-optimization" class="nav-link" data-scroll-target="#efficient-trust-region-policy-optimization">Efficient trust region policy optimization</a></li>
   </ul>
 </nav>
     </div>
@@ -383,7 +394,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title d-none d-lg-block"><span id="sec-distributionalrl" class="quarto-section-identifier"><span class="chapter-title">Distributional learning</span></span></h1>
+<h1 class="title d-none d-lg-block"><span class="chapter-title">Actor-Critic with Experience Replay (ACER)</span></h1>
 </div>
 
 
@@ -400,166 +411,189 @@ window.Quarto = {
 </header>
 
 
-<p>All RL methods based on the Bellman equations use the expectation operator to average returns and compute the values of states and actions:</p>
-<p><span class="math display">
-    Q^\pi(s, a) = \mathbb{E}_{s, a \sim \pi}[R(s, a)]
-</span></p>
-<p>The variance of the returns is not considered in the action selection scheme, and most methods actually try to reduce this variance as it impairs the convergence of neural networks. Decision theory states that only the mean should matter on the long-term, but one can imagine tasks where the variance is an important factor for the decision. Imagine you are in a game where you have two actions available: the first one brings returns of 10 and 20, with a probability of 0.5 each (to simplify), while the second one brings returns of -10 and +40 with probability 0.5 too. Both actions have the same Q-value of 15 (a return which is actually never experienced), so one can theoretically pick whatever action, both are optimal in the Bellman’s sense.</p>
-<p>However, this is only true when playing <strong>long enough</strong>. If, after learning, one is only allowed one try on that game, it is obviously safer (but less fun) to choose the first action, as one wins at worse 10, while it is -10 with the second action. Knowing the distribution of the returns can allow to distinguish risky choices from safe ones more easily and adapt the behavior. Another advantage would be that by learning the distribution of the returns instead of just their mean, one actually gathers more information about the environment dynamics: it can only help the convergence of the algorithm towards the optimal policy.</p>
-<section id="categorical-dqn" class="level2">
-<h2 class="anchored" data-anchor-id="categorical-dqn">Categorical DQN</h2>
-<p><span class="citation" data-cites="Bellemare2017">Bellemare et al. (<a href="references.html#ref-Bellemare2017" role="doc-biblioref">2017</a>)</span> proposed to learn the <strong>value distribution</strong> (the probability distribution of the returns) through a modification of the Bellman equation. They show that learning the complete distribution of rewards instead of their mean leads to performance improvements on Atari games over modern variants of DQN.</p>
-<p>Their proposed <strong>categorical DQN</strong> (also called C51) has an architecture based on DQN, but where the output layer predicts the distribution of the returns for each action <span class="math inline">a</span> in state <span class="math inline">s</span>, instead of its mean <span class="math inline">Q^\pi(s, a)</span>. In practice, each action <span class="math inline">a</span> is represented by <span class="math inline">N</span> output neurons, who encode the support of the distribution of returns. If the returns take values between <span class="math inline">V_\text{min}</span> and <span class="math inline">V_\text{max}</span>, one can represent their distribution <span class="math inline">\mathcal{Z}</span> by taking <span class="math inline">N</span> discrete “bins” (called <em>atoms</em> in the paper) in that range. <a href="#fig-distributionallearning" class="quarto-xref">Figure&nbsp;<span>15.1</span></a> shows how the distribution of returns between -10 and 10 can be represented using 21 atoms.</p>
-<div id="fig-distributionallearning" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-distributionallearning-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/distributionallearning.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;15.1: Example of a value distribution using 21 atoms between -10 and 10. The average return is 3, but its variance is explicitly represented."><img src="img/distributionallearning.png" class="img-fluid figure-img" style="width:80.0%"></a>
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-distributionallearning-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;15.1: Example of a value distribution using 21 atoms between -10 and 10. The average return is 3, but its variance is explicitly represented.
-</figcaption>
-</figure>
-</div>
-<p>Of course, the main problem is to know in advance the range of returns <span class="math inline">[V_\text{min}, V_\text{max}]</span> (it depends largely on the choice of the discount rate <span class="math inline">\gamma</span>), but you can infer it from training another algorithm such as DQN beforehand. <span class="citation" data-cites="Dabney2017">Dabney et al. (<a href="references.html#ref-Dabney2017" role="doc-biblioref">2017</a>)</span> got rid of this problem with quantile regression. In the paper, the authors found out experimentally that 51 is the most efficient number of atoms (hence the name C51).</p>
-<p>Let’s note <span class="math inline">z_i</span> these atoms with <span class="math inline">1 \leq i &lt; N</span>. The atom probability that the return associated to a state-action pair <span class="math inline">(s, a)</span> lies within the bin associated to the atom <span class="math inline">z_i</span> is noted <span class="math inline">p_i(s, a)</span>. These probabilities can be predicted by a neural network, typically by using a softmax function over outputs <span class="math inline">f_i(s, a; \theta)</span>:</p>
-<p><span class="math display">
-    p_i(s, a; \theta) = \frac{\exp f_i(s, a; \theta)}{\sum_{j=1}^{N} \exp f_j(s, a; \theta)}
-</span></p>
-<p>The distribution of the returns <span class="math inline">\mathcal{Z}</span> is simply a sum over the atoms (represented by the Dirac distribution <span class="math inline">\delta_{z_i}</span>):</p>
-<p><span class="math display">
-    \mathcal{Z}_\theta(s, a) = \sum_{i=1}^{N} p_i(s, a; \theta) \, \delta_{z_i}
-</span></p>
-<p>If these probabilities are correctly estimated, the Q-value is easy to compute as the mean of the distribution:</p>
-<p><span class="math display">
-    Q_\theta(s, a) = \mathbb{E} [\mathcal{Z}_\theta(s, a)] = \sum_{i=1}^{N} p_i(s, a; \theta) \, z_i
-</span></p>
-<p>These Q-values can then be used for action selection as in the regular DQN. The problem is now to learn the value distribution <span class="math inline">\mathcal{Z}_\theta</span>, i.e.&nbsp;to find a learning rule / loss function for the <span class="math inline">p_i(s, a; \theta)</span>. Let’s consider a single transition <span class="math inline">(s, a, r, s')</span> and select the greedy action <span class="math inline">a'</span> in <span class="math inline">s'</span> using the current policy <span class="math inline">\pi_\theta</span>. The value distribution <span class="math inline">\mathcal{Z}_\theta</span> can be evaluated by applying recursively the Bellman operator <span class="math inline">\mathcal{T}</span>:</p>
-<p><span class="math display">
-    \mathcal{T} \, \mathcal{Z}_\theta(s, a) = \mathcal{R}(s, a) + \gamma \, \mathcal{Z}_\theta(s', a')
-</span></p>
-<p>where <span class="math inline">\mathcal{R}(s, a)</span> is the distribution of immediate rewards after <span class="math inline">(s, a)</span>. This use of the Bellman operator is the same as in Q-learning:</p>
-<p><span class="math display">
-    \mathcal{T} \, \mathcal{Q}_\theta(s, a) = \mathbb{E}[r(s, a)] + \gamma \, \mathcal{Q}_\theta(s', a')
-</span></p>
-<p>In Q-learning, one minimizes the difference (mse) between <span class="math inline">\mathcal{T} \, \mathcal{Q}_\theta(s, a)</span> and <span class="math inline">\mathcal{Q}_\theta(s, a)</span>, which are expectations (so we only manipulate scalars). Here, we will minimize the statistical distance between the distributions <span class="math inline">\mathcal{T} \, \mathcal{Z}_\theta(s, a)</span> and <span class="math inline">\mathcal{Z}_\theta(s, a)</span> themselves, using for example the KL divergence, Wasserstein metric, total variation or whatnot.</p>
-<p>The problem is mostly that the distributions <span class="math inline">\mathcal{T} \, \mathcal{Z}_\theta(s, a)</span> and <span class="math inline">\mathcal{Z}_\theta(s, a)</span> do not have the same support: for a particular atom <span class="math inline">z_i</span>, <span class="math inline">\mathcal{T} \, \mathcal{Z}_\theta(s, a)</span> can have a non-zero probability <span class="math inline">p_i(s, a)</span>, while <span class="math inline">\mathcal{Z}_\theta(s, a)</span> has a zero probability. Besides, the probabilities must sum to 1, so one cannot update the <span class="math inline">z_i</span> independently from one another.</p>
-<p>The proposed method consists of three steps:</p>
-<ol type="1">
-<li>Computation of the Bellman update <span class="math inline">\mathcal{T} \, \mathcal{Z}_\theta(s, a)</span>. They simply compute translated values for each <span class="math inline">z_i</span> according to:</li>
-</ol>
-<p><span class="math display">
-    \mathcal{T} \, z_i = r + \gamma \, z_i
-</span></p>
-<p>and clip the obtained value to <span class="math inline">[V_\text{min}, V_\text{max}]</span>. The reward <span class="math inline">r</span> translates the distribution of atoms, while the discount rate <span class="math inline">\gamma</span> scales it. <a href="#fig-distributionallearning2" class="quarto-xref">Figure&nbsp;<span>15.2</span></a> shows the distribution of <span class="math inline">\mathcal{T} \, \mathcal{Z}_\theta(s, a)</span> compared to <span class="math inline">\mathcal{Z}_\theta(s, a)</span>. Note that the atoms of the two distributions are not aligned.</p>
-<div id="fig-distributionallearning2" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-distributionallearning2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/distributionallearning2.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Figure&nbsp;15.2: Computation of the Bellman update \mathcal{T} \, \mathcal{Z}_\theta(s, a). The atoms of the two distributions are not aligned."><img src="img/distributionallearning2.png" class="img-fluid figure-img" style="width:80.0%"></a>
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-distributionallearning2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;15.2: Computation of the Bellman update <span class="math inline">\mathcal{T} \, \mathcal{Z}_\theta(s, a)</span>. The atoms of the two distributions are not aligned.
-</figcaption>
-</figure>
-</div>
-<ol start="2" type="1">
-<li>Distribution of the probabilities of <span class="math inline">\mathcal{T} \, \mathcal{Z}_\theta(s, a)</span> on the support of <span class="math inline">\mathcal{Z}_\theta(s, a)</span>. The projected atom <span class="math inline">\mathcal{T} \, z_i</span> lie between two “real” atoms <span class="math inline">z_l</span> and <span class="math inline">z_u</span>, with a non-integer index <span class="math inline">b</span> (for example <span class="math inline">b = 3.4</span>, <span class="math inline">l = 3</span> and <span class="math inline">u=4</span>). The corresponding probability <span class="math inline">p_{b}(s', a'; \theta)</span> of the next greedy action <span class="math inline">(s', a')</span> is “spread” to its neighbors through a local interpolation depending on the distances between <span class="math inline">b</span>, <span class="math inline">l</span> and <span class="math inline">u</span>:</li>
-</ol>
-<p><span class="math display">
-    \Delta p_{l}(s', a'; \theta) = p_{b}(s', a'; \theta) \, (b - u)
-</span> <span class="math display">
-    \Delta p_{u}(s', a'; \theta) = p_{b}(s', a'; \theta) \, (l - b)
-</span></p>
-<p><a href="#fig-distributionallearning3" class="quarto-xref">Figure&nbsp;<span>15.3</span></a> shows how the projected update distribution <span class="math inline">\Phi \, \mathcal{T} \, \mathcal{Z}_\theta(s, a)</span> now matches the support of <span class="math inline">\mathcal{Z}_\theta(s, a)</span></p>
-<div id="fig-distributionallearning3" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-distributionallearning3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/distributionallearning3.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Figure&nbsp;15.3: Projected update \Phi \, \mathcal{T} \, \mathcal{Z}_\theta(s, a) on the support of \mathcal{Z}_\theta(s, a). The atoms are now aligned, the statistical distance between the two distributions can be minimized."><img src="img/distributionallearning3.png" class="img-fluid figure-img" style="width:80.0%"></a>
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-distributionallearning3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;15.3: Projected update <span class="math inline">\Phi \, \mathcal{T} \, \mathcal{Z}_\theta(s, a)</span> on the support of <span class="math inline">\mathcal{Z}_\theta(s, a)</span>. The atoms are now aligned, the statistical distance between the two distributions can be minimized.
-</figcaption>
-</figure>
-</div>
-<p>The projection of the Bellman update onto an atom <span class="math inline">z_i</span> can be summarized by the following equation:</p>
-<p><span class="math display">
-    (\Phi \, \mathcal{T} \, \mathcal{Z}_\theta(s, a))_i = \sum_{j=1}^N \big [1 - \frac{| [\mathcal{T}\, z_j]_{V_\text{min}}^{V_\text{max}} - z_i|}{\Delta z} \big ]_0^1 \, p_j (s', a'; \theta)
-</span></p>
-<p>where <span class="math inline">[\cdot]_a^b</span> bounds its argument in <span class="math inline">[a, b]</span> and <span class="math inline">\Delta z</span> is the step size between two atoms.</p>
-<ol start="3" type="1">
-<li>Minimizing the statistical distance between <span class="math inline">\Phi \, \mathcal{T} \, \mathcal{Z}_\theta(s, a)</span> and <span class="math inline">\mathcal{Z}_\theta(s, a)</span>. Now that the Bellman update has the same support as the value distribution, we can minimize the KL divergence between the two for a single transition:</li>
-</ol>
-<p><span class="math display">
-    \mathcal{L}(\theta) = D_\text{KL} (\Phi \, \mathcal{T} \, \mathcal{Z}_{\theta'}(s, a) | \mathcal{Z}_\theta(s, a))
-</span></p>
-<p>using a target network <span class="math inline">\theta'</span> for the target. It is to be noted that minimizing the KL divergence is the same as minimizing the cross-entropy between the two, as in classification tasks:</p>
-<p><span class="math display">
-    \mathcal{L}(\theta) =  - \sum_i (\Phi \, \mathcal{T} \, \mathcal{Z}_{\theta'}(s, a))_i \log p_i (s, a; \theta)
-</span></p>
-<p>The projected Bellman update plays the role of the one-hot encoded target vector in classification (except that it is not one-hot encoded). DQN performs a regression on the Q-values (mse loss), while categorical DQN performs a classification (cross-entropy loss). Apart from the way the target is computed, categorical DQN is very similar to DQN: architecture, experience replay memory, target networks, etc.</p>
-<p><a href="#fig-categoricaldqn" class="quarto-xref">Figure&nbsp;<span>15.4</span></a> illustrates how the predicted value distribution changes when playing Space invaders (also have a look at the Youtube video at <a href="https://www.youtube.com/watch?v=yFBwyPuO2Vg" class="uri">https://www.youtube.com/watch?v=yFBwyPuO2Vg</a>). C51 outperforms DQN on most Atari games, both in terms of the achieved performance and the sample complexity.</p>
-<div id="fig-categoricaldqn" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-categoricaldqn-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/categoricaldqn.gif" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="Figure&nbsp;15.4: Evolution of the value distribution for the categorical DQN playing Space Invaders. Animation Source: https://deepmind.com/blog/going-beyond-average-reinforcement-learning/"><img src="img/categoricaldqn.gif" class="img-fluid figure-img" style="width:100.0%"></a>
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-categoricaldqn-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;15.4: Evolution of the value distribution for the categorical DQN playing Space Invaders. Animation Source: <a href="https://deepmind.com/blog/going-beyond-average-reinforcement-learning/" class="uri">https://deepmind.com/blog/going-beyond-average-reinforcement-learning/</a>
-</figcaption>
-</figure>
-</div>
-<iframe width="600" height="300" src="https://www.youtube.com/embed/yFBwyPuO2Vg" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="">
-</iframe>
-<p><strong>Additional resources:</strong></p>
+<p>The natural gradient methods presented previously (TRPO, PPO) are stochastic actor-critic methods, therefore strictly on-policy. Off-policy methods such as DQN or DDPG allow to reuse past transitions through the usage of an <strong>experience replay memory</strong>, potentially reducing the sample complexity at the cost of a higher variance and worse stability. <span class="citation" data-cites="Wang2017">Wang et al. (<a href="references.html#ref-Wang2017" role="doc-biblioref">2017</a>)</span> proposed an off-policy actor-critic architecture using variance reduction techniques, the off-policy Retrace algorithm <span class="citation" data-cites="Munos2016">(<a href="references.html#ref-Munos2016" role="doc-biblioref">Munos et al., 2016</a>)</span>, parallel training of multiple actor-learners <span class="citation" data-cites="Mnih2016">(<a href="references.html#ref-Mnih2016" role="doc-biblioref">Mnih et al., 2016</a>)</span>, truncated importance sampling with bias correction, stochastic duelling network architectures <span class="citation" data-cites="Wang2016">(<a href="references.html#ref-Wang2016" role="doc-biblioref">Wang et al., 2016</a>)</span>, and efficient trust region policy optimization. It can be seen as the off-policy counterpart to A3C.</p>
+<p>The first aspect of ACER is that it interleaves on-policy learning with off-policy: the agent samples a trajectory <span class="math inline">\tau</span>, learns from it on-policy, stores it in the replay buffer, samples <span class="math inline">n</span> trajectories from the replay buffer and learns off-policy from each of them:</p>
+<hr>
 <ul>
-<li><a href="https://deepmind.com/blog/going-beyond-average-reinforcement-learning" class="uri">https://deepmind.com/blog/going-beyond-average-reinforcement-learning</a></li>
-<li><a href="https://physai.sciencesconf.org/data/pages/distributional_RL_Remi_Munos.pdf" class="uri">https://physai.sciencesconf.org/data/pages/distributional_RL_Remi_Munos.pdf</a></li>
-<li><a href="https://flyyufelix.github.io/2017/10/24/distributional-bellman.html" class="uri">https://flyyufelix.github.io/2017/10/24/distributional-bellman.html</a>, with keras code for C51.</li>
-</ul>
-</section>
-<section id="the-reactor" class="level2">
-<h2 class="anchored" data-anchor-id="the-reactor">The Reactor</h2>
-<p>The <strong>Reactor</strong> (Retrace Actor) of <span class="citation" data-cites="Gruslys2017">Gruslys et al. (<a href="references.html#ref-Gruslys2017" role="doc-biblioref">2017</a>)</span> combines many architectural and algorithmic contributions seen until now in order to provide an algorithm that is both sample efficient and with a good run-time performance. A3C has for example a better run-time performance (smaller wall-clock time for the training) than DQN or categorical DQN thanks to the use of multiple actor-learners in parallel, but its sample complexity is actually higher (as it is on-policy).</p>
-<p>The Reactor combines and improves on:</p>
+<li><p>Sample a trajectory <span class="math inline">\tau</span> using the current policy.</p></li>
+<li><p>Apply ACER on-policy on <span class="math inline">\tau</span>.</p></li>
+<li><p>Store <span class="math inline">\tau</span> in the replay buffer.</p></li>
+<li><p>Sample <span class="math inline">n</span> trajectories from the replay buffer.</p></li>
+<li><p>for each sampled trajectory <span class="math inline">\tau_k</span>:</p>
 <ul>
-<li>An actor-critic architecture using policy gradient with importance sampling,</li>
-<li>Off-policy corrected returns computed by the Retrace algorithm,</li>
-<li>Distributional learning of the Q-values in the critic,</li>
-<li>Prioritized experience replay for sequences.</li>
+<li>Apply ACER off-policy on <span class="math inline">\tau_k</span>.</li>
+</ul></li>
 </ul>
-<p>One could consider REACTOR as the distributional version of ACER. We will not go into all the details here, but simply outline the main novelties.</p>
-<p>The Reactor is composed of an actor <span class="math inline">\pi_\theta(s, a)</span> and a critic <span class="math inline">Q_\varphi(s, a)</span>. The actor is trained using policy gradient with importance sampling, as in Off-PAC. For a single state <span class="math inline">s</span> and an action <span class="math inline">\hat{a}</span> sampled by the behavior policy <span class="math inline">b</span>, the gradient of the objective is defined as:</p>
+<hr>
+<p>Mixing on-policy learning with off-policy is quite similar to the Self-Imitation Learning approach of <span class="citation" data-cites="Oh2018">(<a href="references.html#ref-Oh2018" role="doc-biblioref">Oh et al., 2018</a>)</span>.</p>
+<section id="retrace-evaluation" class="level3">
+<h3 class="anchored" data-anchor-id="retrace-evaluation">Retrace evaluation</h3>
+<p>ACER comes in two flavors: one for discrete action spaces, one for continuous spaces. The discrete version is simpler, so let’s focus on this one. As any policy-gradient method, ACER tries to estimate the policy gradient for each transition of a trajectory, but using importance sampling <span class="citation" data-cites="Degris2012">(<a href="references.html#ref-Degris2012" role="doc-biblioref">Degris et al., 2012</a>)</span>:</p>
+<p><span class="math display">
+    \nabla_\theta J(\theta)  = \mathbb{E}_{s_t, a_t \sim \rho_b} [\frac{\pi_\theta(s_t, a_t)}{b(s_t, a_t)} \, Q_\varphi(s_t, a_t) \, \nabla_\theta \log \pi_\theta(s_t, a_t)]
+</span></p>
+<p>The problem is now to train the critic <span class="math inline">Q_\varphi(s_t, a_t)</span> by computing the correct target. ACER learning builds on the Retrace algorithm <span class="citation" data-cites="Munos2016">(<a href="references.html#ref-Munos2016" role="doc-biblioref">Munos et al., 2016</a>)</span>:</p>
+<p><span class="math display">
+    \Delta Q_\varphi(s_t, a_t) = \alpha \, \sum_{t'=t}^T (\gamma)^{t'-t} \left(\prod_{s=t+1}^{t'} c_s \right) \, \delta_{t'}
+</span></p>
+<p>with <span class="math inline">c_s = \lambda \min (1, \frac{\pi_\theta(s_s, a_s)}{b(s_s, a_s)})</span> being the clipped importance sampling weight and <span class="math inline">\delta_{t'}</span> is the TD error at time <span class="math inline">t'&gt;t</span>:</p>
+<p><span class="math display">
+    \delta_{t'} = r_{t'+1} + \gamma \, V(s_{t'+1}) - V(s_{t'})
+</span></p>
+<p>By noting <span class="math inline">Q^\text{ret}</span> the target value for the update of the critic (neglecting the learning rate <span class="math inline">\alpha</span>):</p>
+<p><span class="math display">
+    Q^\text{ret}(s_t, a_t) = Q_\varphi(s_t, a_t) +  \sum_{t'=t}^T (\gamma)^{t'-t} \left(\prod_{s=t+1}^{t'} c_s \right) \, \delta_{t'}
+</span></p>
+<p>we can transform the Retrace formula into a recurrent one:</p>
 <p><span class="math display">
 \begin{aligned}
-    \nabla_\theta J(\theta) = \frac{\pi_\theta(s, \hat{a})}{b(s, \hat{a})} &amp; \, (R(s, \hat{a}) - Q_\varphi(s, \hat{a})) \, \nabla_\theta \log \pi_\theta(s, \hat{a}) \\
-    &amp; + \sum_a Q_\varphi(s, a) \, \nabla_\theta \pi_\theta(s, a) \\
+    Q^\text{ret}(s_t, a_t) &amp; = Q_\varphi(s_t, a_t) + \delta_t + \sum_{t'=t+1}^T (\gamma)^{t'-t} \left(\prod_{s=t+1}^{t'} c_s \right) \, \delta_{t'} \\
+    &amp; = Q_\varphi(s_t, a_t) + \delta_t + \gamma \, c_{t+1} \, (Q^\text{ret}(s_{t+1}, a_{t+1}) - Q_\varphi(s_{t+1}, a_{t+1})) \\
 \end{aligned}
 </span></p>
-<p>The first term comes from Off-PAC and only concerns the chosen action <span class="math inline">\hat{a}</span> from the behavior policy. The actual return <span class="math inline">R(s, a)</span> is compared to its estimate <span class="math inline">Q_\varphi(s, \hat{a})</span> in order to reduce its variance. The second term <span class="math inline">\sum_a Q_\varphi(s, a) \, \nabla_\theta \pi_\theta(s, a)</span> depends on all available actions in <span class="math inline">s</span>. Its role is to reduce the bias of the first term, without adding any variance as it is only based on estimates. As the value of the state is defined by <span class="math inline">V^\pi(s) = \sum_a \pi(s, a) \, Q^\pi(s, a)</span>, maximizing this term maximizes the value of the state, i.e.&nbsp;the associated returns. This rule is called <strong>leave-one-out</strong> (LOO), as one action is left out from the sum and estimated from actual returns instead of other estimates.</p>
-<p>For a better control on the variance, the behavior probability <span class="math inline">b(s, a)</span> is replaced by a parameter <span class="math inline">\beta</span>:</p>
+<p><span class="math inline">Q_\varphi(s_t, a_t) + \delta_t = Q_\varphi(s_t, a_t) + r_{t+1} + \gamma \, V(s_{t+1}) - V(s_t)</span> can furthermore be reduced to <span class="math inline">r_{t+1} + \gamma \, V(s_{t+1})</span> by considering that <span class="math inline">Q_\varphi(s_t, a_t) \approx V(s_t)</span> (the paper does not justify this assumption, but it should be true in expectation).</p>
+<p>This gives us the following target value for the Q-values:</p>
 <p><span class="math display">
-    \nabla_\theta J(\theta) = \beta \, (R(s, \hat{a}) - Q_\varphi(s, \hat{a})) \, \nabla_\theta \pi_\theta(s, \hat{a}) + \sum_a Q_\varphi(s, a) \, \nabla_\theta \pi_\theta(s, a)
+    Q^\text{ret}(s_t, a_t) = r_{t+1} + \gamma \, c_{t+1} \, (Q^\text{ret}(s_{t+1}, a_{t+1}) - Q_\varphi(s_{t+1}, a_{t+1})) + \gamma \, V(s_{t+1})
 </span></p>
-<p><span class="math inline">\beta</span> is defined as <span class="math inline">\min (c, \frac{1}{b(s, \hat{a})})</span>, where <span class="math inline">c&gt;1</span> is a constant. This truncated term is similar to what was used in ACER. The rule is now called <strong><span class="math inline">\beta</span>-LOO</strong> and is a novel proposition of the Reactor.</p>
-<p>The second importance contribution of the Reactor is how to combine the Retrace algorithm (<span class="citation" data-cites="Munos2016">Munos et al. (<a href="references.html#ref-Munos2016" role="doc-biblioref">2016</a>)</span>) for estimating the return <span class="math inline">R(s, \hat{a})</span> on multiple steps, with the distributional learning method of Categorical DQN. As Retrace uses n-steps returns iteratively, the n-step distributional Bellman target can updated using the <span class="math inline">n</span> future rewards:</p>
+<p>One remaining issue is that the critic would also need to output the value of each state <span class="math inline">V(s_{t+1})</span>, in addition to the Q-values <span class="math inline">Q_\varphi(s_t, a_t)</span>. In the discrete case, this is not necessary, as the value of a state is the expectation of the value of the available actions under the current policy:</p>
 <p><span class="math display">
-    z_i^n = \mathcal{T}^n \, z_i = \sum_{k=t}^{t+n} \gamma^{k-t} r_k + \gamma^n \, z_i
+    V(s_{t+1}) = \mathbb{E}_{a_{t+1} \sim \pi_\theta} [Q_\varphi(s_{t+1}, a_{t+1})] = \sum_a \pi_\theta(s_{t+1}, a) \, Q_\varphi(s_{t+1}, a))
 </span></p>
-<p>We leave out the details on how Retrace is combined with these distributional Bellman updates: the notation is complicated but the idea is simple. The last importance contribution of the paper is the use of <strong>prioritized sequence replay</strong>. Prioritized experience replay allows to select in priority transitions from the replay buffer which are the most surprising, i.e.&nbsp;where the TD error is the highest. These transitions are the ones carrying the most information. A similar principle can be applied to sequences of transitions, which are needed by the n-step updates. They devised a specific sampling algorithm in order to achieve this and reduce the variance of the samples.</p>
-<p>The last particularities of the Reactor is that it uses a LSTM layer to make the problem Markovian (instead of stacking four frames as in DQN) and train multiple actor-learners as in A3C. The algorithm is trained on CPU, with 10 or 20 actor-learners. The Reactor outperforms DQN and its variants, A3C and ACER on Atari games. Importantly, Reactor only needs one day of training on CPU, compared to the 8 days of GPU training needed by DQN.</p>
+<p>The value of the next state can be easily computed when we have the policy <span class="math inline">\pi_\theta(s, a)</span> (actor) and the Q-value <span class="math inline">Q_\varphi(s, a)</span> (critic) of each action <span class="math inline">a</span> in a state <span class="math inline">s</span>.</p>
+<p>The actor-critic architecture needed for ACER is therefore the following:</p>
+<ul>
+<li><p>The <strong>actor</strong> <span class="math inline">\pi_\theta</span> takes a state <span class="math inline">s</span> as input and outputs a vector of probabilities <span class="math inline">\pi_\theta</span> for each available action.</p></li>
+<li><p>The <strong>critic</strong> <span class="math inline">Q_\varphi</span> takes a state <span class="math inline">s</span> as input and outputs a vector of Q-values.</p></li>
+</ul>
+<p>This is different from the architecture of A3C, where the critic “only” had to output the value of a state <span class="math inline">V_\varphi(s)</span>: it is now a vector of Q-values. Note that the actor and the critic can share most of their parameters: the network only needs to output two different vectors <span class="math inline">\pi_\theta(s)</span> and <span class="math inline">Q_\varphi(s)</span> for each input state <span class="math inline">s</span> (<a href="#fig-acer" class="quarto-xref">Figure&nbsp;<span>16.1</span></a>). This makes a “two heads” NN, similar to the <strong>duelling architecture</strong> of <span class="citation" data-cites="Wang2016">(<a href="references.html#ref-Wang2016" role="doc-biblioref">Wang et al., 2016</a>)</span>.</p>
+<div id="fig-acer" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-acer-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="img/acer.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;16.1: Architecture of the ACER actor-critic."><img src="img/acer.png" class="img-fluid figure-img" style="width:90.0%"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-acer-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;16.1: Architecture of the ACER actor-critic.
+</figcaption>
+</figure>
+</div>
+<p>The target Q-value <span class="math inline">Q^\text{ret}(s, a)</span> can be found recursively by iterating backwards over the episode:</p>
+<hr>
+<ul>
+<li><p>Initialize <span class="math inline">Q^\text{ret}(s_T, a_T)</span>, <span class="math inline">Q_\varphi(s_T, a_T)</span> and <span class="math inline">V(s_T)</span> to 0, as the terminal state has no value.</p></li>
+<li><p>for <span class="math inline">t \in [T-1, \ldots, 0]</span>:</p>
+<ul>
+<li>Update the target Q-value using the received reward, the critic and the previous target value:</li>
+</ul>
+<p><span class="math display">
+      Q^\text{ret}(s_t, a_t) = r_{t+1} + \gamma \, c_{t+1} \, (Q^\text{ret}(s_{t+1}, a_{t+1}) - Q_\varphi(s_{t+1}, a_{t+1})) + \gamma \, V(s_{t+1})
+  </span></p>
+<ul>
+<li>Apply the critic on the current action:</li>
+</ul>
+<p><span class="math display">
+      Q_\varphi(s_t, a_t)
+  </span></p>
+<ul>
+<li>Estimate the value of the state using the critic:</li>
+</ul>
+<p><span class="math display">
+      V(s_t) = \sum_a \pi_\theta(s_t) \, Q_\varphi(s_t, a)
+  </span></p></li>
+</ul>
+<hr>
+<p>As the target value <span class="math inline">Q^\text{ret}(s, a)</span> use multiple “real” rewards <span class="math inline">r_{t+1}</span>, it is actually less biased than the critic <span class="math inline">Q_\varphi(s, a)</span>. It is then better to use it to update the actor:</p>
+<p><span class="math display">
+    \nabla_\theta J(\theta)  = \mathbb{E}_{s_t, a_t \sim \rho_b} [\frac{\pi_\theta(s_t, a_t)}{b(s_t, a_t)} \, Q^\text{ret}(s_t, a_t) \, \nabla_\theta \log \pi_\theta(s_t, a_t)]
+</span></p>
+<p>The critic just has to minimize the mse with the target value:</p>
+<p><span class="math display">
+    \mathcal{L}(\varphi) = \mathbb{E}_{s_t, a_t \sim \rho_b} [(Q^\text{ret}(s, a) - Q_\varphi(s, a))^2]
+</span></p>
+</section>
+<section id="importance-weight-truncation-with-bias-correction" class="level3">
+<h3 class="anchored" data-anchor-id="importance-weight-truncation-with-bias-correction">Importance weight truncation with bias correction</h3>
+<p>When updating the actor, we rely on the importance sampling weight <span class="math inline">\rho_t = \frac{\pi_\theta(s_t, a_t)}{b(s_t, a_t)}</span> which can vary a lot and destabilize learning.</p>
+<p><span class="math display">
+    \nabla_\theta J(\theta)  = \mathbb{E}_{s_t, a_t \sim \rho_b} [\rho_t \, Q^\text{ret}(s_t, a_t) \, \nabla_\theta \log \pi_\theta(s_t, a_t)]
+</span></p>
+<p>PPO solved this problem by clipping the importance sampling weight between <span class="math inline">1- \epsilon</span> and <span class="math inline">1+\epsilon</span>. ACER uses a similar strategy, but only using an upper bound <span class="math inline">c = 10</span> on the weight:</p>
+<p><span class="math display">
+    \bar{\rho}_t = \min(c, \rho_t)
+</span></p>
+<p>Using <span class="math inline">\bar{\rho}_t</span> in the policy gradient directly would introduce a bias: actions whose importance sampling weight <span class="math inline">\rho_t</span> is higher than <span class="math inline">c</span> would contribute to the policy gradient with a smaller value than they should, introducing a bias.</p>
+<p>The solution in ACER is to add a <strong>bias correcting term</strong>, that corrects the policy gradient when an action has a weight higher than <span class="math inline">c</span>:</p>
+<p><span class="math display">
+\begin{aligned}
+    \nabla_\theta J(\theta)  = &amp; \mathbb{E}_{s_t \sim \rho_b} [\mathbb{E}_{a_t \sim b} [\bar{\rho}_t \, Q^\text{ret}(s_t, a_t) \, \nabla_\theta \log \pi_\theta(s_t, a_t)] \\
+    &amp; + \mathbb{E}_{a \sim \pi_\theta}[(\frac{\rho_t(a) - c}{\rho_t(a)})^+ \, Q_\varphi(s_t, a) \, \nabla_\theta \log \pi_\theta(s_t, a)]] \\
+\end{aligned}
+</span></p>
+<p>The left part of that equation is the same policy gradient as before, but using a clipped importance sampling weight.</p>
+<p>The right part requires to integrate over all possible actions in the state <span class="math inline">s_t</span> according to the learned policy <span class="math inline">\pi_\theta</span>, although only the action <span class="math inline">a_t</span> was selected by the behavior policy <span class="math inline">b</span>. The term <span class="math inline">(\frac{\rho_t(a) - c}{\rho_t(a)})^+</span> is zero for all actions having an importance sampling weight smaller than c, and has a maximum of 1. In practice, this correction term can be computed using the vectors <span class="math inline">\pi_\theta(s, a)</span> and <span class="math inline">Q_\varphi(s, a)</span>, which are the outputs of the actor and the critic, respectively.</p>
+<p>Finally, the Q-values <span class="math inline">Q^\text{ret}(s_t, a_t)</span> and <span class="math inline">Q_\varphi(s_t, a)</span> are transformed into advantages <span class="math inline">Q^\text{ret}(s_t, a_t)  - V_\varphi(s_t)</span> and <span class="math inline">Q_\varphi(s_t, a) - V_\varphi(s_t)</span> by substracting the value of the state in order to reduce the variance of the policy gradient.</p>
+<p>In short, we now have an estimator of the policy gradient which is <strong>unbiased</strong> and of smaller variance.</p>
+</section>
+<section id="efficient-trust-region-policy-optimization" class="level3">
+<h3 class="anchored" data-anchor-id="efficient-trust-region-policy-optimization">Efficient trust region policy optimization</h3>
+<p>However, the variance is still too high. The last important step of ACER is an efficient TRPO update for the parameters of the actor.</p>
+<p>A first component of their TRPO update is they use a <strong>target actor network</strong> <span class="math inline">\theta'</span> (called averaged policy network in the paper) slowly tracking the actor <span class="math inline">\theta</span> after each update:</p>
+<p><span class="math display">
+    \theta' \leftarrow \alpha \, \theta' + (1 - \alpha) \, \theta
+</span></p>
+<p>A second component is that the actor is decomposed into two components:</p>
+<ol type="1">
+<li>a distribution <span class="math inline">f</span>.</li>
+<li>the statistics <span class="math inline">\Phi_\theta(x)</span> of this distribution.</li>
+</ol>
+<p>This is what you do when you apply the softmax action selection on Q-values: the distribution is the Gibbs (or Boltzmann) distribution and the Q-values are its statistics. In the discrete case, they take a categorical (or multinouilli) distribution: <span class="math inline">\Phi_\theta(s)</span> is the probability for each action to be taken and the distribution selects one of them. Think of a dice with one side per action and probabilities governed by the policy. In the continuous case, it could be anything, for example a normal distribution.</p>
+<p>Let’s rewrite the policy gradient with that formulation (we omit here the bias correction, but ACER uses it), but only w.r.t the output of the actor <span class="math inline">\Phi_\theta(s_t)</span> for a state <span class="math inline">s_t</span>:</p>
+<p><span class="math display">
+    \hat{g_t}^\text{ACER} = \nabla_{\Phi_\theta(s_t)} J(\theta)  = \bar{\rho}_t \, (Q^\text{ret}(s_t, a_t) - V_\phi(s_t) ) \, \nabla_{\Phi_\theta(s_t)} \log f(a_t | \Phi_\theta(s_t))
+</span></p>
+<p>To compute the policy gradient, we would only need to apply the chain rule:</p>
+<p><span class="math display">
+    \nabla_\theta J(\theta) = \mathbb{E}_{s_t, a_t \sim \rho_b} [ \hat{g_t}^\text{ACER} \, \nabla_\theta \Phi_\theta(s_t) ]
+</span></p>
+<p>The variance of <span class="math inline">\hat{g_t}^\text{ACER}</span> is too high. ACER defines the following TRPO problem: we search for a gradient <span class="math inline">z</span> solution of:</p>
+<p><span class="math display">
+    \min_z ||\hat{g_t}^\text{ACER} - z ||^2 \\
+    \text{s.t.} \quad \nabla_{\Phi_\theta(s_t)} D_{KL}( f(\cdot | \Phi_{\theta'}(s_t) ) || f(\cdot | \Phi_{\theta'}(s_t)) )^T \times z &lt; \delta
+</span></p>
+<p>The exact meaning of the constraint is hard to grasp, but here some intuition: the change of policy <span class="math inline">z</span> (remember that <span class="math inline">\hat{g_t}^\text{ACER}</span> is defined w.r.t the output of the actor) should be as orthogonal as possible (within a margin <span class="math inline">\delta</span>) to the change of the <strong>Kullback-Leibler</strong> divergence between the policy defined by the actor (<span class="math inline">\theta</span>) and the one defined by the <strong>target actor</strong> (<span class="math inline">\theta'</span>). In other words, we want to update the actor, but without making the new policy too different from its past values (the target actor).</p>
+<p>The advantage of this formulation is that the objective function is quadratic in <span class="math inline">z</span> and the constraint is linear. We can therefore very easily find its solution using KKT optimization:</p>
+<p><span class="math display">
+    z^* = \hat{g_t}^\text{ACER} - \max(0, \frac{k^T \, \hat{g_t}^\text{ACER} - \delta}{||k||^2}) \, k
+</span></p>
+<p>where <span class="math inline">k = \nabla_{\Phi_\theta(s_t)} D_{KL}( f(\cdot | \Phi_{\theta'}(s_t) ) || f(\cdot | \Phi_{\theta'}(s_t)) )</span>.</p>
+<p>Having obtained <span class="math inline">z^*</span>, we can safely update the parameters of the actor in the direction of:</p>
+<p><span class="math display">
+    \nabla_\theta J(\theta) = \mathbb{E}_{s_t, a_t \sim \rho_b} [ z^* \, \nabla_\theta \Phi_\theta(s_t) ]
+</span></p>
+<p>As noted in the paper: <em>“The trust region step is carried out in the space of the statistics of the distribution <span class="math inline">f</span> , and not in the space of the policy parameters. This is done deliberately so as to avoid an additional back-propagation step through the policy network”</em>. We indeed need only one network update per transition. If the KL divergence was computed with respect to <span class="math inline">\pi_\theta</span> directly, one would need to apply backpropagation on the target network too.</p>
+<p>The target network <span class="math inline">\theta'</span> is furthermore used as the behavior policy <span class="math inline">b(s, a)</span>. here is also a <strong>target critic network</strong> <span class="math inline">\varphi'</span>, which is primarily used to compute the value of the states <span class="math inline">V_{\varphi'}(s)</span> for variance reduction.</p>
+<p>For a complete description of the algorithm, refer to the paper… To summarize, ACER is an actor-critic architecture using Retrace estimated values, importance weight truncation with bias correction and efficient TRPO. Its variant for continuous action spaces furthermore uses a <strong>Stochastic Dueling Network</strong> (SDN) in order estimate both <span class="math inline">Q_\varphi(s, a)</span> and <span class="math inline">V_\varphi(s)</span>. It is straightforward in the discrete case (multiply the policy with the Q-values and take the average) but hard in the continuous case.</p>
+<p>ACER improved the performance and/or the sample efficiency of the state-of-the-art (A3C, DDPG, etc) on a variety of tasks (Atari, Mujoco). Apart from truncation with bias correction, all aspects of the algorithm are essential to obtain this improvement, as shown by ablation studies.</p>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
-<div id="ref-Bellemare2017" class="csl-entry" role="listitem">
-Bellemare, M. G., Dabney, W., and Munos, R. (2017). A <span>Distributional Perspective</span> on <span>Reinforcement Learning</span>. Available at: <a href="http://arxiv.org/abs/1707.06887">http://arxiv.org/abs/1707.06887</a>.
+<div id="ref-Degris2012" class="csl-entry" role="listitem">
+Degris, T., White, M., and Sutton, R. S. (2012). Linear <span>Off-Policy Actor-Critic</span>. in <em>Proceedings of the 2012 <span>International Conference</span> on <span>Machine Learning</span></em> Available at: <a href="http://arxiv.org/abs/1205.4839">http://arxiv.org/abs/1205.4839</a>.
 </div>
-<div id="ref-Dabney2017" class="csl-entry" role="listitem">
-Dabney, W., Rowland, M., Bellemare, M. G., and Munos, R. (2017). Distributional <span>Reinforcement Learning</span> with <span>Quantile Regression</span>. Available at: <a href="http://arxiv.org/abs/1710.10044">http://arxiv.org/abs/1710.10044</a> [Accessed June 28, 2019].
-</div>
-<div id="ref-Gruslys2017" class="csl-entry" role="listitem">
-Gruslys, A., Dabney, W., Azar, M. G., Piot, B., Bellemare, M., and Munos, R. (2017). The <span>Reactor</span>: <span>A</span> fast and sample-efficient <span>Actor-Critic</span> agent for <span>Reinforcement Learning</span>. Available at: <a href="http://arxiv.org/abs/1704.04651">http://arxiv.org/abs/1704.04651</a>.
+<div id="ref-Mnih2016" class="csl-entry" role="listitem">
+Mnih, V., Badia, A. P., Mirza, M., Graves, A., Lillicrap, T. P., Harley, T., et al. (2016). Asynchronous <span>Methods</span> for <span>Deep Reinforcement Learning</span>. in <em>Proc. <span>ICML</span></em> Available at: <a href="http://arxiv.org/abs/1602.01783">http://arxiv.org/abs/1602.01783</a>.
 </div>
 <div id="ref-Munos2016" class="csl-entry" role="listitem">
 Munos, R., Stepleton, T., Harutyunyan, A., and Bellemare, M. G. (2016). Safe and <span>Efficient Off-Policy Reinforcement Learning</span>. Available at: <a href="http://arxiv.org/abs/1606.02647">http://arxiv.org/abs/1606.02647</a>.
+</div>
+<div id="ref-Oh2018" class="csl-entry" role="listitem">
+Oh, J., Guo, Y., Singh, S., and Lee, H. (2018). Self-<span>Imitation Learning</span>. Available at: <a href="http://arxiv.org/abs/1806.05635">http://arxiv.org/abs/1806.05635</a>.
+</div>
+<div id="ref-Wang2017" class="csl-entry" role="listitem">
+Wang, J. X., Kurth-Nelson, Z., Tirumala, D., Soyer, H., Leibo, J. Z., Munos, R., et al. (2017). Learning to reinforcement learn. Available at: <a href="http://arxiv.org/abs/1611.05763">http://arxiv.org/abs/1611.05763</a> [Accessed February 5, 2021].
+</div>
+<div id="ref-Wang2016" class="csl-entry" role="listitem">
+Wang, Z., Schaul, T., Hessel, M., van Hasselt, H., Lanctot, M., and de Freitas, N. (2016). Dueling <span>Network Architectures</span> for <span>Deep Reinforcement Learning</span>. Available at: <a href="http://arxiv.org/abs/1511.06581">http://arxiv.org/abs/1511.06581</a> [Accessed November 21, 2019].
 </div>
 </div>
 </section>
@@ -987,13 +1021,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../src/3.6-EntropyRL.html" class="pagination-link" aria-label="Maximum Entropy RL (SAC)">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">Maximum Entropy RL (SAC)</span></span>
+      <a href="../src/3.6-PPO.html" class="pagination-link" aria-label="Policy optimization (TRPO, PPO)">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">Policy optimization (TRPO, PPO)</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../src/3.8-OtherPolicyGradient.html" class="pagination-link" aria-label="Miscellaneous model-free algorithms">
-        <span class="nav-page-text"><span class="chapter-title">Miscellaneous model-free algorithms</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../src/3.8-EntropyRL.html" class="pagination-link" aria-label="Maximum Entropy RL (SAC)">
+        <span class="nav-page-text"><span class="chapter-title">Maximum Entropy RL (SAC)</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
@@ -1011,7 +1045,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     </div>
   </div>
 </footer>
-<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","loop":false,"descPosition":"bottom","selector":".lightbox","openEffect":"zoom"});
+<script>var lightboxQuarto = GLightbox({"loop":false,"openEffect":"zoom","selector":".lightbox","closeEffect":"zoom","descPosition":"bottom"});
 (function() {
   let previousOnload = window.onload;
   window.onload = () => {

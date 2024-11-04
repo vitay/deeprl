@@ -224,7 +224,12 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/2.4-DQNvariants.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">DQN variants</span></a>
+  <a href="../src/2.4-DQNvariants.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">DQN variants (Rainbow)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/2.5-DistributedLearning.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Distributed learning</span></a>
   </div>
 </li>
       </ul>
@@ -246,7 +251,7 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../src/3.2-ActorCritic.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Asynchronous Advantage Actor-Critic (A3C)</span></a>
+ <span class="menu-text">Advantage Actor-Critic (A3C)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -261,22 +266,27 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/3.5-NaturalGradient.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Policy Optimization (TRPO, PPO)</span></a>
+  <a href="../src/3.5-NaturalGradient.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Natural gradients</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/3.6-EntropyRL.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Maximum Entropy RL (SAC)</span></a>
+  <a href="../src/3.6-PPO.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Policy optimization (TRPO, PPO)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/3.7-DistributionalRL.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Distributional learning</span></a>
+  <a href="../src/3.7-ACER.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Actor-Critic with Experience Replay (ACER)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/3.8-OtherPolicyGradient.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Miscellaneous model-free algorithms</span></a>
+  <a href="../src/3.8-EntropyRL.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Maximum Entropy RL (SAC)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/3.9-OtherPolicyGradient.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Miscellaneous model-free algorithms</span></a>
   </div>
 </li>
       </ul>
@@ -354,7 +364,11 @@ window.Quarto = {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#value-based-function-approximation" id="toc-value-based-function-approximation" class="nav-link active" data-scroll-target="#value-based-function-approximation">Value-based function approximation</a></li>
+  <li><a href="#value-based-function-approximation" id="toc-value-based-function-approximation" class="nav-link active" data-scroll-target="#value-based-function-approximation">Value-based function approximation</a>
+  <ul class="collapse">
+  <li><a href="#state-value-approximators" id="toc-state-value-approximators" class="nav-link" data-scroll-target="#state-value-approximators">State value approximators</a></li>
+  <li><a href="#action-value-approximators" id="toc-action-value-approximators" class="nav-link" data-scroll-target="#action-value-approximators">Action value approximators</a></li>
+  </ul></li>
   <li><a href="#policy-based-function-approximation" id="toc-policy-based-function-approximation" class="nav-link" data-scroll-target="#policy-based-function-approximation">Policy-based function approximation</a></li>
   </ul>
 </nav>
@@ -381,63 +395,257 @@ window.Quarto = {
 </header>
 
 
-<p>All the methods presented before are <em>tabular methods</em>, as one needs to store one value per state-action pair: either the Q-value of the action or a preference for that action. In most useful applications, the number of values to store would quickly become prohibitive: when working on raw images, the number of possible states alone is untractable. Moreover, these algorithms require that each state-action pair is visited a sufficient number of times to converge towards the optimal policy: if a single state-action pair is never visited, there is no guarantee that the optimal policy will be found. The problem becomes even more obvious when considering <em>continuous</em> state or action spaces.</p>
-<p>However, in a lot of applications, the optimal action to perform in two very close states is likely to be the same: changing one pixel in a video game does not change which action should be applied. It would therefore be very useful to be able to <em>interpolate</em> Q-values between different states: only a subset of all state-action pairs has to explored; the others will be “guessed” depending on the proximity between the states and/or the actions. The problem is now <strong>generalization</strong>, i.e.&nbsp;transferring acquired knowledge to unseen but similar situations.</p>
-<p>This is where <strong>function approximation</strong> becomes useful: the Q-values or the policy are not stored in a table, but rather learned by a function approximator. The type of function approximator does not really matter here: in deep RL we are of course interested in deep neural networks, but any kind of regressor theoretically works (linear algorithms, radial-basis function network, SVR…).</p>
-<section id="value-based-function-approximation" class="level2">
-<h2 class="anchored" data-anchor-id="value-based-function-approximation">Value-based function approximation</h2>
-<p>In <strong>value-based</strong> methods, we want to approximate the Q-values <span class="math inline">Q^\pi(s,a)</span> of all possible state-action pairs for a given policy. The function approximator depends on a set of parameters <span class="math inline">\theta</span>. <span class="math inline">\theta</span> can for example represent all the weights and biases of a neural network. The approximated Q-value can now be noted <span class="math inline">Q(s, a ;\theta)</span> or <span class="math inline">Q_\theta(s, a)</span>. As the parameters will change over time during learning, we can omit the time <span class="math inline">t</span> from the notation. Similarly, action selection is usually <span class="math inline">\epsilon</span>-greedy or softmax, so the policy <span class="math inline">\pi</span> depends directly on the estimated Q-values and can therefore on the parameters: it is noted <span class="math inline">\pi_\theta</span>.</p>
-<div id="fig-functionapprox" class="quarto-float quarto-figure quarto-figure-center anchored">
+<p>All the methods presented before are <em>tabular methods</em>, as one needs to store one value per state-action pair: either the Q-value of the action or a preference for that action.</p>
+<div id="fig-qtable" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-functionapprox-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/functionapprox.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;6.1: Function approximators can either take a state-action pair as input and output the Q-value, or simply take a state as input and output the Q-values of all possible actions."><img src="img/functionapprox.png" class="img-fluid figure-img"></a>
+<div aria-describedby="fig-qtable-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="img/qtable.gif" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;6.1: Source: https://towardsdatascience.com/qrash-course-deep-q-networks-from-the-ground-up-1bbda41d3677"><img src="img/qtable.gif" class="img-fluid figure-img"></a>
 </div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-functionapprox-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;6.1: Function approximators can either take a state-action pair as input and output the Q-value, or simply take a state as input and output the Q-values of all possible actions.
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-qtable-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;6.1: Source: <a href="https://towardsdatascience.com/qrash-course-deep-q-networks-from-the-ground-up-1bbda41d3677" class="uri">https://towardsdatascience.com/qrash-course-deep-q-networks-from-the-ground-up-1bbda41d3677</a>
 </figcaption>
 </figure>
 </div>
-<p>There are basically two options regarding the structure of the function approximator (<a href="2.3-DQN.html#fig-functionapprox" class="quarto-xref">Figure&nbsp;<span>8.1</span></a>):</p>
+<p>In most useful applications, the number of values to store would quickly become prohibitive: when working on raw images, the number of possible states alone is untractable. Moreover, these algorithms require that each state-action pair is visited a sufficient number of times to converge towards the optimal policy: if a single state-action pair is never visited, there is no guarantee that the optimal policy will be found. The problem becomes even more obvious when considering <em>continuous</em> state or action spaces.</p>
+<p>However, in a lot of applications, the optimal action to perform in two very close states is likely to be the same: changing one pixel in a video game does not change which action should be applied. It would therefore be very useful to be able to <strong>interpolate</strong> Q-values between different states: only a subset of all state-action pairs has to explored; the others will be “guessed” depending on the proximity between the states and/or the actions. The problem is now <strong>generalization</strong>, i.e.&nbsp;transferring acquired knowledge to unseen but similar situations.</p>
+<div id="fig-generalization" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-generalization-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="img/tabular-generalization.svg" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Figure&nbsp;6.2: Generalization between similar states is not possible in tabular RL."><img src="img/tabular-generalization.svg" class="img-fluid figure-img" style="width:80.0%"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-generalization-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;6.2: Generalization between similar states is not possible in tabular RL.
+</figcaption>
+</figure>
+</div>
+<p>This is where <strong>function approximation</strong> (FA) becomes useful: the V/Q-values or the policy are not stored in a table, but rather learned by a function approximator. The type of function approximator does not really matter here: in deep RL we are of course interested in deep neural networks, but any kind of regressor theoretically works (linear algorithms, radial-basis function network, SVR…).</p>
+<section id="value-based-function-approximation" class="level2">
+<h2 class="anchored" data-anchor-id="value-based-function-approximation">Value-based function approximation</h2>
+<section id="state-value-approximators" class="level3">
+<h3 class="anchored" data-anchor-id="state-value-approximators">State value approximators</h3>
+<p>Let’s represent a state <span class="math inline">s</span> by a vector of <span class="math inline">d</span> <strong>features</strong> <span class="math inline">\phi(s) = [\phi_1(s), \phi_2(s), \ldots, \phi_d(s)]^T</span>. For the cartpole, the feature vector would be:</p>
+<p><span class="math display"> \phi(s) = \begin{bmatrix}x \\ \dot{x} \\ \theta \\ \dot{\theta} \end{bmatrix}</span></p>
+<p><span class="math inline">x</span> is the position, <span class="math inline">\theta</span> the angle, <span class="math inline">\dot{x}</span> and <span class="math inline">\dot{\theta}</span> their derivatives. We are able to represent <strong>any state</strong> <span class="math inline">s</span> of the Cartpole using these four variables. If the state can be represented by an image, we only need to put its pixels into a single vector. For more complex problems, the feature vector should include all the necessary information (Markov property).</p>
+<p>In <strong>state value approximation</strong>, we want to approximate the state value function <span class="math inline">V^\pi(s)</span> with a <strong>parameterized function</strong> <span class="math inline">V_\varphi(s)</span>:</p>
+<p><span class="math display">V_\varphi(s) \approx V^\pi(s)</span></p>
+<div id="fig-FA-V" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-FA-V-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="img/functionapproximation-state.svg" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Figure&nbsp;6.3: Parameterized model to approximate state values."><img src="img/functionapproximation-state.svg" class="img-fluid figure-img" style="width:80.0%"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-FA-V-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;6.3: Parameterized model to approximate state values.
+</figcaption>
+</figure>
+</div>
+<p>The parameterized function can have any form. It has a set of parameters <span class="math inline">\varphi</span> used to transform the feature vector <span class="math inline">\phi(s)</span> into an approximated value <span class="math inline">V_\varphi(s)</span>.</p>
+<p>The simplest function approximator (FA) is the <strong>linear approximator</strong>.</p>
+<div id="fig-FA-Vlinear" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-FA-Vlinear-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="img/functionapproximation-state-linear.svg" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="Figure&nbsp;6.4: Linear approximator for state values."><img src="img/functionapproximation-state-linear.svg" class="img-fluid figure-img" style="width:80.0%"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-FA-Vlinear-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;6.4: Linear approximator for state values.
+</figcaption>
+</figure>
+</div>
+<p>The approximated value is a linear combination of the features:</p>
+<p><span class="math display">V_\varphi(s) = \sum_{i=1}^d w_i \, \phi_i(s) = \mathbf{w}^T \times \phi(s)</span></p>
+<p>The <strong>weight vector</strong> <span class="math inline">\mathbf{w} = [w_1, w_2, \ldots, w_d]^T</span>is the set of parameters <span class="math inline">\varphi</span> of the function.</p>
+<p>Regardless the form of the function approximator, we want to find the parameters <span class="math inline">\varphi</span> making the approximated values <span class="math inline">V_\varphi(s)</span> as close as possible from the true values <span class="math inline">V^\pi(s)</span> for all states <span class="math inline">s</span>. This is a <strong>regression</strong> problem. We want to minimize the <strong>mean square error</strong> between the two quantities:</p>
+<p><span class="math display"> \min_\varphi \mathcal{L}(\varphi) = \mathbb{E}_{s \in \mathcal{S}} [ (V^\pi(s) - V_\varphi(s))^2]</span></p>
+<p>The <strong>loss function</strong> <span class="math inline">\mathcal{L}(\varphi)</span> is minimal when the predicted values are close to the true ones on average for all states. Let’s suppose that we know the true state values <span class="math inline">V^\pi(s)</span> for all states and that the parameterized function is <strong>differentiable</strong>. We can find the minimum of the loss function by applying <strong>gradient descent</strong> (GD) iteratively:</p>
+<p><span class="math display">
+    \Delta \varphi = - \eta \, \nabla_\varphi \mathcal{L}(\varphi)
+</span></p>
+<p><span class="math inline">\nabla_\varphi \mathcal{L}(\varphi)</span> is the gradient of the loss function w.r.t to the parameters <span class="math inline">\varphi</span>:</p>
+<p><span class="math display">
+    \nabla_\varphi \mathcal{L}(\varphi) = \begin{bmatrix}
+        \dfrac{\partial \mathcal{L}(\varphi)}{\partial \varphi_1} \\
+        \dfrac{\partial \mathcal{L}(\varphi)}{\partial \varphi_2} \\
+        \ldots \\
+        \dfrac{\partial \mathcal{L}(\varphi)}{\partial \varphi_K} \\
+    \end{bmatrix}
+</span></p>
+<p>When applied repeatedly, GD converges to a local minimum of the loss function. To minimize the mean square error, we just need to compute its gradient with respect to the parametsr <span class="math inline">\varphi</span>:</p>
+<p><span class="math display">
+\begin{aligned}
+    \mathcal{L}(\varphi) &amp;= \nabla_\varphi \mathbb{E}_{s \in \mathcal{S}} [ (V^\pi(s) - V_\varphi(s))^2] \\
+    &amp;\\
+    &amp; = \mathbb{E}_{s \in \mathcal{S}} [\nabla_\varphi  (V^\pi(s) - V_\varphi(s))^2] \\
+    &amp;\\
+    &amp; = \mathbb{E}_{s \in \mathcal{S}} [ - (V^\pi(s) - V_\varphi(s)) \, \nabla_\varphi V_\varphi(s)] \\
+\end{aligned}
+</span></p>
+<p>As it would be too slow to compute the expectation on the whole state space (<strong>batch algorithm</strong>), we will update the parameters with <strong>stochastic gradient descent</strong> (SGD):</p>
+<p><span class="math display">
+    \Delta \varphi = \eta \,  \frac{1}{K} \sum_{k=1}^K (V^\pi(s_k) - V_\varphi(s_k)) \, \nabla_\varphi V_\varphi(s_k)
+</span></p>
+<p>where <span class="math inline">K</span> is the batch size. We can also sample a single state <span class="math inline">s</span> (online algorithm):</p>
+<p><span class="math display">
+    \Delta \varphi = \eta \, (V^\pi(s) - V_\varphi(s)) \, \nabla_\varphi V_\varphi(s)
+</span></p>
+<p>Unless stated otherwise, we will sample single states in this section, but the parameter updates will be noisy (high variance).</p>
+<p>The obtained rule is the <strong>delta learning rule</strong> of linear regression and classification, with <span class="math inline">\phi(s)</span> being the input vector and <span class="math inline">V^\pi(s) - V_\varphi(s)</span> the prediction error. The rule can be used with any function approximator, we only need to be able to differentiate it to get <span class="math inline">\nabla_\varphi V_\varphi(s)</span>. The problem is that we do not know <span class="math inline">V^\pi(s)</span>, as it is what we are trying to estimate. We can replace <span class="math inline">V^\pi(s)</span> by a sampled estimate using Monte Carlo or TD:</p>
+<ul>
+<li><strong>Monte Carlo</strong> function approximation:</li>
+</ul>
+<p><span class="math display">
+    \Delta \varphi = \eta \, (R_t - V_\varphi(s)) \, \nabla_\varphi V_\varphi(s)
+</span></p>
+<ul>
+<li><strong>Temporal Difference</strong> function approximation:</li>
+</ul>
+<p><span class="math display">
+    \Delta \varphi = \eta \, (r_{t+1} + \gamma \, V_\varphi(s') - V_\varphi(s)) \, \nabla_\varphi V_\varphi(s)
+</span></p>
+<p>Note that for Temporal Difference, we actually want to minimize the TD reward-prediction error for all states, i.e.&nbsp;the surprise:</p>
+<p><span class="math display">\mathcal{L}(\varphi) = \mathbb{E}_{s \in \mathcal{S}} [ (r_{t+1} + \gamma \, V_\varphi(s') - V_\varphi(s))^2]= \mathbb{E}_{s \in \mathcal{S}} [ \delta_t^2]</span></p>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Gradient Monte Carlo Algorithm for value estimation
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li><p>Algorithm:</p>
+<ul>
+<li><p>Initialize the parameter <span class="math inline">\varphi</span> to 0 or randomly.</p></li>
+<li><p><strong>while</strong> not converged:</p>
 <ol type="1">
-<li>The approximator takes a state-action pair <span class="math inline">(s, a)</span> as input and returns a single Q-value <span class="math inline">Q(s, a)</span>.</li>
-<li>It takes a state <span class="math inline">s</span> as input and returns the Q-value of all possible actions in that state.</li>
+<li>Generate an episode according to the current policy <span class="math inline">\pi</span> until a terminal state <span class="math inline">s_T</span> is reached.</li>
 </ol>
-<p>The second option is of course only possible when the action space is discrete, but has the advantage to generalize better over similar states.</p>
-<p>The goal of a function approximator is to minimize a <em>loss function</em> (or cost function) <span class="math inline">\mathcal{L}(\theta)</span>, so that the estimated Q-values converge for all state-pairs towards their target value, depending on the chosen algorithm:</p>
+<p><span class="math display">
+      \tau = (s_o, a_o, r_ 1, s_1, a_1, \ldots, s_T)
+  </span></p>
+<ol start="2" type="1">
+<li><p>For all encountered states <span class="math inline">s_0, s_1, \ldots, s_{T-1}</span>:</p>
+<ol type="1">
+<li><p>Compute the return <span class="math inline">R_t = \sum_k \gamma^k r_{t+k+1}</span> .</p></li>
+<li><p>Update the parameters using function approximation:</p></li>
+</ol>
+<p><span class="math display">
+     \Delta \varphi = \eta \, (R_t - V_\varphi(s_t)) \, \nabla_\varphi V_\varphi(s_t)
+</span></p></li>
+</ol></li>
+</ul></li>
+</ul>
+</div>
+</div>
+<p>Gradient Monte Carlo has no bias (real returns) but a high variance.</p>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Semi-gradient Temporal Difference Algorithm for value estimation
+</div>
+</div>
+<div class="callout-body-container callout-body">
 <ul>
-<li>Monte Carlo methods: the Q-value of each <span class="math inline">(s, a)</span> pair should converge towards the expected return:</li>
+<li><p>Algorithm:</p>
+<ul>
+<li><p>Initialize the parameter <span class="math inline">\varphi</span> to 0 or randomly.</p></li>
+<li><p><strong>while</strong> not converged:</p>
+<ul>
+<li><p>Start from an initial state <span class="math inline">s_0</span>.</p></li>
+<li><p><strong>foreach</strong> step <span class="math inline">t</span> of the episode:</p>
+<ul>
+<li><p>Select <span class="math inline">a_t</span> using the current policy <span class="math inline">\pi</span> in state <span class="math inline">s_t</span>.</p></li>
+<li><p>Observe <span class="math inline">r_{t+1}</span> and <span class="math inline">s_{t+1}</span>.</p></li>
+<li><p>Update the parameters using function approximation:</p></li>
 </ul>
 <p><span class="math display">
-    \mathcal{L}(\theta) = \mathbb{E}_\pi[(R_t - Q_\theta(s, a))^2]
-</span></p>
-<p>If we learn over <span class="math inline">N</span> episodes of length <span class="math inline">T</span>, the loss function can be approximated as:</p>
-<p><span class="math display">
-    \mathcal{L}(\theta) \approx \frac{1}{N} \sum_{e=1}^N \sum_{t = 1}^T [R^e_t - Q_\theta(s_t, a_t)]^2
-</span></p>
-<ul>
-<li><p>Temporal difference methods: the Q-values should converge towards an estimation of the expected return.</p>
-<ul>
-<li>For SARSA:</li>
-</ul>
-<p><span class="math display">
-  \mathcal{L}(\theta) = \mathbb{E}_\pi[(r(s, a, s') + \gamma \, Q_\theta(s', \pi(s')) - Q_\theta(s, a))^2]
+      \Delta \varphi = \eta \, (r_{t+1} + \gamma \, V_\varphi(s_{t+1}) - V_\varphi(s_t)) \, \nabla_\varphi V_\varphi(s_t)
   </span></p>
 <ul>
-<li>For Q-learning:</li>
+<li><strong>if</strong> <span class="math inline">s_{t+1}</span> is terminal: <strong>break</strong></li>
+</ul></li>
+</ul></li>
+</ul></li>
 </ul>
-<p><span class="math display">
-  \mathcal{L}(\theta) = \mathbb{E}_\pi[(r(s, a, s') + \gamma \, \max_{a'} Q_\theta(s', a') - Q_\theta(s, a))^2]
-  </span></p></li>
+</div>
+</div>
+<p>Semi-gradient TD has less variance, but a significant bias as <span class="math inline">V_\varphi(s_{t+1})</span> is initially wrong. You can never trust these estimates completely.</p>
+</section>
+<section id="action-value-approximators" class="level3">
+<h3 class="anchored" data-anchor-id="action-value-approximators">Action value approximators</h3>
+<p>Q-values can be approximated by a parameterized function <span class="math inline">Q_\theta(s, a)</span> in the same manner. There are basically two options for the structure of the function approximator:</p>
+<ol type="1">
+<li>The FA takes a feature vector for both the state <span class="math inline">s</span> and the action <span class="math inline">a</span> (which can be continuous) as inputs, and outputs a single Q-value <span class="math inline">Q_\theta(s ,a)</span>.</li>
+</ol>
+<div id="fig-qapprox1" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-qapprox1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="img/functionapproximation-action1.svg" class="lightbox" data-gallery="quarto-lightbox-gallery-5" title="Figure&nbsp;6.5: Single Q-value approximation."><img src="img/functionapproximation-action1.svg" class="img-fluid figure-img" style="width:80.0%"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-qapprox1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;6.5: Single Q-value approximation.
+</figcaption>
+</figure>
+</div>
+<ol start="2" type="1">
+<li>The FA takes a feature vector for the state <span class="math inline">s</span> as input, and outputs one Q-value <span class="math inline">Q_\theta(s ,a)</span> per possible action (the action space must be discrete).</li>
+</ol>
+<div id="fig-qapprox2" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-qapprox2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="img/functionapproximation-action2.svg" class="lightbox" data-gallery="quarto-lightbox-gallery-6" title="Figure&nbsp;6.6: Multiple Q-value approximation"><img src="img/functionapproximation-action2.svg" class="img-fluid figure-img" style="width:80.0%"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-qapprox2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;6.6: Multiple Q-value approximation
+</figcaption>
+</figure>
+</div>
+<p>In both cases, we minimize the mse between the true value <span class="math inline">Q^\pi(s, a)</span> and the approximated value <span class="math inline">Q_\theta(s, a)</span>. The target can be approximated with SARSA or Q-learning:</p>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Q-learning with function approximation
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li><p>Initialize the parameters <span class="math inline">\theta</span>.</p></li>
+<li><p><strong>while</strong> True:</p>
+<ul>
+<li><p>Start from an initial state <span class="math inline">s_0</span>.</p></li>
+<li><p><strong>foreach</strong> step <span class="math inline">t</span> of the episode:</p>
+<ul>
+<li><p>Select <span class="math inline">a_{t}</span> using the behavior policy <span class="math inline">b</span> (e.g.&nbsp;derived from <span class="math inline">\pi</span>).</p></li>
+<li><p>Take <span class="math inline">a_t</span>, observe <span class="math inline">r_{t+1}</span> and <span class="math inline">s_{t+1}</span>.</p></li>
+<li><p>Update the parameters <span class="math inline">\theta</span>:</p></li>
 </ul>
-<p>Any function approximator able to minimize these loss functions can be used.</p>
+<p><span class="math display">\Delta \theta = \eta \, (r_{t+1} + \gamma \, \max_a Q_\theta(s_{t+1}, a) - Q_\theta(s_t, a_t)) \, \nabla_\theta Q_\theta(s_t, a_t)</span></p>
+<ul>
+<li>Improve greedily the learned policy:</li>
+</ul>
+<p><span class="math display">\pi(s_t, a) = \text{Greedy}(Q_\theta(s_t, a))</span></p>
+<ul>
+<li><strong>if</strong> <span class="math inline">s_{t+1}</span> is terminal: <strong>break</strong></li>
+</ul></li>
+</ul></li>
+</ul>
+</div>
+</div>
+</section>
 </section>
 <section id="policy-based-function-approximation" class="level2">
 <h2 class="anchored" data-anchor-id="policy-based-function-approximation">Policy-based function approximation</h2>
 <p>In policy-based function approximation, we want to directly learn a policy <span class="math inline">\pi_\theta(s, a)</span> that maximizes the expected return of each possible transition, i.e.&nbsp;the ones which are selected by the policy. The <strong>objective function</strong> to be maximized is defined over all trajectories <span class="math inline">\tau = (s_0, a_0, s_1, a_1, \ldots, s_T, a_T)</span> conditioned by the policy:</p>
 <p><span class="math display">
-    J(\theta) = \mathbb{E}_{\tau \sim \rho_\theta} [R_t]
+    \mathcal{J}(\theta) = \mathbb{E}_{\tau \sim \rho_\theta} [R (\tau)]
 </span></p>
-<p>In short, the learned policy <span class="math inline">\pi_\theta</span> should only produce trajectories <span class="math inline">\tau</span> where each state is associated to a high return <span class="math inline">R_t</span> and avoid trajectories with low returns. Although this objective function leads to the desired behavior, it is not computationally tractable as we would need to integrate over all possible trajectories. The methods presented in Section <a href="3.1-PolicyGradient.html" class="quarto-xref"><span>Policy Gradient methods</span></a> will provide estimates of the gradient of this objective function.</p>
+<p>In short, the learned policy <span class="math inline">\pi_\theta</span> should only produce trajectories <span class="math inline">\tau</span> where each state is associated to a high return <span class="math inline">R(\tau)</span> and avoid trajectories with low returns. Although this objective function leads to the desired behavior, it is not computationally tractable as we would need to integrate over all possible trajectories. The methods presented in Section <a href="3.1-PolicyGradient.html" class="quarto-xref"><span>Policy Gradient methods</span></a> will provide estimates of the gradient of this objective function.</p>
 
 
 </section>
@@ -889,7 +1097,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     </div>
   </div>
 </footer>
-<script>var lightboxQuarto = GLightbox({"openEffect":"zoom","selector":".lightbox","descPosition":"bottom","loop":false,"closeEffect":"zoom"});
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","selector":".lightbox","descPosition":"bottom","openEffect":"zoom","loop":false});
 (function() {
   let previousOnload = window.onload;
   window.onload = () => {

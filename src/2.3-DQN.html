@@ -243,7 +243,12 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/2.4-DQNvariants.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">DQN variants</span></a>
+  <a href="../src/2.4-DQNvariants.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">DQN variants (Rainbow)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/2.5-DistributedLearning.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Distributed learning</span></a>
   </div>
 </li>
       </ul>
@@ -265,7 +270,7 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../src/3.2-ActorCritic.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Asynchronous Advantage Actor-Critic (A3C)</span></a>
+ <span class="menu-text">Advantage Actor-Critic (A3C)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -280,22 +285,27 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/3.5-NaturalGradient.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Policy Optimization (TRPO, PPO)</span></a>
+  <a href="../src/3.5-NaturalGradient.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Natural gradients</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/3.6-EntropyRL.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Maximum Entropy RL (SAC)</span></a>
+  <a href="../src/3.6-PPO.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Policy optimization (TRPO, PPO)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/3.7-DistributionalRL.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Distributional learning</span></a>
+  <a href="../src/3.7-ACER.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Actor-Critic with Experience Replay (ACER)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/3.8-OtherPolicyGradient.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Miscellaneous model-free algorithms</span></a>
+  <a href="../src/3.8-EntropyRL.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Maximum Entropy RL (SAC)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/3.9-OtherPolicyGradient.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Miscellaneous model-free algorithms</span></a>
   </div>
 </li>
       </ul>
@@ -374,7 +384,12 @@ window.Quarto = {
    
   <ul>
   <li><a href="#limitations-of-deep-neural-networks-for-function-approximation" id="toc-limitations-of-deep-neural-networks-for-function-approximation" class="nav-link active" data-scroll-target="#limitations-of-deep-neural-networks-for-function-approximation">Limitations of deep neural networks for function approximation</a></li>
-  <li><a href="#deep-q-network-dqn" id="toc-deep-q-network-dqn" class="nav-link" data-scroll-target="#deep-q-network-dqn">Deep Q-Network (DQN)</a></li>
+  <li><a href="#deep-q-network-dqn" id="toc-deep-q-network-dqn" class="nav-link" data-scroll-target="#deep-q-network-dqn">Deep Q-Network (DQN)</a>
+  <ul class="collapse">
+  <li><a href="#experience-replay-memory" id="toc-experience-replay-memory" class="nav-link" data-scroll-target="#experience-replay-memory">Experience replay memory</a></li>
+  <li><a href="#target-networks" id="toc-target-networks" class="nav-link" data-scroll-target="#target-networks">Target networks</a></li>
+  <li><a href="#dqn-algorithm" id="toc-dqn-algorithm" class="nav-link" data-scroll-target="#dqn-algorithm">DQN algorithm</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -402,7 +417,7 @@ window.Quarto = {
 
 <section id="limitations-of-deep-neural-networks-for-function-approximation" class="level2">
 <h2 class="anchored" data-anchor-id="limitations-of-deep-neural-networks-for-function-approximation">Limitations of deep neural networks for function approximation</h2>
-<p>The goal of value-based deep RL is to approximate the Q-value of each possible state-action pair using a deep (convolutional) neural network. As shown on <a href="#fig-functionapprox" class="quarto-xref">Figure&nbsp;<span>8.1</span></a>, the network can either take a state-action pair as input and return a single output value, or take only the state as input and return the Q-value of all possible actions (only possible if the action space is discrete), In both cases, the goal is to learn estimates <span class="math inline">Q_\theta(s, a)</span> with a NN with parameters <span class="math inline">\theta</span>.</p>
+<p>The goal of value-based deep RL is to approximate the Q-value of each possible state-action pair using a deep neural network. As shown on <a href="#fig-functionapprox" class="quarto-xref">Figure&nbsp;<span>8.1</span></a>, the network can either take a state-action pair as input and return a single output value, or take only the state as input and return the Q-value of all possible actions (only possible if the action space is discrete). In both cases, the goal is to learn estimates <span class="math inline">Q_\theta(s, a)</span> with a NN with parameters <span class="math inline">\theta</span>.</p>
 <div id="fig-functionapprox" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-functionapprox-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -415,11 +430,30 @@ Figure&nbsp;8.1: Function approximators can either associate a state-action pair
 </div>
 <p>When using Q-learning, we have already seen that the problem is a regression problem, where the following mse loss function has to be minimized:</p>
 <p><span class="math display">
-    \mathcal{L}(\theta) = \mathbb{E}_\pi[(r_t + \gamma \, \max_{a'} Q_\theta(s', a') - Q_\theta(s, a))^2]
+    \mathcal{L}(\theta) = \mathbb{E}_{(s, a, r ,s')}[(r(s, a, s') + \gamma \, \max_{a'} Q_\theta(s', a') - Q_\theta(s, a))^2]
 </span></p>
-<p>In short, we want to reduce the prediction error, i.e.&nbsp;the mismatch between the estimate of the value of an action <span class="math inline">Q_\theta(s, a)</span> and the real return, here approximated with <span class="math inline">r(s, a, s') + \gamma \, \text{max}_{a'} Q_\theta(s', a')</span>.</p>
+<p>In short, we want to reduce the prediction error, i.e.&nbsp;the mismatch between the estimate of the value of an action <span class="math inline">Q_\theta(s, a)</span> and the real return <span class="math inline">Q^\pi(s, a)</span>, here approximated with <span class="math inline">r(s, a, s') + \gamma \, \text{max}_{a'} Q_\theta(s', a')</span>.</p>
+<div id="fig-valuebasedagent" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-valuebasedagent-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="img/valuebased-agent.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Figure&nbsp;8.2: Value-based Q-learning agent."><img src="img/valuebased-agent.png" class="img-fluid figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-valuebasedagent-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;8.2: Value-based Q-learning agent.
+</figcaption>
+</figure>
+</div>
 <p>We can compute this loss by gathering enough samples <span class="math inline">(s, a, r, s')</span> (i.e.&nbsp;single transitions), concatenating them randomly in minibatches, and let the DNN learn to minimize the prediction error using backpropagation and SGD, indirectly improving the policy. The following pseudocode would describe the training procedure when gathering transitions <strong>online</strong>, i.e.&nbsp;when directly interacting with the environment:</p>
-<hr>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Naive Q-learning with function approximation
+</div>
+</div>
+<div class="callout-body-container callout-body">
 <ul>
 <li>Initialize value network <span class="math inline">Q_{\theta}</span> with random weights.</li>
 <li>Initialize empty minibatch <span class="math inline">\mathcal{D}</span> of maximal size <span class="math inline">n</span>.</li>
@@ -428,17 +462,30 @@ Figure&nbsp;8.1: Function approximators can either associate a state-action pair
 <ul>
 <li>Select the action <span class="math inline">a_t</span> based on the behavior policy derived from <span class="math inline">Q_\theta(s_t, a)</span> (e.g.&nbsp;softmax).</li>
 <li>Perform the action <span class="math inline">a_t</span> and observe the next state <span class="math inline">s_{t+1}</span> and the reward <span class="math inline">r_{t+1}</span>.</li>
-<li>Predict the Q-value of the greedy action in the next state <span class="math inline">\max_{a'} Q_\theta(s_{t+1}, a')</span></li>
-<li>Store <span class="math inline">(s_t, a_t, r_{t+1} + \gamma \, \max_{a'} Q_\theta(s_{t+1}, a'))</span> in the minibatch.</li>
-<li>If minibatch <span class="math inline">\mathcal{D}</span> is full:
+<li>Store <span class="math inline">(s_t, a_t, r_{t+1}, s_{t+1})</span> in the minibatch.</li>
+<li>When minibatch <span class="math inline">\mathcal{D}</span> is full:
 <ul>
-<li>Train the value network <span class="math inline">Q_{\theta}</span> on <span class="math inline">\mathcal{D}</span> to minimize <span class="math inline">\mathcal{L}(\theta) = \mathbb{E}_\mathcal{D}[(r(s, a, s') + \gamma \, \text{max}_{a'} Q_\theta(s', a') - Q_\theta(s, a))^2]</span></li>
+<li>Train the value network <span class="math inline">Q_{\theta}</span> on <span class="math inline">\mathcal{D}</span> to minimize <span class="math display">
+  \mathcal{L}(\theta) = \mathbb{E}_\mathcal{D}[(r(s, a, s') + \gamma \, \text{max}_{a'} Q_\theta(s', a') - Q_\theta(s, a))^2]
+  </span></li>
 <li>Empty the minibatch <span class="math inline">\mathcal{D}</span>.</li>
 </ul></li>
 </ul></li>
 </ul>
-<hr>
-<p>However, the definition of the loss function uses the mathematical expectation operator <span class="math inline">E</span> over all transitions, which can only be approximated by <strong>randomly</strong> sampling the distribution (the MDP). This implies that the samples concatenated in a minibatch should be independent from each other (i.i.d). When gathering transitions online, the samples are correlated: <span class="math inline">(s_t, a_t, r_{t+1}, s_{t+1})</span> will be followed by <span class="math inline">(s_{t+1}, a_{t+1}, r_{t+2}, s_{t+2})</span>, etc. When playing video games, two successive frames will be very similar (a few pixels will change, or even none if the sampling rate is too high) and the optimal action will likely not change either (to catch the ball in pong, you will need to perform the same action - going left - many times in a row).</p>
+</div>
+</div>
+<p>However, the definition of the loss function uses the mathematical expectation operator <span class="math inline">E</span> over all transitions, which can only be approximated by <strong>randomly</strong> sampling the distribution (the MDP). This implies that the samples concatenated in a minibatch should be independent from each other (<strong>i.i.d</strong>).</p>
+<p>When gathering transitions online, the samples are correlated: <span class="math inline">(s_t, a_t, r_{t+1}, s_{t+1})</span> will be followed by <span class="math inline">(s_{t+1}, a_{t+1}, r_{t+2}, s_{t+2})</span>, etc. When playing video games, two successive frames will be very similar (a few pixels will change, or even none if the sampling rate is too high) and the optimal action will likely not change either (to catch the ball in pong, you will need to perform the same action - going left - many times in a row).</p>
+<div id="fig-breakout-correlated" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-breakout-correlated-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="img/breakout.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Figure&nbsp;8.3: Sucessive frames in a video game are highly correlated."><img src="img/breakout.png" class="img-fluid figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-breakout-correlated-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;8.3: Sucessive frames in a video game are highly correlated.
+</figcaption>
+</figure>
+</div>
 <p><strong>Correlated inputs/outputs</strong> are very bad for deep neural networks: the DNN will overfit and fall into a very bad local minimum. That is why stochastic gradient descent works so well: it randomly samples values from the training set to form minibatches and minimize the loss function on these uncorrelated samples (hopefully). If all samples of a minibatch were of the same class (e.g.&nbsp;zeros in MNIST), the network would converge poorly. This is the first problem preventing an easy use of deep neural networks as function approximators in RL.</p>
 <p>The second major problem is the <strong>non-stationarity</strong> of the targets in the loss function. In classification or regression, the desired values <span class="math inline">\mathbf{t}</span> are fixed throughout learning: the class of an object does not change in the middle of the training phase.</p>
 <p><span class="math display">
@@ -448,21 +495,58 @@ Figure&nbsp;8.1: Function approximators can either associate a state-action pair
 </section>
 <section id="deep-q-network-dqn" class="level2">
 <h2 class="anchored" data-anchor-id="deep-q-network-dqn">Deep Q-Network (DQN)</h2>
-<p><span class="citation" data-cites="Mnih2015">Mnih et al. (<a href="references.html#ref-Mnih2015" role="doc-biblioref">2015</a>)</span> (originally arXived in <span class="citation" data-cites="Mnih2013">Mnih et al. (<a href="references.html#ref-Mnih2013" role="doc-biblioref">2013</a>)</span>) proposed an elegant solution to the problems of correlated inputs/outputs and non-stationarity inherent to RL. This article is a milestone of deep RL and it is fair to say that it started or at least strongly renewed the interest for deep RL.</p>
+<p><span class="citation" data-cites="Mnih2015">Mnih et al. (<a href="references.html#ref-Mnih2015" role="doc-biblioref">2015</a>)</span> (originally arXived in <span class="citation" data-cites="Mnih2013">Mnih et al. (<a href="references.html#ref-Mnih2013" role="doc-biblioref">2013</a>)</span>) proposed an elegant solution to the problems of correlated inputs/outputs and non-stationarity inherent to RL. This article is a milestone of deep RL and it is fair to say that it started the hype for deep RL.</p>
+<section id="experience-replay-memory" class="level3">
+<h3 class="anchored" data-anchor-id="experience-replay-memory">Experience replay memory</h3>
 <p>The first idea proposed by <span class="citation" data-cites="Mnih2015">Mnih et al. (<a href="references.html#ref-Mnih2015" role="doc-biblioref">2015</a>)</span> solves the problem of correlated input/outputs and is actually quite simple: instead of feeding successive transitions into a minibatch and immediately training the NN on it, transitions are stored in a huge buffer called <strong>experience replay memory</strong> (ERM) or <strong>replay buffer</strong> able to store 100000 transitions. When the buffer is full, new transitions replace the old ones. SGD can now randomly sample the ERM to form minibatches and train the NN.</p>
 <div id="fig-erm" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-erm-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/ERM.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Figure&nbsp;8.2: Experience replay memory. Interactions with the environment are stored in the ERM. Random minibatches are sampled from it to train the DQN value network."><img src="img/ERM.png" class="img-fluid figure-img"></a>
+<a href="img/ERM.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="Figure&nbsp;8.4: Experience replay memory. Interactions with the environment are stored in the ERM. Random minibatches are sampled from it to train the DQN value network."><img src="img/ERM.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-erm-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;8.2: Experience replay memory. Interactions with the environment are stored in the ERM. Random minibatches are sampled from it to train the DQN value network.
+Figure&nbsp;8.4: Experience replay memory. Interactions with the environment are stored in the ERM. Random minibatches are sampled from it to train the DQN value network.
 </figcaption>
 </figure>
 </div>
-<p>The second idea solves the non-stationarity of the targets <span class="math inline">r(s, a, s') + \gamma \, \max_{a'} Q_\theta(s', a')</span>. Instead of computing it with the current parameters <span class="math inline">\theta</span> of the NN, they are computed with an old version of the NN called the <strong>target network</strong> with parameters <span class="math inline">\theta'</span>. The target network is updated only infrequently (every thousands of iterations or so) with the learned weights <span class="math inline">\theta</span>. As this target network does not change very often, the targets stay constant for a long period of time, and the problem becomes more stationary.</p>
+<p>The loss minimized by DQN is defined on a minibatch of size <span class="math inline">K</span>:</p>
+<p><span class="math display">
+    \mathcal{L}(\theta) = \dfrac{1}{K} \, \sum_{k=1}^K (r_k + \gamma \, \text{max}_{a'} Q_\theta(s'_k, a') - Q_\theta(s_k, a_k))^2
+</span></p>
+<p>Are these <span class="math inline">K</span> samples <strong>i.i.d</strong>? They are independent because they are randomly sampled from the ERM, but they do not come from the same distribution: some were generated by a very old policy, some much more recently… However, this does not matter, as Q-learning is <strong>off-policy</strong>: the different policies that populated the ERM are a <strong>behavior policy</strong>, different from the learned one. Off-policy methods do not mind if the samples come from the same distribution or not. It would be very different if we has used SARSA instead.</p>
+<p>→ <strong>It is only possible to use an experience replay memory with off-policy algorithms</strong></p>
+</section>
+<section id="target-networks" class="level3">
+<h3 class="anchored" data-anchor-id="target-networks">Target networks</h3>
+<p>The second idea solves the non-stationarity of the targets <span class="math inline">r(s, a, s') + \gamma \, \max_{a'} Q_\theta(s', a')</span>. Instead of computing it with the current parameters <span class="math inline">\theta</span> of the NN, they are computed with an old version of the NN called the <strong>target network</strong> with parameters <span class="math inline">\theta'</span>.</p>
+<p><span class="math display">
+    \mathcal{L}(\theta) = \dfrac{1}{K} \, \sum_{k=1}^K (r_k + \gamma \, \text{max}_{a'} Q_{\theta'}(s'_k, a') - Q_\theta(s_k, a_k))^2
+</span></p>
+<p>The target network is updated only infrequently (every thousands of iterations or so) with the learned weights <span class="math inline">\theta</span>. As this target network does not change very often, the targets stay constant for a long period of time, and the problem becomes more stationary.</p>
+<div id="fig-targetnetwork" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-targetnetwork-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="img/targetnetwork.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5" title="Figure&nbsp;8.5: The target network is used to compute the targets to train the value network. Its waits are regularly copied from the value network."><img src="img/targetnetwork.png" class="img-fluid figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-targetnetwork-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;8.5: The target network is used to compute the targets to train the value network. Its waits are regularly copied from the value network.
+</figcaption>
+</figure>
+</div>
+</section>
+<section id="dqn-algorithm" class="level3">
+<h3 class="anchored" data-anchor-id="dqn-algorithm">DQN algorithm</h3>
 <p>The resulting algorithm is called <strong>Deep Q-Network (DQN)</strong>. It is summarized by the following pseudocode:</p>
-<hr>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
 <ul>
 <li>Initialize value network <span class="math inline">Q_{\theta}</span> with random weights.</li>
 <li>Copy <span class="math inline">Q_{\theta}</span> to create the target network <span class="math inline">Q_{\theta'}</span>.</li>
@@ -479,9 +563,9 @@ Figure&nbsp;8.2: Experience replay memory. Interactions with the environment are
 <li>For each transition <span class="math inline">(s, a, r, s')</span> in the minibatch:
 <ul>
 <li>Predict the Q-value of the greedy action in the next state <span class="math inline">\max_{a'} Q_{\theta'}(s', a')</span> using the target network.</li>
-<li>Compute the target value <span class="math inline">y = r + \gamma \, \max_{a'} Q_{\theta'}(s', a')</span>.</li>
+<li>Compute the target value <span class="math inline">t = r + \gamma \, \max_{a'} Q_{\theta'}(s', a')</span>.</li>
 </ul></li>
-<li>Train the value network <span class="math inline">Q_{\theta}</span> on <span class="math inline">\mathcal{D}_s</span> to minimize <span class="math inline">\mathcal{L}(\theta) = \mathbb{E}_{\mathcal{D}_s}[(y - Q_\theta(s, a))^2]</span></li>
+<li>Train the value network <span class="math inline">Q_{\theta}</span> on <span class="math inline">\mathcal{D}_s</span> to minimize <span class="math inline">\mathcal{L}(\theta) = \mathbb{E}_{\mathcal{D}_s}[(t - Q_\theta(s, a))^2]</span></li>
 </ul></li>
 <li>Every <span class="math inline">T_\text{target}</span> steps:
 <ul>
@@ -489,28 +573,40 @@ Figure&nbsp;8.2: Experience replay memory. Interactions with the environment are
 </ul></li>
 </ul></li>
 </ul>
-<hr>
-<p>In this document, pseudocode will omit many details to simplify the explanations (for example here, the case where a state is terminal - the game ends - and the next state has to be chosen from the distribution of possible starting states). Refer to the original publication for more exact algorithms.</p>
+</div>
+</div>
 <p>The first thing to notice is that experienced transitions are not immediately used for learning, but simply stored in the ERM to be sampled later. Due to the huge size of the ERM, it is even likely that the recently experienced transition will only be used for learning hundreds or thousands of steps later. Meanwhile, very old transitions, generated using an initially bad policy, can be used to train the network for a very long time.</p>
 <p>The second thing is that the target network is not updated very often (<span class="math inline">T_\text{target}=10000</span>), so the target values are going to be wrong a long time. More recent algorithms such as DDPG use a smoothed version of the current weights, as proposed in <span class="citation" data-cites="Lillicrap2015">Lillicrap et al. (<a href="references.html#ref-Lillicrap2015" role="doc-biblioref">2015</a>)</span>:</p>
 <p><span class="math display">
     \theta' = \tau \, \theta + (1-\tau) \, \theta'
 </span></p>
-<p>If this rule is applied after each step with a very small rate <span class="math inline">\tau</span>, the target network will slowly track the learned network, but never be the same.</p>
+<p>If this rule is applied after each step with a very small rate <span class="math inline">\tau</span>, the target network will slowly track the learned network, but never be the same. Modern implementations of DQN use this smoothed version.</p>
 <p>These two facts make DQN extremely slow to learn: millions of transitions are needed to obtain a satisfying policy. This is called the <strong>sample complexity</strong>, i.e.&nbsp;the number of transitions needed to obtain a satisfying performance. DQN finds very good policies, but at the cost of a very long training time.</p>
-<p>DQN was initially applied to solve various Atari 2600 games. Video frames were used as observations and the set of possible discrete actions was limited (left/right/up/down, shoot, etc). The CNN used is depicted on <a href="#fig-dqn" class="quarto-xref">Figure&nbsp;<span>8.3</span></a>. It has two convolutional layers, no max-pooling, 2 fully-connected layer and one output layer representing the Q-value of all possible actions in the games.</p>
+<p>DQN was initially applied to solve various Atari 2600 games. Video frames were used as observations and the set of possible discrete actions was limited (left/right/up/down, shoot, etc). The CNN used is depicted on <a href="#fig-dqn" class="quarto-xref">Figure&nbsp;<span>8.6</span></a>. It has two convolutional layers, no max-pooling, 2 fully-connected layer and one output layer representing the Q-value of all possible actions in the games.</p>
 <div id="fig-dqn" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-dqn-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/dqn.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Figure&nbsp;8.3: Architecture of the CNN used in the original DQN paper. Source: @Mnih2015."><img src="img/dqn.png" class="img-fluid figure-img"></a>
+<a href="img/dqn.png" class="lightbox" data-gallery="quarto-lightbox-gallery-6" title="Figure&nbsp;8.6: Architecture of the CNN used in the original DQN paper. Source: @Mnih2015."><img src="img/dqn.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-dqn-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;8.3: Architecture of the CNN used in the original DQN paper. Source: <span class="citation" data-cites="Mnih2015">Mnih et al. (<a href="references.html#ref-Mnih2015" role="doc-biblioref">2015</a>)</span>.
+Figure&nbsp;8.6: Architecture of the CNN used in the original DQN paper. Source: <span class="citation" data-cites="Mnih2015">Mnih et al. (<a href="references.html#ref-Mnih2015" role="doc-biblioref">2015</a>)</span>.
 </figcaption>
 </figure>
 </div>
-<p>The problem of partial observability is solved by concatenating the four last video frames into a single tensor used as input to the CNN. The convolutional layers become able through learning to extract the speed information from it. Some of the Atari games (Pinball, Breakout) were solved with a performance well above human level, especially when they are mostly reactive. Games necessitating more long-term planning (Montezuma’ Revenge) were still poorly learned, though.</p>
+<p>The problem of partial observability (a single frame does not hold the Markov property) is solved by concatenating the four last video frames into a single tensor used as input to the CNN. The convolutional layers become able through learning to extract the speed information from it. Some of the Atari games (Pinball, Breakout) were solved with a performance well above human level, especially when they are mostly reactive. Games necessitating more long-term planning (Montezuma’s Revenge) were still poorly learned, though.</p>
 <p>Beside being able to learn using delayed and sparse rewards in highly dimensional input spaces, the true <em>tour de force</em> of DQN is that it was able to learn the 49 Atari games using the same architecture and hyperparameters, showing the generality of the approach.</p>
+<div class="quarto-video ratio ratio-16x9"><iframe data-external="1" src="https://www.youtube.com/embed/TmPfTpjtdgg" title="DQN" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe></div>
+<div class="quarto-video ratio ratio-16x9"><iframe data-external="1" src="https://www.youtube.com/embed/W2CAghUiofY" title="DQN" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe></div>
+<div id="fig-dqnresults" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-dqnresults-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="img/atari-results.png" class="lightbox" data-gallery="quarto-lightbox-gallery-7" title="Figure&nbsp;8.7: Results on the Atari benchmark. Some games achieved super-human performance. Source: @Mnih2015"><img src="img/atari-results.png" class="img-fluid figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-dqnresults-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;8.7: Results on the Atari benchmark. Some games achieved super-human performance. Source: <span class="citation" data-cites="Mnih2015">Mnih et al. (<a href="references.html#ref-Mnih2015" role="doc-biblioref">2015</a>)</span>
+</figcaption>
+</figure>
+</div>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
@@ -524,6 +620,7 @@ Mnih, V., Kavukcuoglu, K., Silver, D., Graves, A., Antonoglou, I., Wierstra, D.,
 Mnih, V., Kavukcuoglu, K., Silver, D., Rusu, A. A., Veness, J., Bellemare, M. G., et al. (2015). Human-level control through deep reinforcement learning. <em>Nature</em> 518, 529–533. doi:<a href="https://doi.org/10.1038/nature14236">10.1038/nature14236</a>.
 </div>
 </div>
+</section>
 </section>
 
 </main> <!-- /main -->
@@ -954,8 +1051,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../src/2.4-DQNvariants.html" class="pagination-link" aria-label="DQN variants">
-        <span class="nav-page-text"><span class="chapter-title">DQN variants</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../src/2.4-DQNvariants.html" class="pagination-link" aria-label="DQN variants (Rainbow)">
+        <span class="nav-page-text"><span class="chapter-title">DQN variants (Rainbow)</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
@@ -973,7 +1070,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     </div>
   </div>
 </footer>
-<script>var lightboxQuarto = GLightbox({"descPosition":"bottom","openEffect":"zoom","loop":false,"selector":".lightbox","closeEffect":"zoom"});
+<script>var lightboxQuarto = GLightbox({"selector":".lightbox","openEffect":"zoom","loop":false,"descPosition":"bottom","closeEffect":"zoom"});
 (function() {
   let previousOnload = window.onload;
   window.onload = () => {

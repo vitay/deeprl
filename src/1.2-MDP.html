@@ -243,7 +243,12 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/2.4-DQNvariants.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">DQN variants</span></a>
+  <a href="../src/2.4-DQNvariants.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">DQN variants (Rainbow)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/2.5-DistributedLearning.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Distributed learning</span></a>
   </div>
 </li>
       </ul>
@@ -265,7 +270,7 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../src/3.2-ActorCritic.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Asynchronous Advantage Actor-Critic (A3C)</span></a>
+ <span class="menu-text">Advantage Actor-Critic (A3C)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -280,22 +285,27 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/3.5-NaturalGradient.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Policy Optimization (TRPO, PPO)</span></a>
+  <a href="../src/3.5-NaturalGradient.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Natural gradients</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/3.6-EntropyRL.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Maximum Entropy RL (SAC)</span></a>
+  <a href="../src/3.6-PPO.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Policy optimization (TRPO, PPO)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/3.7-DistributionalRL.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Distributional learning</span></a>
+  <a href="../src/3.7-ACER.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Actor-Critic with Experience Replay (ACER)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/3.8-OtherPolicyGradient.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Miscellaneous model-free algorithms</span></a>
+  <a href="../src/3.8-EntropyRL.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Maximum Entropy RL (SAC)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/3.9-OtherPolicyGradient.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Miscellaneous model-free algorithms</span></a>
   </div>
 </li>
       </ul>
@@ -387,7 +397,7 @@ window.Quarto = {
   <li><a href="#bellman-equations-1" id="toc-bellman-equations-1" class="nav-link" data-scroll-target="#bellman-equations-1">Bellman equations</a></li>
   <li><a href="#optimal-bellman-equations" id="toc-optimal-bellman-equations" class="nav-link" data-scroll-target="#optimal-bellman-equations">Optimal Bellman equations</a></li>
   </ul></li>
-  <li><a href="#dynamic-programming" id="toc-dynamic-programming" class="nav-link" data-scroll-target="#dynamic-programming">Dynamic programming</a>
+  <li><a href="#sec-dp" id="toc-sec-dp" class="nav-link" data-scroll-target="#sec-dp">Dynamic programming</a>
   <ul class="collapse">
   <li><a href="#exact-solution" id="toc-exact-solution" class="nav-link" data-scroll-target="#exact-solution">Exact solution</a></li>
   <li><a href="#policy-iteration" id="toc-policy-iteration" class="nav-link" data-scroll-target="#policy-iteration">Policy iteration</a></li>
@@ -480,7 +490,7 @@ Figure&nbsp;3.1: Interaction between an agent and its environment. Source: <span
 </section>
 <section id="rewards-and-returns" class="level3">
 <h3 class="anchored" data-anchor-id="rewards-and-returns">Rewards and returns</h3>
-<p>As with n-armed bandits, we only care about the <strong>expected reward</strong> received during a transition <span class="math inline">s \rightarrow s'</span> (<em>on average</em>), but the actual reward received <span class="math inline">r_{t+1}</span> may vary around the expected value with some unknown variance. In hard RL, we only care about the expected reward and ignore its variance, as we suppose that we can take actions an infinity of times. However, distributional RL investigates the role of this variance (see Section <a href="3.7-DistributionalRL.html" class="quarto-xref"><span>Distributional learning</span></a>).</p>
+<p>As with n-armed bandits, we only care about the <strong>expected reward</strong> received during a transition <span class="math inline">s \rightarrow s'</span> (<em>on average</em>), but the actual reward received <span class="math inline">r_{t+1}</span> may vary around the expected value with some unknown variance. In hard RL, we only care about the expected reward and ignore its variance, as we suppose that we can take actions an infinity of times. However, distributional RL investigates the role of this variance (see Section <a href="2.4-DQNvariants.html#sec-distributionalrl" class="quarto-xref"><span>Categorical DQN</span></a>).</p>
 <p><span class="math display">r(s, a, s') =  \mathbb{E} (r_{t+1} | s_t = s, a_t = a, s_{t+1} = s')</span></p>
 <div id="fig-rewarddistribution" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
@@ -847,8 +857,8 @@ $$
 -->
 </section>
 </section>
-<section id="dynamic-programming" class="level2">
-<h2 class="anchored" data-anchor-id="dynamic-programming">Dynamic programming</h2>
+<section id="sec-dp" class="level2">
+<h2 class="anchored" data-anchor-id="sec-dp">Dynamic programming</h2>
 <div id="fig-gpi" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-gpi-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -1637,7 +1647,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     </div>
   </div>
 </footer>
-<script>var lightboxQuarto = GLightbox({"loop":false,"openEffect":"zoom","selector":".lightbox","descPosition":"bottom","closeEffect":"zoom"});
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","selector":".lightbox","loop":false,"descPosition":"bottom","openEffect":"zoom"});
 (function() {
   let previousOnload = window.onload;
   window.onload = () => {

@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Asynchronous Advantage Actor-Critic (A3C) – Deep Reinforcement Learning</title>
+<title>Advantage Actor-Critic (A3C) – Deep Reinforcement Learning</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -148,7 +148,7 @@ window.Quarto = {
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
         <a class="flex-grow-1 no-decor" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-          <h1 class="quarto-secondary-nav-title">Asynchronous Advantage Actor-Critic (A3C)</h1>
+          <h1 class="quarto-secondary-nav-title">Advantage Actor-Critic (A3C)</h1>
         </a>     
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
         <i class="bi bi-search"></i>
@@ -243,7 +243,12 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/2.4-DQNvariants.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">DQN variants</span></a>
+  <a href="../src/2.4-DQNvariants.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">DQN variants (Rainbow)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/2.5-DistributedLearning.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Distributed learning</span></a>
   </div>
 </li>
       </ul>
@@ -265,7 +270,7 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../src/3.2-ActorCritic.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">Asynchronous Advantage Actor-Critic (A3C)</span></a>
+ <span class="menu-text">Advantage Actor-Critic (A3C)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -280,22 +285,27 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/3.5-NaturalGradient.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Policy Optimization (TRPO, PPO)</span></a>
+  <a href="../src/3.5-NaturalGradient.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Natural gradients</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/3.6-EntropyRL.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Maximum Entropy RL (SAC)</span></a>
+  <a href="../src/3.6-PPO.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Policy optimization (TRPO, PPO)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/3.7-DistributionalRL.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Distributional learning</span></a>
+  <a href="../src/3.7-ACER.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Actor-Critic with Experience Replay (ACER)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/3.8-OtherPolicyGradient.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Miscellaneous model-free algorithms</span></a>
+  <a href="../src/3.8-EntropyRL.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Maximum Entropy RL (SAC)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/3.9-OtherPolicyGradient.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Miscellaneous model-free algorithms</span></a>
   </div>
 </li>
       </ul>
@@ -377,7 +387,6 @@ window.Quarto = {
   <ul class="collapse">
   <li><a href="#advantage-actor-critic-a2c" id="toc-advantage-actor-critic-a2c" class="nav-link" data-scroll-target="#advantage-actor-critic-a2c">Advantage Actor-Critic (A2C)</a></li>
   <li><a href="#asynchronous-advantage-actor-critic-a3c" id="toc-asynchronous-advantage-actor-critic-a3c" class="nav-link" data-scroll-target="#asynchronous-advantage-actor-critic-a3c">Asynchronous Advantage Actor-Critic (A3C)</a></li>
-  <li><a href="#generalized-advantage-estimation-gae" id="toc-generalized-advantage-estimation-gae" class="nav-link" data-scroll-target="#generalized-advantage-estimation-gae">Generalized Advantage Estimation (GAE)</a></li>
   <li><a href="#stochastic-actor-critic-for-continuous-action-spaces" id="toc-stochastic-actor-critic-for-continuous-action-spaces" class="nav-link" data-scroll-target="#stochastic-actor-critic-for-continuous-action-spaces">Stochastic actor-critic for continuous action spaces</a></li>
   </ul></li>
   </ul>
@@ -388,7 +397,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title d-none d-lg-block">Asynchronous Advantage Actor-Critic (A3C)</h1>
+<h1 class="title d-none d-lg-block">Advantage Actor-Critic (A3C)</h1>
 </div>
 
 
@@ -412,7 +421,7 @@ window.Quarto = {
     A^{\pi}(s, a) = Q^{\pi}(s, a) - V^\pi(s)
 </span></p>
 <p>which is the <strong>advantage</strong> of the action <span class="math inline">a</span> in <span class="math inline">s</span>, as already seen in <em>duelling networks</em>.</p>
-<p>Now the problem is that the critic would have to approximate two functions: <span class="math inline">Q^{\pi}(s, a)</span> and <span class="math inline">V^{\pi}(s)</span>. <strong>Advantage actor-critic</strong> methods presented in this section (A2C, A3C, GAE) approximate the advantage of an action:</p>
+<p>Now the problem is that the critic would have to approximate two functions: <span class="math inline">Q^{\pi}(s, a)</span> and <span class="math inline">V^{\pi}(s)</span>. <strong>Advantage actor-critic</strong> methods approximate the advantage of an action:</p>
 <p><span class="math display">
     \nabla_\theta J(\theta) =  \mathbb{E}_{s \sim \rho^\pi, a \sim \pi_\theta}[\nabla_\theta \log \pi_\theta(s, a) \, A_\varphi(s, a)]
 </span></p>
@@ -423,7 +432,7 @@ window.Quarto = {
 <li><p><span class="math inline">A_\varphi(s, a) =   r(s, a, s') + \gamma \, V_\varphi(s') - V_\varphi(s)</span> is the <strong>TD advantage estimate</strong> or TD error.</p></li>
 <li><p><span class="math inline">A_\varphi(s, a) =   \sum_{k=0}^{n-1} \gamma^{k} \, r_{t+k+1} + \gamma^n \, V_\varphi(s_{t+n+1}) - V_\varphi(s_t)</span> is the <strong>n-step advantage estimate</strong>.</p></li>
 </ul>
-<p>The most popular approach is the n-step advantage, which is at the core of the methods A2C and A3C, and can be understood as a trade-off between MC and TD. MC and TD advantages could be used as well, but come with the respective disadvantages of MC (need for finite episodes, slow updates) and TD (unstable). Generalized Advantage Estimation (GAE) takes another interesting approach to estimate the advantage.</p>
+<p>The most popular approach is the n-step advantage, which is at the core of the methods A2C and A3C, and can be understood as a trade-off between MC and TD. MC and TD advantages could be used as well, but come with the respective disadvantages of MC (need for finite episodes, slow updates) and TD (unstable). Generalized Advantage Estimation (, section <a href="1.5-TD.html#sec-GAE" class="quarto-xref"><span>Generalized Advantage Estimation (GAE)</span></a>) takes another interesting approach to estimate the advantage.</p>
 <p><em>Note:</em> A2C is actually derived from the A3C algorithm presented later, but it is simpler to explain it first. See <a href="https://openai.com/index/openai-baselines-acktr-a2c/" class="uri">https://openai.com/index/openai-baselines-acktr-a2c/</a> for an explanation of the reasons. A good explanation of A2C and A3C with Python code is available at <a href="https://cgnicholls.github.io/reinforcement-learning/2017/03/27/a3c.html" class="uri">https://cgnicholls.github.io/reinforcement-learning/2017/03/27/a3c.html</a>.</p>
 <section id="advantage-actor-critic-a2c" class="level3">
 <h3 class="anchored" data-anchor-id="advantage-actor-critic-a2c">Advantage Actor-Critic (A2C)</h3>
@@ -581,72 +590,6 @@ Figure&nbsp;2: Architecture of A3C. A master network interacts asynchronously wi
 </ol>
 </section>
 </section>
-<section id="generalized-advantage-estimation-gae" class="level3">
-<h3 class="anchored" data-anchor-id="generalized-advantage-estimation-gae">Generalized Advantage Estimation (GAE)</h3>
-<p>The different versions of the policy gradient seen so far take the form:</p>
-<p><span class="math display">
-    \nabla_\theta J(\theta) =  \mathbb{E}_{s_t \sim \rho^\pi, a_t \sim \pi_\theta}[\nabla_\theta \log \pi_\theta (s_t, a_t) \, \psi_t ]
-</span></p>
-<p>where:</p>
-<ul>
-<li><p><span class="math inline">\psi_t = R_t</span> is the <em>REINFORCE</em> algorithm (MC sampling).</p></li>
-<li><p><span class="math inline">\psi_t = R_t - b</span> is the <em>REINFORCE with baseline</em> algorithm.</p></li>
-<li><p><span class="math inline">\psi_t = Q^\pi(s_t, a_t)</span> is the <em>policy gradient theorem</em>.</p></li>
-<li><p><span class="math inline">\psi_t = A^\pi(s_t, a_t)</span> is the <em>advantage actor critic</em>.</p></li>
-<li><p><span class="math inline">\psi_t = r_{t+1} + \gamma \, V^\pi(s_{t+1}) - V^\pi(s_t)</span> is the <em>TD actor critic</em>.</p></li>
-<li><p><span class="math inline">\psi_t = \sum_{k=0}^{n-1} \gamma^{k} \, r_{t+k+1} + \gamma^n \, V^\pi(s_{t+n+1}) - V^\pi(s_t)</span> is the <em>n-step algorithm</em> (A2C).</p></li>
-</ul>
-<p>Generally speaking:</p>
-<ul>
-<li>the more <span class="math inline">\psi_t</span> relies on real rewards (e.g.&nbsp;<span class="math inline">R_t</span>), the more the gradient will be correct on average (small bias), but the more it will vary (high variance). This increases the sample complexity: we need to average more samples to correctly estimate the gradient.</li>
-<li>the more <span class="math inline">\psi_t</span> relies on estimations (e.g.&nbsp;the TD error), the more stable the gradient (small variance), but the more incorrect it is (high bias). This can lead to suboptimal policies, i.e.&nbsp;local optima of the objective function.</li>
-</ul>
-<p>This is the classical bias/variance trade-off in machine learning. The n-step algorithm used in A2C is an attempt to mitigate between these extrema. <span class="citation" data-cites="Schulman2015a">Schulman et al. (<a href="references.html#ref-Schulman2015a" role="doc-biblioref">2015</a>)</span> proposed the <strong>Generalized Advantage Estimate</strong> (GAE) to further control the bias/variance trade-off.</p>
-<p>Let’s define the n-step advantage:</p>
-<p><span class="math display">
-    A^{n}_t = \sum_{k=0}^{n-1} \gamma^{k} \, r_{t+k+1} + \gamma^n \, V^\pi(s_{t+n+1}) - V^\pi(s_t)
-</span></p>
-<p>It is easy to show recursively that it depends on the TD error <span class="math inline">\delta_t = r_{t+1} + \gamma \, V^\pi(s_{t+1}) - V^\pi(s_t)</span> of the <span class="math inline">n</span> next steps:</p>
-<p><span class="math display">
-    A^{n}_t = \sum_{l=0}^{n-1} \gamma^l \, \delta_{t+l}
-</span></p>
-<p>In other words, the prediction error over <span class="math inline">n</span> steps is the (discounted) sum of the prediction errors between two successive steps. Now, what is the optimal value of <span class="math inline">n</span>? GAE decides not to choose and to simply average all n-step advantages and to weight them with a discount parameter <span class="math inline">\lambda</span>. This defines the <strong>Generalized Advantage Estimator</strong> <span class="math inline">A^{\text{GAE}(\gamma, \lambda)}_t</span>:</p>
-<p><span class="math display">
-    A^{\text{GAE}(\gamma, \lambda)}_t = (1-\lambda) \, \sum_{l=0}^\infty \lambda^l A^l_t = \sum_{l=0}^\infty (\gamma \lambda)^l \delta_{t+l}
-</span></p>
-<p>The GAE is the discounted sum of all n-step advantages. When <span class="math inline">\lambda=0</span>, we have <span class="math inline">A^{\text{GAE}(\gamma, 0)}_t = A^{0}_t = \delta_t</span>, i.e.&nbsp;the TD advantage (high bias, low variance). When <span class="math inline">\lambda=1</span>, we have (at the limit) <span class="math inline">A^{\text{GAE}(\gamma, 1)}_t = R_t</span>, i.e.&nbsp;the MC advantage (low bias, high variance). Choosing the right value of <span class="math inline">\lambda</span> between 0 and 1 allows to control the bias/variance trade-off.</p>
-<p><span class="math inline">\gamma</span> and <span class="math inline">\lambda</span> play different roles in GAE: <span class="math inline">\gamma</span> determines the scale or horizon of the value functions: how much future rewards rewards are to be taken into account. The higher <span class="math inline">\gamma &lt;1</span>, the smaller the bias, but the higher the variance. Empirically, <span class="citation" data-cites="Schulman2015a">Schulman et al. (<a href="references.html#ref-Schulman2015a" role="doc-biblioref">2015</a>)</span> found that small <span class="math inline">\lambda</span> values introduce less bias than <span class="math inline">\gamma</span>, so <span class="math inline">\lambda</span> can be chosen smaller than <span class="math inline">\gamma</span> (which is typically 0.99).</p>
-<p>The policy gradient for Generalized Advantage Estimation is therefore:</p>
-<p><span class="math display">
-    \nabla_\theta J(\theta) =  \mathbb{E}_{s_t \sim \rho^\pi, a_t \sim \pi_\theta}[\nabla_\theta \log \pi_\theta (s_t, a_t) \, \sum_{l=0}^\infty (\gamma \lambda)^l \delta_{t+l} ]
-</span></p>
-<p>Note that <span class="citation" data-cites="Schulman2015a">Schulman et al. (<a href="references.html#ref-Schulman2015a" role="doc-biblioref">2015</a>)</span> additionally use <em>trust region optimization</em> to stabilize learning and further reduce the bias, for now just consider it is a better optimization method than gradient descent. The GAE algorithm is summarized here:</p>
-<hr>
-<ul>
-<li>Initialize the actor <span class="math inline">\pi_\theta</span> and the critic <span class="math inline">V_\varphi</span> with random weights.</li>
-<li>for <span class="math inline">t \in [0, T_\text{total}]</span>:
-<ul>
-<li><p>Initialize empty minibatch.</p></li>
-<li><p>for <span class="math inline">k \in [0, n]</span>:</p>
-<ul>
-<li>Select a action <span class="math inline">a_k</span> using the actor <span class="math inline">\pi_\theta</span>.</li>
-<li>Perform the action <span class="math inline">a_k</span> and observe the next state <span class="math inline">s_{k+1}</span> and the reward <span class="math inline">r_{k+1}</span>.</li>
-<li>Store <span class="math inline">(s_k, a_k, r_{k+1})</span> in the minibatch.</li>
-</ul></li>
-<li><p>for <span class="math inline">k \in [0, n]</span>:</p>
-<ul>
-<li>Compute the TD error <span class="math inline">\delta_k = r_{k+1} + \gamma \, V_\varphi(s_{k+1}) - V_\varphi(s_k)</span></li>
-</ul></li>
-<li><p>for <span class="math inline">k \in [0, n]</span>:</p>
-<ul>
-<li>Compute the GAE advantage <span class="math inline">A^{\text{GAE}(\gamma, \lambda)}_k = \sum_{l=0}^\infty (\gamma \lambda)^l \delta_{k+l}</span></li>
-</ul></li>
-<li><p>Update the actor using the GAE advantage and natural gradients (TRPO).</p></li>
-<li><p>Update the critic using natural gradients (TRPO)</p></li>
-</ul></li>
-</ul>
-<hr>
-</section>
 <section id="stochastic-actor-critic-for-continuous-action-spaces" class="level3">
 <h3 class="anchored" data-anchor-id="stochastic-actor-critic-for-continuous-action-spaces">Stochastic actor-critic for continuous action spaces</h3>
 <p>The actor-critic method presented above use <strong>stochastic policies</strong> <span class="math inline">\pi_\theta(s, a)</span> assigning parameterized probabilities of being selecting to each <span class="math inline">(s, a)</span> pair.</p>
@@ -695,9 +638,6 @@ Mnih, V., Badia, A. P., Mirza, M., Graves, A., Lillicrap, T. P., Harley, T., et 
 </div>
 <div id="ref-Niu2011" class="csl-entry" role="listitem">
 Niu, F., Recht, B., Re, C., and Wright, S. J. (2011). <span>HOGWILD</span>!: <span>A Lock-Free Approach</span> to <span>Parallelizing Stochastic Gradient Descent</span>. in <em>Proc. <span>Advances</span> in <span>Neural Information Processing Systems</span></em>, 21–21. Available at: <a href="http://arxiv.org/abs/1106.5730">http://arxiv.org/abs/1106.5730</a>.
-</div>
-<div id="ref-Schulman2015a" class="csl-entry" role="listitem">
-Schulman, J., Levine, S., Abbeel, P., Jordan, M., and Moritz, P. (2015). Trust <span>Region Policy Optimization</span>. in <em>Proceedings of the 31 st <span>International Conference</span> on <span>Machine Learning</span></em>, 1889–1897. Available at: <a href="http://proceedings.mlr.press/v37/schulman15.html">http://proceedings.mlr.press/v37/schulman15.html</a>.
 </div>
 <div id="ref-Sutton1998" class="csl-entry" role="listitem">
 Sutton, R. S., and Barto, A. G. (1998). <em>Reinforcement <span>Learning</span>: <span>An</span> introduction</em>. Cambridge, MA: MIT press.
@@ -1156,7 +1096,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     </div>
   </div>
 </footer>
-<script>var lightboxQuarto = GLightbox({"openEffect":"zoom","selector":".lightbox","loop":false,"closeEffect":"zoom","descPosition":"bottom"});
+<script>var lightboxQuarto = GLightbox({"openEffect":"zoom","closeEffect":"zoom","selector":".lightbox","loop":false,"descPosition":"bottom"});
 (function() {
   let previousOnload = window.onload;
   window.onload = () => {
