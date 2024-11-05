@@ -1,3 +1,9 @@
 # Offline RL
 
 **work in progress**
+
+
+## Diffusion policies
+
+@Chi2023 Diffusion Policy: Visuomotor Policy Learning via Action Diffusion
+@Wang2024 One-Step Diffusion Policy: Fast Visuomotor Policies via Diffusion Distillation

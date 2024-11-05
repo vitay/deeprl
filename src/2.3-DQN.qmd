@@ -40,11 +40,15 @@ We can compute this loss by gathering enough samples $(s, a, r, s')$ (i.e. singl
 
 However, the definition of the loss function uses the mathematical expectation operator $E$ over all transitions, which can only be approximated by **randomly** sampling the distribution (the MDP). This implies that the samples concatenated in a minibatch should be independent from each other (**i.i.d**). 
 
+### Correlated inputs
+
 When gathering transitions online, the samples are correlated: $(s_t, a_t, r_{t+1}, s_{t+1})$ will be followed by $(s_{t+1}, a_{t+1}, r_{t+2}, s_{t+2})$, etc. When playing video games, two successive frames will be very similar (a few pixels will change, or even none if the sampling rate is too high) and the optimal action will likely not change either (to catch the ball in pong, you will need to perform the same action - going left - many times in a row).
 
 ![Sucessive frames in a video game are highly correlated.](img/breakout.png){#fig-breakout-correlated}
 
 **Correlated inputs/outputs** are very bad for deep neural networks: the DNN will overfit and fall into a very bad local minimum. That is why stochastic gradient descent works so well: it randomly samples values from the training set to form minibatches and minimize the loss function on these uncorrelated samples (hopefully). If all samples of a minibatch were of the same class (e.g. zeros in MNIST), the network would converge poorly. This is the first problem preventing an easy use of deep neural networks as function approximators in RL.
+
+### Non-stationary targets
 
 The second major problem is the **non-stationarity** of the targets in the loss function. In classification or regression, the desired values $\mathbf{t}$ are fixed throughout learning: the class of an object does not change in the middle of the training phase.
 
@@ -52,7 +56,15 @@ $$
     \mathcal{L}(\theta) = - \mathbb{E}_{\mathbf{x}, \mathbf{t} \in \mathcal{D}}[ ||\mathbf{t} - \mathbf{y}||^2]
 $$
 
-In Q-learning, the target $r(s, a, s') + \gamma \, \max_{a'} Q_\theta(s', a')$ will change during learning, as $Q_\theta(s', a')$ depends on the weights $\theta$ and will hopefully increase as the performance improves. This is the second problem of deep RL: deep NN are particularly bad on non-stationary problems, especially feedforward networks. They iteratively converge towards the desired value, but have troubles when the target also moves (like a dog chasing its tail).
+In Q-learning, the target :
+
+$$
+    t = r(s, a, s') + \gamma \, \max_{a'} Q_\theta(s', a')
+$$
+
+will change during learning, as $Q_\theta(s', a')$ depends on the weights $\theta$ and will hopefully increase as the performance improves. This is the second problem of deep RL: deep NN are particularly bad on non-stationary problems, especially feedforward networks. They iteratively converge towards the desired value, but have troubles when the target also moves (like a dog chasing its tail).
+
+![In supervised learning, the targets are stationary, leading to good convergence properties. In RL, the targets are non-stationary and depending on the network itself. This often leads to suboptimal convergence.](img/nonstationarity.svg){#fig-nonstationarity width=80%}
 
 ## Deep Q-Network (DQN)
 
@@ -87,11 +99,14 @@ The target network is updated only infrequently (every thousands of iterations o
 
 ![The target network is used to compute the targets to train the value network. Its waits are regularly copied from the value network.](img/targetnetwork.png){#fig-targetnetwork}
 
+![By keeping the the targets constant for a while, the target network lets the value network catch up with them and converge optimally (in principle).](img/nonstationarity2.svg){#fig-nonstationarity2 width=80%}
+
 ### DQN algorithm 
 
 The resulting algorithm is called **Deep Q-Network (DQN)**. It is summarized by the following pseudocode:
 
 :::{.callout-note icon="false"}
+## DQN algorithm
 
 * Initialize value network $Q_{\theta}$ with random weights.
 * Copy $Q_{\theta}$ to create the target network $Q_{\theta'}$.
@@ -130,6 +145,16 @@ DQN was initially applied to solve various Atari 2600 games. Video frames were u
 ![Architecture of the CNN used in the original DQN paper. Source: @Mnih2015.](img/dqn.png){#fig-dqn}
 
 The problem of partial observability (a single frame does not hold the Markov property) is solved by concatenating the four last video frames into a single tensor used as input to the CNN. The convolutional layers become able through learning to extract the speed information from it. Some of the Atari games (Pinball, Breakout) were solved with a performance well above human level, especially when they are mostly reactive. Games necessitating more long-term planning (Montezuma's Revenge) were still poorly learned, though.
+
+:::{.callout-tip icon="false"}
+## Why no max-pooling? 
+
+The CNN used in deep RL agents (DQN or others) usually do not have many max-pooling layers (or strides, which are equivalent). The goal of a max-pooling layer is to achieve **spatial invariance**, i.e. being able to recognize an object whatever its position in the input image. A cat is a cat, whether it is on the left or the right of the image.
+
+However, we usually do not want spatial invariance in RL: the location of the ball in the frame in Breakout or Pinball is extremely important for the policy, we do not want to get rid of it. 
+
+The drawback of not having max-pooling layers is that the last convolutional layer (before the first FC layer) will still have a lot of elements, so the first FC matrix will likely be huge. This limits the ability of deep RL algorithms to work with big images. 
+:::
 
 Beside being able to learn using delayed and sparse rewards in highly dimensional input spaces, the true *tour de force* of DQN is that it was able to learn the 49 Atari games using the same architecture and hyperparameters, showing the generality of the approach. 
 
