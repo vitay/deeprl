@@ -383,7 +383,11 @@ window.Quarto = {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#limitations-of-deep-neural-networks-for-function-approximation" id="toc-limitations-of-deep-neural-networks-for-function-approximation" class="nav-link active" data-scroll-target="#limitations-of-deep-neural-networks-for-function-approximation">Limitations of deep neural networks for function approximation</a></li>
+  <li><a href="#limitations-of-deep-neural-networks-for-function-approximation" id="toc-limitations-of-deep-neural-networks-for-function-approximation" class="nav-link active" data-scroll-target="#limitations-of-deep-neural-networks-for-function-approximation">Limitations of deep neural networks for function approximation</a>
+  <ul class="collapse">
+  <li><a href="#correlated-inputs" id="toc-correlated-inputs" class="nav-link" data-scroll-target="#correlated-inputs">Correlated inputs</a></li>
+  <li><a href="#non-stationary-targets" id="toc-non-stationary-targets" class="nav-link" data-scroll-target="#non-stationary-targets">Non-stationary targets</a></li>
+  </ul></li>
   <li><a href="#deep-q-network-dqn" id="toc-deep-q-network-dqn" class="nav-link" data-scroll-target="#deep-q-network-dqn">Deep Q-Network (DQN)</a>
   <ul class="collapse">
   <li><a href="#experience-replay-memory" id="toc-experience-replay-memory" class="nav-link" data-scroll-target="#experience-replay-memory">Experience replay memory</a></li>
@@ -475,6 +479,8 @@ Naive Q-learning with function approximation
 </div>
 </div>
 <p>However, the definition of the loss function uses the mathematical expectation operator <span class="math inline">E</span> over all transitions, which can only be approximated by <strong>randomly</strong> sampling the distribution (the MDP). This implies that the samples concatenated in a minibatch should be independent from each other (<strong>i.i.d</strong>).</p>
+<section id="correlated-inputs" class="level3">
+<h3 class="anchored" data-anchor-id="correlated-inputs">Correlated inputs</h3>
 <p>When gathering transitions online, the samples are correlated: <span class="math inline">(s_t, a_t, r_{t+1}, s_{t+1})</span> will be followed by <span class="math inline">(s_{t+1}, a_{t+1}, r_{t+2}, s_{t+2})</span>, etc. When playing video games, two successive frames will be very similar (a few pixels will change, or even none if the sampling rate is too high) and the optimal action will likely not change either (to catch the ball in pong, you will need to perform the same action - going left - many times in a row).</p>
 <div id="fig-breakout-correlated" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
@@ -487,11 +493,29 @@ Figure&nbsp;8.3: Sucessive frames in a video game are highly correlated.
 </figure>
 </div>
 <p><strong>Correlated inputs/outputs</strong> are very bad for deep neural networks: the DNN will overfit and fall into a very bad local minimum. That is why stochastic gradient descent works so well: it randomly samples values from the training set to form minibatches and minimize the loss function on these uncorrelated samples (hopefully). If all samples of a minibatch were of the same class (e.g.&nbsp;zeros in MNIST), the network would converge poorly. This is the first problem preventing an easy use of deep neural networks as function approximators in RL.</p>
+</section>
+<section id="non-stationary-targets" class="level3">
+<h3 class="anchored" data-anchor-id="non-stationary-targets">Non-stationary targets</h3>
 <p>The second major problem is the <strong>non-stationarity</strong> of the targets in the loss function. In classification or regression, the desired values <span class="math inline">\mathbf{t}</span> are fixed throughout learning: the class of an object does not change in the middle of the training phase.</p>
 <p><span class="math display">
     \mathcal{L}(\theta) = - \mathbb{E}_{\mathbf{x}, \mathbf{t} \in \mathcal{D}}[ ||\mathbf{t} - \mathbf{y}||^2]
 </span></p>
-<p>In Q-learning, the target <span class="math inline">r(s, a, s') + \gamma \, \max_{a'} Q_\theta(s', a')</span> will change during learning, as <span class="math inline">Q_\theta(s', a')</span> depends on the weights <span class="math inline">\theta</span> and will hopefully increase as the performance improves. This is the second problem of deep RL: deep NN are particularly bad on non-stationary problems, especially feedforward networks. They iteratively converge towards the desired value, but have troubles when the target also moves (like a dog chasing its tail).</p>
+<p>In Q-learning, the target :</p>
+<p><span class="math display">
+    t = r(s, a, s') + \gamma \, \max_{a'} Q_\theta(s', a')
+</span></p>
+<p>will change during learning, as <span class="math inline">Q_\theta(s', a')</span> depends on the weights <span class="math inline">\theta</span> and will hopefully increase as the performance improves. This is the second problem of deep RL: deep NN are particularly bad on non-stationary problems, especially feedforward networks. They iteratively converge towards the desired value, but have troubles when the target also moves (like a dog chasing its tail).</p>
+<div id="fig-nonstationarity" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-nonstationarity-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="img/nonstationarity.svg" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="Figure&nbsp;8.4: In supervised learning, the targets are stationary, leading to good convergence properties. In RL, the targets are non-stationary and depending on the network itself. This often leads to suboptimal convergence."><img src="img/nonstationarity.svg" class="img-fluid figure-img" style="width:80.0%"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-nonstationarity-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;8.4: In supervised learning, the targets are stationary, leading to good convergence properties. In RL, the targets are non-stationary and depending on the network itself. This often leads to suboptimal convergence.
+</figcaption>
+</figure>
+</div>
+</section>
 </section>
 <section id="deep-q-network-dqn" class="level2">
 <h2 class="anchored" data-anchor-id="deep-q-network-dqn">Deep Q-Network (DQN)</h2>
@@ -502,10 +526,10 @@ Figure&nbsp;8.3: Sucessive frames in a video game are highly correlated.
 <div id="fig-erm" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-erm-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/ERM.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="Figure&nbsp;8.4: Experience replay memory. Interactions with the environment are stored in the ERM. Random minibatches are sampled from it to train the DQN value network."><img src="img/ERM.png" class="img-fluid figure-img"></a>
+<a href="img/ERM.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5" title="Figure&nbsp;8.5: Experience replay memory. Interactions with the environment are stored in the ERM. Random minibatches are sampled from it to train the DQN value network."><img src="img/ERM.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-erm-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;8.4: Experience replay memory. Interactions with the environment are stored in the ERM. Random minibatches are sampled from it to train the DQN value network.
+Figure&nbsp;8.5: Experience replay memory. Interactions with the environment are stored in the ERM. Random minibatches are sampled from it to train the DQN value network.
 </figcaption>
 </figure>
 </div>
@@ -526,10 +550,20 @@ Figure&nbsp;8.4: Experience replay memory. Interactions with the environment are
 <div id="fig-targetnetwork" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-targetnetwork-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/targetnetwork.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5" title="Figure&nbsp;8.5: The target network is used to compute the targets to train the value network. Its waits are regularly copied from the value network."><img src="img/targetnetwork.png" class="img-fluid figure-img"></a>
+<a href="img/targetnetwork.png" class="lightbox" data-gallery="quarto-lightbox-gallery-6" title="Figure&nbsp;8.6: The target network is used to compute the targets to train the value network. Its waits are regularly copied from the value network."><img src="img/targetnetwork.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-targetnetwork-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;8.5: The target network is used to compute the targets to train the value network. Its waits are regularly copied from the value network.
+Figure&nbsp;8.6: The target network is used to compute the targets to train the value network. Its waits are regularly copied from the value network.
+</figcaption>
+</figure>
+</div>
+<div id="fig-nonstationarity2" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-nonstationarity2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="img/nonstationarity2.svg" class="lightbox" data-gallery="quarto-lightbox-gallery-7" title="Figure&nbsp;8.7: By keeping the the targets constant for a while, the target network lets the value network catch up with them and converge optimally (in principle)."><img src="img/nonstationarity2.svg" class="img-fluid figure-img" style="width:80.0%"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-nonstationarity2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;8.7: By keeping the the targets constant for a while, the target network lets the value network catch up with them and converge optimally (in principle).
 </figcaption>
 </figure>
 </div>
@@ -543,7 +577,7 @@ Figure&nbsp;8.5: The target network is used to compute the targets to train the 
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Note
+DQN algorithm
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -582,28 +616,43 @@ Note
 </span></p>
 <p>If this rule is applied after each step with a very small rate <span class="math inline">\tau</span>, the target network will slowly track the learned network, but never be the same. Modern implementations of DQN use this smoothed version.</p>
 <p>These two facts make DQN extremely slow to learn: millions of transitions are needed to obtain a satisfying policy. This is called the <strong>sample complexity</strong>, i.e.&nbsp;the number of transitions needed to obtain a satisfying performance. DQN finds very good policies, but at the cost of a very long training time.</p>
-<p>DQN was initially applied to solve various Atari 2600 games. Video frames were used as observations and the set of possible discrete actions was limited (left/right/up/down, shoot, etc). The CNN used is depicted on <a href="#fig-dqn" class="quarto-xref">Figure&nbsp;<span>8.6</span></a>. It has two convolutional layers, no max-pooling, 2 fully-connected layer and one output layer representing the Q-value of all possible actions in the games.</p>
+<p>DQN was initially applied to solve various Atari 2600 games. Video frames were used as observations and the set of possible discrete actions was limited (left/right/up/down, shoot, etc). The CNN used is depicted on <a href="#fig-dqn" class="quarto-xref">Figure&nbsp;<span>8.8</span></a>. It has two convolutional layers, no max-pooling, 2 fully-connected layer and one output layer representing the Q-value of all possible actions in the games.</p>
 <div id="fig-dqn" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-dqn-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/dqn.png" class="lightbox" data-gallery="quarto-lightbox-gallery-6" title="Figure&nbsp;8.6: Architecture of the CNN used in the original DQN paper. Source: @Mnih2015."><img src="img/dqn.png" class="img-fluid figure-img"></a>
+<a href="img/dqn.png" class="lightbox" data-gallery="quarto-lightbox-gallery-8" title="Figure&nbsp;8.8: Architecture of the CNN used in the original DQN paper. Source: @Mnih2015."><img src="img/dqn.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-dqn-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;8.6: Architecture of the CNN used in the original DQN paper. Source: <span class="citation" data-cites="Mnih2015">Mnih et al. (<a href="references.html#ref-Mnih2015" role="doc-biblioref">2015</a>)</span>.
+Figure&nbsp;8.8: Architecture of the CNN used in the original DQN paper. Source: <span class="citation" data-cites="Mnih2015">Mnih et al. (<a href="references.html#ref-Mnih2015" role="doc-biblioref">2015</a>)</span>.
 </figcaption>
 </figure>
 </div>
 <p>The problem of partial observability (a single frame does not hold the Markov property) is solved by concatenating the four last video frames into a single tensor used as input to the CNN. The convolutional layers become able through learning to extract the speed information from it. Some of the Atari games (Pinball, Breakout) were solved with a performance well above human level, especially when they are mostly reactive. Games necessitating more long-term planning (Montezuma’s Revenge) were still poorly learned, though.</p>
+<div class="callout callout-style-default callout-tip no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Why no max-pooling?
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The CNN used in deep RL agents (DQN or others) usually do not have many max-pooling layers (or strides, which are equivalent). The goal of a max-pooling layer is to achieve <strong>spatial invariance</strong>, i.e.&nbsp;being able to recognize an object whatever its position in the input image. A cat is a cat, whether it is on the left or the right of the image.</p>
+<p>However, we usually do not want spatial invariance in RL: the location of the ball in the frame in Breakout or Pinball is extremely important for the policy, we do not want to get rid of it.</p>
+<p>The drawback of not having max-pooling layers is that the last convolutional layer (before the first FC layer) will still have a lot of elements, so the first FC matrix will likely be huge. This limits the ability of deep RL algorithms to work with big images.</p>
+</div>
+</div>
 <p>Beside being able to learn using delayed and sparse rewards in highly dimensional input spaces, the true <em>tour de force</em> of DQN is that it was able to learn the 49 Atari games using the same architecture and hyperparameters, showing the generality of the approach.</p>
 <div class="quarto-video ratio ratio-16x9"><iframe data-external="1" src="https://www.youtube.com/embed/TmPfTpjtdgg" title="DQN" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe></div>
 <div class="quarto-video ratio ratio-16x9"><iframe data-external="1" src="https://www.youtube.com/embed/W2CAghUiofY" title="DQN" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe></div>
 <div id="fig-dqnresults" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-dqnresults-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/atari-results.png" class="lightbox" data-gallery="quarto-lightbox-gallery-7" title="Figure&nbsp;8.7: Results on the Atari benchmark. Some games achieved super-human performance. Source: @Mnih2015"><img src="img/atari-results.png" class="img-fluid figure-img"></a>
+<a href="img/atari-results.png" class="lightbox" data-gallery="quarto-lightbox-gallery-9" title="Figure&nbsp;8.9: Results on the Atari benchmark. Some games achieved super-human performance. Source: @Mnih2015"><img src="img/atari-results.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-dqnresults-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;8.7: Results on the Atari benchmark. Some games achieved super-human performance. Source: <span class="citation" data-cites="Mnih2015">Mnih et al. (<a href="references.html#ref-Mnih2015" role="doc-biblioref">2015</a>)</span>
+Figure&nbsp;8.9: Results on the Atari benchmark. Some games achieved super-human performance. Source: <span class="citation" data-cites="Mnih2015">Mnih et al. (<a href="references.html#ref-Mnih2015" role="doc-biblioref">2015</a>)</span>
 </figcaption>
 </figure>
 </div>
@@ -1070,7 +1119,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     </div>
   </div>
 </footer>
-<script>var lightboxQuarto = GLightbox({"selector":".lightbox","openEffect":"zoom","loop":false,"descPosition":"bottom","closeEffect":"zoom"});
+<script>var lightboxQuarto = GLightbox({"selector":".lightbox","loop":false,"openEffect":"zoom","closeEffect":"zoom","descPosition":"bottom"});
 (function() {
   let previousOnload = window.onload;
   window.onload = () => {

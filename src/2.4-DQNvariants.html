@@ -418,14 +418,33 @@ window.Quarto = {
 <section id="double-dqn" class="level2">
 <h2 class="anchored" data-anchor-id="double-dqn">Double DQN</h2>
 <p>In DQN, the experience replay memory and the target network were decisive in allowing the CNN to learn the tasks through RL. Their drawback is that they drastically slow down learning and increase the sample complexity. Additionally, DQN has stability issues: the same network may not converge the same way in different runs. One first improvement on DQN was proposed by <span class="citation" data-cites="vanHasselt2015">van Hasselt et al. (<a href="references.html#ref-vanHasselt2015" role="doc-biblioref">2015</a>)</span> and called <strong>double DQN</strong>.</p>
-<p>The idea is that the target value <span class="math inline">y = r(s, a, s') + \gamma \, \max_{a'} Q_{\theta'}(s', a')</span> is frequently over-estimating the true return because of the max operator. Especially at the beginning of learning when Q-values are far from being correct, if an action is over-estimated (<span class="math inline">Q_{\theta'}(s', a)</span> is higher that its true value) and selected by the target network as the next greedy action, the learned Q-value <span class="math inline">Q_{\theta}(s, a)</span> will also become over-estimated, what will propagate to all previous actions on the long-term. <span class="citation" data-cites="vanHasselt2010">van Hasselt (<a href="references.html#ref-vanHasselt2010" role="doc-biblioref">2010</a>)</span> showed that this over-estimation is inevitable in regular Q-learning and proposed <strong>double learning</strong>.</p>
+<p>The idea is that the target value <span class="math inline">y = r(s, a, s') + \gamma \, \max_{a'} Q_{\theta'}(s', a')</span> is frequently over-estimating the true return because of the maximum operator. Especially at the beginning of learning when Q-values are far from being correct, if an action is over-estimated (<span class="math inline">Q_{\theta'}(s', a)</span> is higher that its true value) and selected by the target network as the next greedy action, the learned Q-value <span class="math inline">Q_{\theta}(s, a)</span> will also become over-estimated, what will propagate to all previous actions on the long-term. <span class="citation" data-cites="vanHasselt2010">van Hasselt (<a href="references.html#ref-vanHasselt2010" role="doc-biblioref">2010</a>)</span> showed that this over-estimation is inevitable in regular Q-learning and proposed <strong>double learning</strong>.</p>
+<div id="fig-doubleqdn" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-doubleqdn-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="img/ddqn-results2.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;9.1: Overestimation of Q-values with DQN on a few Atari games. The true Q-value can be estimated by counting the rewards until the end of the episode. Source @vanHasselt2015."><img src="img/ddqn-results2.png" class="img-fluid figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-doubleqdn-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;9.1: Overestimation of Q-values with DQN on a few Atari games. The true Q-value can be estimated by counting the rewards until the end of the episode. Source <span class="citation" data-cites="vanHasselt2015">van Hasselt et al. (<a href="references.html#ref-vanHasselt2015" role="doc-biblioref">2015</a>)</span>.
+</figcaption>
+</figure>
+</div>
 <p>The idea is to train independently two value networks: one will be used to find the greedy action (the action with the maximal Q-value), the other to estimate the Q-value itself. Even if the first network choose an over-estimated action as the greedy action, the other might provide a less over-estimated value for it, solving the problem.</p>
 <p>Applying double learning to DQN is particularly straightforward: there are already two value networks, the trained network and the target network. Instead of using the target network to both select the greedy action in the next state and estimate its Q-value, here the trained network <span class="math inline">\theta</span> is used to select the greedy action <span class="math inline">a^* = \text{argmax}_{a'} Q_\theta (s', a')</span> while the target network only estimates its Q-value. The target value becomes:</p>
 <p><span class="math display">
     y = r(s, a, s') + \gamma \, Q_{\theta'}(s', \text{argmax}_{a'} Q_\theta (s', a'))
 </span></p>
 <p>This induces only a small modification of the DQN algorithm and significantly improves its performance and stability:</p>
-<hr>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Double DQN algorithm
+</div>
+</div>
+<div class="callout-body-container callout-body">
 <ul>
 <li>Every <span class="math inline">T_\text{train}</span> steps:
 <ul>
@@ -438,7 +457,8 @@ window.Quarto = {
 </ul></li>
 </ul></li>
 </ul>
-<hr>
+</div>
+</div>
 </section>
 <section id="prioritized-experience-replay" class="level2">
 <h2 class="anchored" data-anchor-id="prioritized-experience-replay">Prioritized experience replay</h2>
@@ -446,7 +466,21 @@ window.Quarto = {
 <p><span class="math display">
     \delta = r(s, a, s') + \gamma \, Q_{\theta'}(s', \text{argmax}_{a'} Q_\theta (s', a')) - Q_\theta(s, a)
 </span></p>
-<p>and sample with a higher probability those surprising transitions to form a minibatch. However, non-surprising transitions might become relevant again after enough training, as the <span class="math inline">Q_\theta(s, a)</span> change, so prioritized replay has a softmax function over the TD error to ensure “exploration” of memorized transitions. This data structure has of course a non-negligible computational cost, but accelerates learning so much that it is worth it. See <a href="https://jaromiru.com/2016/11/07/lets-make-a-dqn-double-learning-and-prioritized-experience-replay/" class="uri">https://jaromiru.com/2016/11/07/lets-make-a-dqn-double-learning-and-prioritized-experience-replay/</a> for a presentation of double DQN with prioritized replay.</p>
+<p>and sample with a higher probability those surprising transitions to form a minibatch:</p>
+<p><span class="math display">
+    P(k) = \frac{(|\delta_k| + \epsilon)^\alpha}{\sum_k (|\delta_k| + \epsilon)^\alpha}
+</span></p>
+<p>However, non-surprising transitions might become relevant again after enough training, as the <span class="math inline">Q_\theta(s, a)</span> change, so prioritized replay has a softmax function over the TD error to ensure “exploration” of memorized transitions. This data structure has of course a non-negligible computational cost, but accelerates learning so much that it is worth it. See <a href="https://jaromiru.com/2016/11/07/lets-make-a-dqn-double-learning-and-prioritized-experience-replay/" class="uri">https://jaromiru.com/2016/11/07/lets-make-a-dqn-double-learning-and-prioritized-experience-replay/</a> for a presentation of double DQN with prioritized replay.</p>
+<div id="fig-perresult" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-perresult-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="img/per_results2.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Figure&nbsp;9.2: Relative improvement on the Atari benchmark brought by PER. Source: @Schaul2015"><img src="img/per_results2.png" class="img-fluid figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-perresult-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;9.2: Relative improvement on the Atari benchmark brought by PER. Source: <span class="citation" data-cites="Schaul2015">Schaul et al. (<a href="references.html#ref-Schaul2015" role="doc-biblioref">2015</a>)</span>
+</figcaption>
+</figure>
+</div>
 </section>
 <section id="duelling-network" class="level2">
 <h2 class="anchored" data-anchor-id="duelling-network">Duelling network</h2>
@@ -455,6 +489,23 @@ window.Quarto = {
 <li>the value of the underlying state <span class="math inline">s</span>: in some states, all actions are bad, you lose whatever you do.</li>
 <li>the interest of that action: some actions are better than others for a given state.</li>
 </ul>
+<div id="fig-duelling" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-duelling-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="img/dueling-principle.svg" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Figure&nbsp;9.3: The value of an action depends on the value of the underlying state, plus its own advantage."><img src="img/dueling-principle.svg" class="img-fluid figure-img" style="width:60.0%"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-duelling-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;9.3: The value of an action depends on the value of the underlying state, plus its own advantage.
+</figcaption>
+</figure>
+</div>
+<p>However, the exact Q-values of all actions are not equally important.</p>
+<ul>
+<li>In <strong>bad</strong> states (low <span class="math inline">V^\pi(s)</span>), you can do whatever you want, you will lose.</li>
+<li>In neutral states, you can do whatever you want, nothing happens.</li>
+<li>In <strong>good</strong> states (high <span class="math inline">V^\pi(s)</span>), you need to select the right action to get rewards, otherwise you lose.</li>
+</ul>
+<p>The total variance of the Q-values (over all states) is quite high: it can be a problem for the underlying neural network, which has to output very negative and very positive number.</p>
 <p>This leads to the definition of the <strong>advantage</strong> <span class="math inline">A^\pi(s,a)</span> of an action:</p>
 <p><span id="eq-advantagefunction"><span class="math display">
     A^\pi(s, a) = Q^\pi(s, a) - V^\pi(s)
@@ -465,18 +516,28 @@ window.Quarto = {
     Q^\pi(s, a) = V^\pi(s) + A^\pi(s, a)
 </span></p>
 <p>If you already know that the value of a state is very low, you do not need to bother exploring and learning the value of all actions in that state, they will not bring much. Moreover, the advantage function has <strong>less variance</strong> than the Q-values, which is a very good property when using neural networks for function approximation. The variance of the Q-values comes from the fact that they are estimated based on other estimates, which themselves evolve during learning (non-stationarity of the targets) and can drastically change during exploration (stochastic policies). The advantages only track the <em>relative</em> change of the value of an action compared to its state, what is going to be much more stable over time.</p>
-<p>The range of values taken by the advantages is also much smaller than the Q-values. Let’s suppose we have two states with values -10 and 10, and two actions with advantages 0 and -1 (it does not matter which one). The Q-values will vary between -11 (the worst action in the worst state) and 10 (the best action in the best state), while the advantage only varies between -1 and 0. It is therefore going to be much easier for a neural network to learn the advantages than the Q-values, as they are theoretically not bounded.</p>
 <div id="fig-duelling" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-duelling-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/duelling.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;9.1: Duelling network architecture. Top: classical feedforward architecture to predict Q-values. Bottom: Duelling networks predicting state values and advantage functions to form the Q-values. Source: @Wang2016."><img src="img/duelling.png" class="img-fluid figure-img" style="width:60.0%"></a>
+<a href="img/dueling-principle2.svg" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="Figure&nbsp;9.4: The advantages have a much smaller variability than the Q-values."><img src="img/dueling-principle2.svg" class="img-fluid figure-img" style="width:60.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-duelling-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;9.1: Duelling network architecture. Top: classical feedforward architecture to predict Q-values. Bottom: Duelling networks predicting state values and advantage functions to form the Q-values. Source: <span class="citation" data-cites="Wang2016">Wang et al. (<a href="references.html#ref-Wang2016" role="doc-biblioref">2016</a>)</span>.
+Figure&nbsp;9.4: The advantages have a much smaller variability than the Q-values.
 </figcaption>
 </figure>
 </div>
-<p><span class="citation" data-cites="Wang2016">Wang et al. (<a href="references.html#ref-Wang2016" role="doc-biblioref">2016</a>)</span> incorporated the idea of <em>advantage updating</em> in a double DQN architecture with prioritized replay (<a href="#fig-duelling" class="quarto-xref">Figure&nbsp;<span>9.1</span></a>). As in DQN, the last layer represents the Q-values of the possible actions and has to minimize the mse loss:</p>
+<p>The range of values taken by the advantages is also much smaller than the Q-values. Let’s suppose we have two states with values -10 and 10, and two actions with advantages 0 and -1 (it does not matter which one). The Q-values will vary between -11 (the worst action in the worst state) and 10 (the best action in the best state), while the advantage only varies between -1 and 0. It is therefore going to be much easier for a neural network to learn the advantages than the Q-values, which are theoretically not bounded.</p>
+<div id="fig-duelling" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-duelling-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="img/duelling.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5" title="Figure&nbsp;9.5: Duelling network architecture. Top: classical feedforward architecture to predict Q-values. Bottom: Duelling networks predicting state values and advantage functions to form the Q-values. Source: @Wang2016."><img src="img/duelling.png" class="img-fluid figure-img" style="width:60.0%"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-duelling-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;9.5: Duelling network architecture. Top: classical feedforward architecture to predict Q-values. Bottom: Duelling networks predicting state values and advantage functions to form the Q-values. Source: <span class="citation" data-cites="Wang2016">Wang et al. (<a href="references.html#ref-Wang2016" role="doc-biblioref">2016</a>)</span>.
+</figcaption>
+</figure>
+</div>
+<p><span class="citation" data-cites="Wang2016">Wang et al. (<a href="references.html#ref-Wang2016" role="doc-biblioref">2016</a>)</span> incorporated the idea of <em>advantage updating</em> in a double DQN architecture with prioritized replay (<a href="#fig-duelling" class="quarto-xref">Figure&nbsp;<span>9.5</span></a>). As in DQN, the last layer represents the Q-values of the possible actions and has to minimize the mse loss:</p>
 <p><span class="math display">
     \mathcal{L}(\theta) = \mathbb{E}_\pi([r(s, a, s') + \gamma \, Q_{\theta', \alpha', \beta'}(s', \text{argmax}_{a'} Q_{\theta, \alpha, \beta} (s', a')) - Q_{\theta, \alpha, \beta}(s, a)]^2)
 </span></p>
@@ -492,7 +553,17 @@ Figure&nbsp;9.1: Duelling network architecture. Top: classical feedforward archi
 <p><span class="math display">
     Q_{\theta, \alpha, \beta}(s, a) = V_{\theta, \beta}(s) + (A_{\theta, \alpha}(s, a) - \frac{1}{|\mathcal{A}|} \sum_a A_{\theta, \alpha}(s, a))
 </span></p>
-<p>Apart from this specific output layer, everything works as usual, especially the gradient of the mse loss function can travel backwards using backpropagation to update the weights <span class="math inline">\theta</span>, <span class="math inline">\alpha</span> and <span class="math inline">\beta</span>. The resulting architecture outperforms double DQN with prioritized replay on most Atari games, particularly games with repetitive actions.</p>
+<p>Apart from this specific output layer, everything works as usual, especially the gradient of the mse loss function can travel backwards using backpropagation to update the weights <span class="math inline">\theta</span>, <span class="math inline">\alpha</span> and <span class="math inline">\beta</span>. The resulting architecture outperforms double DQN with prioritized replay (DDQN-PER) on most Atari games, particularly games with repetitive actions.</p>
+<div id="fig-dueling-results" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-dueling-results-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="img/dueling-result.png" class="lightbox" data-gallery="quarto-lightbox-gallery-6" title="Figure&nbsp;9.6: Relative improvement of Duelling DQN over DDQN-PER on Atari games. Source: @Wang2016."><img src="img/dueling-result.png" class="img-fluid figure-img" style="width:70.0%"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-dueling-results-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;9.6: Relative improvement of Duelling DQN over DDQN-PER on Atari games. Source: <span class="citation" data-cites="Wang2016">Wang et al. (<a href="references.html#ref-Wang2016" role="doc-biblioref">2016</a>)</span>.
+</figcaption>
+</figure>
+</div>
 </section>
 <section id="sec-distributionalrl" class="level2">
 <h2 class="anchored" data-anchor-id="sec-distributionalrl">Categorical DQN</h2>
@@ -503,14 +574,14 @@ Figure&nbsp;9.1: Duelling network architecture. Top: classical feedforward archi
 <p>The variance of the returns is not considered in the action selection scheme, and most methods actually try to reduce this variance as it impairs the convergence of neural networks. Decision theory states that only the mean should matter on the long-term, but one can imagine tasks where the variance is an important factor for the decision. Imagine you are in a game where you have two actions available: the first one brings returns of 10 and 20, with a probability of 0.5 each (to simplify), while the second one brings returns of -10 and +40 with probability 0.5 too. Both actions have the same Q-value of 15 (a return which is actually never experienced), so one can theoretically pick whatever action, both are optimal in the Bellman’s sense.</p>
 <p>However, this is only true when playing <strong>long enough</strong>. If, after learning, one is only allowed one try on that game, it is obviously safer (but less fun) to choose the first action, as one wins at worse 10, while it is -10 with the second action. Knowing the distribution of the returns can allow to distinguish risky choices from safe ones more easily and adapt the behavior. Another advantage would be that by learning the distribution of the returns instead of just their mean, one actually gathers more information about the environment dynamics: it can only help the convergence of the algorithm towards the optimal policy.</p>
 <p><span class="citation" data-cites="Bellemare2017">Bellemare et al. (<a href="references.html#ref-Bellemare2017" role="doc-biblioref">2017</a>)</span> proposed to learn the <strong>value distribution</strong> (the probability distribution of the returns) through a modification of the Bellman equation. They show that learning the complete distribution of rewards instead of their mean leads to performance improvements on Atari games over modern variants of DQN.</p>
-<p>Their proposed <strong>categorical DQN</strong> (also called C51) has an architecture based on DQN, but where the output layer predicts the distribution of the returns for each action <span class="math inline">a</span> in state <span class="math inline">s</span>, instead of its mean <span class="math inline">Q^\pi(s, a)</span>. In practice, each action <span class="math inline">a</span> is represented by <span class="math inline">N</span> output neurons, who encode the support of the distribution of returns. If the returns take values between <span class="math inline">V_\text{min}</span> and <span class="math inline">V_\text{max}</span>, one can represent their distribution <span class="math inline">\mathcal{Z}</span> by taking <span class="math inline">N</span> discrete “bins” (called <em>atoms</em> in the paper) in that range. <a href="#fig-distributionallearning" class="quarto-xref">Figure&nbsp;<span>9.2</span></a> shows how the distribution of returns between -10 and 10 can be represented using 21 atoms.</p>
+<p>Their proposed <strong>categorical DQN</strong> (also called C51) has an architecture based on DQN, but where the output layer predicts the distribution of the returns for each action <span class="math inline">a</span> in state <span class="math inline">s</span>, instead of its mean <span class="math inline">Q^\pi(s, a)</span>. In practice, each action <span class="math inline">a</span> is represented by <span class="math inline">N</span> output neurons, who encode the support of the distribution of returns. If the returns take values between <span class="math inline">V_\text{min}</span> and <span class="math inline">V_\text{max}</span>, one can represent their distribution <span class="math inline">\mathcal{Z}</span> by taking <span class="math inline">N</span> discrete “bins” (called <em>atoms</em> in the paper) in that range. <a href="#fig-distributionallearning" class="quarto-xref">Figure&nbsp;<span>9.7</span></a> shows how the distribution of returns between -10 and 10 can be represented using 21 atoms.</p>
 <div id="fig-distributionallearning" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-distributionallearning-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/distributionallearning.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Figure&nbsp;9.2: Example of a value distribution using 21 atoms between -10 and 10. The average return is 3, but its variance is explicitly represented."><img src="img/distributionallearning.png" class="img-fluid figure-img" style="width:80.0%"></a>
+<a href="img/distributionallearning.png" class="lightbox" data-gallery="quarto-lightbox-gallery-7" title="Figure&nbsp;9.7: Example of a value distribution using 21 atoms between -10 and 10. The average return is 3, but its variance is explicitly represented."><img src="img/distributionallearning.png" class="img-fluid figure-img" style="width:80.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-distributionallearning-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;9.2: Example of a value distribution using 21 atoms between -10 and 10. The average return is 3, but its variance is explicitly represented.
+Figure&nbsp;9.7: Example of a value distribution using 21 atoms between -10 and 10. The average return is 3, but its variance is explicitly represented.
 </figcaption>
 </figure>
 </div>
@@ -544,14 +615,14 @@ Figure&nbsp;9.2: Example of a value distribution using 21 atoms between -10 and 
 <p><span class="math display">
     \mathcal{T} \, z_i = r + \gamma \, z_i
 </span></p>
-<p>and clip the obtained value to <span class="math inline">[V_\text{min}, V_\text{max}]</span>. The reward <span class="math inline">r</span> translates the distribution of atoms, while the discount rate <span class="math inline">\gamma</span> scales it. <a href="#fig-distributionallearning2" class="quarto-xref">Figure&nbsp;<span>9.3</span></a> shows the distribution of <span class="math inline">\mathcal{T} \, \mathcal{Z}_\theta(s, a)</span> compared to <span class="math inline">\mathcal{Z}_\theta(s, a)</span>. Note that the atoms of the two distributions are not aligned.</p>
+<p>and clip the obtained value to <span class="math inline">[V_\text{min}, V_\text{max}]</span>. The reward <span class="math inline">r</span> translates the distribution of atoms, while the discount rate <span class="math inline">\gamma</span> scales it. <a href="#fig-distributionallearning2" class="quarto-xref">Figure&nbsp;<span>9.8</span></a> shows the distribution of <span class="math inline">\mathcal{T} \, \mathcal{Z}_\theta(s, a)</span> compared to <span class="math inline">\mathcal{Z}_\theta(s, a)</span>. Note that the atoms of the two distributions are not aligned.</p>
 <div id="fig-distributionallearning2" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-distributionallearning2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/distributionallearning2.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Figure&nbsp;9.3: Computation of the Bellman update \mathcal{T} \, \mathcal{Z}_\theta(s, a). The atoms of the two distributions are not aligned."><img src="img/distributionallearning2.png" class="img-fluid figure-img" style="width:80.0%"></a>
+<a href="img/distributionallearning2.png" class="lightbox" data-gallery="quarto-lightbox-gallery-8" title="Figure&nbsp;9.8: Computation of the Bellman update \mathcal{T} \, \mathcal{Z}_\theta(s, a). The atoms of the two distributions are not aligned."><img src="img/distributionallearning2.png" class="img-fluid figure-img" style="width:80.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-distributionallearning2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;9.3: Computation of the Bellman update <span class="math inline">\mathcal{T} \, \mathcal{Z}_\theta(s, a)</span>. The atoms of the two distributions are not aligned.
+Figure&nbsp;9.8: Computation of the Bellman update <span class="math inline">\mathcal{T} \, \mathcal{Z}_\theta(s, a)</span>. The atoms of the two distributions are not aligned.
 </figcaption>
 </figure>
 </div>
@@ -563,14 +634,14 @@ Figure&nbsp;9.3: Computation of the Bellman update <span class="math inline">\ma
 </span> <span class="math display">
     \Delta p_{u}(s', a'; \theta) = p_{b}(s', a'; \theta) \, (l - b)
 </span></p>
-<p><a href="#fig-distributionallearning3" class="quarto-xref">Figure&nbsp;<span>9.4</span></a> shows how the projected update distribution <span class="math inline">\Phi \, \mathcal{T} \, \mathcal{Z}_\theta(s, a)</span> now matches the support of <span class="math inline">\mathcal{Z}_\theta(s, a)</span></p>
+<p><a href="#fig-distributionallearning3" class="quarto-xref">Figure&nbsp;<span>9.9</span></a> shows how the projected update distribution <span class="math inline">\Phi \, \mathcal{T} \, \mathcal{Z}_\theta(s, a)</span> now matches the support of <span class="math inline">\mathcal{Z}_\theta(s, a)</span></p>
 <div id="fig-distributionallearning3" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-distributionallearning3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/distributionallearning3.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="Figure&nbsp;9.4: Projected update \Phi \, \mathcal{T} \, \mathcal{Z}_\theta(s, a) on the support of \mathcal{Z}_\theta(s, a). The atoms are now aligned, the statistical distance between the two distributions can be minimized."><img src="img/distributionallearning3.png" class="img-fluid figure-img" style="width:80.0%"></a>
+<a href="img/distributionallearning3.png" class="lightbox" data-gallery="quarto-lightbox-gallery-9" title="Figure&nbsp;9.9: Projected update \Phi \, \mathcal{T} \, \mathcal{Z}_\theta(s, a) on the support of \mathcal{Z}_\theta(s, a). The atoms are now aligned, the statistical distance between the two distributions can be minimized."><img src="img/distributionallearning3.png" class="img-fluid figure-img" style="width:80.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-distributionallearning3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;9.4: Projected update <span class="math inline">\Phi \, \mathcal{T} \, \mathcal{Z}_\theta(s, a)</span> on the support of <span class="math inline">\mathcal{Z}_\theta(s, a)</span>. The atoms are now aligned, the statistical distance between the two distributions can be minimized.
+Figure&nbsp;9.9: Projected update <span class="math inline">\Phi \, \mathcal{T} \, \mathcal{Z}_\theta(s, a)</span> on the support of <span class="math inline">\mathcal{Z}_\theta(s, a)</span>. The atoms are now aligned, the statistical distance between the two distributions can be minimized.
 </figcaption>
 </figure>
 </div>
@@ -590,14 +661,14 @@ Figure&nbsp;9.4: Projected update <span class="math inline">\Phi \, \mathcal{T} 
     \mathcal{L}(\theta) =  - \sum_i (\Phi \, \mathcal{T} \, \mathcal{Z}_{\theta'}(s, a))_i \log p_i (s, a; \theta)
 </span></p>
 <p>The projected Bellman update plays the role of the one-hot encoded target vector in classification (except that it is not one-hot encoded). DQN performs a regression on the Q-values (mse loss), while categorical DQN performs a classification (cross-entropy loss). Apart from the way the target is computed, categorical DQN is very similar to DQN: architecture, experience replay memory, target networks, etc.</p>
-<p><a href="#fig-categoricaldqn" class="quarto-xref">Figure&nbsp;<span>9.5</span></a> illustrates how the predicted value distribution changes when playing Space invaders (also have a look at the Youtube video at <a href="https://www.youtube.com/watch?v=yFBwyPuO2Vg" class="uri">https://www.youtube.com/watch?v=yFBwyPuO2Vg</a>). C51 outperforms DQN on most Atari games, both in terms of the achieved performance and the sample complexity.</p>
+<p><a href="#fig-categoricaldqn" class="quarto-xref">Figure&nbsp;<span>9.10</span></a> illustrates how the predicted value distribution changes when playing Space invaders (also have a look at the Youtube video at <a href="https://www.youtube.com/watch?v=yFBwyPuO2Vg" class="uri">https://www.youtube.com/watch?v=yFBwyPuO2Vg</a>). C51 outperforms DQN on most Atari games, both in terms of the achieved performance and the sample complexity.</p>
 <div id="fig-categoricaldqn" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-categoricaldqn-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/categoricaldqn.gif" class="lightbox" data-gallery="quarto-lightbox-gallery-5" title="Figure&nbsp;9.5: Evolution of the value distribution for the categorical DQN playing Space Invaders. Animation Source: https://deepmind.com/blog/going-beyond-average-reinforcement-learning/"><img src="img/categoricaldqn.gif" class="img-fluid figure-img" style="width:100.0%"></a>
+<a href="img/categoricaldqn.gif" class="lightbox" data-gallery="quarto-lightbox-gallery-10" title="Figure&nbsp;9.10: Evolution of the value distribution for the categorical DQN playing Space Invaders. Animation Source: https://deepmind.com/blog/going-beyond-average-reinforcement-learning/"><img src="img/categoricaldqn.gif" class="img-fluid figure-img" style="width:100.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-categoricaldqn-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;9.5: Evolution of the value distribution for the categorical DQN playing Space Invaders. Animation Source: <a href="https://deepmind.com/blog/going-beyond-average-reinforcement-learning/" class="uri">https://deepmind.com/blog/going-beyond-average-reinforcement-learning/</a>
+Figure&nbsp;9.10: Evolution of the value distribution for the categorical DQN playing Space Invaders. Animation Source: <a href="https://deepmind.com/blog/going-beyond-average-reinforcement-learning/" class="uri">https://deepmind.com/blog/going-beyond-average-reinforcement-learning/</a>
 </figcaption>
 </figure>
 </div>
@@ -617,10 +688,10 @@ Figure&nbsp;9.5: Evolution of the value distribution for the categorical DQN pla
 <div id="fig-noisydqn" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-noisydqn-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/ddpg-parameternoise.png" class="lightbox" data-gallery="quarto-lightbox-gallery-6" title="Figure&nbsp;9.6: Parameter noise. Source: https://openai.com/blog/better-exploration-with-parameter-noise/"><img src="img/ddpg-parameternoise.png" class="img-fluid figure-img"></a>
+<a href="img/ddpg-parameternoise.png" class="lightbox" data-gallery="quarto-lightbox-gallery-11" title="Figure&nbsp;9.11: Parameter noise. Source: https://openai.com/blog/better-exploration-with-parameter-noise/"><img src="img/ddpg-parameternoise.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-noisydqn-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;9.6: Parameter noise. Source: <a href="https://openai.com/blog/better-exploration-with-parameter-noise/" class="uri">https://openai.com/blog/better-exploration-with-parameter-noise/</a>
+Figure&nbsp;9.11: Parameter noise. Source: <a href="https://openai.com/blog/better-exploration-with-parameter-noise/" class="uri">https://openai.com/blog/better-exploration-with-parameter-noise/</a>
 </figcaption>
 </figure>
 </div>
@@ -639,10 +710,10 @@ Figure&nbsp;9.6: Parameter noise. Source: <a href="https://openai.com/blog/bette
 <div id="fig-noisydqn-results" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-noisydqn-results-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/noisydqn2.png" class="lightbox" data-gallery="quarto-lightbox-gallery-7" title="Figure&nbsp;9.7: Results of Noisy DQN. Source: @Fortunato2017"><img src="img/noisydqn2.png" class="img-fluid figure-img"></a>
+<a href="img/noisydqn2.png" class="lightbox" data-gallery="quarto-lightbox-gallery-12" title="Figure&nbsp;9.12: Results of Noisy DQN. Source: @Fortunato2017"><img src="img/noisydqn2.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-noisydqn-results-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;9.7: Results of Noisy DQN. Source: <span class="citation" data-cites="Fortunato2017">Fortunato et al. (<a href="references.html#ref-Fortunato2017" role="doc-biblioref">2017</a>)</span>
+Figure&nbsp;9.12: Results of Noisy DQN. Source: <span class="citation" data-cites="Fortunato2017">Fortunato et al. (<a href="references.html#ref-Fortunato2017" role="doc-biblioref">2017</a>)</span>
 </figcaption>
 </figure>
 </div>
@@ -674,14 +745,14 @@ Figure&nbsp;9.7: Results of Noisy DQN. Source: <span class="citation" data-cites
 <li><strong>Noisy DQN</strong> <span class="citation" data-cites="Fortunato2017">(<a href="references.html#ref-Fortunato2017" role="doc-biblioref">Fortunato et al., 2017</a>)</span> ensures exploration by adding noise to the parameters of the network instead of a softmax / <span class="math inline">\epsilon</span>-greedy action selection over the Q-values.</li>
 </ul>
 <p>All these improvements exceed the performance of vanilla DQN on most if not all Atari game. But which ones are the most important?</p>
-<p><span class="citation" data-cites="Hessel2017">Hessel et al. (<a href="references.html#ref-Hessel2017" role="doc-biblioref">2017</a>)</span> designed a <strong>Rainbow DQN</strong> integrating all these improvements. Not only does the combined network outperform all the DQN variants, but each of its components is important for its performance as shown by ablation studies (apart from double learning and duelling networks), see <a href="#fig-rainbow" class="quarto-xref">Figure&nbsp;<span>9.8</span></a>.</p>
+<p><span class="citation" data-cites="Hessel2017">Hessel et al. (<a href="references.html#ref-Hessel2017" role="doc-biblioref">2017</a>)</span> designed a <strong>Rainbow DQN</strong> integrating all these improvements. Not only does the combined network outperform all the DQN variants, but each of its components is important for its performance as shown by ablation studies (apart from double learning and duelling networks), see <a href="#fig-rainbow" class="quarto-xref">Figure&nbsp;<span>9.13</span></a>.</p>
 <div id="fig-rainbow" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-rainbow-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/rainbow.png" class="lightbox" data-gallery="quarto-lightbox-gallery-8" title="Figure&nbsp;9.8: Performance of the Rainbow DQN compared to other DQN variants (left) and ablation studies. Figures Source: @Hessel2017."><img src="img/rainbow.png" class="img-fluid figure-img"></a>
+<a href="img/rainbow.png" class="lightbox" data-gallery="quarto-lightbox-gallery-13" title="Figure&nbsp;9.13: Performance of the Rainbow DQN compared to other DQN variants (left) and ablation studies. Figures Source: @Hessel2017."><img src="img/rainbow.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-rainbow-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;9.8: Performance of the Rainbow DQN compared to other DQN variants (left) and ablation studies. Figures Source: <span class="citation" data-cites="Hessel2017">Hessel et al. (<a href="references.html#ref-Hessel2017" role="doc-biblioref">2017</a>)</span>.
+Figure&nbsp;9.13: Performance of the Rainbow DQN compared to other DQN variants (left) and ablation studies. Figures Source: <span class="citation" data-cites="Hessel2017">Hessel et al. (<a href="references.html#ref-Hessel2017" role="doc-biblioref">2017</a>)</span>.
 </figcaption>
 </figure>
 </div>
@@ -693,8 +764,28 @@ Figure&nbsp;9.8: Performance of the Rainbow DQN compared to other DQN variants (
 <li>It increases the size of the experience replay memory, as four video frames have to be stored for each transition.</li>
 <li>It solves only short-term dependencies (instantaneous speeds). If the partial observability has long-term dependencies (an object has been hidden a long time ago but now becomes useful), the input to the neural network will not have that information. This is the main explanation why the original DQN performed so poorly on games necessitating long-term planning like Montezuma’s revenge.</li>
 </ol>
-<p>Building on previous ideas from the Schmidhuber’s group <span class="citation" data-cites="Bakker2001 Wierstra2007">(<a href="references.html#ref-Bakker2001" role="doc-biblioref">Bakker, 2001</a>; <a href="references.html#ref-Wierstra2007" role="doc-biblioref">Wierstra et al., 2007</a>)</span>, <span class="citation" data-cites="Hausknecht2015">Hausknecht and Stone (<a href="references.html#ref-Hausknecht2015" role="doc-biblioref">2015</a>)</span> replaced one of the fully-connected layers of the DQN network by a LSTM layer while using single frames as inputs. The resulting <strong>deep recurrent q-learning</strong> (DRQN) network became able to solve POMDPs thanks to the astonishing learning abilities of LSTMs: the LSTM layer learn to remember which part of the sensory information will be useful to take decisions later.</p>
-<p>However, LSTMs are not a magical solution either. They are trained using *<strong>truncated BPTT</strong>, i.e.&nbsp;on a limited history of states. Long-term dependencies exceeding the truncation horizon cannot be learned. Additionally, all states in that horizon (i.e.&nbsp;all frames) have to be stored in the ERM to train the network, increasing drastically its size. Despite these limitations, DRQN is a much more elegant solution to the partial observability problem, letting the network decide which horizon it needs to solve long-term dependencies.</p>
+<div id="fig-drqn" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-drqn-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="img/drqn-architecture2.png" class="lightbox" data-gallery="quarto-lightbox-gallery-14" title="Figure&nbsp;9.14: Architecture of DRQN. Source: @Hausknecht2015."><img src="img/drqn-architecture2.png" class="img-fluid figure-img" style="width:80.0%"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-drqn-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;9.14: Architecture of DRQN. Source: <span class="citation" data-cites="Hausknecht2015">Hausknecht and Stone (<a href="references.html#ref-Hausknecht2015" role="doc-biblioref">2015</a>)</span>.
+</figcaption>
+</figure>
+</div>
+<p>Building on previous ideas from the Schmidhuber’s group <span class="citation" data-cites="Bakker2001 Wierstra2007">(<a href="references.html#ref-Bakker2001" role="doc-biblioref">Bakker, 2001</a>; <a href="references.html#ref-Wierstra2007" role="doc-biblioref">Wierstra et al., 2007</a>)</span>, <span class="citation" data-cites="Hausknecht2015">Hausknecht and Stone (<a href="references.html#ref-Hausknecht2015" role="doc-biblioref">2015</a>)</span> replaced one of the fully-connected layers of the DQN network by a LSTM layer while using single frames as inputs. The resulting <strong>deep recurrent q-learning</strong> (DRQN) network became able to solve POMDPs thanks to the learning abilities of LSTMs: the LSTM layer learn to remember which part of the sensory information will be useful to take decisions later.</p>
+<p>However, LSTMs are not a magical solution either. They are trained using <strong>truncated BPTT</strong>, i.e.&nbsp;on a limited history of states. Long-term dependencies exceeding the truncation horizon cannot be learned. Additionally, all states in that horizon (i.e.&nbsp;all frames) have to be stored in the ERM to train the network, increasing drastically its size. Firthermore, the training time (but not inference time) is orders of magnitude slower than with a comparable feedforward network. Despite these limitations, DRQN is a much more elegant solution to the partial observability problem, letting the network decide which horizon it needs to solve long-term dependencies.</p>
+<div id="fig-drqn-results" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-drqn-results-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="img/drqn4.png" class="lightbox" data-gallery="quarto-lightbox-gallery-15" title="Figure&nbsp;9.15: Performance of DRWN compared to DQN. Source: @Hausknecht2015."><img src="img/drqn4.png" class="img-fluid figure-img" style="width:80.0%"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-drqn-results-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;9.15: Performance of DRWN compared to DQN. Source: <span class="citation" data-cites="Hausknecht2015">Hausknecht and Stone (<a href="references.html#ref-Hausknecht2015" role="doc-biblioref">2015</a>)</span>.
+</figcaption>
+</figure>
+</div>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
@@ -1190,7 +1281,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     </div>
   </div>
 </footer>
-<script>var lightboxQuarto = GLightbox({"openEffect":"zoom","loop":false,"selector":".lightbox","descPosition":"bottom","closeEffect":"zoom"});
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","selector":".lightbox","openEffect":"zoom","loop":false,"descPosition":"bottom"});
 (function() {
   let previousOnload = window.onload;
   window.onload = () => {

@@ -20,7 +20,26 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -313,8 +332,14 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#diffusion-policies" id="toc-diffusion-policies" class="nav-link active" data-scroll-target="#diffusion-policies">Diffusion policies</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -339,8 +364,20 @@ ul.task-list li input[type="checkbox"] {
 
 
 <p><strong>work in progress</strong></p>
+<section id="diffusion-policies" class="level2">
+<h2 class="anchored" data-anchor-id="diffusion-policies">Diffusion policies</h2>
+<p><span class="citation" data-cites="Chi2023">Chi et al. (<a href="references.html#ref-Chi2023" role="doc-biblioref">2023</a>)</span> Diffusion Policy: Visuomotor Policy Learning via Action Diffusion <span class="citation" data-cites="Wang2024">Wang et al. (<a href="references.html#ref-Wang2024" role="doc-biblioref">2024</a>)</span> One-Step Diffusion Policy: Fast Visuomotor Policies via Diffusion Distillation</p>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
+<div id="ref-Chi2023" class="csl-entry" role="listitem">
+Chi, C., Xu, Z., Feng, S., Cousineau, E., Du, Y., Burchfiel, B., et al. (2023). Diffusion <span>Policy</span>: <span>Visuomotor Policy Learning</span> via <span>Action Diffusion</span>. Available at: <a href="https://arxiv.org/abs/2303.04137v5">https://arxiv.org/abs/2303.04137v5</a> [Accessed October 9, 2024].
+</div>
+<div id="ref-Wang2024" class="csl-entry" role="listitem">
+Wang, Z., Li, Z., Mandlekar, A., Xu, Z., Fan, J., Narang, Y., et al. (2024). One-<span>Step Diffusion Policy</span>: <span>Fast Visuomotor Policies</span> via <span>Diffusion Distillation</span>. doi:<a href="https://doi.org/10.48550/arXiv.2410.21257">10.48550/arXiv.2410.21257</a>.
+</div>
+</div>
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
