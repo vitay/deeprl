@@ -189,7 +189,7 @@ window.Quarto = {
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
- <span class="menu-text"><strong>Basic RL</strong></span></a>
+ <span class="menu-text"><strong>Tabular RL</strong></span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -251,6 +251,11 @@ window.Quarto = {
   <a href="../src/2.5-DistributedLearning.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Distributed learning</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/2.6-Misc.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Misc.</span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -305,7 +310,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/3.9-OtherPolicyGradient.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Miscellaneous model-free algorithms</span></a>
+  <a href="../src/3.9-Misc.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Misc.</span></a>
   </div>
 </li>
       </ul>
@@ -326,12 +331,27 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/4.2-WorldModels.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">World models</span></a>
+  <a href="../src/4.2-MBMF.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Model-based-augmented model-free RL (Dyna-Q, I2A)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/4.3-AlphaGo.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">AlphaGo</span></a>
+  <a href="../src/4.3-Planning.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Planning (MPC, TDM)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/4.4-WorldModels.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">World models, Dreamer</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/4.5-AlphaGo.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">AlphaGo</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/4.6-Misc.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Misc.</span></a>
   </div>
 </li>
       </ul>
@@ -347,7 +367,7 @@ window.Quarto = {
       <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/5.1-Hierarchical.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Hierarchical Reinforcement Learning</span></a>
+  <a href="../src/5.1-Intrinsic.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Intrinsic motivation</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -363,6 +383,11 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../src/5.4-Meta.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Meta learning</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/5.5-Hierarchical.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Hierarchical Reinforcement Learning</span></a>
   </div>
 </li>
       </ul>
@@ -383,7 +408,7 @@ window.Quarto = {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#double-dqn" id="toc-double-dqn" class="nav-link active" data-scroll-target="#double-dqn">Double DQN</a></li>
+  <li><a href="#sec-doubleqlearning" id="toc-sec-doubleqlearning" class="nav-link active" data-scroll-target="#sec-doubleqlearning">Double DQN</a></li>
   <li><a href="#prioritized-experience-replay" id="toc-prioritized-experience-replay" class="nav-link" data-scroll-target="#prioritized-experience-replay">Prioritized experience replay</a></li>
   <li><a href="#duelling-network" id="toc-duelling-network" class="nav-link" data-scroll-target="#duelling-network">Duelling network</a></li>
   <li><a href="#sec-distributionalrl" id="toc-sec-distributionalrl" class="nav-link" data-scroll-target="#sec-distributionalrl">Categorical DQN</a></li>
@@ -415,8 +440,8 @@ window.Quarto = {
 </header>
 
 
-<section id="double-dqn" class="level2">
-<h2 class="anchored" data-anchor-id="double-dqn">Double DQN</h2>
+<section id="sec-doubleqlearning" class="level2">
+<h2 class="anchored" data-anchor-id="sec-doubleqlearning">Double DQN</h2>
 <p>In DQN, the experience replay memory and the target network were decisive in allowing the CNN to learn the tasks through RL. Their drawback is that they drastically slow down learning and increase the sample complexity. Additionally, DQN has stability issues: the same network may not converge the same way in different runs. One first improvement on DQN was proposed by <span class="citation" data-cites="vanHasselt2015">van Hasselt et al. (<a href="references.html#ref-vanHasselt2015" role="doc-biblioref">2015</a>)</span> and called <strong>double DQN</strong>.</p>
 <p>The idea is that the target value <span class="math inline">y = r(s, a, s') + \gamma \, \max_{a'} Q_{\theta'}(s', a')</span> is frequently over-estimating the true return because of the maximum operator. Especially at the beginning of learning when Q-values are far from being correct, if an action is over-estimated (<span class="math inline">Q_{\theta'}(s', a)</span> is higher that its true value) and selected by the target network as the next greedy action, the learned Q-value <span class="math inline">Q_{\theta}(s, a)</span> will also become over-estimated, what will propagate to all previous actions on the long-term. <span class="citation" data-cites="vanHasselt2010">van Hasselt (<a href="references.html#ref-vanHasselt2010" role="doc-biblioref">2010</a>)</span> showed that this over-estimation is inevitable in regular Q-learning and proposed <strong>double learning</strong>.</p>
 <div id="fig-doubleqdn" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -446,14 +471,14 @@ Double DQN algorithm
 </div>
 <div class="callout-body-container callout-body">
 <ul>
-<li>Every <span class="math inline">T_\text{train}</span> steps:
+<li><p>Every <span class="math inline">T_\text{train}</span> steps:</p>
 <ul>
-<li>Sample a minibatch <span class="math inline">\mathcal{D}_s</span> randomly from <span class="math inline">\mathcal{D}</span>.</li>
-<li>For each transition <span class="math inline">(s, a, r, s')</span> in the minibatch:
+<li><p>Sample a minibatch <span class="math inline">\mathcal{D}_s</span> randomly from <span class="math inline">\mathcal{D}</span>.</p></li>
+<li><p>For each transition <span class="math inline">(s, a, r, s')</span> in the minibatch:</p>
 <ul>
-<li>Select the greedy action in the next state <span class="math inline">a^* = \text{argmax}_{a'} Q_\theta (s', a')</span> using the trained network.</li>
-<li>Predict its Q-value <span class="math inline">Q_{\theta'}(s', a^*)</span> using the target network.</li>
-<li>Compute the target value <span class="math inline">y = r + \gamma \, Q_{\theta'}(s', a*)</span>.</li>
+<li><p>Select the greedy action in the next state <span class="math inline">a^* = \text{argmax}_{a'} Q_\theta (s', a')</span> using the trained network.</p></li>
+<li><p>Predict its Q-value <span class="math inline">Q_{\theta'}(s', a^*)</span> using the target network.</p></li>
+<li><p>Compute the target value <span class="math inline">y = r + \gamma \, Q_{\theta'}(s', a*)</span>.</p></li>
 </ul></li>
 </ul></li>
 </ul>
@@ -1281,7 +1306,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     </div>
   </div>
 </footer>
-<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","selector":".lightbox","openEffect":"zoom","loop":false,"descPosition":"bottom"});
+<script>var lightboxQuarto = GLightbox({"openEffect":"zoom","descPosition":"bottom","selector":".lightbox","loop":false,"closeEffect":"zoom"});
 (function() {
   let previousOnload = window.onload;
   window.onload = () => {

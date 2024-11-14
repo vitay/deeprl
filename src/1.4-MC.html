@@ -170,7 +170,7 @@ window.Quarto = {
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
- <span class="menu-text"><strong>Basic RL</strong></span></a>
+ <span class="menu-text"><strong>Tabular RL</strong></span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -232,6 +232,11 @@ window.Quarto = {
   <a href="../src/2.5-DistributedLearning.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Distributed learning</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/2.6-Misc.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Misc.</span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -286,7 +291,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/3.9-OtherPolicyGradient.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Miscellaneous model-free algorithms</span></a>
+  <a href="../src/3.9-Misc.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Misc.</span></a>
   </div>
 </li>
       </ul>
@@ -307,12 +312,27 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/4.2-WorldModels.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">World models</span></a>
+  <a href="../src/4.2-MBMF.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Model-based-augmented model-free RL (Dyna-Q, I2A)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/4.3-AlphaGo.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">AlphaGo</span></a>
+  <a href="../src/4.3-Planning.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Planning (MPC, TDM)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/4.4-WorldModels.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">World models, Dreamer</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/4.5-AlphaGo.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">AlphaGo</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/4.6-Misc.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Misc.</span></a>
   </div>
 </li>
       </ul>
@@ -328,7 +348,7 @@ window.Quarto = {
       <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/5.1-Hierarchical.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Hierarchical Reinforcement Learning</span></a>
+  <a href="../src/5.1-Intrinsic.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Intrinsic motivation</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -344,6 +364,11 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../src/5.4-Meta.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Meta learning</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/5.5-Hierarchical.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Hierarchical Reinforcement Learning</span></a>
   </div>
 </li>
       </ul>
@@ -368,7 +393,7 @@ window.Quarto = {
   <li><a href="#on-policy-monte-carlo-methods" id="toc-on-policy-monte-carlo-methods" class="nav-link" data-scroll-target="#on-policy-monte-carlo-methods">On-policy Monte Carlo methods</a></li>
   <li><a href="#off-policy-monte-carlo-methods" id="toc-off-policy-monte-carlo-methods" class="nav-link" data-scroll-target="#off-policy-monte-carlo-methods">Off-policy Monte Carlo methods</a>
   <ul class="collapse">
-  <li><a href="#importance-sampling" id="toc-importance-sampling" class="nav-link" data-scroll-target="#importance-sampling">Importance sampling</a></li>
+  <li><a href="#sec-importancesampling" id="toc-sec-importancesampling" class="nav-link" data-scroll-target="#sec-importancesampling">Importance sampling</a></li>
   <li><a href="#off-policy-monte-carlo-control" id="toc-off-policy-monte-carlo-control" class="nav-link" data-scroll-target="#off-policy-monte-carlo-control">Off-policy Monte Carlo control</a></li>
   <li><a href="#advantages-of-off-policy-methods" id="toc-advantages-of-off-policy-methods" class="nav-link" data-scroll-target="#advantages-of-off-policy-methods">Advantages of off-policy methods</a></li>
   </ul></li>
@@ -507,8 +532,8 @@ On-policy Monte Carlo control
 <p>The policy that maximizes <span class="math inline">\mathcal{J}'(\pi)</span> is <strong>not</strong> the optimal policy of the MDP.</p>
 <p><a href="img/importancesampling.svg" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img src="img/importancesampling.svg" class="img-fluid"></a></p>
 <p>If you try to estimate a parameter of a random distribution <span class="math inline">\pi</span> using samples of another distribution <span class="math inline">b</span>, the sample average will have a strong <strong>bias</strong>. We need to <strong>correct</strong> the samples from <span class="math inline">b</span> in order to be able to estimate the parameters of <span class="math inline">\pi</span> correctly, through <strong>importance sampling</strong> (IS).</p>
-<section id="importance-sampling" class="level3">
-<h3 class="anchored" data-anchor-id="importance-sampling">Importance sampling</h3>
+<section id="sec-importancesampling" class="level3">
+<h3 class="anchored" data-anchor-id="sec-importancesampling">Importance sampling</h3>
 <p>We want to estimate the expected return of the trajectories generated by the policy <span class="math inline">\pi</span>:</p>
 <p><span class="math display">\mathcal{J}(\pi) = \mathbb{E}_{\tau \sim \rho_\pi} [R(\tau)]</span></p>
 <p>We start by using the definition of the mathematical expectation:</p>
@@ -1061,7 +1086,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     </div>
   </div>
 </footer>
-<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","selector":".lightbox","openEffect":"zoom","descPosition":"bottom","loop":false});
+<script>var lightboxQuarto = GLightbox({"descPosition":"bottom","loop":false,"selector":".lightbox","openEffect":"zoom","closeEffect":"zoom"});
 (function() {
   let previousOnload = window.onload;
   window.onload = () => {

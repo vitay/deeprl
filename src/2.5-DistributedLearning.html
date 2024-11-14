@@ -49,7 +49,7 @@ div.csl-indent {
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../src/3.1-PolicyGradient.html" rel="next">
+<link href="../src/2.6-Misc.html" rel="next">
 <link href="../src/2.4-DQNvariants.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
@@ -148,7 +148,7 @@ window.Quarto = {
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
         <a class="flex-grow-1 no-decor" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-          <h1 class="quarto-secondary-nav-title"><span class="chapter-title">Distributed learning</span></h1>
+          <h1 class="quarto-secondary-nav-title"><span id="sec-distributedlearning" class="quarto-section-identifier"><span class="chapter-title">Distributed learning</span></span></h1>
         </a>     
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
         <i class="bi bi-search"></i>
@@ -189,7 +189,7 @@ window.Quarto = {
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
- <span class="menu-text"><strong>Basic RL</strong></span></a>
+ <span class="menu-text"><strong>Tabular RL</strong></span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -251,6 +251,11 @@ window.Quarto = {
   <a href="../src/2.5-DistributedLearning.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">Distributed learning</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/2.6-Misc.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Misc.</span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -305,7 +310,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/3.9-OtherPolicyGradient.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Miscellaneous model-free algorithms</span></a>
+  <a href="../src/3.9-Misc.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Misc.</span></a>
   </div>
 </li>
       </ul>
@@ -326,12 +331,27 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/4.2-WorldModels.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">World models</span></a>
+  <a href="../src/4.2-MBMF.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Model-based-augmented model-free RL (Dyna-Q, I2A)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/4.3-AlphaGo.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">AlphaGo</span></a>
+  <a href="../src/4.3-Planning.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Planning (MPC, TDM)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/4.4-WorldModels.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">World models, Dreamer</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/4.5-AlphaGo.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">AlphaGo</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/4.6-Misc.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Misc.</span></a>
   </div>
 </li>
       </ul>
@@ -347,7 +367,7 @@ window.Quarto = {
       <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/5.1-Hierarchical.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Hierarchical Reinforcement Learning</span></a>
+  <a href="../src/5.1-Intrinsic.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Intrinsic motivation</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -363,6 +383,11 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../src/5.4-Meta.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Meta learning</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/5.5-Hierarchical.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Hierarchical Reinforcement Learning</span></a>
   </div>
 </li>
       </ul>
@@ -384,8 +409,8 @@ window.Quarto = {
    
   <ul>
   <li><a href="#distributed-dqn-gorila" id="toc-distributed-dqn-gorila" class="nav-link active" data-scroll-target="#distributed-dqn-gorila">Distributed DQN (GORILA)</a></li>
+  <li><a href="#ape-x" id="toc-ape-x" class="nav-link" data-scroll-target="#ape-x">Ape-X</a></li>
   <li><a href="#recurrent-replay-distributed-dqn-r2d2" id="toc-recurrent-replay-distributed-dqn-r2d2" class="nav-link" data-scroll-target="#recurrent-replay-distributed-dqn-r2d2">Recurrent Replay Distributed DQN (R2D2)</a></li>
-  <li><a href="#other-variants-of-dqn" id="toc-other-variants-of-dqn" class="nav-link" data-scroll-target="#other-variants-of-dqn">Other variants of DQN</a></li>
   </ul>
 </nav>
     </div>
@@ -394,7 +419,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title d-none d-lg-block"><span class="chapter-title">Distributed learning</span></h1>
+<h1 class="title d-none d-lg-block"><span id="sec-distributedlearning" class="quarto-section-identifier"><span class="chapter-title">Distributed learning</span></span></h1>
 </div>
 
 
@@ -418,44 +443,88 @@ window.Quarto = {
 <li>the <strong>sample complexity</strong>, i.e.&nbsp;the number of transitions needed to learn a satisfying policy.</li>
 <li>the <strong>online interaction</strong> with the environment (states are visited one after the other).</li>
 </ul>
-<p>The second factor is particularly critical in real-world applications like robotics: physical robots evolve in real time, so the acquisition speed of transitions will be limited. Even in simulation (video games, robot emulators), the simulator might turn out to be much slower than training the underlying neural network. Google Deepmind proposed the GORILA (General Reinforcement Learning Architecture) framework to speed up the training of DQN networks using distributed actors and learners <span class="citation" data-cites="Nair2015">(<a href="references.html#ref-Nair2015" role="doc-biblioref">Nair et al., 2015</a>)</span>. The framework is quite general and the distribution granularity can change depending on the task.</p>
+<p>The second factor is particularly critical in real-world applications like robotics: physical robots evolve in real time, so the acquisition speed of transitions will be limited. Even in simulation (video games, robot emulators), the environment might turn out to be much slower than training the underlying neural network. In most settings, the value and target networks runs on a single GPu, while the environment is simulated on the CPU, as well as the ERM (there is not enough on the GPU to store it there). As the communication between the CPU and the GPU is rather slow, the GPU has to wait quite a long tme between two minibatches and is therefore idle most of the time.</p>
+<div id="fig-gorila1" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-gorila1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="img/gorila1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;10.1: Typical architecture of DQN using a single CPU and GPU. Source: @Nair2015."><img src="img/gorila1.png" class="img-fluid figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-gorila1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;10.1: Typical architecture of DQN using a single CPU and GPU. Source: <span class="citation" data-cites="Nair2015">Nair et al. (<a href="references.html#ref-Nair2015" role="doc-biblioref">2015</a>)</span>.
+</figcaption>
+</figure>
+</div>
+<p>Google Deepmind proposed the GORILA (General Reinforcement Learning Architecture) framework to speed up the training of DQN networks using distributed actors and learners <span class="citation" data-cites="Nair2015">(<a href="references.html#ref-Nair2015" role="doc-biblioref">Nair et al., 2015</a>)</span>. The framework is quite general and the distribution granularity can change depending on the task.</p>
 <div id="fig-gorila" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-gorila-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/gorila-global.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;10.1: GORILA architecture. Multiple actors interact with multiple copies of the environment and store their experiences in a (distributed) experience replay memory. Multiple DQN learners sample from the ERM and compute the gradient of the loss function w.r.t the parameters \theta. A master network (parameter server, possibly distributed) gathers the gradients, apply weight updates and synchronizes regularly both the actors and the learners with new parameters. Source: @Nair2015."><img src="img/gorila-global.png" class="img-fluid figure-img" style="width:90.0%"></a>
+<a href="img/gorila-global.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Figure&nbsp;10.2: GORILA architecture. Multiple actors interact with multiple copies of the environment and store their experiences in a (distributed) experience replay memory. Multiple DQN learners sample from the ERM and compute the gradient of the loss function w.r.t the parameters \theta. A master network (parameter server, possibly distributed) gathers the gradients, apply weight updates and synchronizes regularly both the actors and the learners with new parameters. Source: @Nair2015."><img src="img/gorila-global.png" class="img-fluid figure-img" style="width:90.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-gorila-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;10.1: GORILA architecture. Multiple actors interact with multiple copies of the environment and store their experiences in a (distributed) experience replay memory. Multiple DQN learners sample from the ERM and compute the gradient of the loss function w.r.t the parameters <span class="math inline">\theta</span>. A master network (parameter server, possibly distributed) gathers the gradients, apply weight updates and synchronizes regularly both the actors and the learners with new parameters. Source: <span class="citation" data-cites="Nair2015">Nair et al. (<a href="references.html#ref-Nair2015" role="doc-biblioref">2015</a>)</span>.
+Figure&nbsp;10.2: GORILA architecture. Multiple actors interact with multiple copies of the environment and store their experiences in a (distributed) experience replay memory. Multiple DQN learners sample from the ERM and compute the gradient of the loss function w.r.t the parameters <span class="math inline">\theta</span>. A master network (parameter server, possibly distributed) gathers the gradients, apply weight updates and synchronizes regularly both the actors and the learners with new parameters. Source: <span class="citation" data-cites="Nair2015">Nair et al. (<a href="references.html#ref-Nair2015" role="doc-biblioref">2015</a>)</span>.
 </figcaption>
 </figure>
 </div>
 <p>In GORILA, multiple actors interact with the environment to gather transitions. Each actor has an independent copy of the environment, so they can gather <span class="math inline">N</span> times more samples per second if there are <span class="math inline">N</span> actors. This is possible in simulation (starting <span class="math inline">N</span> instances of the same game in parallel) but much more complicated for real-world systems (but see <span class="citation" data-cites="Gu2017">Gu et al. (<a href="references.html#ref-Gu2017" role="doc-biblioref">2017</a>)</span> for an example where multiple identical robots are used to gather experiences in parallel).</p>
-<p>The experienced transitions are sent as in DQN to an experience replay memory, which may be distributed or centralized. Multiple DQN learners will then sample a minibatch from the ERM and compute the DQN loss on this minibatch (also using a target network). All learners start with the same parameters <span class="math inline">\theta</span> and simply compute the gradient of the loss function <span class="math inline">\frac{\partial \mathcal{L}(\theta)}{\partial \theta}</span> on the minibatch. The gradients are sent to a parameter server (a master network) which uses the gradients to apply the optimizer (e.g.&nbsp;SGD) and find new values for the parameters <span class="math inline">\theta</span>. Weight updates can also be applied in a distributed manner. This distributed method to train a network using multiple learners is now quite standard in deep learning: on multiple GPU systems, each GPU has a copy of the network and computes gradients on a different minibatch, while a master network integrates these gradients and updates the slaves.</p>
+<div class="quarto-video ratio ratio-16x9"><iframe data-external="1" src="https://www.youtube.com/embed/iaF43Ze1oeI" title="Large-scale data collection with an array of robots." frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe></div>
+<p>The experienced transitions are sent to the experience replay memory, which may be distributed or centralized. Multiple DQN learners will then sample a minibatch from the ERM and compute the DQN loss on this minibatch (also using a target network). All learners start with the same parameters <span class="math inline">\theta</span> and simply compute the gradient of the loss function <span class="math inline">\frac{\partial \mathcal{L}(\theta)}{\partial \theta}</span> on the minibatch. The gradients are sent to a parameter server (a master network) which uses the gradients to apply the optimizer (e.g.&nbsp;SGD) and find new values for the parameters <span class="math inline">\theta</span>. Weight updates can also be applied in a distributed manner. This distributed method to train a network using multiple learners is now quite standard in deep learning: on multiple GPU systems, each GPU has a copy of the network and computes gradients on a different minibatch, while a master network integrates these gradients and updates the slaves.</p>
 <p>The parameter server regularly updates the actors (to gather samples with the new policy) and the learners (to compute gradients w.r.t the new parameter values). Such a distributed system can greatly accelerate learning, but it can be quite tricky to find the optimum number of actors and learners (too many learners might degrade the stability) or their update rate (if the learners are not updated frequently enough, the gradients might not be correct).</p>
-<p>Further variants of distributed DQN learning include Ape-X <span class="citation" data-cites="Horgan2018">(<a href="references.html#ref-Horgan2018" role="doc-biblioref">Horgan et al., 2018</a>)</span> and IMPALA <span class="citation" data-cites="Espeholt2018">(<a href="references.html#ref-Espeholt2018" role="doc-biblioref">Espeholt et al., 2018</a>)</span>. A similar idea is at the core of the A3C algorithm, which is a policy gradient method.</p>
+<p>The final performance is not incredibly better than single-GPU DQN, but obtained much faster in wall-clock time (2 days instead of 12-14 days on a single GPU in 2015).</p>
+<p><a href="img/gorila-results1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3"><img src="img/gorila-results1.png" class="img-fluid"></a></p>
+<div id="fig-gorila-results" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-gorila-results-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="img/gorila-results2.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="Figure&nbsp;10.3: Results of GORILA. Source: @Nair2015."><img src="img/gorila-results2.png" class="img-fluid figure-img" style="width:60.0%"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-gorila-results-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;10.3: Results of GORILA. Source: <span class="citation" data-cites="Nair2015">Nair et al. (<a href="references.html#ref-Nair2015" role="doc-biblioref">2015</a>)</span>.
+</figcaption>
+</figure>
+</div>
+</section>
+<section id="ape-x" class="level2">
+<h2 class="anchored" data-anchor-id="ape-x">Ape-X</h2>
+<p>Further variants of distributed DQN learning include Ape-X <span class="citation" data-cites="Horgan2018">(<a href="references.html#ref-Horgan2018" role="doc-biblioref">Horgan et al., 2018</a>)</span> and IMPALA <span class="citation" data-cites="Espeholt2018">(<a href="references.html#ref-Espeholt2018" role="doc-biblioref">Espeholt et al., 2018</a>)</span>. In Ape-X, they realized that using a single learner and many many actors is actually more efficient. The ERM further uses prioritized experience replay to increase the efficiency. The learner uses n-step returns and the double dueling DQN network architecture, so it is not much different from Rainbow DQN internally.</p>
+<p>However, the multiple parallel workers can collect much more frames, leading to a much better performance in term of wall-clock time, but also pure performance (3x better than humans in only 20 hours of training, but using 360 CPU cores and one GPU).</p>
+<p><a href="img/apex-results.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5"><img src="img/apex-results.png" class="img-fluid"></a></p>
+<div id="fig-apex2" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-apex2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="img/apex-results2.png" class="lightbox" data-gallery="quarto-lightbox-gallery-6" title="Figure&nbsp;10.4: Results of Ape-X on the Atari benchmark. Source: @Horgan2018"><img src="img/apex-results2.png" class="img-fluid figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-apex2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;10.4: Results of Ape-X on the Atari benchmark. Source: <span class="citation" data-cites="Horgan2018">Horgan et al. (<a href="references.html#ref-Horgan2018" role="doc-biblioref">2018</a>)</span>
+</figcaption>
+</figure>
+</div>
 </section>
 <section id="recurrent-replay-distributed-dqn-r2d2" class="level2">
 <h2 class="anchored" data-anchor-id="recurrent-replay-distributed-dqn-r2d2">Recurrent Replay Distributed DQN (R2D2)</h2>
-<p><span class="citation" data-cites="Kapturowski2019">Kapturowski et al. (<a href="references.html#ref-Kapturowski2019" role="doc-biblioref">2019</a>)</span></p>
-</section>
-<section id="other-variants-of-dqn" class="level2">
-<h2 class="anchored" data-anchor-id="other-variants-of-dqn">Other variants of DQN</h2>
-<p><strong>Average-DQN</strong> <span class="citation" data-cites="Anschel2016">(<a href="references.html#ref-Anschel2016" role="doc-biblioref">Anschel et al., 2016</a>)</span> proposes to increase the stability and performance of DQN by replacing the single target network (a copy of the trained network) by an average of the last parameter values, in other words an average of many past target networks.</p>
-<p><span class="citation" data-cites="He2016">He et al. (<a href="references.html#ref-He2016" role="doc-biblioref">2016</a>)</span> proposed <strong>fast reward propagation</strong> through optimality tightening to speedup learning: when rewards are sparse, they require a lot of episodes to propagate these rare rewards to all actions leading to it. Their method combines immediate rewards (single steps) with actual returns (as in Monte Carlo) via a constrained optimization approach.</p>
+<p>R2D2 <span class="citation" data-cites="Kapturowski2019">(<a href="references.html#ref-Kapturowski2019" role="doc-biblioref">Kapturowski et al., 2019</a>)</span> builds on Ape-X and DRQN by combining:</p>
+<ul>
+<li>a double dueling DQN with n-step returns (n=5) and prioritized experience replay.</li>
+<li>256 CPU actors, 1 GPU learner for distributed learning.</li>
+<li>a LSTM layer after the convolutional stack to address POMDPs.</li>
+</ul>
+<p>Additionally solving practical problems with LSTMs (choice of the initial state), it became for a moment the state of the art on the Atari-57 benchmark. The jump in performance from Ape-X is impressive. Distributed learning with multiple actor is now a standard technique, as it only necessitates a few more cores (or robots…).</p>
+<div id="fig-r2d2" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-r2d2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="img/r2d2-results.png" class="lightbox" data-gallery="quarto-lightbox-gallery-7" title="Figure&nbsp;10.5: Results of R2D2 on the Atari benchmark. 20 times better than humans in only 120 hours of training… Source: @Kapturowski2019."><img src="img/r2d2-results.png" class="img-fluid figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-r2d2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;10.5: Results of R2D2 on the Atari benchmark. 20 times better than humans in only 120 hours of training… Source: <span class="citation" data-cites="Kapturowski2019">Kapturowski et al. (<a href="references.html#ref-Kapturowski2019" role="doc-biblioref">2019</a>)</span>.
+</figcaption>
+</figure>
+</div>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
-<div id="ref-Anschel2016" class="csl-entry" role="listitem">
-Anschel, O., Baram, N., and Shimkin, N. (2016). Averaged-<span>DQN</span>: <span>Variance Reduction</span> and <span>Stabilization</span> for <span>Deep Reinforcement Learning</span>. Available at: <a href="http://arxiv.org/abs/1611.01929">http://arxiv.org/abs/1611.01929</a>.
-</div>
 <div id="ref-Espeholt2018" class="csl-entry" role="listitem">
 Espeholt, L., Soyer, H., Munos, R., Simonyan, K., Mnih, V., Ward, T., et al. (2018). <span>IMPALA</span>: <span>Scalable Distributed Deep-RL</span> with <span>Importance Weighted Actor-Learner Architectures</span>. doi:<a href="https://doi.org/10.48550/arXiv.1802.01561">10.48550/arXiv.1802.01561</a>.
 </div>
 <div id="ref-Gu2017" class="csl-entry" role="listitem">
 Gu, S., Holly, E., Lillicrap, T., and Levine, S. (2017). Deep <span>Reinforcement Learning</span> for <span>Robotic Manipulation</span> with <span>Asynchronous Off-Policy Updates</span>. in <em>Proc. <span>ICRA</span></em> Available at: <a href="http://arxiv.org/abs/1610.00633">http://arxiv.org/abs/1610.00633</a>.
-</div>
-<div id="ref-He2016" class="csl-entry" role="listitem">
-He, F. S., Liu, Y., Schwing, A. G., and Peng, J. (2016). Learning to <span>Play</span> in a <span>Day</span>: <span>Faster Deep Reinforcement Learning</span> by <span>Optimality Tightening</span>. Available at: <a href="http://arxiv.org/abs/1611.01606">http://arxiv.org/abs/1611.01606</a>.
 </div>
 <div id="ref-Horgan2018" class="csl-entry" role="listitem">
 Horgan, D., Quan, J., Budden, D., Barth-Maron, G., Hessel, M., van Hasselt, H., et al. (2018). Distributed <span>Prioritized Experience Replay</span>. Available at: <a href="http://arxiv.org/abs/1803.00933">http://arxiv.org/abs/1803.00933</a> [Accessed December 14, 2019].
@@ -897,8 +966,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../src/3.1-PolicyGradient.html" class="pagination-link" aria-label="Policy Gradient methods">
-        <span class="nav-page-text"><span class="chapter-title">Policy Gradient methods</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../src/2.6-Misc.html" class="pagination-link" aria-label="Misc.">
+        <span class="nav-page-text"><span class="chapter-title">Misc.</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
@@ -916,7 +985,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     </div>
   </div>
 </footer>
-<script>var lightboxQuarto = GLightbox({"openEffect":"zoom","descPosition":"bottom","closeEffect":"zoom","selector":".lightbox","loop":false});
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","loop":false,"descPosition":"bottom","selector":".lightbox","openEffect":"zoom"});
 (function() {
   let previousOnload = window.onload;
   window.onload = () => {

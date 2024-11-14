@@ -189,7 +189,7 @@ window.Quarto = {
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
- <span class="menu-text"><strong>Basic RL</strong></span></a>
+ <span class="menu-text"><strong>Tabular RL</strong></span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -251,6 +251,11 @@ window.Quarto = {
   <a href="../src/2.5-DistributedLearning.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Distributed learning</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/2.6-Misc.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Misc.</span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -305,7 +310,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/3.9-OtherPolicyGradient.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Miscellaneous model-free algorithms</span></a>
+  <a href="../src/3.9-Misc.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Misc.</span></a>
   </div>
 </li>
       </ul>
@@ -326,12 +331,27 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/4.2-WorldModels.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">World models</span></a>
+  <a href="../src/4.2-MBMF.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Model-based-augmented model-free RL (Dyna-Q, I2A)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/4.3-AlphaGo.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">AlphaGo</span></a>
+  <a href="../src/4.3-Planning.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Planning (MPC, TDM)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/4.4-WorldModels.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">World models, Dreamer</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/4.5-AlphaGo.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">AlphaGo</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/4.6-Misc.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Misc.</span></a>
   </div>
 </li>
       </ul>
@@ -347,7 +367,7 @@ window.Quarto = {
       <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/5.1-Hierarchical.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Hierarchical Reinforcement Learning</span></a>
+  <a href="../src/5.1-Intrinsic.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Intrinsic motivation</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -363,6 +383,11 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../src/5.4-Meta.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Meta learning</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/5.5-Hierarchical.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Hierarchical Reinforcement Learning</span></a>
   </div>
 </li>
       </ul>
@@ -459,19 +484,22 @@ Naive Q-learning with function approximation
 </div>
 <div class="callout-body-container callout-body">
 <ul>
-<li>Initialize value network <span class="math inline">Q_{\theta}</span> with random weights.</li>
-<li>Initialize empty minibatch <span class="math inline">\mathcal{D}</span> of maximal size <span class="math inline">n</span>.</li>
-<li>Observe the initial state <span class="math inline">s_0</span>.</li>
-<li>for <span class="math inline">t \in [0, T_\text{total}]</span>:
+<li><p>Initialize value network <span class="math inline">Q_{\theta}</span> with random weights.</p></li>
+<li><p>Initialize empty minibatch <span class="math inline">\mathcal{D}</span> of maximal size <span class="math inline">n</span>.</p></li>
+<li><p>Observe the initial state <span class="math inline">s_0</span>.</p></li>
+<li><p>for <span class="math inline">t \in [0, T_\text{total}]</span>:</p>
 <ul>
-<li>Select the action <span class="math inline">a_t</span> based on the behavior policy derived from <span class="math inline">Q_\theta(s_t, a)</span> (e.g.&nbsp;softmax).</li>
-<li>Perform the action <span class="math inline">a_t</span> and observe the next state <span class="math inline">s_{t+1}</span> and the reward <span class="math inline">r_{t+1}</span>.</li>
-<li>Store <span class="math inline">(s_t, a_t, r_{t+1}, s_{t+1})</span> in the minibatch.</li>
-<li>When minibatch <span class="math inline">\mathcal{D}</span> is full:
+<li><p>Select the action <span class="math inline">a_t</span> based on the behavior policy derived from <span class="math inline">Q_\theta(s_t, a)</span> (e.g.&nbsp;softmax).</p></li>
+<li><p>Perform the action <span class="math inline">a_t</span> and observe the next state <span class="math inline">s_{t+1}</span> and the reward <span class="math inline">r_{t+1}</span>.</p></li>
+<li><p>Store <span class="math inline">(s_t, a_t, r_{t+1}, s_{t+1})</span> in the minibatch.</p></li>
+<li><p>When minibatch <span class="math inline">\mathcal{D}</span> is full:</p>
 <ul>
-<li>Train the value network <span class="math inline">Q_{\theta}</span> on <span class="math inline">\mathcal{D}</span> to minimize <span class="math display">
+<li>Train the value network <span class="math inline">Q_{\theta}</span> on <span class="math inline">\mathcal{D}</span> to minimize</li>
+</ul>
+<p><span class="math display">
   \mathcal{L}(\theta) = \mathbb{E}_\mathcal{D}[(r(s, a, s') + \gamma \, \text{max}_{a'} Q_\theta(s', a') - Q_\theta(s, a))^2]
-  </span></li>
+  </span></p>
+<ul>
 <li>Empty the minibatch <span class="math inline">\mathcal{D}</span>.</li>
 </ul></li>
 </ul></li>
@@ -582,26 +610,26 @@ DQN algorithm
 </div>
 <div class="callout-body-container callout-body">
 <ul>
-<li>Initialize value network <span class="math inline">Q_{\theta}</span> with random weights.</li>
-<li>Copy <span class="math inline">Q_{\theta}</span> to create the target network <span class="math inline">Q_{\theta'}</span>.</li>
-<li>Initialize experience replay memory <span class="math inline">\mathcal{D}</span> of maximal size <span class="math inline">N</span>.</li>
-<li>Observe the initial state <span class="math inline">s_0</span>.</li>
-<li>for <span class="math inline">t \in [0, T_\text{total}]</span>:
+<li><p>Initialize value network <span class="math inline">Q_{\theta}</span> with random weights.</p></li>
+<li><p>Copy <span class="math inline">Q_{\theta}</span> to create the target network <span class="math inline">Q_{\theta'}</span>.</p></li>
+<li><p>Initialize experience replay memory <span class="math inline">\mathcal{D}</span> of maximal size <span class="math inline">N</span>.</p></li>
+<li><p>Observe the initial state <span class="math inline">s_0</span>.</p></li>
+<li><p>for <span class="math inline">t \in [0, T_\text{total}]</span>:</p>
 <ul>
-<li>Select the action <span class="math inline">a_t</span> based on the behavior policy derived from <span class="math inline">Q_\theta(s_t, a)</span> (e.g.&nbsp;softmax).</li>
-<li>Perform the action <span class="math inline">a_t</span> and observe the next state <span class="math inline">s_{t+1}</span> and the reward <span class="math inline">r_{t+1}</span>.</li>
-<li>Store <span class="math inline">(s_t, a_t, r_{t+1}, s_{t+1})</span> in the experience replay memory.</li>
-<li>Every <span class="math inline">T_\text{train}</span> steps:
+<li><p>Select the action <span class="math inline">a_t</span> based on the behavior policy derived from <span class="math inline">Q_\theta(s_t, a)</span> (e.g.&nbsp;softmax).</p></li>
+<li><p>Perform the action <span class="math inline">a_t</span> and observe the next state <span class="math inline">s_{t+1}</span> and the reward <span class="math inline">r_{t+1}</span>.</p></li>
+<li><p>Store <span class="math inline">(s_t, a_t, r_{t+1}, s_{t+1})</span> in the experience replay memory.</p></li>
+<li><p>Every <span class="math inline">T_\text{train}</span> steps:</p>
 <ul>
-<li>Sample a minibatch <span class="math inline">\mathcal{D}_s</span> randomly from <span class="math inline">\mathcal{D}</span>.</li>
-<li>For each transition <span class="math inline">(s, a, r, s')</span> in the minibatch:
+<li><p>Sample a minibatch <span class="math inline">\mathcal{D}_s</span> randomly from <span class="math inline">\mathcal{D}</span>.</p></li>
+<li><p>For each transition <span class="math inline">(s, a, r, s')</span> in the minibatch:</p>
 <ul>
-<li>Predict the Q-value of the greedy action in the next state <span class="math inline">\max_{a'} Q_{\theta'}(s', a')</span> using the target network.</li>
-<li>Compute the target value <span class="math inline">t = r + \gamma \, \max_{a'} Q_{\theta'}(s', a')</span>.</li>
+<li><p>Predict the Q-value of the greedy action in the next state <span class="math inline">\max_{a'} Q_{\theta'}(s', a')</span> using the target network.</p></li>
+<li><p>Compute the target value <span class="math inline">t = r + \gamma \, \max_{a'} Q_{\theta'}(s', a')</span>.</p></li>
 </ul></li>
-<li>Train the value network <span class="math inline">Q_{\theta}</span> on <span class="math inline">\mathcal{D}_s</span> to minimize <span class="math inline">\mathcal{L}(\theta) = \mathbb{E}_{\mathcal{D}_s}[(t - Q_\theta(s, a))^2]</span></li>
+<li><p>Train the value network <span class="math inline">Q_{\theta}</span> on <span class="math inline">\mathcal{D}_s</span> to minimize <span class="math inline">\mathcal{L}(\theta) = \mathbb{E}_{\mathcal{D}_s}[(t - Q_\theta(s, a))^2]</span></p></li>
 </ul></li>
-<li>Every <span class="math inline">T_\text{target}</span> steps:
+<li><p>Every <span class="math inline">T_\text{target}</span> steps:</p>
 <ul>
 <li>Update the target network with the trained value network: <span class="math inline">\theta' \leftarrow \theta</span></li>
 </ul></li>
@@ -1119,7 +1147,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     </div>
   </div>
 </footer>
-<script>var lightboxQuarto = GLightbox({"selector":".lightbox","loop":false,"openEffect":"zoom","closeEffect":"zoom","descPosition":"bottom"});
+<script>var lightboxQuarto = GLightbox({"selector":".lightbox","descPosition":"bottom","closeEffect":"zoom","loop":false,"openEffect":"zoom"});
 (function() {
   let previousOnload = window.onload;
   window.onload = () => {

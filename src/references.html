@@ -49,7 +49,7 @@ div.csl-indent {
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../src/5.4-Meta.html" rel="prev">
+<link href="../src/5.5-Hierarchical.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -142,7 +142,7 @@ div.csl-indent {
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
- <span class="menu-text"><strong>Basic RL</strong></span></a>
+ <span class="menu-text"><strong>Tabular RL</strong></span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -204,6 +204,11 @@ div.csl-indent {
   <a href="../src/2.5-DistributedLearning.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Distributed learning</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/2.6-Misc.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Misc.</span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -258,7 +263,7 @@ div.csl-indent {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/3.9-OtherPolicyGradient.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Miscellaneous model-free algorithms</span></a>
+  <a href="../src/3.9-Misc.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Misc.</span></a>
   </div>
 </li>
       </ul>
@@ -279,12 +284,27 @@ div.csl-indent {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/4.2-WorldModels.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">World models</span></a>
+  <a href="../src/4.2-MBMF.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Model-based-augmented model-free RL (Dyna-Q, I2A)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/4.3-AlphaGo.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">AlphaGo</span></a>
+  <a href="../src/4.3-Planning.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Planning (MPC, TDM)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/4.4-WorldModels.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">World models, Dreamer</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/4.5-AlphaGo.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">AlphaGo</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/4.6-Misc.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Misc.</span></a>
   </div>
 </li>
       </ul>
@@ -300,7 +320,7 @@ div.csl-indent {
       <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/5.1-Hierarchical.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Hierarchical Reinforcement Learning</span></a>
+  <a href="../src/5.1-Intrinsic.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Intrinsic motivation</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -316,6 +336,11 @@ div.csl-indent {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../src/5.4-Meta.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Meta learning</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/5.5-Hierarchical.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Hierarchical Reinforcement Learning</span></a>
   </div>
 </li>
       </ul>
@@ -376,6 +401,25 @@ Available at: <a href="http://arxiv.org/abs/1611.01929">http://arxiv.org/abs/161
 Arjovsky, M., Chintala, S., and Bottou, L. (2017). Wasserstein
 <span>GAN</span>. Available at: <a href="http://arxiv.org/abs/1701.07875">http://arxiv.org/abs/1701.07875</a>.
 </div>
+<div id="ref-Badia2020" class="csl-entry" role="listitem">
+Badia, A. P., Piot, B., Kapturowski, S., Sprechmann, P., Vitvitskyi, A.,
+Guo, D., et al. (2020a). Agent57: <span>Outperforming</span> the
+<span>Atari Human Benchmark</span>. Available at: <a href="http://arxiv.org/abs/2003.13350">http://arxiv.org/abs/2003.13350</a>
+[Accessed January 17, 2022].
+</div>
+<div id="ref-Badia2020a" class="csl-entry" role="listitem">
+Badia, A. P., Sprechmann, P., Vitvitskyi, A., Guo, D., Piot, B.,
+Kapturowski, S., et al. (2020b). Never <span>Give Up</span>:
+<span>Learning Directed Exploration Strategies</span>. Available at: <a href="http://arxiv.org/abs/2002.06038">http://arxiv.org/abs/2002.06038</a>
+[Accessed January 17, 2022].
+</div>
+<div id="ref-Badrinarayanan2016" class="csl-entry" role="listitem">
+Badrinarayanan, V., Kendall, A., and Cipolla, R. (2016).
+<span>SegNet</span>: <span>A Deep Convolutional Encoder-Decoder
+Architecture</span> for <span>Image Segmentation</span>. Available at:
+<a href="http://arxiv.org/abs/1511.00561">http://arxiv.org/abs/1511.00561</a>
+[Accessed November 29, 2020].
+</div>
 <div id="ref-Baird1993" class="csl-entry" role="listitem">
 Baird, L. C. (1993). Advantage updating. Wright-Patterson Air Force Base
 Available at: <a href="http://leemon.com/papers/1993b.pdf">http://leemon.com/papers/1993b.pdf</a>.
@@ -395,6 +439,15 @@ Gradients</span>. Available at: <a href="http://arxiv.org/abs/1804.08617">http:/
 Bellemare, M. G., Dabney, W., and Munos, R. (2017). A
 <span>Distributional Perspective</span> on <span>Reinforcement
 Learning</span>. Available at: <a href="http://arxiv.org/abs/1707.06887">http://arxiv.org/abs/1707.06887</a>.
+</div>
+<div id="ref-Bishop1994" class="csl-entry" role="listitem">
+Bishop, C. M. (1994). Mixture <span>Density Networks</span>. Birmingham,
+UK: Neural Computing Research Group, Aston University Available at: <a href="https://publications.aston.ac.uk/id/eprint/373/1/NCRG_94_004.pdf">https://publications.aston.ac.uk/id/eprint/373/1/NCRG_94_004.pdf</a>
+[Accessed November 12, 2024].
+</div>
+<div id="ref-Burda2018b" class="csl-entry" role="listitem">
+Burda, Y., Edwards, H., Storkey, A., and Klimov, O. (2018). Exploration
+by <span>Random Network Distillation</span>. doi:<a href="https://doi.org/10.48550/arXiv.1810.12894">10.48550/arXiv.1810.12894</a>.
 </div>
 <div id="ref-Chi2023" class="csl-entry" role="listitem">
 Chi, C., Xu, Z., Feng, S., Cousineau, E., Du, Y., Burchfiel, B., et al.
@@ -416,11 +469,22 @@ Control</span> with <span>Deep Reinforcement Learning</span> using the
 <span>Conference</span> on <span>Machine Learning</span></em> Available
 at: <a href="http://proceedings.mlr.press/v70/chou17a/chou17a.pdf">http://proceedings.mlr.press/v70/chou17a/chou17a.pdf</a>.
 </div>
+<div id="ref-Clavera2018" class="csl-entry" role="listitem">
+Clavera, I., Nagabandi, A., Fearing, R. S., Abbeel, P., Levine, S., and
+Finn, C. (2018). Learning to <span>Adapt</span>:
+<span>Meta-Learning</span> for <span>Model-Based Control</span>.
+Available at: <a href="http://arxiv.org/abs/1803.11347">http://arxiv.org/abs/1803.11347</a>.
+</div>
 <div id="ref-Co-Reyes2018" class="csl-entry" role="listitem">
 Co-Reyes, J. D., Liu, Y., Gupta, A., Eysenbach, B., Abbeel, P., and
 Levine, S. (2018). Self-<span>Consistent Trajectory Autoencoder</span>:
 <span>Hierarchical Reinforcement Learning</span> with <span>Trajectory
 Embeddings</span>.
+</div>
+<div id="ref-Corneil2018" class="csl-entry" role="listitem">
+Corneil, D., Gerstner, W., and Brea, J. (2018). Efficient
+<span>Model-Based Deep Reinforcement Learning</span> with
+<span>Variational State Tabulation</span>. Available at: <a href="http://arxiv.org/abs/1802.04325">http://arxiv.org/abs/1802.04325</a>.
 </div>
 <div id="ref-Dabney2017" class="csl-entry" role="listitem">
 Dabney, W., Rowland, M., Bellemare, M. G., and Munos, R. (2017).
@@ -454,11 +518,23 @@ al. (2018). <span>IMPALA</span>: <span>Scalable Distributed
 Deep-RL</span> with <span>Importance Weighted Actor-Learner
 Architectures</span>. doi:<a href="https://doi.org/10.48550/arXiv.1802.01561">10.48550/arXiv.1802.01561</a>.
 </div>
+<div id="ref-Feinberg2018" class="csl-entry" role="listitem">
+Feinberg, V., Wan, A., Stoica, I., Jordan, M. I., Gonzalez, J. E., and
+Levine, S. (2018). Model-<span>Based Value Estimation</span> for
+<span>Efficient Model-Free Reinforcement Learning</span>. Available at:
+<a href="http://arxiv.org/abs/1803.00101">http://arxiv.org/abs/1803.00101</a>.
+</div>
 <div id="ref-Fortunato2017" class="csl-entry" role="listitem">
 Fortunato, M., Azar, M. G., Piot, B., Menick, J., Osband, I., Graves,
 A., et al. (2017). Noisy <span>Networks</span> for
 <span>Exploration</span>. Available at: <a href="http://arxiv.org/abs/1706.10295">http://arxiv.org/abs/1706.10295</a>
 [Accessed March 2, 2020].
+</div>
+<div id="ref-Fujimoto2018" class="csl-entry" role="listitem">
+Fujimoto, S., van Hoof, H., and Meger, D. (2018). Addressing
+<span>Function Approximation Error</span> in <span>Actor-Critic
+Methods</span>. Available at: <a href="http://arxiv.org/abs/1802.09477">http://arxiv.org/abs/1802.09477</a>
+[Accessed March 1, 2020].
 </div>
 <div id="ref-Gers2001" class="csl-entry" role="listitem">
 Gers, F. (2001). Long <span>Short-Term Memory</span> in <span>Recurrent
@@ -472,6 +548,12 @@ Networks</span>. Available at: <a href="http://arxiv.org/abs/1406.2661">http://a
 <div id="ref-Goodfellow2016" class="csl-entry" role="listitem">
 Goodfellow, I., Bengio, Y., and Courville, A. (2016). <em>Deep
 <span>Learning</span></em>. MIT Press Available at: <a href="http://www.deeplearningbook.org">http://www.deeplearningbook.org</a>.
+</div>
+<div id="ref-Goyal2018" class="csl-entry" role="listitem">
+Goyal, A., Brakel, P., Fedus, W., Lillicrap, T., Levine, S., Larochelle,
+H., et al. (2018). Recall <span>Traces</span>: <span>Backtracking
+Models</span> for <span>Efficient Reinforcement Learning</span>.
+Available at: <a href="http://arxiv.org/abs/1804.00379">http://arxiv.org/abs/1804.00379</a>.
 </div>
 <div id="ref-Gruslys2017" class="csl-entry" role="listitem">
 Gruslys, A., Dabney, W., Azar, M. G., Piot, B., Bellemare, M., and
@@ -495,6 +577,14 @@ Gu, S., Lillicrap, T., Sutskever, I., and Levine, S. (2016b). Continuous
 <span>Deep Q-Learning</span> with <span class="nocase">Model-based
 Acceleration</span>. Available at: <a href="http://arxiv.org/abs/1603.00748">http://arxiv.org/abs/1603.00748</a>.
 </div>
+<div id="ref-Ha2017" class="csl-entry" role="listitem">
+Ha, D., and Eck, D. (2017). A <span>Neural Representation</span> of
+<span>Sketch Drawings</span>. Available at: <a href="http://arxiv.org/abs/1704.03477">http://arxiv.org/abs/1704.03477</a>
+[Accessed January 17, 2021].
+</div>
+<div id="ref-Ha2018" class="csl-entry" role="listitem">
+Ha, D., and Schmidhuber, J. (2018). World <span>Models</span>. doi:<a href="https://doi.org/10.5281/zenodo.1207631">10.5281/zenodo.1207631</a>.
+</div>
 <div id="ref-Haarnoja2018" class="csl-entry" role="listitem">
 Haarnoja, T., Hartikainen, K., Abbeel, P., and Levine, S. (2018a).
 Latent <span>Space Policies</span> for <span>Hierarchical Reinforcement
@@ -512,9 +602,26 @@ al. (2018b). Soft <span>Actor-Critic Algorithms</span> and
 <span>Applications</span>. Available at: <a href="http://arxiv.org/abs/1812.05905">http://arxiv.org/abs/1812.05905</a>
 [Accessed February 5, 2019].
 </div>
+<div id="ref-Hafner2020" class="csl-entry" role="listitem">
+Hafner, D., Lillicrap, T., Ba, J., and Norouzi, M. (2020). Dream to
+<span>Control</span>: <span>Learning Behaviors</span> by <span>Latent
+Imagination</span>. Available at: <a href="http://arxiv.org/abs/1912.01603">http://arxiv.org/abs/1912.01603</a>
+[Accessed March 24, 2020].
+</div>
+<div id="ref-Hafner2019" class="csl-entry" role="listitem">
+Hafner, D., Lillicrap, T., Fischer, I., Villegas, R., Ha, D., Lee, H.,
+et al. (2019). Learning <span>Latent Dynamics</span> for
+<span>Planning</span> from <span>Pixels</span>. Available at: <a href="http://arxiv.org/abs/1811.04551">http://arxiv.org/abs/1811.04551</a>
+[Accessed January 24, 2020].
+</div>
 <div id="ref-Hafner2011" class="csl-entry" role="listitem">
 Hafner, R., and Riedmiller, M. (2011). Reinforcement learning in
 feedback control. <em>Machine Learning</em> 84, 137–169. doi:<a href="https://doi.org/10.1007/s10994-011-5235-x">10.1007/s10994-011-5235-x</a>.
+</div>
+<div id="ref-Hansen2001" class="csl-entry" role="listitem">
+Hansen, N., and Ostermeier, A. (2001). Completely <span>Derandomized
+Self-Adaptation</span> in <span>Evolution Strategies</span>.
+<em>Evolutionary Computation</em> 9, 159–195. doi:<a href="https://doi.org/10.1162/106365601750190398">10.1162/106365601750190398</a>.
 </div>
 <div id="ref-Harutyunyan2016" class="csl-entry" role="listitem">
 Harutyunyan, A., Bellemare, M. G., Stepleton, T., and Munos, R. (2016).
@@ -550,6 +657,11 @@ Heinrich, J., and Silver, D. (2016). Deep <span>Reinforcement
 Learning</span> from <span>Self-Play</span> in
 <span>Imperfect-Information Games</span>. Available at: <a href="http://arxiv.org/abs/1603.01121">http://arxiv.org/abs/1603.01121</a>.
 </div>
+<div id="ref-Henaff2017" class="csl-entry" role="listitem">
+Henaff, M., Whitney, W. F., and LeCun, Y. (2017). Model-<span>Based
+Planning</span> with <span>Discrete</span> and <span>Continuous
+Actions</span>. Available at: <a href="http://arxiv.org/abs/1705.07177">http://arxiv.org/abs/1705.07177</a>.
+</div>
 <div id="ref-Hessel2017" class="csl-entry" role="listitem">
 Hessel, M., Modayil, J., van Hasselt, H., Schaul, T., Ostrovski, G.,
 Dabney, W., et al. (2017). Rainbow: <span>Combining Improvements</span>
@@ -583,6 +695,17 @@ Kakade, S. (2001). A <span>Natural Policy Gradient</span>. in
 Kakade, S., and Langford, J. (2002). Approximately <span>Optimal
 Approximate Reinforcement Learning</span>. <em>Proc. 19th International
 Conference on Machine Learning</em>, 267–274. Available at: <a href="http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.7.7601">http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.7.7601</a>.
+</div>
+<div id="ref-Kansky2017" class="csl-entry" role="listitem">
+Kansky, K., Silver, T., Mély, D. A., Eldawy, M., Lázaro-Gredilla, M.,
+Lou, X., et al. (2017). Schema <span>Networks</span>: <span class="nocase">Zero-shot Transfer</span> with a <span>Generative Causal
+Model</span> of <span>Intuitive Physics</span>. Available at: <a href="http://arxiv.org/abs/1706.04317">http://arxiv.org/abs/1706.04317</a>
+[Accessed January 10, 2019].
+</div>
+<div id="ref-Kapturowski2022" class="csl-entry" role="listitem">
+Kapturowski, S., Campos, V., Jiang, R., Rakićević, N., van Hasselt, H.,
+Blundell, C., et al. (2022). Human-level <span>Atari</span> 200x faster.
+doi:<a href="https://doi.org/10.48550/arXiv.2209.07550">10.48550/arXiv.2209.07550</a>.
 </div>
 <div id="ref-Kapturowski2019" class="csl-entry" role="listitem">
 Kapturowski, S., Ostrovski, G., Quan, J., Munos, R., and Dabney, W.
@@ -661,11 +784,6 @@ Malibari, N., Katib, I., and Mehmood, R. (2023). Systematic
 Meuleau, N., Peshkin, L., Kaelbling, L. P., and Kim, K. (2000).
 Off-<span>Policy Policy Search</span>. Available at: <a href="http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.28.894">http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.28.894</a>.
 </div>
-<div id="ref-Mirowski2016" class="csl-entry" role="listitem">
-Mirowski, P., Pascanu, R., Viola, F., Soyer, H., Ballard, A. J., Banino,
-A., et al. (2016). Learning to <span>Navigate</span> in <span>Complex
-Environments</span>. Available at: <a href="http://arxiv.org/abs/1611.03673">http://arxiv.org/abs/1611.03673</a>.
-</div>
 <div id="ref-Mnih2016" class="csl-entry" role="listitem">
 Mnih, V., Badia, A. P., Mirza, M., Graves, A., Lillicrap, T. P., Harley,
 T., et al. (2016). Asynchronous <span>Methods</span> for <span>Deep
@@ -730,6 +848,21 @@ Available at: <a href="http://arxiv.org/abs/1611.01626">http://arxiv.org/abs/161
 Oh, J., Guo, Y., Singh, S., and Lee, H. (2018). Self-<span>Imitation
 Learning</span>. Available at: <a href="http://arxiv.org/abs/1806.05635">http://arxiv.org/abs/1806.05635</a>.
 </div>
+<div id="ref-Pardo2018" class="csl-entry" role="listitem">
+Pardo, F., Levdik, V., and Kormushev, P. (2018). Q-map: A
+<span>Convolutional Approach</span> for <span>Goal-Oriented
+Reinforcement Learning</span>. Available at: <a href="http://arxiv.org/abs/1810.02927">http://arxiv.org/abs/1810.02927</a>.
+</div>
+<div id="ref-Pathak2017" class="csl-entry" role="listitem">
+Pathak, D., Agrawal, P., Efros, A. A., and Darrell, T. (2017).
+Curiosity-driven <span>Exploration</span> by <span class="nocase">Self-supervised Prediction</span>. Available at: <a href="http://arxiv.org/abs/1705.05363">http://arxiv.org/abs/1705.05363</a>
+[Accessed February 6, 2021].
+</div>
+<div id="ref-Peng2018" class="csl-entry" role="listitem">
+Peng, B., Li, X., Gao, J., Liu, J., Wong, K.-F., and Su, S.-Y. (2018).
+Deep <span>Dyna-Q</span>: <span>Integrating Planning</span> for
+<span>Task-Completion Dialogue Policy Learning</span>. Available at: <a href="http://arxiv.org/abs/1801.06176">http://arxiv.org/abs/1801.06176</a>.
+</div>
 <div id="ref-Peshkin2002" class="csl-entry" role="listitem">
 Peshkin, L., and Shelton, C. R. (2002). Learning from <span>Scarce
 Experience</span>. Available at: <a href="http://arxiv.org/abs/cs/0204043">http://arxiv.org/abs/cs/0204043</a>.
@@ -738,6 +871,11 @@ Experience</span>. Available at: <a href="http://arxiv.org/abs/cs/0204043">http:
 Peters, J., and Schaal, S. (2008). Reinforcement learning of motor
 skills with policy gradients. <em>Neural Networks</em> 21, 682–697.
 doi:<a href="https://doi.org/10.1016/j.neunet.2008.02.003">10.1016/j.neunet.2008.02.003</a>.
+</div>
+<div id="ref-Pong2018" class="csl-entry" role="listitem">
+Pong, V., Gu, S., Dalal, M., and Levine, S. (2018). Temporal
+<span>Difference Models</span>: <span>Model-Free Deep RL</span> for
+<span>Model-Based Control</span>. Available at: <a href="http://arxiv.org/abs/1802.09081">http://arxiv.org/abs/1802.09081</a>.
 </div>
 <div id="ref-Popov2017" class="csl-entry" role="listitem">
 Popov, I., Heess, N., Lillicrap, T., Hafner, R., Barth-Maron, G.,
@@ -751,6 +889,12 @@ off-policy policy evaluation. in <em>Proceedings of the
 <span>Seventeenth International Conference</span> on <span>Machine
 Learning</span>.</em>
 </div>
+<div id="ref-Ronneberger2015" class="csl-entry" role="listitem">
+Ronneberger, O., Fischer, P., and Brox, T. (2015). U-<span>Net</span>:
+<span>Convolutional Networks</span> for <span>Biomedical Image
+Segmentation</span>. Available at: <a href="http://arxiv.org/abs/1505.04597">http://arxiv.org/abs/1505.04597</a>
+[Accessed November 29, 2020].
+</div>
 <div id="ref-Roy2022" class="csl-entry" role="listitem">
 Roy, R., Raiman, J., Kant, N., Elkin, I., Kirby, R., Siu, M., et al.
 (2022). <span>PrefixRL</span>: <span>Optimization</span> of
@@ -761,6 +905,12 @@ Learning</span>. doi:<a href="https://doi.org/10.1109/DAC18074.2021.9586094">10.
 Ruder, S. (2016). An overview of gradient descent optimization
 algorithms. Available at: <a href="http://arxiv.org/abs/1609.04747">http://arxiv.org/abs/1609.04747</a>.
 </div>
+<div id="ref-Rusu2016" class="csl-entry" role="listitem">
+Rusu, A. A., Colmenarejo, S. G., Gulcehre, C., Desjardins, G.,
+Kirkpatrick, J., Pascanu, R., et al. (2016). Policy
+<span>Distillation</span>. Available at: <a href="http://arxiv.org/abs/1511.06295">http://arxiv.org/abs/1511.06295</a>
+[Accessed January 26, 2020].
+</div>
 <div id="ref-Salimans2017" class="csl-entry" role="listitem">
 Salimans, T., Ho, J., Chen, X., Sidor, S., and Sutskever, I. (2017).
 Evolution <span>Strategies</span> as a <span>Scalable Alternative</span>
@@ -769,6 +919,14 @@ to <span>Reinforcement Learning</span>. Available at: <a href="http://arxiv.org/
 <div id="ref-Schaul2015" class="csl-entry" role="listitem">
 Schaul, T., Quan, J., Antonoglou, I., and Silver, D. (2015). Prioritized
 <span>Experience Replay</span>. Available at: <a href="http://arxiv.org/abs/1511.05952">http://arxiv.org/abs/1511.05952</a>.
+</div>
+<div id="ref-Schrittwieser2019" class="csl-entry" role="listitem">
+Schrittwieser, J., Antonoglou, I., Hubert, T., Simonyan, K., Sifre, L.,
+Schmitt, S., et al. (2019). Mastering <span>Atari</span>,
+<span>Go</span>, <span>Chess</span> and <span>Shogi</span> by
+<span>Planning</span> with a <span>Learned Model</span>. Available at:
+<a href="http://arxiv.org/abs/1911.08265">http://arxiv.org/abs/1911.08265</a>
+[Accessed November 24, 2019].
 </div>
 <div id="ref-Schulman2017" class="csl-entry" role="listitem">
 Schulman, J., Chen, X., and Abbeel, P. (2017a). Equivalence
@@ -792,11 +950,23 @@ Schulman, J., Wolski, F., Dhariwal, P., Radford, A., and Klimov, O.
 (2017b). Proximal <span>Policy Optimization Algorithms</span>. Available
 at: <a href="http://arxiv.org/abs/1707.06347">http://arxiv.org/abs/1707.06347</a>.
 </div>
+<div id="ref-Sekar2020" class="csl-entry" role="listitem">
+Sekar, R., Rybkin, O., Daniilidis, K., Abbeel, P., Hafner, D., and
+Pathak, D. (2020). Planning to <span>Explore</span> via
+<span>Self-Supervised World Models</span>. Available at: <a href="http://arxiv.org/abs/2005.05960">http://arxiv.org/abs/2005.05960</a>
+[Accessed January 29, 2024].
+</div>
 <div id="ref-Silver2016" class="csl-entry" role="listitem">
 Silver, D., Huang, A., Maddison, C. J., Guez, A., Sifre, L., van den
-Driessche, G., et al. (2016). Mastering the game of <span>Go</span> with
-deep neural networks and tree search. <em>Nature</em> 529, 484–489.
+Driessche, G., et al. (2016a). Mastering the game of <span>Go</span>
+with deep neural networks and tree search. <em>Nature</em> 529, 484–489.
 doi:<a href="https://doi.org/10.1038/nature16961">10.1038/nature16961</a>.
+</div>
+<div id="ref-Silver2018" class="csl-entry" role="listitem">
+Silver, D., Hubert, T., Schrittwieser, J., Antonoglou, I., Lai, M.,
+Guez, A., et al. (2018). A general reinforcement learning algorithm that
+masters chess, shogi, and <span>Go</span> through self-play.
+<em>Science</em> 362, 1140–1144. doi:<a href="https://doi.org/10.1126/science.aar6404">10.1126/science.aar6404</a>.
 </div>
 <div id="ref-Silver2014" class="csl-entry" role="listitem">
 Silver, D., Lever, G., Heess, N., Degris, T., Wierstra, D., and
@@ -805,11 +975,20 @@ Algorithms</span>. in <em>Proc. <span>ICML</span></em> Proceedings of
 <span>Machine Learning Research</span>., eds. E. P. Xing and T. Jebara
 (PMLR), 387–395. Available at: <a href="http://proceedings.mlr.press/v32/silver14.html">http://proceedings.mlr.press/v32/silver14.html</a>.
 </div>
+<div id="ref-Silver2016a" class="csl-entry" role="listitem">
+Silver, D., van Hasselt, H., Hessel, M., Schaul, T., Guez, A., Harley,
+T., et al. (2016b). The <span>Predictron</span>: <span>End-To-End
+Learning</span> and <span>Planning</span>. Available at: <a href="http://arxiv.org/abs/1612.08810">http://arxiv.org/abs/1612.08810</a>.
+</div>
 <div id="ref-Simonyan2015" class="csl-entry" role="listitem">
 Simonyan, K., and Zisserman, A. (2015). Very <span>Deep Convolutional
 Networks</span> for <span>Large-Scale Image Recognition</span>.
 <em>International Conference on Learning Representations (ICRL)</em>,
 1–14. doi:<a href="https://doi.org/10.1016/j.infsof.2008.09.005">10.1016/j.infsof.2008.09.005</a>.
+</div>
+<div id="ref-Srinivas2018" class="csl-entry" role="listitem">
+Srinivas, A., Jabri, A., Abbeel, P., Levine, S., and Finn, C. (2018).
+Universal <span>Planning Networks</span>. Available at: <a href="http://arxiv.org/abs/1804.00645">http://arxiv.org/abs/1804.00645</a>.
 </div>
 <div id="ref-Sutton1990" class="csl-entry" role="listitem">
 Sutton, R. S. (1990). Integrated <span>Architectures</span> for
@@ -844,6 +1023,12 @@ Tang, J., and Abbeel, P. (2010). On a <span>Connection</span> between
 <span>Importance Sampling</span> and the <span>Likelihood Ratio Policy
 Gradient</span>. in <em>Adv. <span>Neural</span> inf.
 <span>Process</span>. <span>Syst</span>.</em> Available at: <a href="http://rll.berkeley.edu/~jietang/pubs/nips10_Tang.pdf">http://rll.berkeley.edu/~jietang/pubs/nips10_Tang.pdf</a>.
+</div>
+<div id="ref-Teh2017" class="csl-entry" role="listitem">
+Teh, Y. W., Bapst, V., Czarnecki, W. M., Quan, J., Kirkpatrick, J.,
+Hadsell, R., et al. (2017). Distral: <span>Robust Multitask
+Reinforcement Learning</span>. Available at: <a href="http://arxiv.org/abs/1707.04175">http://arxiv.org/abs/1707.04175</a>
+[Accessed January 26, 2020].
 </div>
 <div id="ref-Todorov2008" class="csl-entry" role="listitem">
 Todorov, E. (2008). General duality between optimal control and
@@ -892,6 +1077,17 @@ Freitas, N. (2016). Dueling <span>Network Architectures</span> for
 <div id="ref-Watkins1989" class="csl-entry" role="listitem">
 Watkins, C. J. (1989). Learning from delayed rewards.
 </div>
+<div id="ref-Watter2015" class="csl-entry" role="listitem">
+Watter, M., Springenberg, J. T., Boedecker, J., and Riedmiller, M.
+(2015). Embed to <span>Control</span>: <span>A Locally Linear Latent
+Dynamics Model</span> for <span>Control</span> from <span>Raw
+Images</span>. Available at: <a href="https://arxiv.org/pdf/1506.07365.pdf">https://arxiv.org/pdf/1506.07365.pdf</a>.
+</div>
+<div id="ref-Weber2017" class="csl-entry" role="listitem">
+Weber, T., Racanière, S., Reichert, D. P., Buesing, L., Guez, A.,
+Rezende, D. J., et al. (2017). Imagination-<span>Augmented Agents</span>
+for <span>Deep Reinforcement Learning</span>. Available at: <a href="http://arxiv.org/abs/1707.06203">http://arxiv.org/abs/1707.06203</a>.
+</div>
 <div id="ref-Wierstra2007" class="csl-entry" role="listitem">
 Wierstra, D., Foerster, A., Peters, J., and Schmidhuber, J. (2007).
 <span>“Solving <span>Deep Memory POMDPs</span> with <span>Recurrent
@@ -907,6 +1103,15 @@ for connectionist reinforcement learning. <em>Machine Learning</em> 8,
 Williams, R. J., and Peng, J. (1991). Function optimization using
 connectionist reinforcement learning algorithms. <em>Connection
 Science</em> 3, 241–268.
+</div>
+<div id="ref-Wu2022" class="csl-entry" role="listitem">
+Wu, P., Escontrela, A., Hafner, D., Goldberg, K., and Abbeel, P. (2022).
+<span>DayDreamer</span>: <span>World Models</span> for <span>Physical
+Robot Learning</span>. doi:<a href="https://doi.org/10.48550/arXiv.2206.14176">10.48550/arXiv.2206.14176</a>.
+</div>
+<div id="ref-Ye2021" class="csl-entry" role="listitem">
+Ye, W., Liu, S., Kurutach, T., Abbeel, P., and Gao, Y. (2021). Mastering
+<span>Atari Games</span> with <span>Limited Data</span>. doi:<a href="https://doi.org/10.48550/arXiv.2111.00210">10.48550/arXiv.2111.00210</a>.
 </div>
 <div id="ref-Yu2020b" class="csl-entry" role="listitem">
 Yu, C., Liu, J., and Nemati, S. (2020). Reinforcement
@@ -1344,8 +1549,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../src/5.4-Meta.html" class="pagination-link" aria-label="Meta learning">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">Meta learning</span></span>
+      <a href="../src/5.5-Hierarchical.html" class="pagination-link" aria-label="Hierarchical Reinforcement Learning">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">Hierarchical Reinforcement Learning</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">

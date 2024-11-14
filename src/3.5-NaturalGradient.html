@@ -189,7 +189,7 @@ window.Quarto = {
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
- <span class="menu-text"><strong>Basic RL</strong></span></a>
+ <span class="menu-text"><strong>Tabular RL</strong></span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -251,6 +251,11 @@ window.Quarto = {
   <a href="../src/2.5-DistributedLearning.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Distributed learning</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/2.6-Misc.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Misc.</span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -305,7 +310,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/3.9-OtherPolicyGradient.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Miscellaneous model-free algorithms</span></a>
+  <a href="../src/3.9-Misc.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Misc.</span></a>
   </div>
 </li>
       </ul>
@@ -326,12 +331,27 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/4.2-WorldModels.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">World models</span></a>
+  <a href="../src/4.2-MBMF.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Model-based-augmented model-free RL (Dyna-Q, I2A)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/4.3-AlphaGo.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">AlphaGo</span></a>
+  <a href="../src/4.3-Planning.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Planning (MPC, TDM)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/4.4-WorldModels.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">World models, Dreamer</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/4.5-AlphaGo.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">AlphaGo</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/4.6-Misc.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Misc.</span></a>
   </div>
 </li>
       </ul>
@@ -347,7 +367,7 @@ window.Quarto = {
       <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/5.1-Hierarchical.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Hierarchical Reinforcement Learning</span></a>
+  <a href="../src/5.1-Intrinsic.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Intrinsic motivation</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -363,6 +383,11 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../src/5.4-Meta.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Meta learning</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/5.5-Hierarchical.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Hierarchical Reinforcement Learning</span></a>
   </div>
 </li>
       </ul>
@@ -383,7 +408,8 @@ window.Quarto = {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#principle-of-natural-gradients" id="toc-principle-of-natural-gradients" class="nav-link active" data-scroll-target="#principle-of-natural-gradients">Principle of natural gradients</a></li>
+  <li><a href="#learning-stability" id="toc-learning-stability" class="nav-link active" data-scroll-target="#learning-stability">Learning stability</a></li>
+  <li><a href="#principle-of-natural-gradients" id="toc-principle-of-natural-gradients" class="nav-link" data-scroll-target="#principle-of-natural-gradients">Principle of natural gradients</a></li>
   <li><a href="#natural-policy-gradient-and-natural-actor-critic-nac" id="toc-natural-policy-gradient-and-natural-actor-critic-nac" class="nav-link" data-scroll-target="#natural-policy-gradient-and-natural-actor-critic-nac">Natural policy gradient and Natural Actor Critic (NAC)</a></li>
   </ul>
 </nav>
@@ -410,6 +436,8 @@ window.Quarto = {
 </header>
 
 
+<section id="learning-stability" class="level2">
+<h2 class="anchored" data-anchor-id="learning-stability">Learning stability</h2>
 <p>The deep networks used as function approximators in the methods presented until now were all optimized (trained) using <strong>stochastic gradient descent</strong> (SGD) or any of its variants (RMSProp, Adam, etc). The basic idea is to change the parameters <span class="math inline">\theta</span> in the opposite direction of the gradient of the loss function (or the same direction as the policy gradient, in which case it is called gradient ascent), proportionally to a small learning rate <span class="math inline">\eta</span>:</p>
 <p><span class="math display">
     \Delta \theta = - \eta \, \nabla_\theta \mathcal{L}(\theta)
@@ -424,21 +452,26 @@ window.Quarto = {
 \end{aligned}
 </span></p>
 <p>If the policy <span class="math inline">\pi_\theta</span> changes a lot between two updates, the estimated Q-value <span class="math inline">Q_\varphi(s, a)</span> will represent the value of the action for a totally different policy, not the true Q-value <span class="math inline">Q^{\pi_\theta}(s, a)</span>. The estimated policy gradient will then be strongly biased and learning will be suboptimal. In other words, the actor should not change much faster than the critic, and vice versa. A naive solution would be to use a very small learning rate for the actor, but this just slows down learning (adding to the sample complexity) without solving the problem.</p>
-<p>To solve the problem, we should actually do the opposite of the steepest descent: <em>search for the biggest parameter change <span class="math inline">\Delta \theta</span> inducing the smallest change in the policy, but in the right direction</em>. If the parameter change is high, the actor will learn a lot internally from each experience. But if the policy change is small between two updates (although the parameters have changed a lot), we might be able to reuse past experiences, as the targets will not be that wrong.</p>
+<p>To solve the problem, we should actually do the opposite of the steepest descent:</p>
+<blockquote class="blockquote">
+<p>search for the biggest parameter change <span class="math inline">\Delta \theta</span> inducing the smallest change in the policy, but in the right direction.</p>
+</blockquote>
+<p>If the parameter change is high, the actor will learn a lot internally from each experience. But if the policy change is small between two updates (although the parameters have changed a lot), we might be able to reuse past experiences, as the targets will not be that wrong.</p>
 <p>This is where <strong>natural gradients</strong> come into play, which are originally a statistical method to optimize over spaces of probability distributions, for example for variational inference. The idea to use natural gradients to train neural networks comes from <span class="citation" data-cites="Amari1998">Amari (<a href="references.html#ref-Amari1998" role="doc-biblioref">1998</a>)</span>. <span class="citation" data-cites="Kakade2001">Kakade (<a href="references.html#ref-Kakade2001" role="doc-biblioref">2001</a>)</span> applied natural gradients to policy gradient methods, while <span class="citation" data-cites="Peters2008">Peters and Schaal (<a href="references.html#ref-Peters2008" role="doc-biblioref">2008</a>)</span> proposed a natural actor-critic algorithm for linear function approximators. The idea was adapted to deep RL by Schulman and colleagues, with Trust Region Policy Optimization <span class="citation" data-cites="Schulman2015">(TRPO, <a href="references.html#ref-Schulman2015" role="doc-biblioref">Schulman et al., 2015</a>)</span> and Proximal Policy Optimization <span class="citation" data-cites="Schulman2017">(PPO, <a href="references.html#ref-Schulman2017" role="doc-biblioref">Schulman et al., 2017</a>)</span>, the latter having replaced DDPG as the go-to method for continuous RL problems, particularly because of its smaller sample complexity and its robustness to hyperparameters.</p>
+</section>
 <section id="principle-of-natural-gradients" class="level2">
 <h2 class="anchored" data-anchor-id="principle-of-natural-gradients">Principle of natural gradients</h2>
 <div id="fig-naturalgradient" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-naturalgradient-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/naturalgradient.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;14.1: Euclidian distances in the parameter space do not represent well the statistical distance between probability distributions. The two Gaussians on the left (\mathcal{N}(0, 0.2) and \mathcal{N}(1, 0.2)) have the same Euclidian distance in the parameter space (d = \sqrt{(\mu_0 - \mu_1)^2+(\sigma_0 - \sigma_1)^2}) than the two Gaussians on the right (\mathcal{N}(0, 10) and \mathcal{N}(1, 10)). However, the Gaussians on the right are much more similar than the two on the left: if you have a single sample, you could not say from which distribution it comes for the Gaussians on the right, while it is obvious for the Gaussians on the left."><img src="img/naturalgradient.png" class="img-fluid figure-img" style="width:80.0%"></a>
+<a href="img/naturalgradient.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;15.1: Euclidian distances in the parameter space do not represent well the statistical distance between probability distributions. The two Gaussians on the left (\mathcal{N}(0, 0.2) and \mathcal{N}(1, 0.2)) have the same Euclidian distance in the parameter space (d = \sqrt{(\mu_0 - \mu_1)^2+(\sigma_0 - \sigma_1)^2}) than the two Gaussians on the right (\mathcal{N}(0, 10) and \mathcal{N}(1, 10)). However, the Gaussians on the right are much more similar than the two on the left: if you have a single sample, you could not say from which distribution it comes for the Gaussians on the right, while it is obvious for the Gaussians on the left."><img src="img/naturalgradient.png" class="img-fluid figure-img" style="width:80.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-naturalgradient-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;14.1: Euclidian distances in the parameter space do not represent well the statistical distance between probability distributions. The two Gaussians on the left (<span class="math inline">\mathcal{N}(0, 0.2)</span> and <span class="math inline">\mathcal{N}(1, 0.2)</span>) have the same Euclidian distance in the parameter space (<span class="math inline">d = \sqrt{(\mu_0 - \mu_1)^2+(\sigma_0 - \sigma_1)^2}</span>) than the two Gaussians on the right (<span class="math inline">\mathcal{N}(0, 10)</span> and <span class="math inline">\mathcal{N}(1, 10)</span>). However, the Gaussians on the right are much more similar than the two on the left: if you have a single sample, you could not say from which distribution it comes for the Gaussians on the right, while it is obvious for the Gaussians on the left.
+Figure&nbsp;15.1: Euclidian distances in the parameter space do not represent well the statistical distance between probability distributions. The two Gaussians on the left (<span class="math inline">\mathcal{N}(0, 0.2)</span> and <span class="math inline">\mathcal{N}(1, 0.2)</span>) have the same Euclidian distance in the parameter space (<span class="math inline">d = \sqrt{(\mu_0 - \mu_1)^2+(\sigma_0 - \sigma_1)^2}</span>) than the two Gaussians on the right (<span class="math inline">\mathcal{N}(0, 10)</span> and <span class="math inline">\mathcal{N}(1, 10)</span>). However, the Gaussians on the right are much more similar than the two on the left: if you have a single sample, you could not say from which distribution it comes for the Gaussians on the right, while it is obvious for the Gaussians on the left.
 </figcaption>
 </figure>
 </div>
-<p>Consider the two Gaussian distributions in the left part of <a href="#fig-naturalgradient" class="quarto-xref">Figure&nbsp;<span>14.1</span></a> (<span class="math inline">\mathcal{N}(0, 0.2)</span> and <span class="math inline">\mathcal{N}(1, 0.2)</span>) and the two on the right (<span class="math inline">\mathcal{N}(0, 10)</span> and <span class="math inline">\mathcal{N}(1, 10)</span>). In both cases, the distance in the Euclidian space of parameters <span class="math inline">d = \sqrt{(\mu_0 - \mu_1)^2+(\sigma_0 - \sigma_1)^2}</span> is the same between the two Gaussians. Obviously, the two distributions on the left are however further away from each other than the two on the the right. This indicates that the Euclidian distance in the parameter space (which is what <em>regular</em> gradients act on) is not a correct measurement of the statistical distance between two distributions (which what we want to minimize between two iterations of PG).</p>
+<p>Consider the two Gaussian distributions in the left part of <a href="#fig-naturalgradient" class="quarto-xref">Figure&nbsp;<span>15.1</span></a> (<span class="math inline">\mathcal{N}(0, 0.2)</span> and <span class="math inline">\mathcal{N}(1, 0.2)</span>) and the two on the right (<span class="math inline">\mathcal{N}(0, 10)</span> and <span class="math inline">\mathcal{N}(1, 10)</span>). In both cases, the distance in the Euclidian space of parameters <span class="math inline">d = \sqrt{(\mu_0 - \mu_1)^2+(\sigma_0 - \sigma_1)^2}</span> is the same between the two Gaussians. Obviously, the two distributions on the left are however further away from each other than the two on the the right. This indicates that the Euclidian distance in the parameter space (which is what <em>regular</em> gradients act on) is not a correct measurement of the statistical distance between two distributions (which what we want to minimize between two iterations of PG).</p>
 <p>In statistics, a common measurement of the statistical distance between two distributions <span class="math inline">p</span> and <span class="math inline">q</span> is the <strong>Kullback-Leibler (KL) divergence</strong> <span class="math inline">D_{KL}(p||q)</span>, also called relative entropy or information gain. It is defined as:</p>
 <p><span class="math display">
     D_{KL}(p || q) = \mathbb{E}_{x \sim p} [\log \frac{p(x)}{q(x)}]  = \int p(x) \, \log \frac{p(x)}{q(x)} \, dx
@@ -453,14 +486,14 @@ Figure&nbsp;14.1: Euclidian distances in the parameter space do not represent we
 <div id="fig-riemannian" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-riemannian-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/riemannian.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Figure&nbsp;14.2: Naive illustration of the Riemannian metric. The Euclidian distance between p(x; \theta) and p(x; \theta + \Delta \theta) depends on the Euclidian distance between \theta and \theta + \Delta\theta, i.e.&nbsp;\Delta \theta. Riemannian metrics follow the geometry of the manifold to compute that distance, depending on its curvature. This figure is only for illustration: Riemannian metrics are purely local, \Delta \theta should be much smaller."><img src="img/riemannian.png" class="img-fluid figure-img" style="width:50.0%"></a>
+<a href="img/riemannian.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Figure&nbsp;15.2: Naive illustration of the Riemannian metric. The Euclidian distance between p(x; \theta) and p(x; \theta + \Delta \theta) depends on the Euclidian distance between \theta and \theta + \Delta\theta, i.e.&nbsp;\Delta \theta. Riemannian metrics follow the geometry of the manifold to compute that distance, depending on its curvature. This figure is only for illustration: Riemannian metrics are purely local, \Delta \theta should be much smaller."><img src="img/riemannian.png" class="img-fluid figure-img" style="width:50.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-riemannian-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;14.2: Naive illustration of the Riemannian metric. The Euclidian distance between <span class="math inline">p(x; \theta)</span> and <span class="math inline">p(x; \theta + \Delta \theta)</span> depends on the Euclidian distance between <span class="math inline">\theta</span> and <span class="math inline">\theta + \Delta\theta</span>, i.e.&nbsp;<span class="math inline">\Delta \theta</span>. Riemannian metrics follow the geometry of the manifold to compute that distance, depending on its curvature. This figure is only for illustration: Riemannian metrics are purely local, <span class="math inline">\Delta \theta</span> should be much smaller.
+Figure&nbsp;15.2: Naive illustration of the Riemannian metric. The Euclidian distance between <span class="math inline">p(x; \theta)</span> and <span class="math inline">p(x; \theta + \Delta \theta)</span> depends on the Euclidian distance between <span class="math inline">\theta</span> and <span class="math inline">\theta + \Delta\theta</span>, i.e.&nbsp;<span class="math inline">\Delta \theta</span>. Riemannian metrics follow the geometry of the manifold to compute that distance, depending on its curvature. This figure is only for illustration: Riemannian metrics are purely local, <span class="math inline">\Delta \theta</span> should be much smaller.
 </figcaption>
 </figure>
 </div>
-<p>Let’s consider a parameterized distribution <span class="math inline">p(x; \theta)</span> and its new value <span class="math inline">p(x; \theta + \Delta \theta)</span> after applying a small parameter change <span class="math inline">\Delta \theta</span>. As depicted on <a href="#fig-riemannian" class="quarto-xref">Figure&nbsp;<span>14.2</span></a>, the Euclidian metric in the parameter space (<span class="math inline">||\theta + \Delta \theta - \theta||^2</span>) does not take the structure of the statistical manifold into account. We need to define a <strong>Riemannian metric</strong> which accounts locally for the curvature of the manifold between <span class="math inline">\theta</span> and <span class="math inline">\theta + \Delta \theta</span>. The Riemannian distance is defined by the dot product:</p>
+<p>Let’s consider a parameterized distribution <span class="math inline">p(x; \theta)</span> and its new value <span class="math inline">p(x; \theta + \Delta \theta)</span> after applying a small parameter change <span class="math inline">\Delta \theta</span>. As depicted on <a href="#fig-riemannian" class="quarto-xref">Figure&nbsp;<span>15.2</span></a>, the Euclidian metric in the parameter space (<span class="math inline">||\theta + \Delta \theta - \theta||^2</span>) does not take the structure of the statistical manifold into account. We need to define a <strong>Riemannian metric</strong> which accounts locally for the curvature of the manifold between <span class="math inline">\theta</span> and <span class="math inline">\theta + \Delta \theta</span>. The Riemannian distance is defined by the dot product:</p>
 <p><span class="math display">
     ||\Delta \theta||^2 = &lt; \Delta \theta , F(\theta) \, \Delta \theta &gt;
 </span></p>
@@ -490,7 +523,16 @@ Figure&nbsp;14.2: Naive illustration of the Riemannian metric. The Euclidian dis
 <p>When the manifold is not curved (<span class="math inline">F(\theta)</span> is the identity matrix), natural gradient descent is the regular gradient descent.</p>
 <p>But what is the advantage of natural gradients? The problem with regular gradient descent is that it relies on a fixed learning rate. In regions where the loss function is flat (a plateau), the gradient will be almost zero, leading to very slow improvements. Because the natural gradient depends on the inverse of the curvature (Fisher), the magnitude of the gradient will be higher in flat regions, leading to bigger steps, and smaller in very steep regions (around minima). Natural GD therefore converges faster and better than regular GD.</p>
 <p>Natural gradient descent is a generic optimization method, it can for example be used to train more efficiently deep networks in supervised learning. Its main drawback is the necessity to inverse the Fisher information matrix, whose size depends on the number of free parameters (if you have N weights in the NN, you need to inverse a NxN matrix). Several approximations allows to remediate to this problem, for example Conjugate Gradients or Kronecker-Factored Approximate Curvature (K-FAC).</p>
-<p><strong>Additional resources</strong> to understand natural gradients:</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Additional resources
+</div>
+</div>
+<div class="callout-body-container callout-body">
 <ul>
 <li><a href="http://andymiller.github.io/2016/10/02/natural_gradient_bbvi.html" class="uri">http://andymiller.github.io/2016/10/02/natural_gradient_bbvi.html</a></li>
 <li><a href="https://hips.seas.harvard.edu/blog/2013/01/25/the-natural-gradient/" class="uri">https://hips.seas.harvard.edu/blog/2013/01/25/the-natural-gradient/</a></li>
@@ -502,6 +544,8 @@ Figure&nbsp;14.2: Naive illustration of the Riemannian metric. The Euclidian dis
 <li>Conjugate gradients: <a href="https://www.cs.cmu.edu/~quake-papers/painless-conjugate-gradient.pdf" class="uri">https://www.cs.cmu.edu/~quake-papers/painless-conjugate-gradient.pdf</a></li>
 </ul>
 <p><strong>Note:</strong> Natural gradients can also be used to train DQN architectures, resulting in more efficient and stable learning behaviors <span class="citation" data-cites="Knight2018">(<a href="references.html#ref-Knight2018" role="doc-biblioref">Knight and Lerner, 2018</a>)</span>.</p>
+</div>
+</div>
 </section>
 <section id="natural-policy-gradient-and-natural-actor-critic-nac" class="level2">
 <h2 class="anchored" data-anchor-id="natural-policy-gradient-and-natural-actor-critic-nac">Natural policy gradient and Natural Actor Critic (NAC)</h2>
@@ -999,7 +1043,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     </div>
   </div>
 </footer>
-<script>var lightboxQuarto = GLightbox({"selector":".lightbox","openEffect":"zoom","loop":false,"closeEffect":"zoom","descPosition":"bottom"});
+<script>var lightboxQuarto = GLightbox({"loop":false,"openEffect":"zoom","descPosition":"bottom","selector":".lightbox","closeEffect":"zoom"});
 (function() {
   let previousOnload = window.onload;
   window.onload = () => {

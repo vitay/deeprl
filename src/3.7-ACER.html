@@ -60,9 +60,6 @@ div.csl-indent {
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
-<script src="../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
-<link href="../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
-<link href="../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -148,7 +145,7 @@ window.Quarto = {
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
         <a class="flex-grow-1 no-decor" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-          <h1 class="quarto-secondary-nav-title"><span class="chapter-title">Actor-Critic with Experience Replay (ACER)</span></h1>
+          <h1 class="quarto-secondary-nav-title"><span id="sec-acer" class="quarto-section-identifier"><span class="chapter-title">Actor-Critic with Experience Replay (ACER)</span></span></h1>
         </a>     
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
         <i class="bi bi-search"></i>
@@ -189,7 +186,7 @@ window.Quarto = {
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
- <span class="menu-text"><strong>Basic RL</strong></span></a>
+ <span class="menu-text"><strong>Tabular RL</strong></span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -251,6 +248,11 @@ window.Quarto = {
   <a href="../src/2.5-DistributedLearning.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Distributed learning</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/2.6-Misc.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Misc.</span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -305,7 +307,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/3.9-OtherPolicyGradient.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Miscellaneous model-free algorithms</span></a>
+  <a href="../src/3.9-Misc.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Misc.</span></a>
   </div>
 </li>
       </ul>
@@ -326,12 +328,27 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/4.2-WorldModels.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">World models</span></a>
+  <a href="../src/4.2-MBMF.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Model-based-augmented model-free RL (Dyna-Q, I2A)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/4.3-AlphaGo.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">AlphaGo</span></a>
+  <a href="../src/4.3-Planning.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Planning (MPC, TDM)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/4.4-WorldModels.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">World models, Dreamer</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/4.5-AlphaGo.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">AlphaGo</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/4.6-Misc.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Misc.</span></a>
   </div>
 </li>
       </ul>
@@ -347,7 +364,7 @@ window.Quarto = {
       <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/5.1-Hierarchical.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Hierarchical Reinforcement Learning</span></a>
+  <a href="../src/5.1-Intrinsic.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Intrinsic motivation</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -363,6 +380,11 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../src/5.4-Meta.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Meta learning</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/5.5-Hierarchical.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Hierarchical Reinforcement Learning</span></a>
   </div>
 </li>
       </ul>
@@ -394,7 +416,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title d-none d-lg-block"><span class="chapter-title">Actor-Critic with Experience Replay (ACER)</span></h1>
+<h1 class="title d-none d-lg-block"><span id="sec-acer" class="quarto-section-identifier"><span class="chapter-title">Actor-Critic with Experience Replay (ACER)</span></span></h1>
 </div>
 
 
@@ -413,7 +435,16 @@ window.Quarto = {
 
 <p>The natural gradient methods presented previously (TRPO, PPO) are stochastic actor-critic methods, therefore strictly on-policy. Off-policy methods such as DQN or DDPG allow to reuse past transitions through the usage of an <strong>experience replay memory</strong>, potentially reducing the sample complexity at the cost of a higher variance and worse stability. <span class="citation" data-cites="Wang2017">Wang et al. (<a href="references.html#ref-Wang2017" role="doc-biblioref">2017</a>)</span> proposed an off-policy actor-critic architecture using variance reduction techniques, the off-policy Retrace algorithm <span class="citation" data-cites="Munos2016">(<a href="references.html#ref-Munos2016" role="doc-biblioref">Munos et al., 2016</a>)</span>, parallel training of multiple actor-learners <span class="citation" data-cites="Mnih2016">(<a href="references.html#ref-Mnih2016" role="doc-biblioref">Mnih et al., 2016</a>)</span>, truncated importance sampling with bias correction, stochastic duelling network architectures <span class="citation" data-cites="Wang2016">(<a href="references.html#ref-Wang2016" role="doc-biblioref">Wang et al., 2016</a>)</span>, and efficient trust region policy optimization. It can be seen as the off-policy counterpart to A3C.</p>
 <p>The first aspect of ACER is that it interleaves on-policy learning with off-policy: the agent samples a trajectory <span class="math inline">\tau</span>, learns from it on-policy, stores it in the replay buffer, samples <span class="math inline">n</span> trajectories from the replay buffer and learns off-policy from each of them:</p>
-<hr>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+ACER algorithm
+</div>
+</div>
+<div class="callout-body-container callout-body">
 <ul>
 <li><p>Sample a trajectory <span class="math inline">\tau</span> using the current policy.</p></li>
 <li><p>Apply ACER on-policy on <span class="math inline">\tau</span>.</p></li>
@@ -424,8 +455,9 @@ window.Quarto = {
 <li>Apply ACER off-policy on <span class="math inline">\tau_k</span>.</li>
 </ul></li>
 </ul>
-<hr>
-<p>Mixing on-policy learning with off-policy is quite similar to the Self-Imitation Learning approach of <span class="citation" data-cites="Oh2018">(<a href="references.html#ref-Oh2018" role="doc-biblioref">Oh et al., 2018</a>)</span>.</p>
+</div>
+</div>
+<p>Mixing on-policy learning with off-policy is quite similar to the Self-Imitation Learning approach of <span class="citation" data-cites="Oh2018">(<a href="references.html#ref-Oh2018" role="doc-biblioref">Oh et al., 2018</a>)</span> (see Section <a href="3.3-ImportanceSampling.html#sec-SIL" class="quarto-xref"><span>Self-Imitation Learning (SIL)</span></a>).</p>
 <section id="retrace-evaluation" class="level3">
 <h3 class="anchored" data-anchor-id="retrace-evaluation">Retrace evaluation</h3>
 <p>ACER comes in two flavors: one for discrete action spaces, one for continuous spaces. The discrete version is simpler, so let’s focus on this one. As any policy-gradient method, ACER tries to estimate the policy gradient for each transition of a trajectory, but using importance sampling <span class="citation" data-cites="Degris2012">(<a href="references.html#ref-Degris2012" role="doc-biblioref">Degris et al., 2012</a>)</span>:</p>
@@ -466,19 +498,18 @@ window.Quarto = {
 <li><p>The <strong>actor</strong> <span class="math inline">\pi_\theta</span> takes a state <span class="math inline">s</span> as input and outputs a vector of probabilities <span class="math inline">\pi_\theta</span> for each available action.</p></li>
 <li><p>The <strong>critic</strong> <span class="math inline">Q_\varphi</span> takes a state <span class="math inline">s</span> as input and outputs a vector of Q-values.</p></li>
 </ul>
-<p>This is different from the architecture of A3C, where the critic “only” had to output the value of a state <span class="math inline">V_\varphi(s)</span>: it is now a vector of Q-values. Note that the actor and the critic can share most of their parameters: the network only needs to output two different vectors <span class="math inline">\pi_\theta(s)</span> and <span class="math inline">Q_\varphi(s)</span> for each input state <span class="math inline">s</span> (<a href="#fig-acer" class="quarto-xref">Figure&nbsp;<span>16.1</span></a>). This makes a “two heads” NN, similar to the <strong>duelling architecture</strong> of <span class="citation" data-cites="Wang2016">(<a href="references.html#ref-Wang2016" role="doc-biblioref">Wang et al., 2016</a>)</span>.</p>
-<div id="fig-acer" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-acer-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/acer.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;16.1: Architecture of the ACER actor-critic."><img src="img/acer.png" class="img-fluid figure-img" style="width:90.0%"></a>
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-acer-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;16.1: Architecture of the ACER actor-critic.
-</figcaption>
-</figure>
-</div>
+<p>This is different from the architecture of A3C, where the critic “only” had to output the value of a state <span class="math inline">V_\varphi(s)</span>: it is now a vector of Q-values. Note that the actor and the critic can share most of their parameters: the network only needs to output two different vectors <span class="math inline">\pi_\theta(s)</span> and <span class="math inline">Q_\varphi(s)</span> for each input state <span class="math inline">s</span>. This makes a “two heads” NN, similar to the <strong>duelling architecture</strong> of <span class="citation" data-cites="Wang2016">(<a href="references.html#ref-Wang2016" role="doc-biblioref">Wang et al., 2016</a>)</span>.</p>
 <p>The target Q-value <span class="math inline">Q^\text{ret}(s, a)</span> can be found recursively by iterating backwards over the episode:</p>
-<hr>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Retrace evaluation
+</div>
+</div>
+<div class="callout-body-container callout-body">
 <ul>
 <li><p>Initialize <span class="math inline">Q^\text{ret}(s_T, a_T)</span>, <span class="math inline">Q_\varphi(s_T, a_T)</span> and <span class="math inline">V(s_T)</span> to 0, as the terminal state has no value.</p></li>
 <li><p>for <span class="math inline">t \in [T-1, \ldots, 0]</span>:</p>
@@ -501,7 +532,8 @@ Figure&nbsp;16.1: Architecture of the ACER actor-critic.
       V(s_t) = \sum_a \pi_\theta(s_t) \, Q_\varphi(s_t, a)
   </span></p></li>
 </ul>
-<hr>
+</div>
+</div>
 <p>As the target value <span class="math inline">Q^\text{ret}(s, a)</span> use multiple “real” rewards <span class="math inline">r_{t+1}</span>, it is actually less biased than the critic <span class="math inline">Q_\varphi(s, a)</span>. It is then better to use it to update the actor:</p>
 <p><span class="math display">
     \nabla_\theta J(\theta)  = \mathbb{E}_{s_t, a_t \sim \rho_b} [\frac{\pi_\theta(s_t, a_t)}{b(s_t, a_t)} \, Q^\text{ret}(s_t, a_t) \, \nabla_\theta \log \pi_\theta(s_t, a_t)]
@@ -570,7 +602,11 @@ Figure&nbsp;16.1: Architecture of the ACER actor-critic.
 <p><span class="math display">
     \nabla_\theta J(\theta) = \mathbb{E}_{s_t, a_t \sim \rho_b} [ z^* \, \nabla_\theta \Phi_\theta(s_t) ]
 </span></p>
-<p>As noted in the paper: <em>“The trust region step is carried out in the space of the statistics of the distribution <span class="math inline">f</span> , and not in the space of the policy parameters. This is done deliberately so as to avoid an additional back-propagation step through the policy network”</em>. We indeed need only one network update per transition. If the KL divergence was computed with respect to <span class="math inline">\pi_\theta</span> directly, one would need to apply backpropagation on the target network too.</p>
+<p>As noted in the paper:</p>
+<blockquote class="blockquote">
+<p>“The trust region step is carried out in the space of the statistics of the distribution <span class="math inline">f</span> , and not in the space of the policy parameters. This is done deliberately so as to avoid an additional back-propagation step through the policy network”.</p>
+</blockquote>
+<p>We indeed need only one network update per transition. If the KL divergence was computed with respect to <span class="math inline">\pi_\theta</span> directly, one would need to apply backpropagation on the target network too.</p>
 <p>The target network <span class="math inline">\theta'</span> is furthermore used as the behavior policy <span class="math inline">b(s, a)</span>. here is also a <strong>target critic network</strong> <span class="math inline">\varphi'</span>, which is primarily used to compute the value of the states <span class="math inline">V_{\varphi'}(s)</span> for variance reduction.</p>
 <p>For a complete description of the algorithm, refer to the paper… To summarize, ACER is an actor-critic architecture using Retrace estimated values, importance weight truncation with bias correction and efficient TRPO. Its variant for continuous action spaces furthermore uses a <strong>Stochastic Dueling Network</strong> (SDN) in order estimate both <span class="math inline">Q_\varphi(s, a)</span> and <span class="math inline">V_\varphi(s)</span>. It is straightforward in the discrete case (multiply the policy with the Q-values and take the average) but hard in the continuous case.</p>
 <p>ACER improved the performance and/or the sample efficiency of the state-of-the-art (A3C, DDPG, etc) on a variety of tasks (Atari, Mujoco). Apart from truncation with bias correction, all aspects of the algorithm are essential to obtain this improvement, as shown by ablation studies.</p>
@@ -1045,38 +1081,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     </div>
   </div>
 </footer>
-<script>var lightboxQuarto = GLightbox({"openEffect":"zoom","selector":".lightbox","closeEffect":"zoom","descPosition":"bottom","loop":false});
-(function() {
-  let previousOnload = window.onload;
-  window.onload = () => {
-    if (previousOnload) {
-      previousOnload();
-    }
-    lightboxQuarto.on('slide_before_load', (data) => {
-      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
-      const href = trigger.getAttribute('href');
-      if (href !== null) {
-        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
-        if (imgEl !== null) {
-          const srcAttr = imgEl.getAttribute("src");
-          if (srcAttr && srcAttr.startsWith("data:")) {
-            slideConfig.href = srcAttr;
-          }
-        }
-      } 
-    });
-  
-    lightboxQuarto.on('slide_after_load', (data) => {
-      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
-      if (window.Quarto?.typesetMath) {
-        window.Quarto.typesetMath(slideNode);
-      }
-    });
-  
-  };
-  
-})();
-          </script>
 
 
 

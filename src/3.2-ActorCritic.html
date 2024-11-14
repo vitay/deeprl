@@ -189,7 +189,7 @@ window.Quarto = {
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
- <span class="menu-text"><strong>Basic RL</strong></span></a>
+ <span class="menu-text"><strong>Tabular RL</strong></span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -251,6 +251,11 @@ window.Quarto = {
   <a href="../src/2.5-DistributedLearning.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Distributed learning</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/2.6-Misc.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Misc.</span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -305,7 +310,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/3.9-OtherPolicyGradient.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Miscellaneous model-free algorithms</span></a>
+  <a href="../src/3.9-Misc.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Misc.</span></a>
   </div>
 </li>
       </ul>
@@ -326,12 +331,27 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/4.2-WorldModels.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">World models</span></a>
+  <a href="../src/4.2-MBMF.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Model-based-augmented model-free RL (Dyna-Q, I2A)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/4.3-AlphaGo.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">AlphaGo</span></a>
+  <a href="../src/4.3-Planning.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Planning (MPC, TDM)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/4.4-WorldModels.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">World models, Dreamer</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/4.5-AlphaGo.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">AlphaGo</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/4.6-Misc.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Misc.</span></a>
   </div>
 </li>
       </ul>
@@ -347,7 +367,7 @@ window.Quarto = {
       <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/5.1-Hierarchical.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Hierarchical Reinforcement Learning</span></a>
+  <a href="../src/5.1-Intrinsic.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Intrinsic motivation</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -363,6 +383,11 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../src/5.4-Meta.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Meta learning</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/5.5-Hierarchical.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Hierarchical Reinforcement Learning</span></a>
   </div>
 </li>
       </ul>
@@ -383,12 +408,14 @@ window.Quarto = {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#actor-critic-algorithms" id="toc-actor-critic-algorithms" class="nav-link active" data-scroll-target="#actor-critic-algorithms">Actor-critic algorithms</a>
-  <ul class="collapse">
+  <li><a href="#actor-critic-algorithms" id="toc-actor-critic-algorithms" class="nav-link active" data-scroll-target="#actor-critic-algorithms">Actor-critic algorithms</a></li>
   <li><a href="#advantage-actor-critic-a2c" id="toc-advantage-actor-critic-a2c" class="nav-link" data-scroll-target="#advantage-actor-critic-a2c">Advantage Actor-Critic (A2C)</a></li>
-  <li><a href="#asynchronous-advantage-actor-critic-a3c" id="toc-asynchronous-advantage-actor-critic-a3c" class="nav-link" data-scroll-target="#asynchronous-advantage-actor-critic-a3c">Asynchronous Advantage Actor-Critic (A3C)</a></li>
-  <li><a href="#stochastic-actor-critic-for-continuous-action-spaces" id="toc-stochastic-actor-critic-for-continuous-action-spaces" class="nav-link" data-scroll-target="#stochastic-actor-critic-for-continuous-action-spaces">Stochastic actor-critic for continuous action spaces</a></li>
+  <li><a href="#asynchronous-advantage-actor-critic-a3c" id="toc-asynchronous-advantage-actor-critic-a3c" class="nav-link" data-scroll-target="#asynchronous-advantage-actor-critic-a3c">Asynchronous Advantage Actor-Critic (A3C)</a>
+  <ul class="collapse">
+  <li><a href="#entropy-regularization" id="toc-entropy-regularization" class="nav-link" data-scroll-target="#entropy-regularization">Entropy regularization</a></li>
   </ul></li>
+  <li><a href="#actor-critic-neural-architectures" id="toc-actor-critic-neural-architectures" class="nav-link" data-scroll-target="#actor-critic-neural-architectures">Actor-critic neural architectures</a></li>
+  <li><a href="#sec-continuousspaces" id="toc-sec-continuousspaces" class="nav-link" data-scroll-target="#sec-continuousspaces">Continuous action spaces</a></li>
   </ul>
 </nav>
     </div>
@@ -416,36 +443,56 @@ window.Quarto = {
 
 <section id="actor-critic-algorithms" class="level2">
 <h2 class="anchored" data-anchor-id="actor-critic-algorithms">Actor-critic algorithms</h2>
-<p>The <strong>policy gradient theorem</strong> provides an actor-critic architecture able to learn parameterized policies. In comparison to REINFORCE, the policy gradient depends on the Q-values of the actions taken during the trajectory rather than on the obtained returns <span class="math inline">R(\tau)</span>. Quite obviously, it will also suffer from the high variance of the gradient, requiring the use of baselines. In this section, the baseline is state-dependent and chosen equal to the value of the state <span class="math inline">V^\pi(s)</span>, so the factor multiplying the log-likelihood of the policy is:</p>
+<p>The policy gradient theorem provides an actor-critic arhictecture that allow to estimate the PG from single transitions:</p>
 <p><span class="math display">
-    A^{\pi}(s, a) = Q^{\pi}(s, a) - V^\pi(s)
+    \nabla_\theta J(\theta) =  \mathbb{E}_{s \sim \rho_\theta, a \sim \pi_\theta}[\nabla_\theta \log \pi_\theta(s, a) \, Q_\varphi(s, a))]
 </span></p>
-<p>which is the <strong>advantage</strong> of the action <span class="math inline">a</span> in <span class="math inline">s</span>, as already seen in <em>duelling networks</em>.</p>
-<p>Now the problem is that the critic would have to approximate two functions: <span class="math inline">Q^{\pi}(s, a)</span> and <span class="math inline">V^{\pi}(s)</span>. <strong>Advantage actor-critic</strong> methods approximate the advantage of an action:</p>
+<div id="fig-actorcriticpolicy" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-actorcriticpolicy-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="img/policygradient.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;1: Architecture of the policy gradient (PG) method."><img src="img/policygradient.png" class="img-fluid figure-img" style="width:80.0%"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-actorcriticpolicy-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Architecture of the policy gradient (PG) method.
+</figcaption>
+</figure>
+</div>
+<p>The critic can be trained with any advantage estimator, including Q-learning. It is common to use the DQN loss (or any variant of it: double DQN, n-step, etc) for the critic.</p>
 <p><span class="math display">
-    \nabla_\theta J(\theta) =  \mathbb{E}_{s \sim \rho^\pi, a \sim \pi_\theta}[\nabla_\theta \log \pi_\theta(s, a) \, A_\varphi(s, a)]
+\mathcal{L}(\varphi) =  \mathbb{E}_{s_t \sim \rho_\theta, a_t \sim \pi_\theta} [(r(s, a, s') + \gamma \, Q_{\varphi'}(s', \text{argmax}_{a'} Q_\varphi (s', a')) - Q_\varphi (s, a) )^2]
 </span></p>
-<p><span class="math inline">A_\varphi(s, a)</span> is called the <strong>advantage estimate</strong> and should be equal to the real advantage <em>in expectation</em>.</p>
-<p>Different methods could be used to compute the advantage estimate:</p>
+<p>Most policy-gradient algorithms in this section are actor-critic architectures. The different versions of the policy gradient take the form:</p>
+<p><span class="math display">
+    \nabla_\theta J(\theta) =  \mathbb{E}_{s_t \sim \rho^\pi, a_t \sim \pi_\theta}[\nabla_\theta \log \pi_\theta (s_t, a_t) \, \psi_t ]
+</span></p>
+<p>where:</p>
 <ul>
-<li><p><span class="math inline">A_\varphi(s, a) =  R(s, a) - V_\varphi(s)</span> is the <strong>MC advantage estimate</strong>, the Q-value of the action being replaced by the actual return.</p></li>
-<li><p><span class="math inline">A_\varphi(s, a) =   r(s, a, s') + \gamma \, V_\varphi(s') - V_\varphi(s)</span> is the <strong>TD advantage estimate</strong> or TD error.</p></li>
-<li><p><span class="math inline">A_\varphi(s, a) =   \sum_{k=0}^{n-1} \gamma^{k} \, r_{t+k+1} + \gamma^n \, V_\varphi(s_{t+n+1}) - V_\varphi(s_t)</span> is the <strong>n-step advantage estimate</strong>.</p></li>
+<li><p><span class="math inline">\psi_t = R_t</span> is the <strong>REINFORCE</strong> algorithm (MC sampling).</p></li>
+<li><p><span class="math inline">\psi_t = R_t - b</span> is the <strong>REINFORCE with baseline</strong> algorithm.</p></li>
+<li><p><span class="math inline">\psi_t = Q^\pi(s_t, a_t)</span> is the <strong>policy gradient theorem</strong>.</p></li>
+<li><p><span class="math inline">\psi_t = A^\pi(s_t, a_t)</span> is the <strong>advantage actor-critic</strong>.</p></li>
+<li><p><span class="math inline">\psi_t = r_{t+1} + \gamma \, V^\pi(s_{t+1}) - V^\pi(s_t)</span> is the <strong>TD actor-critic</strong>.</p></li>
+<li><p><span class="math inline">\psi_t = \sum_{k=0}^{n-1} \gamma^{k} \, r_{t+k+1} + \gamma^n \, V^\pi(s_{t+n+1}) - V^\pi(s_t)</span> is the <strong>n-step advanatge actor-critic</strong> (A2C).</p></li>
 </ul>
-<p>The most popular approach is the n-step advantage, which is at the core of the methods A2C and A3C, and can be understood as a trade-off between MC and TD. MC and TD advantages could be used as well, but come with the respective disadvantages of MC (need for finite episodes, slow updates) and TD (unstable). Generalized Advantage Estimation (, section <a href="1.5-TD.html#sec-GAE" class="quarto-xref"><span>Generalized Advantage Estimation (GAE)</span></a>) takes another interesting approach to estimate the advantage.</p>
+<p>Generally speaking:</p>
+<ul>
+<li>the more <span class="math inline">\psi_t</span> relies on <strong>real rewards</strong> (e.g.&nbsp;<span class="math inline">R_t</span>), the more the gradient will be correct on average (<strong>small bias</strong>), but the more it will vary (<strong>high variance</strong>). This increases the sample complexity: we need to average more samples to correctly estimate the gradient.</li>
+<li>the more <span class="math inline">\psi_t</span> relies on <strong>estimations</strong> (e.g.&nbsp;the TD error), the more stable the gradient (<strong>small variance</strong>), but the more incorrect it is (<strong>high bias</strong>). This can lead to suboptimal policies, i.e.&nbsp;local optima of the objective function.</li>
+</ul>
+<p>This is the classical bias/variance trade-off in machine learning. n-step advantages are an attempt to mitigate between these extrema. <span class="citation" data-cites="Schulman2015a">Schulman et al. (<a href="references.html#ref-Schulman2015a" role="doc-biblioref">2015</a>)</span> proposed the <strong>Generalized Advantage Estimate</strong> (GAE, see Section <a href="1.5-TD.html#sec-GAE" class="quarto-xref"><span>Generalized Advantage Estimation (GAE)</span></a>) to further control the bias/variance trade-off.</p>
 <p><em>Note:</em> A2C is actually derived from the A3C algorithm presented later, but it is simpler to explain it first. See <a href="https://openai.com/index/openai-baselines-acktr-a2c/" class="uri">https://openai.com/index/openai-baselines-acktr-a2c/</a> for an explanation of the reasons. A good explanation of A2C and A3C with Python code is available at <a href="https://cgnicholls.github.io/reinforcement-learning/2017/03/27/a3c.html" class="uri">https://cgnicholls.github.io/reinforcement-learning/2017/03/27/a3c.html</a>.</p>
-<section id="advantage-actor-critic-a2c" class="level3">
-<h3 class="anchored" data-anchor-id="advantage-actor-critic-a2c">Advantage Actor-Critic (A2C)</h3>
+</section>
+<section id="advantage-actor-critic-a2c" class="level2">
+<h2 class="anchored" data-anchor-id="advantage-actor-critic-a2c">Advantage Actor-Critic (A2C)</h2>
 <p>The first aspect of A2C is that it relies on n-step updating, which is a trade-off between MC and TD:</p>
 <ul>
 <li>MC waits until the end of an episode to update the value of an action using the reward to-go (sum of obtained rewards) <span class="math inline">R(s, a)</span>.</li>
 <li>TD updates immediately the action using the immediate reward <span class="math inline">r(s, a, s')</span> and approximates the rest with the value of the next state <span class="math inline">V^\pi(s)</span>.</li>
 <li>n-step uses the <span class="math inline">n</span> next immediate rewards and approximates the rest with the value of the state visited <span class="math inline">n</span> steps later.</li>
 </ul>
-<p><span id="eq-a2c"><span class="math display">
+<p><span class="math display">
     \nabla_\theta J(\theta) =  \mathbb{E}_{s_t \sim \rho^\pi, a_t \sim \pi_\theta}[\nabla_\theta \log \pi_\theta(s_t, a_t) \, ( \sum_{k=0}^{n-1} \gamma^{k} \, r_{t+k+1} + \gamma^n \, V_\varphi(s_{t+n+1}) - V_\varphi(s_t))]
-\tag{1}</span></span></p>
-<p>TD can be therefore be seen as a 1-step algorithm. For sparse rewards (mostly zero, +1 or -1 at the end of a game for example), this allows to update the <span class="math inline">n</span> last actions which lead to a win/loss, instead of only the last one in TD, speeding up learning. However, there is no need for finite episodes as in MC. In other words, n-step estimation ensures a trade-off between bias (wrong updates based on estimated values as in TD) and variance (variability of the obtained returns as in MC). An alternative to n-step updating is the use of <em>eligibility traces</em> (see <span class="citation" data-cites="Sutton1998">Sutton and Barto (<a href="references.html#ref-Sutton1998" role="doc-biblioref">1998</a>)</span>).</p>
+</span></p>
 <p>A2C has an actor-critic architecture:</p>
 <ul>
 <li>The actor outputs the policy <span class="math inline">\pi_\theta</span> for a state <span class="math inline">s</span>, i.e.&nbsp;a vector of probabilities for each action.</li>
@@ -454,10 +501,10 @@ window.Quarto = {
 <div id="fig-a3c" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-a3c-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/a2c.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;1: Advantage actor-critic architecture."><img src="img/a2c.png" class="img-fluid figure-img" style="width:100.0%"></a>
+<a href="img/a2c.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Figure&nbsp;2: Advantage actor-critic architecture."><img src="img/a2c.png" class="img-fluid figure-img" style="width:100.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-a3c-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;1: Advantage actor-critic architecture.
+Figure&nbsp;2: Advantage actor-critic architecture.
 </figcaption>
 </figure>
 </div>
@@ -470,7 +517,7 @@ Figure&nbsp;1: Advantage actor-critic architecture.
     R_t = \sum_{k=0}^{n-1} \gamma^{k} \, r_{t+k+1} + \gamma^n \, V_\varphi(s_{t+n+1})
 </span></p>
 <ol start="3" type="1">
-<li>Update the actor using <a href="#eq-a2c" class="quarto-xref">Equation&nbsp;<span>1</span></a>.</li>
+<li>Update the actor.</li>
 </ol>
 <p><span class="math display">
     \nabla_\theta J(\theta) =  \sum_t \nabla_\theta \log \pi_\theta(s_t, a_t) \, (R_t - V_\varphi(s_t))
@@ -485,123 +532,184 @@ Figure&nbsp;1: Advantage actor-critic architecture.
 <li>Repeat.</li>
 </ol>
 <p>This is not very different in essence from REINFORCE (sample transitions, compute the return, update the policy), apart from the facts that episodes do not need to be finite and that a critic has to be learned in parallel. A more detailed pseudo-algorithm for a single A2C learner is the following:</p>
-<hr>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+A2C algorithm for a single worker/learner
+</div>
+</div>
+<div class="callout-body-container callout-body">
 <ul>
-<li>Initialize the actor <span class="math inline">\pi_\theta</span> and the critic <span class="math inline">V_\varphi</span> with random weights.</li>
-<li>Observe the initial state <span class="math inline">s_0</span>.</li>
-<li>for <span class="math inline">t \in [0, T_\text{total}]</span>:
+<li><p>Initialize the actor <span class="math inline">\pi_\theta</span> and the critic <span class="math inline">V_\varphi</span> with random weights.</p></li>
+<li><p>Observe the initial state <span class="math inline">s_0</span>.</p></li>
+<li><p><strong>while</strong> not converged:</p>
 <ul>
 <li><p>Initialize empty episode minibatch.</p></li>
 <li><p>for <span class="math inline">k \in [0, n]</span>: # Sample episode</p>
 <ul>
-<li>Select a action <span class="math inline">a_k</span> using the actor <span class="math inline">\pi_\theta</span>.</li>
-<li>Perform the action <span class="math inline">a_k</span> and observe the next state <span class="math inline">s_{k+1}</span> and the reward <span class="math inline">r_{k+1}</span>.</li>
-<li>Store <span class="math inline">(s_k, a_k, r_{k+1})</span> in the episode minibatch.</li>
+<li><p>Select a action <span class="math inline">a_k</span> using the actor <span class="math inline">\pi_\theta</span>.</p></li>
+<li><p>Perform the action <span class="math inline">a_k</span> and observe the next state <span class="math inline">s_{k+1}</span> and the reward <span class="math inline">r_{k+1}</span>.</p></li>
+<li><p>Store <span class="math inline">(s_k, a_k, r_{k+1})</span> in the episode minibatch.</p></li>
 </ul></li>
 <li><p>if <span class="math inline">s_n</span> is not terminal: set <span class="math inline">R = V_\varphi(s_n)</span> with the critic, else <span class="math inline">R=0</span>.</p></li>
 <li><p>Reset gradient <span class="math inline">d\theta</span> and <span class="math inline">d\varphi</span> to 0.</p></li>
 <li><p>for <span class="math inline">k \in [n-1, 0]</span>: # Backwards iteration over the episode</p>
 <ul>
-<li>Update the discounted sum of rewards <span class="math inline">R = r_k + \gamma \, R</span></li>
-<li>Accumulate the policy gradient using the critic: <span class="math display">
-  d\theta \leftarrow d\theta + \nabla_\theta \log \pi_\theta(s_k, a_k) \, (R - V_\varphi(s_k))
-  </span></li>
-<li>Accumulate the critic gradient: <span class="math display">
-  d\varphi \leftarrow d\varphi + \nabla_\varphi (R - V_\varphi(s_k))^2
-  </span></li>
-</ul></li>
-<li><p>Update the actor and the critic with the accumulated gradients using gradient descent or similar: <span class="math display">
-  \theta \leftarrow \theta + \eta \, d\theta \qquad \varphi \leftarrow \varphi + \eta \, d\varphi
+<li><p>Update the discounted sum of rewards <span class="math inline">R = r_k + \gamma \, R</span></p></li>
+<li><p>Accumulate the policy gradient using the critic:</p></li>
+</ul>
+<p><span class="math display">
+      d\theta \leftarrow d\theta + \nabla_\theta \log \pi_\theta(s_k, a_k) \, (R - V_\varphi(s_k))
+  </span></p>
+<ul>
+<li>Accumulate the critic gradient:</li>
+</ul>
+<p><span class="math display">
+      d\varphi \leftarrow d\varphi + \nabla_\varphi (R - V_\varphi(s_k))^2
   </span></p></li>
-</ul></li>
+<li><p>Update the actor and the critic with the accumulated gradients using gradient descent or similar:</p></li>
 </ul>
-<hr>
+<p><span class="math display">
+      \theta \leftarrow \theta + \eta \, d\theta \qquad \varphi \leftarrow \varphi + \eta \, d\varphi
+  </span></p></li>
+</ul>
+</div>
+</div>
 <p>Note that not all states are updated with the same horizon <span class="math inline">n</span>: the last action encountered in the sampled episode will only use the last reward and the value of the final state (TD learning), while the very first action will use the <span class="math inline">n</span> accumulated rewards. In practice it does not really matter, but the choice of the discount rate <span class="math inline">\gamma</span> will have a significant influence on the results.</p>
-<p>As many actor-critic methods, A2C performs online learning: a couple of transitions are explored using the current policy, which is immediately updated. As for value-based networks (e.g.&nbsp;DQN), the underlying NN will be affected by the correlated inputs and outputs: a single batch contains similar states and action (e.g.&nbsp;consecutive frames of a video game). The solution retained in A2C and A3C does not depend on an <em>experience replay memory</em> as DQN, but rather on the use of <strong>multiple parallel actors and learners</strong>.</p>
-<p>The idea is depicted on <a href="#fig-a3carchi" class="quarto-xref">Figure&nbsp;<span>2</span></a> (actually for A3C, but works with A2C). The actor and critic are stored in a global network. Multiple instances of the environment are created in different parallel threads (the <strong>workers</strong> or <strong>actor-learners</strong>). At the beginning of an episode, each worker receives a copy of the actor and critic weights from the global network. Each worker samples an episode (starting from different initial states, so the episodes are uncorrelated), computes the accumulated gradients and sends them back to the global network. The global networks merges the gradients and uses them to update the parameters of the policy and critic networks. The new parameters are send to each worker again, until it converges.</p>
-<hr>
+<p>As many actor-critic methods, A2C performs online learning: a couple of transitions are explored using the current policy, which is immediately updated. As for value-based networks (e.g.&nbsp;DQN), the underlying NN will be affected by the correlated inputs and outputs: a single batch contains similar states and action (e.g.&nbsp;consecutive frames of a video game). The solution retained in A2C and A3C does not depend on an <em>experience replay memory</em> as DQN, but rather on the use of <strong>multiple parallel actors and learners</strong> (see Section <a href="2.5-DistributedLearning.html" class="quarto-xref"><span>Distributed learning</span></a>).</p>
+<p>The idea is depicted on <a href="#fig-a3carchi" class="quarto-xref">Figure&nbsp;<span>3</span></a> (actually for A3C, but works with A2C). The actor and critic are stored in a global network. Multiple instances of the environment are created in different parallel threads (the <strong>workers</strong>). At the beginning of an episode, each worker receives a copy of the actor and critic weights from the global network. Each worker samples an episode (starting from different initial states, so the episodes are uncorrelated), computes the accumulated gradients and sends them back to the global network. The global networks merges the gradients and uses them to update the parameters of the policy and critic networks. The new parameters are send to each worker again, until it converges.</p>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Distributed A2C algorithm
+</div>
+</div>
+<div class="callout-body-container callout-body">
 <ul>
-<li>Initialize the actor <span class="math inline">\pi_\theta</span> and the critic <span class="math inline">V_\varphi</span> in the global network.</li>
-<li>repeat:
+<li><p>Initialize the actor <span class="math inline">\pi_\theta</span> and the critic <span class="math inline">V_\varphi</span> in the global network.</p></li>
+<li><p><strong>while</strong> not converged:</p>
 <ul>
-<li>for each worker <span class="math inline">i</span> in <strong>parallel</strong>:
+<li><p>for each worker <span class="math inline">i</span> in <strong>parallel</strong>:</p>
 <ul>
-<li>Get a copy of the global actor <span class="math inline">\pi_\theta</span> and critic <span class="math inline">V_\varphi</span>.</li>
-<li>Sample an episode of <span class="math inline">n</span> steps.</li>
-<li>Return the accumulated gradients <span class="math inline">d\theta_i</span> and <span class="math inline">d\varphi_i</span>.</li>
+<li><p>Get a copy of the global actor <span class="math inline">\pi_\theta</span> and critic <span class="math inline">V_\varphi</span>.</p></li>
+<li><p>Sample an episode of <span class="math inline">n</span> steps.</p></li>
+<li><p>Return the accumulated gradients <span class="math inline">d\theta_i</span> and <span class="math inline">d\varphi_i</span>.</p></li>
 </ul></li>
-<li>Wait for all workers to terminate.</li>
-<li>Merge all accumulated gradients into <span class="math inline">d\theta</span> and <span class="math inline">d\varphi</span>.</li>
-<li>Update the global actor and critic networks.</li>
+<li><p>Wait for all workers to terminate.</p></li>
+<li><p>Merge all accumulated gradients into <span class="math inline">d\theta</span> and <span class="math inline">d\varphi</span>.</p></li>
+<li><p>Update the global actor and critic networks.</p></li>
 </ul></li>
 </ul>
-<hr>
+</div>
+</div>
 <p>This solves the problem of correlated inputs and outputs, as each worker explores different regions of the environment (one can set different initial states in each worker, vary the exploration rate, etc), so the final batch of transitions used for training the global networks is much less correlated. The only drawback of this approach is that it has to be possible to explore multiple environments in parallel. This is easy to achieve in simulated environments (e.g.&nbsp;video games) but much harder in real-world systems like robots. A brute-force solution for robotics is simply to buy enough robots and let them learn in parallel <span class="citation" data-cites="Gu2017">(<a href="references.html#ref-Gu2017" role="doc-biblioref">Gu et al., 2017</a>)</span>.</p>
 </section>
-<section id="asynchronous-advantage-actor-critic-a3c" class="level3">
-<h3 class="anchored" data-anchor-id="asynchronous-advantage-actor-critic-a3c">Asynchronous Advantage Actor-Critic (A3C)</h3>
+<section id="asynchronous-advantage-actor-critic-a3c" class="level2">
+<h2 class="anchored" data-anchor-id="asynchronous-advantage-actor-critic-a3c">Asynchronous Advantage Actor-Critic (A3C)</h2>
 <div id="fig-a3carchi" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-a3carchi-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/A3C_architecture.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Figure&nbsp;2: Architecture of A3C. A master network interacts asynchronously with several workers, each having a copy of the network and interacting with a separate environment. At the end of an episode, the accumulated gradients are sent back to the master network, and a new value of the parameters is sent to the workers. Source: https://medium.com/emergent-future/simple-reinforcement-learning-with-tensorflow-part-8-asynchronous-actor-critic-agents-a3c-c88f72a5e9f2."><img src="img/A3C_architecture.png" class="img-fluid figure-img" style="width:70.0%"></a>
+<a href="img/a3c-parallel.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Figure&nbsp;3: Distributed architecture of A3C. A global network interacts asynchronously with several workers, each having a copy of the network and interacting with a separate environment. At the end of an episode, the accumulated gradients are sent back to the master network, and a new value of the parameters is sent to the workers."><img src="img/a3c-parallel.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-a3carchi-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;2: Architecture of A3C. A master network interacts asynchronously with several workers, each having a copy of the network and interacting with a separate environment. At the end of an episode, the accumulated gradients are sent back to the master network, and a new value of the parameters is sent to the workers. Source: <a href="https://medium.com/emergent-future/simple-reinforcement-learning-with-tensorflow-part-8-asynchronous-actor-critic-agents-a3c-c88f72a5e9f2" class="uri">https://medium.com/emergent-future/simple-reinforcement-learning-with-tensorflow-part-8-asynchronous-actor-critic-agents-a3c-c88f72a5e9f2</a>.
+Figure&nbsp;3: Distributed architecture of A3C. A global network interacts asynchronously with several workers, each having a copy of the network and interacting with a separate environment. At the end of an episode, the accumulated gradients are sent back to the master network, and a new value of the parameters is sent to the workers.
 </figcaption>
 </figure>
 </div>
 <p>Asynchronous Advantage Actor-Critic <span class="citation" data-cites="Mnih2016">(A3C, <a href="references.html#ref-Mnih2016" role="doc-biblioref">Mnih et al., 2016</a>)</span> extends the approach of A2C by removing the need of synchronization between the workers at the end of each episode before applying the gradients. The rationale behind this is that each worker may need different times to complete its task, so they need to be synchronized. Some workers might then be idle most of the time, what is a waste of resources. Gradient merging and parameter updates are sequential operations, so no significant speedup is to be expected even if one increases the number of workers.</p>
 <p>The solution retained in A3C is to simply skip the synchronization step: each worker reads and writes the network parameters whenever it wants. Without synchronization barriers, there is of course a risk that one worker tries to read the network parameters while another writes them: the obtained parameters would be a mix of two different networks. Surprisingly, it does not matter: if the learning rate is small enough, there is anyway not a big difference between two successive versions of the network parameters. This kind of “dirty” parameter sharing is called <em>HogWild!</em> updating <span class="citation" data-cites="Niu2011">(<a href="references.html#ref-Niu2011" role="doc-biblioref">Niu et al., 2011</a>)</span> and has been proven to work under certain conditions which are met here.</p>
 <p>The resulting A3C pseudocode is summarized here:</p>
-<hr>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Distributed A3C algorithm
+</div>
+</div>
+<div class="callout-body-container callout-body">
 <ul>
 <li><p>Initialize the actor <span class="math inline">\pi_\theta</span> and the critic <span class="math inline">V_\varphi</span> in the global network.</p></li>
 <li><p>for each worker <span class="math inline">i</span> in <strong>parallel</strong>:</p>
 <ul>
-<li>repeat:
+<li><p><strong>repeat</strong>:</p>
 <ul>
-<li>Get a copy of the global actor <span class="math inline">\pi_\theta</span> and critic <span class="math inline">V_\varphi</span>.</li>
-<li>Sample an episode of <span class="math inline">n</span> steps.</li>
-<li>Compute the accumulated gradients <span class="math inline">d\theta_i</span> and <span class="math inline">d\varphi_i</span>.</li>
-<li>Update the global actor and critic networks asynchronously (HogWild!).</li>
+<li><p>Get a copy of the global actor <span class="math inline">\pi_\theta</span> and critic <span class="math inline">V_\varphi</span>.</p></li>
+<li><p>Sample an episode of <span class="math inline">n</span> steps.</p></li>
+<li><p>Compute the accumulated gradients <span class="math inline">d\theta_i</span> and <span class="math inline">d\varphi_i</span>.</p></li>
+<li><p>Update the global actor and critic networks asynchronously (HogWild!).</p></li>
 </ul></li>
 </ul></li>
 </ul>
-<hr>
+</div>
+</div>
 <p>The workers are fully independent: their only communication is through the <strong>asynchronous</strong> updating of the global networks. This can lead to very efficient parallel implementations: in the original A3C paper <span class="citation" data-cites="Mnih2016">(<a href="references.html#ref-Mnih2016" role="doc-biblioref">Mnih et al., 2016</a>)</span>, they solved the same Atari games than DQN using 16 CPU cores instead of a powerful GPU, while achieving a better performance in less training time (1 day instead of 8). The speedup is almost linear: the more workers, the faster the computations, the better the performance (as the policy updates are less correlated).</p>
-<section id="entropy-regularization" class="level4 unnumbered">
-<h4 class="unnumbered anchored" data-anchor-id="entropy-regularization">Entropy regularization</h4>
-<p>An interesting addition in A3C is the way they enforce exploration during learning. In actor-critic methods, exploration classically relies on the fact that the learned policies are stochastic (<strong>on-policy</strong>): <span class="math inline">\pi(s, a)</span> describes the probability of taking the action <span class="math inline">a</span> in the state <span class="math inline">s</span>. In discrete action spaces, the output of the actor is usually a softmax layer, ensuring that all actions get a non-zero probability of being selected during training. In continuous action spaces, the executed action is sampled from the output probability distribution. However, this is often not sufficient and hard to control.</p>
+<section id="entropy-regularization" class="level3">
+<h3 class="anchored" data-anchor-id="entropy-regularization">Entropy regularization</h3>
+<p>An interesting addition in A3C is the way they enforce exploration during learning. In actor-critic methods, exploration classically relies on the fact that the learned policies are stochastic (<strong>on-policy</strong>): <span class="math inline">\pi(s, a)</span> describes the probability of taking the action <span class="math inline">a</span> in the state <span class="math inline">s</span>. In discrete action spaces, the output of the actor can be a softmax layer, ensuring that all actions get a non-zero probability of being selected during training. In continuous action spaces, the executed action is sampled from the output probability distribution. However, this is often not sufficient and hard to control.</p>
 <p>In A3C, the authors added an <strong>entropy regularization</strong> term <span class="citation" data-cites="Williams1991">(<a href="references.html#ref-Williams1991" role="doc-biblioref">Williams and Peng, 1991</a>)</span> to the policy gradient update:</p>
-<p><span id="eq-a3c_entropy"><span class="math display">
+<p><span class="math display">
     \nabla_\theta J(\theta) =  \mathbb{E}_{s_t \sim \rho^\pi, a_t \sim \pi_\theta}[\nabla_\theta \log \pi_\theta(s_t, a_t) \, ( R_t - V_\varphi(s_t)) + \beta \, \nabla_\theta H(\pi_\theta(s_t))]
-\tag{2}</span></span></p>
-<p>For discrete actions, the entropy of the policy for a state <span class="math inline">s_t</span> is simple to compute: <span class="math inline">H(\pi_\theta(s_t)) = - \sum_a \pi_\theta(s_t, a) \, \log \pi_\theta(s_t, a)</span>. For continuous actions, replace the sum with an integral. It measures the “randomness” of the policy: if the policy is fully deterministic (the same action is systematically selected), the entropy is zero as it carries no information. If the policy is completely random, the entropy is maximal. Maximizing the entropy at the same time as the returns improves exploration by forcing the policy to be as non-deterministic as possible.</p>
-<p>The parameter <span class="math inline">\beta</span> controls the level of regularization: we do not want the entropy to dominate either, as a purely random policy does not bring much reward. If <span class="math inline">\beta</span> is chosen too low, the entropy won’t play a significant role in the optimization and we may obtain a suboptimal deterministic policy early during training as there was not enough exploration. If <span class="math inline">\beta</span> is too high, the policy will be random. Entropy regularization adds yet another hyperparameter to the problem, but can be really useful for convergence when adequately chosen.</p>
-</section>
-<section id="comparison-between-a3c-and-dqn" class="level4 unnumbered">
-<h4 class="unnumbered anchored" data-anchor-id="comparison-between-a3c-and-dqn">Comparison between A3C and DQN</h4>
-<ol type="1">
-<li>DQN uses an experience replay memory to solve the correlation of inputs/outputs problem, while A3C uses parallel actor-learners. If multiple copies of the environment are available, A3C should be preferred because the ERM slows down learning (very old transitions are still used for learning) and requires a lot of memory.</li>
-<li>A3C is on-policy: the learned policy must be used to explore the environment. DQN is off-policy: a behavior policy can be used for exploration, allowing to guide externally which regions of the state-action space should be explored. Off-policy are often preferred when expert knowledge is available.</li>
-<li>DQN has to use target networks to fight the non-stationarity of the Q-values. A3C uses state-values and advantages, which are much more stable over time than Q-values, so there is no need for target networks.</li>
-<li>A3C can deal with continuous action spaces easily, as it uses a parameterized policy. DQN has to be strongly modified to deal with this problem.</li>
-<li>Both can deal with POMDP by using LSTMs in the actor network: A3C <span class="citation" data-cites="Mnih2016 Mirowski2016">(<a href="references.html#ref-Mirowski2016" role="doc-biblioref">Mirowski et al., 2016</a>; <a href="references.html#ref-Mnih2016" role="doc-biblioref">Mnih et al., 2016</a>)</span>, DQN <span class="citation" data-cites="Hausknecht2015">(<a href="references.html#ref-Hausknecht2015" role="doc-biblioref">Hausknecht and Stone, 2015</a>)</span>.</li>
-</ol>
+</span></p>
+<p>For discrete actions, the entropy of the policy for a state <span class="math inline">s_t</span> is simple to compute:</p>
+<p><span class="math display">
+    H(\pi_\theta(s_t)) = - \sum_a \pi_\theta(s_t, a) \, \log \pi_\theta(s_t, a)
+</span></p>
+<p>It measures the “randomness” of the policy: if the policy is fully deterministic (the same action is systematically selected), the entropy is zero as it carries no information. If the policy is completely random, the entropy is maximal. Maximizing the entropy at the same time as the returns improves exploration by forcing the policy to be as non-deterministic as possible.</p>
+<p>See Section <a href="3.8-EntropyRL.html" class="quarto-xref"><span>Maximum Entropy RL (SAC)</span></a> for more details on using the entropy for exploration.</p>
 </section>
 </section>
-<section id="stochastic-actor-critic-for-continuous-action-spaces" class="level3">
-<h3 class="anchored" data-anchor-id="stochastic-actor-critic-for-continuous-action-spaces">Stochastic actor-critic for continuous action spaces</h3>
-<p>The actor-critic method presented above use <strong>stochastic policies</strong> <span class="math inline">\pi_\theta(s, a)</span> assigning parameterized probabilities of being selecting to each <span class="math inline">(s, a)</span> pair.</p>
+<section id="actor-critic-neural-architectures" class="level2">
+<h2 class="anchored" data-anchor-id="actor-critic-neural-architectures">Actor-critic neural architectures</h2>
+<p>We have considered that actor-critic architectures consist of two separate neural networks, the actor <span class="math inline">\pi(s, a)</span> and the critic <span class="math inline">Q(s, a)</span> both taking the state <span class="math inline">s</span> (or observation <span class="math inline">o</span>) as an input and outputing one value per action. Each of these networks have their own loss function. They share nothing except the “data”. Is it really the best option?</p>
+<p>When working on images, the first few layers of the CNNs are likely to learn the same visual features (edges, contours). It would be more efficient to <strong>share</strong> some of the extracted features. Actor-critic architectures can share layers between the actor and the critic, sometimes up to the output layer. A compound loss sums the losses for the actor and the critic. Tensorflow/pytorch know which parameters influence which part of the loss.</p>
+<p><span class="math display">
+    \mathcal{L}(\theta) = \mathcal{L}_\text{actor}(\theta) + \mathcal{L}_\text{critic}(\theta)
+</span></p>
+<p>For pixel-based environments (Atari), the networks often share the convolutional layers. For continuous environments (Mujoco), separate networks sometimes work better than two-headed networks.</p>
+<div id="fig-sharedactorcritic" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-sharedactorcritic-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="img/shared_actorcritic.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="Figure&nbsp;4: The actor and the critic can share no/some/most layers, depending on the algorithm and the application."><img src="img/shared_actorcritic.png" class="img-fluid figure-img" style="width:80.0%"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-sharedactorcritic-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4: The actor and the critic can share no/some/most layers, depending on the algorithm and the application.
+</figcaption>
+</figure>
+</div>
+</section>
+<section id="sec-continuousspaces" class="level2">
+<h2 class="anchored" data-anchor-id="sec-continuousspaces">Continuous action spaces</h2>
+<p>The actor-critic methods presented above use <strong>stochastic policies</strong> <span class="math inline">\pi_\theta(s, a)</span> assigning parameterized probabilities of being selecting to each <span class="math inline">(s, a)</span> pair.</p>
 <ul>
-<li><p>When the action space is discrete, the output layer of the actor is simply a <em>softmax</em> layer with as many neurons as possible actions in each state, making sure the probabilities sum to one. It is then straightforward to sample an action from this layer.</p></li>
-<li><p>When the action space is continuous (e.g.&nbsp;the different joints of a robotic arm), one has to make an assumption on the underlying distribution. The actor learns the parameters of the distribution (for example the mean and variance of a Gaussian distribution) and the executed action is simply sampled from the parameterized distribution.</p></li>
+<li><p>When the action space is discrete, the output layer of the actor is simply a <strong>softmax</strong> layer with as many neurons as possible actions in each state, making sure the probabilities sum to one. It is then straightforward to sample an action from this layer.</p></li>
+<li><p>When the action space is continuous, one has to make an assumption on the underlying distribution. The actor learns the parameters of the distribution and the executed action is simply sampled from the parameterized distribution.</p></li>
 </ul>
-<p>The most used distribution is the Gaussian distribution, leading to <strong>Gaussian policies</strong>. In this case, the output of the actor is a mean vector <span class="math inline">\mu_\theta(s)</span> and possibly a variance vector <span class="math inline">\sigma_\theta(s)</span>. The policy is then simply defined as:</p>
+<p>Suppose that we want to control a robotic arm with <span class="math inline">n</span> degrees of freedom. An action <span class="math inline">\mathbf{a}</span> could be a vector of joint displacements:</p>
+<p><span class="math display">\mathbf{a} = \begin{bmatrix} \Delta \theta_1 &amp; \Delta \theta_2 &amp; \ldots \, \Delta \theta_n\end{bmatrix}^T</span></p>
+<p>The output layer of the policy network can very well represent this vector, but how would we implement <strong>exploration</strong>? <span class="math inline">\epsilon</span>-greedy and softmax action selection would not work, as all output neurons are useful.</p>
+<p>The most common solution is to use a stochastic <strong>Gaussian policy</strong>, based on the Gaussian distribution. In this case, the output of the actor is a mean vector <span class="math inline">\mu_\theta(s)</span> and a variance vector <span class="math inline">\sigma_\theta(s)</span>, providing the parameters of the normal distribution. The policy <span class="math inline">\pi_\theta(s, a) = \mathcal{N}(\mu_\theta(s), \sigma^2_\theta(s))</span> is then simply defined as:</p>
 <p><span class="math display">
     \pi_\theta(s, a) = \frac{1}{\sqrt{2\pi\sigma^2_\theta(s)}} \, \exp -\frac{(a - \mu_\theta(s))^2}{2\sigma_\theta(s)^2}
 </span></p>
-<p>In order to use backpropagation on the policy gradient (i.e.&nbsp;getting an analytical form of the score function <span class="math inline">\nabla_\theta \log \pi_\theta (s, a)</span>), one can use the <em>re-parameterization trick</em> <span class="citation" data-cites="Heess2015">(<a href="references.html#ref-Heess2015" role="doc-biblioref">Heess et al., 2015</a>)</span> by rewriting the policy as:</p>
+<div id="fig-gaussianpolicy" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-gaussianpolicy-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="img/reparameterizationtrick.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5" title="Figure&nbsp;5: Reparameterization trick to implement continuous stochastic Gaussian policies."><img src="img/reparameterizationtrick.png" class="img-fluid figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-gaussianpolicy-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5: Reparameterization trick to implement continuous stochastic Gaussian policies.
+</figcaption>
+</figure>
+</div>
+<p>In order to use backpropagation on the policy gradient (i.e.&nbsp;getting an analytical form of the score function <span class="math inline">\nabla_\theta \log \pi_\theta (s, a)</span>), one can use the <strong>reparameterization trick</strong> <span class="citation" data-cites="Heess2015">(<a href="references.html#ref-Heess2015" role="doc-biblioref">Heess et al., 2015</a>)</span> by rewriting the policy as:</p>
 <p><span class="math display">
     a = \mu_\theta(s) + \sigma_\theta(s) \times \xi \qquad \text{where} \qquad \xi \sim \mathcal{N}(0,1)
 </span></p>
@@ -609,7 +717,7 @@ Figure&nbsp;2: Architecture of A3C. A master network interacts asynchronously wi
 <p><span class="math display">
     \nabla_\mu \log \pi_\theta (s, a) = \frac{a - \mu_\theta(s)}{\sigma_\theta(s)^2} \qquad \nabla_\sigma \log \pi_\theta (s, a) = \frac{(a - \mu_\theta(s))^2}{\sigma_\theta(s)^3} - \frac{1}{\sigma_\theta(s)}
 </span></p>
-<p>and use the chain rule to obtain the score function. The <em>reparameterization trick</em> is a cool trick to apply backpropagation on stochastic problems: it is for example used in the variational auto-encoders [VAE; <span class="citation" data-cites="Kingma2013">Kingma and Welling (<a href="references.html#ref-Kingma2013" role="doc-biblioref">2013</a>)</span>].</p>
+<p>and use the chain rule to obtain the score function. The <strong>reparameterization trick</strong> is a cool trick to apply backpropagation on stochastic problems: it is for example used in the variational auto-encoders [VAE; <span class="citation" data-cites="Kingma2013">Kingma and Welling (<a href="references.html#ref-Kingma2013" role="doc-biblioref">2013</a>)</span>].</p>
 <p>Depending on the problem, one could use: 1) a fixed <span class="math inline">\sigma</span> for the whole action space, 2) a fixed <span class="math inline">\sigma</span> per DoF, 3) a learnable <span class="math inline">\sigma</span> per DoF (assuming all action dimensions to be mutually independent) or even 4) a covariance matrix <span class="math inline">\Sigma</span> when the action dimensions are dependent.</p>
 <p>One limitation of Gaussian policies is that their support is infinite: even with a small variance, samples actions can deviate a lot (albeit rarely) from the mean. This is particularly a problem when action must have a limited range: the torque of an effector, the linear or angular speed of a car, etc. Clipping the sampled action to minimal and maximal values introduces a bias which can impair learning. <span class="citation" data-cites="Chou2017">Chou et al. (<a href="references.html#ref-Chou2017" role="doc-biblioref">2017</a>)</span> proposed to use <strong>beta-distributions</strong> instead of Gaussian ones in the actor. Sampled values have a <span class="math inline">[0,1]</span> support, which can rescaled to <span class="math inline">[v_\text{min},v_\text{max}]</span> easily. They show that beta policies have less bias than Gaussian policies in most continuous problems.</p>
 
@@ -621,17 +729,11 @@ Chou, P.-W., Maturana, D., and Scherer, S. (2017). Improving <span>Stochastic Po
 <div id="ref-Gu2017" class="csl-entry" role="listitem">
 Gu, S., Holly, E., Lillicrap, T., and Levine, S. (2017). Deep <span>Reinforcement Learning</span> for <span>Robotic Manipulation</span> with <span>Asynchronous Off-Policy Updates</span>. in <em>Proc. <span>ICRA</span></em> Available at: <a href="http://arxiv.org/abs/1610.00633">http://arxiv.org/abs/1610.00633</a>.
 </div>
-<div id="ref-Hausknecht2015" class="csl-entry" role="listitem">
-Hausknecht, M., and Stone, P. (2015). Deep <span>Recurrent Q-Learning</span> for <span>Partially Observable MDPs</span>. Available at: <a href="http://arxiv.org/abs/1507.06527">http://arxiv.org/abs/1507.06527</a>.
-</div>
 <div id="ref-Heess2015" class="csl-entry" role="listitem">
 Heess, N., Wayne, G., Silver, D., Lillicrap, T., Tassa, Y., and Erez, T. (2015). Learning continuous control policies by stochastic value gradients. <em>Proc. International Conference on Neural Information Processing Systems</em>, 2944–2952. Available at: <a href="http://dl.acm.org/citation.cfm?id=2969569">http://dl.acm.org/citation.cfm?id=2969569</a>.
 </div>
 <div id="ref-Kingma2013" class="csl-entry" role="listitem">
 Kingma, D. P., and Welling, M. (2013). Auto-<span>Encoding Variational Bayes</span>. Available at: <a href="http://arxiv.org/abs/1312.6114">http://arxiv.org/abs/1312.6114</a>.
-</div>
-<div id="ref-Mirowski2016" class="csl-entry" role="listitem">
-Mirowski, P., Pascanu, R., Viola, F., Soyer, H., Ballard, A. J., Banino, A., et al. (2016). Learning to <span>Navigate</span> in <span>Complex Environments</span>. Available at: <a href="http://arxiv.org/abs/1611.03673">http://arxiv.org/abs/1611.03673</a>.
 </div>
 <div id="ref-Mnih2016" class="csl-entry" role="listitem">
 Mnih, V., Badia, A. P., Mirza, M., Graves, A., Lillicrap, T. P., Harley, T., et al. (2016). Asynchronous <span>Methods</span> for <span>Deep Reinforcement Learning</span>. in <em>Proc. <span>ICML</span></em> Available at: <a href="http://arxiv.org/abs/1602.01783">http://arxiv.org/abs/1602.01783</a>.
@@ -639,14 +741,13 @@ Mnih, V., Badia, A. P., Mirza, M., Graves, A., Lillicrap, T. P., Harley, T., et 
 <div id="ref-Niu2011" class="csl-entry" role="listitem">
 Niu, F., Recht, B., Re, C., and Wright, S. J. (2011). <span>HOGWILD</span>!: <span>A Lock-Free Approach</span> to <span>Parallelizing Stochastic Gradient Descent</span>. in <em>Proc. <span>Advances</span> in <span>Neural Information Processing Systems</span></em>, 21–21. Available at: <a href="http://arxiv.org/abs/1106.5730">http://arxiv.org/abs/1106.5730</a>.
 </div>
-<div id="ref-Sutton1998" class="csl-entry" role="listitem">
-Sutton, R. S., and Barto, A. G. (1998). <em>Reinforcement <span>Learning</span>: <span>An</span> introduction</em>. Cambridge, MA: MIT press.
+<div id="ref-Schulman2015a" class="csl-entry" role="listitem">
+Schulman, J., Levine, S., Abbeel, P., Jordan, M., and Moritz, P. (2015). Trust <span>Region Policy Optimization</span>. in <em>Proceedings of the 31 st <span>International Conference</span> on <span>Machine Learning</span></em>, 1889–1897. Available at: <a href="http://proceedings.mlr.press/v37/schulman15.html">http://proceedings.mlr.press/v37/schulman15.html</a>.
 </div>
 <div id="ref-Williams1991" class="csl-entry" role="listitem">
 Williams, R. J., and Peng, J. (1991). Function optimization using connectionist reinforcement learning algorithms. <em>Connection Science</em> 3, 241–268.
 </div>
 </div>
-</section>
 </section>
 
 </main> <!-- /main -->
@@ -1096,7 +1197,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     </div>
   </div>
 </footer>
-<script>var lightboxQuarto = GLightbox({"openEffect":"zoom","closeEffect":"zoom","loop":false,"selector":".lightbox","descPosition":"bottom"});
+<script>var lightboxQuarto = GLightbox({"selector":".lightbox","closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom"});
 (function() {
   let previousOnload = window.onload;
   window.onload = () => {
