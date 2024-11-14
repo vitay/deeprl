@@ -1,0 +1,8 @@
+# Intrinsic motivation
+
+**work in progress**
+
+
+* [@Pathak2017] Curiosity-driven Exploration by Self-supervised Prediction
+* [@Burda2018b] Exploration by Random Network Distillation
+* [@Sekar2020] Planning to Explore via Self-Supervised World Models

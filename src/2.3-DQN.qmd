@@ -24,17 +24,27 @@ We can compute this loss by gathering enough samples $(s, a, r, s')$ (i.e. singl
 ## Naive Q-learning with function approximation
 
 * Initialize value network $Q_{\theta}$ with random weights.
+
 * Initialize empty minibatch $\mathcal{D}$ of maximal size $n$.
+
 * Observe the initial state $s_0$.
+
 * for $t \in [0, T_\text{total}]$:
+
     * Select the action $a_t$ based on the behavior policy derived from $Q_\theta(s_t, a)$ (e.g. softmax).
+
     * Perform the action $a_t$ and observe the next state $s_{t+1}$ and the reward $r_{t+1}$.
+
     * Store $(s_t, a_t, r_{t+1}, s_{t+1})$ in the minibatch.
+
     * When minibatch $\mathcal{D}$ is full:
+
         * Train the value network $Q_{\theta}$ on $\mathcal{D}$ to minimize 
+
         $$
         \mathcal{L}(\theta) = \mathbb{E}_\mathcal{D}[(r(s, a, s') + \gamma \, \text{max}_{a'} Q_\theta(s', a') - Q_\theta(s, a))^2]
         $$
+
         * Empty the minibatch $\mathcal{D}$.
 :::
 
@@ -109,20 +119,35 @@ The resulting algorithm is called **Deep Q-Network (DQN)**. It is summarized by 
 ## DQN algorithm
 
 * Initialize value network $Q_{\theta}$ with random weights.
+
 * Copy $Q_{\theta}$ to create the target network $Q_{\theta'}$.
+
 * Initialize experience replay memory $\mathcal{D}$ of maximal size $N$.
+
 * Observe the initial state $s_0$.
+
 * for $t \in [0, T_\text{total}]$:
+
     * Select the action $a_t$ based on the behavior policy derived from $Q_\theta(s_t, a)$ (e.g. softmax).
+
     * Perform the action $a_t$ and observe the next state $s_{t+1}$ and the reward $r_{t+1}$.
+
     * Store $(s_t, a_t, r_{t+1}, s_{t+1})$ in the experience replay memory.
+
     * Every $T_\text{train}$ steps:
+
         * Sample a minibatch $\mathcal{D}_s$ randomly from $\mathcal{D}$.
+
         * For each transition $(s, a, r, s')$ in the minibatch:
+
             * Predict the Q-value of the greedy action in the next state $\max_{a'} Q_{\theta'}(s', a')$ using the target network.
+
             * Compute the target value $t = r + \gamma \, \max_{a'} Q_{\theta'}(s', a')$.
+
         * Train the value network $Q_{\theta}$ on $\mathcal{D}_s$ to minimize $\mathcal{L}(\theta) = \mathbb{E}_{\mathcal{D}_s}[(t - Q_\theta(s, a))^2]$
+
     * Every $T_\text{target}$ steps:
+
         * Update the target network with the trained value network:  $\theta' \leftarrow \theta$
 
 :::

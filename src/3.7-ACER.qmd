@@ -1,11 +1,12 @@
 
-# Actor-Critic with Experience Replay (ACER)
+# Actor-Critic with Experience Replay (ACER) {#sec-acer}
 
 The natural gradient methods presented previously (TRPO, PPO) are stochastic actor-critic methods, therefore strictly on-policy. Off-policy methods such as DQN or DDPG allow to reuse past transitions through the usage of an **experience replay memory**, potentially reducing the sample complexity at the cost of a higher variance and worse stability. @Wang2017 proposed an off-policy actor-critic architecture using variance reduction techniques, the off-policy Retrace algorithm [@Munos2016], parallel training of multiple actor-learners [@Mnih2016], truncated importance sampling with bias correction, stochastic duelling network architectures [@Wang2016], and efficient trust region policy optimization. It can be seen as the off-policy counterpart to A3C.
 
 The first aspect of ACER is that it interleaves on-policy learning with off-policy: the agent samples a trajectory $\tau$, learns from it on-policy, stores it in the replay buffer, samples $n$ trajectories from the replay buffer and learns off-policy from each of them:
 
----
+:::{.callout-note icon="false"}
+## ACER algorithm
 
 * Sample a trajectory $\tau$ using the current policy.
 
@@ -19,9 +20,9 @@ The first aspect of ACER is that it interleaves on-policy learning with off-poli
 
     * Apply ACER off-policy on $\tau_k$.
 
----
+:::
 
-Mixing on-policy learning with off-policy is quite similar to the Self-Imitation Learning approach of [@Oh2018].
+Mixing on-policy learning with off-policy is quite similar to the Self-Imitation Learning approach of [@Oh2018] (see Section @sec-SIL).
 
 ### Retrace evaluation
 
@@ -80,13 +81,13 @@ The actor-critic architecture needed for ACER is therefore the following:
 
 * The **critic** $Q_\varphi$ takes a state $s$ as input and outputs a vector of Q-values.
 
-This is different from the architecture of A3C, where the critic "only" had to output the value of a state $V_\varphi(s)$: it is now a vector of Q-values. Note that the actor and the critic can share most of their parameters: the network only needs to output two different vectors $\pi_\theta(s)$ and $Q_\varphi(s)$ for each input state $s$ (@fig-acer). This makes a "two heads" NN, similar to the **duelling architecture** of [@Wang2016].
+This is different from the architecture of A3C, where the critic "only" had to output the value of a state $V_\varphi(s)$: it is now a vector of Q-values. Note that the actor and the critic can share most of their parameters: the network only needs to output two different vectors $\pi_\theta(s)$ and $Q_\varphi(s)$ for each input state $s$. This makes a "two heads" NN, similar to the **duelling architecture** of [@Wang2016].
 
-![Architecture of the ACER actor-critic.](img/acer.png){#fig-acer width=90%}
 
 The target Q-value $Q^\text{ret}(s, a)$ can be found recursively by iterating backwards over the episode:
 
----
+:::{.callout-note icon="false"}
+## Retrace evaluation
 
 * Initialize $Q^\text{ret}(s_T, a_T)$, $Q_\varphi(s_T, a_T)$ and $V(s_T)$ to 0, as the terminal state has no value.
 
@@ -110,7 +111,7 @@ The target Q-value $Q^\text{ret}(s, a)$ can be found recursively by iterating ba
         V(s_t) = \sum_a \pi_\theta(s_t) \, Q_\varphi(s_t, a)
     $$
 
----
+:::
 
 As the target value $Q^\text{ret}(s, a)$ use multiple "real" rewards $r_{t+1}$, it is actually less biased than the critic $Q_\varphi(s, a)$. It is then better to use it to update the actor:
 
@@ -210,7 +211,11 @@ $$
     \nabla_\theta J(\theta) = \mathbb{E}_{s_t, a_t \sim \rho_b} [ z^* \, \nabla_\theta \Phi_\theta(s_t) ]
 $$
 
-As noted in the paper: *"The trust region step is carried out in the space of the statistics of the distribution $f$ , and not in the space of the policy parameters. This is done deliberately so as to avoid an additional back-propagation step through the policy network"*. We indeed need only one network update per transition. If the KL divergence was computed with respect to $\pi_\theta$ directly, one would need to apply backpropagation on the target network too.
+As noted in the paper: 
+
+> "The trust region step is carried out in the space of the statistics of the distribution $f$ , and not in the space of the policy parameters. This is done deliberately so as to avoid an additional back-propagation step through the policy network". 
+
+We indeed need only one network update per transition. If the KL divergence was computed with respect to $\pi_\theta$ directly, one would need to apply backpropagation on the target network too.
 
 The target network $\theta'$ is furthermore used as the behavior policy $b(s, a)$. here is also a **target critic network** $\varphi'$, which is primarily used to compute the value of the states $V_{\varphi'}(s)$ for variance reduction.
 

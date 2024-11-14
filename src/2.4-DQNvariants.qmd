@@ -1,7 +1,7 @@
 
 # DQN variants (Rainbow)
 
-## Double DQN
+## Double DQN {#sec-doubleqlearning}
 
 In DQN, the experience replay memory and the target network were decisive in allowing the CNN to learn the tasks through RL. Their drawback is that they drastically slow down learning and increase the sample complexity. Additionally, DQN has stability issues: the same network may not converge the same way in different runs. One first improvement on DQN was proposed by @vanHasselt2015 and called **double DQN**.
 
@@ -24,10 +24,15 @@ This induces only a small modification of the DQN algorithm and significantly im
 ## Double DQN algorithm
 
 * Every $T_\text{train}$ steps:
+
     * Sample a minibatch $\mathcal{D}_s$ randomly from $\mathcal{D}$.
+
     * For each transition $(s, a, r, s')$ in the minibatch:
+
         * Select the greedy action in the next state $a^* = \text{argmax}_{a'} Q_\theta (s', a')$ using the trained network.
+
         * Predict its Q-value $Q_{\theta'}(s', a^*)$ using the target network.
+
         * Compute the target value $y = r + \gamma \, Q_{\theta'}(s', a*)$.
 :::
 

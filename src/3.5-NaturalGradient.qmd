@@ -1,5 +1,7 @@
 # Natural gradients
 
+## Learning stability
+
 The deep networks used as function approximators in the methods presented until now were all optimized (trained) using **stochastic gradient descent** (SGD) or any of its variants (RMSProp, Adam, etc). The basic idea is to change the parameters $\theta$ in the opposite direction of the gradient of the loss function (or the same direction as the policy gradient, in which case it is called gradient ascent), proportionally to a small learning rate $\eta$:
 
 $$
@@ -21,7 +23,11 @@ $$
 
 If the policy $\pi_\theta$ changes a lot between two updates, the estimated Q-value $Q_\varphi(s, a)$ will represent the value of the action for a totally different policy, not the true Q-value $Q^{\pi_\theta}(s, a)$. The estimated policy gradient will then be strongly biased and learning will be suboptimal. In other words, the actor should not change much faster than the critic, and vice versa. A naive solution would be to use a very small learning rate for the actor, but this just slows down learning (adding to the sample complexity) without solving the problem.
 
-To solve the problem, we should actually do the opposite of the steepest descent: *search for the biggest parameter change $\Delta \theta$ inducing the smallest change in the policy, but in the right direction*. If the parameter change is high, the actor will learn a lot internally from each experience. But if the policy change is small between two updates (although the parameters have changed a lot), we might be able to reuse past experiences, as the targets will not be that wrong.
+To solve the problem, we should actually do the opposite of the steepest descent: 
+
+> search for the biggest parameter change $\Delta \theta$ inducing the smallest change in the policy, but in the right direction.
+
+If the parameter change is high, the actor will learn a lot internally from each experience. But if the policy change is small between two updates (although the parameters have changed a lot), we might be able to reuse past experiences, as the targets will not be that wrong.
 
 This is where **natural gradients** come into play, which are originally a statistical method to optimize over spaces of probability distributions, for example for variational inference. The idea to use natural gradients to train neural networks comes from @Amari1998. @Kakade2001 applied natural gradients to policy gradient methods, while @Peters2008 proposed a natural actor-critic algorithm for linear function approximators. The idea was adapted to deep RL by Schulman and colleagues, with Trust Region Policy Optimization [TRPO,@Schulman2015] and Proximal Policy Optimization [PPO,@Schulman2017], the latter having replaced DDPG as the go-to method for continuous RL problems, particularly because of its smaller sample complexity and its robustness to hyperparameters.
 
@@ -100,7 +106,8 @@ But what is the advantage of natural gradients? The problem with regular gradien
 
 Natural gradient descent is a generic optimization method, it can for example be used to train more efficiently deep networks in supervised learning. Its main drawback is the necessity to inverse the Fisher information matrix, whose size depends on the number of free parameters (if you have N weights in the NN, you need to inverse a NxN matrix). Several approximations allows to remediate to this problem, for example Conjugate Gradients or Kronecker-Factored Approximate Curvature (K-FAC).
 
-**Additional resources** to understand natural gradients:
+:::{.callout-tip icon="false}
+## Additional resources
 
 * <http://andymiller.github.io/2016/10/02/natural_gradient_bbvi.html>
 * <https://hips.seas.harvard.edu/blog/2013/01/25/the-natural-gradient/>
@@ -112,6 +119,8 @@ Natural gradient descent is a generic optimization method, it can for example be
 * Conjugate gradients: <https://www.cs.cmu.edu/~quake-papers/painless-conjugate-gradient.pdf>
 
 **Note:** Natural gradients can also be used to train DQN architectures, resulting in more efficient and stable learning behaviors [@Knight2018].
+
+:::
 
 ## Natural policy gradient and Natural Actor Critic (NAC)
 

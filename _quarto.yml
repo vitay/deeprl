@@ -27,7 +27,7 @@ book:
   chapters:
     - index.qmd
     - src/0-Introduction.qmd
-    - part: "**Basic RL**"
+    - part: "**Tabular RL**"
       chapters:
         - src/1.1-Bandits.qmd
         - src/1.2-MDP.qmd
@@ -40,6 +40,7 @@ book:
         - src/2.3-DQN.qmd
         - src/2.4-DQNvariants.qmd
         - src/2.5-DistributedLearning.qmd
+        - src/2.6-Misc.qmd
     - part: "**Policy-gradient methods**"
       chapters:
         - src/3.1-PolicyGradient.qmd
@@ -50,18 +51,22 @@ book:
         - src/3.6-PPO.qmd
         - src/3.7-ACER.qmd
         - src/3.8-EntropyRL.qmd
-        - src/3.9-OtherPolicyGradient.qmd
+        - src/3.9-Misc.qmd
     - part: "**Model-based deep RL**"
       chapters:
         - src/4.1-ModelBased.qmd
-        - src/4.2-WorldModels.qmd
-        - src/4.3-AlphaGo.qmd
+        - src/4.2-MBMF.qmd
+        - src/4.3-Planning.qmd
+        - src/4.4-WorldModels.qmd
+        - src/4.5-AlphaGo.qmd
+        - src/4.6-Misc.qmd
     - part: "**Advanced topics**"
       chapters:
-        - src/5.1-Hierarchical.qmd
+        - src/5.1-Intrinsic.qmd
         - src/5.2-Inverse.qmd
         - src/5.3-OfflineRL.qmd
         - src/5.4-Meta.qmd
+        - src/5.5-Hierarchical.qmd
     - src/references.qmd
 
 bibliography: 
@@ -72,9 +77,7 @@ csl: assets/frontiers.csl
 format:
   html:
     mainfont: Roboto
-    
     theme: [lumen, "assets/webpage.scss"]
-    #page-layout: full
     number-sections: false
     toc: true
     smooth-scroll: true

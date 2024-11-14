@@ -3,30 +3,30 @@
 ## Model-free vs. model-based RL
 
 
-![Source: @Dayan2008 Reinforcement learning: The Good, The Bad and The Ugly. Current Opinion in Neurobiology, Cognitive neuroscience 18:185–196. doi:10.1016/j.conb.2008.08.003](img/modelbased2.png)
+![Model-based RL uses planning to find the optimal action to perform, while model-free RL caches the future and leads to more reflexive behavior. Source: @Dayan2008](img/modelbased2.png){#fig-mbvsmf width=70%}
 
 
-In **model-free RL** (MF) methods seen sofar, we do not need to know anything about the dynamics of the environment to start learning a policy:
+In the **model-free** (MF) RL methods seen sofar, we did not need to know anything about the dynamics of the environment to start learning a policy:
 
-$$p(s_{t+1} | s_t, a_t) \; \; r(s_t, a_t, s_{t+1})$$
+$$p(s' | s, a) \; \; r(s, a, s')$$
 
-We just sample transitions $(s, a, r, s')$ and update Q-values or a policy network.
-The main advantage is that the agent does not need to "think" when acting: just select the action with highest Q-value (**reflexive behavior**).
-The other advantage is that you can use MF methods on **any** MDP: you do not need to know anything about them.
+We just sampled transitions $(s, a, r, s')$ and update the value / policy network.
+The main advantage is that the agent does not need to "think" when acting: it just select the action with highest Q-value or the one selected by the policy network (**reflexive behavior**).
+The other advantage is that you can use MF methods on **any** MDP: you do not need to know anything about them before applying MF as a blackbox optimizer.
 
-But MF methods are very slow (sample complexity): as they make no assumption, they have to learn everything by trial-and-error from scratch.
-If you had a **model** of the environment, you could plan ahead (what would happen if I did that?) and speed up learning (do not explore stupid ideas): **model-based RL** (MB). 
+However, MF methods are very slow (sample complexity): as they make no assumption, they have to learn everything by trial-and-error from scratch.
+If you had a **model** of the environment, you could plan ahead (what would happen if I did that?) and speed up learning (do not explore obviously stupid ideas): such a behavior is called **model-based RL** (MB). Dynamic programming (Section @sec-dp) is for example a model-based method, as it requires the knowledge of $p(s' | s, a)$ and $r(s, a, s')$ to solve the Bellman equations.
 
 In chess, for example, players **plan** ahead the possible moves up to a certain horizon and evaluate moves based on their emulated consequences. In real-time strategy games, learning the environment (**world model**) is part of the strategy: you do not attack right away.
 
-This chapter presents several MB algorithms, including MPC planning algorithms, World models and the different variants of AlphaGo. We first present here the main distinction in MB RL, planning algorithms (MPC) versus MB-augmented MF (Dyna) methods. Another dichotomy that we will see later is about learned models vs. given models.  
+This chapter presents several MB algorithms, including MPC planning algorithms, World models and the different variants of AlphaGo. We first present the main distinction in MB RL, planning algorithms (MPC) versus MB-augmented MF (Dyna) methods. Another useful dichotomy that we will see in the AlphaGo section is about learned models vs. given models.  
 
-![Source: <https://github.com/avillemin/RL-Personnal-Notebook>](img/drl-overview.svg)
+![Source: <https://github.com/avillemin/RL-Personnal-Notebook>](img/drl-overview.svg){#fig-rloverview}
 
 
-##  Learning the model
+##  Learning a dynamics model
 
-Learning the world model is not complicated in theory. We just need to collect *enough* transitions $(s, a, r , s')$ using a random agent (or an expert) and train a **supervised** model to predict the next state and the correspondingreward.
+Learning the world model is not complicated in theory. We just need to collect *enough* transitions $(s, a, r , s')$ using a random agent (or an expert) and train a **supervised** model to predict the next state and the corresponding reward.
 
 ![](img/learningdynamics.png)
 
@@ -38,7 +38,7 @@ Such a model is called the **dynamics model**, the **transition model** or the *
 
 > What would happen if I did that?
 
-The model can be deterministic (in which can we should use neural networks) or stochastic (in which case we should use Gaussian Processes). Any kind of supervised learning method can be used in principle. 
+The model can be deterministic (in which case we should use neural networks) or stochastic (in which case we should use Gaussian processes, mixture density networks or recurrent state space models). Any kind of supervised learning method can be used in principle. 
 
 Once you have trained a good transition model, you can generate **rollouts**, i.e. imaginary trajectories / episodes $\tau$ using the model. Given an initial state $s_0$ and a policy $\pi$, you can unroll the future using the model $s', r = M(s, a)$.
 
@@ -61,103 +61,11 @@ Any method can be used to optimize the policy. We can obviously use a **model-fr
 
 $$\mathcal{J}(\pi) = \mathbb{E}_{\tau \sim \rho_\pi}[R(\tau)]$$
 
-The only sample complexity is the one needed to train the model: the rest is **emulated**. For problems where a physical step ($t \rightarrow t+1$) is very expensive compared to an inference step of the model (neural networks can predict very fast), this can even allow to use inefficient but optimal methods to find the policy, such as:
-
-* The Cross-entropy Method (CEM) [@Szita2006], where the policy is randomly sampled and improved over successive rollouts. 
-* Genetic algorithms, such as Evolutionary Search (ES) [@Salimans2017].
-
+The only sample complexity is the one needed to train the model: the rest is **emulated**. For problems where a physical step ($t \rightarrow t+1$) is very expensive compared to an inference step of the model (neural networks can predict very fast), this can even allow to use inefficient but optimal methods to find the policy.
 Brute-force optimization becomes possible if using the model is much faster that the real environment. 
 However, this approach has two major drawbacks:
 
 1. The model can only be as good as the data, and errors are going to accumulate, especially for long trajectories or probabilistic MDPs.
-2. If the dataset does not contain the important transitions (for example when there are sparse rewards), the policy will likely be sub-optimal. In extreme cases, training the model up to a sufficient precision might necessitate more samples than learning the policy directly with MF methods.
+2. If the dataset does not contain the important transitions (for example where there are sparse rewards), the policy will likely be sub-optimal. In extreme cases, training the model up to a sufficient precision might necessitate more samples than learning the policy directly with MF methods.
 
-
-## Dyna-Q
-
-One variant of the previous approach is to **augment** MF algorithms with MB rollouts. The MF algorithm (e.g. Q-learning) learns from transitions $(s, a, r, s')$ sampled either with:
-
-* **real experience**: interaction with the environment.
-* **simulated experience**: simulation by the model.
-
-![Dyna-Q. Source: <https://towardsdatascience.com/reinforcement-learning-model-based-planning-methods-5e99cae0abb8>](img/dynaq.png)
-
-
-If the simulated transitions are realistic enough, the MF algorithm can converge using much less **real transitions**, thereby reducing its **sample complexity**.
-This **Dyna-Q** algorithm [@Sutton1990] is an extension of Q-learning to integrate a model $M(s, a) = (s', r')$.
-
-
-:::{.callout-note icon="false"}
-## Dyna-Q [@Sutton1990]
-
-* Initialize values $Q(s, a)$ and model $M(s, a)$.
-
-* **for** $t \in [0, T_\text{total}]$:
-
-    * Select $a_t$ using $Q$, take it on the **real environment** and observe $s_{t+1}$ and $r_{t+1}$.
-
-    * Update the Q-value of the **real** action:
-
-    $$\Delta Q(s_t, a_t) = \alpha \, (r_{t+1} + \gamma \, \max_a Q(s_{t+1}, a) - Q(s_t, a_t))$$
-
-    * Update the model:
-
-    $$M(s_t, a_t) \leftarrow (s_{t+1}, r_{t+1})$$
-
-    * **for** $K$ steps:
-
-        * Sample a state $s_k$ from a list of visited states.
-
-        * Select $a_k$ using $Q$, predict $s_{k+1}$ and $r_{k+1}$ using the **model** $M(s_k, a_k)$.
-
-        * Update the Q-value of the **imagined** action:
-
-        $$\Delta Q(s_k, a_k) = \alpha \, (r_{k+1} + \gamma \, \max_a Q(s_{k+1}, a) - Q(s_k, a_k))$$
-:::
-
-It is interesting to notice that Dyna-Q is the inspiration for DQN and its **experience replay memory**.
-In DQN, the ERM stores **real transitions** generated in the past, while in Dyna-Q, the model generates **imagined transitions** based on past real transitions.
-
-
-## Model Predictive Control
-
-For long horizons, the slightest imperfection in the model can accumulate over time (**drift**) and lead to completely wrong trajectories.
-
-![Source: <https://medium.com/@jonathan_hui/rl-model-based-reinforcement-learning-3c2b6f0aa323>](img/mpc-drift1.jpeg)
-
-The emulated trajectory will have a biased return, and the algorithm will not converge to the optimal policy.
-If you have a perfect model, you should not be using RL anyway, as classical control methods would be much faster (but see AlphaGo).
-
-The solution is to **replan** at each time step and execute only the first planned action **in the real environment**.
-
-![Source: <https://medium.com/@jonathan_hui/rl-model-based-reinforcement-learning-3c2b6f0aa323>](img/mpc-drift2.jpeg){width=80%}
-
-**Model Predictive Control** iteratively plans complete trajectories, but only selects the first action.
-
-![Source: <http://rail.eecs.berkeley.edu/deeprlcourse-fa17/f17docs/lecture_9_model_based_rl.pdf>](img/mpc-algo.png)
-
-
-The planner (or MPC controller) can actually be anything, it does not have to be a RL algorithm. It could for example be iLQR (Iterative Linear Quadratic Regulator), a non-linear optimization method classically used in control (see  <https://jonathan-hui.medium.com/rl-lqr-ilqr-linear-quadratic-regulator-a5de5104c750> for explanations). 
-
-
-![Model-predictive control using a learned model. Source: @Nagabandi2017.](img/mpc-architecture.png)
-
-In @Nagabandi2017, the dynamics model is a neural network predicted the next state and the associated reward. 
-The controller uses **random-sampling shooting**:
-
-1. In the current state, a set of possible actions is selected.
-2. Rollouts are generated from these actions using the model and their return is computed.
-3. The initial action of the rollout with the highest return is selected.
-4. Repeat.
-
-![Random-sampling shooting. Using different initial actions, several imaginary rollouts are performed. The one leading to the maximal return is chosen and executed. Source: <https://bair.berkeley.edu/blog/2017/11/30/model-based-rl/>](img/mpc-example.png)
-
-The main advantage of MPC is that you can change the reward function (the **goal**) on the fly: what you learn is the model, but planning is just an optimization procedure.
-You can set intermediary goals to the agent very flexibly: no need for a well-defined reward function.
-Model imperfection is not a problem as you replan all the time. As seen below, the model can adapt to changes in the environment (slippery terrain, simulation to real-world).
-
-
-![Source: <https://bair.berkeley.edu/blog/2017/11/30/model-based-rl/>](img/mpc-application1.gif)
-
-![Source: <https://bair.berkeley.edu/blog/2017/11/30/model-based-rl/>](img/mpc-application2.gif)
 

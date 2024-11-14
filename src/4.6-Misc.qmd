@@ -1,0 +1,13 @@
+# Misc.
+
+* Embed to Control: A Locally Linear Latent Dynamics Model for Control from Raw Images [@Watter2015]
+* Efficient Model-Based Deep Reinforcement Learning with Variational State Tabulation [@Corneil2018]
+* Model-Based Value Estimation for Efficient Model-Free Reinforcement Learning [@Feinberg2018]
+* Learning to Adapt: Meta-Learning for Model-Based Control, [@Clavera2018]
+* The Predictron: End-To-End Learning and Planning [@Silver2016a]
+* Model-Based Planning with Discrete and Continuous Actions [@Henaff2017]
+* Schema Networks: Zero-shot Transfer with a Generative Causal Model of Intuitive Physics [@Kansky2017]
+* Universal Planning Networks [@Srinivas2018]
+* Recall Traces: Backtracking Models for Efficient Reinforcement Learning [@Goyal2018]
+* Deep Dyna-Q: Integrating Planning for Task-Completion Dialogue Policy Learning [@Peng2018]
+* Q-map: a Convolutional Approach for Goal-Oriented Reinforcement Learning [@Pardo2018]

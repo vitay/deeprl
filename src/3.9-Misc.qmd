@@ -1,4 +1,4 @@
-# Miscellaneous model-free algorithms
+# Misc.
 
 * Stochastic Value Gradient (SVG) [@Heess2015]
 * Q-Prop [@Gu2016]

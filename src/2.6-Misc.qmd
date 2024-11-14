@@ -1,0 +1,11 @@
+# Misc.
+
+* **Average-DQN** [@Anschel2016] proposes to increase the stability and performance of DQN by replacing the single target network (a copy of the trained network) by an average of the last parameter values, in other words an average of many past target networks.
+
+* @He2016 proposed **fast reward propagation** through optimality tightening to speedup learning: when rewards are sparse, they require a lot of episodes to propagate these rare rewards to all actions leading to it. Their method combines immediate rewards (single steps) with actual returns (as in Monte Carlo) via a constrained optimization approach.
+
+* Never Give Up: Learning Directed Exploration Strategies [@Badia2020a]
+
+* Agent57: Outperforming the Atari Human Benchmark [@Badia2020]
+
+* Human-level Atari 200x faster [@Kapturowski2022]

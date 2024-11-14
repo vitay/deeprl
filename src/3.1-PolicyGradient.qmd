@@ -1,12 +1,28 @@
 # Policy Gradient methods {#sec-policygradient}
 
+Approximating directly the Q-values in value-based methods (DQN) suffers from many problems when using deep neural networks:
+
+* The Q-values are **unbounded**: they can take any value (positive or negative), so the output layer must be linear.
+* The Q-values have a **high variability**: some $(s,a)$ pairs have very negative values, others have very positive values. Difficult to learn for a NN.
+* It works only for small **discrete action spaces**: we need to iterate over all actions to find the greedy action.
+
+Instead of learning the Q-values, one could approximate directly the policy $\pi_\theta(s, a)$ with the neural network.
+$\pi_\theta(s, a)$ is then called a **parameterized policy**, as it depends directly on the parameters $\theta$ of the NN.
+For discrete action spaces, the output of the NN can be a **softmax** layer, directly giving the probability of selecting an action.
+For continuous action spaces, the output layer can directly control the effector (e.g. the joint angles of a robotic arm).
+Parameterized policies can represent continuous policies and avoid the curse of dimensionality. See Section @sec-continuousspaces for more details.
+
+![In policy search, the function approximator outputs direcly the policy $\pi_\theta(s, a)$, not the Q-values.](img/policysearch.png){#fig-policysearchmodel}
+
 ## Policy search
 
-**Policy search** methods directly learn to estimate the policy $\pi_\theta$ with a parameterized function estimator. The goal of the neural network is to maximize an objective function representing the *return* (sum of rewards, noted $R(\tau)$ for simplicity) of the trajectories $\tau = (s_0, a_0, s_1, a_1, \ldots, s_T, a_T)$ selected by the policy $\pi_\theta$:
+**Policy search** methods directly learn to estimate the policy $\pi_\theta$ with a parameterized function estimator. The goal of the neural network is to maximize an objective function representing the **return** (sum of rewards, noted $R(\tau)$ for simplicity) of the trajectories $\tau = (s_0, a_0, s_1, a_1, \ldots, s_T, a_T)$ selected by the policy $\pi_\theta$:
 
 $$
     J(\theta) = \mathbb{E}_{\tau \sim \rho_\theta}[R(\tau)] = \mathbb{E}_{\tau \sim \rho_\theta}[\sum_{t=0}^T \gamma^t \, r(s_t, a_t, s_{t+1}) ]
 $$
+
+![We search for a policy that only generates trajectories associated wizh a high return.](img/policysearch.svg){#fig-policysearch width=60%}
 
 To maximize this objective function, the policy $\pi_\theta$ should only generate trajectories $\tau$ associated with high returns $R(\tau)$ and avoid those with low return, which is exactly what we want.
 
@@ -14,7 +30,7 @@ The objective function uses the mathematical expectation of the return over all 
 
 $$
     \rho_\theta(\tau) = p_\theta(s_0, a_0, \ldots, s_T, a_T) = p_0 (s_0) \, \prod_{t=0}^T \pi_\theta(s_t, a_t) p(s_{t+1} | s_t, a_t)
-$${#eq-likelihood_trajectory}
+$$
 
 $p_0 (s_0)$ is the initial probability of starting in $s_0$ (independent from the policy) and $p(s_{t+1} | s_t, a_t)$ is the transition probability defining the MDP. Having the probability distribution of the trajectories, we can expand the mathematical expectation in the objective function:
 
@@ -46,8 +62,13 @@ $$
     \theta \leftarrow \theta + \eta \, \nabla_\theta J(\theta)
 $$
 
-The rest of this section basically presents methods allowing to estimate the policy gradient (REINFORCE, DPG) and to improve the sample complexity. See
-<http://www.scholarpedia.org/article/Policy_gradient_methods> for an more detailed overview of policy gradient methods, <https://lilianweng.github.io/lil-log/2018/04/08/policy-gradient-algorithms.html> and <http://karpathy.github.io/2016/05/31/rl/> for excellent tutorials from Lilian Weng and Andrej Karpathy. The article by @Peters2008 is also a good overview of policy gradient methods.
+The rest of this section basically presents methods allowing to estimate the policy gradient (REINFORCE, DPG) and to improve the sample complexity. See:
+
+* <http://www.scholarpedia.org/article/Policy_gradient_methods> for an more detailed overview of policy gradient methods, 
+* <https://lilianweng.github.io/lil-log/2018/04/08/policy-gradient-algorithms.html> and 
+* <http://karpathy.github.io/2016/05/31/rl/> for excellent tutorials from Lilian Weng and Andrej Karpathy. 
+
+The article by @Peters2008 is also a good overview of policy gradient methods.
 
 ## REINFORCE
 
@@ -85,17 +106,17 @@ $$
 
 This means that we can obtain an estimate of the policy gradient by simply sampling different trajectories $\{\tau_i\}$ and averaging $\nabla_\theta \log \rho_\theta (\tau_i) \, R(\tau_i)$ (Monte Carlo sampling).
 
-Let's now look further at how the gradient of the log-likelihood of a trajectory $\log \pi_\theta (\tau)$ look like. Through its definition (@eq-likelihood_trajectory), the log-likelihood of a trajectory is:
+Let's now look further at how the gradient of the log-likelihood of a trajectory $\log \pi_\theta (\tau)$ look like. Through its definition, the log-likelihood of a trajectory is:
 
 $$
     \log \rho_\theta(\tau) = \log p_0 (s_0) + \sum_{t=0}^T \log \pi_\theta(s_t, a_t) + \sum_{t=0}^T \log p(s_{t+1} | s_t, a_t)
-$${#eq-loglikelihood_trajectory}
+$$
 
 $\log p_0 (s_0)$ and $\log p(s_{t+1} | s_t, a_t)$ do not depend on the parameters $\theta$ (they are defined by the MDP), so the gradient of the log-likelihood is simply:
 
 $$
     \nabla_\theta \log \rho_\theta(\tau) = \sum_{t=0}^T \nabla_\theta \log \pi_\theta(s_t, a_t)
-$${#eq-gradloglikelihood_trajectory}
+$$
 
 $\nabla_\theta \log \pi_\theta(s_t, a_t)$ is called the **score function**.
 
@@ -107,25 +128,26 @@ $$
 
 Estimating the policy gradient now becomes straightforward using Monte Carlo sampling. The resulting algorithm is called the **REINFORCE** algorithm [@Williams1992]:
 
----
+:::{.callout-note icon="false"}
+## REINFORCE algorithm
 
-* while not converged:
+**while** not converged:
 
-    * Sample $N$ trajectories $\{\tau_i\}$ using the current policy $\pi_\theta$ and observe the returns $\{R(\tau_i)\}$.
+* Sample $N$ trajectories $\{\tau_i\}$ using the current policy $\pi_\theta$ and observe the returns $\{R(\tau_i)\}$.
 
-    * Estimate the policy gradient as an average over the trajectories:
+* Estimate the policy gradient as an average over the trajectories:
 
-    $$
-       \nabla_\theta J(\theta) \approx \frac{1}{N} \sum_{i=1}^N \sum_{t=0}^T \nabla_\theta \log \pi_\theta(s_t, a_t) \, R(\tau_i)
-    $$
+$$
+    \nabla_\theta J(\theta) \approx \frac{1}{N} \sum_{i=1}^N \sum_{t=0}^T \nabla_\theta \log \pi_\theta(s_t, a_t) \, R(\tau_i)
+$$
 
-    * Update the policy using gradient ascent:
+* Update the policy using gradient ascent:
 
-    $$
-        \theta \leftarrow \theta + \eta \, \nabla_\theta J(\theta)
-    $$
+$$
+    \theta \leftarrow \theta + \eta \, \nabla_\theta J(\theta)
+$$
 
----
+:::
 
 While very simple, the REINFORCE algorithm does not work very well in practice:
 
@@ -165,25 +187,30 @@ In both cases, the policy should select the trajectory $\tau_1$. However, the po
 
 A first simple but effective idea to solve both problems would be to subtract the mean of the sampled returns from the returns:
 
----
 
-* while not converged:
+:::{.callout-note icon="false"}
+## REINFORCE algorithm with baseline
 
-    * Sample $N$ trajectories $\{\tau_i\}$ using the current policy $\pi_\theta$ and observe the returns $\{R(\tau_i)\}$.
-    * Compute the mean return:
-    $$
-        \hat{R} = \frac{1}{N} \sum_{i=1}^N R(\tau_i)
-    $$
-    * Estimate the policy gradient as an average over the trajectories:
-    $$
-       \nabla_\theta J(\theta) \approx \frac{1}{N} \sum_{i=1}^N \sum_{t=0}^T \nabla_\theta \log \pi_\theta(s_t, a_t) \, ( R(\tau_i) - \hat{R})
-    $$
-    * Update the policy using gradient ascent:
-    $$
-        \theta \leftarrow \theta + \eta \, \nabla_\theta J(\theta)
-    $$
+**while** not converged:
 
----
+* Sample $N$ trajectories $\{\tau_i\}$ using the current policy $\pi_\theta$ and observe the returns $\{R(\tau_i)\}$.
+
+* Compute the mean return:
+$$
+    \hat{R} = \frac{1}{N} \sum_{i=1}^N R(\tau_i)
+$$
+
+* Estimate the policy gradient as an average over the trajectories:
+$$
+    \nabla_\theta J(\theta) \approx \frac{1}{N} \sum_{i=1}^N \sum_{t=0}^T \nabla_\theta \log \pi_\theta(s_t, a_t) \, ( R(\tau_i) - \hat{R})
+$$
+
+* Update the policy using gradient ascent:
+$$
+    \theta \leftarrow \theta + \eta \, \nabla_\theta J(\theta)
+$$
+
+:::
 
 This obviously solves the reward scaling problem, and reduces the variance of the gradients. But are we allowed to do this (i.e. does it introduce a bias to the gradient)? @Williams1992 showed that subtracting a constant $b$ from the returns still leads to an unbiased estimate of the gradient:
 
@@ -195,7 +222,13 @@ $$
 The proof is actually quite simple:
 
 $$
-    \mathbb{E}_{\tau \sim \rho_\theta}[\nabla_\theta \log \rho_\theta (\tau) \, b ] = \int_\tau \rho_\theta (\tau) \nabla_\theta \log \rho_\theta (\tau) \, b \, d\tau = \int_\tau \nabla_\theta  \rho_\theta (\tau) \, b \, d\tau = b \, \nabla_\theta \int_\tau \rho_\theta (\tau) \, d\tau =  b \, \nabla_\theta 1 = 0
+\begin{aligned}
+    \mathbb{E}_{\tau \sim \rho_\theta}[\nabla_\theta \log \rho_\theta (\tau) \, b ] & = \int_\tau \rho_\theta (\tau) \nabla_\theta \log \rho_\theta (\tau) \, b \, d\tau \\
+    & = \int_\tau \nabla_\theta  \rho_\theta (\tau) \, b \, d\tau \\
+    &= b \, \nabla_\theta \int_\tau \rho_\theta (\tau) \, d\tau \\
+    &=  b \, \nabla_\theta 1 \\
+    &= 0
+\end{aligned}
 $$
 
 As long as the constant $b$ does not depend on $\theta$, the estimator is unbiased. The resulting algorithm is called **REINFORCE with baseline**. @Williams1992 has actually showed that the best baseline (the one which also reduces the variance) is the mean return weighted by the square of the gradient of the log-likelihood:
@@ -220,19 +253,19 @@ $$
  \nabla_\theta J(\theta) \approx \frac{1}{N} \sum_{i=1}^N (\sum_{t=0}^T \nabla_\theta \log \pi_\theta(s_t, a_t)  \, \sum_{t'=t}^T \gamma^{t'-t} \, r(s_{t'}, a_{t'}, s_{t'+1}) )
 $$
 
-The quantity $\hat{Q}(s_t, a_t) = \sum_{t'=t}^T \gamma^{t'-t} \, r(s_{t'}, a_{t'}, s_{t'+1})$ is called the **reward to-go** from the transition $(s_t, a_t)$, i.e. the discounted sum of future rewards after that transition. Quite obviously, the Q-value of that action is the mathematical expectation of this reward to-go.
-
-![The reward to-go is the sum of rewards gathered during a single trajectory after a transition $(s, a)$. The Q-value of the action $(s, a)$ is the expectation of the reward to-go. Source: S. Levine's lecture <http://rll.berkeley.edu/deeprlcourse/>.](img/rewardtogo.png){#fig-rewardtogo width=30%}
+The quantity $R_t = \sum_{t'=t}^T \gamma^{t'-t} \, r(s_{t'}, a_{t'}, s_{t'+1})$ is the return (or **reward to-go**) after the transition $(s_t, a_t)$, i.e. the discounted sum of future rewards. Quite obviously, the Q-value of that action is the mathematical expectation of this quantity.
 
 $$
- \nabla_\theta J(\theta) \approx \frac{1}{N} \sum_{i=1}^N \sum_{t=0}^T \nabla_\theta \log \pi_\theta(s_t, a_t) \, \hat{Q}(s_t, a_t)
+ \nabla_\theta J(\theta) \approx \frac{1}{N} \sum_{i=1}^N \sum_{t=0}^T \nabla_\theta \log \pi_\theta(s_t, a_t) \, R_t
 $$
 
-@Sutton1999 showed that the policy gradient can be estimated by replacing the return of the sampled trajectory with the Q-value of each action, what leads to the **policy gradient theorem** (@eq-policygradienttheorem):
+![The reward to-go is the sum of rewards gathered during a single trajectory after a transition $(s, a)$. The Q-value of the action $(s, a)$ is the expectation of the reward to-go. Source: S. Levine's lecture <http://rll.berkeley.edu/deeprlcourse/>.](img/rewardtogo.png){#fig-rewardtogo width=50%}
+
+@Sutton1999 showed that the policy gradient can be estimated by replacing the return of the sampled trajectory with the Q-value of each action, what leads to the **policy gradient theorem**:
 
 $$
     \nabla_\theta J(\theta) =  \mathbb{E}_{s \sim \rho_\theta, a \sim \pi_\theta}[\nabla_\theta \log \pi_\theta(s, a) \, Q^{\pi_\theta}(s, a)]
-$${#eq-policygradienttheorem}
+$$
 
 where $\rho_\theta$ is the distribution of states reachable under the policy $\pi_\theta$. Because the actual return $R(\tau)$ is replaced by its expectation $Q^{\pi_\theta}(s, a)$, the policy gradient is now a mathematical expectation over **single transitions** instead of complete trajectories, allowing **bootstrapping** as in temporal difference methods.
 
@@ -242,43 +275,22 @@ The problem is of course that the true Q-value of the actions is as unknown as t
 
 $$
     \nabla_\theta J(\theta) =  \mathbb{E}_{s \sim \rho_\theta, a \sim \pi_\theta}[\nabla_\theta \log \pi_\theta(s, a) \, Q_\varphi(s, a))]
-$${#eq-policygradienttheoremapprox}
+$$
 
 Formally, the Q-value approximator must respect the Compatible Function Approximation Theorem, which states that the value approximator must be compatible with the policy ($\nabla_\varphi Q_\varphi(s, a) = \nabla_\theta \log \pi_\theta(s, a)$) and minimize the mean-square error with the true Q-values $\mathbb{E}_{s \sim \rho^\pi, a \sim \pi_\theta} [(Q^{\pi_\theta}(s, a) - Q_\varphi(s, a))^2]$. In the algorithms presented in this section, these conditions are either met or neglected.
 
 The resulting algorithm belongs to the **actor-critic** class, in the sense that:
 
-* The **actor** $\pi_\theta(s, a)$ learns to approximate the policy by maximizing @eq-policygradienttheoremapprox.
-* The **critic** $Q_\varphi(s, a)$ learns to estimate the policy by minimizing the mse with the true Q-values.
+* The **actor** $\pi_\theta(s, a)$ learns to approximate the policy by using the policy gradient.
+* The **critic** $Q_\varphi(s, a)$ learns to estimate the Q-values of the actions generated by the policy.
 
-@fig-actorcriticpolicy shows the architecture of the algorithm. The only problem left is to provide the critic with the true Q-values.
+@fig-actorcriticpolicy shows the architecture of the algorithm. The only problem left is to provide the critic with the true Q-values (Bellman targets).
 
 ![Architecture of the policy gradient (PG) method.](img/policygradient.png){#fig-actorcriticpolicy width=80%}
 
-Most policy-gradient algorithms (A3C, DPPG, TRPO) are actor-critic architectures. The different versions of the policy gradient  take the form:
+The critic can be trained with any advantage estimator, including Q-learning. It is common to use the DQN loss (or any variant of it: double DQN, n-step, etc) for the critic.
 
 $$
-    \nabla_\theta J(\theta) =  \mathbb{E}_{s_t \sim \rho^\pi, a_t \sim \pi_\theta}[\nabla_\theta \log \pi_\theta (s_t, a_t) \, \psi_t ]
+\mathcal{L}(\varphi) =  \mathbb{E}_{s_t \sim \rho_\theta, a_t \sim \pi_\theta} [(r(s, a, s') + \gamma \, Q_{\varphi'}(s', \text{argmax}_{a'} Q_\varphi (s', a')) - Q_\varphi (s, a) )^2]
 $$
 
-where:
-
-* $\psi_t = R_t$ is the *REINFORCE* algorithm (MC sampling).
-
-* $\psi_t = R_t - b$ is the *REINFORCE with baseline* algorithm.
-
-* $\psi_t = Q^\pi(s_t, a_t)$ is the *policy gradient theorem*.
-
-* $\psi_t = A^\pi(s_t, a_t)$ is the *advantage actor-critic*.
-
-* $\psi_t = r_{t+1} + \gamma \, V^\pi(s_{t+1}) - V^\pi(s_t)$ is the *TD actor-critic*.
-
-* $\psi_t = \sum_{k=0}^{n-1} \gamma^{k} \, r_{t+k+1} + \gamma^n \, V^\pi(s_{t+n+1}) - V^\pi(s_t)$ is the *n-step actor-critic* (A2C).
-
-
-Generally speaking:
-
-* the more $\psi_t$ relies on real rewards (e.g. $R_t$), the more the gradient will be correct on average (small bias), but the more it will vary (high variance). This increases the sample complexity: we need to average more samples to correctly estimate the gradient.
-* the more $\psi_t$ relies on estimations (e.g. the TD error), the more stable the gradient (small variance), but the more incorrect it is (high bias). This can lead to suboptimal policies, i.e. local optima of the objective function.
-
-This is the classical bias/variance trade-off in machine learning. The n-step algorithm is an attempt to mitigate between these extrema. @Schulman2015a proposed the **Generalized Advantage Estimate** (GAE, see Section @sec-GAE) to further control the bias/variance trade-off.

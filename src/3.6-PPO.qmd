@@ -198,13 +198,15 @@ However, it has several limitations:
 * It works well when the NN has only fully-connected layers, but empirically performs poorly on tasks requiring convolutional layers or recurrent layers.
 * The use of conjugate gradients makes the implementation much more complicated and less flexible than regular SGD.
 
-**Additional resources**
+:::{.callout-tip icon="false}
+## Additional resources
 
 * <http://178.79.149.207/posts/trpo.html>
 * <https://towardsdatascience.com/introduction-to-various-reinforcement-learning-algorithms-part-ii-trpo-ppo-87f2c5919bb9>
 * <https://medium.com/@sanketgujar95/trust-region-policy-optimization-trpo-and-proximal-policy-optimization-ppo-e6e7075f39ed>
 * <https://www.depthfirstlearning.com/2018/TRPO>
 * <http://rll.berkeley.edu/deeprlcoursesp17/docs/lec5.pdf>
+:::
 
 ## Proximal Policy Optimization (PPO) {#sec-PPO}
 
@@ -235,7 +237,8 @@ In the original paper, they use **generalized advantage estimation** (GAE, secti
 
 The pseudo-algorithm of PPO is as follows:
 
----
+:::{.callout-note icon="false"}
+## PPO algorithm
 
 * Initialize an actor $\pi_\theta$ and a critic $V_\varphi$ with random weights.
 
@@ -252,19 +255,27 @@ The pseudo-algorithm of PPO is as follows:
         * Sample $M$ transitions from the ones previously collected.
 
         * Train the actor to maximize the clipped surrogate objective.
+        
+        $$
+            L^\text{CLIP}(\theta) = \mathbb{E}_{t} [ \min (\rho_t(\theta) \, A_{\pi_{\theta_\text{old}}}(s_t, a_t), \text{clip}(\rho_t(\theta) , 1- \epsilon, 1+\epsilon) \,  A_{\pi_{\theta_\text{old}}}(s_t, a_t)]
+        $$
 
         * Train the critic to minimize the mse using TD learning.
 
     * $\theta_\text{old} \leftarrow \theta$
-
----
+:::
 
 The main advantage of PPO with respect to TRPO is its simplicity: the clipped objective can be directly maximized using first-order methods like stochastic gradient descent or Adam. It does not depend on assumptions about the parameter space: CNNs and RNNs can be used for the policy. It is sample-efficient, as several epochs of parameter updates are performed between two transition samplings: the policy network therefore needs less fresh samples that strictly on-policy algorithms to converge.
 
 The only drawbacks of PPO is that there no convergence guarantee (although in practice it converges more often than other state-of-the-art methods) and that the right value for $\epsilon$ has to be determined. PPO has improved the state-of-the-art on Atari games and Mujoco robotic tasks. It has become the go-to method for continuous control problems.
 
-**Additional resources**
+:::{.callout-tip icon="false}
+## Additional resources
 
 * More explanations and demos from OpenAI: <https://blog.openai.com/openai-baselines-ppo>
+:::
 
-
+{{< video https://www.youtube.com/embed/jwSbzNHGflM
+    title="PPO"
+    aspect-ratio="16x9" 
+>}}
