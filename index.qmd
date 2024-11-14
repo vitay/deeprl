@@ -8,6 +8,8 @@ This document is meant to stay *work in progress* forever, as new algorithms wil
 
 Some figures are taken from the original publication ("Source:" in the caption). Their copyright stays to the respective authors, naturally. The rest is my own work and can be distributed, reproduced and modified under CC-BY-SA-NC 4.0.
 
+![](src/img/valuebased-agent.png)
+
 :::{.callout-tip}
 ## License
 
