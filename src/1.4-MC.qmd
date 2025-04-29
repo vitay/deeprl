@@ -73,7 +73,7 @@ $$
     P(s, a) = \frac{\exp Q(s, a) / \tau}{ \sum_b \exp Q(s, b) / \tau}
 $$
 
-$\tau$ is a positive parameter called the temperature: high temperatures cause the actions to be nearly equiprobable, while low temperatures cause $\tau$ is a positive parameter called the temperature.
+$\tau$ is a positive parameter called the temperature: high temperatures make the actions nearly equiprobable (random policy), while low temperatures only select the actions with the highest Q-values (greedy policy).
 
 
 In on-policy MC control, each sample episode is generated using the current policy, which ensures exploration, while the control method still converges towards the optimal $\epsilon$-policy.

@@ -350,7 +350,7 @@ Just as $\epsilon$, the temperature $\tau$ controls the level of exploration:
 * Low temperature causes the greediest actions only to be selected (**greedy agent**).
     
 
-![Influence of the temperature parameter.](img/bandit-estimates-softmax2.png){#fig-softmax2}
+![Influence of the temperature parameter. With low temperatures (left), only the greedy action gets selected, while high temperatures (right) make action selection random.](img/bandit-estimates-softmax2.png){#fig-softmax2}
     
 ![](img/bandit-softmax.gif)
 
