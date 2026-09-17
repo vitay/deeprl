@@ -1,5 +1,5 @@
 
-# Deep Q-network (DQN)
+# Deep Q-network (DQN) {#sec-dqn}
 
 ## Limitations of deep neural networks for function approximation
 
@@ -54,7 +54,7 @@ However, the definition of the loss function uses the mathematical expectation o
 
 When gathering transitions online, the samples are correlated: $(s_t, a_t, r_{t+1}, s_{t+1})$ will be followed by $(s_{t+1}, a_{t+1}, r_{t+2}, s_{t+2})$, etc. When playing video games, two successive frames will be very similar (a few pixels will change, or even none if the sampling rate is too high) and the optimal action will likely not change either (to catch the ball in pong, you will need to perform the same action - going left - many times in a row).
 
-![Sucessive frames in a video game are highly correlated.](img/breakout.png){#fig-breakout-correlated}
+![Successive frames in a video game are highly correlated.](img/breakout.png){#fig-breakout-correlated}
 
 **Correlated inputs/outputs** are very bad for deep neural networks: the DNN will overfit and fall into a very bad local minimum. That is why stochastic gradient descent works so well: it randomly samples values from the training set to form minibatches and minimize the loss function on these uncorrelated samples (hopefully). If all samples of a minibatch were of the same class (e.g. zeros in MNIST), the network would converge poorly. This is the first problem preventing an easy use of deep neural networks as function approximators in RL.
 
@@ -107,9 +107,9 @@ $$
 The target network is updated only infrequently (every thousands of iterations or so) with the learned weights $\theta$. As this target network does not change very often, the targets stay constant for a long period of time, and the problem becomes more stationary.
 
 
-![The target network is used to compute the targets to train the value network. Its waits are regularly copied from the value network.](img/targetnetwork.png){#fig-targetnetwork}
+![The target network is used to compute the targets to train the value network. Its weights are regularly copied from the value network.](img/targetnetwork.png){#fig-targetnetwork}
 
-![By keeping the the targets constant for a while, the target network lets the value network catch up with them and converge optimally (in principle).](img/nonstationarity2.svg){#fig-nonstationarity2 width=80%}
+![By keeping the targets constant for a while, the target network lets the value network catch up with them and converge optimally (in principle).](img/nonstationarity2.svg){#fig-nonstationarity2 width=80%}
 
 ### DQN algorithm 
 

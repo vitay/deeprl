@@ -12,7 +12,7 @@ Once a model of the environment is learned, it is possible to **augment** MF alg
 
 If the simulated transitions are realistic enough, the MF algorithm can converge using much less **real transitions**, thereby reducing its **sample complexity**.
 
-The **Dyna-Q** algorithm [@Sutton1990] is an extension of Q-learning to integrate a model $M(s, a) = (s', r')$. It alternates between **online** updates of the agent using the real environment and (possible multiple) **offline** updates using the model.
+The **Dyna-Q** algorithm [@Sutton1990] is an extension of Q-learning to integrate a model $M(s, a) = (s', r')$. It alternates between **online** updates of the agent using the real environment and (possibly multiple) **offline** updates using the model.
 
 :::{.callout-note icon="false"}
 ## Dyna-Q [@Sutton1990]
@@ -89,7 +89,7 @@ The rollout policy $\hat{\pi}$ is a simple and fast policy. It does not have to 
 In I2A, the rollout policy $\hat{\pi}$ is obtained through **policy distillation** of the bigger policy network $\pi$.
 
 
-::: {.callout-tip icon=False}
+:::{.callout-tip icon="false"}
 ## Policy distillation [@Rusu2016]
 
 The small rollout policy network $\hat{\pi}$ tries to copy the outputs $\pi(s, a)$ of the whole model. This is a supervised learning task: we just need minimize the KL divergence between the two policies:

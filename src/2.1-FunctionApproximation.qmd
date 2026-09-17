@@ -1,4 +1,4 @@
-#  Function approximation
+#  Function approximation {#sec-fa}
 
 All the methods presented before are *tabular methods*, as one needs to store one value per state-action pair: either the Q-value of the action or a preference for that action. 
 
@@ -66,16 +66,22 @@ $$
     \end{bmatrix}
 $$
 
-When applied repeatedly, GD converges to a local minimum of the loss function. To minimize the mean square error, we just need to compute its gradient with respect to the parametsr $\varphi$:
+When applied repeatedly, GD converges to a local minimum of the loss function. To minimize the mean square error, we just need to compute its gradient with respect to the parameters $\varphi$:
 
 $$
 \begin{aligned}
-    \mathcal{L}(\varphi) &= \nabla_\varphi \mathbb{E}_{s \in \mathcal{S}} [ (V^\pi(s) - V_\varphi(s))^2] \\
+    \nabla_\varphi \mathcal{L}(\varphi) &= \nabla_\varphi \mathbb{E}_{s \in \mathcal{S}} [ (V^\pi(s) - V_\varphi(s))^2] \\
     &\\
     & = \mathbb{E}_{s \in \mathcal{S}} [\nabla_\varphi  (V^\pi(s) - V_\varphi(s))^2] \\
     &\\
-    & = \mathbb{E}_{s \in \mathcal{S}} [ - (V^\pi(s) - V_\varphi(s)) \, \nabla_\varphi V_\varphi(s)] \\
+    & = - 2 \, \mathbb{E}_{s \in \mathcal{S}} [ (V^\pi(s) - V_\varphi(s)) \, \nabla_\varphi V_\varphi(s)] \\
 \end{aligned}
+$$
+
+Dropping the constant factor 2 into the learning rate, gradient descent $\Delta \varphi = - \eta \, \nabla_\varphi \mathcal{L}(\varphi)$ gives:
+
+$$
+    \Delta \varphi = \eta \, \mathbb{E}_{s \in \mathcal{S}} [ (V^\pi(s) - V_\varphi(s)) \, \nabla_\varphi V_\varphi(s)]
 $$
 
 As it would be too slow to compute the expectation on the whole state space (**batch algorithm**), we will update the parameters with **stochastic gradient descent** (SGD):
@@ -212,6 +218,31 @@ In both cases, we minimize the mse between the true value $Q^\pi(s, a)$ and the 
 :::
 
 
+
+## Feature construction {#sec-features}
+
+All the algorithms above learn the weights $\varphi$ of a linear approximator, but they say nothing about where the features $\phi(s)$ come from. This matters much more than it seems, as a linear approximator can only represent what its features allow.
+
+Take the cartpole again, with the four variables $\phi(s) = [x, \dot{x}, \theta, \dot{\theta}]^T$. Can the value of a state be a linear function of them? No. A high angular velocity $\dot{\theta}$ is a **good** thing when the pole is nearly horizontal, as it means the pole is coming back up, but a **bad** thing when the pole is vertical, as it means the pole will not stop there. Whether $\dot{\theta}$ contributes positively or negatively to the value depends on $\theta$: the value depends on something like $\dot{\theta} \, \sin \theta$, which is a **non-linear combination** of two features. No choice of weights $\varphi$ can produce it, because a linear approximator can only add up the features, never multiply them.
+
+The consequence is visible on any non-linear value function: applied directly to the raw variables, linear approximation catches the general tendency but makes systematic errors, i.e. it **underfits** (high bias).
+
+::: {layout-ncol=2}
+![The true value function.](img/featurecoding-data.png){#fig-featurecoding-data}
+
+![Its linear approximation from the raw variables.](img/featurecoding-linear.png){#fig-featurecoding-linear}
+:::
+
+The classical answer is to keep the approximator linear, but to feed it a richer feature vector, obtained by passing the raw variables through a set of fixed non-linear functions. Several such **bases** are used in practice:
+
+* **Polynomial features**: all products of the variables up to a given order, e.g. $[1, x, y, x \, y, x^2, y^2, \ldots]$. Simple, but their number explodes with the dimension of the state space.
+* **Fourier basis**: cosines of increasing frequency, which are good at representing smooth periodic value functions.
+* **Discrete, coarse and tile coding**: the state space is covered by (possibly overlapping) regions, and the feature vector says in which regions the state falls. Coarse and tile coding use overlapping regions, so that neighboring states share features and generalize to each other.
+* **Radial-basis functions** (RBF): each feature is a Gaussian centered on a prototypical state, so a feature is active only for states close to its center.
+
+The interest of these methods is that the approximator stays linear in $\varphi$, so learning is fast and its convergence is **guaranteed**, which is not the case with non-linear approximators. Their limit is that somebody has to choose the basis, and that the number of features needed grows very quickly with the dimensionality of the state space: for a state that is an image, no such basis is realistic.
+
+This is exactly what deep neural networks solve. Instead of designing the features by hand and learning only the last linear layer, a deep network **learns the features too** (@sec-deeplearning). The price is a loss of the convergence guarantees and a much higher sample complexity, which is the fundamental trade-off of deep RL.
 
 ## Policy-based function approximation
 

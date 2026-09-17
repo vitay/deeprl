@@ -12,17 +12,17 @@ For discrete action spaces, the output of the NN can be a **softmax** layer, dir
 For continuous action spaces, the output layer can directly control the effector (e.g. the joint angles of a robotic arm).
 Parameterized policies can represent continuous policies and avoid the curse of dimensionality. See Section @sec-continuousspaces for more details.
 
-![In policy search, the function approximator outputs direcly the policy $\pi_\theta(s, a)$, not the Q-values.](img/policysearch.png){#fig-policysearchmodel}
+![In policy search, the function approximator outputs directly the policy $\pi_\theta(s, a)$, not the Q-values.](img/policysearch.png){#fig-policysearchmodel}
 
 ## Policy search
 
 **Policy search** methods directly learn to estimate the policy $\pi_\theta$ with a parameterized function estimator. The goal of the neural network is to maximize an objective function representing the **return** (sum of rewards, noted $R(\tau)$ for simplicity) of the trajectories $\tau = (s_0, a_0, s_1, a_1, \ldots, s_T, a_T)$ selected by the policy $\pi_\theta$:
 
 $$
-    J(\theta) = \mathbb{E}_{\tau \sim \rho_\theta}[R(\tau)] = \mathbb{E}_{\tau \sim \rho_\theta}[\sum_{t=0}^T \gamma^t \, r(s_t, a_t, s_{t+1}) ]
+    \mathcal{J}(\theta) = \mathbb{E}_{\tau \sim \rho_\theta}[R(\tau)] = \mathbb{E}_{\tau \sim \rho_\theta}[\sum_{t=0}^T \gamma^t \, r(s_t, a_t, s_{t+1}) ]
 $$
 
-![We search for a policy that only generates trajectories associated wizh a high return.](img/policysearch.svg){#fig-policysearch width=60%}
+![We search for a policy that only generates trajectories associated with a high return.](img/policysearch.svg){#fig-policysearch width=60%}
 
 To maximize this objective function, the policy $\pi_\theta$ should only generate trajectories $\tau$ associated with high returns $R(\tau)$ and avoid those with low return, which is exactly what we want.
 
@@ -35,13 +35,13 @@ $$
 $p_0 (s_0)$ is the initial probability of starting in $s_0$ (independent from the policy) and $p(s_{t+1} | s_t, a_t)$ is the transition probability defining the MDP. Having the probability distribution of the trajectories, we can expand the mathematical expectation in the objective function:
 
 $$
-    J(\theta) = \int_\tau \rho_\theta (\tau) \, R(\tau) \, d\tau
+    \mathcal{J}(\theta) = \int_\tau \rho_\theta (\tau) \, R(\tau) \, d\tau
 $$
 
 Monte Carlo sampling could be used to estimate the objective function. One basically would have to sample multiple trajectories $\{\tau_i\}$ and average the obtained returns:
 
 $$
-    J(\theta) \approx \frac{1}{N} \, \sum_{i=1}^N  R(\tau_i)
+    \mathcal{J}(\theta) \approx \frac{1}{N} \, \sum_{i=1}^N  R(\tau_i)
 $$
 
 However, this approach would suffer from several problems:
@@ -50,16 +50,16 @@ However, this approach would suffer from several problems:
 2. For stability reasons, only small changes can be made to the policy at each iteration, so it would necessitate a lot of episodes (**sample complexity**).
 3. For continuing tasks ($T = \infty$), the return can not be estimated as the episode never ends.
 
-The policy search methods presented in this section are called **policy gradient methods**. As we are going to apply gradient ascent on the weights $\theta$ in order to maximize $J(\theta)$, all we actually need is the gradient $\nabla_\theta J(\theta)$ of the objective function w.r.t the weights:
+The policy search methods presented in this section are called **policy gradient methods**. As we are going to apply gradient ascent on the weights $\theta$ in order to maximize $\mathcal{J}(\theta)$, all we actually need is the gradient $\nabla_\theta \mathcal{J}(\theta)$ of the objective function w.r.t the weights:
 
 $$
-    \nabla_\theta J(\theta) = \frac{\partial J(\theta)}{\partial \theta}
+    \nabla_\theta \mathcal{J}(\theta) = \frac{\partial \mathcal{J}(\theta)}{\partial \theta}
 $$
 
 Once a suitable estimation of this **policy gradient** is obtained, gradient ascent is straightforward:
 
 $$
-    \theta \leftarrow \theta + \eta \, \nabla_\theta J(\theta)
+    \theta \leftarrow \theta + \eta \, \nabla_\theta \mathcal{J}(\theta)
 $$
 
 The rest of this section basically presents methods allowing to estimate the policy gradient (REINFORCE, DPG) and to improve the sample complexity. See:
@@ -77,7 +77,7 @@ The article by @Peters2008 is also a good overview of policy gradient methods.
 @Williams1992 proposed a useful estimate of the policy gradient. Considering that the return $R(\tau)$ of a trajectory does not depend on the parameters $\theta$, one can simplify the policy gradient in the following way:
 
 $$
-    \nabla_\theta J(\theta) = \nabla_\theta \int_\tau \rho_\theta (\tau) \, R(\tau) \, d\tau =  \int_\tau (\nabla_\theta \rho_\theta (\tau)) \, R(\tau) \, d\tau
+    \nabla_\theta \mathcal{J}(\theta) = \nabla_\theta \int_\tau \rho_\theta (\tau) \, R(\tau) \, d\tau =  \int_\tau (\nabla_\theta \rho_\theta (\tau)) \, R(\tau) \, d\tau
 $$
 
 We now use the **log-trick**, a simple identity based on the fact that:
@@ -95,13 +95,13 @@ $$
 The policy gradient becomes:
 
 $$
-    \nabla_\theta J(\theta) =  \int_\tau \rho_\theta (\tau) \, \nabla_\theta \log \rho_\theta (\tau) \, R(\tau) \, d\tau
+    \nabla_\theta \mathcal{J}(\theta) =  \int_\tau \rho_\theta (\tau) \, \nabla_\theta \log \rho_\theta (\tau) \, R(\tau) \, d\tau
 $$
 
 which now has the form of a mathematical expectation:
 
 $$
-    \nabla_\theta J(\theta) =  \mathbb{E}_{\tau \sim \rho_\theta}[ \nabla_\theta \log \rho_\theta (\tau) \, R(\tau) ]
+    \nabla_\theta \mathcal{J}(\theta) =  \mathbb{E}_{\tau \sim \rho_\theta}[ \nabla_\theta \log \rho_\theta (\tau) \, R(\tau) ]
 $$
 
 This means that we can obtain an estimate of the policy gradient by simply sampling different trajectories $\{\tau_i\}$ and averaging $\nabla_\theta \log \rho_\theta (\tau_i) \, R(\tau_i)$ (Monte Carlo sampling).
@@ -123,7 +123,7 @@ $\nabla_\theta \log \pi_\theta(s_t, a_t)$ is called the **score function**.
 This is the main reason why policy gradient algorithms are used: the gradient is independent from the MDP dynamics, allowing **model-free** learning. The policy gradient is then given by:
 
 $$
-    \nabla_\theta J(\theta) =  \mathbb{E}_{\tau \sim \rho_\theta}[\sum_{t=0}^T \nabla_\theta \log \pi_\theta(s_t, a_t) \, R(\tau) ] =  \mathbb{E}_{\tau \sim \rho_\theta}[ \sum_{t=0}^T \nabla_\theta \log \pi_\theta(s_t, a_t) \, (\sum_{t=0}^T \gamma^t r_{t+1})]
+    \nabla_\theta \mathcal{J}(\theta) =  \mathbb{E}_{\tau \sim \rho_\theta}[\sum_{t=0}^T \nabla_\theta \log \pi_\theta(s_t, a_t) \, R(\tau) ] =  \mathbb{E}_{\tau \sim \rho_\theta}[ \sum_{t=0}^T \nabla_\theta \log \pi_\theta(s_t, a_t) \, (\sum_{t=0}^T \gamma^t r_{t+1})]
 $$
 
 Estimating the policy gradient now becomes straightforward using Monte Carlo sampling. The resulting algorithm is called the **REINFORCE** algorithm [@Williams1992]:
@@ -138,13 +138,13 @@ Estimating the policy gradient now becomes straightforward using Monte Carlo sam
 * Estimate the policy gradient as an average over the trajectories:
 
 $$
-    \nabla_\theta J(\theta) \approx \frac{1}{N} \sum_{i=1}^N \sum_{t=0}^T \nabla_\theta \log \pi_\theta(s_t, a_t) \, R(\tau_i)
+    \nabla_\theta \mathcal{J}(\theta) \approx \frac{1}{N} \sum_{i=1}^N \sum_{t=0}^T \nabla_\theta \log \pi_\theta(s_t, a_t) \, R(\tau_i)
 $$
 
 * Update the policy using gradient ascent:
 
 $$
-    \theta \leftarrow \theta + \eta \, \nabla_\theta J(\theta)
+    \theta \leftarrow \theta + \eta \, \nabla_\theta \mathcal{J}(\theta)
 $$
 
 :::
@@ -202,12 +202,12 @@ $$
 
 * Estimate the policy gradient as an average over the trajectories:
 $$
-    \nabla_\theta J(\theta) \approx \frac{1}{N} \sum_{i=1}^N \sum_{t=0}^T \nabla_\theta \log \pi_\theta(s_t, a_t) \, ( R(\tau_i) - \hat{R})
+    \nabla_\theta \mathcal{J}(\theta) \approx \frac{1}{N} \sum_{i=1}^N \sum_{t=0}^T \nabla_\theta \log \pi_\theta(s_t, a_t) \, ( R(\tau_i) - \hat{R})
 $$
 
 * Update the policy using gradient ascent:
 $$
-    \theta \leftarrow \theta + \eta \, \nabla_\theta J(\theta)
+    \theta \leftarrow \theta + \eta \, \nabla_\theta \mathcal{J}(\theta)
 $$
 
 :::
@@ -216,7 +216,7 @@ This obviously solves the reward scaling problem, and reduces the variance of th
 
 
 $$
-    \nabla_\theta J(\theta) =  \mathbb{E}_{\tau \sim \rho_\theta}[\nabla_\theta \log \rho_\theta (\tau) \, (R(\tau) -b) ]
+    \nabla_\theta \mathcal{J}(\theta) =  \mathbb{E}_{\tau \sim \rho_\theta}[\nabla_\theta \log \rho_\theta (\tau) \, (R(\tau) -b) ]
 $$
 
 The proof is actually quite simple:
@@ -244,19 +244,19 @@ but the mean reward actually work quite well. Advantage actor-critic methods rep
 Let's have another look at the REINFORCE estimate of the policy gradient after sampling:
 
 $$
-   \nabla_\theta J(\theta) \approx \frac{1}{N} \sum_{i=1}^N \sum_{t=0}^T \nabla_\theta \log \pi_\theta(s_t, a_t) \, R(\tau_i) = \frac{1}{N} \sum_{i=1}^N (\sum_{t=0}^T \nabla_\theta \log \pi_\theta(s_t, a_t) ) \, (\sum_{t'=0}^T \gamma^{t'} \, r(s_{t'}, a_{t'}, s_{t'+1}) )
+   \nabla_\theta \mathcal{J}(\theta) \approx \frac{1}{N} \sum_{i=1}^N \sum_{t=0}^T \nabla_\theta \log \pi_\theta(s_t, a_t) \, R(\tau_i) = \frac{1}{N} \sum_{i=1}^N (\sum_{t=0}^T \nabla_\theta \log \pi_\theta(s_t, a_t) ) \, (\sum_{t'=0}^T \gamma^{t'} \, r(s_{t'}, a_{t'}, s_{t'+1}) )
 $$
 
 For each transition $(s_t, a_t)$, the  gradient of its log-likelihood (*score function*) $\nabla_\theta \log \pi_\theta(s_t, a_t) )$ is multiplied by the return of the whole episode $R(\tau) = \sum_{t'=0}^T \gamma^{t'} \, r(s_{t'}, a_{t'}, s_{t'+1})$. However, the **causality principle** dictates that the reward received at $t=0$ does not depend on actions taken in the future, so we can simplify the return for each transition:
 
 $$
- \nabla_\theta J(\theta) \approx \frac{1}{N} \sum_{i=1}^N (\sum_{t=0}^T \nabla_\theta \log \pi_\theta(s_t, a_t)  \, \sum_{t'=t}^T \gamma^{t'-t} \, r(s_{t'}, a_{t'}, s_{t'+1}) )
+ \nabla_\theta \mathcal{J}(\theta) \approx \frac{1}{N} \sum_{i=1}^N (\sum_{t=0}^T \nabla_\theta \log \pi_\theta(s_t, a_t)  \, \sum_{t'=t}^T \gamma^{t'-t} \, r(s_{t'}, a_{t'}, s_{t'+1}) )
 $$
 
 The quantity $R_t = \sum_{t'=t}^T \gamma^{t'-t} \, r(s_{t'}, a_{t'}, s_{t'+1})$ is the return (or **reward to-go**) after the transition $(s_t, a_t)$, i.e. the discounted sum of future rewards. Quite obviously, the Q-value of that action is the mathematical expectation of this quantity.
 
 $$
- \nabla_\theta J(\theta) \approx \frac{1}{N} \sum_{i=1}^N \sum_{t=0}^T \nabla_\theta \log \pi_\theta(s_t, a_t) \, R_t
+ \nabla_\theta \mathcal{J}(\theta) \approx \frac{1}{N} \sum_{i=1}^N \sum_{t=0}^T \nabla_\theta \log \pi_\theta(s_t, a_t) \, R_t
 $$
 
 ![The reward to-go is the sum of rewards gathered during a single trajectory after a transition $(s, a)$. The Q-value of the action $(s, a)$ is the expectation of the reward to-go. Source: S. Levine's lecture <http://rll.berkeley.edu/deeprlcourse/>.](img/rewardtogo.png){#fig-rewardtogo width=50%}
@@ -264,7 +264,7 @@ $$
 @Sutton1999 showed that the policy gradient can be estimated by replacing the return of the sampled trajectory with the Q-value of each action, what leads to the **policy gradient theorem**:
 
 $$
-    \nabla_\theta J(\theta) =  \mathbb{E}_{s \sim \rho_\theta, a \sim \pi_\theta}[\nabla_\theta \log \pi_\theta(s, a) \, Q^{\pi_\theta}(s, a)]
+    \nabla_\theta \mathcal{J}(\theta) =  \mathbb{E}_{s \sim \rho_\theta, a \sim \pi_\theta}[\nabla_\theta \log \pi_\theta(s, a) \, Q^{\pi_\theta}(s, a)]
 $$
 
 where $\rho_\theta$ is the distribution of states reachable under the policy $\pi_\theta$. Because the actual return $R(\tau)$ is replaced by its expectation $Q^{\pi_\theta}(s, a)$, the policy gradient is now a mathematical expectation over **single transitions** instead of complete trajectories, allowing **bootstrapping** as in temporal difference methods.
@@ -274,10 +274,10 @@ One clearly sees that REINFORCE is actually a special case of the policy gradien
 The problem is of course that the true Q-value of the actions is as unknown as the policy. However, @Sutton1999 showed that it is possible to estimate the Q-values with a function approximator $Q_\varphi(s, a)$ with parameters $\varphi$ and obtain an unbiased estimation:
 
 $$
-    \nabla_\theta J(\theta) =  \mathbb{E}_{s \sim \rho_\theta, a \sim \pi_\theta}[\nabla_\theta \log \pi_\theta(s, a) \, Q_\varphi(s, a))]
+    \nabla_\theta \mathcal{J}(\theta) =  \mathbb{E}_{s \sim \rho_\theta, a \sim \pi_\theta}[\nabla_\theta \log \pi_\theta(s, a) \, Q_\varphi(s, a))]
 $$
 
-Formally, the Q-value approximator must respect the Compatible Function Approximation Theorem, which states that the value approximator must be compatible with the policy ($\nabla_\varphi Q_\varphi(s, a) = \nabla_\theta \log \pi_\theta(s, a)$) and minimize the mean-square error with the true Q-values $\mathbb{E}_{s \sim \rho^\pi, a \sim \pi_\theta} [(Q^{\pi_\theta}(s, a) - Q_\varphi(s, a))^2]$. In the algorithms presented in this section, these conditions are either met or neglected.
+Formally, the Q-value approximator must respect the Compatible Function Approximation Theorem, which states that the value approximator must be compatible with the policy ($\nabla_\varphi Q_\varphi(s, a) = \nabla_\theta \log \pi_\theta(s, a)$) and minimize the mean-square error with the true Q-values $\mathbb{E}_{s \sim \rho_\theta, a \sim \pi_\theta} [(Q^{\pi_\theta}(s, a) - Q_\varphi(s, a))^2]$. In the algorithms presented in this section, these conditions are either met or neglected.
 
 The resulting algorithm belongs to the **actor-critic** class, in the sense that:
 

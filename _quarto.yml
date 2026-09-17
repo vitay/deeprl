@@ -14,7 +14,7 @@ book:
   bread-crumbs: false
 
   sidebar:
-    style: floating
+    style: docked
     background: white
     tools:
       - icon: github
@@ -40,7 +40,7 @@ book:
         - src/2.3-DQN.qmd
         - src/2.4-DQNvariants.qmd
         - src/2.5-DistributedLearning.qmd
-        - src/2.6-Misc.qmd
+        #- src/2.6-Misc.qmd
     - part: "**Policy-gradient methods**"
       chapters:
         - src/3.1-PolicyGradient.qmd
@@ -51,7 +51,7 @@ book:
         - src/3.6-PPO.qmd
         - src/3.7-ACER.qmd
         - src/3.8-EntropyRL.qmd
-        - src/3.9-Misc.qmd
+        #- src/3.9-Misc.qmd
     - part: "**Model-based deep RL**"
       chapters:
         - src/4.1-ModelBased.qmd
@@ -59,7 +59,7 @@ book:
         - src/4.3-Planning.qmd
         - src/4.4-WorldModels.qmd
         - src/4.5-AlphaGo.qmd
-        - src/4.6-Misc.qmd
+        #- src/4.6-Misc.qmd
     - part: "**Advanced topics**"
       chapters:
         - src/5.1-Intrinsic.qmd
@@ -85,4 +85,9 @@ format:
     highlight-style: github
     code-line-numbers: false
     lightbox: true
+    page-layout: full
+
+
+    grid:
+      sidebar-width: 300px
 

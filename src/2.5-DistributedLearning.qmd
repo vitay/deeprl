@@ -7,7 +7,7 @@ The main limitation of deep RL is the slowness of learning, which is mainly infl
 * the **sample complexity**, i.e. the number of transitions needed to learn a satisfying policy.
 * the **online interaction** with the environment (states are visited one after the other).
 
-The second factor is particularly critical in real-world applications like robotics: physical robots evolve in real time, so the acquisition speed of transitions will be limited. Even in simulation (video games, robot emulators), the environment might turn out to be much slower than training the underlying neural network. In most settings, the value and target networks runs on a single GPu, while the environment is simulated on the CPU, as well as the ERM (there is not enough on the GPU to store it there). As the communication between the CPU and the GPU is rather slow, the GPU has to wait quite a long tme between two minibatches and is therefore idle most of the time. 
+The second factor is particularly critical in real-world applications like robotics: physical robots evolve in real time, so the acquisition speed of transitions will be limited. Even in simulation (video games, robot emulators), the environment might turn out to be much slower than training the underlying neural network. In most settings, the value and target networks runs on a single GPU, while the environment is simulated on the CPU, as well as the ERM (there is not enough on the GPU to store it there). As the communication between the CPU and the GPU is rather slow, the GPU has to wait quite a long time between two minibatches and is therefore idle most of the time. 
 
 ![Typical architecture of DQN using a single CPU and GPU. Source: @Nair2015.](img/gorila1.png){#fig-gorila1}
 

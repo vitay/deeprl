@@ -5,7 +5,7 @@
 ### Definition
 
 Reinforcement Learning methods apply to problems where an agent interacts with an environment in discrete time steps (@fig-agentenv). 
-At time $t$, the agent is in state $s_t$ and decides to perform an action $a_t$. At the next time step, it arrives in the state $s_{t+1}$ and obtains the reward $r_{t+1}$. In the genral case, transitions can be stochastic (there is a probability of arriving in a given state after an action), as well as the rewards (as in the bandits previously seen). The goal of the agent is to maximize the reward obtained on the long term.
+At time $t$, the agent is in state $s_t$ and decides to perform an action $a_t$. At the next time step, it arrives in the state $s_{t+1}$ and obtains the reward $r_{t+1}$. In the general case, transitions can be stochastic (there is a probability of arriving in a given state after an action), as well as the rewards (as in the bandits previously seen). The goal of the agent is to maximize the reward obtained on the long term.
 
 ![Interaction between an agent and its environment. Source: @Sutton1998.](img/rl-agent.png){#fig-agentenv}
 
@@ -40,7 +40,7 @@ $$
 
 In deep RL, the state and action spaces can be infinite, but let's focus on finite MDPs for now.
 
-The behavior of the agent over time is a **trajectory** (also called episode, history or roll-out) $\tau = (s_0, a_0, s_1, a_, \ldots, s_T, a_T)$ defined by the dynamics of the MDP. Each transition occurs with a probability $p(s'|s, a)$ and provides a certain amount of reward defined by $r(s, a, s')$. In episodic tasks, the horizon $T$ is finite, while in continuing tasks $T$ is infinite.
+The behavior of the agent over time is a **trajectory** (also called episode, history or roll-out) $\tau = (s_0, a_0, s_1, a_1, \ldots, s_T, a_T)$ defined by the dynamics of the MDP. Each transition occurs with a probability $p(s'|s, a)$ and provides a certain amount of reward defined by $r(s, a, s')$. In episodic tasks, the horizon $T$ is finite, while in continuing tasks $T$ is infinite.
 
 ### Markov property
 
@@ -139,7 +139,7 @@ $$
 :::{.callout-note icon="false"}
 ## Why the reward on the long term?
 
-![Example of a MDP with two actions in state $s_1$, lading to two different returns. The states $s_5$ and $s_6$ are terminal states, where no reward is received anymore.](img/return-example.svg){#fig-returnexample width=60%}
+![Example of a MDP with two actions in state $s_1$, leading to two different returns. The states $s_5$ and $s_6$ are terminal states, where no reward is received anymore.](img/return-example.svg){#fig-returnexample width=60%}
 
 In the MDP above, selecting the action $a_1$ in $s_1$ does not bring reward immediately ($r_1 = 0$) but allows to reach $s_5$ in the future and get a reward of 10.
 Selecting $a_2$ in $s_1$ brings immediately a reward of 1, but that will be all.
@@ -210,8 +210,7 @@ Only rewards that are obtained using the policy $\pi$ should be taken into accou
 
 The value of a state is not intrinsic to the state itself, it depends on the policy: One could be in a state which is very close to the goal (only one action left to win the game), but if the policy is very bad, the "good" action will not be chosen and the state will have a small value.
 
-The value of taking an action $a$ in a state $s$ under policy $\pi$ is the expected return starting 
-
+The value of taking an action $a$ in a state $s$ under the policy $\pi$ is the expected return when starting from that state, taking that action, and thereafter following $\pi$.
 Similarly, the **action-value** (or **Q-value**) for a state-action pair $(s, a)$ under the policy $\pi$  is defined as:
 
 $$
@@ -309,7 +308,7 @@ which is called the **Bellman equation** for $Q^{\pi}$.
 The optimal policy is the policy that gathers the maximum of reward on the long term.
 Value functions define a partial ordering over policies:
 
-::: {.callout-tip}
+:::{.callout-tip icon="false"}
 ## Partial ordering
 A policy $\pi$ is better than another policy $\pi'$ if its expected return is greater or equal than that of $\pi'$ for all states $s$.
 
@@ -618,7 +617,7 @@ $$
 
 
 
-![Iterative policy estimaiton. Source: David Silver. <http://www0.cs.ucl.ac.uk/staff/d.silver/web/Teaching.html>](img/iterativepolicyevaluation2.png){width=80%}
+![Iterative policy evaluation. Source: David Silver. <http://www0.cs.ucl.ac.uk/staff/d.silver/web/Teaching.html>](img/iterativepolicyevaluation2.png){width=80%}
 
 The value function at step $k+1$ $V_{k+1}(s)$ is computed using the previous estimates $V_{k}(s)$ and the Bellman equation transformed into an **update rule**.
 
@@ -668,11 +667,11 @@ $$Q^{\pi} (s, a) > Q^{\pi} (s, \pi(s)) = V^{\pi}(s)$$
 then it is better to select $a$ once in $s$ and thereafter follow $\pi$. If there is no better action, we keep the previous policy for this state. This corresponds to a **greedy** action selection over the Q-values, defining a **deterministic** policy $\pi(s)$:
 
 
-$$\pi(s) \leftarrow \text{argmax}_a \, Q^{\pi} (s, a) = \sum_{s' \in \mathcal{S}} p(s' | s, a) \, [r(s, a, s') + \gamma \, V^{\pi}(s') ]$$
+$$\pi(s) \leftarrow \text{argmax}_a \, Q^{\pi} (s, a) = \text{argmax}_a \, \sum_{s' \in \mathcal{S}} p(s' | s, a) \, [r(s, a, s') + \gamma \, V^{\pi}(s') ]$$
 
 After the policy improvement, the Q-value of each deterministic action $\pi(s)$ has increased or stayed the same.
 
-$$\text{argmax}_a \; Q^{\pi} (s, a) = \sum_{s' \in \mathcal{S}} p(s' | s, a) \, [r(s, a, s') + \gamma \, V^{\pi}(s') ] \geq Q^\pi(s, \pi(s))$$
+$$\max_a \; Q^{\pi} (s, a) = \max_a \, \sum_{s' \in \mathcal{S}} p(s' | s, a) \, [r(s, a, s') + \gamma \, V^{\pi}(s') ] \geq Q^\pi(s, \pi(s))$$
 
 This defines an improved policy $\pi'$, where all states and actions have a higher value than previously.
 **Greedy action selection** over the state value function implements policy improvement:

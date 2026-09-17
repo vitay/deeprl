@@ -1,4 +1,4 @@
-# Policy optimization (TRPO, PPO)
+# Policy optimization (TRPO, PPO) {#sec-ppo}
 
 
 ## Trust Region Policy Optimization (TRPO)
@@ -38,16 +38,16 @@ One can already recognize the main motivation behind natural gradients: finding 
 Let's now define the following objective function:
 
 $$
-    J_{\theta_\text{old}}(\theta) = \eta(\theta_\text{old}) + \mathbb{E}_{s \sim \rho_{\pi_{\theta_\text{old}}}, a \sim \pi_\theta} [A_{\pi_{\theta_\text{old}}}(s, a)]
+    \mathcal{J}_{\theta_\text{old}}(\theta) = \eta(\theta_\text{old}) + \mathbb{E}_{s \sim \rho_{\pi_{\theta_\text{old}}}, a \sim \pi_\theta} [A_{\pi_{\theta_\text{old}}}(s, a)]
 $$
 
-It is easy to see that $J_{\theta_\text{old}}(\theta_\text{old}) = \eta(\theta_\text{old})$ by definition of the advantage, and that its gradient w.r.t to $\theta$ taken in $\theta_\text{old}$ is the same as the one of $\eta(\theta_\text{old})$:
+It is easy to see that $\mathcal{J}_{\theta_\text{old}}(\theta_\text{old}) = \eta(\theta_\text{old})$ by definition of the advantage, and that its gradient w.r.t to $\theta$ taken in $\theta_\text{old}$ is the same as the one of $\eta(\theta_\text{old})$:
 
 $$
-    \nabla_\theta J_{\theta_\text{old}}(\theta)|_{\theta = \theta_\text{old}} = \nabla_\theta \eta(\theta)|_{\theta = \theta_\text{old}}
+    \nabla_\theta \mathcal{J}_{\theta_\text{old}}(\theta)|_{\theta = \theta_\text{old}} = \nabla_\theta \eta(\theta)|_{\theta = \theta_\text{old}}
 $$
 
-This means that, at least locally, one maximization step of $J_{\theta_\text{old}}(\theta)$ goes in the same direction as maximizing $\eta(\theta)$ if we do not go too far. $J$ is called a **surrogate objective function**: it is not what we want to optimize, but it leads to the same result. TRPO belongs to the class of **minorization-majorization** algorithms (MM, we first find a local lower bound and then maximize it, iteratively).
+This means that, at least locally, one maximization step of $\mathcal{J}_{\theta_\text{old}}(\theta)$ goes in the same direction as maximizing $\eta(\theta)$ if we do not go too far. $\mathcal{J}$ is called a **surrogate objective function**: it is not what we want to optimize, but it leads to the same result. TRPO belongs to the class of **minorization-majorization** algorithms (MM, we first find a local lower bound and then maximize it, iteratively).
 
 Let's now suppose that we can find its maximum, i.e. a policy $\pi'$ that maximizes the advantage of each state-action pair over $\pi_{\theta_\text{old}}$. There would be no guarantee that $\pi'$ and $\pi_{\theta_\text{old}}$ are close enough so that the assumption stands. We could therefore make only a small step in its direction and hope for the best:
 
@@ -55,59 +55,59 @@ $$
     \pi_\theta(s, a) = (1-\alpha) \, \pi_{\theta_\text{old}}(s, a) + \alpha \, \pi'(s,a)
 $${#eq-linesearch}
 
-This is the conservative policy iteration method of @Kakade2002, where a bound on the difference between $\eta(\pi_{\theta_\text{old}})$ and $J_{\theta_\text{old}}(\theta)$ can be derived.
+This is the conservative policy iteration method of @Kakade2002, where a bound on the difference between $\eta(\pi_{\theta_\text{old}})$ and $\mathcal{J}_{\theta_\text{old}}(\theta)$ can be derived.
 
 @Schulman2015 propose to penalize instead the objective function by the KL divergence between the new and old policies. There are basically two ways to penalize an optimization problem:
 
 1. Adding a hard constraint on the KL divergence, leading to a constrained optimization problem (where Lagrange methods can be applied):
 
 $$
-    \text{maximize}_\theta \qquad J_{\theta_\text{old}}(\theta) \\
-    \qquad \text{subject to} \qquad D_{KL}(\pi_{\theta_\text{old}} || \pi_\theta) \leq \delta
+    \text{maximize}_\theta \qquad \mathcal{J}_{\theta_\text{old}}(\theta) \\
+    \qquad \text{subject to} \qquad D_\text{KL}(\pi_{\theta_\text{old}} || \pi_\theta) \leq \delta
 $$
 
 2. Regularizing the objective function with the KL divergence:
 
 $$
-    \text{maximize}_\theta \qquad L(\theta) = J_{\theta_\text{old}}(\pi_\theta) - C \,  D_{KL}(\pi_{\theta_\text{old}} || \pi_\theta)
+    \text{maximize}_\theta \qquad \mathcal{L}(\theta) = \mathcal{J}_{\theta_\text{old}}(\pi_\theta) - C \,  D_\text{KL}(\pi_{\theta_\text{old}} || \pi_\theta)
 $$
 
 
-In the first case, we force the KL divergence to stay below a certain threshold. In the second case, we penalize solutions that would maximize $J_{\theta_\text{old}}(\theta)$ but would be too different from the previous policy.
+In the first case, we force the KL divergence to stay below a certain threshold. In the second case, we penalize solutions that would maximize $\mathcal{J}_{\theta_\text{old}}(\theta)$ but would be too different from the previous policy.
 In both cases, we want to find a policy $\pi_\theta$ maximizing the expected return (the objective), but which is still close (in terms of KL divergence) from the current one. Both methods are however sensible to the choice of the parameters $\delta$ and $C$.
 
-Formally, the KL divergence $D_{KL}(\pi_{\theta_\text{old}} || \pi_\theta)$ should be the maximum KL divergence over the state space:
+Formally, the KL divergence $D_\text{KL}(\pi_{\theta_\text{old}} || \pi_\theta)$ should be the maximum KL divergence over the state space:
 
 $$
-    D^\text{max}_{KL}(\pi_{\theta_\text{old}} || \pi_\theta) = \max_s D_{KL}(\pi_{\theta_\text{old}}(s, .) || \pi_\theta(s, .))
+    D^\text{max}_{KL}(\pi_{\theta_\text{old}} || \pi_\theta) = \max_s D_\text{KL}(\pi_{\theta_\text{old}}(s, .) || \pi_\theta(s, .))
 $$
 
 This maximum KL divergence over the state space would be very hard to compute. Empirical evaluations showed however that it is safe to use the mean KL divergence, or even to sample it:
 
 $$
-    \bar{D}_{KL}(\pi_{\theta_\text{old}} || \pi_\theta) = \mathbb{E}_s [D_{KL}(\pi_{\theta_\text{old}}(s, .) || \pi_\theta(s, .))] \approx \frac{1}{N} \sum_{i=1}^N D_{KL}(\pi_{\theta_\text{old}}(s_i, .) || \pi_\theta(s_i, .))
+    \bar{D}_{KL}(\pi_{\theta_\text{old}} || \pi_\theta) = \mathbb{E}_s [D_\text{KL}(\pi_{\theta_\text{old}}(s, .) || \pi_\theta(s, .))] \approx \frac{1}{N} \sum_{i=1}^N D_\text{KL}(\pi_{\theta_\text{old}}(s_i, .) || \pi_\theta(s_i, .))
 $$
 
 ### Trust regions
 
-![Graphical illustration of trust regions. From the current parameters $\theta_\text{old}$, we search for the maximum $\theta^*$ of the real objective $\eta(\theta)$. The unconstrained objective $J_{\theta_\text{old}}(\theta)$ is locally similar to $\eta(\theta)$ but quickly diverge as $\pi_\theta$ and $\pi_{\theta_\text{old}}$ become very different. The surrogate objective $L(\theta) = J_{\theta_\text{old}} (\theta) - C \,  D_{KL}(\pi_{\theta_\text{old}} || \pi_\theta)$ is always smaller than $\eta(\theta)$ and has a maximum close to $\theta^*$ which keeps $\pi_\theta$ and $\pi_{\theta_\text{old}}$ close from each other in terms of KL divergence. The region around $\theta_\text{old}$ where big optimization steps can be taken without changing the policy too much is called the trust region.](img/trustregion.png){#fig-trustregion width=70%}
+![Graphical illustration of trust regions. From the current parameters $\theta_\text{old}$, we search for the maximum $\theta^*$ of the real objective $\eta(\theta)$. The unconstrained objective $\mathcal{J}_{\theta_\text{old}}(\theta)$ is locally similar to $\eta(\theta)$ but quickly diverge as $\pi_\theta$ and $\pi_{\theta_\text{old}}$ become very different. The surrogate objective $\mathcal{L}(\theta) = \mathcal{J}_{\theta_\text{old}} (\theta) - C \,  D_\text{KL}(\pi_{\theta_\text{old}} || \pi_\theta)$ is always smaller than $\eta(\theta)$ and has a maximum close to $\theta^*$ which keeps $\pi_\theta$ and $\pi_{\theta_\text{old}}$ close from each other in terms of KL divergence. The region around $\theta_\text{old}$ where big optimization steps can be taken without changing the policy too much is called the trust region.](img/trustregion.png){#fig-trustregion width=70%}
 
-Before diving further into how these optimization problems can be solved, let's wonder why the algorithm is called **trust region policy optimization** using the regularized objective. @fig-trustregion illustrates the idea. The "real" objective function $\eta(\theta)$ should be maximized (with gradient descent or similar) starting from the parameters $\theta_\text{old}$. We cannot estimate the objective function directly, so we build a surrogate objective function $L(\theta) = J_{\theta_\text{old}} (\theta) - C \,  D_{KL}(\pi_{\theta_\text{old}} || \pi_\theta)$. We know that:
+Before diving further into how these optimization problems can be solved, let's wonder why the algorithm is called **trust region policy optimization** using the regularized objective. @fig-trustregion illustrates the idea. The "real" objective function $\eta(\theta)$ should be maximized (with gradient descent or similar) starting from the parameters $\theta_\text{old}$. We cannot estimate the objective function directly, so we build a surrogate objective function $\mathcal{L}(\theta) = \mathcal{J}_{\theta_\text{old}} (\theta) - C \,  D_\text{KL}(\pi_{\theta_\text{old}} || \pi_\theta)$. We know that:
 
 1. The two objectives have the same value in $\theta_\text{old}$:
 $$
-    L(\theta_\text{old}) = J_{\theta_\text{old}}(\theta_\text{old}) - C \,  D_{KL}(\pi_{\theta_\text{old}} || \pi_{\theta_\text{old}}) = \eta(\theta_\text{old})
+    \mathcal{L}(\theta_\text{old}) = \mathcal{J}_{\theta_\text{old}}(\theta_\text{old}) - C \,  D_\text{KL}(\pi_{\theta_\text{old}} || \pi_{\theta_\text{old}}) = \eta(\theta_\text{old})
 $$
 2. Their gradient w.r.t $\theta$ are the same in $\theta_\text{old}$:
 $$
-    \nabla_\theta L(\theta)|_{\theta = \theta_\text{old}} = \nabla_\theta \eta(\theta)|_{\theta = \theta_\text{old}}
+    \nabla_\theta \mathcal{L}(\theta)|_{\theta = \theta_\text{old}} = \nabla_\theta \eta(\theta)|_{\theta = \theta_\text{old}}
 $$
 3. The surrogate objective is always smaller than the real objective, as the KL divergence is positive:
 $$
-    \eta(\theta) \geq J_{\theta_\text{old}}(\theta) - C \,  D_{KL}(\pi_{\theta_\text{old}} || \pi_\theta)
+    \eta(\theta) \geq \mathcal{J}_{\theta_\text{old}}(\theta) - C \,  D_\text{KL}(\pi_{\theta_\text{old}} || \pi_\theta)
 $$
 
-Under these conditions, the surrogate objective is also called a **lower bound** of the primary objective. The interesting fact is that the value of $\theta$ that maximizes $L(\theta)$ is at the same time:
+Under these conditions, the surrogate objective is also called a **lower bound** of the primary objective. The interesting fact is that the value of $\theta$ that maximizes $\mathcal{L}(\theta)$ is at the same time:
 
 * A big step in the parameter space towards the maximum of $\eta(\theta)$, as $\theta$ and $\theta_\text{old}$ can be very different.
 * A small step in the policy distribution space, as the KL divergence between the previous and the new policies is kept small.
@@ -119,15 +119,15 @@ Exactly what we needed! The parameter region around $\theta_\text{old}$ where th
 Although the theoretical proofs in @Schulman2015 used the regularized optimization method, the practical implementation uses the constrained optimization problem:
 
 $$
-    \text{maximize}_\theta \qquad J_{\theta_\text{old}}(\theta) = \eta(\theta_\text{old}) + \mathbb{E}_{s \sim \rho_{\pi_{\theta_\text{old}}}, a \sim \pi_\theta} [A_{\pi_{\theta_\text{old}}}(s, a)] \\
-    \qquad \text{subject to} \qquad D_{KL}(\pi_{\theta_\text{old}} || \pi_\theta) \leq \delta
+    \text{maximize}_\theta \qquad \mathcal{J}_{\theta_\text{old}}(\theta) = \eta(\theta_\text{old}) + \mathbb{E}_{s \sim \rho_{\pi_{\theta_\text{old}}}, a \sim \pi_\theta} [A_{\pi_{\theta_\text{old}}}(s, a)] \\
+    \qquad \text{subject to} \qquad D_\text{KL}(\pi_{\theta_\text{old}} || \pi_\theta) \leq \delta
 $$
 
 The first thing to notice is that $\eta(\theta_\text{old})$ does not depend on $\theta$, so it is constant in the optimization problem. We only need to maximize the advantage of the actions taken by $\pi_\theta$ in each state visited by $\pi_{\theta_\text{old}}$. The problem is that $\pi_\theta$ is what we search, so we can not sample actions from it. The solution is to use **importance sampling** to allow sampling actions from $\pi_{\theta_\text{old}}$. This is possible as long as we correct the objective with the importance sampling weight:
 
 $$
     \text{maximize}_\theta \qquad \mathbb{E}_{s \sim \rho_{\pi_{\theta_\text{old}}}, a \sim \pi_{\theta_\text{old}}} [\frac{\pi_\theta(s, a)}{\pi_{\theta_\text{old}}(s, a)} \, A_{\pi_{\theta_\text{old}}}(s, a)] \\
-    \qquad \text{subject to} \qquad D_{KL}(\pi_{\theta_\text{old}} || \pi_\theta) \leq \delta
+    \qquad \text{subject to} \qquad D_\text{KL}(\pi_{\theta_\text{old}} || \pi_\theta) \leq \delta
 $$
 
 Now that states and actions are generated by the old policy, we can safely sample many trajectories using $\pi_{\theta_\text{old}}$ (@Schulman2015 proposes two methods called single path and Vine, but we ignore it here), compute the advantages of all state-action pairs (using real rewards along the trajectories), form the surrogate objective function and optimize it using second-order optimization methods.
@@ -136,7 +136,7 @@ One last thing to notice is that the advantages $A_{\pi_{\theta_\text{old}}}(s, 
 
 $$
     \text{maximize}_\theta \qquad \mathbb{E}_{s \sim \rho_{\pi_{\theta_\text{old}}}, a \sim \pi_{\theta_\text{old}}} [\frac{\pi_\theta(s, a)}{\pi_{\theta_\text{old}}(s, a)} \, Q_{\pi_{\theta_\text{old}}}(s, a)] \\
-    \qquad \text{subject to} \qquad D_{KL}(\pi_{\theta_\text{old}} || \pi_\theta) \leq \delta
+    \qquad \text{subject to} \qquad D_\text{KL}(\pi_{\theta_\text{old}} || \pi_\theta) \leq \delta
 $$
 
 Here we go, that's TRPO. It could seem a bit disappointing to come up with such a simple formulation (find a policy which maximizes the Q-value of sampled actions while being not too different from the previous one) after so many mathematical steps, but that is also the beauty of it: not only it works, but it is guaranteed to work. With TRPO, each optimization step brings the policy closer from an optimum, what is called **monotonic improvement**.
@@ -148,44 +148,44 @@ Now, how do we solve the constrained optimization problem? And what is the link 
 To solve constrained optimization problems, we can form a Lagrange function with an additional parameter $\lambda$ and search for its maximum:
 
 $$
-    \mathcal{L}(\theta, \lambda) = J_{\theta_\text{old}}(\theta)  - \lambda \, (D_{KL}(\pi_{\theta_\text{old}} || \pi_\theta) - \delta)
+    \mathcal{L}(\theta, \lambda) = \mathcal{J}_{\theta_\text{old}}(\theta)  - \lambda \, (D_\text{KL}(\pi_{\theta_\text{old}} || \pi_\theta) - \delta)
 $$
 
-Notice how close the Lagrange function is from the regularized problem used in the theory. We can form a first-order approximation of $J_{\theta_\text{old}}(\theta)$:
+Notice how close the Lagrange function is from the regularized problem used in the theory. We can form a first-order approximation of $\mathcal{J}_{\theta_\text{old}}(\theta)$:
 
 $$
-    J_{\theta_\text{old}}(\theta) = \nabla_\theta J_{\theta_\text{old}}(\theta) \, (\theta- \theta_\text{old})
+    \mathcal{J}_{\theta_\text{old}}(\theta) = \nabla_\theta \mathcal{J}_{\theta_\text{old}}(\theta) \, (\theta- \theta_\text{old})
 $$
 
-as $J_{\theta_\text{old}}(\theta_\text{old}) = 0$. $g = \nabla_\theta J_{\theta_\text{old}}(\theta)$ is the now familiar **policy gradient** with importance sampling. Higher-order terms do not matter, as they are going to be dominated by the KL divergence term.
+as $\mathcal{J}_{\theta_\text{old}}(\theta_\text{old}) = 0$. $g = \nabla_\theta \mathcal{J}_{\theta_\text{old}}(\theta)$ is the now familiar **policy gradient** with importance sampling. Higher-order terms do not matter, as they are going to be dominated by the KL divergence term.
 
 We will use a second-order approximation of the KL divergence term using the Fisher Information Matrix:
 
 $$
-    D_{KL}(\pi_{\theta_\text{old}} || \pi_\theta) = (\theta- \theta_\text{old})^T \, F(\theta_\text{old}) \,  (\theta- \theta_\text{old})
+    D_\text{KL}(\pi_{\theta_\text{old}} || \pi_\theta) = (\theta- \theta_\text{old})^T \, F(\theta_\text{old}) \,  (\theta- \theta_\text{old})
 $$
 
 We get the following Lagrangian function:
 
 $$
-    \mathcal{L}(\theta, \lambda) = \nabla_\theta J_{\theta_\text{old}}(\theta) \, (\theta- \theta_\text{old})  - \lambda \, (\theta- \theta_\text{old})^T \, F(\theta_\text{old}) \,  (\theta- \theta_\text{old})
+    \mathcal{L}(\theta, \lambda) = \nabla_\theta \mathcal{J}_{\theta_\text{old}}(\theta) \, (\theta- \theta_\text{old})  - \lambda \, (\theta- \theta_\text{old})^T \, F(\theta_\text{old}) \,  (\theta- \theta_\text{old})
 $$
 
 which is quadratic in $\Delta \theta = \theta- \theta_\text{old}$. It has therefore a unique maximum, characterized by a first-order derivative equal to 0:
 
 $$
-    \nabla_\theta J_{\theta_\text{old}}(\theta) = \lambda \, F(\theta_\text{old}) \,  \Delta \theta
+    \nabla_\theta \mathcal{J}_{\theta_\text{old}}(\theta) = \lambda \, F(\theta_\text{old}) \,  \Delta \theta
 $$
 
 or:
 
 $$
-    \Delta \theta  = \frac{1}{\lambda} \, F(\theta_\text{old})^{-1} \,  \nabla_\theta J_{\theta_\text{old}}(\theta)
+    \Delta \theta  = \frac{1}{\lambda} \, F(\theta_\text{old})^{-1} \,  \nabla_\theta \mathcal{J}_{\theta_\text{old}}(\theta)
 $$
 
 which is the **natural gradient descent**! The size of the step $\frac{1}{\lambda}$ still has to be determined, but it can also be replaced by a fixed hyperparameter.
 
-The main problem is now to compute and inverse the Fisher information matrix, which is quadratic with the number of parameters $\theta$, i.e. with the number of weights in the NN. @Schulman2015 proposes to used **conjugate gradients** to iteratively approximate the Fisher, a second-order method which will not be presented here (see <https://www.cs.cmu.edu/~quake-papers/painless-conjugate-gradient.pdf> for a detailed introduction). After the conjugate gradient optimization step, the constraint $D_{KL}(\pi_{\theta_\text{old}} || \pi_\theta) \leq \delta$ is however not ensured anymore, so a line search is made as in @eq-linesearch until that criteria is met.
+The main problem is now to compute and inverse the Fisher information matrix, which is quadratic with the number of parameters $\theta$, i.e. with the number of weights in the NN. @Schulman2015 proposes to used **conjugate gradients** to iteratively approximate the Fisher, a second-order method which will not be presented here (see <https://www.cs.cmu.edu/~quake-papers/painless-conjugate-gradient.pdf> for a detailed introduction). After the conjugate gradient optimization step, the constraint $D_\text{KL}(\pi_{\theta_\text{old}} || \pi_\theta) \leq \delta$ is however not ensured anymore, so a line search is made as in @eq-linesearch until that criteria is met.
 
 
 ### Summary
@@ -198,7 +198,7 @@ However, it has several limitations:
 * It works well when the NN has only fully-connected layers, but empirically performs poorly on tasks requiring convolutional layers or recurrent layers.
 * The use of conjugate gradients makes the implementation much more complicated and less flexible than regular SGD.
 
-:::{.callout-tip icon="false}
+:::{.callout-tip icon="false"}
 ## Additional resources
 
 * <http://178.79.149.207/posts/trpo.html>
@@ -215,16 +215,16 @@ Proximal Policy Optimization (PPO) was proposed by @Schulman2017 to overcome the
 For that, they investigated various surrogate objectives (lower bounds) that could be solved using first-order optimization techniques (gradient descent).  Let's rewrite the surrogate loss of TRPO in the following manner:
 
 $$
-    L^\text{CPI}(\theta) = \mathbb{E}_{t} [\frac{\pi_\theta(s_t, a_t)}{\pi_{\theta_\text{old}}(s_t, a_t)} \, A_{\pi_{\theta_\text{old}}}(s_t, a_t)] = \mathbb{E}_{t} [\rho_t(\theta) \, A_{\pi_{\theta_\text{old}}}(s_t, a_t)]
+    \mathcal{L}^\text{CPI}(\theta) = \mathbb{E}_{t} [\frac{\pi_\theta(s_t, a_t)}{\pi_{\theta_\text{old}}(s_t, a_t)} \, A_{\pi_{\theta_\text{old}}}(s_t, a_t)] = \mathbb{E}_{t} [\rho_t(\theta) \, A_{\pi_{\theta_\text{old}}}(s_t, a_t)]
 $$
 
-by making the dependency over time explicit and noting the importance sampling weight $\rho_t(\theta)$. The superscript CPI refers to conservative policy iteration [@Kakade2002]. Without a constraint, the maximization of $L^\text{CPI}$ would lead to an excessively large policy updates. The authors searched how to modify the objective, in order to penalize changes to the policy that make $\rho_t(\theta)$ very different from 1, i.e. where the KL divergence between the new and old policies would become high. They ended up with the following surrogate loss:
+by making the dependency over time explicit and noting the importance sampling weight $\rho_t(\theta)$. The superscript CPI refers to conservative policy iteration [@Kakade2002]. Without a constraint, the maximization of $\mathcal{L}^\text{CPI}$ would lead to an excessively large policy updates. The authors searched how to modify the objective, in order to penalize changes to the policy that make $\rho_t(\theta)$ very different from 1, i.e. where the KL divergence between the new and old policies would become high. They ended up with the following surrogate loss:
 
 $$
-    L^\text{CLIP}(\theta) = \mathbb{E}_{t} [ \min (\rho_t(\theta) \, A_{\pi_{\theta_\text{old}}}(s_t, a_t), \text{clip}(\rho_t(\theta) , 1- \epsilon, 1+\epsilon) \,  A_{\pi_{\theta_\text{old}}}(s_t, a_t)]
+    \mathcal{L}^\text{CLIP}(\theta) = \mathbb{E}_{t} [ \min (\rho_t(\theta) \, A_{\pi_{\theta_\text{old}}}(s_t, a_t), \text{clip}(\rho_t(\theta) , 1- \epsilon, 1+\epsilon) \,  A_{\pi_{\theta_\text{old}}}(s_t, a_t)]
 $$
 
-The left part of the min operator is the surrogate objective of TRPO $L^\text{CPI}(\theta)$. The right part restricts the importance sampling weight between $1-\epsilon$ and $1 +\epsilon$.  Let's consider two cases (depicted on @fig-ppo):
+The left part of the min operator is the surrogate objective of TRPO $\mathcal{L}^\text{CPI}(\theta)$. The right part restricts the importance sampling weight between $1-\epsilon$ and $1 +\epsilon$.  Let's consider two cases (depicted on @fig-ppo):
 
 ![Illustration of the effect of clipping the importance sampling weight. Source: @Schulman2017.](img/ppo.png){#fig-ppo width=80%}
 
@@ -257,7 +257,7 @@ The pseudo-algorithm of PPO is as follows:
         * Train the actor to maximize the clipped surrogate objective.
         
         $$
-            L^\text{CLIP}(\theta) = \mathbb{E}_{t} [ \min (\rho_t(\theta) \, A_{\pi_{\theta_\text{old}}}(s_t, a_t), \text{clip}(\rho_t(\theta) , 1- \epsilon, 1+\epsilon) \,  A_{\pi_{\theta_\text{old}}}(s_t, a_t)]
+            \mathcal{L}^\text{CLIP}(\theta) = \mathbb{E}_{t} [ \min (\rho_t(\theta) \, A_{\pi_{\theta_\text{old}}}(s_t, a_t), \text{clip}(\rho_t(\theta) , 1- \epsilon, 1+\epsilon) \,  A_{\pi_{\theta_\text{old}}}(s_t, a_t)]
         $$
 
         * Train the critic to minimize the mse using TD learning.
@@ -269,7 +269,7 @@ The main advantage of PPO with respect to TRPO is its simplicity: the clipped ob
 
 The only drawbacks of PPO is that there no convergence guarantee (although in practice it converges more often than other state-of-the-art methods) and that the right value for $\epsilon$ has to be determined. PPO has improved the state-of-the-art on Atari games and Mujoco robotic tasks. It has become the go-to method for continuous control problems.
 
-:::{.callout-tip icon="false}
+:::{.callout-tip icon="false"}
 ## Additional resources
 
 * More explanations and demos from OpenAI: <https://blog.openai.com/openai-baselines-ppo>
@@ -279,3 +279,32 @@ The only drawbacks of PPO is that there no convergence guarantee (although in pr
     title="PPO"
     aspect-ratio="16x9" 
 >}}
+
+## Application: OpenAI Five
+
+The most spectacular application of PPO is **OpenAI Five** [@OpenAI2019], a team of five agents playing the multiplayer game **Dota 2**, which beat the world champions in 2019.
+
+{{< video https://www.youtube.com/embed/eHipy_j29Xw
+    title="OpenAI Five"
+    aspect-ratio="16x9"
+>}}
+
+Dota 2 is considerably harder than the board games on which RL had succeeded before, for reasons that are worth listing, as they are exactly the difficulties discussed in this book:
+
+| Feature                       | Chess | Go  | Dota 2 |
+|-------------------------------|-------|-----|--------|
+| Total number of moves         | 40    | 150 | 20000  |
+| Number of possible actions    | 35    | 250 | 1000   |
+| Number of inputs              | 70    | 400 | 20000  |
+
+A game lasts 45 minutes, i.e. around 20000 decisions, so the credit assignment problem is extreme: the action responsible for a defeat may have been taken half an hour earlier. The game is also **partially observable**, as each player only sees the part of the map close to their units, which is why the network relies on a LSTM layer (@sec-deeplearning). Finally, five agents must **cooperate** without communicating explicitly.
+
+![Distributed architecture of OpenAI Five. Rollout workers generate games, optimizers compute PPO gradients on them and average them. Source: <https://openai.com/research/openai-five>](img/ppo-dota-architecture.png){#fig-dota-architecture width=90%}
+
+The algorithm itself is PPO, distributed over an impressive amount of hardware: 128,000 preemptible CPU cores generating games and 256 P100 GPUs computing the gradients, which corresponds to roughly 180 years of gameplay per day. The agents are trained by **self-play**: each worker plays 80% of its games against the current version of the network, and 20% against older versions, which prevents the agents from over-specializing against their current selves and forgetting how to beat strategies they had already mastered.
+
+Two details are instructive. First, the reward is **hand-designed** using human heuristics (net worth, kills, deaths, assists, last hits), and not simply winning or losing: with a reward this sparse, nothing would ever be learned. This is reward engineering of the kind discussed in @sec-inverse. Second, the discount factor $\gamma$ is **annealed** during training, from 0.998 (a half-life of 46 seconds) to 0.9997 (a half-life of five minutes): the agents first learn to fight locally, and only later learn to care about the long-term outcome of the game.
+
+![Some numbers about OpenAI Five. Source: <https://openai.com/research/openai-five>](img/ppo-dota-facts.png){#fig-dota-facts width=80%}
+
+The honest conclusion of this project is double. It shows that a standard algorithm such as PPO scales, with no fundamental change, to problems of a complexity that seemed out of reach. But it also shows at what cost: the amount of computation involved is out of reach of anybody but a handful of labs, and the main difficulty reported by the authors was not the RL algorithm itself, but coordinating the hardware. @OpenAI2019 describes the whole system in detail and is an interesting read on what deep RL looks like at that scale.

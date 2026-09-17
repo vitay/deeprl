@@ -16,7 +16,7 @@ jobs:
     
     steps:
       - name: Check out repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         
       - name: Set up Quarto
         uses: quarto-dev/quarto-actions/setup@v2
@@ -30,7 +30,7 @@ jobs:
       
       # From https://github.com/actions/setup-python
       - name: Setup Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v7
         with:
           python-version: '3.x' # Version range or exact version of a Python version to use, using SemVer's version range syntax
       

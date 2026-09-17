@@ -123,7 +123,7 @@ These toy control problems were used for decades to test various RL algorithms, 
     aspect-ratio="16x9" 
 >}}
 
-Similar pixel-based games were quickly mastered, such as the TORCS simulator with the A3C algporithm [@Mnih2016]:
+Similar pixel-based games were quickly mastered, such as the TORCS simulator with the A3C algorithm [@Mnih2016]:
 
 {{< video https://www.youtube.com/embed/0xo1Ldx3L5Q
     title="A3C - TOCS"

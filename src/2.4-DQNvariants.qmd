@@ -316,7 +316,7 @@ $$\mathcal{L}(\theta) = \mathbb{E}_{\mathcal{D}_s}[ - \mathbf{t}_k \, \log Z_\th
 
 * **n-step returns** [@Sutton2017] reduce the bias of the estimation by taking the next $n$ rewards into account, at the cost of a slightly higher variance.
 
-$$\mathcal{L}(\theta) = \mathbb{E}_\mathcal{D} [(\sum_{k=1}^n r_{t+k} + \gamma \max_a Q_\theta(s_{t+n+1}, a) - Q_\theta(s_t, a_t))^2$$
+$$\mathcal{L}(\theta) = \mathbb{E}_\mathcal{D} [(\sum_{k=0}^{n-1} \gamma^k \, r_{t+k+1} + \gamma^n \, \max_a Q_\theta(s_{t+n}, a) - Q_\theta(s_t, a_t))^2]$$
 
 * **Noisy DQN** [@Fortunato2017] ensures exploration by adding noise to the parameters of the network instead of a softmax / $\epsilon$-greedy action selection over the Q-values.
 
@@ -341,6 +341,6 @@ The Atari games used as a benchmark for value-based methods are **partially obse
 
 Building on previous ideas from the Schmidhuber's group [@Bakker2001;@Wierstra2007], @Hausknecht2015 replaced one of the fully-connected layers of the DQN network by a LSTM layer  while using single frames as inputs. The resulting **deep recurrent q-learning** (DRQN) network became able to solve POMDPs thanks to the learning abilities of LSTMs: the LSTM layer learn to remember which part of the sensory information will be useful to take decisions later.
 
-However, LSTMs are not a magical solution either. They are trained using **truncated BPTT**, i.e. on a limited history of states. Long-term dependencies exceeding the truncation horizon cannot be learned. Additionally, all states in that horizon (i.e. all frames) have to be stored in the ERM to train the network, increasing drastically its size. Firthermore, the training time (but not inference time) is orders of magnitude slower than with a comparable feedforward network. Despite these limitations, DRQN is a much more elegant solution to the partial observability problem, letting the network decide which horizon it needs to solve long-term dependencies.
+However, LSTMs are not a magical solution either. They are trained using **truncated BPTT**, i.e. on a limited history of states. Long-term dependencies exceeding the truncation horizon cannot be learned. Additionally, all states in that horizon (i.e. all frames) have to be stored in the ERM to train the network, increasing drastically its size. Furthermore, the training time (but not inference time) is orders of magnitude slower than with a comparable feedforward network. Despite these limitations, DRQN is a much more elegant solution to the partial observability problem, letting the network decide which horizon it needs to solve long-term dependencies.
 
 ![Performance of DRWN compared to DQN. Source: @Hausknecht2015.](img/drqn4.png){#fig-drqn-results width=80%}

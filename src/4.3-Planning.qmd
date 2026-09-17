@@ -1,6 +1,6 @@
 # Planning (MPC, TDM)
 
-Model-based learning is not only used to augment MF methods with imaginary rollouts. It can also be use directly for planning, as the model $s', r = M(s, a)$ can emulate complete trajectories and estimate their return. 
+Model-based learning is not only used to augment MF methods with imaginary rollouts. It can also be used directly for planning, as the model $s', r = M(s, a)$ can emulate complete trajectories and estimate their return. 
 
 $$
     s_0  \xrightarrow[\pi]{} a_0 \xrightarrow[M]{} s_1  \xrightarrow[\pi]{} a_1 \xrightarrow[\pi]{} s_2 \xrightarrow[]{} \ldots \xrightarrow[M]{} s_T
@@ -76,7 +76,7 @@ Model imperfection is not a problem as you replan all the time. As seen below, t
 ![Source: <https://bair.berkeley.edu/blog/2017/11/30/model-based-rl/>](img/mpc-application2.gif){#fig-randomshooting2}
 
 
-## Temporal difference models - TDM
+## Temporal difference models - TDM {#sec-tdm}
 
 ### Planning over long horizon
 

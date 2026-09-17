@@ -1,4 +1,4 @@
-# World models, Dreamer
+# World models, Dreamer {#sec-worldmodels}
 
 
 ## World models
@@ -9,7 +9,7 @@ A huge **world model** can be efficiently trained by self-supervised / unsupervi
 
 @Ha2018 used the Vizdoom Take Cover environment (<http://vizdoom.cs.put.edu.pl/>) to demonstrate the power of world models, as well as a car racing environment.
 
-:::{.callout-tip}
+:::{.callout-tip icon="false"}
 For a detailed explanation of world models, refer to:
 
 <https://worldmodels.github.io/>
@@ -38,7 +38,7 @@ The resulting latent vector $\mathbf{z}_t$ contains a compressed representation 
 
 The sequence of latent representations $\mathbf{z}_0, \ldots \mathbf{z}_t$ in a game is fed to a LSTM layer (RNN) together with the actions $a_t$ to compress what happens over time.
 
-A **Mixture Density Network** (MDN, @Bishop1994) is used to predict the **distribution** of the next latent representations $P(\mathbf{z}_{t+1} | a_t, \mathbf{h}_t, \ldots \mathbf{z}_t)$. In short, MDN allows to perform probabilistic regression, but predicting both the mean and the variance of the data, instead of just its mean as in vanilla least sqaures regression. Most MDN methods use a mixture of Gaussian distributions to model the target distribution. 
+A **Mixture Density Network** (MDN, @Bishop1994) is used to predict the **distribution** of the next latent representations $P(\mathbf{z}_{t+1} | a_t, \mathbf{h}_t, \ldots \mathbf{z}_t)$. In short, MDN allows to perform probabilistic regression, but predicting both the mean and the variance of the data, instead of just its mean as in vanilla least squares regression. Most MDN methods use a mixture of Gaussian distributions to model the target distribution. 
 
 ![Memory module. Source: <https://worldmodels.github.io/>](img/wm-mdn_rnn.svg){#fig-wmmemory}
 
@@ -167,7 +167,7 @@ A belief over the action sequences is updated using the **cross-entropy method**
 
 After the 10000 rollouts are executed (in imagination), the sequence with the highest return is selected and its first action is executed. 
 At the next time step, planning starts from scratch: this is the key idea of Model Predictive Control.
-There is no actor in PlaNet, only a transition model used for planning. The reason PlaNet works is that planning is done in the latent space, hich has a much lower dimensionality than the observations (e.g. images). 
+There is no actor in PlaNet, only a transition model used for planning. The reason PlaNet works is that planning is done in the latent space, which has a much lower dimensionality than the observations (e.g. images). 
 
 
 ![Source: <https://ai.googleblog.com/2019/02/introducing-planet-deep-planning.html>](img/planet-planning.png)
@@ -237,10 +237,21 @@ It also learns Atari and Deepmind lab video games, sometimes on par with Rainbow
 ![](img/dreamer-resultsatari.gif)
 
 
-![Results of Dreamer on Atari gameSource: <https://dreamrl.github.io/>](img/dreamer-resultsatari.png){#fig-dreamer-atari}
+![Results of Dreamer on Atari games. Source: <https://dreamrl.github.io/>](img/dreamer-resultsatari.png){#fig-dreamer-atari}
 
 
-A recent extension of Dreamer, DayDreamer [@Wu2022], allows physical robots to learn complex tasks in a few hours.
+### DreamerV2
+
+The main change introduced by DreamerV2 [@Hafner2022] is in the representation used by the RSSM. In PlaNet and Dreamer, the stochastic part of the latent state is a Gaussian distribution, as in a regular VAE. DreamerV2 replaces it by a set of **categorical** variables (32 variables with 32 classes each), sampled with straight-through gradients so that backpropagation still works through the sampling operation.
+
+Categorical latents turn out to be much better suited to video games than Gaussians: the future of a game is often genuinely multi-modal (an enemy appears or it does not), and a categorical distribution can represent that, while a unimodal Gaussian has to average over the alternatives and produce blurry predictions. Note the parallel with the argument for stochastic policies in @sec-maxentrl: whenever the quantity to be modeled is multi-modal, a Gaussian is the wrong tool.
+
+With this single change, DreamerV2 became the first agent to reach human-level performance on the Atari benchmark of 55 tasks by learning behaviors **purely inside a world model**, surpassing the final performance of the top single-GPU agents IQN and Rainbow at the same computational budget and wall-clock time. This mattered beyond the score itself: until then, model-based methods were considered competitive only on continuous control tasks with simple dynamics, not on pixel-based games.
+
+
+### DayDreamer
+
+An extension of Dreamer, DayDreamer [@Wu2022], allows **physical** robots to learn complex tasks in a few hours, without a simulator. The sample efficiency of learning in imagination is what makes this possible: the expensive resource is real-world interaction, and the world model turns a small number of real transitions into a large number of imagined ones.
 
 
 ![DayDreamer. Source: @Wu2022 and <https://danijar.com/daydreamer>](img/daydreamer.png)
@@ -248,5 +259,65 @@ A recent extension of Dreamer, DayDreamer [@Wu2022], allows physical robots to l
 
 {{< video https://www.youtube.com/embed/xAXvfVTgqr0
     title="DayDreamer"
-    aspect-ratio="16x9" 
+    aspect-ratio="16x9"
 >}}
+
+
+### DreamerV3
+
+DreamerV3 [@Hafner2024] is not primarily a new architecture: the RSSM world model and the actor-critic trained in imagination are those of DreamerV2. What it addresses is a different and rather uncomfortable problem, which applies to every algorithm presented in this book:
+
+> deep RL algorithms work, but only after someone has spent a lot of time tuning them for the task at hand.
+
+Reward scales differ by orders of magnitude between domains, rewards can be dense or extremely sparse, observations can be images or proprioceptive vectors, episodes can last a hundred or a million steps. Each of these usually requires its own reward clipping, its own normalization, its own learning rates. This tuning cost is invisible in published benchmark curves but is what actually prevents RL from being applied to new problems.
+
+DreamerV3 fixes a **single configuration of hyperparameters** and makes the algorithm robust enough to work with it everywhere, using three families of techniques: transformations, balancing and normalization.
+
+**Symlog transformations**
+
+The magnitudes of rewards, values and observations vary enormously across domains. Instead of normalizing them per domain, DreamerV3 squashes them through the **symlog** function, a symmetric logarithm which compresses large magnitudes while staying linear around zero:
+
+$$
+    \text{symlog}(x) = \text{sign}(x) \, \ln(|x| + 1) \qquad \qquad \text{symexp}(x) = \text{sign}(x) \, (\exp(|x|) - 1)
+$$
+
+symexp is its inverse, used to decode predictions back into the original scale. Inputs are fed to the networks as $\text{symlog}(x)$, and the reward and value predictors are trained to predict $\text{symlog}$ of their targets. A reward of 1 and a reward of 1000 then produce gradients of comparable magnitude, so the same learning rate works for both.
+
+**Two-hot discrete regression**
+
+Predicting rewards and values by regression (mse) is fragile when the targets are sparse or span several orders of magnitude: a handful of very large returns dominate the loss. DreamerV3 instead turns the regression into a **classification** problem. The output layer is a softmax over a fixed set of exponentially spaced bins, and the target is a **two-hot** vector: all the probability mass is put on the two bins surrounding the true value, split between them in proportion to the distance.
+
+This should look familiar: it is the same device as the categorical output of C51 (@sec-distributionalrl). The motivation differs, though — C51 predicts a distribution because the *distribution itself* is of interest, while DreamerV3 uses it because classification losses are far better behaved than mse when the scale of the target is unknown in advance.
+
+**Balancing the world model loss**
+
+The world model is trained with a reconstruction term and a KL term between the representations inferred from observations and those predicted by the dynamics. Two adjustments keep this balanced across domains:
+
+* **Free bits**: the KL term is clipped below a small threshold (one nat), so that once the dynamics are predicted well enough the optimizer stops pushing on the KL and concentrates on reconstruction. Without it, on domains with easily predictable dynamics, the KL collapses and the latent state stops carrying information.
+* **KL balancing**: the representation and dynamics sides of the KL are scaled by different coefficients, so that the dynamics model is encouraged to move towards the representations more than the reverse.
+
+The actor's returns are additionally normalized by a running estimate of the range between low and high percentiles of recent returns, which keeps the entropy regularizer in a sensible ratio to the returns whether rewards are dense or very sparse.
+
+**Results**
+
+With this single configuration, DreamerV3 outperforms specialized methods across more than 150 tasks drawn from very different domains: continuous control from states and from pixels, Atari, ProcGen, DMLab, BSuite, and Minecraft.
+
+![The domains covered by DreamerV3 with a single configuration. Source: @Hafner2024.](img/dreamerv3-tasks.png){#fig-dreamerv3-tasks}
+
+@fig-dreamerv3-results compares DreamerV3 against the best specialized agent on each benchmark. The grey bars are **tuned experts** (each tuned for its own domain), the colored ones use a **unified configuration**. Dreamer matches or beats the tuned experts nearly everywhere, and on DMLab it does so while using ten times less data than R2D2+ and IMPALA.
+
+![Left: performance on eight benchmark suites against domain-specific baselines. Right: return on the Minecraft diamond task, with the successive items collected along the way. Source: @Hafner2024.](img/dreamerv3-results.png){#fig-dreamerv3-results}
+
+Another useful property is that DreamerV3 **scales monotonically**: increasing the size of the model improves not only the final performance but also the data efficiency. This is not generally true of deep RL algorithms, where bigger networks often just become harder to train.
+
+**Minecraft**
+
+The headline result is that DreamerV3 is the first algorithm to **collect diamonds in Minecraft from scratch**, without human demonstrations and without a curriculum. This had been a standing challenge in the field, because it combines nearly everything that makes RL hard: an open world generated afresh for each episode (so the policy cannot memorize a map), pixel observations, and an extremely sparse reward at the end of a long chain of prerequisites — you need to collect wood, craft a table, craft a wooden pickaxe, mine stone, craft a stone pickaxe, mine iron, smelt it, craft an iron pickaxe, and only then can you mine a diamond.
+
+The right panel of @fig-dreamerv3-results shows this progression: each step of the curve corresponds to the agent reliably obtaining one more item in the chain. Reaching the diamond requires the agent to pursue a strategy whose payoff is tens of thousands of steps away, which is exactly what planning in a learned world model is supposed to buy us.
+
+:::{.callout-tip icon="false" title="Additional resources"}
+* <https://danijar.com/project/dreamerv3/>
+* <https://danijar.com/project/dreamerv2/>
+* <https://danijar.com/daydreamer>
+:::

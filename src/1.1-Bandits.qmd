@@ -249,7 +249,7 @@ $$
 $$
 
 The moving average adapts very fast to changes in the reward distribution and should be used in **non-stationary problems**. 
-It is however not exact and sensible to noise.
+It is however not exact and sensitive to noise.
 Choosing the right value for $\alpha$ can be difficult.
 
 The form of this **update rule** is very important to remember:
@@ -272,7 +272,7 @@ Choosing the action to perform next is called **action selection** and several s
 
 ### Greedy action selection
 
-The **greedy action** is the action whose expected value is **maximal** at time $t$ based on our current estimates: 
+The **greedy action** is the action whose estimated value is **maximal** at time $t$ based on our current estimates: 
 
 $$
     a^*_t = \text{argmax}_{a} Q_t(a)

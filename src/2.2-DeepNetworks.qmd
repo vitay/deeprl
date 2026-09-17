@@ -1,4 +1,4 @@
-# Deep learning
+# Deep learning {#sec-deeplearning}
 
 Deep RL uses deep neural networks as function approximators, allowing complex representations of the value of state-action pairs to be learned. This section provides a very quick overview of deep learning. For additional details, refer to the excellent book of @Goodfellow2016.
 
@@ -32,7 +32,25 @@ $$
     \mathcal{L}(\theta) = - \mathbb{E}_{\mathbf{x}, \mathbf{t} \in \mathcal{D}} [\sum_i t_i \log y_i]
 $$
 
-where the log-likelihood of the prediction $\mathbf{y}$ to match the data $\mathbf{t}$ is maximized over the training set. The mse could be used for classification problems too, but the output layer usually has a softmax activation function for classification problems, which works nicely with the cross entropy loss function. See <https://rdipietro.github.io/friendly-intro-to-cross-entropy-loss> for the link between cross entropy and log-likelihood and <https://deepnotes.io/softmax-crossentropy> for the interplay between softmax and cross entropy.
+where the log-likelihood of the prediction $\mathbf{y}$ to match the data $\mathbf{t}$ is maximized over the training set. The mse could be used for classification problems too, but the output layer usually has a softmax activation function for classification problems, which works nicely with the cross entropy loss function.
+
+It is worth spending a moment on what the cross entropy actually measures, as it will come back in deep RL in places that have nothing to do with classification. The cross entropy between two probability distributions $X$ and $Y$ is defined as:
+
+$$
+    H(X, Y) = \mathbb{E}_{x \sim X} [- \log P(Y = x)]
+$$
+
+It answers the question: **are samples from $X$ likely under $Y$?** One draws samples from the first distribution and asks the second one how surprised it is. If $Y$ gives a high probability to everything $X$ produces, $- \log P(Y=x)$ is small and the cross entropy is low. If $Y$ gives a low probability to something $X$ produces often, that term explodes and the cross entropy is high. Minimizing $H(X, Y)$ w.r.t $Y$ therefore makes the two distributions equal almost everywhere: the cross entropy is a measure of **similarity between distributions**.
+
+![The cross entropy is minimal when the two distributions are identical.](img/crossentropy.svg){#fig-crossentropy width=60%}
+
+The classification loss above is just the special case where the target distribution $\mathbf{t}$ is a **one-hot encoded vector**: all the probability mass is on the correct class, so the sum $\sum_i t_i \log y_i$ reduces to the single term $\log y_{i^*}$ of the correct class $i^*$. But nothing forces the target to be one-hot: the target can be **any** distribution, and the loss will still push the output of the network towards it.
+
+![Minimizing the cross entropy makes the predicted distribution match the target distribution, which does not have to be one-hot. Source: <https://rdipietro.github.io/friendly-intro-to-cross-entropy-loss>](img/crossentropy-animation.gif){#fig-crossentropy-animation width=60%}
+
+This generality is what makes the cross entropy useful beyond classification. Categorical DQN (@sec-distributionalrl) will use it to make a network predict a whole **distribution of returns** instead of their mean, the target being the distribution obtained by applying the Bellman equation. DreamerV3 (@sec-worldmodels) will use it to turn regression into classification over a set of bins. In all these cases, the loss is the same formula, only the target distribution changes.
+
+See <https://rdipietro.github.io/friendly-intro-to-cross-entropy-loss> for the link between cross entropy and log-likelihood and <https://deepnotes.io/softmax-crossentropy> for the interplay between softmax and cross entropy.
 
 Once the loss function is defined, it has to be minimized by searching optimal values for the free parameters $\theta$. This optimization procedure is based on **gradient descent**, which is an iterative procedure modifying estimates of the free parameters in the opposite direction of the gradient of the loss function:
 
@@ -103,6 +121,38 @@ A convolutional neural network is simply a sequence of convolutional layers and 
 
 Many improvements have been proposed since 2012 (e.g. ResNets [@He2015]) but the idea stays similar. Generally, convolutional and max-pooling layers are alternated until the spatial dimensions are so reduced (around 10x10) that they can be put into a single vector and fed into a fully-connected layer. This is **NOT** the case in deep RL! Contrary to object classification, spatial information is crucial in deep RL: position of the ball, position of the body, etc. It matters whether the ball is to the right or to the left of your paddle when you decide how to move it. Max-pooling layers are therefore omitted and the CNNs only consist of convolutional and fully-connected layers. This greatly increases the number of weights in the networks, hence the number of training examples needed to train the network. This is still the main limitation of using CNNs in deep RL.
 
+## Autoencoders
+
+Fully-connected and convolutional networks as presented above extract features in a **supervised** manner: the features that appear in the hidden layers are those that happen to be useful to predict the labels, so one needs a lot of annotated data (image, label) to obtain them.
+
+**Autoencoders** allow to extract features in an **unsupervised** way, i.e. using only inputs, without any label. The trick is to give the network a task that requires no annotation at all: **reconstructing its own input**.
+
+$$
+    \mathbf{y} = \mathbf{\tilde{x}} \approx \mathbf{x}
+$$
+
+The loss function is simply the mse between the input and its reconstruction:
+
+$$
+    \mathcal{L}(\theta) = \mathbb{E}_{\mathbf{x} \in \mathcal{D}} [ ||\mathbf{\tilde{x}} - \mathbf{x}||^2 ]
+$$
+
+Apart from this **reconstruction loss**, an autoencoder is trained exactly as a regular network, with backpropagation and the same optimizers.
+
+An autoencoder is made of two parts: the **encoder**, which maps the input $\mathbf{x}$ to a vector $\mathbf{z}$ called the **latent representation**, and the **decoder**, which maps $\mathbf{z}$ back to a reconstruction $\mathbf{\tilde{x}}$ of the input.
+
+![Architecture of an autoencoder: the encoder compresses the input into a latent representation, the decoder reconstructs the input from it. Source: <https://lilianweng.github.io/lil-log/2018/08/12/from-autoencoder-to-beta-vae.html>](img/autoencoder-architecture.png){#fig-autoencoder width=75%}
+
+Reconstructing the input would be trivial if the network could simply copy it, which is why the latent space $\mathbf{z}$ is made much smaller than the input. This **bottleneck** is the whole point: to reconstruct a 84x84 image from 50 numbers, the encoder has no choice but to throw away everything that is not essential and to keep only what really characterizes the image. The latent representation is a **compressed representation** of the input, obtained without a single label. This is both a dimensionality reduction method and an unsupervised feature extractor.
+
+In deep RL, this provides a way to construct the feature vector $\phi(s)$ discussed in @sec-features. Instead of designing the features by hand or learning them from the reward, one trains an autoencoder on the observations and uses its latent representation $\mathbf{z}$ as the state representation fed to the RL algorithm.
+
+![Using an autoencoder in deep RL: the encoder provides a compact state representation to the RL algorithm.](img/autoencoder-RL.svg){#fig-autoencoder-rl width=80%}
+
+This is interesting because the reward is a very poor teaching signal: a single scalar per step, often zero, has to shape millions of weights. The pixels, on the other hand, are available in huge quantities and for free. The autoencoder can be trained offline on observations collected by a random agent, or online together with the RL algorithm as an **auxiliary loss**, i.e. an additional term in the loss function whose only purpose is to force the network to learn good representations faster.
+
+Autoencoders come in many variants. The **variational autoencoder** [VAE, @Kingma2013] is the most important one for this book: instead of mapping the input to a single point $\mathbf{z}$, its encoder outputs a *distribution* over the latent space, from which $\mathbf{z}$ is sampled. This makes the latent space continuous and well-behaved, so that sampling a random $\mathbf{z}$ and decoding it produces a plausible input: a VAE is a **generative model**. This property is what world models (@sec-worldmodels) rely on to dream trajectories without touching the environment.
+
 ## Recurrent neural networks
 
 Feedforward neural networks learn to efficiently map static inputs $\mathbf{x}$ to outputs $\mathbf{y}$ but have no memory or context: the output at time $t$ does not depend on the inputs at time $t-1$ or $t-2$, only the one at time $t$. This is problematic when dealing with video sequences for example: if the task is to classify videos into happy/sad, a frame by frame analysis is going to be inefficient (most frames a neutral). Concatenating all frames in a giant input vector would increase dramatically the complexity of the classifier and no generalization can be expected.
@@ -165,7 +215,7 @@ $$
     \mathbf{h}_t = \mathbf{o}_t \odot \tanh \mathbf{C}_t
 $$
 
-The architecture may seem complex, but everything is differentiable: backpropagation though time can be used to learn not only the input and recurrent weights for the candidate state, but also the weights and and biases of the gates. The main advantage of LSTMs is that they solve the vanishing gradient problem: if the input at time $t=0$ is important to produce a response at time $t$, the input gate will learn to put it into the memory and the forget gate will learn to maintain in the current state until it is not needed anymore. During this "working memory" phase, the gradient is multiplied by exactly one as nothing changes: the dependency can be learned with arbitrary time delays!
+The architecture may seem complex, but everything is differentiable: backpropagation though time can be used to learn not only the input and recurrent weights for the candidate state, but also the weights and biases of the gates. The main advantage of LSTMs is that they solve the vanishing gradient problem: if the input at time $t=0$ is important to produce a response at time $t$, the input gate will learn to put it into the memory and the forget gate will learn to maintain in the current state until it is not needed anymore. During this "working memory" phase, the gradient is multiplied by exactly one as nothing changes: the dependency can be learned with arbitrary time delays!
 
 There are alternatives to the classical LSTM layer such as the gated recurrent unit [GRU; @Cho2014] or peephole connections [@Gers2001]. See <http://colah.github.io/posts/2015-08-Understanding-LSTMs>, <https://medium.com/mlreview/understanding-lstm-and-its-diagrams-37e2f46f1714> or <http://blog.echen.me/2017/05/30/exploring-lstms/> for more visual explanations of LSTMs and their variants.
 

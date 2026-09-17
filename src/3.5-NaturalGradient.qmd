@@ -16,7 +16,7 @@ Target networks cannot be used in **on-policy** methods, especially actor-critic
 
 $$
 \begin{aligned}
-    \nabla_\theta J(\theta) & =  \mathbb{E}_{s \sim \rho_\theta, a \sim \pi_\theta}[\nabla_\theta \log \pi_\theta(s, a) \, Q^{\pi_\theta}(s, a)] \\
+    \nabla_\theta \mathcal{J}(\theta) & =  \mathbb{E}_{s \sim \rho_\theta, a \sim \pi_\theta}[\nabla_\theta \log \pi_\theta(s, a) \, Q^{\pi_\theta}(s, a)] \\
     & \approx  \mathbb{E}_{s \sim \rho_\theta, a \sim \pi_\theta}[\nabla_\theta \log \pi_\theta(s, a) \, Q_\varphi(s, a)]
 \end{aligned}
 $$
@@ -35,20 +35,20 @@ This is where **natural gradients** come into play, which are originally a stati
 
 ![Euclidian distances in the parameter space do not represent well the statistical distance between probability distributions. The two Gaussians on the left ($\mathcal{N}(0, 0.2)$ and $\mathcal{N}(1, 0.2)$) have the same Euclidian distance in the parameter space ($d = \sqrt{(\mu_0 - \mu_1)^2+(\sigma_0 - \sigma_1)^2}$) than the two Gaussians on the right ($\mathcal{N}(0, 10)$ and $\mathcal{N}(1, 10)$). However, the Gaussians on the right are much more similar than the two on the left: if you have a single sample, you could not say from which distribution it comes for the Gaussians on the right, while it is obvious for the Gaussians on the left.](img/naturalgradient.png){#fig-naturalgradient width=80%}
 
-Consider the two Gaussian distributions in the left part of @fig-naturalgradient ($\mathcal{N}(0, 0.2)$ and $\mathcal{N}(1, 0.2)$) and the two on the right ($\mathcal{N}(0, 10)$ and $\mathcal{N}(1, 10)$). In both cases, the distance in the Euclidian space of parameters $d = \sqrt{(\mu_0 - \mu_1)^2+(\sigma_0 - \sigma_1)^2}$ is the same between the two Gaussians. Obviously, the two distributions on the left are however further away from each other than the two on the the right. This indicates that the Euclidian distance in the parameter space (which is what *regular* gradients act on) is not a correct measurement of the statistical distance between two distributions (which what we want to minimize between two iterations of PG).
+Consider the two Gaussian distributions in the left part of @fig-naturalgradient ($\mathcal{N}(0, 0.2)$ and $\mathcal{N}(1, 0.2)$) and the two on the right ($\mathcal{N}(0, 10)$ and $\mathcal{N}(1, 10)$). In both cases, the distance in the Euclidian space of parameters $d = \sqrt{(\mu_0 - \mu_1)^2+(\sigma_0 - \sigma_1)^2}$ is the same between the two Gaussians. Obviously, the two distributions on the left are however further away from each other than the two on the right. This indicates that the Euclidian distance in the parameter space (which is what *regular* gradients act on) is not a correct measurement of the statistical distance between two distributions (which what we want to minimize between two iterations of PG).
 
-In statistics, a common measurement of the statistical distance between two distributions $p$ and $q$ is the **Kullback-Leibler (KL) divergence** $D_{KL}(p||q)$, also called relative entropy or information gain. It is defined as:
+In statistics, a common measurement of the statistical distance between two distributions $p$ and $q$ is the **Kullback-Leibler (KL) divergence** $D_\text{KL}(p||q)$, also called relative entropy or information gain. It is defined as:
 
 $$
-    D_{KL}(p || q) = \mathbb{E}_{x \sim p} [\log \frac{p(x)}{q(x)}]  = \int p(x) \, \log \frac{p(x)}{q(x)} \, dx
+    D_\text{KL}(p || q) = \mathbb{E}_{x \sim p} [\log \frac{p(x)}{q(x)}]  = \int p(x) \, \log \frac{p(x)}{q(x)} \, dx
 $$
 
 Its minimum is 0 when $p=q$ (as $\log \frac{p(x)}{q(x)}$ is then 0) and is positive otherwise. Minimizing the KL divergence is equivalent to "matching" two distributions. Note that supervised methods in machine learning can all be interpreted as a minimization of the KL divergence: if $p(x)$ represents the distribution of the data (the label of a sample $x$) and $q(x)$ the one of the model (the prediction of a neural network for the same sample $x$), supervised methods want the output distribution of the model to match the distribution of the data, i.e. make predictions that are the same as the labels. For generative models, this is for example at the core of *generative adversarial networks* [@Goodfellow2014;@Arjovsky2017] or *variational autoencoders* [@Kingma2013].
 
-The KL divergence is however not symmetrical ($D_{KL}(p || q) \neq D_{KL}(q || p)$), so a more useful divergence is the symmetric KL divergence, also known as Jensen-Shannon (JS) divergence:
+The KL divergence is however not symmetrical ($D_\text{KL}(p || q) \neq D_\text{KL}(q || p)$), so a more useful divergence is the symmetric KL divergence, also known as Jensen-Shannon (JS) divergence:
 
 $$
-    D_{JS}(p || q) = \frac{D_{KL}(p || q) + D_{KL}(q || p)}{2}
+    D_\text{JS}(p || q) = \frac{D_\text{KL}(p || q) + D_\text{KL}(q || p)}{2}
 $$
 
 Other forms of divergence measurements exist, such as the Wasserstein distance which improves generative adversarial networks [@Arjovsky2017], but they are not relevant here. See <https://www.alexirpan.com/2017/02/22/wasserstein-gan.html> for more explanations.
@@ -71,7 +71,7 @@ When using the symmetric KL divergence to measure the distance between two distr
 The Fisher information matrix is defined as the Hessian of the KL divergence around $\theta$, i.e. how the manifold locally changes around $\theta$:
 
 $$
-    F(\theta) = \nabla^2 D_{JS}(p(x; \theta) || p(x; \theta + \Delta \theta))|_{\Delta \theta = 0}
+    F(\theta) = \nabla^2 D_\text{JS}(p(x; \theta) || p(x; \theta + \Delta \theta))|_{\Delta \theta = 0}
 $$
 
 which necessitates to compute second order derivatives which are very complex and slow to obtain, especially when there are many parameters $\theta$ (the weights of the NN). Fortunately, it also has a simpler form which only depends on the outer product between the gradients of the log-likelihoods:
@@ -85,19 +85,19 @@ which is something we can easily sample and compute.
 Why is it useful? The Fisher Information matrix allows to **locally** approximate (for small $\Delta \theta$) the KL divergence between the two close distributions (using a second-order Taylor series expansion):
 
 $$
-    D_{JS}(p(x; \theta) || p(x; \theta + \Delta \theta)) \approx \Delta \theta^T \, F(\theta) \, \Delta \theta
+    D_\text{JS}(p(x; \theta) || p(x; \theta + \Delta \theta)) \approx \Delta \theta^T \, F(\theta) \, \Delta \theta
 $$
 
-The KL divergence is then locally quadratic, which means that the update rules obtained when minimizing the KL divergence with gradient descent will be linear. Suppose we want to minimize a loss function $L$ parameterized by $\theta$ and depending on the distribution $p$. **Natural gradient descent** [@Amari1998] attempts to move along the statistical manifold defined by $p$ by correcting the gradient of $L(\theta)$ using the local curvature of the KL-divergence surface, i.e. moving some given distance in the direction $\tilde{\nabla_\theta} L(\theta)$:
+The KL divergence is then locally quadratic, which means that the update rules obtained when minimizing the KL divergence with gradient descent will be linear. Suppose we want to minimize a loss function $\mathcal{L}$ parameterized by $\theta$ and depending on the distribution $p$. **Natural gradient descent** [@Amari1998] attempts to move along the statistical manifold defined by $p$ by correcting the gradient of $\mathcal{L}(\theta)$ using the local curvature of the KL-divergence surface, i.e. moving some given distance in the direction $\tilde{\nabla_\theta} \mathcal{L}(\theta)$:
 
 $$
-    \tilde{\nabla_\theta} L(\theta) = F(\theta)^{-1} \, \nabla_\theta L(\theta)
+    \tilde{\nabla_\theta} \mathcal{L}(\theta) = F(\theta)^{-1} \, \nabla_\theta \mathcal{L}(\theta)
 $$
 
-$\tilde{\nabla_\theta} L(\theta)$ is the **natural gradient** of $L(\theta)$. Natural gradient descent simply takes steps in this direction:
+$\tilde{\nabla_\theta} \mathcal{L}(\theta)$ is the **natural gradient** of $\mathcal{L}(\theta)$. Natural gradient descent simply takes steps in this direction:
 
 $$
-    \Delta \theta = - \eta \, \tilde{\nabla_\theta} L(\theta)
+    \Delta \theta = - \eta \, \tilde{\nabla_\theta} \mathcal{L}(\theta)
 $$
 
 When the manifold is not curved ($F(\theta)$ is the identity matrix), natural gradient descent is the regular gradient descent.
@@ -106,7 +106,7 @@ But what is the advantage of natural gradients? The problem with regular gradien
 
 Natural gradient descent is a generic optimization method, it can for example be used to train more efficiently deep networks in supervised learning. Its main drawback is the necessity to inverse the Fisher information matrix, whose size depends on the number of free parameters (if you have N weights in the NN, you need to inverse a NxN matrix). Several approximations allows to remediate to this problem, for example Conjugate Gradients or Kronecker-Factored Approximate Curvature (K-FAC).
 
-:::{.callout-tip icon="false}
+:::{.callout-tip icon="false"}
 ## Additional resources
 
 * <http://andymiller.github.io/2016/10/02/natural_gradient_bbvi.html>
@@ -127,7 +127,7 @@ Natural gradient descent is a generic optimization method, it can for example be
 @Kakade2001 applied the principle of natural gradients proposed by @Amari1998 to the policy gradient theorem:
 
 $$
-    \nabla_\theta J(\theta) =  \mathbb{E}_{s \sim \rho_\theta, a \sim \pi_\theta}[\nabla_\theta \log \pi_\theta(s, a) \, Q^{\pi_\theta}(s, a)]
+    \nabla_\theta \mathcal{J}(\theta) =  \mathbb{E}_{s \sim \rho_\theta, a \sim \pi_\theta}[\nabla_\theta \log \pi_\theta(s, a) \, Q^{\pi_\theta}(s, a)]
 $$
 
 This *regular* gradient does not take into account the underlying structure of the policy distribution $\pi(s, a)$. The Fisher information matrix for the policy is defined by:
@@ -139,7 +139,7 @@ $$
 The natural policy gradient is simply:
 
 $$
-    \tilde{\nabla}_\theta J(\theta) = F(\theta)^{-1} \, \nabla_\theta J(\theta)  = \mathbb{E}_{s \sim \rho_\theta, a \sim \pi_\theta}[ F(\theta)^{-1} \,  \nabla_\theta \log \pi_\theta(s, a) \, Q^{\pi_\theta}(s, a)]
+    \tilde{\nabla}_\theta \mathcal{J}(\theta) = F(\theta)^{-1} \, \nabla_\theta \mathcal{J}(\theta)  = \mathbb{E}_{s \sim \rho_\theta, a \sim \pi_\theta}[ F(\theta)^{-1} \,  \nabla_\theta \log \pi_\theta(s, a) \, Q^{\pi_\theta}(s, a)]
 $$
 
 @Kakade2001 also shows that you can replace the true Q-value $Q^{\pi_\theta}(s, a)$ with a compatible approximation $Q_\varphi(s, a)$ (as long as it minimizes the quadratic error) and still obtained an unbiased natural gradient. An important theoretical result is that policy improvement is guaranteed with natural gradients: the new policy after an update is always better (more expected returns) than before. He experimented this new rule on various simple MDPs and observed drastic improvements over vanilla PG.
