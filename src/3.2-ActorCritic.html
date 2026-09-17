@@ -2,17 +2,23 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.29">
+<meta name="generator" content="quarto-1.10.18">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>Advantage Actor-Critic (A3C) – Deep Reinforcement Learning</title>
 <style>
-code{white-space: pre-wrap;}
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -57,10 +63,10 @@ div.csl-indent {
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-bcbce66894bfa8e7e94e40e0186b9bb8.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-bb62276ab45c84d9efd712f51ff97b5a.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-ea27fabe3da5290357830f0bd5288bdb.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-3998d32367fd34ee6440c4fab252e735.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script src="../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
 <link href="../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
 <link href="../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
@@ -121,7 +127,7 @@ const typesetMath = (el) => {
     var macros = [];
     for (var i = 0; i < mathElements.length; i++) {
       var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
         window.katex.render(texText.data, mathElements[i], {
           displayMode: mathElements[i].classList.contains('display'),
           throwOnError: false,
@@ -139,7 +145,7 @@ window.Quarto = {
 
 </head>
 
-<body class="nav-sidebar floating quarto-light">
+<body class="nav-sidebar docked quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -149,7 +155,7 @@ window.Quarto = {
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
         <a class="flex-grow-1 no-decor" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-          <h1 class="quarto-secondary-nav-title">Advantage Actor-Critic (A3C)</h1>
+          <h1 class="quarto-secondary-nav-title"><span id="sec-a3c" class="quarto-section-identifier"><span class="chapter-title">Advantage Actor-Critic (A3C)</span></span></h1>
         </a>     
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
         <i class="bi bi-search"></i>
@@ -158,9 +164,9 @@ window.Quarto = {
   </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="../">Deep Reinforcement Learning</a> 
@@ -252,11 +258,6 @@ window.Quarto = {
   <a href="../src/2.5-DistributedLearning.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Distributed learning</span></a>
   </div>
 </li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../src/2.6-Misc.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Misc.</span></a>
-  </div>
-</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -275,8 +276,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/3.2-ActorCritic.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">Advantage Actor-Critic (A3C)</span></a>
+  <a href="../src/3.2-ActorCritic.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">Advantage Actor-Critic (A3C)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -307,11 +307,6 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../src/3.8-EntropyRL.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Maximum Entropy RL (SAC)</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../src/3.9-Misc.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Misc.</span></a>
   </div>
 </li>
       </ul>
@@ -350,11 +345,6 @@ window.Quarto = {
   <a href="../src/4.5-AlphaGo.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">AlphaGo</span></a>
   </div>
 </li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../src/4.6-Misc.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Misc.</span></a>
-  </div>
-</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -383,7 +373,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/5.4-Meta.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Meta learning</span></a>
+  <a href="../src/5.4-Meta.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Meta reinforcement learning</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -421,16 +411,16 @@ window.Quarto = {
 </nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
+<main class="content column-body" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title d-none d-lg-block">Advantage Actor-Critic (A3C)</h1>
+<h1 class="title d-none d-lg-block"><span id="sec-a3c" class="quarto-section-identifier"><span class="chapter-title">Advantage Actor-Critic (A3C)</span></span></h1>
 </div>
 
 
 
-<div class="quarto-title-meta">
+<div class="quarto-title-meta column-body">
 
     
   
@@ -444,17 +434,17 @@ window.Quarto = {
 
 <section id="actor-critic-algorithms" class="level2">
 <h2 class="anchored" data-anchor-id="actor-critic-algorithms">Actor-critic algorithms</h2>
-<p>The policy gradient theorem provides an actor-critic arhictecture that allow to estimate the PG from single transitions:</p>
+<p>The policy gradient theorem provides an actor-critic architecture that allow to estimate the PG from single transitions:</p>
 <p><span class="math display">
-    \nabla_\theta J(\theta) =  \mathbb{E}_{s \sim \rho_\theta, a \sim \pi_\theta}[\nabla_\theta \log \pi_\theta(s, a) \, Q_\varphi(s, a))]
+    \nabla_\theta \mathcal{J}(\theta) =  \mathbb{E}_{s \sim \rho_\theta, a \sim \pi_\theta}[\nabla_\theta \log \pi_\theta(s, a) \, Q_\varphi(s, a))]
 </span></p>
 <div id="fig-actorcriticpolicy" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-actorcriticpolicy-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/policygradient.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;1: Architecture of the policy gradient (PG) method."><img src="img/policygradient.png" class="img-fluid figure-img" style="width:80.0%"></a>
+<a href="img/policygradient.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;12.1: Architecture of the policy gradient (PG) method."><img src="img/policygradient.png" class="img-fluid figure-img" style="width:80.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-actorcriticpolicy-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;1: Architecture of the policy gradient (PG) method.
+Figure&nbsp;12.1: Architecture of the policy gradient (PG) method.
 </figcaption>
 </figure>
 </div>
@@ -464,7 +454,7 @@ Figure&nbsp;1: Architecture of the policy gradient (PG) method.
 </span></p>
 <p>Most policy-gradient algorithms in this section are actor-critic architectures. The different versions of the policy gradient take the form:</p>
 <p><span class="math display">
-    \nabla_\theta J(\theta) =  \mathbb{E}_{s_t \sim \rho^\pi, a_t \sim \pi_\theta}[\nabla_\theta \log \pi_\theta (s_t, a_t) \, \psi_t ]
+    \nabla_\theta \mathcal{J}(\theta) =  \mathbb{E}_{s_t \sim \rho_\theta, a_t \sim \pi_\theta}[\nabla_\theta \log \pi_\theta (s_t, a_t) \, \psi_t ]
 </span></p>
 <p>where:</p>
 <ul>
@@ -473,7 +463,7 @@ Figure&nbsp;1: Architecture of the policy gradient (PG) method.
 <li><p><span class="math inline">\psi_t = Q^\pi(s_t, a_t)</span> is the <strong>policy gradient theorem</strong>.</p></li>
 <li><p><span class="math inline">\psi_t = A^\pi(s_t, a_t)</span> is the <strong>advantage actor-critic</strong>.</p></li>
 <li><p><span class="math inline">\psi_t = r_{t+1} + \gamma \, V^\pi(s_{t+1}) - V^\pi(s_t)</span> is the <strong>TD actor-critic</strong>.</p></li>
-<li><p><span class="math inline">\psi_t = \sum_{k=0}^{n-1} \gamma^{k} \, r_{t+k+1} + \gamma^n \, V^\pi(s_{t+n+1}) - V^\pi(s_t)</span> is the <strong>n-step advanatge actor-critic</strong> (A2C).</p></li>
+<li><p><span class="math inline">\psi_t = \sum_{k=0}^{n-1} \gamma^{k} \, r_{t+k+1} + \gamma^n \, V^\pi(s_{t+n}) - V^\pi(s_t)</span> is the <strong>n-step advantage actor-critic</strong> (A2C).</p></li>
 </ul>
 <p>Generally speaking:</p>
 <ul>
@@ -492,7 +482,7 @@ Figure&nbsp;1: Architecture of the policy gradient (PG) method.
 <li>n-step uses the <span class="math inline">n</span> next immediate rewards and approximates the rest with the value of the state visited <span class="math inline">n</span> steps later.</li>
 </ul>
 <p><span class="math display">
-    \nabla_\theta J(\theta) =  \mathbb{E}_{s_t \sim \rho^\pi, a_t \sim \pi_\theta}[\nabla_\theta \log \pi_\theta(s_t, a_t) \, ( \sum_{k=0}^{n-1} \gamma^{k} \, r_{t+k+1} + \gamma^n \, V_\varphi(s_{t+n+1}) - V_\varphi(s_t))]
+    \nabla_\theta \mathcal{J}(\theta) =  \mathbb{E}_{s_t \sim \rho_\theta, a_t \sim \pi_\theta}[\nabla_\theta \log \pi_\theta(s_t, a_t) \, ( \sum_{k=0}^{n-1} \gamma^{k} \, r_{t+k+1} + \gamma^n \, V_\varphi(s_{t+n}) - V_\varphi(s_t))]
 </span></p>
 <p>A2C has an actor-critic architecture:</p>
 <ul>
@@ -502,26 +492,26 @@ Figure&nbsp;1: Architecture of the policy gradient (PG) method.
 <div id="fig-a3c" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-a3c-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/a2c.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Figure&nbsp;2: Advantage actor-critic architecture."><img src="img/a2c.png" class="img-fluid figure-img" style="width:100.0%"></a>
+<a href="img/a2c.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Figure&nbsp;12.2: Advantage actor-critic architecture."><img src="img/a2c.png" class="img-fluid figure-img" style="width:100.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-a3c-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;2: Advantage actor-critic architecture.
+Figure&nbsp;12.2: Advantage actor-critic architecture.
 </figcaption>
 </figure>
 </div>
 <p>Having a computable formula for the policy gradient, the algorithm is rather simple:</p>
 <ol type="1">
 <li><p>Acquire a batch of transitions <span class="math inline">(s, a, r, s')</span> using the current policy <span class="math inline">\pi_\theta</span> (either a finite episode or a truncated one).</p></li>
-<li><p>For each state encountered, compute the discounted sum of the next <span class="math inline">n</span> rewards <span class="math inline">\sum_{k=0}^{n} \gamma^{k} \, r_{t+k+1}</span> and use the critic to estimate the value of the state encountered <span class="math inline">n</span> steps later <span class="math inline">V_\varphi(s_{t+n+1})</span>.</p></li>
+<li><p>For each state encountered, compute the discounted sum of the next <span class="math inline">n</span> rewards <span class="math inline">\sum_{k=0}^{n-1} \gamma^{k} \, r_{t+k+1}</span> and use the critic to estimate the value of the state encountered <span class="math inline">n</span> steps later <span class="math inline">V_\varphi(s_{t+n})</span>.</p></li>
 </ol>
 <p><span class="math display">
-    R_t = \sum_{k=0}^{n-1} \gamma^{k} \, r_{t+k+1} + \gamma^n \, V_\varphi(s_{t+n+1})
+    R_t = \sum_{k=0}^{n-1} \gamma^{k} \, r_{t+k+1} + \gamma^n \, V_\varphi(s_{t+n})
 </span></p>
 <ol start="3" type="1">
 <li>Update the actor.</li>
 </ol>
 <p><span class="math display">
-    \nabla_\theta J(\theta) =  \sum_t \nabla_\theta \log \pi_\theta(s_t, a_t) \, (R_t - V_\varphi(s_t))
+    \nabla_\theta \mathcal{J}(\theta) =  \sum_t \nabla_\theta \log \pi_\theta(s_t, a_t) \, (R_t - V_\varphi(s_t))
 </span></p>
 <ol start="4" type="1">
 <li>Update the critic to minimize the TD error between the estimated value of a state and its true value.</li>
@@ -539,7 +529,7 @@ Figure&nbsp;2: Advantage actor-critic architecture.
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-A2C algorithm for a single worker/learner
+<span class="screen-reader-only">Note</span>A2C algorithm for a single worker/learner
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -581,14 +571,14 @@ A2C algorithm for a single worker/learner
 </div>
 <p>Note that not all states are updated with the same horizon <span class="math inline">n</span>: the last action encountered in the sampled episode will only use the last reward and the value of the final state (TD learning), while the very first action will use the <span class="math inline">n</span> accumulated rewards. In practice it does not really matter, but the choice of the discount rate <span class="math inline">\gamma</span> will have a significant influence on the results.</p>
 <p>As many actor-critic methods, A2C performs online learning: a couple of transitions are explored using the current policy, which is immediately updated. As for value-based networks (e.g.&nbsp;DQN), the underlying NN will be affected by the correlated inputs and outputs: a single batch contains similar states and action (e.g.&nbsp;consecutive frames of a video game). The solution retained in A2C and A3C does not depend on an <em>experience replay memory</em> as DQN, but rather on the use of <strong>multiple parallel actors and learners</strong> (see Section <a href="2.5-DistributedLearning.html" class="quarto-xref"><span>Distributed learning</span></a>).</p>
-<p>The idea is depicted on <a href="#fig-a3carchi" class="quarto-xref">Figure&nbsp;<span>3</span></a> (actually for A3C, but works with A2C). The actor and critic are stored in a global network. Multiple instances of the environment are created in different parallel threads (the <strong>workers</strong>). At the beginning of an episode, each worker receives a copy of the actor and critic weights from the global network. Each worker samples an episode (starting from different initial states, so the episodes are uncorrelated), computes the accumulated gradients and sends them back to the global network. The global networks merges the gradients and uses them to update the parameters of the policy and critic networks. The new parameters are send to each worker again, until it converges.</p>
+<p>The idea is depicted on <a href="#fig-a3carchi" class="quarto-xref">Figure&nbsp;<span>12.3</span></a> (actually for A3C, but works with A2C). The actor and critic are stored in a global network. Multiple instances of the environment are created in different parallel threads (the <strong>workers</strong>). At the beginning of an episode, each worker receives a copy of the actor and critic weights from the global network. Each worker samples an episode (starting from different initial states, so the episodes are uncorrelated), computes the accumulated gradients and sends them back to the global network. The global networks merges the gradients and uses them to update the parameters of the policy and critic networks. The new parameters are send to each worker again, until it converges.</p>
 <div class="callout callout-style-default callout-note no-icon callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Distributed A2C algorithm
+<span class="screen-reader-only">Note</span>Distributed A2C algorithm
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -616,10 +606,10 @@ Distributed A2C algorithm
 <div id="fig-a3carchi" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-a3carchi-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/a3c-parallel.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Figure&nbsp;3: Distributed architecture of A3C. A global network interacts asynchronously with several workers, each having a copy of the network and interacting with a separate environment. At the end of an episode, the accumulated gradients are sent back to the master network, and a new value of the parameters is sent to the workers."><img src="img/a3c-parallel.png" class="img-fluid figure-img"></a>
+<a href="img/a3c-parallel.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Figure&nbsp;12.3: Distributed architecture of A3C. A global network interacts asynchronously with several workers, each having a copy of the network and interacting with a separate environment. At the end of an episode, the accumulated gradients are sent back to the master network, and a new value of the parameters is sent to the workers."><img src="img/a3c-parallel.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-a3carchi-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;3: Distributed architecture of A3C. A global network interacts asynchronously with several workers, each having a copy of the network and interacting with a separate environment. At the end of an episode, the accumulated gradients are sent back to the master network, and a new value of the parameters is sent to the workers.
+Figure&nbsp;12.3: Distributed architecture of A3C. A global network interacts asynchronously with several workers, each having a copy of the network and interacting with a separate environment. At the end of an episode, the accumulated gradients are sent back to the master network, and a new value of the parameters is sent to the workers.
 </figcaption>
 </figure>
 </div>
@@ -632,7 +622,7 @@ Figure&nbsp;3: Distributed architecture of A3C. A global network interacts async
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Distributed A3C algorithm
+<span class="screen-reader-only">Note</span>Distributed A3C algorithm
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -657,7 +647,7 @@ Distributed A3C algorithm
 <p>An interesting addition in A3C is the way they enforce exploration during learning. In actor-critic methods, exploration classically relies on the fact that the learned policies are stochastic (<strong>on-policy</strong>): <span class="math inline">\pi(s, a)</span> describes the probability of taking the action <span class="math inline">a</span> in the state <span class="math inline">s</span>. In discrete action spaces, the output of the actor can be a softmax layer, ensuring that all actions get a non-zero probability of being selected during training. In continuous action spaces, the executed action is sampled from the output probability distribution. However, this is often not sufficient and hard to control.</p>
 <p>In A3C, the authors added an <strong>entropy regularization</strong> term <span class="citation" data-cites="Williams1991">(<a href="references.html#ref-Williams1991" role="doc-biblioref">Williams and Peng, 1991</a>)</span> to the policy gradient update:</p>
 <p><span class="math display">
-    \nabla_\theta J(\theta) =  \mathbb{E}_{s_t \sim \rho^\pi, a_t \sim \pi_\theta}[\nabla_\theta \log \pi_\theta(s_t, a_t) \, ( R_t - V_\varphi(s_t)) + \beta \, \nabla_\theta H(\pi_\theta(s_t))]
+    \nabla_\theta \mathcal{J}(\theta) =  \mathbb{E}_{s_t \sim \rho_\theta, a_t \sim \pi_\theta}[\nabla_\theta \log \pi_\theta(s_t, a_t) \, ( R_t - V_\varphi(s_t)) + \beta \, \nabla_\theta H(\pi_\theta(s_t))]
 </span></p>
 <p>For discrete actions, the entropy of the policy for a state <span class="math inline">s_t</span> is simple to compute:</p>
 <p><span class="math display">
@@ -678,10 +668,10 @@ Distributed A3C algorithm
 <div id="fig-sharedactorcritic" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-sharedactorcritic-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/shared_actorcritic.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="Figure&nbsp;4: The actor and the critic can share no/some/most layers, depending on the algorithm and the application."><img src="img/shared_actorcritic.png" class="img-fluid figure-img" style="width:80.0%"></a>
+<a href="img/shared_actorcritic.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="Figure&nbsp;12.4: The actor and the critic can share no/some/most layers, depending on the algorithm and the application."><img src="img/shared_actorcritic.png" class="img-fluid figure-img" style="width:80.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-sharedactorcritic-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;4: The actor and the critic can share no/some/most layers, depending on the algorithm and the application.
+Figure&nbsp;12.4: The actor and the critic can share no/some/most layers, depending on the algorithm and the application.
 </figcaption>
 </figure>
 </div>
@@ -703,10 +693,10 @@ Figure&nbsp;4: The actor and the critic can share no/some/most layers, depending
 <div id="fig-gaussianpolicy" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-gaussianpolicy-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/reparameterizationtrick.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5" title="Figure&nbsp;5: Reparameterization trick to implement continuous stochastic Gaussian policies."><img src="img/reparameterizationtrick.png" class="img-fluid figure-img"></a>
+<a href="img/reparameterizationtrick.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5" title="Figure&nbsp;12.5: Reparameterization trick to implement continuous stochastic Gaussian policies."><img src="img/reparameterizationtrick.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-gaussianpolicy-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;5: Reparameterization trick to implement continuous stochastic Gaussian policies.
+Figure&nbsp;12.5: Reparameterization trick to implement continuous stochastic Gaussian policies.
 </figcaption>
 </figure>
 </div>
@@ -725,25 +715,25 @@ Figure&nbsp;5: Reparameterization trick to implement continuous stochastic Gauss
 
 <div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
 <div id="ref-Chou2017" class="csl-entry" role="listitem">
-Chou, P.-W., Maturana, D., and Scherer, S. (2017). Improving <span>Stochastic Policy Gradients</span> in <span>Continuous Control</span> with <span>Deep Reinforcement Learning</span> using the <span>Beta Distribution</span>. in <em>International <span>Conference</span> on <span>Machine Learning</span></em> Available at: <a href="http://proceedings.mlr.press/v70/chou17a/chou17a.pdf">http://proceedings.mlr.press/v70/chou17a/chou17a.pdf</a>.
+Chou, P.-W., Maturana, D., and Scherer, S. (2017). Improving <span>Stochastic Policy Gradients</span> in <span>Continuous Control</span> with <span>Deep Reinforcement Learning</span> using the <span>Beta Distribution</span>. in <em>International <span>Conference</span> on <span>Machine Learning</span></em>.
 </div>
 <div id="ref-Gu2017" class="csl-entry" role="listitem">
-Gu, S., Holly, E., Lillicrap, T., and Levine, S. (2017). Deep <span>Reinforcement Learning</span> for <span>Robotic Manipulation</span> with <span>Asynchronous Off-Policy Updates</span>. in <em>Proc. <span>ICRA</span></em> Available at: <a href="http://arxiv.org/abs/1610.00633">http://arxiv.org/abs/1610.00633</a>.
+Gu, S., Holly, E., Lillicrap, T., and Levine, S. (2017). Deep <span>Reinforcement Learning</span> for <span>Robotic Manipulation</span> with <span>Asynchronous Off-Policy Updates</span>. in <em>Proc. <span>ICRA</span></em>.
 </div>
 <div id="ref-Heess2015" class="csl-entry" role="listitem">
-Heess, N., Wayne, G., Silver, D., Lillicrap, T., Tassa, Y., and Erez, T. (2015). Learning continuous control policies by stochastic value gradients. <em>Proc. International Conference on Neural Information Processing Systems</em>, 2944–2952. Available at: <a href="http://dl.acm.org/citation.cfm?id=2969569">http://dl.acm.org/citation.cfm?id=2969569</a>.
+Heess, N., Wayne, G., Silver, D., Lillicrap, T., Tassa, Y., and Erez, T. (2015). Learning continuous control policies by stochastic value gradients. <em>Proc. International Conference on Neural Information Processing Systems</em>, 2944–2952.
 </div>
 <div id="ref-Kingma2013" class="csl-entry" role="listitem">
-Kingma, D. P., and Welling, M. (2013). Auto-<span>Encoding Variational Bayes</span>. Available at: <a href="http://arxiv.org/abs/1312.6114">http://arxiv.org/abs/1312.6114</a>.
+Kingma, D. P., and Welling, M. (2013). Auto-<span>Encoding Variational Bayes</span>. <em>arXiv:1312.6114 [cs]</em>. Available at: <a href="https://arxiv.org/abs/1312.6114">https://arxiv.org/abs/1312.6114</a>.
 </div>
 <div id="ref-Mnih2016" class="csl-entry" role="listitem">
-Mnih, V., Badia, A. P., Mirza, M., Graves, A., Lillicrap, T. P., Harley, T., et al. (2016). Asynchronous <span>Methods</span> for <span>Deep Reinforcement Learning</span>. in <em>Proc. <span>ICML</span></em> Available at: <a href="http://arxiv.org/abs/1602.01783">http://arxiv.org/abs/1602.01783</a>.
+Mnih, V., Badia, A. P., Mirza, M., Graves, A., Lillicrap, T. P., Harley, T., et al. (2016). Asynchronous <span>Methods</span> for <span>Deep Reinforcement Learning</span>. in <em>Proc. <span>ICML</span></em>.
 </div>
 <div id="ref-Niu2011" class="csl-entry" role="listitem">
-Niu, F., Recht, B., Re, C., and Wright, S. J. (2011). <span>HOGWILD</span>!: <span>A Lock-Free Approach</span> to <span>Parallelizing Stochastic Gradient Descent</span>. in <em>Proc. <span>Advances</span> in <span>Neural Information Processing Systems</span></em>, 21–21. Available at: <a href="http://arxiv.org/abs/1106.5730">http://arxiv.org/abs/1106.5730</a>.
+Niu, F., Recht, B., Re, C., and Wright, S. J. (2011). <span>HOGWILD</span>!: <span>A Lock-Free Approach</span> to <span>Parallelizing Stochastic Gradient Descent</span>. in <em>Proc. <span>Advances</span> in <span>Neural Information Processing Systems</span></em>, 21–21.
 </div>
 <div id="ref-Schulman2015a" class="csl-entry" role="listitem">
-Schulman, J., Levine, S., Abbeel, P., Jordan, M., and Moritz, P. (2015). Trust <span>Region Policy Optimization</span>. in <em>Proceedings of the 31 st <span>International Conference</span> on <span>Machine Learning</span></em>, 1889–1897. Available at: <a href="http://proceedings.mlr.press/v37/schulman15.html">http://proceedings.mlr.press/v37/schulman15.html</a>.
+Schulman, J., Levine, S., Abbeel, P., Jordan, M., and Moritz, P. (2015). Trust <span>Region Policy Optimization</span>. in <em>Proceedings of the 31 st <span>International Conference</span> on <span>Machine Learning</span></em>, 1889–1897.
 </div>
 <div id="ref-Williams1991" class="csl-entry" role="listitem">
 Williams, R. J., and Peng, J. (1991). Function optimization using connectionist reinforcement learning algorithms. <em>Connection Science</em> 3, 241–268.
@@ -803,13 +793,14 @@ Williams, R. J., and Peng, J. (1991). Function optimization using connectionist 
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy
@@ -1151,7 +1142,7 @@ Williams, R. J., and Peng, J. (1991). Function optimization using connectionist 
     }
   });
   </script>
-<nav class="page-navigation">
+<nav class="page-navigation column-body">
   <div class="nav-page nav-page-previous">
       <a href="../src/3.1-PolicyGradient.html" class="pagination-link" aria-label="Policy Gradient methods">
         <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">Policy Gradient methods</span></span>

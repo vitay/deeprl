@@ -2,17 +2,23 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.29">
+<meta name="generator" content="quarto-1.10.18">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>Deep Deterministic Policy Gradient (DDPG) – Deep Reinforcement Learning</title>
 <style>
-code{white-space: pre-wrap;}
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -57,10 +63,10 @@ div.csl-indent {
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-bcbce66894bfa8e7e94e40e0186b9bb8.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-bb62276ab45c84d9efd712f51ff97b5a.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-ea27fabe3da5290357830f0bd5288bdb.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-3998d32367fd34ee6440c4fab252e735.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script src="../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
 <link href="../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
 <link href="../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
@@ -121,7 +127,7 @@ const typesetMath = (el) => {
     var macros = [];
     for (var i = 0; i < mathElements.length; i++) {
       var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
         window.katex.render(texText.data, mathElements[i], {
           displayMode: mathElements[i].classList.contains('display'),
           throwOnError: false,
@@ -139,7 +145,7 @@ window.Quarto = {
 
 </head>
 
-<body class="nav-sidebar floating quarto-light">
+<body class="nav-sidebar docked quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -149,7 +155,7 @@ window.Quarto = {
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
         <a class="flex-grow-1 no-decor" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-          <h1 class="quarto-secondary-nav-title"><span class="chapter-title">Deep Deterministic Policy Gradient (DDPG)</span></h1>
+          <h1 class="quarto-secondary-nav-title"><span id="sec-ddpg" class="quarto-section-identifier"><span class="chapter-title">Deep Deterministic Policy Gradient (DDPG)</span></span></h1>
         </a>     
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
         <i class="bi bi-search"></i>
@@ -158,9 +164,9 @@ window.Quarto = {
   </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="../">Deep Reinforcement Learning</a> 
@@ -252,11 +258,6 @@ window.Quarto = {
   <a href="../src/2.5-DistributedLearning.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Distributed learning</span></a>
   </div>
 </li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../src/2.6-Misc.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Misc.</span></a>
-  </div>
-</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -275,8 +276,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/3.2-ActorCritic.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Advantage Actor-Critic (A3C)</span></a>
+  <a href="../src/3.2-ActorCritic.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Advantage Actor-Critic (A3C)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -307,11 +307,6 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../src/3.8-EntropyRL.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Maximum Entropy RL (SAC)</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../src/3.9-Misc.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Misc.</span></a>
   </div>
 </li>
       </ul>
@@ -350,11 +345,6 @@ window.Quarto = {
   <a href="../src/4.5-AlphaGo.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">AlphaGo</span></a>
   </div>
 </li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../src/4.6-Misc.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Misc.</span></a>
-  </div>
-</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -383,7 +373,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/5.4-Meta.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Meta learning</span></a>
+  <a href="../src/5.4-Meta.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Meta reinforcement learning</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -412,7 +402,7 @@ window.Quarto = {
   <li><a href="#deterministic-policy-gradient-theorem" id="toc-deterministic-policy-gradient-theorem" class="nav-link active" data-scroll-target="#deterministic-policy-gradient-theorem">Deterministic policy gradient theorem</a></li>
   <li><a href="#deep-deterministic-policy-gradient-ddpg" id="toc-deep-deterministic-policy-gradient-ddpg" class="nav-link" data-scroll-target="#deep-deterministic-policy-gradient-ddpg">Deep Deterministic Policy Gradient (DDPG)</a></li>
   <li><a href="#application-learning-to-drive-in-a-day" id="toc-application-learning-to-drive-in-a-day" class="nav-link" data-scroll-target="#application-learning-to-drive-in-a-day">Application: learning to drive in a day</a></li>
-  <li><a href="#td3---twin-delayed-deep-deterministic-policy-gradient" id="toc-td3---twin-delayed-deep-deterministic-policy-gradient" class="nav-link" data-scroll-target="#td3---twin-delayed-deep-deterministic-policy-gradient">TD3 - Twin Delayed Deep Deterministic policy gradient</a>
+  <li><a href="#sec-td3" id="toc-sec-td3" class="nav-link" data-scroll-target="#sec-td3">TD3 - Twin Delayed Deep Deterministic policy gradient</a>
   <ul class="collapse">
   <li><a href="#twin-critics" id="toc-twin-critics" class="nav-link" data-scroll-target="#twin-critics">Twin critics</a></li>
   <li><a href="#delayed-actor-updates" id="toc-delayed-actor-updates" class="nav-link" data-scroll-target="#delayed-actor-updates">Delayed actor updates</a></li>
@@ -423,16 +413,16 @@ window.Quarto = {
 </nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
+<main class="content column-body" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title d-none d-lg-block"><span class="chapter-title">Deep Deterministic Policy Gradient (DDPG)</span></h1>
+<h1 class="title d-none d-lg-block"><span id="sec-ddpg" class="quarto-section-identifier"><span class="chapter-title">Deep Deterministic Policy Gradient (DDPG)</span></span></h1>
 </div>
 
 
 
-<div class="quarto-title-meta">
+<div class="quarto-title-meta column-body">
 
     
   
@@ -451,22 +441,22 @@ window.Quarto = {
 <li>Because of the stochasticity of the policy, the returns may vary considerably between two episodes generated by the same optimal policy. This induces a lot of <strong>variance</strong> in the policy gradient, which explains why policy gradient methods have a worse <strong>sample complexity</strong> than value-based methods: they need more samples to get rid of this variance.</li>
 </ol>
 <p>Successful value-based methods such as DQN produce a <strong>deterministic policy</strong>, where the action to be executed after learning is simply the greedy action <span class="math inline">a^*_t = \text{argmax}_a Q_\theta(s_t, a)</span>. Exploration is enforced by forcing the behavior policy (the one used to generate the samples) to be stochastic (<span class="math inline">\epsilon</span>-greedy), but the learned policy is itself deterministic. This is <strong>off-policy</strong> learning, allowing to use a different policy than the learned one to explore. When using an experience replay memory, the behavior policy is simply an older version of the learning policy (as samples stored in the ERM were generated by an older version of the actor).</p>
-<p>In this section, we will see the now state-of-the-art method DDPG (Deep Deterministic Policy Gradient), which tries to combine the advantages of policy gradient methods (actor-critic, continuous or highly dimensional outputs, stability) with those of value-based methods (sample efficiency, off-policy).</p>
+<p>In this section, we will see DDPG (Deep Deterministic Policy Gradient), which tries to combine the advantages of policy gradient methods (actor-critic, continuous or highly dimensional outputs, stability) with those of value-based methods (sample efficiency, off-policy).</p>
 <section id="deterministic-policy-gradient-theorem" class="level2">
 <h2 class="anchored" data-anchor-id="deterministic-policy-gradient-theorem">Deterministic policy gradient theorem</h2>
 <p>We now assume that we want to learn a parameterized <strong>deterministic policy</strong> <span class="math inline">\mu_\theta(s)</span>. As for the stochastic policy gradient theorem, the goal is to maximize the expectation over all states reachable by the policy of the reward to-go (return) after each action:</p>
 <p><span class="math display">
-    J(\theta) =  \mathbb{E}_{s \sim \rho_\mu}[R(s, \mu_\theta(s))]
+    \mathcal{J}(\theta) =  \mathbb{E}_{s \sim \rho_\mu}[R(s, \mu_\theta(s))]
 </span></p>
 <p>As in the stochastic case, the distribution of states reachable by the policy <span class="math inline">\rho_\mu</span> is impossible to estimate, so we will have to perform approximations. Building on <span class="citation" data-cites="Hafner2011">Hafner and Riedmiller (<a href="references.html#ref-Hafner2011" role="doc-biblioref">2011</a>)</span>, <span class="citation" data-cites="Silver2014">Silver et al. (<a href="references.html#ref-Silver2014" role="doc-biblioref">2014</a>)</span> showed how to obtain a usable gradient for the objective function when the policy is deterministic.</p>
 <p>Considering that the Q-value of an action is the expectation of the reward to-go after that action <span class="math inline">Q^\pi(s, a) = \mathbb{E}_\pi[R(s, a)]</span>, maximizing the returns or maximizing the true Q-value of all actions leads to the same optimal policy. This is the basic idea behind dynamic programming, where <em>policy evaluation</em> first finds the true Q-value of all state-action pairs and <em>policy improvement</em> changes the policy by selecting the action with the maximal Q-value <span class="math inline">a^*_t = \text{argmax}_a Q_\theta(s_t, a)</span>.</p>
 <p>In the continuous case, we will simply state that the gradient of the objective function is the same as the gradient of the Q-value. Supposing we have an unbiased estimate <span class="math inline">Q^\mu(s, a)</span> of the value of any action in <span class="math inline">s</span>, changing the policy <span class="math inline">\mu_\theta(s)</span> in the direction of <span class="math inline">\nabla_\theta Q^\mu(s, a)</span> leads to an action with a higher Q-value, therefore with a higher associated return:</p>
 <p><span class="math display">
-    \nabla_\theta J(\theta) = \mathbb{E}_{s \sim \rho_\mu}[\nabla_\theta Q^\mu(s, a) |_{a = \mu_\theta(s)}]
+    \nabla_\theta \mathcal{J}(\theta) = \mathbb{E}_{s \sim \rho_\mu}[\nabla_\theta Q^\mu(s, a) |_{a = \mu_\theta(s)}]
 </span></p>
 <p>This notation means that the gradient w.r.t <span class="math inline">a</span> of the Q-value is taken at <span class="math inline">a = \mu_\theta(s)</span>. We now use the chain rule to expand the gradient of the Q-value:</p>
 <p><span class="math display">
-    \nabla_\theta J(\theta) = \mathbb{E}_{s \sim \rho_\mu}[\nabla_\theta \mu_\theta(s) \times \nabla_a Q^\mu(s, a) |_{a = \mu_\theta(s)}]
+    \nabla_\theta \mathcal{J}(\theta) = \mathbb{E}_{s \sim \rho_\mu}[\nabla_\theta \mu_\theta(s) \times \nabla_a Q^\mu(s, a) |_{a = \mu_\theta(s)}]
 </span></p>
 <p>It is perhaps clearer using partial derivatives and simplifying the notations:</p>
 <p><span class="math display">
@@ -476,19 +466,19 @@ window.Quarto = {
 <div id="fig-chainrule" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-chainrule-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/dpg-chainrule.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;14.1: The chain rule can be applied on the deterministic policy gradient, as it is a composition of deterministic functions.."><img src="img/dpg-chainrule.png" class="img-fluid figure-img"></a>
+<a href="img/dpg-chainrule.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;14.1: The chain rule can be applied on the deterministic policy gradient, as it is a composition of deterministic functions."><img src="img/dpg-chainrule.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-chainrule-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;14.1: The chain rule can be applied on the deterministic policy gradient, as it is a composition of deterministic functions..
+Figure&nbsp;14.1: The chain rule can be applied on the deterministic policy gradient, as it is a composition of deterministic functions.
 </figcaption>
 </figure>
 </div>
 <p>We already see an <strong>actor-critic</strong> architecture emerging from this equation: <span class="math inline">\nabla_\theta \mu_\theta(s)</span> only depends on the parameterized actor, while <span class="math inline">\nabla_a Q^\mu(s, a)</span> is a sort of critic, telling the actor in which direction to change its policy: towards actions associated with more reward.</p>
 <p>As in the stochastic policy gradient theorem, the question is now how to obtain an unbiased estimate of the Q-value of any action and compute its gradient. <span class="citation" data-cites="Silver2014">Silver et al. (<a href="references.html#ref-Silver2014" role="doc-biblioref">2014</a>)</span> showed that it is possible to use a function approximator <span class="math inline">Q_\varphi(s, a)</span> as long as it is compatible and minimize the quadratic error with the true Q-values:</p>
 <p><span class="math display">
-    \nabla_\theta J(\theta) = \mathbb{E}_{s \sim \rho_\mu}[\nabla_\theta \mu_\theta(s) \times \nabla_a Q_\varphi(s, a) |_{a = \mu_\theta(s)}]
+    \nabla_\theta \mathcal{J}(\theta) = \mathbb{E}_{s \sim \rho_\mu}[\nabla_\theta \mu_\theta(s) \times \nabla_a Q_\varphi(s, a) |_{a = \mu_\theta(s)}]
 </span> <span class="math display">
-    J(\varphi) = \mathbb{E}_{s \sim \rho_\mu}[(Q^\mu(s, \mu_\theta(s)) - Q_\varphi(s, \mu_\theta(s)))^2]
+    \mathcal{L}(\varphi) = \mathbb{E}_{s \sim \rho_\mu}[(Q^\mu(s, \mu_\theta(s)) - Q_\varphi(s, \mu_\theta(s)))^2]
 </span></p>
 <p><a href="#fig-dpg" class="quarto-xref">Figure&nbsp;<span>14.2</span></a> outlines the actor-critic architecture of the DPG (deterministic policy gradient) method, to compare with the actor-critic architecture of the stochastic policy gradient.</p>
 <div id="fig-dpg" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -505,7 +495,7 @@ Figure&nbsp;14.2: Architecture of the DPG (deterministic policy gradient) method
 </section>
 <section id="deep-deterministic-policy-gradient-ddpg" class="level2">
 <h2 class="anchored" data-anchor-id="deep-deterministic-policy-gradient-ddpg">Deep Deterministic Policy Gradient (DDPG)</h2>
-<p><span class="citation" data-cites="Lillicrap2015">Lillicrap et al. (<a href="references.html#ref-Lillicrap2015" role="doc-biblioref">2015</a>)</span> extended the DPG approach to work with non-linear function approximators. In fact, they combined ideas from DQN and DPG to create a very successful algorithm able to solve continuous problems off-policy, the <strong>deep deterministic policy gradient</strong> (DDPG) algorithm..</p>
+<p><span class="citation" data-cites="Lillicrap2015">Lillicrap et al. (<a href="references.html#ref-Lillicrap2015" role="doc-biblioref">2015</a>)</span> extended the DPG approach to work with non-linear function approximators. In fact, they combined ideas from DQN and DPG to create a very successful algorithm able to solve continuous problems off-policy, the <strong>deep deterministic policy gradient</strong> (DDPG) algorithm.</p>
 <p>The key ideas borrowed from DQN are:</p>
 <ul>
 <li>Using an <strong>experience replay memory</strong> to store past transitions and learn off-policy.</li>
@@ -518,7 +508,7 @@ Figure&nbsp;14.2: Architecture of the DPG (deterministic policy gradient) method
 <p>with <span class="math inline">\tau &lt;&lt;1</span>. Using this update rule, the target networks are always “late” with respect to the trained networks, providing more stability to the learning of Q-values.</p>
 <p>The key idea borrowed from DPG is the policy gradient for the actor. The critic is learned using regular Q-learning and target networks:</p>
 <p><span class="math display">
-    J(\varphi) = \mathbb{E}_{s \sim \rho_\mu}[(r(s, a, s') + \gamma \, Q_{\varphi'}(s', \mu_{\theta'}(s')) - Q_\varphi(s, a))^2]
+    \mathcal{L}(\varphi) = \mathbb{E}_{s \sim \rho_\mu}[(r(s, a, s') + \gamma \, Q_{\varphi'}(s', \mu_{\theta'}(s')) - Q_\varphi(s, a))^2]
 </span></p>
 <p>One remaining issue is <strong>exploration</strong>: as the policy is deterministic, it can very quickly produce always the same actions, missing perhaps more rewarding options. Some environments are naturally noisy, enforcing exploration by itself, but this cannot be assumed in the general case. The solution retained in DDPG is an <strong>additive noise</strong> added to the deterministic action to explore the environment:</p>
 <p><span class="math display">
@@ -555,7 +545,7 @@ Figure&nbsp;14.4: Architecture of the DDPG (deep deterministic policy gradient) 
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-DDPG algorithm
+<span class="screen-reader-only">Note</span>DDPG algorithm
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -586,7 +576,7 @@ DDPG algorithm
 <li>Update the actor using the sampled policy gradient:</li>
 </ul>
 <p><span class="math display">
-      \nabla_\theta J(\theta) = \frac{1}{N} \sum_k \nabla_\theta \mu_\theta(s_k) \times \nabla_a Q_\varphi(s_k, a) |_{a = \mu_\theta(s_k)}
+      \nabla_\theta \mathcal{J}(\theta) = \frac{1}{N} \sum_k \nabla_\theta \mu_\theta(s_k) \times \nabla_a Q_\varphi(s_k, a) |_{a = \mu_\theta(s_k)}
   </span></p>
 <ul>
 <li>Update the target networks:</li>
@@ -598,15 +588,17 @@ DDPG algorithm
 </div>
 <p>The question that arises is how to obtain the gradient of the Q-value w.r.t the action <span class="math inline">\nabla_a Q_\varphi(s, a)</span>, when the critic only outputs the Q-value <span class="math inline">Q_\varphi(s, a)</span>. Fortunately, deep neural networks are simulated using automatic differentiation libraries such as tensorflow or pytorch, which can automatically output this gradient.</p>
 <p>Note that the DDPG algorithm is <strong>off-policy</strong>: the samples used to train the actor come from the replay buffer, i.e.&nbsp;were generated by an older version of the target policy. DDPG does not rely on importance sampling: as the policy is deterministic (we maximize <span class="math inline">\mathbb{E}_{s}[Q(s, \mu_\theta(s))]</span>), there is no need to balance the probabilities of the behavior and target policies (with stochastic policies, one should maximize <span class="math inline">\mathbb{E}_{s}[\sum_{a\in\mathcal{A}} \pi(s, a) Q(s, a)]</span>). In other words, the importance sampling weight can safely be set to 1 for deterministic policies.</p>
-<p>DDPG has rapidly become the state-of-the-art model-free method for continuous action spaces (although now PPO is preferred). It is able to learn efficent policies on most contiuous problems, either pixel-based or using individual state variables. In the original DDPG paper, they showed that <em>batch normalization</em> <span class="citation" data-cites="Ioffe2015">(<a href="references.html#ref-Ioffe2015" role="doc-biblioref">Ioffe and Szegedy, 2015</a>)</span> is crucial in stabilizing the training of deep networks on such problems. Its main limitation is its high sample complexity. Distributed versions of DDPG have been proposed to speed up learning, similarly to the parallel actor learners of A3C <span class="citation" data-cites="Lotzsch2017 Popov2017 Barth-Maron2018">(<a href="references.html#ref-Barth-Maron2018" role="doc-biblioref">Barth-Maron et al., 2018</a>; <a href="references.html#ref-Lotzsch2017" role="doc-biblioref">Lötzsch et al., 2017</a>; <a href="references.html#ref-Popov2017" role="doc-biblioref">Popov et al., 2017</a>)</span>.</p>
+<p>DDPG rapidly became the reference model-free method for continuous action spaces. It is able to learn efficient policies on most continuous problems, either pixel-based or using individual state variables. In the original DDPG paper, they showed that <em>batch normalization</em> <span class="citation" data-cites="Ioffe2015">(<a href="references.html#ref-Ioffe2015" role="doc-biblioref">Ioffe and Szegedy, 2015</a>)</span> is crucial in stabilizing the training of deep networks on such problems.</p>
+<p>Its reputation has however suffered from two problems. The first one is its <strong>sample complexity</strong>, which is high for an off-policy method: distributed versions of DDPG have been proposed to speed up learning, similarly to the parallel actor learners of A3C <span class="citation" data-cites="Lotzsch2017 Popov2017 Barth-Maron2018">(<a href="references.html#ref-Barth-Maron2018" role="doc-biblioref">Barth-Maron et al., 2018</a>; <a href="references.html#ref-Lotzsch2017" role="doc-biblioref">Lötzsch et al., 2017</a>; <a href="references.html#ref-Popov2017" role="doc-biblioref">Popov et al., 2017</a>)</span>. The second one, much more annoying in practice, is its <strong>brittleness</strong>: DDPG is extremely sensitive to the choice of its hyperparameters, and two runs differing only by the random seed can give completely different results. Getting it to work on a new problem often requires a lot of tuning, which is a serious problem when each run takes days.</p>
+<p>This is why DDPG is nowadays rarely used as such, although almost everything that came after derives from it. TD3 (<a href="#sec-td3" class="quarto-xref"><span>TD3 - Twin Delayed Deep Deterministic policy gradient</span></a>), presented at the end of this section, keeps its structure but fixes the overestimation of the critic which is responsible for much of the instability. SAC (<a href="3.8-EntropyRL.html" class="quarto-xref"><span>Maximum Entropy RL (SAC)</span></a>) goes back to a stochastic policy while keeping the sample efficiency of off-policy learning. When robustness matters more than sample efficiency, PPO (<a href="3.6-PPO.html" class="quarto-xref"><span>Policy optimization (TRPO, PPO)</span></a>) is usually preferred, as it tends to work out of the box with its default hyperparameters.</p>
 <div class="quarto-video ratio ratio-16x9"><iframe data-external="1" src="https://www.youtube.com/embed/iFg5lcUzSYU" title="DDPG" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe></div>
-<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout callout-style-default callout-tip no-icon callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
-<i class="callout-icon"></i>
+<i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Additional resources
+<span class="screen-reader-only">Tip</span>Additional resources
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -643,8 +635,8 @@ Figure&nbsp;14.6: Simulator used to find the hyperparameters of the DDPG algorit
 </figure>
 </div>
 </section>
-<section id="td3---twin-delayed-deep-deterministic-policy-gradient" class="level2">
-<h2 class="anchored" data-anchor-id="td3---twin-delayed-deep-deterministic-policy-gradient">TD3 - Twin Delayed Deep Deterministic policy gradient</h2>
+<section id="sec-td3" class="level2">
+<h2 class="anchored" data-anchor-id="sec-td3">TD3 - Twin Delayed Deep Deterministic policy gradient</h2>
 <section id="twin-critics" class="level3">
 <h3 class="anchored" data-anchor-id="twin-critics">Twin critics</h3>
 <p>As any Q-learning-based method, DDPG <strong>overestimates</strong> Q-values. The Bellman target <span class="math inline">t = r + \gamma \, \max_{a'} Q(s', a')</span> uses a maximum over other values, so it is increasingly overestimated during learning. After a while, the overestimated Q-values disrupt training in the actor.</p>
@@ -663,7 +655,7 @@ Figure&nbsp;14.7: Overestimation of Q-values by DDPG.
     \mathcal{L}(\theta) = \mathbb{E}_\mathcal{D} [(r + \gamma \, Q_{\theta'}(s´, \text{argmax}_{a'} Q_{\theta}(s', a')) - Q_\theta(s, a))^2]
 </span></p>
 <p>The idea is to use two different independent networks to reduce overestimation. This does not work well with DDPG, as the Bellman target <span class="math inline">t = r + \gamma \, Q_{\varphi'}(s', \mu_{\theta'}(s'))</span> will use a target actor network that is not very different from the trained deterministic actor, as the greedy action is likely to be the same for both.</p>
-<p>To solve this, TD3 <span class="citation" data-cites="Fujimoto2018">(<a href="references.html#ref-Fujimoto2018" role="doc-biblioref">Fujimoto et al., 2018</a>)</span> uses two critics <span class="math inline">\varphi_1</span> and <span class="math inline">\varphi_2</span> (and target critics): the Q-value used to train the actor will be the <strong>lesser of two evils</strong>, i.e.&nbsp;the minimum Q-value:</p>
+<p>To solve this, TD3 <span class="citation" data-cites="Fujimoto2018">(<a href="references.html#ref-Fujimoto2018" role="doc-biblioref"><span class="nocase">Fujimoto et al.</span>, 2018</a>)</span> uses two critics <span class="math inline">\varphi_1</span> and <span class="math inline">\varphi_2</span> (and target critics): the Q-value used to train the actor will be the <strong>lesser of two evils</strong>, i.e.&nbsp;the minimum Q-value:</p>
 <p><span class="math display">t = r + \gamma \, \min(Q_{\varphi'_1}(s', \mu_{\theta'}(s')), Q_{\varphi'_2}(s', \mu_{\theta'}(s')))</span></p>
 <p>One of the critic will always be less over-estimating than the other. Better than nothing… Using twin critics is called <strong>clipped double learning</strong>.</p>
 <p>Both critics learn in parallel using the same target:</p>
@@ -694,7 +686,7 @@ Figure&nbsp;14.8: Non-stationarity of the Bellman targets impairs learning.
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Delayed actor updates
+<span class="screen-reader-only">Note</span>Delayed actor updates
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -725,7 +717,7 @@ Delayed actor updates
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-TD3 algorithm
+<span class="screen-reader-only">Note</span>TD3 algorithm
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -768,7 +760,7 @@ TD3 algorithm
 <a href="img/td3-results.png" class="lightbox" data-gallery="quarto-lightbox-gallery-9" title="Figure&nbsp;14.9: Performance of TD3 on Mujoco tasks compared to DDPG, PPO and SAC. Source: @Fujimoto2018"><img src="img/td3-results.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-td3results-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;14.9: Performance of TD3 on Mujoco tasks compared to DDPG, PPO and SAC. Source: <span class="citation" data-cites="Fujimoto2018">Fujimoto et al. (<a href="references.html#ref-Fujimoto2018" role="doc-biblioref">2018</a>)</span>
+Figure&nbsp;14.9: Performance of TD3 on Mujoco tasks compared to DDPG, PPO and SAC. Source: <span class="citation" data-cites="Fujimoto2018"><span class="nocase">Fujimoto et al.</span> (<a href="references.html#ref-Fujimoto2018" role="doc-biblioref">2018</a>)</span>
 </figcaption>
 </figure>
 </div>
@@ -799,31 +791,31 @@ Figure&nbsp;14.10: D4PG results. Source: <span class="citation" data-cites="Bart
 
 <div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
 <div id="ref-Barth-Maron2018" class="csl-entry" role="listitem">
-Barth-Maron, G., Hoffman, M. W., Budden, D., Dabney, W., Horgan, D., TB, D., et al. (2018). Distributed <span>Distributional Deterministic Policy Gradients</span>. Available at: <a href="http://arxiv.org/abs/1804.08617">http://arxiv.org/abs/1804.08617</a>.
+Barth-Maron, G., Hoffman, M. W., Budden, D., Dabney, W., Horgan, D., TB, D., et al. (2018). Distributed <span>Distributional Deterministic Policy Gradients</span>. <em>arXiv:1804.08617 [cs]</em>. Available at: <a href="https://arxiv.org/abs/1804.08617">https://arxiv.org/abs/1804.08617</a>.
 </div>
 <div id="ref-Fujimoto2018" class="csl-entry" role="listitem">
-Fujimoto, S., van Hoof, H., and Meger, D. (2018). Addressing <span>Function Approximation Error</span> in <span>Actor-Critic Methods</span>. Available at: <a href="http://arxiv.org/abs/1802.09477">http://arxiv.org/abs/1802.09477</a> [Accessed March 1, 2020].
+<span class="nocase">Fujimoto, S., van Hoof, H., and Meger, D.</span> (2018). Addressing <span>Function Approximation Error</span> in <span>Actor-Critic Methods</span>. <em>arXiv:1802.09477 [cs, stat]</em>. Available at: <a href="https://arxiv.org/abs/1802.09477">https://arxiv.org/abs/1802.09477</a> [Accessed March 1, 2020].
 </div>
 <div id="ref-Hafner2011" class="csl-entry" role="listitem">
 Hafner, R., and Riedmiller, M. (2011). Reinforcement learning in feedback control. <em>Machine Learning</em> 84, 137–169. doi:<a href="https://doi.org/10.1007/s10994-011-5235-x">10.1007/s10994-011-5235-x</a>.
 </div>
 <div id="ref-Ioffe2015" class="csl-entry" role="listitem">
-Ioffe, S., and Szegedy, C. (2015). Batch <span>Normalization</span>: <span>Accelerating Deep Network Training</span> by <span>Reducing Internal Covariate Shift</span>. Available at: <a href="http://arxiv.org/abs/1502.03167">http://arxiv.org/abs/1502.03167</a>.
+Ioffe, S., and Szegedy, C. (2015). Batch <span>Normalization</span>: <span>Accelerating Deep Network Training</span> by <span>Reducing Internal Covariate Shift</span>. <em>arXiv:1502.03167 [cs.LG]</em>. Available at: <a href="https://arxiv.org/abs/1502.03167">https://arxiv.org/abs/1502.03167</a>.
 </div>
 <div id="ref-Kendall2018" class="csl-entry" role="listitem">
-Kendall, A., Hawke, J., Janz, D., Mazur, P., Reda, D., Allen, J.-M., et al. (2018). Learning to <span>Drive</span> in a <span>Day</span>. Available at: <a href="http://arxiv.org/abs/1807.00412">http://arxiv.org/abs/1807.00412</a> [Accessed December 19, 2018].
+Kendall, A., Hawke, J., Janz, D., Mazur, P., Reda, D., Allen, J.-M., et al. (2018). Learning to <span>Drive</span> in a <span>Day</span>. <em>arXiv:1807.00412 [cs, stat]</em>. Available at: <a href="https://arxiv.org/abs/1807.00412">https://arxiv.org/abs/1807.00412</a> [Accessed December 19, 2018].
 </div>
 <div id="ref-Lillicrap2015" class="csl-entry" role="listitem">
-Lillicrap, T. P., Hunt, J. J., Pritzel, A., Heess, N., Erez, T., Tassa, Y., et al. (2015). Continuous control with deep reinforcement learning. <em>CoRR</em>. Available at: <a href="http://arxiv.org/abs/1509.02971">http://arxiv.org/abs/1509.02971</a>.
+Lillicrap, T. P., Hunt, J. J., Pritzel, A., Heess, N., Erez, T., Tassa, Y., et al. (2015). Continuous control with deep reinforcement learning. <em>CoRR</em>.
 </div>
 <div id="ref-Lotzsch2017" class="csl-entry" role="listitem">
-Lötzsch, W., Vitay, J., and Hamker, F. H. (2017). Training a deep policy gradient-based neural network with asynchronous learners on a simulated robotic problem. in <em><span>INFORMATIK</span> 2017. <span>Gesellschaft</span> für <span>Informatik</span></em>, eds. M. Eibl and M. Gaedke (Gesellschaft für Informatik, Bonn), 2143–2154. Available at: <a href="https://dl.gi.de/handle/20.500.12116/3986">https://dl.gi.de/handle/20.500.12116/3986</a>.
+Lötzsch, W., Vitay, J., and Hamker, F. H. (2017). Training a deep policy gradient-based neural network with asynchronous learners on a simulated robotic problem. in <em><span>INFORMATIK</span> 2017. <span>Gesellschaft</span> für <span>Informatik</span></em>, eds. M. Eibl and M. Gaedke (Gesellschaft für Informatik, Bonn), 2143–2154.
 </div>
 <div id="ref-Popov2017" class="csl-entry" role="listitem">
-Popov, I., Heess, N., Lillicrap, T., Hafner, R., Barth-Maron, G., Vecerik, M., et al. (2017). Data-efficient <span>Deep Reinforcement Learning</span> for <span>Dexterous Manipulation</span>. Available at: <a href="http://arxiv.org/abs/1704.03073">http://arxiv.org/abs/1704.03073</a>.
+Popov, I., Heess, N., Lillicrap, T., Hafner, R., Barth-Maron, G., Vecerik, M., et al. (2017). Data-efficient <span>Deep Reinforcement Learning</span> for <span>Dexterous Manipulation</span>. <em>arXiv:1704.03073 [cs]</em>. Available at: <a href="https://arxiv.org/abs/1704.03073">https://arxiv.org/abs/1704.03073</a>.
 </div>
 <div id="ref-Silver2014" class="csl-entry" role="listitem">
-Silver, D., Lever, G., Heess, N., Degris, T., Wierstra, D., and Riedmiller, M. (2014). Deterministic <span>Policy Gradient Algorithms</span>. in <em>Proc. <span>ICML</span></em> Proceedings of <span>Machine Learning Research</span>., eds. E. P. Xing and T. Jebara (PMLR), 387–395. Available at: <a href="http://proceedings.mlr.press/v32/silver14.html">http://proceedings.mlr.press/v32/silver14.html</a>.
+Silver, D., Lever, G., Heess, N., Degris, T., Wierstra, D., and Riedmiller, M. (2014). Deterministic <span>Policy Gradient Algorithms</span>. in <em>Proc. <span>ICML</span></em> Proceedings of <span>Machine Learning Research</span>., eds. E. P. Xing and T. Jebara (PMLR), 387–395.
 </div>
 <div id="ref-Uhlenbeck1930" class="csl-entry" role="listitem">
 Uhlenbeck, G. E., and Ornstein, L. S. (1930). On the <span>Theory</span> of the <span>Brownian Motion</span>. <em>Physical Review</em> 36. doi:<a href="https://doi.org/10.1103/PhysRev.36.823">10.1103/PhysRev.36.823</a>.
@@ -883,13 +875,14 @@ Uhlenbeck, G. E., and Ornstein, L. S. (1930). On the <span>Theory</span> of the 
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy
@@ -1231,7 +1224,7 @@ Uhlenbeck, G. E., and Ornstein, L. S. (1930). On the <span>Theory</span> of the 
     }
   });
   </script>
-<nav class="page-navigation">
+<nav class="page-navigation column-body">
   <div class="nav-page nav-page-previous">
       <a href="../src/3.3-ImportanceSampling.html" class="pagination-link" aria-label="Off-policy Actor-Critic">
         <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">Off-policy Actor-Critic</span></span>

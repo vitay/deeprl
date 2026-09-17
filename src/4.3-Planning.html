@@ -2,17 +2,23 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.29">
+<meta name="generator" content="quarto-1.10.18">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>Planning (MPC, TDM) – Deep Reinforcement Learning</title>
 <style>
-code{white-space: pre-wrap;}
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -57,10 +63,10 @@ div.csl-indent {
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-bcbce66894bfa8e7e94e40e0186b9bb8.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-bb62276ab45c84d9efd712f51ff97b5a.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-ea27fabe3da5290357830f0bd5288bdb.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-3998d32367fd34ee6440c4fab252e735.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script src="../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
 <link href="../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
 <link href="../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
@@ -121,7 +127,7 @@ const typesetMath = (el) => {
     var macros = [];
     for (var i = 0; i < mathElements.length; i++) {
       var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
         window.katex.render(texText.data, mathElements[i], {
           displayMode: mathElements[i].classList.contains('display'),
           throwOnError: false,
@@ -139,7 +145,7 @@ window.Quarto = {
 
 </head>
 
-<body class="nav-sidebar floating quarto-light">
+<body class="nav-sidebar docked quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -158,9 +164,9 @@ window.Quarto = {
   </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="../">Deep Reinforcement Learning</a> 
@@ -252,11 +258,6 @@ window.Quarto = {
   <a href="../src/2.5-DistributedLearning.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Distributed learning</span></a>
   </div>
 </li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../src/2.6-Misc.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Misc.</span></a>
-  </div>
-</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -275,8 +276,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/3.2-ActorCritic.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Advantage Actor-Critic (A3C)</span></a>
+  <a href="../src/3.2-ActorCritic.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Advantage Actor-Critic (A3C)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -307,11 +307,6 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../src/3.8-EntropyRL.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Maximum Entropy RL (SAC)</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../src/3.9-Misc.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Misc.</span></a>
   </div>
 </li>
       </ul>
@@ -350,11 +345,6 @@ window.Quarto = {
   <a href="../src/4.5-AlphaGo.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">AlphaGo</span></a>
   </div>
 </li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../src/4.6-Misc.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Misc.</span></a>
-  </div>
-</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -383,7 +373,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/5.4-Meta.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Meta learning</span></a>
+  <a href="../src/5.4-Meta.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Meta reinforcement learning</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -413,7 +403,7 @@ window.Quarto = {
   <ul class="collapse">
   <li><a href="#example-with-a-neural-dynamics-model" id="toc-example-with-a-neural-dynamics-model" class="nav-link" data-scroll-target="#example-with-a-neural-dynamics-model">Example with a neural dynamics model</a></li>
   </ul></li>
-  <li><a href="#temporal-difference-models---tdm" id="toc-temporal-difference-models---tdm" class="nav-link" data-scroll-target="#temporal-difference-models---tdm">Temporal difference models - TDM</a>
+  <li><a href="#sec-tdm" id="toc-sec-tdm" class="nav-link" data-scroll-target="#sec-tdm">Temporal difference models - TDM</a>
   <ul class="collapse">
   <li><a href="#planning-over-long-horizon" id="toc-planning-over-long-horizon" class="nav-link" data-scroll-target="#planning-over-long-horizon">Planning over long horizon</a></li>
   <li><a href="#goal-conditioned-rl" id="toc-goal-conditioned-rl" class="nav-link" data-scroll-target="#goal-conditioned-rl">Goal-conditioned RL</a></li>
@@ -423,7 +413,7 @@ window.Quarto = {
 </nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
+<main class="content column-body" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
@@ -432,7 +422,7 @@ window.Quarto = {
 
 
 
-<div class="quarto-title-meta">
+<div class="quarto-title-meta column-body">
 
     
   
@@ -444,7 +434,7 @@ window.Quarto = {
 </header>
 
 
-<p>Model-based learning is not only used to augment MF methods with imaginary rollouts. It can also be use directly for planning, as the model <span class="math inline">s', r = M(s, a)</span> can emulate complete trajectories and estimate their return.</p>
+<p>Model-based learning is not only used to augment MF methods with imaginary rollouts. It can also be used directly for planning, as the model <span class="math inline">s', r = M(s, a)</span> can emulate complete trajectories and estimate their return.</p>
 <p><span class="math display">
     s_0  \xrightarrow[\pi]{} a_0 \xrightarrow[M]{} s_1  \xrightarrow[\pi]{} a_1 \xrightarrow[\pi]{} s_2 \xrightarrow[]{} \ldots \xrightarrow[M]{} s_T
 </span></p>
@@ -459,10 +449,10 @@ window.Quarto = {
 <div id="fig-mpc1" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-mpc1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/mpc-drift1.jpeg" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;22.1: Planning over long trajectories can accumulate imperfections in the model. Source: https://medium.com/@jonathan_hui/rl-model-based-reinforcement-learning-3c2b6f0aa323"><img src="img/mpc-drift1.jpeg" class="img-fluid figure-img"></a>
+<a href="img/mpc-drift1.jpeg" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;21.1: Planning over long trajectories can accumulate imperfections in the model. Source: https://medium.com/@jonathan_hui/rl-model-based-reinforcement-learning-3c2b6f0aa323"><img src="img/mpc-drift1.jpeg" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-mpc1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;22.1: Planning over long trajectories can accumulate imperfections in the model. Source: <a href="https://medium.com/@jonathan_hui/rl-model-based-reinforcement-learning-3c2b6f0aa323" class="uri">https://medium.com/@jonathan_hui/rl-model-based-reinforcement-learning-3c2b6f0aa323</a>
+Figure&nbsp;21.1: Planning over long trajectories can accumulate imperfections in the model. Source: <a href="https://medium.com/@jonathan_hui/rl-model-based-reinforcement-learning-3c2b6f0aa323" class="uri">https://medium.com/@jonathan_hui/rl-model-based-reinforcement-learning-3c2b6f0aa323</a>
 </figcaption>
 </figure>
 </div>
@@ -473,10 +463,10 @@ Figure&nbsp;22.1: Planning over long trajectories can accumulate imperfections i
 <div id="fig-mpc2" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-mpc2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/mpc-drift2.jpeg" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Figure&nbsp;22.2: Replanning after each step allows to compensate for model errors. Source: https://medium.com/@jonathan_hui/rl-model-based-reinforcement-learning-3c2b6f0aa323"><img src="img/mpc-drift2.jpeg" class="img-fluid figure-img"></a>
+<a href="img/mpc-drift2.jpeg" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Figure&nbsp;21.2: Replanning after each step allows to compensate for model errors. Source: https://medium.com/@jonathan_hui/rl-model-based-reinforcement-learning-3c2b6f0aa323"><img src="img/mpc-drift2.jpeg" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-mpc2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;22.2: Replanning after each step allows to compensate for model errors. Source: <a href="https://medium.com/@jonathan_hui/rl-model-based-reinforcement-learning-3c2b6f0aa323" class="uri">https://medium.com/@jonathan_hui/rl-model-based-reinforcement-learning-3c2b6f0aa323</a>
+Figure&nbsp;21.2: Replanning after each step allows to compensate for model errors. Source: <a href="https://medium.com/@jonathan_hui/rl-model-based-reinforcement-learning-3c2b6f0aa323" class="uri">https://medium.com/@jonathan_hui/rl-model-based-reinforcement-learning-3c2b6f0aa323</a>
 </figcaption>
 </figure>
 </div>
@@ -487,7 +477,7 @@ Figure&nbsp;22.2: Replanning after each step allows to compensate for model erro
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Model Predictive Control
+<span class="screen-reader-only">Note</span>Model Predictive Control
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -528,10 +518,10 @@ Model Predictive Control
 <div id="fig-randomshooting" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-randomshooting-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/mpc-example.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="Figure&nbsp;22.3: Random-sampling shooting. Using different initial actions, several imaginary rollouts are performed. The one leading to the maximal return is chosen and executed. Source: https://bair.berkeley.edu/blog/2017/11/30/model-based-rl/"><img src="img/mpc-example.png" class="img-fluid figure-img"></a>
+<a href="img/mpc-example.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="Figure&nbsp;21.3: Random-sampling shooting. Using different initial actions, several imaginary rollouts are performed. The one leading to the maximal return is chosen and executed. Source: https://bair.berkeley.edu/blog/2017/11/30/model-based-rl/"><img src="img/mpc-example.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-randomshooting-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;22.3: Random-sampling shooting. Using different initial actions, several imaginary rollouts are performed. The one leading to the maximal return is chosen and executed. Source: <a href="https://bair.berkeley.edu/blog/2017/11/30/model-based-rl/" class="uri">https://bair.berkeley.edu/blog/2017/11/30/model-based-rl/</a>
+Figure&nbsp;21.3: Random-sampling shooting. Using different initial actions, several imaginary rollouts are performed. The one leading to the maximal return is chosen and executed. Source: <a href="https://bair.berkeley.edu/blog/2017/11/30/model-based-rl/" class="uri">https://bair.berkeley.edu/blog/2017/11/30/model-based-rl/</a>
 </figcaption>
 </figure>
 </div>
@@ -539,37 +529,37 @@ Figure&nbsp;22.3: Random-sampling shooting. Using different initial actions, sev
 <div id="fig-randomshooting1" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-randomshooting1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/mpc-application1.gif" class="lightbox" data-gallery="quarto-lightbox-gallery-5" title="Figure&nbsp;22.4: Source: https://bair.berkeley.edu/blog/2017/11/30/model-based-rl/"><img src="img/mpc-application1.gif" class="img-fluid figure-img"></a>
+<a href="img/mpc-application1.gif" class="lightbox" data-gallery="quarto-lightbox-gallery-5" title="Figure&nbsp;21.4: Source: https://bair.berkeley.edu/blog/2017/11/30/model-based-rl/"><img src="img/mpc-application1.gif" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-randomshooting1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;22.4: Source: <a href="https://bair.berkeley.edu/blog/2017/11/30/model-based-rl/" class="uri">https://bair.berkeley.edu/blog/2017/11/30/model-based-rl/</a>
+Figure&nbsp;21.4: Source: <a href="https://bair.berkeley.edu/blog/2017/11/30/model-based-rl/" class="uri">https://bair.berkeley.edu/blog/2017/11/30/model-based-rl/</a>
 </figcaption>
 </figure>
 </div>
 <div id="fig-randomshooting2" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-randomshooting2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/mpc-application2.gif" class="lightbox" data-gallery="quarto-lightbox-gallery-6" title="Figure&nbsp;22.5: Source: https://bair.berkeley.edu/blog/2017/11/30/model-based-rl/"><img src="img/mpc-application2.gif" class="img-fluid figure-img"></a>
+<a href="img/mpc-application2.gif" class="lightbox" data-gallery="quarto-lightbox-gallery-6" title="Figure&nbsp;21.5: Source: https://bair.berkeley.edu/blog/2017/11/30/model-based-rl/"><img src="img/mpc-application2.gif" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-randomshooting2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;22.5: Source: <a href="https://bair.berkeley.edu/blog/2017/11/30/model-based-rl/" class="uri">https://bair.berkeley.edu/blog/2017/11/30/model-based-rl/</a>
+Figure&nbsp;21.5: Source: <a href="https://bair.berkeley.edu/blog/2017/11/30/model-based-rl/" class="uri">https://bair.berkeley.edu/blog/2017/11/30/model-based-rl/</a>
 </figcaption>
 </figure>
 </div>
 </section>
 </section>
-<section id="temporal-difference-models---tdm" class="level2">
-<h2 class="anchored" data-anchor-id="temporal-difference-models---tdm">Temporal difference models - TDM</h2>
+<section id="sec-tdm" class="level2">
+<h2 class="anchored" data-anchor-id="sec-tdm">Temporal difference models - TDM</h2>
 <section id="planning-over-long-horizon" class="level3">
 <h3 class="anchored" data-anchor-id="planning-over-long-horizon">Planning over long horizon</h3>
 <p>One problem with model-based planning is the <strong>discretization time step</strong> (difference between <span class="math inline">t</span> and <span class="math inline">t+1</span>). It is determined by the action rate: how often a different action <span class="math inline">a_t</span> has to be taken. In robotics, it could be below the millisecond, leading to very long trajectories in terms of steps.</p>
 <div id="fig-tdm1" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-tdm1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/tdm-mb-bike-plan-small.png" class="lightbox" data-gallery="quarto-lightbox-gallery-7" title="Figure&nbsp;22.6: Example of going from Berkeley to the Golden Gate bridge with a bike. Source: @Pong2018 and https://bairblog.github.io/2018/04/26/tdm/"><img src="img/tdm-mb-bike-plan-small.png" class="img-fluid figure-img" style="width:80.0%"></a>
+<a href="img/tdm-mb-bike-plan-small.png" class="lightbox" data-gallery="quarto-lightbox-gallery-7" title="Figure&nbsp;21.6: Example of going from Berkeley to the Golden Gate bridge with a bike. Source: @Pong2018 and https://bairblog.github.io/2018/04/26/tdm/"><img src="img/tdm-mb-bike-plan-small.png" class="img-fluid figure-img" style="width:80.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-tdm1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;22.6: Example of going from Berkeley to the Golden Gate bridge with a bike. Source: <span class="citation" data-cites="Pong2018">Pong et al. (<a href="references.html#ref-Pong2018" role="doc-biblioref">2018</a>)</span> and <a href="https://bairblog.github.io/2018/04/26/tdm/" class="uri">https://bairblog.github.io/2018/04/26/tdm/</a>
+Figure&nbsp;21.6: Example of going from Berkeley to the Golden Gate bridge with a bike. Source: <span class="citation" data-cites="Pong2018">Pong et al. (<a href="references.html#ref-Pong2018" role="doc-biblioref">2018</a>)</span> and <a href="https://bairblog.github.io/2018/04/26/tdm/" class="uri">https://bairblog.github.io/2018/04/26/tdm/</a>
 </figcaption>
 </figure>
 </div>
@@ -595,10 +585,10 @@ Figure&nbsp;22.6: Example of going from Berkeley to the Golden Gate bridge with 
 <div id="fig-HER" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-HER-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/HER.png" class="lightbox" data-gallery="quarto-lightbox-gallery-8" title="Figure&nbsp;22.7: Hindsight experience replay. Source: https://openai.com/blog/ingredients-for-robotics-research/"><img src="img/HER.png" class="img-fluid figure-img"></a>
+<a href="img/HER.png" class="lightbox" data-gallery="quarto-lightbox-gallery-8" title="Figure&nbsp;21.7: Hindsight experience replay. Source: https://openai.com/blog/ingredients-for-robotics-research/"><img src="img/HER.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-HER-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;22.7: Hindsight experience replay. Source: <a href="https://openai.com/blog/ingredients-for-robotics-research/" class="uri">https://openai.com/blog/ingredients-for-robotics-research/</a>
+Figure&nbsp;21.7: Hindsight experience replay. Source: <a href="https://openai.com/blog/ingredients-for-robotics-research/" class="uri">https://openai.com/blog/ingredients-for-robotics-research/</a>
 </figcaption>
 </figure>
 </div>
@@ -671,16 +661,16 @@ Figure&nbsp;22.7: Hindsight experience replay. Source: <a href="https://openai.c
 
 <div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
 <div id="ref-Andrychowicz2017" class="csl-entry" role="listitem">
-Andrychowicz, M., Wolski, F., Ray, A., Schneider, J., Fong, R., Welinder, P., et al. (2017). Hindsight <span>Experience Replay</span>. Available at: <a href="http://arxiv.org/abs/1707.01495">http://arxiv.org/abs/1707.01495</a>.
+Andrychowicz, M., Wolski, F., Ray, A., Schneider, J., Fong, R., Welinder, P., et al. (2017). Hindsight <span>Experience Replay</span>. <em>arXiv:1707.01495 [cs]</em>. Available at: <a href="https://arxiv.org/abs/1707.01495">https://arxiv.org/abs/1707.01495</a>.
 </div>
 <div id="ref-Nagabandi2017" class="csl-entry" role="listitem">
-Nagabandi, A., Kahn, G., Fearing, R. S., and Levine, S. (2017). Neural <span>Network Dynamics</span> for <span>Model-Based Deep Reinforcement Learning</span> with <span>Model-Free Fine-Tuning</span>. Available at: <a href="http://arxiv.org/abs/1708.02596">http://arxiv.org/abs/1708.02596</a> [Accessed March 3, 2019].
+Nagabandi, A., Kahn, G., Fearing, R. S., and Levine, S. (2017). Neural <span>Network Dynamics</span> for <span>Model-Based Deep Reinforcement Learning</span> with <span>Model-Free Fine-Tuning</span>. <em>arXiv:1708.02596 [cs]</em>. Available at: <a href="https://arxiv.org/abs/1708.02596">https://arxiv.org/abs/1708.02596</a> [Accessed March 3, 2019].
 </div>
 <div id="ref-Pong2018" class="csl-entry" role="listitem">
-Pong, V., Gu, S., Dalal, M., and Levine, S. (2018). Temporal <span>Difference Models</span>: <span>Model-Free Deep RL</span> for <span>Model-Based Control</span>. Available at: <a href="http://arxiv.org/abs/1802.09081">http://arxiv.org/abs/1802.09081</a>.
+Pong, V., Gu, S., Dalal, M., and Levine, S. (2018). Temporal <span>Difference Models</span>: <span>Model-Free Deep RL</span> for <span>Model-Based Control</span>. <em>arXiv:1802.09081 [cs]</em>. Available at: <a href="https://arxiv.org/abs/1802.09081">https://arxiv.org/abs/1802.09081</a>.
 </div>
 <div id="ref-Salimans2017" class="csl-entry" role="listitem">
-Salimans, T., Ho, J., Chen, X., Sidor, S., and Sutskever, I. (2017). Evolution <span>Strategies</span> as a <span>Scalable Alternative</span> to <span>Reinforcement Learning</span>. Available at: <a href="http://arxiv.org/abs/1703.03864">http://arxiv.org/abs/1703.03864</a>.
+Salimans, T., Ho, J., Chen, X., Sidor, S., and Sutskever, I. (2017). Evolution <span>Strategies</span> as a <span>Scalable Alternative</span> to <span>Reinforcement Learning</span>.
 </div>
 <div id="ref-Szita2006" class="csl-entry" role="listitem">
 Szita, I., and Lörincz, A. (2006). Learning <span>Tetris Using</span> the <span>Noisy Cross-Entropy Method</span>. <em>Neural Computation</em> 18, 2936–2941. doi:<a href="https://doi.org/10.1162/neco.2006.18.12.2936">10.1162/neco.2006.18.12.2936</a>.
@@ -741,13 +731,14 @@ Szita, I., and Lörincz, A. (2006). Learning <span>Tetris Using</span> the <span
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy
@@ -1089,7 +1080,7 @@ Szita, I., and Lörincz, A. (2006). Learning <span>Tetris Using</span> the <span
     }
   });
   </script>
-<nav class="page-navigation">
+<nav class="page-navigation column-body">
   <div class="nav-page nav-page-previous">
       <a href="../src/4.2-MBMF.html" class="pagination-link" aria-label="Model-based-augmented model-free RL (Dyna-Q, I2A)">
         <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">Model-based-augmented model-free RL (Dyna-Q, I2A)</span></span>

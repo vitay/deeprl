@@ -2,17 +2,23 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.29">
+<meta name="generator" content="quarto-1.10.18">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>Deep learning – Deep Reinforcement Learning</title>
 <style>
-code{white-space: pre-wrap;}
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -57,10 +63,10 @@ div.csl-indent {
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-bcbce66894bfa8e7e94e40e0186b9bb8.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-bb62276ab45c84d9efd712f51ff97b5a.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-ea27fabe3da5290357830f0bd5288bdb.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-3998d32367fd34ee6440c4fab252e735.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script src="../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
 <link href="../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
 <link href="../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
@@ -121,7 +127,7 @@ const typesetMath = (el) => {
     var macros = [];
     for (var i = 0; i < mathElements.length; i++) {
       var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
         window.katex.render(texText.data, mathElements[i], {
           displayMode: mathElements[i].classList.contains('display'),
           throwOnError: false,
@@ -139,7 +145,7 @@ window.Quarto = {
 
 </head>
 
-<body class="nav-sidebar floating quarto-light">
+<body class="nav-sidebar docked quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -149,7 +155,7 @@ window.Quarto = {
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
         <a class="flex-grow-1 no-decor" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-          <h1 class="quarto-secondary-nav-title"><span class="chapter-title">Deep learning</span></h1>
+          <h1 class="quarto-secondary-nav-title"><span id="sec-deeplearning" class="quarto-section-identifier"><span class="chapter-title">Deep learning</span></span></h1>
         </a>     
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
         <i class="bi bi-search"></i>
@@ -158,9 +164,9 @@ window.Quarto = {
   </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="../">Deep Reinforcement Learning</a> 
@@ -252,11 +258,6 @@ window.Quarto = {
   <a href="../src/2.5-DistributedLearning.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Distributed learning</span></a>
   </div>
 </li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../src/2.6-Misc.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Misc.</span></a>
-  </div>
-</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -275,8 +276,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/3.2-ActorCritic.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Advantage Actor-Critic (A3C)</span></a>
+  <a href="../src/3.2-ActorCritic.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Advantage Actor-Critic (A3C)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -307,11 +307,6 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../src/3.8-EntropyRL.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Maximum Entropy RL (SAC)</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../src/3.9-Misc.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Misc.</span></a>
   </div>
 </li>
       </ul>
@@ -350,11 +345,6 @@ window.Quarto = {
   <a href="../src/4.5-AlphaGo.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">AlphaGo</span></a>
   </div>
 </li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../src/4.6-Misc.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Misc.</span></a>
-  </div>
-</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -383,7 +373,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/5.4-Meta.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Meta learning</span></a>
+  <a href="../src/5.4-Meta.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Meta reinforcement learning</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -411,6 +401,7 @@ window.Quarto = {
   <ul>
   <li><a href="#feedforward-neural-networks" id="toc-feedforward-neural-networks" class="nav-link active" data-scroll-target="#feedforward-neural-networks">Feedforward neural networks</a></li>
   <li><a href="#convolutional-networks" id="toc-convolutional-networks" class="nav-link" data-scroll-target="#convolutional-networks">Convolutional networks</a></li>
+  <li><a href="#autoencoders" id="toc-autoencoders" class="nav-link" data-scroll-target="#autoencoders">Autoencoders</a></li>
   <li><a href="#recurrent-neural-networks" id="toc-recurrent-neural-networks" class="nav-link" data-scroll-target="#recurrent-neural-networks">Recurrent neural networks</a></li>
   <li><a href="#transformers" id="toc-transformers" class="nav-link" data-scroll-target="#transformers">Transformers</a></li>
   <li><a href="#diffusion-models" id="toc-diffusion-models" class="nav-link" data-scroll-target="#diffusion-models">Diffusion models</a></li>
@@ -418,16 +409,16 @@ window.Quarto = {
 </nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
+<main class="content column-body" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title d-none d-lg-block"><span class="chapter-title">Deep learning</span></h1>
+<h1 class="title d-none d-lg-block"><span id="sec-deeplearning" class="quarto-section-identifier"><span class="chapter-title">Deep learning</span></span></h1>
 </div>
 
 
 
-<div class="quarto-title-meta">
+<div class="quarto-title-meta column-body">
 
     
   
@@ -472,7 +463,35 @@ Figure&nbsp;7.1: Architecture of a deep neural network. Source: <span class="cit
 <p><span class="math display">
     \mathcal{L}(\theta) = - \mathbb{E}_{\mathbf{x}, \mathbf{t} \in \mathcal{D}} [\sum_i t_i \log y_i]
 </span></p>
-<p>where the log-likelihood of the prediction <span class="math inline">\mathbf{y}</span> to match the data <span class="math inline">\mathbf{t}</span> is maximized over the training set. The mse could be used for classification problems too, but the output layer usually has a softmax activation function for classification problems, which works nicely with the cross entropy loss function. See <a href="https://rdipietro.github.io/friendly-intro-to-cross-entropy-loss" class="uri">https://rdipietro.github.io/friendly-intro-to-cross-entropy-loss</a> for the link between cross entropy and log-likelihood and <a href="https://deepnotes.io/softmax-crossentropy" class="uri">https://deepnotes.io/softmax-crossentropy</a> for the interplay between softmax and cross entropy.</p>
+<p>where the log-likelihood of the prediction <span class="math inline">\mathbf{y}</span> to match the data <span class="math inline">\mathbf{t}</span> is maximized over the training set. The mse could be used for classification problems too, but the output layer usually has a softmax activation function for classification problems, which works nicely with the cross entropy loss function.</p>
+<p>It is worth spending a moment on what the cross entropy actually measures, as it will come back in deep RL in places that have nothing to do with classification. The cross entropy between two probability distributions <span class="math inline">X</span> and <span class="math inline">Y</span> is defined as:</p>
+<p><span class="math display">
+    H(X, Y) = \mathbb{E}_{x \sim X} [- \log P(Y = x)]
+</span></p>
+<p>It answers the question: <strong>are samples from <span class="math inline">X</span> likely under <span class="math inline">Y</span>?</strong> One draws samples from the first distribution and asks the second one how surprised it is. If <span class="math inline">Y</span> gives a high probability to everything <span class="math inline">X</span> produces, <span class="math inline">- \log P(Y=x)</span> is small and the cross entropy is low. If <span class="math inline">Y</span> gives a low probability to something <span class="math inline">X</span> produces often, that term explodes and the cross entropy is high. Minimizing <span class="math inline">H(X, Y)</span> w.r.t <span class="math inline">Y</span> therefore makes the two distributions equal almost everywhere: the cross entropy is a measure of <strong>similarity between distributions</strong>.</p>
+<div id="fig-crossentropy" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-crossentropy-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="img/crossentropy.svg" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Figure&nbsp;7.2: The cross entropy is minimal when the two distributions are identical."><img src="img/crossentropy.svg" class="img-fluid figure-img" style="width:60.0%"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-crossentropy-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;7.2: The cross entropy is minimal when the two distributions are identical.
+</figcaption>
+</figure>
+</div>
+<p>The classification loss above is just the special case where the target distribution <span class="math inline">\mathbf{t}</span> is a <strong>one-hot encoded vector</strong>: all the probability mass is on the correct class, so the sum <span class="math inline">\sum_i t_i \log y_i</span> reduces to the single term <span class="math inline">\log y_{i^*}</span> of the correct class <span class="math inline">i^*</span>. But nothing forces the target to be one-hot: the target can be <strong>any</strong> distribution, and the loss will still push the output of the network towards it.</p>
+<div id="fig-crossentropy-animation" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-crossentropy-animation-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="img/crossentropy-animation.gif" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Figure&nbsp;7.3: Minimizing the cross entropy makes the predicted distribution match the target distribution, which does not have to be one-hot. Source: https://rdipietro.github.io/friendly-intro-to-cross-entropy-loss"><img src="img/crossentropy-animation.gif" class="img-fluid figure-img" style="width:60.0%"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-crossentropy-animation-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;7.3: Minimizing the cross entropy makes the predicted distribution match the target distribution, which does not have to be one-hot. Source: <a href="https://rdipietro.github.io/friendly-intro-to-cross-entropy-loss" class="uri">https://rdipietro.github.io/friendly-intro-to-cross-entropy-loss</a>
+</figcaption>
+</figure>
+</div>
+<p>This generality is what makes the cross entropy useful beyond classification. Categorical DQN (<a href="2.4-DQNvariants.html#sec-distributionalrl" class="quarto-xref"><span>Categorical DQN</span></a>) will use it to make a network predict a whole <strong>distribution of returns</strong> instead of their mean, the target being the distribution obtained by applying the Bellman equation. DreamerV3 (<a href="4.4-WorldModels.html" class="quarto-xref"><span>World models, Dreamer</span></a>) will use it to turn regression into classification over a set of bins. In all these cases, the loss is the same formula, only the target distribution changes.</p>
+<p>See <a href="https://rdipietro.github.io/friendly-intro-to-cross-entropy-loss" class="uri">https://rdipietro.github.io/friendly-intro-to-cross-entropy-loss</a> for the link between cross entropy and log-likelihood and <a href="https://deepnotes.io/softmax-crossentropy" class="uri">https://deepnotes.io/softmax-crossentropy</a> for the interplay between softmax and cross entropy.</p>
 <p>Once the loss function is defined, it has to be minimized by searching optimal values for the free parameters <span class="math inline">\theta</span>. This optimization procedure is based on <strong>gradient descent</strong>, which is an iterative procedure modifying estimates of the free parameters in the opposite direction of the gradient of the loss function:</p>
 <p><span class="math display">
 \Delta \theta = -\eta \, \nabla_\theta \mathcal{L}(\theta) = -\eta \, \frac{\partial \mathcal{L}(\theta)}{\partial \theta}
@@ -517,10 +536,10 @@ Figure&nbsp;7.1: Architecture of a deep neural network. Source: <span class="cit
 <div id="fig-convlayer" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-convlayer-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/convlayer.gif" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Figure&nbsp;7.2: Convolutional layer. Source: https://github.com/vdumoulin/conv_arithmetic."><img src="img/convlayer.gif" class="img-fluid figure-img" style="width:50.0%"></a>
+<a href="img/convlayer.gif" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="Figure&nbsp;7.4: Convolutional layer. Source: https://github.com/vdumoulin/conv_arithmetic."><img src="img/convlayer.gif" class="img-fluid figure-img" style="width:50.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-convlayer-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;7.2: Convolutional layer. Source: <a href="https://github.com/vdumoulin/conv_arithmetic" class="uri">https://github.com/vdumoulin/conv_arithmetic</a>.
+Figure&nbsp;7.4: Convolutional layer. Source: <a href="https://github.com/vdumoulin/conv_arithmetic" class="uri">https://github.com/vdumoulin/conv_arithmetic</a>.
 </figcaption>
 </figure>
 </div>
@@ -528,37 +547,75 @@ Figure&nbsp;7.2: Convolutional layer. Source: <a href="https://github.com/vdumou
 <div id="fig-maxpooling" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-maxpooling-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/maxpooling.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Figure&nbsp;7.3: Max-pooling layer. Source: Stanford’s CS231n course http://cs231n.github.io/convolutional-networks"><img src="img/maxpooling.png" class="img-fluid figure-img"></a>
+<a href="img/maxpooling.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5" title="Figure&nbsp;7.5: Max-pooling layer. Source: Stanford’s CS231n course http://cs231n.github.io/convolutional-networks"><img src="img/maxpooling.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-maxpooling-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;7.3: Max-pooling layer. Source: Stanford’s CS231n course <a href="http://cs231n.github.io/convolutional-networks" class="uri">http://cs231n.github.io/convolutional-networks</a>
+Figure&nbsp;7.5: Max-pooling layer. Source: Stanford’s CS231n course <a href="http://cs231n.github.io/convolutional-networks" class="uri">http://cs231n.github.io/convolutional-networks</a>
 </figcaption>
 </figure>
 </div>
-<p>A convolutional neural network is simply a sequence of convolutional layers and max-pooling layers (sometime two convolutional layers are applied in a row before max-pooling, as in VGG <span class="citation" data-cites="Simonyan2015">(<a href="references.html#ref-Simonyan2015" role="doc-biblioref">Simonyan and Zisserman, 2015</a>)</span>), followed by a couple of fully-connected layers and a softmax output layer. <a href="#fig-alexnet" class="quarto-xref">Figure&nbsp;<span>7.4</span></a> shows the architecture of AlexNet, the winning architecture of the ImageNet challenge in 2012 <span class="citation" data-cites="Krizhevsky2012">(<a href="references.html#ref-Krizhevsky2012" role="doc-biblioref">Krizhevsky et al., 2012</a>)</span>.</p>
+<p>A convolutional neural network is simply a sequence of convolutional layers and max-pooling layers (sometime two convolutional layers are applied in a row before max-pooling, as in VGG <span class="citation" data-cites="Simonyan2015">(<a href="references.html#ref-Simonyan2015" role="doc-biblioref">Simonyan and Zisserman, 2015</a>)</span>), followed by a couple of fully-connected layers and a softmax output layer. <a href="#fig-alexnet" class="quarto-xref">Figure&nbsp;<span>7.6</span></a> shows the architecture of AlexNet, the winning architecture of the ImageNet challenge in 2012 <span class="citation" data-cites="Krizhevsky2012">(<a href="references.html#ref-Krizhevsky2012" role="doc-biblioref">Krizhevsky et al., 2012</a>)</span>.</p>
 <div id="fig-alexnet" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-alexnet-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/alexnet.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="Figure&nbsp;7.4: Architecture of the AlexNet CNN. Source: @Krizhevsky2012."><img src="img/alexnet.png" class="img-fluid figure-img"></a>
+<a href="img/alexnet.png" class="lightbox" data-gallery="quarto-lightbox-gallery-6" title="Figure&nbsp;7.6: Architecture of the AlexNet CNN. Source: @Krizhevsky2012."><img src="img/alexnet.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-alexnet-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;7.4: Architecture of the AlexNet CNN. Source: <span class="citation" data-cites="Krizhevsky2012">Krizhevsky et al. (<a href="references.html#ref-Krizhevsky2012" role="doc-biblioref">2012</a>)</span>.
+Figure&nbsp;7.6: Architecture of the AlexNet CNN. Source: <span class="citation" data-cites="Krizhevsky2012">Krizhevsky et al. (<a href="references.html#ref-Krizhevsky2012" role="doc-biblioref">2012</a>)</span>.
 </figcaption>
 </figure>
 </div>
 <p>Many improvements have been proposed since 2012 (e.g.&nbsp;ResNets <span class="citation" data-cites="He2015">(<a href="references.html#ref-He2015" role="doc-biblioref">He et al., 2015</a>)</span>) but the idea stays similar. Generally, convolutional and max-pooling layers are alternated until the spatial dimensions are so reduced (around 10x10) that they can be put into a single vector and fed into a fully-connected layer. This is <strong>NOT</strong> the case in deep RL! Contrary to object classification, spatial information is crucial in deep RL: position of the ball, position of the body, etc. It matters whether the ball is to the right or to the left of your paddle when you decide how to move it. Max-pooling layers are therefore omitted and the CNNs only consist of convolutional and fully-connected layers. This greatly increases the number of weights in the networks, hence the number of training examples needed to train the network. This is still the main limitation of using CNNs in deep RL.</p>
 </section>
+<section id="autoencoders" class="level2">
+<h2 class="anchored" data-anchor-id="autoencoders">Autoencoders</h2>
+<p>Fully-connected and convolutional networks as presented above extract features in a <strong>supervised</strong> manner: the features that appear in the hidden layers are those that happen to be useful to predict the labels, so one needs a lot of annotated data (image, label) to obtain them.</p>
+<p><strong>Autoencoders</strong> allow to extract features in an <strong>unsupervised</strong> way, i.e.&nbsp;using only inputs, without any label. The trick is to give the network a task that requires no annotation at all: <strong>reconstructing its own input</strong>.</p>
+<p><span class="math display">
+    \mathbf{y} = \mathbf{\tilde{x}} \approx \mathbf{x}
+</span></p>
+<p>The loss function is simply the mse between the input and its reconstruction:</p>
+<p><span class="math display">
+    \mathcal{L}(\theta) = \mathbb{E}_{\mathbf{x} \in \mathcal{D}} [ ||\mathbf{\tilde{x}} - \mathbf{x}||^2 ]
+</span></p>
+<p>Apart from this <strong>reconstruction loss</strong>, an autoencoder is trained exactly as a regular network, with backpropagation and the same optimizers.</p>
+<p>An autoencoder is made of two parts: the <strong>encoder</strong>, which maps the input <span class="math inline">\mathbf{x}</span> to a vector <span class="math inline">\mathbf{z}</span> called the <strong>latent representation</strong>, and the <strong>decoder</strong>, which maps <span class="math inline">\mathbf{z}</span> back to a reconstruction <span class="math inline">\mathbf{\tilde{x}}</span> of the input.</p>
+<div id="fig-autoencoder" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-autoencoder-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="img/autoencoder-architecture.png" class="lightbox" data-gallery="quarto-lightbox-gallery-7" title="Figure&nbsp;7.7: Architecture of an autoencoder: the encoder compresses the input into a latent representation, the decoder reconstructs the input from it. Source: https://lilianweng.github.io/lil-log/2018/08/12/from-autoencoder-to-beta-vae.html"><img src="img/autoencoder-architecture.png" class="img-fluid figure-img" style="width:75.0%"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-autoencoder-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;7.7: Architecture of an autoencoder: the encoder compresses the input into a latent representation, the decoder reconstructs the input from it. Source: <a href="https://lilianweng.github.io/lil-log/2018/08/12/from-autoencoder-to-beta-vae.html" class="uri">https://lilianweng.github.io/lil-log/2018/08/12/from-autoencoder-to-beta-vae.html</a>
+</figcaption>
+</figure>
+</div>
+<p>Reconstructing the input would be trivial if the network could simply copy it, which is why the latent space <span class="math inline">\mathbf{z}</span> is made much smaller than the input. This <strong>bottleneck</strong> is the whole point: to reconstruct a 84x84 image from 50 numbers, the encoder has no choice but to throw away everything that is not essential and to keep only what really characterizes the image. The latent representation is a <strong>compressed representation</strong> of the input, obtained without a single label. This is both a dimensionality reduction method and an unsupervised feature extractor.</p>
+<p>In deep RL, this provides a way to construct the feature vector <span class="math inline">\phi(s)</span> discussed in <a href="2.1-FunctionApproximation.html#sec-features" class="quarto-xref"><span>Feature construction</span></a>. Instead of designing the features by hand or learning them from the reward, one trains an autoencoder on the observations and uses its latent representation <span class="math inline">\mathbf{z}</span> as the state representation fed to the RL algorithm.</p>
+<div id="fig-autoencoder-rl" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-autoencoder-rl-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="img/autoencoder-RL.svg" class="lightbox" data-gallery="quarto-lightbox-gallery-8" title="Figure&nbsp;7.8: Using an autoencoder in deep RL: the encoder provides a compact state representation to the RL algorithm."><img src="img/autoencoder-RL.svg" class="img-fluid figure-img" style="width:80.0%"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-autoencoder-rl-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;7.8: Using an autoencoder in deep RL: the encoder provides a compact state representation to the RL algorithm.
+</figcaption>
+</figure>
+</div>
+<p>This is interesting because the reward is a very poor teaching signal: a single scalar per step, often zero, has to shape millions of weights. The pixels, on the other hand, are available in huge quantities and for free. The autoencoder can be trained offline on observations collected by a random agent, or online together with the RL algorithm as an <strong>auxiliary loss</strong>, i.e.&nbsp;an additional term in the loss function whose only purpose is to force the network to learn good representations faster.</p>
+<p>Autoencoders come in many variants. The <strong>variational autoencoder</strong> <span class="citation" data-cites="Kingma2013">(VAE, <a href="references.html#ref-Kingma2013" role="doc-biblioref">Kingma and Welling, 2013</a>)</span> is the most important one for this book: instead of mapping the input to a single point <span class="math inline">\mathbf{z}</span>, its encoder outputs a <em>distribution</em> over the latent space, from which <span class="math inline">\mathbf{z}</span> is sampled. This makes the latent space continuous and well-behaved, so that sampling a random <span class="math inline">\mathbf{z}</span> and decoding it produces a plausible input: a VAE is a <strong>generative model</strong>. This property is what world models (<a href="4.4-WorldModels.html" class="quarto-xref"><span>World models, Dreamer</span></a>) rely on to dream trajectories without touching the environment.</p>
+</section>
 <section id="recurrent-neural-networks" class="level2">
 <h2 class="anchored" data-anchor-id="recurrent-neural-networks">Recurrent neural networks</h2>
 <p>Feedforward neural networks learn to efficiently map static inputs <span class="math inline">\mathbf{x}</span> to outputs <span class="math inline">\mathbf{y}</span> but have no memory or context: the output at time <span class="math inline">t</span> does not depend on the inputs at time <span class="math inline">t-1</span> or <span class="math inline">t-2</span>, only the one at time <span class="math inline">t</span>. This is problematic when dealing with video sequences for example: if the task is to classify videos into happy/sad, a frame by frame analysis is going to be inefficient (most frames a neutral). Concatenating all frames in a giant input vector would increase dramatically the complexity of the classifier and no generalization can be expected.</p>
-<p>Recurrent Neural Networks (RNN) are designed to deal with time-varying inputs, where the relevant information to take a decision at time <span class="math inline">t</span> may have happened at different times in the past. The general structure of a RNN is depicted on <a href="#fig-rnn" class="quarto-xref">Figure&nbsp;<span>7.5</span></a>:</p>
+<p>Recurrent Neural Networks (RNN) are designed to deal with time-varying inputs, where the relevant information to take a decision at time <span class="math inline">t</span> may have happened at different times in the past. The general structure of a RNN is depicted on <a href="#fig-rnn" class="quarto-xref">Figure&nbsp;<span>7.9</span></a>:</p>
 <div id="fig-rnn" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-rnn-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/RNN-unrolled.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5" title="Figure&nbsp;7.5: Architecture of a RNN. Left: recurrent architecture. Right: unrolled network, showing that a RNN is equivalent to a deep network. Source: http://colah.github.io/posts/2015-08-Understanding-LSTMs."><img src="img/RNN-unrolled.png" class="img-fluid figure-img" style="width:90.0%"></a>
+<a href="img/RNN-unrolled.png" class="lightbox" data-gallery="quarto-lightbox-gallery-9" title="Figure&nbsp;7.9: Architecture of a RNN. Left: recurrent architecture. Right: unrolled network, showing that a RNN is equivalent to a deep network. Source: http://colah.github.io/posts/2015-08-Understanding-LSTMs."><img src="img/RNN-unrolled.png" class="img-fluid figure-img" style="width:90.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-rnn-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;7.5: Architecture of a RNN. Left: recurrent architecture. Right: unrolled network, showing that a RNN is equivalent to a deep network. Source: <a href="http://colah.github.io/posts/2015-08-Understanding-LSTMs" class="uri">http://colah.github.io/posts/2015-08-Understanding-LSTMs</a>.
+Figure&nbsp;7.9: Architecture of a RNN. Left: recurrent architecture. Right: unrolled network, showing that a RNN is equivalent to a deep network. Source: <a href="http://colah.github.io/posts/2015-08-Understanding-LSTMs" class="uri">http://colah.github.io/posts/2015-08-Understanding-LSTMs</a>.
 </figcaption>
 </figure>
 </div>
@@ -575,10 +632,10 @@ Figure&nbsp;7.5: Architecture of a RNN. Left: recurrent architecture. Right: unr
 <div id="fig-lstm" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-lstm-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/LSTM.png" class="lightbox" data-gallery="quarto-lightbox-gallery-6" title="Figure&nbsp;7.6: Architecture of a LSTM layer. Source: http://colah.github.io/posts/2015-08-Understanding-LSTMs."><img src="img/LSTM.png" class="img-fluid figure-img" style="width:40.0%"></a>
+<a href="img/LSTM.png" class="lightbox" data-gallery="quarto-lightbox-gallery-10" title="Figure&nbsp;7.10: Architecture of a LSTM layer. Source: http://colah.github.io/posts/2015-08-Understanding-LSTMs."><img src="img/LSTM.png" class="img-fluid figure-img" style="width:40.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-lstm-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;7.6: Architecture of a LSTM layer. Source: <a href="http://colah.github.io/posts/2015-08-Understanding-LSTMs" class="uri">http://colah.github.io/posts/2015-08-Understanding-LSTMs</a>.
+Figure&nbsp;7.10: Architecture of a LSTM layer. Source: <a href="http://colah.github.io/posts/2015-08-Understanding-LSTMs" class="uri">http://colah.github.io/posts/2015-08-Understanding-LSTMs</a>.
 </figcaption>
 </figure>
 </div>
@@ -611,8 +668,8 @@ Figure&nbsp;7.6: Architecture of a LSTM layer. Source: <a href="http://colah.git
 <p><span class="math display">
     \mathbf{h}_t = \mathbf{o}_t \odot \tanh \mathbf{C}_t
 </span></p>
-<p>The architecture may seem complex, but everything is differentiable: backpropagation though time can be used to learn not only the input and recurrent weights for the candidate state, but also the weights and and biases of the gates. The main advantage of LSTMs is that they solve the vanishing gradient problem: if the input at time <span class="math inline">t=0</span> is important to produce a response at time <span class="math inline">t</span>, the input gate will learn to put it into the memory and the forget gate will learn to maintain in the current state until it is not needed anymore. During this “working memory” phase, the gradient is multiplied by exactly one as nothing changes: the dependency can be learned with arbitrary time delays!</p>
-<p>There are alternatives to the classical LSTM layer such as the gated recurrent unit [GRU; <span class="citation" data-cites="Cho2014">Cho et al. (<a href="references.html#ref-Cho2014" role="doc-biblioref">2014</a>)</span>] or peephole connections <span class="citation" data-cites="Gers2001">(<a href="references.html#ref-Gers2001" role="doc-biblioref">Gers, 2001</a>)</span>. See <a href="http://colah.github.io/posts/2015-08-Understanding-LSTMs" class="uri">http://colah.github.io/posts/2015-08-Understanding-LSTMs</a>, <a href="https://medium.com/mlreview/understanding-lstm-and-its-diagrams-37e2f46f1714" class="uri">https://medium.com/mlreview/understanding-lstm-and-its-diagrams-37e2f46f1714</a> or <a href="http://blog.echen.me/2017/05/30/exploring-lstms/" class="uri">http://blog.echen.me/2017/05/30/exploring-lstms/</a> for more visual explanations of LSTMs and their variants.</p>
+<p>The architecture may seem complex, but everything is differentiable: backpropagation though time can be used to learn not only the input and recurrent weights for the candidate state, but also the weights and biases of the gates. The main advantage of LSTMs is that they solve the vanishing gradient problem: if the input at time <span class="math inline">t=0</span> is important to produce a response at time <span class="math inline">t</span>, the input gate will learn to put it into the memory and the forget gate will learn to maintain in the current state until it is not needed anymore. During this “working memory” phase, the gradient is multiplied by exactly one as nothing changes: the dependency can be learned with arbitrary time delays!</p>
+<p>There are alternatives to the classical LSTM layer such as the gated recurrent unit [GRU; <span class="citation" data-cites="Cho2014"><span class="nocase">Cho et al.</span> (<a href="references.html#ref-Cho2014" role="doc-biblioref">2014</a>)</span>] or peephole connections <span class="citation" data-cites="Gers2001">(<a href="references.html#ref-Gers2001" role="doc-biblioref">Gers, 2001</a>)</span>. See <a href="http://colah.github.io/posts/2015-08-Understanding-LSTMs" class="uri">http://colah.github.io/posts/2015-08-Understanding-LSTMs</a>, <a href="https://medium.com/mlreview/understanding-lstm-and-its-diagrams-37e2f46f1714" class="uri">https://medium.com/mlreview/understanding-lstm-and-its-diagrams-37e2f46f1714</a> or <a href="http://blog.echen.me/2017/05/30/exploring-lstms/" class="uri">http://blog.echen.me/2017/05/30/exploring-lstms/</a> for more visual explanations of LSTMs and their variants.</p>
 <p>RNNs are particularly useful for deep RL when considering POMDPs, i.e.&nbsp;partially observable problems. If an observation does not contain enough information about the underlying state (e.g.&nbsp;a single image does not contain speed information), LSTM can integrate these observations over time and learn to implicitly represent speed in its context vector, allowing efficient policies to be learned.</p>
 </section>
 <section id="transformers" class="level2">
@@ -626,31 +683,34 @@ Figure&nbsp;7.6: Architecture of a LSTM layer. Source: <a href="http://colah.git
 
 <div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
 <div id="ref-Cho2014" class="csl-entry" role="listitem">
-Cho, K., van Merrienboer, B., Gulcehre, C., Bahdanau, D., Bougares, F., Schwenk, H., et al. (2014). Learning <span>Phrase Representations</span> using <span>RNN Encoder-Decoder</span> for <span>Statistical Machine Translation</span>. Available at: <a href="http://arxiv.org/abs/1406.1078">http://arxiv.org/abs/1406.1078</a>.
+<span class="nocase">Cho, K., van Merrienboer, B., Gulcehre, C., Bahdanau, D., Bougares, F., Schwenk, H., et al.</span> (2014). Learning <span>Phrase Representations</span> using <span>RNN Encoder-Decoder</span> for <span>Statistical Machine Translation</span>.
 </div>
 <div id="ref-Gers2001" class="csl-entry" role="listitem">
-Gers, F. (2001). Long <span>Short-Term Memory</span> in <span>Recurrent Neural Networks</span>. Available at: <a href="http://www.felixgers.de/papers/phd.pdf">http://www.felixgers.de/papers/phd.pdf</a>.
+Gers, F. (2001). Long <span>Short-Term Memory</span> in <span>Recurrent Neural Networks</span>.
 </div>
 <div id="ref-Goodfellow2016" class="csl-entry" role="listitem">
-Goodfellow, I., Bengio, Y., and Courville, A. (2016). <em>Deep <span>Learning</span></em>. MIT Press Available at: <a href="http://www.deeplearningbook.org">http://www.deeplearningbook.org</a>.
+Goodfellow, I., Bengio, Y., and Courville, A. (2016). <em>Deep <span>Learning</span></em>. MIT Press.
 </div>
 <div id="ref-He2015" class="csl-entry" role="listitem">
-He, K., Zhang, X., Ren, S., and Sun, J. (2015). Deep <span>Residual Learning</span> for <span>Image Recognition</span>. Available at: <a href="http://arxiv.org/abs/1512.03385">http://arxiv.org/abs/1512.03385</a>.
+He, K., Zhang, X., Ren, S., and Sun, J. (2015). Deep <span>Residual Learning</span> for <span>Image Recognition</span>. <em>arXiv:1512.03385 [cs]</em>. Available at: <a href="https://arxiv.org/abs/1512.03385">https://arxiv.org/abs/1512.03385</a>.
 </div>
 <div id="ref-Hochreiter1991" class="csl-entry" role="listitem">
-Hochreiter, S. (1991). Untersuchungen zu dynamischen neuronalen <span>Netzen</span>. Available at: <a href="http://people.idsia.ch/~juergen/SeppHochreiter1991ThesisAdvisorSchmidhuber.pdf">http://people.idsia.ch/~juergen/SeppHochreiter1991ThesisAdvisorSchmidhuber.pdf</a>.
+Hochreiter, S. (1991). Untersuchungen zu dynamischen neuronalen <span>Netzen</span>.
 </div>
 <div id="ref-Hochreiter1997" class="csl-entry" role="listitem">
 Hochreiter, S., and Schmidhuber, J. (1997). Long <span>Short-Term Memory</span>. <em>Neural Computation</em> 9, 1735–1780. doi:<a href="https://doi.org/10.1162/neco.1997.9.8.1735">10.1162/neco.1997.9.8.1735</a>.
 </div>
+<div id="ref-Kingma2013" class="csl-entry" role="listitem">
+Kingma, D. P., and Welling, M. (2013). Auto-<span>Encoding Variational Bayes</span>. <em>arXiv:1312.6114 [cs]</em>. Available at: <a href="https://arxiv.org/abs/1312.6114">https://arxiv.org/abs/1312.6114</a>.
+</div>
 <div id="ref-Krizhevsky2012" class="csl-entry" role="listitem">
-Krizhevsky, A., Sutskever, I., and Hinton, G. E. (2012). <span>ImageNet Classification</span> with <span>Deep Convolutional Neural Networks</span>. in <em>Advances in <span>Neural Information Processing Systems</span> (<span>NIPS</span>)</em> Available at: <a href="https://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf">https://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf</a>.
+Krizhevsky, A., Sutskever, I., and Hinton, G. E. (2012). <span>ImageNet Classification</span> with <span>Deep Convolutional Neural Networks</span>. in <em>Advances in <span>Neural Information Processing Systems</span> (<span>NIPS</span>)</em>.
 </div>
 <div id="ref-Nielsen2015" class="csl-entry" role="listitem">
-Nielsen, M. A. (2015). <em>Neural <span>Networks</span> and <span>Deep Learning</span></em>. Determination Press Available at: <a href="http://neuralnetworksanddeeplearning.com/">http://neuralnetworksanddeeplearning.com/</a>.
+Nielsen, M. A. (2015). <em>Neural <span>Networks</span> and <span>Deep Learning</span></em>. Determination Press.
 </div>
 <div id="ref-Ruder2016" class="csl-entry" role="listitem">
-Ruder, S. (2016). An overview of gradient descent optimization algorithms. Available at: <a href="http://arxiv.org/abs/1609.04747">http://arxiv.org/abs/1609.04747</a>.
+Ruder, S. (2016). An overview of gradient descent optimization algorithms.
 </div>
 <div id="ref-Simonyan2015" class="csl-entry" role="listitem">
 Simonyan, K., and Zisserman, A. (2015). Very <span>Deep Convolutional Networks</span> for <span>Large-Scale Image Recognition</span>. <em>International Conference on Learning Representations (ICRL)</em>, 1–14. doi:<a href="https://doi.org/10.1016/j.infsof.2008.09.005">10.1016/j.infsof.2008.09.005</a>.
@@ -710,13 +770,14 @@ Simonyan, K., and Zisserman, A. (2015). Very <span>Deep Convolutional Networks</
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy
@@ -1058,7 +1119,7 @@ Simonyan, K., and Zisserman, A. (2015). Very <span>Deep Convolutional Networks</
     }
   });
   </script>
-<nav class="page-navigation">
+<nav class="page-navigation column-body">
   <div class="nav-page nav-page-previous">
       <a href="../src/2.1-FunctionApproximation.html" class="pagination-link" aria-label="Function approximation">
         <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">Function approximation</span></span>

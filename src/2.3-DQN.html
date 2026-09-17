@@ -2,17 +2,23 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.29">
+<meta name="generator" content="quarto-1.10.18">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>Deep Q-network (DQN) – Deep Reinforcement Learning</title>
 <style>
-code{white-space: pre-wrap;}
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -57,10 +63,10 @@ div.csl-indent {
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-bcbce66894bfa8e7e94e40e0186b9bb8.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-bb62276ab45c84d9efd712f51ff97b5a.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-ea27fabe3da5290357830f0bd5288bdb.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-3998d32367fd34ee6440c4fab252e735.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script src="../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
 <link href="../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
 <link href="../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
@@ -121,7 +127,7 @@ const typesetMath = (el) => {
     var macros = [];
     for (var i = 0; i < mathElements.length; i++) {
       var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
         window.katex.render(texText.data, mathElements[i], {
           displayMode: mathElements[i].classList.contains('display'),
           throwOnError: false,
@@ -139,7 +145,7 @@ window.Quarto = {
 
 </head>
 
-<body class="nav-sidebar floating quarto-light">
+<body class="nav-sidebar docked quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -149,7 +155,7 @@ window.Quarto = {
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
         <a class="flex-grow-1 no-decor" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-          <h1 class="quarto-secondary-nav-title"><span class="chapter-title">Deep Q-network (DQN)</span></h1>
+          <h1 class="quarto-secondary-nav-title"><span id="sec-dqn" class="quarto-section-identifier"><span class="chapter-title">Deep Q-network (DQN)</span></span></h1>
         </a>     
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
         <i class="bi bi-search"></i>
@@ -158,9 +164,9 @@ window.Quarto = {
   </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="../">Deep Reinforcement Learning</a> 
@@ -252,11 +258,6 @@ window.Quarto = {
   <a href="../src/2.5-DistributedLearning.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Distributed learning</span></a>
   </div>
 </li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../src/2.6-Misc.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Misc.</span></a>
-  </div>
-</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -275,8 +276,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/3.2-ActorCritic.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Advantage Actor-Critic (A3C)</span></a>
+  <a href="../src/3.2-ActorCritic.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Advantage Actor-Critic (A3C)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -307,11 +307,6 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../src/3.8-EntropyRL.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Maximum Entropy RL (SAC)</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../src/3.9-Misc.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Misc.</span></a>
   </div>
 </li>
       </ul>
@@ -350,11 +345,6 @@ window.Quarto = {
   <a href="../src/4.5-AlphaGo.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">AlphaGo</span></a>
   </div>
 </li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../src/4.6-Misc.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Misc.</span></a>
-  </div>
-</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -383,7 +373,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/5.4-Meta.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Meta learning</span></a>
+  <a href="../src/5.4-Meta.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Meta reinforcement learning</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -424,16 +414,16 @@ window.Quarto = {
 </nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
+<main class="content column-body" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title d-none d-lg-block"><span class="chapter-title">Deep Q-network (DQN)</span></h1>
+<h1 class="title d-none d-lg-block"><span id="sec-dqn" class="quarto-section-identifier"><span class="chapter-title">Deep Q-network (DQN)</span></span></h1>
 </div>
 
 
 
-<div class="quarto-title-meta">
+<div class="quarto-title-meta column-body">
 
     
   
@@ -480,7 +470,7 @@ Figure&nbsp;8.2: Value-based Q-learning agent.
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Naive Q-learning with function approximation
+<span class="screen-reader-only">Note</span>Naive Q-learning with function approximation
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -514,10 +504,10 @@ Naive Q-learning with function approximation
 <div id="fig-breakout-correlated" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-breakout-correlated-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/breakout.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Figure&nbsp;8.3: Sucessive frames in a video game are highly correlated."><img src="img/breakout.png" class="img-fluid figure-img"></a>
+<a href="img/breakout.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Figure&nbsp;8.3: Successive frames in a video game are highly correlated."><img src="img/breakout.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-breakout-correlated-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;8.3: Sucessive frames in a video game are highly correlated.
+Figure&nbsp;8.3: Successive frames in a video game are highly correlated.
 </figcaption>
 </figure>
 </div>
@@ -579,20 +569,20 @@ Figure&nbsp;8.5: Experience replay memory. Interactions with the environment are
 <div id="fig-targetnetwork" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-targetnetwork-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/targetnetwork.png" class="lightbox" data-gallery="quarto-lightbox-gallery-6" title="Figure&nbsp;8.6: The target network is used to compute the targets to train the value network. Its waits are regularly copied from the value network."><img src="img/targetnetwork.png" class="img-fluid figure-img"></a>
+<a href="img/targetnetwork.png" class="lightbox" data-gallery="quarto-lightbox-gallery-6" title="Figure&nbsp;8.6: The target network is used to compute the targets to train the value network. Its weights are regularly copied from the value network."><img src="img/targetnetwork.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-targetnetwork-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;8.6: The target network is used to compute the targets to train the value network. Its waits are regularly copied from the value network.
+Figure&nbsp;8.6: The target network is used to compute the targets to train the value network. Its weights are regularly copied from the value network.
 </figcaption>
 </figure>
 </div>
 <div id="fig-nonstationarity2" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-nonstationarity2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/nonstationarity2.svg" class="lightbox" data-gallery="quarto-lightbox-gallery-7" title="Figure&nbsp;8.7: By keeping the the targets constant for a while, the target network lets the value network catch up with them and converge optimally (in principle)."><img src="img/nonstationarity2.svg" class="img-fluid figure-img" style="width:80.0%"></a>
+<a href="img/nonstationarity2.svg" class="lightbox" data-gallery="quarto-lightbox-gallery-7" title="Figure&nbsp;8.7: By keeping the targets constant for a while, the target network lets the value network catch up with them and converge optimally (in principle)."><img src="img/nonstationarity2.svg" class="img-fluid figure-img" style="width:80.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-nonstationarity2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;8.7: By keeping the the targets constant for a while, the target network lets the value network catch up with them and converge optimally (in principle).
+Figure&nbsp;8.7: By keeping the targets constant for a while, the target network lets the value network catch up with them and converge optimally (in principle).
 </figcaption>
 </figure>
 </div>
@@ -606,7 +596,7 @@ Figure&nbsp;8.7: By keeping the the targets constant for a while, the target net
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-DQN algorithm
+<span class="screen-reader-only">Note</span>DQN algorithm
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -663,7 +653,7 @@ Figure&nbsp;8.8: Architecture of the CNN used in the original DQN paper. Source:
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Why no max-pooling?
+<span class="screen-reader-only">Tip</span>Why no max-pooling?
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -689,10 +679,10 @@ Figure&nbsp;8.9: Results on the Atari benchmark. Some games achieved super-human
 
 <div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
 <div id="ref-Lillicrap2015" class="csl-entry" role="listitem">
-Lillicrap, T. P., Hunt, J. J., Pritzel, A., Heess, N., Erez, T., Tassa, Y., et al. (2015). Continuous control with deep reinforcement learning. <em>CoRR</em>. Available at: <a href="http://arxiv.org/abs/1509.02971">http://arxiv.org/abs/1509.02971</a>.
+Lillicrap, T. P., Hunt, J. J., Pritzel, A., Heess, N., Erez, T., Tassa, Y., et al. (2015). Continuous control with deep reinforcement learning. <em>CoRR</em>.
 </div>
 <div id="ref-Mnih2013" class="csl-entry" role="listitem">
-Mnih, V., Kavukcuoglu, K., Silver, D., Graves, A., Antonoglou, I., Wierstra, D., et al. (2013). Playing <span>Atari</span> with <span>Deep Reinforcement Learning</span>. Available at: <a href="http://arxiv.org/abs/1312.5602">http://arxiv.org/abs/1312.5602</a>.
+Mnih, V., Kavukcuoglu, K., Silver, D., Graves, A., Antonoglou, I., Wierstra, D., et al. (2013). Playing <span>Atari</span> with <span>Deep Reinforcement Learning</span>. <em>arXiv:1312.5602 [cs]</em>. Available at: <a href="https://arxiv.org/abs/1312.5602">https://arxiv.org/abs/1312.5602</a>.
 </div>
 <div id="ref-Mnih2015" class="csl-entry" role="listitem">
 Mnih, V., Kavukcuoglu, K., Silver, D., Rusu, A. A., Veness, J., Bellemare, M. G., et al. (2015). Human-level control through deep reinforcement learning. <em>Nature</em> 518, 529–533. doi:<a href="https://doi.org/10.1038/nature14236">10.1038/nature14236</a>.
@@ -753,13 +743,14 @@ Mnih, V., Kavukcuoglu, K., Silver, D., Rusu, A. A., Veness, J., Bellemare, M. G.
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy
@@ -1101,7 +1092,7 @@ Mnih, V., Kavukcuoglu, K., Silver, D., Rusu, A. A., Veness, J., Bellemare, M. G.
     }
   });
   </script>
-<nav class="page-navigation">
+<nav class="page-navigation column-body">
   <div class="nav-page nav-page-previous">
       <a href="../src/2.2-DeepNetworks.html" class="pagination-link" aria-label="Deep learning">
         <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">Deep learning</span></span>

@@ -2,17 +2,23 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.29">
+<meta name="generator" content="quarto-1.10.18">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>Markov Decision Process – Deep Reinforcement Learning</title>
 <style>
-code{white-space: pre-wrap;}
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -57,10 +63,10 @@ div.csl-indent {
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-bcbce66894bfa8e7e94e40e0186b9bb8.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-bb62276ab45c84d9efd712f51ff97b5a.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-ea27fabe3da5290357830f0bd5288bdb.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-3998d32367fd34ee6440c4fab252e735.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script src="../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
 <link href="../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
 <link href="../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
@@ -121,7 +127,7 @@ const typesetMath = (el) => {
     var macros = [];
     for (var i = 0; i < mathElements.length; i++) {
       var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
         window.katex.render(texText.data, mathElements[i], {
           displayMode: mathElements[i].classList.contains('display'),
           throwOnError: false,
@@ -139,7 +145,7 @@ window.Quarto = {
 
 </head>
 
-<body class="nav-sidebar floating quarto-light">
+<body class="nav-sidebar docked quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -158,9 +164,9 @@ window.Quarto = {
   </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="../">Deep Reinforcement Learning</a> 
@@ -252,11 +258,6 @@ window.Quarto = {
   <a href="../src/2.5-DistributedLearning.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Distributed learning</span></a>
   </div>
 </li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../src/2.6-Misc.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Misc.</span></a>
-  </div>
-</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -275,8 +276,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/3.2-ActorCritic.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Advantage Actor-Critic (A3C)</span></a>
+  <a href="../src/3.2-ActorCritic.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Advantage Actor-Critic (A3C)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -307,11 +307,6 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../src/3.8-EntropyRL.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Maximum Entropy RL (SAC)</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../src/3.9-Misc.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Misc.</span></a>
   </div>
 </li>
       </ul>
@@ -350,11 +345,6 @@ window.Quarto = {
   <a href="../src/4.5-AlphaGo.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">AlphaGo</span></a>
   </div>
 </li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../src/4.6-Misc.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Misc.</span></a>
-  </div>
-</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -383,7 +373,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/5.4-Meta.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Meta learning</span></a>
+  <a href="../src/5.4-Meta.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Meta reinforcement learning</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -434,7 +424,7 @@ window.Quarto = {
 </nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
+<main class="content column-body" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
@@ -443,7 +433,7 @@ window.Quarto = {
 
 
 
-<div class="quarto-title-meta">
+<div class="quarto-title-meta column-body">
 
     
   
@@ -459,7 +449,7 @@ window.Quarto = {
 <h2 class="anchored" data-anchor-id="markov-decision-process">Markov Decision Process</h2>
 <section id="definition" class="level3">
 <h3 class="anchored" data-anchor-id="definition">Definition</h3>
-<p>Reinforcement Learning methods apply to problems where an agent interacts with an environment in discrete time steps (<a href="#fig-agentenv" class="quarto-xref">Figure&nbsp;<span>3.1</span></a>). At time <span class="math inline">t</span>, the agent is in state <span class="math inline">s_t</span> and decides to perform an action <span class="math inline">a_t</span>. At the next time step, it arrives in the state <span class="math inline">s_{t+1}</span> and obtains the reward <span class="math inline">r_{t+1}</span>. In the genral case, transitions can be stochastic (there is a probability of arriving in a given state after an action), as well as the rewards (as in the bandits previously seen). The goal of the agent is to maximize the reward obtained on the long term.</p>
+<p>Reinforcement Learning methods apply to problems where an agent interacts with an environment in discrete time steps (<a href="#fig-agentenv" class="quarto-xref">Figure&nbsp;<span>3.1</span></a>). At time <span class="math inline">t</span>, the agent is in state <span class="math inline">s_t</span> and decides to perform an action <span class="math inline">a_t</span>. At the next time step, it arrives in the state <span class="math inline">s_{t+1}</span> and obtains the reward <span class="math inline">r_{t+1}</span>. In the general case, transitions can be stochastic (there is a probability of arriving in a given state after an action), as well as the rewards (as in the bandits previously seen). The goal of the agent is to maximize the reward obtained on the long term.</p>
 <div id="fig-agentenv" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-agentenv-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -496,7 +486,7 @@ Figure&nbsp;3.1: Interaction between an agent and its environment. Source: <span
 <li>The <strong>discount factor</strong> <span class="math inline">\gamma \in [0, 1]</span>.</li>
 </ol>
 <p>In deep RL, the state and action spaces can be infinite, but let’s focus on finite MDPs for now.</p>
-<p>The behavior of the agent over time is a <strong>trajectory</strong> (also called episode, history or roll-out) <span class="math inline">\tau = (s_0, a_0, s_1, a_, \ldots, s_T, a_T)</span> defined by the dynamics of the MDP. Each transition occurs with a probability <span class="math inline">p(s'|s, a)</span> and provides a certain amount of reward defined by <span class="math inline">r(s, a, s')</span>. In episodic tasks, the horizon <span class="math inline">T</span> is finite, while in continuing tasks <span class="math inline">T</span> is infinite.</p>
+<p>The behavior of the agent over time is a <strong>trajectory</strong> (also called episode, history or roll-out) <span class="math inline">\tau = (s_0, a_0, s_1, a_1, \ldots, s_T, a_T)</span> defined by the dynamics of the MDP. Each transition occurs with a probability <span class="math inline">p(s'|s, a)</span> and provides a certain amount of reward defined by <span class="math inline">r(s, a, s')</span>. In episodic tasks, the horizon <span class="math inline">T</span> is finite, while in continuing tasks <span class="math inline">T</span> is infinite.</p>
 </section>
 <section id="markov-property" class="level3">
 <h3 class="anchored" data-anchor-id="markov-property">Markov property</h3>
@@ -594,17 +584,17 @@ Figure&nbsp;3.5: The value of <span class="math inline">\gamma^k</span> decays o
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Why the reward on the long term?
+<span class="screen-reader-only">Note</span>Why the reward on the long term?
 </div>
 </div>
 <div class="callout-body-container callout-body">
 <div id="fig-returnexample" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-returnexample-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/return-example.svg" class="lightbox" data-gallery="quarto-lightbox-gallery-6" title="Figure&nbsp;3.6: Example of a MDP with two actions in state s_1, lading to two different returns. The states s_5 and s_6 are terminal states, where no reward is received anymore."><img src="img/return-example.svg" class="img-fluid figure-img" style="width:60.0%"></a>
+<a href="img/return-example.svg" class="lightbox" data-gallery="quarto-lightbox-gallery-6" title="Figure&nbsp;3.6: Example of a MDP with two actions in state s_1, leading to two different returns. The states s_5 and s_6 are terminal states, where no reward is received anymore."><img src="img/return-example.svg" class="img-fluid figure-img" style="width:60.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-returnexample-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;3.6: Example of a MDP with two actions in state <span class="math inline">s_1</span>, lading to two different returns. The states <span class="math inline">s_5</span> and <span class="math inline">s_6</span> are terminal states, where no reward is received anymore.
+Figure&nbsp;3.6: Example of a MDP with two actions in state <span class="math inline">s_1</span>, leading to two different returns. The states <span class="math inline">s_5</span> and <span class="math inline">s_6</span> are terminal states, where no reward is received anymore.
 </figcaption>
 </figure>
 </div>
@@ -652,8 +642,7 @@ Figure&nbsp;3.6: Example of a MDP with two actions in state <span class="math in
 </ul>
 <p>Only rewards that are obtained using the policy <span class="math inline">\pi</span> should be taken into account, not the complete distribution of states and rewards.</p>
 <p>The value of a state is not intrinsic to the state itself, it depends on the policy: One could be in a state which is very close to the goal (only one action left to win the game), but if the policy is very bad, the “good” action will not be chosen and the state will have a small value.</p>
-<p>The value of taking an action <span class="math inline">a</span> in a state <span class="math inline">s</span> under policy <span class="math inline">\pi</span> is the expected return starting</p>
-<p>Similarly, the <strong>action-value</strong> (or <strong>Q-value</strong>) for a state-action pair <span class="math inline">(s, a)</span> under the policy <span class="math inline">\pi</span> is defined as:</p>
+<p>The value of taking an action <span class="math inline">a</span> in a state <span class="math inline">s</span> under the policy <span class="math inline">\pi</span> is the expected return when starting from that state, taking that action, and thereafter following <span class="math inline">\pi</span>. Similarly, the <strong>action-value</strong> (or <strong>Q-value</strong>) for a state-action pair <span class="math inline">(s, a)</span> under the policy <span class="math inline">\pi</span> is defined as:</p>
 <p><span class="math display">
 \begin{align}
     Q^{\pi} (s, a)  &amp; = \mathbb{E}_{\rho_\pi} ( R_t | s_t = s, a_t =a) \\
@@ -722,13 +711,13 @@ Figure&nbsp;3.6: Example of a MDP with two actions in state <span class="math in
 <section id="optimal-bellman-equations" class="level3">
 <h3 class="anchored" data-anchor-id="optimal-bellman-equations">Optimal Bellman equations</h3>
 <p>The optimal policy is the policy that gathers the maximum of reward on the long term. Value functions define a partial ordering over policies:</p>
-<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout callout-style-default callout-tip no-icon callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
-<i class="callout-icon"></i>
+<i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Partial ordering
+<span class="screen-reader-only">Tip</span>Partial ordering
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -986,8 +975,8 @@ Figure&nbsp;3.7: Generalized Policy Iteration. Source: <span class="citation" da
 </span></p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><a href="img/iterativepolicyevaluation2.png" class="lightbox" data-gallery="quarto-lightbox-gallery-8" title="Iterative policy estimaiton. Source: David Silver. http://www0.cs.ucl.ac.uk/staff/d.silver/web/Teaching.html"><img src="img/iterativepolicyevaluation2.png" class="img-fluid figure-img" style="width:80.0%" alt="Iterative policy estimaiton. Source: David Silver. http://www0.cs.ucl.ac.uk/staff/d.silver/web/Teaching.html"></a></p>
-<figcaption>Iterative policy estimaiton. Source: David Silver. <a href="http://www0.cs.ucl.ac.uk/staff/d.silver/web/Teaching.html" class="uri">http://www0.cs.ucl.ac.uk/staff/d.silver/web/Teaching.html</a></figcaption>
+<p><a href="img/iterativepolicyevaluation2.png" class="lightbox" data-gallery="quarto-lightbox-gallery-8" title="Iterative policy evaluation. Source: David Silver. http://www0.cs.ucl.ac.uk/staff/d.silver/web/Teaching.html"><img src="img/iterativepolicyevaluation2.png" class="img-fluid figure-img" style="width:80.0%" alt="Iterative policy evaluation. Source: David Silver. http://www0.cs.ucl.ac.uk/staff/d.silver/web/Teaching.html"></a></p>
+<figcaption>Iterative policy evaluation. Source: David Silver. <a href="http://www0.cs.ucl.ac.uk/staff/d.silver/web/Teaching.html" class="uri">http://www0.cs.ucl.ac.uk/staff/d.silver/web/Teaching.html</a></figcaption>
 </figure>
 </div>
 <p>The value function at step <span class="math inline">k+1</span> <span class="math inline">V_{k+1}(s)</span> is computed using the previous estimates <span class="math inline">V_{k}(s)</span> and the Bellman equation transformed into an <strong>update rule</strong>.</p>
@@ -1001,7 +990,7 @@ Figure&nbsp;3.7: Generalized Policy Iteration. Source: <span class="citation" da
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Iterative policy evaluation
+<span class="screen-reader-only">Note</span>Iterative policy evaluation
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -1034,9 +1023,9 @@ Iterative policy evaluation
 <p>If the Q-value of an action <span class="math inline">a</span> is higher than the one currently selected by the <strong>deterministic</strong> policy:</p>
 <p><span class="math display">Q^{\pi} (s, a) &gt; Q^{\pi} (s, \pi(s)) = V^{\pi}(s)</span></p>
 <p>then it is better to select <span class="math inline">a</span> once in <span class="math inline">s</span> and thereafter follow <span class="math inline">\pi</span>. If there is no better action, we keep the previous policy for this state. This corresponds to a <strong>greedy</strong> action selection over the Q-values, defining a <strong>deterministic</strong> policy <span class="math inline">\pi(s)</span>:</p>
-<p><span class="math display">\pi(s) \leftarrow \text{argmax}_a \, Q^{\pi} (s, a) = \sum_{s' \in \mathcal{S}} p(s' | s, a) \, [r(s, a, s') + \gamma \, V^{\pi}(s') ]</span></p>
+<p><span class="math display">\pi(s) \leftarrow \text{argmax}_a \, Q^{\pi} (s, a) = \text{argmax}_a \, \sum_{s' \in \mathcal{S}} p(s' | s, a) \, [r(s, a, s') + \gamma \, V^{\pi}(s') ]</span></p>
 <p>After the policy improvement, the Q-value of each deterministic action <span class="math inline">\pi(s)</span> has increased or stayed the same.</p>
-<p><span class="math display">\text{argmax}_a \; Q^{\pi} (s, a) = \sum_{s' \in \mathcal{S}} p(s' | s, a) \, [r(s, a, s') + \gamma \, V^{\pi}(s') ] \geq Q^\pi(s, \pi(s))</span></p>
+<p><span class="math display">\max_a \; Q^{\pi} (s, a) = \max_a \, \sum_{s' \in \mathcal{S}} p(s' | s, a) \, [r(s, a, s') + \gamma \, V^{\pi}(s') ] \geq Q^\pi(s, \pi(s))</span></p>
 <p>This defines an improved policy <span class="math inline">\pi'</span>, where all states and actions have a higher value than previously. <strong>Greedy action selection</strong> over the state value function implements policy improvement:</p>
 <p><span class="math display">\pi' \leftarrow \text{Greedy}(V^\pi)</span></p>
 <div class="callout callout-style-default callout-tip no-icon callout-titled">
@@ -1045,7 +1034,7 @@ Iterative policy evaluation
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Greedy policy improvement:
+<span class="screen-reader-only">Tip</span>Greedy policy improvement:
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -1068,7 +1057,7 @@ Greedy policy improvement:
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Policy iteration
+<span class="screen-reader-only">Tip</span>Policy iteration
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -1111,7 +1100,7 @@ Policy iteration
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Value iteration
+<span class="screen-reader-only">Tip</span>Value iteration
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -1278,13 +1267,14 @@ Sutton, R. S., and Barto, A. G. (1998). <em>Reinforcement <span>Learning</span>:
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy
@@ -1626,7 +1616,7 @@ Sutton, R. S., and Barto, A. G. (1998). <em>Reinforcement <span>Learning</span>:
     }
   });
   </script>
-<nav class="page-navigation">
+<nav class="page-navigation column-body">
   <div class="nav-page nav-page-previous">
       <a href="../src/1.1-Bandits.html" class="pagination-link" aria-label="Sampling and Bandits">
         <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">Sampling and Bandits</span></span>

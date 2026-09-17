@@ -2,17 +2,23 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.29">
+<meta name="generator" content="quarto-1.10.18">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>Function approximation – Deep Reinforcement Learning</title>
 <style>
-code{white-space: pre-wrap;}
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -38,10 +44,10 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-bcbce66894bfa8e7e94e40e0186b9bb8.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-bb62276ab45c84d9efd712f51ff97b5a.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-ea27fabe3da5290357830f0bd5288bdb.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-3998d32367fd34ee6440c4fab252e735.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script src="../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
 <link href="../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
 <link href="../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
@@ -102,7 +108,7 @@ const typesetMath = (el) => {
     var macros = [];
     for (var i = 0; i < mathElements.length; i++) {
       var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
         window.katex.render(texText.data, mathElements[i], {
           displayMode: mathElements[i].classList.contains('display'),
           throwOnError: false,
@@ -120,7 +126,7 @@ window.Quarto = {
 
 </head>
 
-<body class="nav-sidebar floating quarto-light">
+<body class="nav-sidebar docked quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -130,7 +136,7 @@ window.Quarto = {
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
         <a class="flex-grow-1 no-decor" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-          <h1 class="quarto-secondary-nav-title"><span class="chapter-title">Function approximation</span></h1>
+          <h1 class="quarto-secondary-nav-title"><span id="sec-fa" class="quarto-section-identifier"><span class="chapter-title">Function approximation</span></span></h1>
         </a>     
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
         <i class="bi bi-search"></i>
@@ -139,9 +145,9 @@ window.Quarto = {
   </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="../">Deep Reinforcement Learning</a> 
@@ -233,11 +239,6 @@ window.Quarto = {
   <a href="../src/2.5-DistributedLearning.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Distributed learning</span></a>
   </div>
 </li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../src/2.6-Misc.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Misc.</span></a>
-  </div>
-</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -256,8 +257,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/3.2-ActorCritic.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Advantage Actor-Critic (A3C)</span></a>
+  <a href="../src/3.2-ActorCritic.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Advantage Actor-Critic (A3C)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -288,11 +288,6 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../src/3.8-EntropyRL.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Maximum Entropy RL (SAC)</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../src/3.9-Misc.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Misc.</span></a>
   </div>
 </li>
       </ul>
@@ -331,11 +326,6 @@ window.Quarto = {
   <a href="../src/4.5-AlphaGo.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">AlphaGo</span></a>
   </div>
 </li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../src/4.6-Misc.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Misc.</span></a>
-  </div>
-</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -364,7 +354,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/5.4-Meta.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Meta learning</span></a>
+  <a href="../src/5.4-Meta.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Meta reinforcement learning</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -395,21 +385,22 @@ window.Quarto = {
   <li><a href="#state-value-approximators" id="toc-state-value-approximators" class="nav-link" data-scroll-target="#state-value-approximators">State value approximators</a></li>
   <li><a href="#action-value-approximators" id="toc-action-value-approximators" class="nav-link" data-scroll-target="#action-value-approximators">Action value approximators</a></li>
   </ul></li>
+  <li><a href="#sec-features" id="toc-sec-features" class="nav-link" data-scroll-target="#sec-features">Feature construction</a></li>
   <li><a href="#policy-based-function-approximation" id="toc-policy-based-function-approximation" class="nav-link" data-scroll-target="#policy-based-function-approximation">Policy-based function approximation</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
+<main class="content column-body" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title d-none d-lg-block"><span class="chapter-title">Function approximation</span></h1>
+<h1 class="title d-none d-lg-block"><span id="sec-fa" class="quarto-section-identifier"><span class="chapter-title">Function approximation</span></span></h1>
 </div>
 
 
 
-<div class="quarto-title-meta">
+<div class="quarto-title-meta column-body">
 
     
   
@@ -494,15 +485,19 @@ Figure&nbsp;6.4: Linear approximator for state values.
         \dfrac{\partial \mathcal{L}(\varphi)}{\partial \varphi_K} \\
     \end{bmatrix}
 </span></p>
-<p>When applied repeatedly, GD converges to a local minimum of the loss function. To minimize the mean square error, we just need to compute its gradient with respect to the parametsr <span class="math inline">\varphi</span>:</p>
+<p>When applied repeatedly, GD converges to a local minimum of the loss function. To minimize the mean square error, we just need to compute its gradient with respect to the parameters <span class="math inline">\varphi</span>:</p>
 <p><span class="math display">
 \begin{aligned}
-    \mathcal{L}(\varphi) &amp;= \nabla_\varphi \mathbb{E}_{s \in \mathcal{S}} [ (V^\pi(s) - V_\varphi(s))^2] \\
+    \nabla_\varphi \mathcal{L}(\varphi) &amp;= \nabla_\varphi \mathbb{E}_{s \in \mathcal{S}} [ (V^\pi(s) - V_\varphi(s))^2] \\
     &amp;\\
     &amp; = \mathbb{E}_{s \in \mathcal{S}} [\nabla_\varphi  (V^\pi(s) - V_\varphi(s))^2] \\
     &amp;\\
-    &amp; = \mathbb{E}_{s \in \mathcal{S}} [ - (V^\pi(s) - V_\varphi(s)) \, \nabla_\varphi V_\varphi(s)] \\
+    &amp; = - 2 \, \mathbb{E}_{s \in \mathcal{S}} [ (V^\pi(s) - V_\varphi(s)) \, \nabla_\varphi V_\varphi(s)] \\
 \end{aligned}
+</span></p>
+<p>Dropping the constant factor 2 into the learning rate, gradient descent <span class="math inline">\Delta \varphi = - \eta \, \nabla_\varphi \mathcal{L}(\varphi)</span> gives:</p>
+<p><span class="math display">
+    \Delta \varphi = \eta \, \mathbb{E}_{s \in \mathcal{S}} [ (V^\pi(s) - V_\varphi(s)) \, \nabla_\varphi V_\varphi(s)]
 </span></p>
 <p>As it would be too slow to compute the expectation on the whole state space (<strong>batch algorithm</strong>), we will update the parameters with <strong>stochastic gradient descent</strong> (SGD):</p>
 <p><span class="math display">
@@ -534,7 +529,7 @@ Figure&nbsp;6.4: Linear approximator for state values.
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Gradient Monte Carlo Algorithm for value estimation
+<span class="screen-reader-only">Note</span>Gradient Monte Carlo Algorithm for value estimation
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -570,7 +565,7 @@ Gradient Monte Carlo Algorithm for value estimation
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Semi-gradient Temporal Difference Algorithm for value estimation
+<span class="screen-reader-only">Note</span>Semi-gradient Temporal Difference Algorithm for value estimation
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -636,7 +631,7 @@ Figure&nbsp;6.6: Multiple Q-value approximation
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Q-learning with function approximation
+<span class="screen-reader-only">Note</span>Q-learning with function approximation
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -664,6 +659,49 @@ Q-learning with function approximation
 </div>
 </div>
 </section>
+</section>
+<section id="sec-features" class="level2">
+<h2 class="anchored" data-anchor-id="sec-features">Feature construction</h2>
+<p>All the algorithms above learn the weights <span class="math inline">\varphi</span> of a linear approximator, but they say nothing about where the features <span class="math inline">\phi(s)</span> come from. This matters much more than it seems, as a linear approximator can only represent what its features allow.</p>
+<p>Take the cartpole again, with the four variables <span class="math inline">\phi(s) = [x, \dot{x}, \theta, \dot{\theta}]^T</span>. Can the value of a state be a linear function of them? No.&nbsp;A high angular velocity <span class="math inline">\dot{\theta}</span> is a <strong>good</strong> thing when the pole is nearly horizontal, as it means the pole is coming back up, but a <strong>bad</strong> thing when the pole is vertical, as it means the pole will not stop there. Whether <span class="math inline">\dot{\theta}</span> contributes positively or negatively to the value depends on <span class="math inline">\theta</span>: the value depends on something like <span class="math inline">\dot{\theta} \, \sin \theta</span>, which is a <strong>non-linear combination</strong> of two features. No choice of weights <span class="math inline">\varphi</span> can produce it, because a linear approximator can only add up the features, never multiply them.</p>
+<p>The consequence is visible on any non-linear value function: applied directly to the raw variables, linear approximation catches the general tendency but makes systematic errors, i.e.&nbsp;it <strong>underfits</strong> (high bias).</p>
+<div class="quarto-layout-panel" data-layout-ncol="2">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div id="fig-featurecoding-data" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-featurecoding-data-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="img/featurecoding-data.png" class="lightbox" data-gallery="quarto-lightbox-gallery-7" title="Figure&nbsp;6.7: The true value function."><img src="img/featurecoding-data.png" class="img-fluid figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-featurecoding-data-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;6.7: The true value function.
+</figcaption>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div id="fig-featurecoding-linear" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-featurecoding-linear-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="img/featurecoding-linear.png" class="lightbox" data-gallery="quarto-lightbox-gallery-8" title="Figure&nbsp;6.8: Its linear approximation from the raw variables."><img src="img/featurecoding-linear.png" class="img-fluid figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-featurecoding-linear-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;6.8: Its linear approximation from the raw variables.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<p>The classical answer is to keep the approximator linear, but to feed it a richer feature vector, obtained by passing the raw variables through a set of fixed non-linear functions. Several such <strong>bases</strong> are used in practice:</p>
+<ul>
+<li><strong>Polynomial features</strong>: all products of the variables up to a given order, e.g.&nbsp;<span class="math inline">[1, x, y, x \, y, x^2, y^2, \ldots]</span>. Simple, but their number explodes with the dimension of the state space.</li>
+<li><strong>Fourier basis</strong>: cosines of increasing frequency, which are good at representing smooth periodic value functions.</li>
+<li><strong>Discrete, coarse and tile coding</strong>: the state space is covered by (possibly overlapping) regions, and the feature vector says in which regions the state falls. Coarse and tile coding use overlapping regions, so that neighboring states share features and generalize to each other.</li>
+<li><strong>Radial-basis functions</strong> (RBF): each feature is a Gaussian centered on a prototypical state, so a feature is active only for states close to its center.</li>
+</ul>
+<p>The interest of these methods is that the approximator stays linear in <span class="math inline">\varphi</span>, so learning is fast and its convergence is <strong>guaranteed</strong>, which is not the case with non-linear approximators. Their limit is that somebody has to choose the basis, and that the number of features needed grows very quickly with the dimensionality of the state space: for a state that is an image, no such basis is realistic.</p>
+<p>This is exactly what deep neural networks solve. Instead of designing the features by hand and learning only the last linear layer, a deep network <strong>learns the features too</strong> (<a href="2.2-DeepNetworks.html" class="quarto-xref"><span>Deep learning</span></a>). The price is a loss of the convergence guarantees and a much higher sample complexity, which is the fundamental trade-off of deep RL.</p>
 </section>
 <section id="policy-based-function-approximation" class="level2">
 <h2 class="anchored" data-anchor-id="policy-based-function-approximation">Policy-based function approximation</h2>
@@ -728,13 +766,14 @@ Q-learning with function approximation
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy
@@ -1076,7 +1115,7 @@ Q-learning with function approximation
     }
   });
   </script>
-<nav class="page-navigation">
+<nav class="page-navigation column-body">
   <div class="nav-page nav-page-previous">
       <a href="../src/1.5-TD.html" class="pagination-link" aria-label="Temporal Difference learning">
         <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">Temporal Difference learning</span></span>

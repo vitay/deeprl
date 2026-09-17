@@ -2,17 +2,23 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.29">
+<meta name="generator" content="quarto-1.10.18">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>AlphaGo – Deep Reinforcement Learning</title>
 <style>
-code{white-space: pre-wrap;}
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -49,7 +55,7 @@ div.csl-indent {
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../src/4.6-Misc.html" rel="next">
+<link href="../src/5.1-Intrinsic.html" rel="next">
 <link href="../src/4.4-WorldModels.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -57,10 +63,10 @@ div.csl-indent {
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-bcbce66894bfa8e7e94e40e0186b9bb8.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-bb62276ab45c84d9efd712f51ff97b5a.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-ea27fabe3da5290357830f0bd5288bdb.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-3998d32367fd34ee6440c4fab252e735.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script src="../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
 <link href="../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
 <link href="../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
@@ -121,7 +127,7 @@ const typesetMath = (el) => {
     var macros = [];
     for (var i = 0; i < mathElements.length; i++) {
       var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
         window.katex.render(texText.data, mathElements[i], {
           displayMode: mathElements[i].classList.contains('display'),
           throwOnError: false,
@@ -139,7 +145,7 @@ window.Quarto = {
 
 </head>
 
-<body class="nav-sidebar floating quarto-light">
+<body class="nav-sidebar docked quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -158,9 +164,9 @@ window.Quarto = {
   </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="../">Deep Reinforcement Learning</a> 
@@ -252,11 +258,6 @@ window.Quarto = {
   <a href="../src/2.5-DistributedLearning.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Distributed learning</span></a>
   </div>
 </li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../src/2.6-Misc.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Misc.</span></a>
-  </div>
-</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -275,8 +276,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/3.2-ActorCritic.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Advantage Actor-Critic (A3C)</span></a>
+  <a href="../src/3.2-ActorCritic.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Advantage Actor-Critic (A3C)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -307,11 +307,6 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../src/3.8-EntropyRL.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Maximum Entropy RL (SAC)</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../src/3.9-Misc.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Misc.</span></a>
   </div>
 </li>
       </ul>
@@ -350,11 +345,6 @@ window.Quarto = {
   <a href="../src/4.5-AlphaGo.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">AlphaGo</span></a>
   </div>
 </li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../src/4.6-Misc.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Misc.</span></a>
-  </div>
-</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -383,7 +373,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/5.4-Meta.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Meta learning</span></a>
+  <a href="../src/5.4-Meta.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Meta reinforcement learning</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -421,7 +411,7 @@ window.Quarto = {
 </nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
+<main class="content column-body" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
@@ -430,7 +420,7 @@ window.Quarto = {
 
 
 
-<div class="quarto-title-meta">
+<div class="quarto-title-meta column-body">
 
     
   
@@ -446,10 +436,10 @@ window.Quarto = {
 <div id="fig-go" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-go-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/go.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;24.1: Example of a Go board."><img src="img/go.png" class="img-fluid figure-img"></a>
+<a href="img/go.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;23.1: Example of a Go board."><img src="img/go.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-go-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;24.1: Example of a Go board.
+Figure&nbsp;23.1: Example of a Go board.
 </figcaption>
 </figure>
 </div>
@@ -458,10 +448,10 @@ Figure&nbsp;24.1: Example of a Go board.
 <div id="fig-minimax" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-minimax-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/minimax.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Figure&nbsp;24.2: Zero-sum game."><img src="img/minimax.png" class="img-fluid figure-img"></a>
+<a href="img/minimax.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Figure&nbsp;23.2: Zero-sum game."><img src="img/minimax.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-minimax-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;24.2: Zero-sum game.
+Figure&nbsp;23.2: Zero-sum game.
 </figcaption>
 </figure>
 </div>
@@ -470,10 +460,10 @@ Figure&nbsp;24.2: Zero-sum game.
 <div id="fig-minimaxsol" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-minimaxsol-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/minimax-sol.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Figure&nbsp;24.3: Solution found by Minimax"><img src="img/minimax-sol.png" class="img-fluid figure-img"></a>
+<a href="img/minimax-sol.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Figure&nbsp;23.3: Solution found by Minimax"><img src="img/minimax-sol.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-minimaxsol-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;24.3: Solution found by Minimax
+Figure&nbsp;23.3: Solution found by Minimax
 </figcaption>
 </figure>
 </div>
@@ -482,10 +472,10 @@ Figure&nbsp;24.3: Solution found by Minimax
 <div id="fig-gametreego" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-gametreego-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/gotree.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="Figure&nbsp;24.4: Game tree of Go. Source: <https://www.quora.com/What-does-it-mean-that-AlphaGo-relied-on-Monte Carlo-tree-search/answer/Kostis-Gourgoulias>"><img src="img/gotree.png" class="img-fluid figure-img"></a>
+<a href="img/gotree.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="Figure&nbsp;23.4: Game tree of Go. Source: <https://www.quora.com/What-does-it-mean-that-AlphaGo-relied-on-Monte Carlo-tree-search/answer/Kostis-Gourgoulias>"><img src="img/gotree.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-gametreego-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;24.4: Game tree of Go. Source: &lt;https://www.quora.com/What-does-it-mean-that-AlphaGo-relied-on-Monte Carlo-tree-search/answer/Kostis-Gourgoulias&gt;
+Figure&nbsp;23.4: Game tree of Go. Source: &lt;https://www.quora.com/What-does-it-mean-that-AlphaGo-relied-on-Monte Carlo-tree-search/answer/Kostis-Gourgoulias&gt;
 </figcaption>
 </figure>
 </div>
@@ -494,7 +484,7 @@ Figure&nbsp;24.4: Game tree of Go. Source: &lt;https://www.quora.com/What-does-i
 <h2 class="anchored" data-anchor-id="alphago">AlphaGo</h2>
 <section id="training-the-neural-networks" class="level3">
 <h3 class="anchored" data-anchor-id="training-the-neural-networks">Training the neural networks</h3>
-<p>AlphaGo <span class="citation" data-cites="Silver2016">(<a href="references.html#ref-Silver2016" role="doc-biblioref">Silver et al., 2016</a>)</span> uses four different neural networks:</p>
+<p>AlphaGo <span class="citation" data-cites="Silver2016">(<a href="references.html#ref-Silver2016" role="doc-biblioref"><span class="nocase">Silver et al.</span>, 2016</a>)</span> uses four different neural networks:</p>
 <ul>
 <li>The <strong>rollout policy</strong> and the <strong>SL policy network</strong> use supervised learning to predict expert human moves in any state.</li>
 <li>The <strong>RL policy network</strong> uses <strong>self-play</strong> and reinforcement learning to learn new strategies.</li>
@@ -504,10 +494,10 @@ Figure&nbsp;24.4: Game tree of Go. Source: &lt;https://www.quora.com/What-does-i
 <div id="fig-alphago-structure" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-alphago-structure-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/alphago.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5" title="Figure&nbsp;24.5: Four neural networks are used in AlphaGo. Source: @Silver2016"><img src="img/alphago.png" class="img-fluid figure-img"></a>
+<a href="img/alphago.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5" title="Figure&nbsp;23.5: Four neural networks are used in AlphaGo. Source: @Silver2016"><img src="img/alphago.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-alphago-structure-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;24.5: Four neural networks are used in AlphaGo. Source: <span class="citation" data-cites="Silver2016">Silver et al. (<a href="references.html#ref-Silver2016" role="doc-biblioref">2016</a>)</span>
+Figure&nbsp;23.5: Four neural networks are used in AlphaGo. Source: <span class="citation" data-cites="Silver2016"><span class="nocase">Silver et al.</span> (<a href="references.html#ref-Silver2016" role="doc-biblioref">2016</a>)</span>
 </figcaption>
 </figure>
 </div>
@@ -526,10 +516,10 @@ Figure&nbsp;24.5: Four neural networks are used in AlphaGo. Source: <span class=
 <div id="fig-mcts" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-mcts-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/mcts.png" class="lightbox" data-gallery="quarto-lightbox-gallery-6" title="Figure&nbsp;24.6: Monte Carlo Tree Search. Source: @Silver2016"><img src="img/mcts.png" class="img-fluid figure-img"></a>
+<a href="img/mcts.png" class="lightbox" data-gallery="quarto-lightbox-gallery-6" title="Figure&nbsp;23.6: Monte Carlo Tree Search. Source: @Silver2016"><img src="img/mcts.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-mcts-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;24.6: Monte Carlo Tree Search. Source: <span class="citation" data-cites="Silver2016">Silver et al. (<a href="references.html#ref-Silver2016" role="doc-biblioref">2016</a>)</span>
+Figure&nbsp;23.6: Monte Carlo Tree Search. Source: <span class="citation" data-cites="Silver2016"><span class="nocase">Silver et al.</span> (<a href="references.html#ref-Silver2016" role="doc-biblioref">2016</a>)</span>
 </figcaption>
 </figure>
 </div>
@@ -573,10 +563,10 @@ Figure&nbsp;24.6: Monte Carlo Tree Search. Source: <span class="citation" data-c
 <div id="fig-alphazero" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-alphazero-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/alphazero.jpg" class="lightbox" data-gallery="quarto-lightbox-gallery-7" title="Figure&nbsp;24.7: Architecture of AlphaZero. Source: @Silver2018"><img src="img/alphazero.jpg" class="img-fluid figure-img"></a>
+<a href="img/alphazero.jpg" class="lightbox" data-gallery="quarto-lightbox-gallery-7" title="Figure&nbsp;23.7: Architecture of AlphaZero. Source: @Silver2018"><img src="img/alphazero.jpg" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-alphazero-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;24.7: Architecture of AlphaZero. Source: <span class="citation" data-cites="Silver2018">Silver et al. (<a href="references.html#ref-Silver2018" role="doc-biblioref">2018</a>)</span>
+Figure&nbsp;23.7: Architecture of AlphaZero. Source: <span class="citation" data-cites="Silver2018">Silver et al. (<a href="references.html#ref-Silver2018" role="doc-biblioref">2018</a>)</span>
 </figcaption>
 </figure>
 </div>
@@ -588,10 +578,10 @@ Figure&nbsp;24.7: Architecture of AlphaZero. Source: <span class="citation" data
 <div id="fig-alphazeroperformance" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-alphazeroperformance-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/AlphaZero-perf.gif" class="lightbox" data-gallery="quarto-lightbox-gallery-8" title="Figure&nbsp;24.8: Source: https://deepmind.com/blog/alphago-zero-learning-scratch/"><img src="img/AlphaZero-perf.gif" class="img-fluid figure-img"></a>
+<a href="img/AlphaZero-perf.gif" class="lightbox" data-gallery="quarto-lightbox-gallery-8" title="Figure&nbsp;23.8: Source: https://deepmind.com/blog/alphago-zero-learning-scratch/"><img src="img/AlphaZero-perf.gif" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-alphazeroperformance-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;24.8: Source: <a href="https://deepmind.com/blog/alphago-zero-learning-scratch/" class="uri">https://deepmind.com/blog/alphago-zero-learning-scratch/</a>
+Figure&nbsp;23.8: Source: <a href="https://deepmind.com/blog/alphago-zero-learning-scratch/" class="uri">https://deepmind.com/blog/alphago-zero-learning-scratch/</a>
 </figcaption>
 </figure>
 </div>
@@ -618,10 +608,10 @@ Figure&nbsp;24.8: Source: <a href="https://deepmind.com/blog/alphago-zero-learni
 <div id="fig-muzero" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-muzero-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/muzero.png" class="lightbox" data-gallery="quarto-lightbox-gallery-11" title="Figure&nbsp;24.9: MuZero. Source: @Schrittwieser2019"><img src="img/muzero.png" class="img-fluid figure-img"></a>
+<a href="img/muzero.png" class="lightbox" data-gallery="quarto-lightbox-gallery-11" title="Figure&nbsp;23.9: MuZero. Source: @Schrittwieser2019"><img src="img/muzero.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-muzero-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;24.9: MuZero. Source: <span class="citation" data-cites="Schrittwieser2019">Schrittwieser et al. (<a href="references.html#ref-Schrittwieser2019" role="doc-biblioref">2019</a>)</span>
+Figure&nbsp;23.9: MuZero. Source: <span class="citation" data-cites="Schrittwieser2019">Schrittwieser et al. (<a href="references.html#ref-Schrittwieser2019" role="doc-biblioref">2019</a>)</span>
 </figcaption>
 </figure>
 </div>
@@ -638,10 +628,10 @@ Figure&nbsp;24.9: MuZero. Source: <span class="citation" data-cites="Schrittwies
 <div id="fig-muzero-results" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-muzero-results-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/muzero-results.png" class="lightbox" data-gallery="quarto-lightbox-gallery-13" title="Figure&nbsp;24.10: Results of MuZero. Source: @Schrittwieser2019"><img src="img/muzero-results.png" class="img-fluid figure-img"></a>
+<a href="img/muzero-results.png" class="lightbox" data-gallery="quarto-lightbox-gallery-13" title="Figure&nbsp;23.10: Results of MuZero. Source: @Schrittwieser2019"><img src="img/muzero-results.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-muzero-results-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;24.10: Results of MuZero. Source: <span class="citation" data-cites="Schrittwieser2019">Schrittwieser et al. (<a href="references.html#ref-Schrittwieser2019" role="doc-biblioref">2019</a>)</span>
+Figure&nbsp;23.10: Results of MuZero. Source: <span class="citation" data-cites="Schrittwieser2019">Schrittwieser et al. (<a href="references.html#ref-Schrittwieser2019" role="doc-biblioref">2019</a>)</span>
 </figcaption>
 </figure>
 </div>
@@ -651,7 +641,7 @@ Figure&nbsp;24.10: Results of MuZero. Source: <span class="citation" data-cites=
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Additional resources
+<span class="screen-reader-only">Tip</span>Additional resources
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -665,10 +655,10 @@ Additional resources
 
 <div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
 <div id="ref-Schrittwieser2019" class="csl-entry" role="listitem">
-Schrittwieser, J., Antonoglou, I., Hubert, T., Simonyan, K., Sifre, L., Schmitt, S., et al. (2019). Mastering <span>Atari</span>, <span>Go</span>, <span>Chess</span> and <span>Shogi</span> by <span>Planning</span> with a <span>Learned Model</span>. Available at: <a href="http://arxiv.org/abs/1911.08265">http://arxiv.org/abs/1911.08265</a> [Accessed November 24, 2019].
+Schrittwieser, J., Antonoglou, I., Hubert, T., Simonyan, K., Sifre, L., Schmitt, S., et al. (2019). Mastering <span>Atari</span>, <span>Go</span>, <span>Chess</span> and <span>Shogi</span> by <span>Planning</span> with a <span>Learned Model</span>. <em>arXiv:1911.08265 [cs, stat]</em>. Available at: <a href="https://arxiv.org/abs/1911.08265">https://arxiv.org/abs/1911.08265</a> [Accessed November 24, 2019].
 </div>
 <div id="ref-Silver2016" class="csl-entry" role="listitem">
-Silver, D., Huang, A., Maddison, C. J., Guez, A., Sifre, L., van den Driessche, G., et al. (2016). Mastering the game of <span>Go</span> with deep neural networks and tree search. <em>Nature</em> 529, 484–489. doi:<a href="https://doi.org/10.1038/nature16961">10.1038/nature16961</a>.
+<span class="nocase">Silver, D., Huang, A., Maddison, C. J., Guez, A., Sifre, L., van den Driessche, G., et al.</span> (2016). Mastering the game of <span>Go</span> with deep neural networks and tree search. <em>Nature</em> 529, 484–489. doi:<a href="https://doi.org/10.1038/nature16961">10.1038/nature16961</a>.
 </div>
 <div id="ref-Silver2018" class="csl-entry" role="listitem">
 Silver, D., Hubert, T., Schrittwieser, J., Antonoglou, I., Lai, M., Guez, A., et al. (2018). A general reinforcement learning algorithm that masters chess, shogi, and <span>Go</span> through self-play. <em>Science</em> 362, 1140–1144. doi:<a href="https://doi.org/10.1126/science.aar6404">10.1126/science.aar6404</a>.
@@ -731,13 +721,14 @@ Ye, W., Liu, S., Kurutach, T., Abbeel, P., and Gao, Y. (2021). Mastering <span>A
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy
@@ -1079,15 +1070,15 @@ Ye, W., Liu, S., Kurutach, T., Abbeel, P., and Gao, Y. (2021). Mastering <span>A
     }
   });
   </script>
-<nav class="page-navigation">
+<nav class="page-navigation column-body">
   <div class="nav-page nav-page-previous">
       <a href="../src/4.4-WorldModels.html" class="pagination-link" aria-label="World models, Dreamer">
         <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">World models, Dreamer</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../src/4.6-Misc.html" class="pagination-link" aria-label="Misc.">
-        <span class="nav-page-text"><span class="chapter-title">Misc.</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../src/5.1-Intrinsic.html" class="pagination-link" aria-label="Intrinsic motivation">
+        <span class="nav-page-text"><span class="chapter-title">Intrinsic motivation</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

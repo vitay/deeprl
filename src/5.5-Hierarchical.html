@@ -2,17 +2,23 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.29">
+<meta name="generator" content="quarto-1.10.18">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>Hierarchical Reinforcement Learning – Deep Reinforcement Learning</title>
 <style>
-code{white-space: pre-wrap;}
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -57,10 +63,13 @@ div.csl-indent {
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-bcbce66894bfa8e7e94e40e0186b9bb8.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-bb62276ab45c84d9efd712f51ff97b5a.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-ea27fabe3da5290357830f0bd5288bdb.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-3998d32367fd34ee6440c4fab252e735.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -90,10 +99,53 @@ div.csl-indent {
 }</script>
 <style>html{ scroll-behavior: smooth; }</style>
 
+  <script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+ var mathElements = document.getElementsByClassName("math");
+ var macros = [];
+ for (var i = 0; i < mathElements.length; i++) {
+  var texText = mathElements[i].firstChild;
+  if (mathElements[i].tagName == "SPAN") {
+   katex.render(texText.data, mathElements[i], {
+    displayMode: mathElements[i].classList.contains('display'),
+    throwOnError: false,
+    macros: macros,
+    fleqn: false
+   });
+}}});
+  </script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css">
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
-<body class="nav-sidebar floating quarto-light">
+<body class="nav-sidebar docked quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -103,7 +155,7 @@ div.csl-indent {
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
         <a class="flex-grow-1 no-decor" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-          <h1 class="quarto-secondary-nav-title"><span class="chapter-title">Hierarchical Reinforcement Learning</span></h1>
+          <h1 class="quarto-secondary-nav-title"><span id="sec-hrl" class="quarto-section-identifier"><span class="chapter-title">Hierarchical Reinforcement Learning</span></span></h1>
         </a>     
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
         <i class="bi bi-search"></i>
@@ -112,9 +164,9 @@ div.csl-indent {
   </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="../">Deep Reinforcement Learning</a> 
@@ -206,11 +258,6 @@ div.csl-indent {
   <a href="../src/2.5-DistributedLearning.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Distributed learning</span></a>
   </div>
 </li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../src/2.6-Misc.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Misc.</span></a>
-  </div>
-</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -229,8 +276,7 @@ div.csl-indent {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/3.2-ActorCritic.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Advantage Actor-Critic (A3C)</span></a>
+  <a href="../src/3.2-ActorCritic.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Advantage Actor-Critic (A3C)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -261,11 +307,6 @@ div.csl-indent {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../src/3.8-EntropyRL.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Maximum Entropy RL (SAC)</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../src/3.9-Misc.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Misc.</span></a>
   </div>
 </li>
       </ul>
@@ -304,11 +345,6 @@ div.csl-indent {
   <a href="../src/4.5-AlphaGo.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">AlphaGo</span></a>
   </div>
 </li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../src/4.6-Misc.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Misc.</span></a>
-  </div>
-</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -337,7 +373,7 @@ div.csl-indent {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/5.4-Meta.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Meta learning</span></a>
+  <a href="../src/5.4-Meta.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Meta reinforcement learning</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -358,20 +394,29 @@ div.csl-indent {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#acting-at-different-levels" id="toc-acting-at-different-levels" class="nav-link active" data-scroll-target="#acting-at-different-levels">Acting at different levels</a></li>
+  <li><a href="#options" id="toc-options" class="nav-link" data-scroll-target="#options">Options</a></li>
+  <li><a href="#meta-learning-shared-hierarchies" id="toc-meta-learning-shared-hierarchies" class="nav-link" data-scroll-target="#meta-learning-shared-hierarchies">Meta-Learning Shared Hierarchies</a></li>
+  <li><a href="#giving-goals-instead-of-calling-options" id="toc-giving-goals-instead-of-calling-options" class="nav-link" data-scroll-target="#giving-goals-instead-of-calling-options">Giving goals instead of calling options</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
+<main class="content column-body" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title d-none d-lg-block"><span class="chapter-title">Hierarchical Reinforcement Learning</span></h1>
+<h1 class="title d-none d-lg-block"><span id="sec-hrl" class="quarto-section-identifier"><span class="chapter-title">Hierarchical Reinforcement Learning</span></span></h1>
 </div>
 
 
 
-<div class="quarto-title-meta">
+<div class="quarto-title-meta column-body">
 
     
   
@@ -383,24 +428,133 @@ div.csl-indent {
 </header>
 
 
-<p><strong>work in progress</strong></p>
-<p>Very good link: <a href="https://thegradient.pub/the-promise-of-hierarchical-reinforcement-learning/" class="uri">https://thegradient.pub/the-promise-of-hierarchical-reinforcement-learning/</a></p>
-<p><span class="citation" data-cites="Nachum2018">Nachum et al. (<a href="references.html#ref-Nachum2018" role="doc-biblioref">2018</a>)</span></p>
-<p><span class="citation" data-cites="Haarnoja2018">Haarnoja et al. (<a href="references.html#ref-Haarnoja2018" role="doc-biblioref">2018</a>)</span></p>
-<p><span class="citation" data-cites="Co-Reyes2018">Co-Reyes et al. (<a href="references.html#ref-Co-Reyes2018" role="doc-biblioref">2018</a>)</span></p>
+<p>In every method seen so far, the action space is <strong>fixed</strong> and given in advance: 18 joystick directions in Atari, a torque per joint in MuJoCo. The agent takes one such action per step, and that is the only level at which it thinks.</p>
+<p>Humans obviously do not work like that, and a recipe is a good way to see it.</p>
+<section id="acting-at-different-levels" class="level2">
+<h2 class="anchored" data-anchor-id="acting-at-different-levels">Acting at different levels</h2>
+<p>When you read the recipe of a beef bourguignon, the actions are “cut four carrots”, “brown the meat”, “add the wine”. These are not actions in the sense of this book: they are <strong>high-level actions</strong>, and you have to figure out yourself how to perform them. “Cut four carrots” decomposes into “take four carrots”, “put them on the table”, and so on, until one reaches the level at which something really happens, i.e.&nbsp;muscle activations.</p>
+<div id="fig-hierarchicalrl" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-hierarchicalrl-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="img/hierarchicalRL.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;28.1: Cooking a beef bourguignon decomposes into high-level actions, which decompose into lower-level ones, down to muscle activations. Source: https://thegradient.pub/the-promise-of-hierarchical-reinforcement-learning/"><img src="img/hierarchicalRL.png" class="img-fluid figure-img" style="width:90.0%"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-hierarchicalrl-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;28.1: Cooking a beef bourguignon decomposes into high-level actions, which decompose into lower-level ones, down to muscle activations. Source: <a href="https://thegradient.pub/the-promise-of-hierarchical-reinforcement-learning/" class="uri">https://thegradient.pub/the-promise-of-hierarchical-reinforcement-learning/</a>
+</figcaption>
+</figure>
+</div>
+<p>The important remark is that nobody could learn to cook a beef bourguignon if muscle activations were the only available actions. There are two reasons for this, and both are problems we have met before:</p>
+<ul>
+<li><p><strong>Credit assignment.</strong> A recipe takes hours, i.e.&nbsp;millions of muscle activations. When the dish is finally tasted, which of these millions of contractions deserves the credit? The discounted return of <a href="1.4-MC.html" class="quarto-xref"><span>Monte Carlo methods</span></a> becomes useless over such horizons: with <span class="math inline">\gamma = 0.99</span>, a reward obtained one million steps later is multiplied by <span class="math inline">0.99^{1000000}</span>, which is zero for any practical purpose.</p></li>
+<li><p><strong>Exploration.</strong> Random exploration in the space of muscle activations will produce random twitching, forever. The probability that a random sequence of a million actions happens to produce a beef bourguignon, and therefore a reward to learn from, is not small, it is zero. This is the sparse reward problem of <a href="5.1-Intrinsic.html" class="quarto-xref"><span>Intrinsic motivation</span></a>, in its most extreme form.</p></li>
+</ul>
+<p>At the level of “cut carrots / brown meat / add wine”, both problems disappear. The episode lasts twenty steps instead of a million, so credit assignment is easy, and random exploration over twenty high-level actions will occasionally produce something edible. <strong>Hierarchical reinforcement learning</strong> (HRL) is about building agents that work at several such levels at once.</p>
+</section>
+<section id="options" class="level2">
+<h2 class="anchored" data-anchor-id="options">Options</h2>
+<p>The classical way to formalize this is the <strong>option</strong> framework <span class="citation" data-cites="Sutton1999a">(<a href="references.html#ref-Sutton1999a" role="doc-biblioref">Sutton et al., 1999</a>)</span>. An option is a temporally extended action, a “mini-policy” that one can call and that runs for a while before giving back the control. It is defined by three things:</p>
+<ol type="1">
+<li>An <strong>initiation set</strong>: the states in which the option can be called (you can only cut carrots if you have carrots).</li>
+<li>A <strong>policy</strong>: what to do at the low level while the option is running.</li>
+<li>A <strong>termination condition</strong>: when the option considers itself finished (the carrots are cut), or gives up.</li>
+</ol>
+<p>The agent is then organized in two levels. A <strong>master policy</strong>, also called manager or meta-policy, observes the state and selects an <strong>option</strong> instead of an action. The selected option takes over and generates primitive actions for as many steps as it needs. When it terminates, the control goes back to the master policy, which selects the next option.</p>
+<p>Note what this does to the time scales: the master policy takes a decision only every <span class="math inline">k</span> steps, so it sees a much shorter problem. Since options have variable durations, the underlying process is not a MDP anymore but a <strong>semi-MDP</strong>, where the time elapsed between two decisions of the master is itself a random variable. This mostly means that the discount applied to the reward of an option must account for how long the option lasted.</p>
+<p>The obvious question is where the options come from. Historically they were designed by hand, which works but only moves the problem: somebody still has to know that cutting carrots is a useful skill. Deep HRL tries to <strong>learn</strong> them.</p>
+</section>
+<section id="meta-learning-shared-hierarchies" class="level2">
+<h2 class="anchored" data-anchor-id="meta-learning-shared-hierarchies">Meta-Learning Shared Hierarchies</h2>
+<p>MLSH <span class="citation" data-cites="Frans2017">(<a href="references.html#ref-Frans2017" role="doc-biblioref">Frans et al., 2017</a>)</span> proposes a simple and elegant answer, which is to learn the options on a <strong>distribution of tasks</strong>, exactly as in <a href="5.4-Meta.html" class="quarto-xref"><span>Meta reinforcement learning</span></a>.</p>
+<p>The agent has a fixed number of <strong>sub-policies</strong> (the options) and one <strong>master policy</strong> which, every <span class="math inline">k</span> steps, decides which sub-policy is in charge. Both are trained, but not at the same rhythm:</p>
+<ul>
+<li><p>The <strong>sub-policies are shared</strong> across all tasks of the distribution. They are trained slowly, and end up representing skills that are useful in many tasks, typically primitives such as “walk left”, “walk right”, “jump”.</p></li>
+<li><p>The <strong>master policy is specific to each task</strong> and is re-initialized whenever a new task is sampled. It must therefore be learned very quickly, from scratch, using only the existing sub-policies.</p></li>
+</ul>
+<div id="fig-mlsh" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-mlsh-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="img/MLSH.gif" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Figure&nbsp;28.2: In MLSH, a master policy selects every k steps which sub-policy will produce the actions. Source: @Frans2017."><img src="img/MLSH.gif" class="img-fluid figure-img" style="width:70.0%"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-mlsh-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;28.2: In MLSH, a master policy selects every <span class="math inline">k</span> steps which sub-policy will produce the actions. Source: <span class="citation" data-cites="Frans2017">Frans et al. (<a href="references.html#ref-Frans2017" role="doc-biblioref">2017</a>)</span>.
+</figcaption>
+</figure>
+</div>
+<p>The trick is that the master policy is deliberately handicapped: it is thrown away between tasks and given very little time to learn. The only way for the whole system to obtain a good reward on a new task is that the sub-policies are <em>already</em> good enough for a simple, quickly learned combination of them to solve it. Gradient descent on the sub-policies is thus pushed towards skills that are <strong>reusable</strong>, and not towards skills that solve one particular task.</p>
+<p>This is the fast/slow decomposition of <a href="5.4-Meta.html" class="quarto-xref"><span>Meta reinforcement learning</span></a> in another disguise: the slow knowledge is in the sub-policies, the fast adaptation is in the master policy.</p>
+<div class="quarto-video ratio ratio-16x9"><iframe data-external="1" src="https://www.youtube.com/embed/zkJmH4NlzPs" title="Meta Learning Shared Hierarchies" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe></div>
+</section>
+<section id="giving-goals-instead-of-calling-options" class="level2">
+<h2 class="anchored" data-anchor-id="giving-goals-instead-of-calling-options">Giving goals instead of calling options</h2>
+<p>A different idea is that the upper level, instead of picking from a list of options, tells the lower level <strong>what to achieve</strong>, and lets it figure out how. The lower level is then an ordinary RL agent, but with a reward that is produced internally by the level above. This is the same machinery as in <a href="5.1-Intrinsic.html" class="quarto-xref"><span>Intrinsic motivation</span></a>, except that the intrinsic reward rewards obedience rather than curiosity.</p>
+<p><strong>FeUdal Networks</strong> <span class="citation" data-cites="Vezhnevets2017">(FuN, <a href="references.html#ref-Vezhnevets2017" role="doc-biblioref">Vezhnevets et al., 2017</a>)</span> use a <em>manager</em> and a <em>worker</em>. The manager operates at a low temporal resolution and outputs a <strong>direction</strong> in a learned latent space, i.e.&nbsp;roughly “make the situation change this way”. The worker acts at every step and receives an intrinsic reward proportional to how well the state actually moves in the direction asked. The manager is not allowed to give primitive actions, and the worker never sees the real reward. These two principles, called <em>information hiding</em> and <em>reward hiding</em>, come from the original feudal architecture <span class="citation" data-cites="Dayan1992">(<a href="references.html#ref-Dayan1992" role="doc-biblioref">Dayan and Hinton, 1992</a>)</span>: a level is only told what it needs to know, and is only rewarded for obeying the level above, not for solving the task. This is what forces the levels to specialize instead of all doing the same thing.</p>
+<p><strong>HIRO</strong> <span class="citation" data-cites="Nachum2018">(<a href="references.html#ref-Nachum2018" role="doc-biblioref">Nachum et al., 2018</a>)</span> is more direct: the manager proposes a <strong>goal state</strong> <span class="math inline">s_g</span> every <span class="math inline">k</span> steps, and the worker is rewarded by its distance to that goal, <span class="math inline">r_t = - ||s_t - s_g||</span>. Goals expressed as states are easy to interpret, and the approach connects naturally with the goal-conditioned policies of <a href="4.3-Planning.html#sec-tdm" class="quarto-xref"><span>Temporal difference models - TDM</span></a>. HIRO is also off-policy at both levels, which is what makes it data-efficient enough for real robots.</p>
+<p>Being off-policy raises a problem specific to hierarchies, which is worth understanding because it is the main technical difficulty of the field. The manager’s transitions stored in the replay buffer say “I asked for goal <span class="math inline">s_g</span> and the following 10 steps happened”. But the worker keeps learning, so the same goal asked today would produce completely different steps: the manager is learning about a world whose dynamics change under its feet, since these dynamics <em>are</em> the worker. HIRO’s answer is an <strong>off-policy correction</strong>: old transitions are relabeled with the goal that would have made the <em>current</em> worker produce the observed behavior.</p>
+<p><strong>HAC</strong> <span class="citation" data-cites="Levy2019">(<em>Hierarchical Actor-Critic</em>, <a href="references.html#ref-Levy2019" role="doc-biblioref">Levy et al., 2019</a>)</span> attacks the same problem with hindsight (<a href="4.3-Planning.html#sec-tdm" class="quarto-xref"><span>Temporal difference models - TDM</span></a>). Each level is trained as if the level below were already optimal, by pretending that the goal it had asked for was the state actually reached. This decouples the levels and allows three of them to be learned in parallel.</p>
+<p><strong>Option-critic</strong> <span class="citation" data-cites="Bacon2016">(<a href="references.html#ref-Bacon2016" role="doc-biblioref">Bacon et al., 2016</a>)</span> goes one step further and derives the policy gradient theorem (<a href="3.1-PolicyGradient.html" class="quarto-xref"><span>Policy Gradient methods</span></a>) for options, making it possible to learn the options, their policies <strong>and</strong> their termination conditions end-to-end, with no sub-goal and no intrinsic reward. It is the most principled formulation, but it is also where a typical failure mode of HRL is easiest to see: nothing in the objective says that options should last. Left alone, the learned options tend to terminate at almost every step, in which case the master policy chooses a new option every step and the whole hierarchy quietly degenerates into a flat policy. In practice, a cost is added to discourage switching.</p>
+<p>A last family avoids the discrete list of options altogether and lets the upper level act in a <strong>continuous latent space</strong>. <span class="citation" data-cites="Haarnoja2018">Haarnoja et al. (<a href="references.html#ref-Haarnoja2018" role="doc-biblioref">2018</a>)</span> stack maximum-entropy policies (<a href="3.8-EntropyRL.html" class="quarto-xref"><span>Maximum Entropy RL (SAC)</span></a>) on top of each other, the latent variable of one layer becoming the action space of the layer above, so that the hierarchy is built by construction instead of being designed. SeCTAR <span class="citation" data-cites="Co-Reyes2018">(<a href="references.html#ref-Co-Reyes2018" role="doc-biblioref">Co-Reyes et al., 2018</a>)</span> learns instead a latent space of <strong>trajectories</strong> with an autoencoder (<a href="4.4-WorldModels.html" class="quarto-xref"><span>World models, Dreamer</span></a>): the upper level picks a point in that space, which describes a whole behavior over the next steps, and a decoder turns it into the corresponding sequence of actions. In both cases the upper level chooses among a continuum of skills rather than among three or four fixed ones.</p>
+<div class="callout callout-style-default callout-tip no-icon callout-titled" title="Does it actually work?">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Does it actually work?
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>HRL is one of the most intuitive ideas in RL and one of the least solved. The difficulties are of the kind described above: what counts as a good sub-goal, how to reward a level that does not see the real reward, how to learn an upper level whose environment keeps changing, and how to prevent the hierarchy from collapsing into a flat policy or into a single option that does everything.</p>
+<p>Hand-designed hierarchies remain very effective in practice, e.g.&nbsp;in robotics where a low-level controller is usually given and only the high level is learned. Learning the whole hierarchy from scratch and beating a well-tuned flat algorithm is still difficult.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip no-icon callout-titled" title="Additional resources">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Additional resources
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><span class="citation" data-cites="Pateria2021">Pateria et al. (<a href="references.html#ref-Pateria2021" role="doc-biblioref">2021</a>)</span> is a comprehensive survey of hierarchical RL and of the many approaches that could not be mentioned here. <a href="https://thegradient.pub/the-promise-of-hierarchical-reinforcement-learning/" class="uri">https://thegradient.pub/the-promise-of-hierarchical-reinforcement-learning/</a> is an excellent and very readable introduction to the motivation behind HRL.</p>
+</div>
+</div>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
+<div id="ref-Bacon2016" class="csl-entry" role="listitem">
+Bacon, P.-L., Harb, J., and Precup, D. (2016). The <span>Option-Critic Architecture</span>. <em>arXiv:1609.05140 [cs]</em>. Available at: <a href="https://arxiv.org/abs/1609.05140">https://arxiv.org/abs/1609.05140</a> [Accessed January 31, 2020].
+</div>
 <div id="ref-Co-Reyes2018" class="csl-entry" role="listitem">
 Co-Reyes, J. D., Liu, Y., Gupta, A., Eysenbach, B., Abbeel, P., and Levine, S. (2018). Self-<span>Consistent Trajectory Autoencoder</span>: <span>Hierarchical Reinforcement Learning</span> with <span>Trajectory Embeddings</span>.
 </div>
+<div id="ref-Dayan1992" class="csl-entry" role="listitem">
+Dayan, P., and Hinton, G. E. (1992). Feudal <span>Reinforcement Learning</span>. in <em>Advances in <span>Neural Information Processing Systems</span></em> (Morgan-Kaufmann).
+</div>
+<div id="ref-Frans2017" class="csl-entry" role="listitem">
+Frans, K., Ho, J., Chen, X., Abbeel, P., and Schulman, J. (2017). Meta <span>Learning Shared Hierarchies</span>. <em>arXiv:1710.09767 [cs]</em>. Available at: <a href="https://arxiv.org/abs/1710.09767">https://arxiv.org/abs/1710.09767</a> [Accessed January 31, 2020].
+</div>
 <div id="ref-Haarnoja2018" class="csl-entry" role="listitem">
-Haarnoja, T., Hartikainen, K., Abbeel, P., and Levine, S. (2018). Latent <span>Space Policies</span> for <span>Hierarchical Reinforcement Learning</span>. Available at: <a href="http://arxiv.org/abs/1804.02808">http://arxiv.org/abs/1804.02808</a>.
+Haarnoja, T., Hartikainen, K., Abbeel, P., and Levine, S. (2018). Latent <span>Space Policies</span> for <span>Hierarchical Reinforcement Learning</span>.
+</div>
+<div id="ref-Levy2019" class="csl-entry" role="listitem">
+Levy, A., Konidaris, G., Platt, R., and Saenko, K. (2019). Learning <span>Multi-Level Hierarchies</span> with <span>Hindsight</span>. <em>arXiv:1712.00948 [cs]</em>. Available at: <a href="https://arxiv.org/abs/1712.00948">https://arxiv.org/abs/1712.00948</a> [Accessed January 31, 2020].
 </div>
 <div id="ref-Nachum2018" class="csl-entry" role="listitem">
-Nachum, O., Gu, S., Lee, H., and Levine, S. (2018). Data-<span>Efficient Hierarchical Reinforcement Learning</span>. Available at: <a href="http://arxiv.org/abs/1805.08296">http://arxiv.org/abs/1805.08296</a>.
+Nachum, O., Gu, S., Lee, H., and Levine, S. (2018). Data-<span>Efficient Hierarchical Reinforcement Learning</span>.
+</div>
+<div id="ref-Pateria2021" class="csl-entry" role="listitem">
+Pateria, S., Subagdja, B., Tan, A., and Quek, C. (2021). Hierarchical <span>Reinforcement Learning</span>: <span>A Comprehensive Survey</span>. <em>ACM Computing Surveys</em> 54, 109:1–109:35. doi:<a href="https://doi.org/10.1145/3453160">10.1145/3453160</a>.
+</div>
+<div id="ref-Sutton1999a" class="csl-entry" role="listitem">
+Sutton, R. S., Precup, D., and Singh, S. (1999). Between <span>MDPs</span> and semi-<span>MDPs</span>: <span>A</span> framework for temporal abstraction in reinforcement learning. <em>Artificial Intelligence</em> 112, 181–211. doi:<a href="https://doi.org/10.1016/S0004-3702(99)00052-1">10.1016/S0004-3702(99)00052-1</a>.
+</div>
+<div id="ref-Vezhnevets2017" class="csl-entry" role="listitem">
+Vezhnevets, A. S., Osindero, S., Schaul, T., Heess, N., Jaderberg, M., Silver, D., et al. (2017). <span>FeUdal Networks</span> for <span>Hierarchical Reinforcement Learning</span>. <em>arXiv:1703.01161 [cs]</em>. Available at: <a href="https://arxiv.org/abs/1703.01161">https://arxiv.org/abs/1703.01161</a> [Accessed January 31, 2020].
 </div>
 </div>
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -454,13 +608,14 @@ Nachum, O., Gu, S., Lee, H., and Levine, S. (2018). Data-<span>Efficient Hierarc
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy
@@ -802,10 +957,10 @@ Nachum, O., Gu, S., Lee, H., and Levine, S. (2018). Data-<span>Efficient Hierarc
     }
   });
   </script>
-<nav class="page-navigation">
+<nav class="page-navigation column-body">
   <div class="nav-page nav-page-previous">
-      <a href="../src/5.4-Meta.html" class="pagination-link" aria-label="Meta learning">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">Meta learning</span></span>
+      <a href="../src/5.4-Meta.html" class="pagination-link" aria-label="Meta reinforcement learning">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">Meta reinforcement learning</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
@@ -828,6 +983,38 @@ Nachum, O., Gu, S., Lee, H., and Levine, S. (2018). Data-<span>Efficient Hierarc
     </div>
   </div>
 </footer>
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
 
 
 

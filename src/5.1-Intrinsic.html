@@ -2,17 +2,23 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.29">
+<meta name="generator" content="quarto-1.10.18">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>Intrinsic motivation – Deep Reinforcement Learning</title>
 <style>
-code{white-space: pre-wrap;}
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -50,17 +56,20 @@ div.csl-indent {
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
 <link href="../src/5.2-Inverse.html" rel="next">
-<link href="../src/4.6-Misc.html" rel="prev">
+<link href="../src/4.5-AlphaGo.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-bcbce66894bfa8e7e94e40e0186b9bb8.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-bb62276ab45c84d9efd712f51ff97b5a.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-ea27fabe3da5290357830f0bd5288bdb.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-3998d32367fd34ee6440c4fab252e735.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -90,10 +99,53 @@ div.csl-indent {
 }</script>
 <style>html{ scroll-behavior: smooth; }</style>
 
+  <script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+ var mathElements = document.getElementsByClassName("math");
+ var macros = [];
+ for (var i = 0; i < mathElements.length; i++) {
+  var texText = mathElements[i].firstChild;
+  if (mathElements[i].tagName == "SPAN") {
+   katex.render(texText.data, mathElements[i], {
+    displayMode: mathElements[i].classList.contains('display'),
+    throwOnError: false,
+    macros: macros,
+    fleqn: false
+   });
+}}});
+  </script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css">
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
-<body class="nav-sidebar floating quarto-light">
+<body class="nav-sidebar docked quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -103,7 +155,7 @@ div.csl-indent {
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
         <a class="flex-grow-1 no-decor" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-          <h1 class="quarto-secondary-nav-title"><span class="chapter-title">Intrinsic motivation</span></h1>
+          <h1 class="quarto-secondary-nav-title"><span id="sec-intrinsic" class="quarto-section-identifier"><span class="chapter-title">Intrinsic motivation</span></span></h1>
         </a>     
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
         <i class="bi bi-search"></i>
@@ -112,9 +164,9 @@ div.csl-indent {
   </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="../">Deep Reinforcement Learning</a> 
@@ -206,11 +258,6 @@ div.csl-indent {
   <a href="../src/2.5-DistributedLearning.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Distributed learning</span></a>
   </div>
 </li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../src/2.6-Misc.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Misc.</span></a>
-  </div>
-</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -229,8 +276,7 @@ div.csl-indent {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/3.2-ActorCritic.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Advantage Actor-Critic (A3C)</span></a>
+  <a href="../src/3.2-ActorCritic.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Advantage Actor-Critic (A3C)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -261,11 +307,6 @@ div.csl-indent {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../src/3.8-EntropyRL.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Maximum Entropy RL (SAC)</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../src/3.9-Misc.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Misc.</span></a>
   </div>
 </li>
       </ul>
@@ -304,11 +345,6 @@ div.csl-indent {
   <a href="../src/4.5-AlphaGo.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">AlphaGo</span></a>
   </div>
 </li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../src/4.6-Misc.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Misc.</span></a>
-  </div>
-</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -337,7 +373,7 @@ div.csl-indent {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/5.4-Meta.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Meta learning</span></a>
+  <a href="../src/5.4-Meta.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Meta reinforcement learning</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -358,20 +394,35 @@ div.csl-indent {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#the-problem-with-sparse-rewards" id="toc-the-problem-with-sparse-rewards" class="nav-link active" data-scroll-target="#the-problem-with-sparse-rewards">The problem with sparse rewards</a></li>
+  <li><a href="#intrinsic-motivation" id="toc-intrinsic-motivation" class="nav-link" data-scroll-target="#intrinsic-motivation">Intrinsic motivation</a></li>
+  <li><a href="#curiosity-as-a-prediction-error" id="toc-curiosity-as-a-prediction-error" class="nav-link" data-scroll-target="#curiosity-as-a-prediction-error">Curiosity as a prediction error</a></li>
+  <li><a href="#the-noisy-tv-problem" id="toc-the-noisy-tv-problem" class="nav-link" data-scroll-target="#the-noisy-tv-problem">The noisy-TV problem</a></li>
+  <li><a href="#intrinsic-curiosity-module-icm" id="toc-intrinsic-curiosity-module-icm" class="nav-link" data-scroll-target="#intrinsic-curiosity-module-icm">Intrinsic Curiosity Module (ICM)</a></li>
+  <li><a href="#counting-states" id="toc-counting-states" class="nav-link" data-scroll-target="#counting-states">Counting states</a></li>
+  <li><a href="#random-network-distillation-rnd" id="toc-random-network-distillation-rnd" class="nav-link" data-scroll-target="#random-network-distillation-rnd">Random Network Distillation (RND)</a></li>
+  <li><a href="#episodic-curiosity" id="toc-episodic-curiosity" class="nav-link" data-scroll-target="#episodic-curiosity">Episodic curiosity</a></li>
+  <li><a href="#planning-to-explore" id="toc-planning-to-explore" class="nav-link" data-scroll-target="#planning-to-explore">Planning to explore</a></li>
+  <li><a href="#is-novelty-enough" id="toc-is-novelty-enough" class="nav-link" data-scroll-target="#is-novelty-enough">Is novelty enough?</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
+<main class="content column-body" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title d-none d-lg-block"><span class="chapter-title">Intrinsic motivation</span></h1>
+<h1 class="title d-none d-lg-block"><span id="sec-intrinsic" class="quarto-section-identifier"><span class="chapter-title">Intrinsic motivation</span></span></h1>
 </div>
 
 
 
-<div class="quarto-title-meta">
+<div class="quarto-title-meta column-body">
 
     
   
@@ -383,25 +434,274 @@ div.csl-indent {
 </header>
 
 
-<p><strong>work in progress</strong></p>
+<p>All the methods presented in this book depend entirely on the <strong>reward function</strong>. The agent maximizes the returns, so whatever we put in the reward function is what we get. This is fine as long as we are able to write down a reward function that describes what we want, and as long as the agent is able to collect some reward by exploring randomly at the beginning of learning. Both assumptions are problematic.</p>
+<section id="the-problem-with-sparse-rewards" class="level2">
+<h2 class="anchored" data-anchor-id="the-problem-with-sparse-rewards">The problem with sparse rewards</h2>
+<p>Let’s start with the second assumption. With <strong>sparse rewards</strong> (<a href="1.4-MC.html" class="quarto-xref"><span>Monte Carlo methods</span></a>), the agent only receives a non-zero reward in a few rare transitions: winning the game, reaching the goal, grasping the object. Everywhere else, the reward is 0.</p>
+<div id="fig-sparserewards" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-sparserewards-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="img/sparserewards.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;24.1: With sparse rewards, the agent has to find the reward by chance before it can learn anything. Credit: https://vimeo.com/felixsteger"><img src="img/sparserewards.png" class="img-fluid figure-img" style="width:60.0%"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-sparserewards-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;24.1: With sparse rewards, the agent has to find the reward by chance before it can learn anything. Credit: <a href="https://vimeo.com/felixsteger" class="uri">https://vimeo.com/felixsteger</a>
+</figcaption>
+</figure>
+</div>
+<p>Before the agent stumbles on a reward <strong>by chance</strong>, all the transitions it experiences have a reward of 0 and all its value estimates stay at 0, so the TD error is 0 and nothing is learned. The agent does not become “better at exploring” during that phase: it is a random agent, and it stays a random agent until the first reward arrives. If the reward is far away, the probability of reaching it by executing random actions decreases exponentially with the distance.</p>
+<p>This is exactly what happened to DQN on <strong>Montezuma’s Revenge</strong> (<a href="2.3-DQN.html" class="quarto-xref"><span>Deep Q-network (DQN)</span></a>). In this Atari game, the agent must climb down a ladder, jump over a skull, pick up a key, come back, and open a door. Only then does it receive a reward. A random agent essentially never completes that sequence, so DQN scored 0 on the game while reaching super-human performance on most of the others. Adding more layers or more training time does not help: the problem is not the capacity of the network, it is that the reward signal never arrives.</p>
+<p>The first assumption is not much better. Writing the “right” reward function is an art, and a badly designed one leads to an agent that maximizes exactly what you asked for instead of what you wanted (we will come back to that in <a href="5.2-Inverse.html" class="quarto-xref"><span>Inverse Reinforcement Learning</span></a>). In many realistic problems, we may not even be able to say what the reward should be.</p>
+<p>So the question of this chapter is:</p>
+<blockquote class="blockquote">
+<p>can the agent generate <strong>its own</strong> reward signal, in order to learn something useful even when the environment does not tell it anything?</p>
+</blockquote>
+</section>
+<section id="intrinsic-motivation" class="level2">
+<h2 class="anchored" data-anchor-id="intrinsic-motivation">Intrinsic motivation</h2>
+<p>The inspiration comes again from animal behavior. Humans, and especially infants, do not spend their time maximizing external rewards. They <strong>play</strong>: they push objects off the table, they open and close doors, they babble. None of this brings any food or any grade. They do it because it is interesting.</p>
+<p>Psychologists call this <strong>intrinsic motivation</strong>: a behavior done for its own sake, as opposed to <strong>extrinsic motivation</strong>, a behavior done to obtain an external reward <span class="citation" data-cites="Barto2013">(<a href="references.html#ref-Barto2013" role="doc-biblioref">Barto, 2013</a>)</span>. The useful thing about playing is that it builds a model of the world, which becomes extremely valuable later, when there finally is a goal to achieve.</p>
+<p>The idea in RL is to give the agent an additional reward that it computes by itself, the <strong>intrinsic reward</strong> <span class="math inline">r^i_t</span>, and to have it maximize the sum of both:</p>
+<p><span class="math display">
+    r_t = r^e_t + \beta \, r^i_t
+</span></p>
+<p>where <span class="math inline">r^e_t</span> is the usual <strong>extrinsic reward</strong> coming from the environment, and <span class="math inline">\beta</span> weights how curious the agent should be.</p>
+<p>One may wonder whether this is not cheating. If the agent produces its own rewards, what prevents it from simply giving itself an infinite reward and stopping there? <span class="citation" data-cites="Barto2013">Barto (<a href="references.html#ref-Barto2013" role="doc-biblioref">2013</a>)</span> proposes a useful way to think about it, depicted on <a href="#fig-barto" class="quarto-xref">Figure&nbsp;<span>24.2</span></a>. What we usually call the environment in the agent-environment interface is in fact the <strong>external environment</strong>. The reward signal is not produced by it, but by a <strong>critic</strong> which belongs to the <strong>internal environment</strong> of the organism. Both the critic and the RL agent are inside the organism, but the RL agent does not control the critic: from its point of view, the reward is still something that it receives, not something that it chooses.</p>
+<div id="fig-barto" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-barto-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="img/intrinsicmotivation.gif" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Figure&nbsp;24.2: Intrinsic motivation in the agent-environment interface. The reward signals are generated by a critic which is internal to the organism, but external to the RL agent itself. Source: @Barto2013."><img src="img/intrinsicmotivation.gif" class="img-fluid figure-img" style="width:55.0%"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-barto-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;24.2: Intrinsic motivation in the agent-environment interface. The reward signals are generated by a critic which is internal to the organism, but external to the RL agent itself. Source: <span class="citation" data-cites="Barto2013">Barto (<a href="references.html#ref-Barto2013" role="doc-biblioref">2013</a>)</span>.
+</figcaption>
+</figure>
+</div>
+<p>In this view, extrinsic and intrinsic rewards are not different in nature: they are both produced by the same internal critic. What differs is only what triggers them, an event in the external environment or an event inside the organism. Hunger, curiosity or boredom are as “real” as a reward given by a teacher.</p>
+<p>Note that this changes nothing to the algorithms themselves: we can use DQN, A3C, PPO or SAC without any modification, we only modify the reward that we feed them. This is why intrinsic motivation is so widely used: it is a module that can be plugged on top of any RL algorithm.</p>
+<p>The idea is not new: <span class="citation" data-cites="Schmidhuber2010">Schmidhuber (<a href="references.html#ref-Schmidhuber2010" role="doc-biblioref">2010</a>)</span> had been formalizing it since 1990, under the names of curiosity, fun and creativity. His formulation is worth remembering, because it is subtly different from what most modern methods do: the intrinsic reward should not be the error of the agent’s model, but the <strong>improvement</strong> of that model, i.e.&nbsp;the <em>learning progress</em>. Rewarding the error pushes the agent towards what it cannot predict; rewarding the progress pushes it towards what it is currently able to learn. We will see very soon why this distinction matters.</p>
+<p>The whole difficulty is now to define <span class="math inline">r^i_t</span>: what should be intrinsically rewarding?</p>
+</section>
+<section id="curiosity-as-a-prediction-error" class="level2">
+<h2 class="anchored" data-anchor-id="curiosity-as-a-prediction-error">Curiosity as a prediction error</h2>
+<p>A reasonable answer is: what is <strong>surprising</strong>. If you can perfectly predict what is going to happen, the situation is boring and there is nothing to learn from it. If you cannot predict what happens, you have found a part of the world that your model does not cover yet, and it is worth exploring.</p>
+<p>This can be measured directly. Let’s learn a <strong>forward model</strong> <span class="math inline">f</span> that predicts the next state from the current state and action, exactly as in model-based RL (<a href="4.4-WorldModels.html" class="quarto-xref"><span>World models, Dreamer</span></a>):</p>
+<p><span class="math display">
+    \hat{s}_{t+1} = f(s_t, a_t)
+</span></p>
+<p>and define the intrinsic reward as the error made by this prediction:</p>
+<p><span class="math display">
+    r^i_t = || f(s_t, a_t) - s_{t+1} ||^2
+</span></p>
+<div id="fig-intrinsicreward" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-intrinsicreward-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="img/intrinsicreward.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Figure&nbsp;24.3: The intrinsic reward is the error of a forward model predicting the next state. Source: https://medium.com/data-from-the-trenches/curiosity-driven-learning-through-next-state-prediction-f7f4e2f592fa"><img src="img/intrinsicreward.png" class="img-fluid figure-img" style="width:70.0%"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-intrinsicreward-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;24.3: The intrinsic reward is the error of a forward model predicting the next state. Source: <a href="https://medium.com/data-from-the-trenches/curiosity-driven-learning-through-next-state-prediction-f7f4e2f592fa" class="uri">https://medium.com/data-from-the-trenches/curiosity-driven-learning-through-next-state-prediction-f7f4e2f592fa</a>
+</figcaption>
+</figure>
+</div>
+<p>An agent maximizing this reward will systematically go towards the transitions that its model predicts badly, i.e.&nbsp;the parts of the environment it does not know yet. This is <strong>exploration</strong>, but a directed one: instead of taking random actions and hoping, the agent actively seeks novelty.</p>
+<p>A very nice property of this scheme is that it is <strong>self-limiting</strong>. The forward model is trained on the transitions that the agent experiences, so the more often the agent visits a region, the better the model predicts it, and the smaller the intrinsic reward becomes. Curiosity therefore extinguishes itself in regions that have been understood, and the agent moves on. Compare this to <span class="math inline">\epsilon</span>-greedy, where the exploration level is a hyperparameter that we have to schedule by hand and which is the same everywhere in the state space.</p>
+</section>
+<section id="the-noisy-tv-problem" class="level2">
+<h2 class="anchored" data-anchor-id="the-noisy-tv-problem">The noisy-TV problem</h2>
+<p>Unfortunately, computing the prediction error directly on the states does not work well.</p>
+<p>The first issue is technical: when the states are images, predicting the next frame means predicting tens of thousands of pixels. This is a hard problem in itself, and the prediction will never be perfect, so there will always be a residual error and therefore a residual intrinsic reward everywhere.</p>
+<div id="fig-intrinsicrewardhard" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-intrinsicrewardhard-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="img/intrinsicreward-hard.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="Figure&nbsp;24.4: Predicting the next frame is a very hard problem when the states are images. Source: https://medium.com/data-from-the-trenches/curiosity-driven-learning-through-next-state-prediction-f7f4e2f592fa"><img src="img/intrinsicreward-hard.png" class="img-fluid figure-img" style="width:55.0%"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-intrinsicrewardhard-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;24.4: Predicting the next frame is a very hard problem when the states are images. Source: <a href="https://medium.com/data-from-the-trenches/curiosity-driven-learning-through-next-state-prediction-f7f4e2f592fa" class="uri">https://medium.com/data-from-the-trenches/curiosity-driven-learning-through-next-state-prediction-f7f4e2f592fa</a>
+</figcaption>
+</figure>
+</div>
+<p>The second issue is much more fundamental. Some things in the world are unpredictable <strong>but not interesting</strong>: leaves moving in the wind, noise on a screen, the result of a dice throw. The prediction error on those will stay high forever, because the randomness is irreducible: no amount of learning will let you predict which way a leaf moves next.</p>
+<div id="fig-leaves" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-leaves-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="img/leaves.gif" class="lightbox" data-gallery="quarto-lightbox-gallery-5" title="Figure&nbsp;24.5: Leaves moving in the wind are unpredictable, but there is nothing to learn from them."><img src="img/leaves.gif" class="img-fluid figure-img" style="width:50.0%"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-leaves-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;24.5: Leaves moving in the wind are unpredictable, but there is nothing to learn from them.
+</figcaption>
+</figure>
+</div>
+<p>An agent maximizing the prediction error will happily park itself in front of such a source of noise and collect a large intrinsic reward forever, without learning anything and without exploring anything else. This failure mode is known as the <strong>noisy-TV problem</strong>: put a TV showing static in a maze, and your curious agent will stop exploring the maze and watch the TV.</p>
+<p>Note that this is the exact opposite of what we wanted: we introduced curiosity to make exploration smarter, and we ended up with an agent that gets addicted to noise. This is also exactly the distinction made by <span class="citation" data-cites="Schmidhuber2010">Schmidhuber (<a href="references.html#ref-Schmidhuber2010" role="doc-biblioref">2010</a>)</span>: in front of the noisy TV, the prediction <strong>error</strong> stays maximal forever, but the learning <strong>progress</strong> is zero, as the model does not improve at all. An agent rewarded by its progress would lose interest immediately. Measuring progress is unfortunately much harder than measuring error, so most practical methods keep the error and try to fix the problem another way: by being more careful about <strong>what</strong> the agent tries to predict.</p>
+</section>
+<section id="intrinsic-curiosity-module-icm" class="level2">
+<h2 class="anchored" data-anchor-id="intrinsic-curiosity-module-icm">Intrinsic Curiosity Module (ICM)</h2>
+<p>The <strong>Intrinsic Curiosity Module</strong> <span class="citation" data-cites="Pathak2017">(ICM, <a href="references.html#ref-Pathak2017" role="doc-biblioref">Pathak et al., 2017</a>)</span> solves both issues at once with a simple idea: do not predict the next state, predict a <strong>learned representation</strong> of the next state, and learn that representation so that it only contains what the agent can influence.</p>
+<p>The ICM has three components:</p>
+<ol type="1">
+<li>A <strong>feature encoder</strong> <span class="math inline">\phi</span>, which maps a state <span class="math inline">s_t</span> to a feature vector <span class="math inline">\phi(s_t)</span> of much smaller dimensionality.</li>
+<li>A <strong>forward model</strong>, which predicts the features of the next state from the features of the current state and the action: <span class="math display">\hat{\phi}(s_{t+1}) = f(\phi(s_t), a_t)</span></li>
+<li>An <strong>inverse model</strong>, which predicts which action was taken between two successive states: <span class="math display">\hat{a}_t = g(\phi(s_t), \phi(s_{t+1}))</span></li>
+</ol>
+<div id="fig-icm" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-icm-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="img/icm.jpg" class="lightbox" data-gallery="quarto-lightbox-gallery-6" title="Figure&nbsp;24.6: Architecture of the Intrinsic Curiosity Module. The policy is trained on the sum of the extrinsic and intrinsic rewards. Source: @Pathak2017."><img src="img/icm.jpg" class="img-fluid figure-img" style="width:90.0%"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-icm-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;24.6: Architecture of the Intrinsic Curiosity Module. The policy is trained on the sum of the extrinsic and intrinsic rewards. Source: <span class="citation" data-cites="Pathak2017">Pathak et al. (<a href="references.html#ref-Pathak2017" role="doc-biblioref">2017</a>)</span>.
+</figcaption>
+</figure>
+</div>
+<p>The intrinsic reward is now the prediction error of the forward model <strong>in the feature space</strong>:</p>
+<p><span class="math display">
+    r^i_t = || \hat{\phi}(s_{t+1}) - \phi(s_{t+1}) ||^2
+</span></p>
+<p>which is a much smaller and easier prediction problem than working on raw pixels.</p>
+<p>But the real trick is the inverse model. The encoder <span class="math inline">\phi</span> is not trained to reconstruct the states (as an autoencoder would), it is trained so that the <strong>inverse model</strong> can recover the action. Think about what this implies:</p>
 <ul>
-<li><span class="citation" data-cites="Pathak2017">(<a href="references.html#ref-Pathak2017" role="doc-biblioref">Pathak et al., 2017</a>)</span> Curiosity-driven Exploration by Self-supervised Prediction</li>
-<li><span class="citation" data-cites="Burda2018b">(<a href="references.html#ref-Burda2018b" role="doc-biblioref">Burda et al., 2018</a>)</span> Exploration by Random Network Distillation</li>
-<li><span class="citation" data-cites="Sekar2020">(<a href="references.html#ref-Sekar2020" role="doc-biblioref">Sekar et al., 2020</a>)</span> Planning to Explore via Self-Supervised World Models</li>
+<li>If some part of the observation is influenced by the agent’s actions (the position of its own body, the objects it pushes), it is useful to predict the action, so <span class="math inline">\phi</span> keeps it.</li>
+<li>If some part of the observation is not influenced by the agent at all (the leaves in the wind, the TV static, the clouds in the background), it is useless to predict the action, so <span class="math inline">\phi</span> learns to <strong>discard</strong> it.</li>
 </ul>
+<p>The feature space therefore only encodes the part of the environment that the agent can control or that affects it, and the noisy-TV disappears from the representation before the intrinsic reward is even computed. This is an elegant solution, and it is worth remembering as a general principle: when a quantity is hard to define directly, one can often define an auxiliary task whose solution forces the right quantity to emerge.</p>
+<p>ICM allows agents to learn to play games such as VizDoom and Super Mario Bros with very sparse rewards, and even with <strong>no extrinsic reward at all</strong>.</p>
+<div class="quarto-video ratio ratio-16x9"><iframe data-external="1" src="https://www.youtube.com/embed/J3FHOyhUn3A" title="ICM - Curiosity-driven exploration" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe></div>
+<p><span class="citation" data-cites="Burda2018">Burda et al. (<a href="references.html#ref-Burda2018" role="doc-biblioref">2018a</a>)</span> later performed a large-scale study of purely curiosity-driven learning, i.e.&nbsp;with the extrinsic reward completely removed (<span class="math inline">r_t = r^i_t</span>), on 54 benchmark environments including the whole Atari suite. The results are surprising: on many games, an agent that has never seen a single point of game score still learns to play reasonably well. The explanation is that these games are designed by humans for humans, so the game score is usually well aligned with “making interesting things happen on the screen” — progressing in the level is exactly what a curious agent wants to do anyway.</p>
+<div class="quarto-video ratio ratio-16x9"><iframe data-external="1" src="https://www.youtube.com/embed/l1FqtAHfJLI" title="Large-scale study of curiosity-driven learning" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe></div>
+</section>
+<section id="counting-states" class="level2">
+<h2 class="anchored" data-anchor-id="counting-states">Counting states</h2>
+<p>Let’s take a step back. All the methods above measure <strong>surprise</strong>: how badly does my model predict what is going to happen? But what we actually want for exploration is <strong>novelty</strong>: have I been here before? The two are related, as a state which has never been visited is usually predicted badly, but they are not the same thing, and the noisy TV is precisely a case where a state stays surprising forever while not being novel at all.</p>
+<p>If novelty is what we want, why not measure it directly? In tabular RL, this is trivial: keep a counter <span class="math inline">N(s)</span> of the number of times each state has been visited, and give a bonus that decreases with it, for example:</p>
+<p><span class="math display">
+    r^i_t = \frac{1}{\sqrt{N(s_t)}}
+</span></p>
+<p>This is a very old idea, and in the tabular case it can even be proven to lead to near-optimal exploration. The problem is that it does not survive the passage to deep RL. When the states are images, no two frames are ever identical pixel by pixel, so every state is visited exactly once, all counts are 1, and the bonus is the same everywhere: useless. Counting requires the states to be discrete and to repeat, which is exactly the assumption that function approximation was introduced to get rid of (<a href="2.1-FunctionApproximation.html" class="quarto-xref"><span>Function approximation</span></a>).</p>
+<p><span class="citation" data-cites="Bellemare2016">Bellemare et al. (<a href="references.html#ref-Bellemare2016" role="doc-biblioref">2016</a>)</span> found an elegant way around this, called <strong>pseudo-counts</strong>. The idea is to replace the counter by a <strong>density model</strong> <span class="math inline">\rho(s)</span>, i.e.&nbsp;a model that estimates the probability of observing the state <span class="math inline">s</span>, and which is trained on the states that the agent visits. Contrary to a counter, a density model <strong>generalizes</strong>: a state which resembles many already visited states receives a high probability, even if this exact state has never been seen.</p>
+<p>The question is then how to get a count back out of a probability. Let’s note <span class="math inline">\rho(s)</span> the probability that the model assigns to <span class="math inline">s</span>, and <span class="math inline">\rho'(s)</span> the probability that it would assign to <span class="math inline">s</span> <strong>after</strong> being trained on <span class="math inline">s</span> one more time. If the density model behaved exactly like a counter having seen <span class="math inline">n</span> states in total, we would have:</p>
+<p><span class="math display">
+    \rho(s) = \frac{N(s)}{n} \qquad \qquad \rho'(s) = \frac{N(s) + 1}{n + 1}
+</span></p>
+<p>These are two equations with two unknowns (<span class="math inline">N(s)</span> and <span class="math inline">n</span>), so we can solve them for <span class="math inline">N(s)</span> and obtain the <strong>pseudo-count</strong>:</p>
+<p><span class="math display">
+    \hat{N}(s) = \frac{\rho(s) \, (1 - \rho'(s))}{\rho'(s) - \rho(s)}
+</span></p>
+<p>which can now be computed for any density model and used in the exploration bonus in place of the true count. Said differently: <em>how much the model improves when forced to learn a state one more time</em> tells us how many times it has effectively already seen it. A state the model already knows well barely changes, so <span class="math inline">\rho'(s) \approx \rho(s)</span>, the denominator is tiny and the pseudo-count is huge. A completely new state changes the model a lot, and the pseudo-count is small.</p>
+<p>It is worth noticing that this is precisely <span class="citation" data-cites="Schmidhuber2010">Schmidhuber (<a href="references.html#ref-Schmidhuber2010" role="doc-biblioref">2010</a>)</span>’s learning progress, measured on a density model instead of a forward model. Pseudo-counts are therefore immune to the noisy TV for the same reason: watching static does not improve the density model, so the pseudo-count stops growing and the bonus vanishes.</p>
+<p>Applied to Atari with a simple pixel density model, pseudo-counts produced the first real progress on Montezuma’s Revenge. <span class="citation" data-cites="Ostrovski2017">Ostrovski et al. (<a href="references.html#ref-Ostrovski2017" role="doc-biblioref">2017</a>)</span> then replaced the density model by PixelCNN, a much better neural density model for images, and improved the results further, confirming that the quality of the density model directly determines the quality of the exploration.</p>
+</section>
+<section id="random-network-distillation-rnd" class="level2">
+<h2 class="anchored" data-anchor-id="random-network-distillation-rnd">Random Network Distillation (RND)</h2>
+<p>Pseudo-counts work, but they require training a density model over images, which is heavy and delicate: the whole scheme depends on the density model being well calibrated, and image density models are hard to get right.</p>
+<p><strong>Random Network Distillation</strong> <span class="citation" data-cites="Burda2018b">(RND, <a href="references.html#ref-Burda2018b" role="doc-biblioref">Burda et al., 2018b</a>)</span> obtains a very similar notion of novelty far more cheaply, with a trick that looks like a joke at first sight. Take two networks:</p>
+<ul>
+<li>A <strong>target network</strong> <span class="math inline">\hat{f}</span> with random weights, which is <strong>fixed</strong> and never trained.</li>
+<li>A <strong>predictor network</strong> <span class="math inline">f_\psi</span>, which is trained to predict the output of the target network on the states that the agent visits, by minimizing:</li>
+</ul>
+<p><span class="math display">
+    \mathcal{L}(\psi) = || f_\psi(s_t) - \hat{f}(s_t) ||^2
+</span></p>
+<p>The intrinsic reward is simply this prediction error:</p>
+<p><span class="math display">
+    r^i_t = || f_\psi(s_t) - \hat{f}(s_t) ||^2
+</span></p>
+<p>Why does this work? The function to be predicted is now <strong>deterministic by construction</strong>: <span class="math inline">\hat{f}</span> is a fixed function of the state, it contains no noise whatsoever. There is therefore no irreducible error: on a state that has been visited often, the predictor can in principle become perfect and the intrinsic reward goes to 0. On a state that has never been visited, the predictor has no reason to be correct and the error is high.</p>
+<p>The prediction error has stopped measuring “how unpredictable is the future” and now measures “<strong>how novel is this state</strong>”, which is what we wanted in the first place. A stochastic TV does not fool RND: whatever the screen shows, <span class="math inline">\hat{f}</span> maps it to a fixed output, and once the predictor has seen enough screens it predicts them all.</p>
+<p>RND is also trivial to implement (two small networks and one mse loss, no forward model, no inverse model, no density model) and adds almost no computation. Combined with PPO, it established the state of the art on <strong>Montezuma’s Revenge</strong> and was the first method to exceed average human performance on it, five years after DQN had scored zero on the same game.</p>
+</section>
+<section id="episodic-curiosity" class="level2">
+<h2 class="anchored" data-anchor-id="episodic-curiosity">Episodic curiosity</h2>
+<p>Pseudo-counts and RND both measure novelty with respect to <strong>everything the agent has seen since the beginning of training</strong>. <span class="citation" data-cites="Savinov2019">Savinov et al. (<a href="references.html#ref-Savinov2019" role="doc-biblioref">2019</a>)</span> propose a different and quite intuitive notion: novelty with respect to the <strong>current episode</strong>, measured in number of steps.</p>
+<p>The agent maintains an <strong>episodic memory</strong> containing the observations encountered since the beginning of the episode. A network is trained to predict, for a pair of observations, whether one is <strong>reachable</strong> from the other within <span class="math inline">k</span> steps. The intrinsic reward of the current observation is then high if it is far, in number of steps, from everything already in memory, and low if it can be reached quickly from something already seen. At the end of the episode, the memory is emptied.</p>
+<p>The interesting point is that this measure is about the <strong>dynamics</strong> of the environment, not about the appearance of the states. Turning on the spot produces a continuous stream of very different images, so any appearance-based novelty measure rewards it. But all these images are reachable from one another in one or two steps, so reachability-based curiosity does not reward it at all. The noisy TV is defeated once more, this time by asking a question about the structure of the environment rather than about the pixels.</p>
+</section>
+<section id="planning-to-explore" class="level2">
+<h2 class="anchored" data-anchor-id="planning-to-explore">Planning to explore</h2>
+<p>All the methods above are <strong>retrospective</strong>: the agent computes the novelty of a state <em>after</em> having reached it. It discovers that a region was interesting only once it is already there, which is still a form of trial and error.</p>
+<p>If we have a world model (<a href="4.4-WorldModels.html" class="quarto-xref"><span>World models, Dreamer</span></a>), we can do better and seek out novelty <strong>before</strong> experiencing it. This is the idea of Plan2Explore <span class="citation" data-cites="Sekar2020">(<a href="references.html#ref-Sekar2020" role="doc-biblioref">Sekar et al., 2020</a>)</span>, which builds on Dreamer. Instead of a single forward model, it trains an <strong>ensemble</strong> of forward models in the latent space. On a part of the environment that has been seen often, all the models agree with each other. On a part that has not, they disagree, because each of them extrapolates differently.</p>
+<p>The <strong>disagreement</strong> between the models (the variance of their predictions) is therefore a measure of novelty that can be computed <strong>in imagination</strong>, without acting. The agent can then plan a trajectory towards the states where the ensemble expects to disagree, i.e.&nbsp;actively navigate towards what it does not know yet.</p>
+<p>The consequence is that the agent explores with <strong>no task and no reward at all</strong>, purely building a world model, and afterwards it can solve new tasks that were not known during exploration, sometimes in a zero-shot manner: once the world model is good, a new reward function is all that is needed to derive a new behavior by planning in imagination.</p>
+<p>This closes a nice loop with <a href="4.4-WorldModels.html" class="quarto-xref"><span>World models, Dreamer</span></a>: a world model makes better exploration possible, and better exploration makes a better world model.</p>
+</section>
+<section id="is-novelty-enough" class="level2">
+<h2 class="anchored" data-anchor-id="is-novelty-enough">Is novelty enough?</h2>
+<p>All the methods presented so far follow the same recipe: define a measure of novelty, turn it into a reward, and let a standard RL algorithm maximize it. <span class="citation" data-cites="Ecoffet2021">Ecoffet et al. (<a href="references.html#ref-Ecoffet2021" role="doc-biblioref">2021</a>)</span> argue that this recipe has a structural weakness, and that this weakness, rather than the quality of the novelty measure, is what really limits exploration. They identify two failure modes:</p>
+<ul>
+<li><strong>Detachment</strong>: the agent discovers a promising area and starts exploring it, but its policy drifts elsewhere in the meantime. When it comes back, the states of that area are not novel anymore, so their intrinsic reward has already been consumed and there is nothing left to attract the agent. It has effectively <strong>forgotten</strong> that there was something to explore there.</li>
+<li><strong>Derailment</strong>: even when the agent does know that a distant state is worth exploring from, it has to travel back to it using its own stochastic, exploratory policy. The longer the path, the more likely the exploratory noise makes it fail somewhere on the way. The very randomness that is needed to explore prevents the agent from reaching the place where it should explore.</li>
+</ul>
+<p>Their algorithm, <strong>Go-Explore</strong>, gives up on the intrinsic reward entirely. It keeps instead an explicit <strong>archive</strong> of the interesting states that have been reached, together with a trajectory leading to each of them, and repeats the two steps which give the paper its title:</p>
+<ol type="1">
+<li><strong>First return</strong>: select a promising state from the archive and go back to it <strong>directly</strong>, by replaying the stored trajectory (or, in the stochastic case, by training a policy to imitate it), rather than by exploring.</li>
+<li><strong>Then explore</strong>: from there, explore randomly, and add every newly discovered state to the archive.</li>
+</ol>
+<p>Separating “coming back” from “exploring” removes both failure modes at once: nothing is forgotten, because the archive is explicit and permanent, and nothing is derailed, because returning does not rely on a noisy policy. Go-Explore solved Montezuma’s Revenge outright, above the human world record, and scored above the state of the art on all the hard-exploration Atari games.</p>
+<p>This is a useful result to keep in mind, because it says something slightly uncomfortable about the rest of this chapter. The hard part of exploration may not be <strong>estimating</strong> novelty, which is what ICM, pseudo-counts, RND and episodic curiosity all work on, but <strong>exploiting</strong> it reliably once it has been estimated. The two views are probably both partly right, and modern agents combine them: Never Give Up <span class="citation" data-cites="Badia2020a">(<a href="references.html#ref-Badia2020a" role="doc-biblioref">Badia et al., 2020b</a>)</span> mixes an episodic novelty measure with a life-long one based on RND, and Agent57 <span class="citation" data-cites="Badia2020">(<a href="references.html#ref-Badia2020" role="doc-biblioref">Badia et al., 2020a</a>)</span> adds a meta-controller that learns how curious the agent should be at each moment, becoming the first agent to beat the human baseline on all 57 Atari games.</p>
+<div class="callout callout-style-default callout-tip no-icon callout-titled" title="Additional resources">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Additional resources
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li><span class="citation" data-cites="Aubret2019">Aubret et al. (<a href="references.html#ref-Aubret2019" role="doc-biblioref">2019</a>)</span> is a survey of intrinsic motivation in RL.</li>
+<li><span class="citation" data-cites="Oudeyer2016">Oudeyer et al. (<a href="references.html#ref-Oudeyer2016" role="doc-biblioref">2016</a>)</span> gives the psychological and developmental background.</li>
+<li><span class="citation" data-cites="Barto2013">Barto (<a href="references.html#ref-Barto2013" role="doc-biblioref">2013</a>)</span> discusses what intrinsic motivation means for a learning machine.</li>
+<li><span class="citation" data-cites="Schmidhuber2010">Schmidhuber (<a href="references.html#ref-Schmidhuber2010" role="doc-biblioref">2010</a>)</span> is the historical formal theory, covering twenty years of work on curiosity, fun and creativity.</li>
+<li><a href="https://pathak22.github.io/large-scale-curiosity/" class="uri">https://pathak22.github.io/large-scale-curiosity/</a> for the large-scale study of <span class="citation" data-cites="Burda2018">Burda et al. (<a href="references.html#ref-Burda2018" role="doc-biblioref">2018a</a>)</span>.</li>
+</ul>
+</div>
+</div>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
+<div id="ref-Aubret2019" class="csl-entry" role="listitem">
+Aubret, A., Matignon, L., and Hassas, S. (2019). A survey on intrinsic motivation in reinforcement learning. <em>arXiv:1908.06976 [cs]</em>. Available at: <a href="https://arxiv.org/abs/1908.06976">https://arxiv.org/abs/1908.06976</a> [Accessed January 17, 2021].
+</div>
+<div id="ref-Badia2020" class="csl-entry" role="listitem">
+Badia, A. P., Piot, B., Kapturowski, S., Sprechmann, P., Vitvitskyi, A., Guo, D., et al. (2020a). Agent57: <span>Outperforming</span> the <span>Atari Human Benchmark</span>. <em>arXiv:2003.13350 [cs, stat]</em>. Available at: <a href="https://arxiv.org/abs/2003.13350">https://arxiv.org/abs/2003.13350</a> [Accessed January 17, 2022].
+</div>
+<div id="ref-Badia2020a" class="csl-entry" role="listitem">
+Badia, A. P., Sprechmann, P., Vitvitskyi, A., Guo, D., Piot, B., Kapturowski, S., et al. (2020b). Never <span>Give Up</span>: <span>Learning Directed Exploration Strategies</span>. <em>arXiv:2002.06038 [cs, stat]</em>. Available at: <a href="https://arxiv.org/abs/2002.06038">https://arxiv.org/abs/2002.06038</a> [Accessed January 17, 2022].
+</div>
+<div id="ref-Barto2013" class="csl-entry" role="listitem">
+Barto, A. G. (2013). <span>“Intrinsic <span>Motivation</span> and <span>Reinforcement Learning</span>,”</span> in <em>Intrinsically <span>Motivated Learning</span> in <span>Natural</span> and <span>Artificial Systems</span></em>, eds. G. Baldassarre and M. Mirolli (Berlin, Heidelberg: Springer), 17–47. doi:<a href="https://doi.org/10.1007/978-3-642-32375-1_2">10.1007/978-3-642-32375-1_2</a>.
+</div>
+<div id="ref-Bellemare2016" class="csl-entry" role="listitem">
+Bellemare, M. G., Srinivasan, S., Ostrovski, G., Schaul, T., Saxton, D., and Munos, R. (2016). Unifying <span>Count-Based Exploration</span> and <span>Intrinsic Motivation</span>. doi:<a href="https://doi.org/10.48550/arXiv.1606.01868">10.48550/arXiv.1606.01868</a>.
+</div>
+<div id="ref-Burda2018" class="csl-entry" role="listitem">
+Burda, Y., Edwards, H., Pathak, D., Storkey, A., Darrell, T., and Efros, A. A. (2018a). Large-<span>Scale Study</span> of <span>Curiosity-Driven Learning</span>. <em>arXiv:1808.04355 [cs, stat]</em>. Available at: <a href="https://arxiv.org/abs/1808.04355">https://arxiv.org/abs/1808.04355</a> [Accessed February 6, 2021].
+</div>
 <div id="ref-Burda2018b" class="csl-entry" role="listitem">
-Burda, Y., Edwards, H., Storkey, A., and Klimov, O. (2018). Exploration by <span>Random Network Distillation</span>. doi:<a href="https://doi.org/10.48550/arXiv.1810.12894">10.48550/arXiv.1810.12894</a>.
+Burda, Y., Edwards, H., Storkey, A., and Klimov, O. (2018b). Exploration by <span>Random Network Distillation</span>. doi:<a href="https://doi.org/10.48550/arXiv.1810.12894">10.48550/arXiv.1810.12894</a>.
+</div>
+<div id="ref-Ecoffet2021" class="csl-entry" role="listitem">
+Ecoffet, A., Huizinga, J., Lehman, J., Stanley, K. O., and Clune, J. (2021). First return, then explore. <em>Nature</em> 590, 580–586. doi:<a href="https://doi.org/10.1038/s41586-020-03157-9">10.1038/s41586-020-03157-9</a>.
+</div>
+<div id="ref-Ostrovski2017" class="csl-entry" role="listitem">
+Ostrovski, G., Bellemare, M. G., Oord, A. van den, and Munos, R. (2017). Count-<span>Based Exploration</span> with <span>Neural Density Models</span>. doi:<a href="https://doi.org/10.48550/arXiv.1703.01310">10.48550/arXiv.1703.01310</a>.
+</div>
+<div id="ref-Oudeyer2016" class="csl-entry" role="listitem">
+Oudeyer, P.-Y., Gottlieb, J., and Lopes, M. (2016). <span>“Chapter 11 - <span>Intrinsic</span> motivation, curiosity, and learning: <span>Theory</span> and applications in educational technologies,”</span> in <em>Progress in <span>Brain Research</span></em> Motivation., eds. B. Studer and S. Knecht (Elsevier), 257–284. doi:<a href="https://doi.org/10.1016/bs.pbr.2016.05.005">10.1016/bs.pbr.2016.05.005</a>.
 </div>
 <div id="ref-Pathak2017" class="csl-entry" role="listitem">
-Pathak, D., Agrawal, P., Efros, A. A., and Darrell, T. (2017). Curiosity-driven <span>Exploration</span> by <span class="nocase">Self-supervised Prediction</span>. Available at: <a href="http://arxiv.org/abs/1705.05363">http://arxiv.org/abs/1705.05363</a> [Accessed February 6, 2021].
+Pathak, D., Agrawal, P., Efros, A. A., and Darrell, T. (2017). Curiosity-driven <span>Exploration</span> by <span class="nocase">Self-supervised Prediction</span>. <em>arXiv:1705.05363 [cs, stat]</em>. Available at: <a href="https://arxiv.org/abs/1705.05363">https://arxiv.org/abs/1705.05363</a> [Accessed February 6, 2021].
+</div>
+<div id="ref-Savinov2019" class="csl-entry" role="listitem">
+Savinov, N., Raichuk, A., Marinier, R., Vincent, D., Pollefeys, M., Lillicrap, T., et al. (2019). Episodic <span>Curiosity</span> through <span>Reachability</span>. doi:<a href="https://doi.org/10.48550/arXiv.1810.02274">10.48550/arXiv.1810.02274</a>.
+</div>
+<div id="ref-Schmidhuber2010" class="csl-entry" role="listitem">
+Schmidhuber, J. (2010). Formal <span>Theory</span> of <span>Creativity</span>, <span>Fun</span>, and <span>Intrinsic Motivation</span> (1990&amp;amp;#x2013;2010). <em>IEEE Transactions on Autonomous Mental Development</em> 2, 230–247. doi:<a href="https://doi.org/10.1109/TAMD.2010.2056368">10.1109/TAMD.2010.2056368</a>.
 </div>
 <div id="ref-Sekar2020" class="csl-entry" role="listitem">
-Sekar, R., Rybkin, O., Daniilidis, K., Abbeel, P., Hafner, D., and Pathak, D. (2020). Planning to <span>Explore</span> via <span>Self-Supervised World Models</span>. Available at: <a href="http://arxiv.org/abs/2005.05960">http://arxiv.org/abs/2005.05960</a> [Accessed January 29, 2024].
+Sekar, R., Rybkin, O., Daniilidis, K., Abbeel, P., Hafner, D., and Pathak, D. (2020). Planning to <span>Explore</span> via <span>Self-Supervised World Models</span>. Available at: <a href="https://arxiv.org/abs/2005.05960">https://arxiv.org/abs/2005.05960</a> [Accessed January 29, 2024].
 </div>
 </div>
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -455,13 +755,14 @@ Sekar, R., Rybkin, O., Daniilidis, K., Abbeel, P., Hafner, D., and Pathak, D. (2
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy
@@ -803,10 +1104,10 @@ Sekar, R., Rybkin, O., Daniilidis, K., Abbeel, P., Hafner, D., and Pathak, D. (2
     }
   });
   </script>
-<nav class="page-navigation">
+<nav class="page-navigation column-body">
   <div class="nav-page nav-page-previous">
-      <a href="../src/4.6-Misc.html" class="pagination-link" aria-label="Misc.">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">Misc.</span></span>
+      <a href="../src/4.5-AlphaGo.html" class="pagination-link" aria-label="AlphaGo">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">AlphaGo</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
@@ -829,6 +1130,38 @@ Sekar, R., Rybkin, O., Daniilidis, K., Abbeel, P., Hafner, D., and Pathak, D. (2
     </div>
   </div>
 </footer>
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
 
 
 

@@ -2,17 +2,23 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.29">
+<meta name="generator" content="quarto-1.10.18">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>Offline RL – Deep Reinforcement Learning</title>
 <style>
-code{white-space: pre-wrap;}
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -57,10 +63,13 @@ div.csl-indent {
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-bcbce66894bfa8e7e94e40e0186b9bb8.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-bb62276ab45c84d9efd712f51ff97b5a.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-ea27fabe3da5290357830f0bd5288bdb.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-3998d32367fd34ee6440c4fab252e735.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -90,10 +99,53 @@ div.csl-indent {
 }</script>
 <style>html{ scroll-behavior: smooth; }</style>
 
+  <script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+ var mathElements = document.getElementsByClassName("math");
+ var macros = [];
+ for (var i = 0; i < mathElements.length; i++) {
+  var texText = mathElements[i].firstChild;
+  if (mathElements[i].tagName == "SPAN") {
+   katex.render(texText.data, mathElements[i], {
+    displayMode: mathElements[i].classList.contains('display'),
+    throwOnError: false,
+    macros: macros,
+    fleqn: false
+   });
+}}});
+  </script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css">
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
-<body class="nav-sidebar floating quarto-light">
+<body class="nav-sidebar docked quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -103,7 +155,7 @@ div.csl-indent {
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
         <a class="flex-grow-1 no-decor" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-          <h1 class="quarto-secondary-nav-title"><span class="chapter-title">Offline RL</span></h1>
+          <h1 class="quarto-secondary-nav-title"><span id="sec-offlinerl" class="quarto-section-identifier"><span class="chapter-title">Offline RL</span></span></h1>
         </a>     
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
         <i class="bi bi-search"></i>
@@ -112,9 +164,9 @@ div.csl-indent {
   </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="../">Deep Reinforcement Learning</a> 
@@ -206,11 +258,6 @@ div.csl-indent {
   <a href="../src/2.5-DistributedLearning.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Distributed learning</span></a>
   </div>
 </li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../src/2.6-Misc.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Misc.</span></a>
-  </div>
-</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -229,8 +276,7 @@ div.csl-indent {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/3.2-ActorCritic.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Advantage Actor-Critic (A3C)</span></a>
+  <a href="../src/3.2-ActorCritic.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Advantage Actor-Critic (A3C)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -261,11 +307,6 @@ div.csl-indent {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../src/3.8-EntropyRL.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Maximum Entropy RL (SAC)</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../src/3.9-Misc.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Misc.</span></a>
   </div>
 </li>
       </ul>
@@ -304,11 +345,6 @@ div.csl-indent {
   <a href="../src/4.5-AlphaGo.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">AlphaGo</span></a>
   </div>
 </li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../src/4.6-Misc.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Misc.</span></a>
-  </div>
-</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -337,7 +373,7 @@ div.csl-indent {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/5.4-Meta.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Meta learning</span></a>
+  <a href="../src/5.4-Meta.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Meta reinforcement learning</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -363,21 +399,26 @@ div.csl-indent {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#diffusion-policies" id="toc-diffusion-policies" class="nav-link active" data-scroll-target="#diffusion-policies">Diffusion policies</a></li>
+  <li><a href="#learning-from-a-fixed-dataset" id="toc-learning-from-a-fixed-dataset" class="nav-link active" data-scroll-target="#learning-from-a-fixed-dataset">Learning from a fixed dataset</a></li>
+  <li><a href="#behavioral-cloning" id="toc-behavioral-cloning" class="nav-link" data-scroll-target="#behavioral-cloning">Behavioral cloning</a></li>
+  <li><a href="#the-distribution-shift-problem" id="toc-the-distribution-shift-problem" class="nav-link" data-scroll-target="#the-distribution-shift-problem">The distribution shift problem</a></li>
+  <li><a href="#conservative-methods" id="toc-conservative-methods" class="nav-link" data-scroll-target="#conservative-methods">Conservative methods</a></li>
+  <li><a href="#sequence-models" id="toc-sequence-models" class="nav-link" data-scroll-target="#sequence-models">Sequence models</a></li>
+  <li><a href="#diffusion-policies" id="toc-diffusion-policies" class="nav-link" data-scroll-target="#diffusion-policies">Diffusion policies</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
+<main class="content column-body" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title d-none d-lg-block"><span class="chapter-title">Offline RL</span></h1>
+<h1 class="title d-none d-lg-block"><span id="sec-offlinerl" class="quarto-section-identifier"><span class="chapter-title">Offline RL</span></span></h1>
 </div>
 
 
 
-<div class="quarto-title-meta">
+<div class="quarto-title-meta column-body">
 
     
   
@@ -389,15 +430,184 @@ div.csl-indent {
 </header>
 
 
-<p><strong>work in progress</strong></p>
+<p>Every method presented so far, whether on-policy or off-policy, needs to <strong>interact</strong> with the environment while learning. This chapter asks what happens when it cannot, and what has to change.</p>
+<section id="learning-from-a-fixed-dataset" class="level2">
+<h2 class="anchored" data-anchor-id="learning-from-a-fixed-dataset">Learning from a fixed dataset</h2>
+<p>It is worth being precise about the difference between <strong>off-policy</strong> and <strong>offline</strong>, because the two are easily confused.</p>
+<p>An off-policy algorithm such as DQN or SAC learns from transitions generated by a <strong>behavior policy</strong> <span class="math inline">b</span> different from the learned policy <span class="math inline">\pi</span> (<a href="1.4-MC.html" class="quarto-xref"><span>Monte Carlo methods</span></a>). But in practice, <span class="math inline">b</span> is an <span class="math inline">\epsilon</span>-soft version of <span class="math inline">\pi</span>: the agent still acts in the environment, and as <span class="math inline">\pi</span> improves, the data that fills the experience replay memory improves with it. If the agent develops a wrong idea about an action, it will eventually try that action, see that it was a bad idea, and correct itself.</p>
+<p>In <strong>offline RL</strong> (also called batch RL), this feedback loop is cut. We are given a fixed dataset of transitions</p>
+<p><span class="math display">
+    \mathcal{D} = \{(s_k, a_k, r_k, s'_k)\}_{k=1}^N
+</span></p>
+<p>collected by somebody else, and we must produce the best possible policy from it, without ever interacting with the environment during training. Whatever the agent believes about an action that is not in the dataset, it will never be contradicted.</p>
+<div id="fig-offlinerl" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-offlinerl-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="img/offlinerl.gif" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;26.1: In offline RL, a fixed dataset is collected once by a behavior policy, and the agent must learn from it without further interaction. Source: https://ai.googleblog.com/2020/04/an-optimistic-perspective-on-offline.html"><img src="img/offlinerl.gif" class="img-fluid figure-img" style="width:75.0%"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-offlinerl-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;26.1: In offline RL, a fixed dataset is collected once by a behavior policy, and the agent must learn from it without further interaction. Source: <a href="https://ai.googleblog.com/2020/04/an-optimistic-perspective-on-offline.html" class="uri">https://ai.googleblog.com/2020/04/an-optimistic-perspective-on-offline.html</a>
+</figcaption>
+</figure>
+</div>
+<p>Why would we want to work under such a constraint? Because in most real applications, it is not a constraint we choose, it is the situation we are in:</p>
+<ul>
+<li><strong>Safety.</strong> Exploration means trying actions to see what happens. This is fine in a simulator, unacceptable for a treatment plan in a hospital, a controller in a chemical plant, or a car on a public road.</li>
+<li><strong>Cost.</strong> Interaction may be extremely slow or expensive, while historical data already exists in large quantities: years of logs from an industrial process, millions of recorded human drives.</li>
+<li><strong>Reuse.</strong> RL is notoriously sample-inefficient. Being able to reuse a dataset across many tasks and many algorithms, as computer vision does with ImageNet, would change the economics of the field completely.</li>
+</ul>
+<p>This last point explains why standardized datasets appeared. <strong>D4RL</strong> (<em>Datasets for Deep Data-Driven RL</em>, <a href="https://sites.google.com/view/d4rl/home" class="uri">https://sites.google.com/view/d4rl/home</a>) provides offline datasets recorded on classical benchmarks with policies of varying quality, from random to expert, so that offline algorithms can be compared on the same data.</p>
+<div id="fig-d4rl" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-d4rl-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="img/d4rl.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Figure&nbsp;26.2: The D4RL benchmark provides standardized offline datasets. Source: https://ai.googleblog.com/2020/08/tackling-open-challenges-in-offline.html"><img src="img/d4rl.png" class="img-fluid figure-img" style="width:80.0%"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-d4rl-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;26.2: The D4RL benchmark provides standardized offline datasets. Source: <a href="https://ai.googleblog.com/2020/08/tackling-open-challenges-in-offline.html" class="uri">https://ai.googleblog.com/2020/08/tackling-open-challenges-in-offline.html</a>
+</figcaption>
+</figure>
+</div>
+</section>
+<section id="behavioral-cloning" class="level2">
+<h2 class="anchored" data-anchor-id="behavioral-cloning">Behavioral cloning</h2>
+<p>The simplest thing one can do with a dataset of transitions is to ignore the rewards entirely and treat it as a supervised learning problem: learn a network that maps states to the actions taken in the data.</p>
+<p><span class="math display">
+    \mathcal{L}(\theta) = \mathbb{E}_{(s, a) \sim \mathcal{D}} [ - \log \pi_\theta(s, a) ]
+</span></p>
+<p>This is <strong>behavioral cloning</strong>, and when the dataset comes from a human it is also called <strong>imitation learning</strong> or learning from demonstrations. Note that this is the approach we contrasted with inverse RL in <a href="5.2-Inverse.html" class="quarto-xref"><span>Inverse Reinforcement Learning</span></a>: it copies <em>what</em> the expert does, without asking <em>why</em>.</p>
+<p>The classical example is Dave2, NVIDIA’s self-driving car <span class="citation" data-cites="Bojarski2016">(<a href="references.html#ref-Bojarski2016" role="doc-biblioref">Bojarski et al., 2016</a>)</span>. A camera and the steering angle of a human driver are recorded over many hours; a CNN is then trained to predict the steering angle from the image. No reward, no value function, no RL at all.</p>
+<div id="fig-dave2" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-dave2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="img/dave2-training.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Figure&nbsp;26.3: Training of Dave2 by behavioral cloning: the network learns to predict the steering angle applied by the human driver. Source: @Bojarski2016."><img src="img/dave2-training.png" class="img-fluid figure-img" style="width:80.0%"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-dave2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;26.3: Training of Dave2 by behavioral cloning: the network learns to predict the steering angle applied by the human driver. Source: <span class="citation" data-cites="Bojarski2016">Bojarski et al. (<a href="references.html#ref-Bojarski2016" role="doc-biblioref">2016</a>)</span>.
+</figcaption>
+</figure>
+</div>
+<div class="quarto-video ratio ratio-16x9"><iframe data-external="1" src="https://www.youtube.com/embed/qhUvQiKec2U" title="Dave2 - NVIDIA self-driving car" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe></div>
+<p>Behavioral cloning is simple and works surprisingly often, but it has two structural limits. First, it can only be as good as the data: it reproduces the behavior policy, so it can never <strong>outperform</strong> the expert, and if the data comes from a mediocre policy the result is a mediocre policy. Second, it suffers from <strong>compounding errors</strong>: the network makes a small mistake, which brings the car slightly off the trajectories seen during training, where the network is less accurate, which produces a bigger mistake, and so on. Nothing in supervised learning teaches the policy how to <em>recover</em> from its own errors, since the expert never made them.</p>
+<p>The promise of offline RL is to do better: by using the rewards, an RL algorithm should in principle be able to <strong>stitch together</strong> the good parts of several mediocre trajectories and produce a policy better than anything present in the dataset.</p>
+</section>
+<section id="the-distribution-shift-problem" class="level2">
+<h2 class="anchored" data-anchor-id="the-distribution-shift-problem">The distribution shift problem</h2>
+<p>So why not simply run DQN or SAC on the fixed dataset, since they are off-policy anyway? This is the natural idea, and it fails, often catastrophically. Understanding why is the key to this whole chapter.</p>
+<p>The problem comes from the maximum in the Bellman target:</p>
+<p><span class="math display">
+    y = r(s, a, s') + \gamma \, \max_{a'} Q_\theta(s', a')
+</span></p>
+<p>This target deliberately looks for the action with the <strong>highest</strong> estimated Q-value in the next state. But <span class="math inline">Q_\theta</span> is a neural network: for the state-action pairs present in the dataset, its predictions are constrained by the data, while for the pairs that are <strong>not</strong> in the dataset, its output is a pure extrapolation. And neural networks extrapolate badly and, as we have seen in <a href="2.4-DQNvariants.html#sec-doubleqlearning" class="quarto-xref"><span>Double DQN</span></a>, they extrapolate <strong>optimistically</strong>: the maximum over many noisy estimates is biased upwards.</p>
+<p>Online, this is not fatal. The overestimated action eventually gets selected, the agent tries it, obtains a disappointing reward, and the estimate is corrected. The max operator is self-correcting because the agent can check its own beliefs against reality.</p>
+<p>Offline, that correction never happens. The action is not in the dataset, so it is never tried, so the overestimation is never contradicted. Worse, bootstrapping <strong>propagates</strong> it: the inflated value of <span class="math inline">(s', a')</span> becomes part of the target for <span class="math inline">(s, a)</span>, which inflates its value, which contaminates its predecessors. The Q-values drift upwards, the policy becomes greedy towards actions that are attractive only because they were never observed, and the final policy can be far worse than plain behavioral cloning on the same data.</p>
+<p>This is called <strong>distribution shift</strong>: the learned policy <span class="math inline">\pi</span> produces state-action pairs that are outside the distribution of the dataset <span class="math inline">\mathcal{D}</span>, and everything the agent believes about those pairs is unverified. Note the irony: adding more data does not necessarily help, because the problem is not the amount of data but the fact that the policy asks questions the data cannot answer.</p>
+</section>
+<section id="conservative-methods" class="level2">
+<h2 class="anchored" data-anchor-id="conservative-methods">Conservative methods</h2>
+<p>The general remedy follows directly from the diagnosis: force the agent to stay <strong>close to the data</strong>, so that it only relies on values it has some evidence for. This is why most offline RL algorithms are called <strong>conservative</strong> or <strong>pessimistic</strong>. They differ mostly in where the conservatism is applied.</p>
+<ul>
+<li><p><strong>Constrain the policy.</strong> Batch-Constrained deep Q-learning <span class="citation" data-cites="Fujimoto2019">(BCQ, <a href="references.html#ref-Fujimoto2019" role="doc-biblioref">Fujimoto et al., 2019</a>)</span> restricts the maximum in the Bellman target to actions that are plausible under the dataset. A generative model is trained on the data to propose actions that the behavior policy could have taken, and the max is taken only over those. The agent can still choose among the actions it has evidence for, but cannot invent new ones.</p></li>
+<li><p><strong>Penalize the values.</strong> Conservative Q-Learning <span class="citation" data-cites="Kumar2020">(CQL, <a href="references.html#ref-Kumar2020" role="doc-biblioref">Kumar et al., 2020</a>)</span> leaves the policy free but modifies the loss of the critic, adding a term that pushes <strong>down</strong> the Q-values of actions not present in the data while keeping those of the observed actions accurate. The learned Q-function becomes a lower bound of the true one, so the policy can only be pleasantly surprised, never disappointed.</p></li>
+<li><p><strong>Be pessimistic about the model.</strong> MOReL <span class="citation" data-cites="Kidambi2021">(<a href="references.html#ref-Kidambi2021" role="doc-biblioref">Kidambi et al., 2021</a>)</span> takes the model-based route (<a href="4.4-WorldModels.html" class="quarto-xref"><span>World models, Dreamer</span></a>): a dynamics model is learned from the dataset, and the agent is trained inside it. The trick is to detect the regions where the model is unreliable, i.e.&nbsp;far from the data, and to make them strongly <strong>penalized</strong> in the learned MDP. The agent is then free to plan, but planning naturally avoids the parts of the state space where the model is guessing.</p></li>
+</ul>
+<div id="fig-morel" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-morel-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="img/morel.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="Figure&nbsp;26.4: MOReL constructs a pessimistic MDP in which leaving the region covered by the data is penalized. Source: https://kenshinhm.tistory.com/37"><img src="img/morel.png" class="img-fluid figure-img" style="width:75.0%"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-morel-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;26.4: MOReL constructs a pessimistic MDP in which leaving the region covered by the data is penalized. Source: <a href="https://kenshinhm.tistory.com/37" class="uri">https://kenshinhm.tistory.com/37</a>
+</figcaption>
+</figure>
+</div>
+<p>All three share the same philosophy: the agent should be allowed to improve upon the data, but not to build its policy on values that the data cannot support.</p>
+</section>
+<section id="sequence-models" class="level2">
+<h2 class="anchored" data-anchor-id="sequence-models">Sequence models</h2>
+<p>A rather different idea is to avoid the Bellman equation altogether. If the max operator is what causes the trouble, why keep it?</p>
+<p>The <strong>Decision Transformer</strong> <span class="citation" data-cites="Chen2021">(<a href="references.html#ref-Chen2021" role="doc-biblioref">Chen et al., 2021</a>)</span> treats offline RL as a <strong>sequence modelling</strong> problem. A trajectory is written as a sequence alternating returns, states and actions:</p>
+<p><span class="math display">
+    \tau = (\hat{R}_0, s_0, a_0, \hat{R}_1, s_1, a_1, \ldots)
+</span></p>
+<p>where <span class="math inline">\hat{R}_t</span> is the <strong>return-to-go</strong>, i.e.&nbsp;the sum of the rewards obtained from <span class="math inline">t</span> until the end of the trajectory. A transformer is then trained, exactly as a language model, to predict the next action given everything before it. There is no value function, no bootstrapping, no maximum: only supervised learning on sequences.</p>
+<div id="fig-decisiontransformer" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-decisiontransformer-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="img/decisiontranformer.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5" title="Figure&nbsp;26.5: The Decision Transformer predicts actions autoregressively from a sequence of returns-to-go, states and actions. Source: @Chen2021."><img src="img/decisiontranformer.png" class="img-fluid figure-img" style="width:85.0%"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-decisiontransformer-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;26.5: The Decision Transformer predicts actions autoregressively from a sequence of returns-to-go, states and actions. Source: <span class="citation" data-cites="Chen2021">Chen et al. (<a href="references.html#ref-Chen2021" role="doc-biblioref">2021</a>)</span>.
+</figcaption>
+</figure>
+</div>
+<p>The clever part is how the policy is used at test time. Since the model has learned the relation between the announced return and the actions that follow, we can simply <strong>ask</strong> for a high return: we feed the desired performance as the first token, and the model generates the actions that, in the training data, were associated with that level of performance. The policy is conditioned on the return instead of maximizing it.</p>
+<div id="fig-decisiontransformer-results" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-decisiontransformer-results-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="img/decisiontransformer-results.png" class="lightbox" data-gallery="quarto-lightbox-gallery-6" title="Figure&nbsp;26.6: Performance of the Decision Transformer on offline benchmarks. Source: @Chen2021."><img src="img/decisiontransformer-results.png" class="img-fluid figure-img" style="width:85.0%"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-decisiontransformer-results-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;26.6: Performance of the Decision Transformer on offline benchmarks. Source: <span class="citation" data-cites="Chen2021">Chen et al. (<a href="references.html#ref-Chen2021" role="doc-biblioref">2021</a>)</span>.
+</figcaption>
+</figure>
+</div>
+<p>Because there is no bootstrapping, there is no propagation of overestimated values, and the distribution shift problem largely disappears. The price is that the model can only recombine what it has seen, which makes it closer in spirit to a very sophisticated behavioral cloning than to dynamic programming. Transformers can also be used as world models for model-based RL <span class="citation" data-cites="Micheli2022">(<a href="references.html#ref-Micheli2022" role="doc-biblioref">Micheli et al., 2022</a>)</span>, which brings us back to <a href="4.4-WorldModels.html" class="quarto-xref"><span>World models, Dreamer</span></a>.</p>
+</section>
 <section id="diffusion-policies" class="level2">
 <h2 class="anchored" data-anchor-id="diffusion-policies">Diffusion policies</h2>
-<p><span class="citation" data-cites="Chi2023">Chi et al. (<a href="references.html#ref-Chi2023" role="doc-biblioref">2023</a>)</span> Diffusion Policy: Visuomotor Policy Learning via Action Diffusion <span class="citation" data-cites="Wang2024">Wang et al. (<a href="references.html#ref-Wang2024" role="doc-biblioref">2024</a>)</span> One-Step Diffusion Policy: Fast Visuomotor Policies via Diffusion Distillation</p>
+<p>The last approach borrows from generative AI. <strong>Diffusion models</strong> learn to generate data by starting from pure noise and iteratively denoising it, and they are currently the most effective way of modelling complex distributions such as images.</p>
+<p>They are a natural fit for offline RL, because the difficulty of cloning a behavior is precisely a problem of <strong>distribution modelling</strong>. Human demonstrations are strongly <strong>multimodal</strong>: faced with an obstacle, one demonstrator goes left, another goes right, and both are correct. A Gaussian policy trained on this data will average the two and drive straight into the obstacle, for exactly the reason discussed in <a href="3.8-EntropyRL.html" class="quarto-xref"><span>Maximum Entropy RL (SAC)</span></a>. A diffusion model has no such problem: it represents the two modes and samples one of them.</p>
+<p><strong>Diffusion Policy</strong> <span class="citation" data-cites="Chi2023">(<a href="references.html#ref-Chi2023" role="doc-biblioref">Chi et al., 2023</a>)</span> applies this idea to visuomotor control, generating not a single action but a short <strong>sequence</strong> of future actions, which makes the resulting behavior smoother and more consistent over time.</p>
+<div id="fig-diffusionpolicy" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-diffusionpolicy-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="img/diffusionpolicy.png" class="lightbox" data-gallery="quarto-lightbox-gallery-7" title="Figure&nbsp;26.7: Diffusion policies generate action sequences by iterative denoising, which allows them to represent multimodal behaviors. Source: @Chi2023."><img src="img/diffusionpolicy.png" class="img-fluid figure-img" style="width:85.0%"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-diffusionpolicy-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;26.7: Diffusion policies generate action sequences by iterative denoising, which allows them to represent multimodal behaviors. Source: <span class="citation" data-cites="Chi2023">Chi et al. (<a href="references.html#ref-Chi2023" role="doc-biblioref">2023</a>)</span>.
+</figcaption>
+</figure>
+</div>
+<p>Their main drawback is inference cost: generating an action requires several denoising steps, which is a problem for a robot that must act at high frequency. Recent work reduces this to a single step by <strong>distillation</strong> <span class="citation" data-cites="Wang2024">(<a href="references.html#ref-Wang2024" role="doc-biblioref">Wang et al., 2024</a>)</span>, making the approach practical for real-time control.</p>
+<div class="callout callout-style-default callout-tip no-icon callout-titled" title="Additional resources">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Additional resources
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Offline RL is a very active field and this chapter only sketches its main ideas. <span class="citation" data-cites="Levine2020">Levine et al. (<a href="references.html#ref-Levine2020" role="doc-biblioref">2020</a>)</span> is the reference tutorial and review: it covers the theory of distribution shift, the main algorithmic families, and the open problems, and it is the right place to continue.</p>
+</div>
+</div>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
+<div id="ref-Bojarski2016" class="csl-entry" role="listitem">
+Bojarski, M., Del Testa, D., Dworakowski, D., Firner, B., Flepp, B., Goyal, P., et al. (2016). End to <span>End Learning</span> for <span>Self-Driving Cars</span>. <em>arXiv:1604.07316 [cs]</em>. Available at: <a href="https://arxiv.org/abs/1604.07316">https://arxiv.org/abs/1604.07316</a> [Accessed September 17, 2020].
+</div>
+<div id="ref-Chen2021" class="csl-entry" role="listitem">
+Chen, L., Lu, K., Rajeswaran, A., Lee, K., Grover, A., Laskin, M., et al. (2021). Decision <span>Transformer</span>: <span>Reinforcement Learning</span> via <span>Sequence Modeling</span>. <em>arXiv:2106.01345 [cs]</em>. Available at: <a href="https://arxiv.org/abs/2106.01345">https://arxiv.org/abs/2106.01345</a> [Accessed December 2, 2021].
+</div>
 <div id="ref-Chi2023" class="csl-entry" role="listitem">
-Chi, C., Xu, Z., Feng, S., Cousineau, E., Du, Y., Burchfiel, B., et al. (2023). Diffusion <span>Policy</span>: <span>Visuomotor Policy Learning</span> via <span>Action Diffusion</span>. Available at: <a href="https://arxiv.org/abs/2303.04137v5">https://arxiv.org/abs/2303.04137v5</a> [Accessed October 9, 2024].
+Chi, C., Xu, Z., Feng, S., Cousineau, E., Du, Y., Burchfiel, B., et al. (2023). Diffusion <span>Policy</span>: <span>Visuomotor Policy Learning</span> via <span>Action Diffusion</span>. <em>arXiv.org</em>.
+</div>
+<div id="ref-Fujimoto2019" class="csl-entry" role="listitem">
+Fujimoto, S., Meger, D., and Precup, D. (2019). Off-<span>Policy Deep Reinforcement Learning</span> without <span>Exploration</span>. in <em>Proceedings of the 36th <span>International Conference</span> on <span>Machine Learning</span></em> (PMLR), 2052–2062.
+</div>
+<div id="ref-Kidambi2021" class="csl-entry" role="listitem">
+Kidambi, R., Rajeswaran, A., Netrapalli, P., and Joachims, T. (2021). <span>MOReL</span> : <span>Model-Based Offline Reinforcement Learning</span>. <em>arXiv:2005.05951 [cs, stat]</em>. Available at: <a href="https://arxiv.org/abs/2005.05951">https://arxiv.org/abs/2005.05951</a> [Accessed October 5, 2021].
+</div>
+<div id="ref-Kumar2020" class="csl-entry" role="listitem">
+Kumar, A., Zhou, A., Tucker, G., and Levine, S. (2020). Conservative <span>Q-Learning</span> for <span>Offline Reinforcement Learning</span>. <em>arXiv:2006.04779 [cs, stat]</em>. Available at: <a href="https://arxiv.org/abs/2006.04779">https://arxiv.org/abs/2006.04779</a> [Accessed June 13, 2020].
+</div>
+<div id="ref-Levine2020" class="csl-entry" role="listitem">
+Levine, S., Kumar, A., Tucker, G., and Fu, J. (2020). Offline <span>Reinforcement Learning</span>: <span>Tutorial</span>, <span>Review</span>, and <span>Perspectives</span> on <span>Open Problems</span>. <em>arXiv:2005.01643 [cs, stat]</em>. Available at: <a href="https://arxiv.org/abs/2005.01643">https://arxiv.org/abs/2005.01643</a> [Accessed May 10, 2020].
+</div>
+<div id="ref-Micheli2022" class="csl-entry" role="listitem">
+Micheli, V., Alonso, E., and Fleuret, F. (2022). Transformers are <span>Sample Efficient World Models</span>. doi:<a href="https://doi.org/10.48550/arXiv.2209.00588">10.48550/arXiv.2209.00588</a>.
 </div>
 <div id="ref-Wang2024" class="csl-entry" role="listitem">
 Wang, Z., Li, Z., Mandlekar, A., Xu, Z., Fan, J., Narang, Y., et al. (2024). One-<span>Step Diffusion Policy</span>: <span>Fast Visuomotor Policies</span> via <span>Diffusion Distillation</span>. doi:<a href="https://doi.org/10.48550/arXiv.2410.21257">10.48550/arXiv.2410.21257</a>.
@@ -457,13 +667,14 @@ Wang, Z., Li, Z., Mandlekar, A., Xu, Z., Fan, J., Narang, Y., et al. (2024). One
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy
@@ -805,15 +1016,15 @@ Wang, Z., Li, Z., Mandlekar, A., Xu, Z., Fan, J., Narang, Y., et al. (2024). One
     }
   });
   </script>
-<nav class="page-navigation">
+<nav class="page-navigation column-body">
   <div class="nav-page nav-page-previous">
       <a href="../src/5.2-Inverse.html" class="pagination-link" aria-label="Inverse Reinforcement Learning">
         <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">Inverse Reinforcement Learning</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../src/5.4-Meta.html" class="pagination-link" aria-label="Meta learning">
-        <span class="nav-page-text"><span class="chapter-title">Meta learning</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../src/5.4-Meta.html" class="pagination-link" aria-label="Meta reinforcement learning">
+        <span class="nav-page-text"><span class="chapter-title">Meta reinforcement learning</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
@@ -831,6 +1042,38 @@ Wang, Z., Li, Z., Mandlekar, A., Xu, Z., Fan, J., Narang, Y., et al. (2024). One
     </div>
   </div>
 </footer>
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
 
 
 

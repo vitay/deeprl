@@ -2,17 +2,23 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.29">
+<meta name="generator" content="quarto-1.10.18">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>Monte Carlo methods – Deep Reinforcement Learning</title>
 <style>
-code{white-space: pre-wrap;}
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -38,10 +44,10 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-bcbce66894bfa8e7e94e40e0186b9bb8.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-bb62276ab45c84d9efd712f51ff97b5a.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-ea27fabe3da5290357830f0bd5288bdb.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-3998d32367fd34ee6440c4fab252e735.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script src="../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
 <link href="../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
 <link href="../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
@@ -102,7 +108,7 @@ const typesetMath = (el) => {
     var macros = [];
     for (var i = 0; i < mathElements.length; i++) {
       var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
         window.katex.render(texText.data, mathElements[i], {
           displayMode: mathElements[i].classList.contains('display'),
           throwOnError: false,
@@ -120,7 +126,7 @@ window.Quarto = {
 
 </head>
 
-<body class="nav-sidebar floating quarto-light">
+<body class="nav-sidebar docked quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -139,9 +145,9 @@ window.Quarto = {
   </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="../">Deep Reinforcement Learning</a> 
@@ -233,11 +239,6 @@ window.Quarto = {
   <a href="../src/2.5-DistributedLearning.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Distributed learning</span></a>
   </div>
 </li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../src/2.6-Misc.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Misc.</span></a>
-  </div>
-</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -256,8 +257,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/3.2-ActorCritic.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Advantage Actor-Critic (A3C)</span></a>
+  <a href="../src/3.2-ActorCritic.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Advantage Actor-Critic (A3C)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -288,11 +288,6 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../src/3.8-EntropyRL.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Maximum Entropy RL (SAC)</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../src/3.9-Misc.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Misc.</span></a>
   </div>
 </li>
       </ul>
@@ -331,11 +326,6 @@ window.Quarto = {
   <a href="../src/4.5-AlphaGo.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">AlphaGo</span></a>
   </div>
 </li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../src/4.6-Misc.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Misc.</span></a>
-  </div>
-</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -364,7 +354,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/5.4-Meta.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Meta learning</span></a>
+  <a href="../src/5.4-Meta.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Meta reinforcement learning</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -391,6 +381,7 @@ window.Quarto = {
    
   <ul>
   <li><a href="#monte-carlo-policy-evaluation" id="toc-monte-carlo-policy-evaluation" class="nav-link active" data-scroll-target="#monte-carlo-policy-evaluation">Monte Carlo policy evaluation</a></li>
+  <li><a href="#monte-carlo-control" id="toc-monte-carlo-control" class="nav-link" data-scroll-target="#monte-carlo-control">Monte Carlo control</a></li>
   <li><a href="#on-policy-monte-carlo-methods" id="toc-on-policy-monte-carlo-methods" class="nav-link" data-scroll-target="#on-policy-monte-carlo-methods">On-policy Monte Carlo methods</a></li>
   <li><a href="#off-policy-monte-carlo-methods" id="toc-off-policy-monte-carlo-methods" class="nav-link" data-scroll-target="#off-policy-monte-carlo-methods">Off-policy Monte Carlo methods</a>
   <ul class="collapse">
@@ -398,11 +389,12 @@ window.Quarto = {
   <li><a href="#off-policy-monte-carlo-control" id="toc-off-policy-monte-carlo-control" class="nav-link" data-scroll-target="#off-policy-monte-carlo-control">Off-policy Monte Carlo control</a></li>
   <li><a href="#advantages-of-off-policy-methods" id="toc-advantages-of-off-policy-methods" class="nav-link" data-scroll-target="#advantages-of-off-policy-methods">Advantages of off-policy methods</a></li>
   </ul></li>
+  <li><a href="#properties-of-monte-carlo-methods" id="toc-properties-of-monte-carlo-methods" class="nav-link" data-scroll-target="#properties-of-monte-carlo-methods">Properties of Monte Carlo methods</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
+<main class="content column-body" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
@@ -411,7 +403,7 @@ window.Quarto = {
 
 
 
-<div class="quarto-title-meta">
+<div class="quarto-title-meta column-body">
 
     
   
@@ -437,7 +429,7 @@ window.Quarto = {
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Monte Carlo policy evaluation
+<span class="screen-reader-only">Note</span>Monte Carlo policy evaluation
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -462,6 +454,71 @@ Monte Carlo policy evaluation
 <p><span class="math display">
     Q(s_t, a_t) \leftarrow Q(s_t, a_t) + \alpha (R_t - Q(s_t, a_t))
 </span></p>
+</section>
+<section id="monte-carlo-control" class="level2">
+<h2 class="anchored" data-anchor-id="monte-carlo-control">Monte Carlo control</h2>
+<p>Evaluating a policy is only half of the job: what we want is to <strong>improve</strong> it. As seen with dynamic programming (<a href="1.2-MDP.html#sec-dp" class="quarto-xref"><span>Dynamic programming</span></a>), RL algorithms alternate between two steps, a principle called <strong>generalized policy iteration</strong>:</p>
+<ol type="1">
+<li><strong>Policy evaluation</strong>: for the current policy <span class="math inline">\pi</span>, estimate <span class="math inline">V^\pi(s)</span> or <span class="math inline">Q^\pi(s, a)</span>. This is what the previous section did, by sampling episodes instead of solving the Bellman equations.</li>
+<li><strong>Policy improvement</strong>: from the current estimates, derive a new and <strong>better</strong> policy <span class="math inline">\pi</span>.</li>
+</ol>
+<p>After each episode, the values of the visited state-action pairs have changed, so the policy that was optimal w.r.t the old values might not be optimal anymore. As in dynamic programming, the policy can be improved <strong>greedily</strong>, by selecting in each state the action with the highest estimated value:</p>
+<p><span class="math display">
+    \pi'(s) = \text{argmax}_a \, Q(s, a)
+</span></p>
+<p>This is the moment where estimating <strong>Q-values</strong> rather than V-values pays off. With Q-values, improving the policy is immediate: one just looks at which action has the highest value. With V-values, one would have to look one step ahead to know where each action leads:</p>
+<p><span class="math display">
+    \pi'(s) = \text{argmax}_a \, \sum_{s' \in \mathcal{S}} p(s' | s, a) \, [r(s, a, s') + \gamma \, V(s')]
+</span></p>
+<p>which requires the dynamics <span class="math inline">p(s' | s, a)</span> and <span class="math inline">r(s, a, s')</span> of the MDP, i.e.&nbsp;exactly the model that we do not have. Estimating Q-values instead of V-values is what makes Monte Carlo methods <strong>model-free</strong>.</p>
+<div id="fig-mccontrol" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-mccontrol-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="img/mc-control.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;4.1: Monte Carlo control alternates between policy evaluation by sampling and greedy policy improvement. See also Figure&nbsp;fig-gpi."><img src="img/mc-control.png" class="img-fluid figure-img" style="width:40.0%"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-mccontrol-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4.1: Monte Carlo control alternates between policy evaluation by sampling and greedy policy improvement. See also <a href="1.2-MDP.html#fig-gpi" class="quarto-xref">Figure&nbsp;<span>3.7</span></a>.
+</figcaption>
+</figure>
+</div>
+<p>Putting the two steps together gives the <strong>Monte Carlo control</strong> algorithm:</p>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Monte Carlo control
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>while</strong> True:</p>
+<ol type="1">
+<li><p>Select an initial state <span class="math inline">s_0</span>.</p></li>
+<li><p>Generate a sequence of transitions according to the current policy <span class="math inline">\pi</span> until a terminal state <span class="math inline">s_T</span> is reached.</p></li>
+</ol>
+<p><span class="math display">
+    \tau = (s_0, a_0, r_1, s_1, a_1, \ldots, s_T)
+</span></p>
+<ol start="3" type="1">
+<li><p>Compute the return <span class="math inline">R_t = \sum_{k=0}^{\infty} \gamma^k \, r_{t+k+1}</span> of all encountered state-action pairs.</p></li>
+<li><p>Update the estimated action value <span class="math inline">Q(s_t, a_t)</span> of all encountered state-action pairs:</p></li>
+</ol>
+<p><span class="math display">
+    Q(s_t, a_t) \leftarrow Q(s_t, a_t) + \alpha \, (R_t - Q(s_t, a_t))
+</span></p>
+<ol start="5" type="1">
+<li>For each state <span class="math inline">s_t</span> in the episode, <strong>improve</strong> the policy greedily:</li>
+</ol>
+<p><span class="math display">
+    \pi(s_t, a) = \begin{cases}
+                    1\; \text{if} \; a = \text{argmax}_a \, Q(s_t, a) \\
+                    0 \; \text{otherwise.} \\
+                  \end{cases}
+</span></p>
+</div>
+</div>
+<p>This algorithm is correct, but as written it does not work. The reason is in step 5: the policy is <strong>deterministic</strong>, so in step 2 the agent will always take the same actions, always generate the same episode, and never find out whether the actions it never takes are better. The rest of this chapter is about fixing this.</p>
 <p>The two main drawbacks of MC methods are:</p>
 <ol type="1">
 <li>The task must be episodic, i.e.&nbsp;stop after a finite amount of transitions. Updates are only applied at the end of an episode.</li>
@@ -493,7 +550,7 @@ Monte Carlo policy evaluation
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-On-policy Monte Carlo control
+<span class="screen-reader-only">Note</span>On-policy Monte Carlo control
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -503,7 +560,7 @@ On-policy Monte Carlo control
 <li><p>For each state-action pair <span class="math inline">(s_t, a_t)</span> in the episode, update the estimated Q-value:</p></li>
 </ol>
 <p><span class="math display">
-    Q(s_t, a_t) = Q(s_t, a_t) + \alpha \, (R_t - Q(s_t, a_t))
+    Q(s_t, a_t) \leftarrow Q(s_t, a_t) + \alpha \, (R_t - Q(s_t, a_t))
 </span></p>
 <ol start="3" type="1">
 <li>For each state <span class="math inline">s_t</span> in the episode, improve the policy (e.g.&nbsp;<span class="math inline">\epsilon</span>-greedy):</li>
@@ -523,15 +580,45 @@ On-policy Monte Carlo control
 <p><span class="math display"> \pi(s,a) &gt; 0 \Rightarrow b(s,a) &gt; 0</span></p>
 <p>There are mostly two choices regarding the behavior policy:</p>
 <ol type="1">
-<li>An <span class="math inline">\epsilon</span>-soft behavior policy over the <strong>Q-values</strong> as in on-policy MC is often enough, while a deterministic (greedy) policy can be learned implictly.</li>
+<li>An <span class="math inline">\epsilon</span>-soft behavior policy over the <strong>Q-values</strong> as in on-policy MC is often enough, while a deterministic (greedy) policy can be learned implicitly.</li>
 <li>The behavior policy could also come from <strong>expert knowledge</strong>, i.e.&nbsp;known episodes from the MDP generated by somebody else (human demonstrator, classical algorithm).</li>
 </ol>
+<p>A famous application of this second option is the control of the cooling system of Google’s datacenters, which reduced their energy consumption by 40%. The RL algorithm did not control anything at first: it learned <strong>passively</strong> from the decisions taken by the existing controllers and the human operators, i.e.&nbsp;from a behavior policy, what the optimal policy should be.</p>
+<div class="quarto-layout-panel" data-layout-ncol="2">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div id="fig-datacenter-pipes" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-datacenter-pipes-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="img/googledatacenterpipes.0.jpg" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Figure&nbsp;4.2: The cooling installation of a Google datacenter."><img src="img/googledatacenterpipes.0.jpg" class="img-fluid figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-datacenter-pipes-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4.2: The cooling installation of a Google datacenter.
+</figcaption>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div id="fig-datacenter-results" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-datacenter-results-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="img/googledatacenter_1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Figure&nbsp;4.3: The resulting reduction in energy used for cooling. Source: https://deepmind.com/blog/deepmind-ai-reduces-google-data-centre-cooling-bill-40/"><img src="img/googledatacenter_1.png" class="img-fluid figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-datacenter-results-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4.3: The resulting reduction in energy used for cooling. Source: <a href="https://deepmind.com/blog/deepmind-ai-reduces-google-data-centre-cooling-bill-40/" class="uri">https://deepmind.com/blog/deepmind-ai-reduces-google-data-centre-cooling-bill-40/</a>
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<p>Learning from data collected by somebody else, without interacting with the environment, is called <strong>learning from demonstrations</strong> or <strong>offline RL</strong>, a topic to which we will come back in <a href="5.3-OfflineRL.html" class="quarto-xref"><span>Offline RL</span></a>. It is often the only realistic option: one does not experiment randomly with the cooling of a datacenter to see what happens.</p>
 <p>But are we mathematically allowed to do this? We search for the optimal policy that maximizes in expectation the return of each <strong>trajectory</strong> (episode) possible under the learned policy <span class="math inline">\pi</span>:</p>
 <p><span class="math display">\mathcal{J}(\pi) = \mathbb{E}_{\tau \sim \rho_\pi} [R(\tau)]</span></p>
 <p><span class="math inline">\rho_\pi</span> denotes the probability distribution of trajectories achievable using the policy <span class="math inline">\pi</span>. If we generate the trajectories from the behavior policy <span class="math inline">b(s, a)</span>, we end up maximizing something else:</p>
 <p><span class="math display">\mathcal{J}'(\pi) = \mathbb{E}_{\tau \sim \rho_b} [R(\tau)]</span></p>
 <p>The policy that maximizes <span class="math inline">\mathcal{J}'(\pi)</span> is <strong>not</strong> the optimal policy of the MDP.</p>
-<p><a href="img/importancesampling.svg" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img src="img/importancesampling.svg" class="img-fluid"></a></p>
+<p><a href="img/importancesampling.svg" class="lightbox" data-gallery="quarto-lightbox-gallery-4"><img src="img/importancesampling.svg" class="img-fluid"></a></p>
 <p>If you try to estimate a parameter of a random distribution <span class="math inline">\pi</span> using samples of another distribution <span class="math inline">b</span>, the sample average will have a strong <strong>bias</strong>. We need to <strong>correct</strong> the samples from <span class="math inline">b</span> in order to be able to estimate the parameters of <span class="math inline">\pi</span> correctly, through <strong>importance sampling</strong> (IS).</p>
 <section id="sec-importancesampling" class="level3">
 <h3 class="anchored" data-anchor-id="sec-importancesampling">Importance sampling</h3>
@@ -542,7 +629,7 @@ On-policy Monte Carlo control
 <p>The expectation is the integral over all possible trajectories of their return <span class="math inline">R(\tau</span>), weighted by the likelihood <span class="math inline">\rho_\pi(\tau)</span> that a trajectory <span class="math inline">\tau</span> is generated by the policy <span class="math inline">\pi</span>.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><a href="img/importancesampling2.svg" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Only certain trajectories are likely under a given policy."><img src="img/importancesampling2.svg" class="img-fluid figure-img" style="width:60.0%" alt="Only certain trajectories are likely under a given policy."></a></p>
+<p><a href="img/importancesampling2.svg" class="lightbox" data-gallery="quarto-lightbox-gallery-5" title="Only certain trajectories are likely under a given policy."><img src="img/importancesampling2.svg" class="img-fluid figure-img" style="width:60.0%" alt="Only certain trajectories are likely under a given policy."></a></p>
 <figcaption>Only certain trajectories are likely under a given policy.</figcaption>
 </figure>
 </div>
@@ -554,7 +641,7 @@ On-policy Monte Carlo control
 <p><span class="math display">\mathcal{J}(\pi) = \mathbb{E}_{\tau \sim \rho_b} [\frac{\rho_\pi(\tau)}{\rho_b(\tau)} \, R(\tau)]</span></p>
 <p>This means that we can sample trajectories from <span class="math inline">b</span>, but we need to <strong>correct</strong> the observed return by the <strong>importance sampling weight</strong> <span class="math inline">\dfrac{\rho_\pi(\tau)}{\rho_b(\tau)}</span>.</p>
 <p>The importance sampling weight corrects the mismatch between <span class="math inline">\pi</span> and <span class="math inline">b</span>.</p>
-<p><a href="img/importancesampling3.svg" class="lightbox" data-gallery="quarto-lightbox-gallery-3"><img src="img/importancesampling3.svg" class="img-fluid"></a></p>
+<p><a href="img/importancesampling3.svg" class="lightbox" data-gallery="quarto-lightbox-gallery-6"><img src="img/importancesampling3.svg" class="img-fluid"></a></p>
 <p>If the two distributions are the same (on-policy), the IS weight is 1, no need to correct the return.</p>
 <ul>
 <li>If a sample is likely under <span class="math inline">b</span> but not under <span class="math inline">\pi</span>, we should not care about its return: <span class="math inline">\dfrac{\rho_\pi(\tau)}{\rho_b(\tau)} &lt;&lt; 1</span></li>
@@ -566,7 +653,7 @@ On-policy Monte Carlo control
 <li>the probability of choosing an action <span class="math inline">a_t</span> in state <span class="math inline">s_t</span>: the <strong>policy</strong> <span class="math inline">\pi(s, a)</span>.</li>
 <li>the probability of arriving in the state <span class="math inline">s_{t+1}</span> from the state <span class="math inline">s_t</span> with the action <span class="math inline">a_t</span>: the <strong>transition probability</strong> <span class="math inline">p(s_{t+1} | s_t, a_t)</span>.</li>
 </ul>
-<p><a href="img/rl-sequence.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4"><img src="img/rl-sequence.png" class="img-fluid"></a></p>
+<p><a href="img/rl-sequence.png" class="lightbox" data-gallery="quarto-lightbox-gallery-7"><img src="img/rl-sequence.png" class="img-fluid"></a></p>
 <p>The <strong>likelihood</strong> of a trajectory <span class="math inline">\tau = (s_0, a_0, s_1, a_1, \ldots, s_T)</span> under a policy <span class="math inline">\pi</span> depends on the policy and the transition probabilities (Markov property):</p>
 <p><span class="math display">
     \rho_\pi(\tau) = p_\pi(s_0, a_0, s_1, a_1, \ldots, s_T) = p(s_0) \, \prod_{t=0}^{T-1} \pi_\theta(s_t, a_t) \, p(s_{t+1} | s_t, a_t)
@@ -585,11 +672,11 @@ On-policy Monte Carlo control
 <p><span class="math display">V^\pi(s_t) = \mathbb{E}_{\tau \sim \rho_b} [\rho_{t:T-1} \, R_t]</span></p>
 <p>This gives us the updates:</p>
 <p><span class="math display">
-    V(s_t) = V(s_t) + \alpha  \, \rho_{t:T-1} \, (R_t - V(s_t))
+    V(s_t) \leftarrow V(s_t) + \alpha  \, \rho_{t:T-1} \, (R_t - V(s_t))
 </span></p>
 <p>and:</p>
 <p><span class="math display">
-    Q(s_t, a_t) = Q(s_t, a_t) + \alpha  \, \rho_{t:T-1} \, (R_t - Q(s_t, a_t))
+    Q(s_t, a_t) \leftarrow Q(s_t, a_t) + \alpha  \, \rho_{t:T-1} \, (R_t - Q(s_t, a_t))
 </span></p>
 <p>Unlikely episodes under <span class="math inline">\pi</span> are barely used for learning, likely ones are used a lot.</p>
 <div class="callout callout-style-default callout-note no-icon callout-titled">
@@ -598,7 +685,7 @@ On-policy Monte Carlo control
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Off-policy Monte Carlo control
+<span class="screen-reader-only">Note</span>Off-policy Monte Carlo control
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -609,7 +696,7 @@ Off-policy Monte Carlo control
 </ol>
 <p><span class="math display">\rho_{t:T-1} = \prod_{k=t}^{T-1} \frac{\pi(s_k, a_k)}{b(s_k, a_k)}</span></p>
 <p><span class="math display">
-    Q(s_t, a_t) = Q(s_t, a_t) + \alpha  \, \rho_{t:T-1} \, (R_t - Q(s_t, a_t))
+    Q(s_t, a_t) \leftarrow Q(s_t, a_t) + \alpha  \, \rho_{t:T-1} \, (R_t - Q(s_t, a_t))
 </span></p>
 <ol start="3" type="1">
 <li>For each state <span class="math inline">s_t</span> in the episode, update the <strong>learned</strong> deterministic policy (greedy):</li>
@@ -635,9 +722,21 @@ Off-policy Monte Carlo control
 <h3 class="anchored" data-anchor-id="advantages-of-off-policy-methods">Advantages of off-policy methods</h3>
 <p>The main advantage of <strong>off-policy</strong> strategies is that you can learn from other’s actions, you don’t have to rely on your initially wrong policies to discover the solution by chance. Example: learning to play chess by studying thousands/millions of plays by chess masters. In a given state, only a subset of the possible actions are actually executed by experts: the others may be too obviously wrong. The exploration is then guided by this expert knowledge, not randomly among all possible actions.</p>
 <p>Off-policy methods greatly reduce the number of transitions needed to learn a policy: very stupid actions are not even considered, but the estimation policy learns an optimal strategy from the “classical” moves. Drawback: if a good move is not explored by the behavior policy, the learned policy will never try it.</p>
-
-
 </section>
+</section>
+<section id="properties-of-monte-carlo-methods" class="level2">
+<h2 class="anchored" data-anchor-id="properties-of-monte-carlo-methods">Properties of Monte Carlo methods</h2>
+<p>To summarize what has been seen in this chapter:</p>
+<ul>
+<li><p>Monte Carlo methods estimate value functions by <strong>sampling</strong> complete episodes and averaging the returns obtained.</p></li>
+<li><p>They are <strong>model-free</strong>: by estimating Q-values rather than V-values, one can improve the policy without ever knowing <span class="math inline">p(s' | s, a)</span> and <span class="math inline">r(s, a, s')</span>. The agent only needs to interact, i.e.&nbsp;trial and error.</p></li>
+<li><p>They only apply to <strong>episodic tasks</strong>. Since learning happens at the end of an episode, a continuing task, which never terminates, can simply not be learned. This is a severe restriction, and the main motivation for the temporal difference methods of the next chapter.</p></li>
+<li><p>They must solve the <strong>exploration-exploitation</strong> dilemma, in one of two ways: on-policy MC learns a stochastic policy (<span class="math inline">\epsilon</span>-greedy, softmax) which explores by itself, while off-policy MC learns a greedy policy but explores through a separate behavior policy, at the price of importance sampling.</p></li>
+<li><p>Finally, and this is the property that will matter most in the rest of the book, MC estimates have a <strong>small bias</strong> but a <strong>huge variance</strong> (<a href="1.1-Bandits.html" class="quarto-xref"><span>Sampling and Bandits</span></a>). The bias is small because the returns <span class="math inline">R_t</span> are real, actually obtained returns: with enough episodes, the estimates converge to the true values, whatever the initial estimates were. The variance is huge because a single different action, or a single unlucky transition, can change the whole episode and therefore its return. This is why MC methods need so many samples to converge, i.e.&nbsp;why they have a bad <strong>sample complexity</strong>.</p></li>
+</ul>
+<p>This last point is the fundamental trade-off of RL, and it explains the structure of everything that follows. Temporal difference methods (<a href="1.5-TD.html" class="quarto-xref"><span>Temporal Difference learning</span></a>) will accept a bias in order to reduce the variance, by replacing the real return by an estimate.</p>
+
+
 </section>
 
 </main> <!-- /main -->
@@ -692,13 +791,14 @@ Off-policy Monte Carlo control
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy
@@ -1040,7 +1140,7 @@ Off-policy Monte Carlo control
     }
   });
   </script>
-<nav class="page-navigation">
+<nav class="page-navigation column-body">
   <div class="nav-page nav-page-previous">
       <a href="../src/1.2-MDP.html" class="pagination-link" aria-label="Markov Decision Process">
         <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">Markov Decision Process</span></span>

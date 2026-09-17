@@ -2,17 +2,23 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.29">
+<meta name="generator" content="quarto-1.10.18">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Meta learning – Deep Reinforcement Learning</title>
+<title>Meta reinforcement learning – Deep Reinforcement Learning</title>
 <style>
-code{white-space: pre-wrap;}
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -20,7 +26,26 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -38,10 +63,13 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-bcbce66894bfa8e7e94e40e0186b9bb8.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-bb62276ab45c84d9efd712f51ff97b5a.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-ea27fabe3da5290357830f0bd5288bdb.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-3998d32367fd34ee6440c4fab252e735.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -71,10 +99,53 @@ ul.task-list li input[type="checkbox"] {
 }</script>
 <style>html{ scroll-behavior: smooth; }</style>
 
+  <script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+ var mathElements = document.getElementsByClassName("math");
+ var macros = [];
+ for (var i = 0; i < mathElements.length; i++) {
+  var texText = mathElements[i].firstChild;
+  if (mathElements[i].tagName == "SPAN") {
+   katex.render(texText.data, mathElements[i], {
+    displayMode: mathElements[i].classList.contains('display'),
+    throwOnError: false,
+    macros: macros,
+    fleqn: false
+   });
+}}});
+  </script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css">
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
-<body class="nav-sidebar floating quarto-light">
+<body class="nav-sidebar docked quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -84,7 +155,7 @@ ul.task-list li input[type="checkbox"] {
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
         <a class="flex-grow-1 no-decor" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-          <h1 class="quarto-secondary-nav-title"><span class="chapter-title">Meta learning</span></h1>
+          <h1 class="quarto-secondary-nav-title"><span id="sec-metarl" class="quarto-section-identifier"><span class="chapter-title">Meta reinforcement learning</span></span></h1>
         </a>     
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
         <i class="bi bi-search"></i>
@@ -93,9 +164,9 @@ ul.task-list li input[type="checkbox"] {
   </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="../">Deep Reinforcement Learning</a> 
@@ -187,11 +258,6 @@ ul.task-list li input[type="checkbox"] {
   <a href="../src/2.5-DistributedLearning.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Distributed learning</span></a>
   </div>
 </li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../src/2.6-Misc.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Misc.</span></a>
-  </div>
-</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -210,8 +276,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/3.2-ActorCritic.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Advantage Actor-Critic (A3C)</span></a>
+  <a href="../src/3.2-ActorCritic.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Advantage Actor-Critic (A3C)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -242,11 +307,6 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../src/3.8-EntropyRL.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Maximum Entropy RL (SAC)</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../src/3.9-Misc.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Misc.</span></a>
   </div>
 </li>
       </ul>
@@ -285,11 +345,6 @@ ul.task-list li input[type="checkbox"] {
   <a href="../src/4.5-AlphaGo.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">AlphaGo</span></a>
   </div>
 </li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../src/4.6-Misc.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Misc.</span></a>
-  </div>
-</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -318,7 +373,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/5.4-Meta.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">Meta learning</span></a>
+  <a href="../src/5.4-Meta.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">Meta reinforcement learning</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -339,20 +394,30 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#learning-to-learn" id="toc-learning-to-learn" class="nav-link active" data-scroll-target="#learning-to-learn">Learning to learn</a></li>
+  <li><a href="#fast-and-slow-learning" id="toc-fast-and-slow-learning" class="nav-link" data-scroll-target="#fast-and-slow-learning">Fast and slow learning</a></li>
+  <li><a href="#rl2-putting-the-learning-algorithm-inside-the-network" id="toc-rl2-putting-the-learning-algorithm-inside-the-network" class="nav-link" data-scroll-target="#rl2-putting-the-learning-algorithm-inside-the-network">RL<span class="math inline">^2</span>: putting the learning algorithm inside the network</a></li>
+  <li><a href="#learning-how-to-solve-bandits" id="toc-learning-how-to-solve-bandits" class="nav-link" data-scroll-target="#learning-how-to-solve-bandits">Learning how to solve bandits</a></li>
+  <li><a href="#other-approaches" id="toc-other-approaches" class="nav-link" data-scroll-target="#other-approaches">Other approaches</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
+<main class="content column-body" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title d-none d-lg-block"><span class="chapter-title">Meta learning</span></h1>
+<h1 class="title d-none d-lg-block"><span id="sec-metarl" class="quarto-section-identifier"><span class="chapter-title">Meta reinforcement learning</span></span></h1>
 </div>
 
 
 
-<div class="quarto-title-meta">
+<div class="quarto-title-meta column-body">
 
     
   
@@ -364,9 +429,163 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p><strong>work in progress</strong></p>
+<p>A deep RL agent trained on Breakout plays Breakout. Retrain it on Pong and it will play Pong, but it will have forgotten Breakout, and it will have needed another 50 million frames to get there, although the two games have a lot in common: there is a ball, it bounces, you move a paddle, you should not let the ball pass. Every agent in this book is a <strong>specialist</strong>: it is trained from scratch on one MDP, and starts from zero every time.</p>
+<p>Humans do not work like that. Somebody who has played a dozen Atari games needs a couple of minutes to become decent at the thirteenth one, not 50 million frames. Not because they are particularly good at that specific game, but because they have learned something about <strong>how</strong> Atari games work in general. <strong>Meta reinforcement learning</strong> tries to give that ability to an agent: the goal is not to learn a task, but to learn how to learn tasks.</p>
+<section id="learning-to-learn" class="level2">
+<h2 class="anchored" data-anchor-id="learning-to-learn">Learning to learn</h2>
+<p>The setup changes slightly. Instead of a single MDP, we are given a <strong>distribution of tasks</strong> <span class="math inline">p(\mathcal{M})</span>: the same robot arm but a different object to manipulate, the same maze but a different position of the goal, the same bandit but different reward probabilities. The tasks share their state and action spaces, and usually most of their dynamics; what changes is the detail that makes each of them a different problem.</p>
+<p>Training consists in sampling tasks from that distribution and learning on them. Testing consists in sampling <strong>new</strong> tasks from the same distribution, and what we measure is not only the final performance, but mostly <strong>how fast</strong> it is reached.</p>
+<div id="fig-metalearning" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-metalearning-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="img/metalearning.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;27.1: Multi-task RL learns a set of tasks and then performs them. Meta RL uses a set of tasks to learn how to learn, so that a new task can be acquired quickly. Source: @Yu2019."><img src="img/metalearning.png" class="img-fluid figure-img" style="width:90.0%"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-metalearning-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;27.1: Multi-task RL learns a set of tasks and then performs them. Meta RL uses a set of tasks to learn how to learn, so that a new task can be acquired quickly. Source: <span class="citation" data-cites="Yu2019">Yu et al. (<a href="references.html#ref-Yu2019" role="doc-biblioref">2019</a>)</span>.
+</figcaption>
+</figure>
+</div>
+<p><a href="#fig-metalearning" class="quarto-xref">Figure&nbsp;<span>27.1</span></a> makes the difference with <strong>multi-task learning</strong> explicit, as the two are easy to confuse. A multi-task agent is trained on <span class="math inline">N</span> tasks and is expected to solve those <span class="math inline">N</span> tasks, typically by conditioning its policy on a task identifier. A meta-RL agent is trained on <span class="math inline">N</span> tasks and is expected to solve the <span class="math inline">N+1</span>-th one, which it has never seen. Multi-task learning asks for competence, meta learning asks for <strong>generalization</strong>.</p>
+<p>Benchmarks had to be created for this, since the classical ones offer a single task. Meta-World <span class="citation" data-cites="Yu2019">(<a href="references.html#ref-Yu2019" role="doc-biblioref">Yu et al., 2019</a>)</span> provides a collection of robotic manipulation tasks (opening a drawer, pressing a button, hammering a nail) sharing the same simulated arm and the same action space, split between tasks used for training and tasks kept for testing.</p>
+<div id="fig-metaworld" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-metaworld-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="img/ml10.gif" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Figure&nbsp;27.2: The Meta-World benchmark: many manipulation tasks with the same robot, some used for training, others kept to evaluate generalization. Source: https://meta-world.github.io/"><img src="img/ml10.gif" class="img-fluid figure-img" style="width:80.0%"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-metaworld-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;27.2: The Meta-World benchmark: many manipulation tasks with the same robot, some used for training, others kept to evaluate generalization. Source: <a href="https://meta-world.github.io/" class="uri">https://meta-world.github.io/</a>
+</figcaption>
+</figure>
+</div>
+</section>
+<section id="fast-and-slow-learning" class="level2">
+<h2 class="anchored" data-anchor-id="fast-and-slow-learning">Fast and slow learning</h2>
+<p>The central idea of meta RL is that learning happens at <strong>two timescales</strong> <span class="citation" data-cites="Botvinick2019">(<a href="references.html#ref-Botvinick2019" role="doc-biblioref">Botvinick et al., 2019</a>)</span>:</p>
+<ul>
+<li><p><strong>Slow learning</strong> is the adaptation of the weights of the neural network by gradient descent. It is slow by construction: learning rates are small, and the gradient is averaged over the whole task distribution. This is where knowledge about the <em>family</em> of tasks accumulates.</p></li>
+<li><p><strong>Fast learning</strong> is the adaptation to the task at hand. It has to happen within a handful of episodes, so it cannot be gradient descent on millions of weights.</p></li>
+</ul>
+<p>Deep RL as seen so far only has the slow loop, which is exactly why it is so sample-inefficient. The question is where to put the fast one.</p>
+</section>
+<section id="rl2-putting-the-learning-algorithm-inside-the-network" class="level2">
+<h2 class="anchored" data-anchor-id="rl2-putting-the-learning-algorithm-inside-the-network">RL<span class="math inline">^2</span>: putting the learning algorithm inside the network</h2>
+<p>Two groups proposed the same answer at the same time <span class="citation" data-cites="Wang2017 Duan2016a">(<a href="references.html#ref-Duan2016a" role="doc-biblioref">Duan et al., 2016</a>; <a href="references.html#ref-Wang2017" role="doc-biblioref">Wang et al., 2017</a>)</span>, and it is surprisingly simple: let the fast learning happen in the <strong>activity</strong> of a recurrent network rather than in its weights.</p>
+<p>Take any model-free algorithm, for instance A3C (<a href="3.2-ActorCritic.html" class="quarto-xref"><span>Advantage Actor-Critic (A3C)</span></a>), and give its network a LSTM layer (<a href="2.2-DeepNetworks.html" class="quarto-xref"><span>Deep learning</span></a>). Instead of feeding the network only the current state <span class="math inline">s_t</span>, feed it also the action <span class="math inline">a_{t-1}</span> it took at the previous step and the reward <span class="math inline">r_t</span> that this action produced:</p>
+<p><span class="math display">
+    \mathbf{h}_t = f(\mathbf{h}_{t-1}, s_t, a_{t-1}, r_t)
+</span></p>
+<div id="fig-metarl-lstm" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-metarl-lstm-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="img/metarl-lstm.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Figure&nbsp;27.3: Architecture used in meta RL: a recurrent layer receives the encoded state \mathbf{x}_t, but also the reward and the action of the previous step, before producing the policy and the value. Source: @Wang2017."><img src="img/metarl-lstm.png" class="img-fluid figure-img" style="width:25.0%"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-metarl-lstm-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;27.3: Architecture used in meta RL: a recurrent layer receives the encoded state <span class="math inline">\mathbf{x}_t</span>, but also the reward and the action of the previous step, before producing the policy and the value. Source: <span class="citation" data-cites="Wang2017">Wang et al. (<a href="references.html#ref-Wang2017" role="doc-biblioref">2017</a>)</span>.
+</figcaption>
+</figure>
+</div>
+<p>This little change matters more than it looks. A regular policy <span class="math inline">\pi_\theta(s, a)</span> is a function of the current state only: two visits to the same state must produce the same distribution over actions, no matter what happened in between. Such a policy cannot represent “I already tried that door and it was locked”. By feeding back the previous action and its outcome, the policy becomes <strong>memory-guided</strong>: what the agent does in a state depends on what it has already tried in this task and on how it went.</p>
+<p>Training then follows this loop:</p>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Meta RL training
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li><p>Repeat:</p>
+<ol type="1">
+<li><p>Sample a MDP <span class="math inline">\mathcal{M}</span> from the task distribution <span class="math inline">p(\mathcal{M})</span>.</p></li>
+<li><p>Reset the internal state <span class="math inline">\mathbf{h}</span> of the LSTM.</p></li>
+<li><p>Let the agent interact with <span class="math inline">\mathcal{M}</span> for <strong>several episodes in a row</strong>, without resetting <span class="math inline">\mathbf{h}</span> between them.</p></li>
+<li><p>Update the weights <span class="math inline">\theta</span> with A3C using all the collected transitions.</p></li>
+</ol></li>
+</ul>
+</div>
+</div>
+<p>Step 3 is the crucial one, and the usual source of confusion. At the end of an episode the <strong>environment</strong> is reset, but the <strong>memory of the agent</strong> is not. The agent therefore keeps across episodes everything it has found out about the current MDP. This whole sequence of episodes is called a <strong>trial</strong>, and it is the trial, not the episode, that the outer algorithm optimizes. The memory is only cleared in step 2, when the task changes and everything has to be discovered again.</p>
+<div id="fig-rl2" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-rl2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="img/RL_2.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="Figure&nbsp;27.4: The hidden state h is carried over the successive episodes of a trial, i.e.&nbsp;of a single MDP, and is only reset when moving to another MDP. Source: @Duan2016a."><img src="img/RL_2.png" class="img-fluid figure-img" style="width:90.0%"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-rl2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;27.4: The hidden state <span class="math inline">h</span> is carried over the successive episodes of a trial, i.e.&nbsp;of a single MDP, and is only reset when moving to another MDP. Source: <span class="citation" data-cites="Duan2016a">Duan et al. (<a href="references.html#ref-Duan2016a" role="doc-biblioref">2016</a>)</span>.
+</figcaption>
+</figure>
+</div>
+<p>Since the return is accumulated over the whole trial, gradient descent has an incentive to make the first episodes <strong>informative</strong> rather than merely rewarding: losing some reward early in order to find out which task we are in pays off over the remaining episodes. The exploration/exploitation trade-off of <a href="1.1-Bandits.html" class="quarto-xref"><span>Sampling and Bandits</span></a> is not implemented by hand anymore, with an <span class="math inline">\epsilon</span> or an entropy bonus: it is <strong>learned</strong>, and it is adapted to the particular structure of the task distribution.</p>
+<p>This is where the name RL<span class="math inline">^2</span> comes from. We train an agent using a reinforcement learning algorithm (A3C), and what ends up in the recurrent weights is a <strong>second</strong> reinforcement learning algorithm, one that the LSTM executes at run time with no weight change at all. The outer algorithm is chosen by us and is slow; the inner one is discovered by gradient descent and is fast.</p>
+</section>
+<section id="learning-how-to-solve-bandits" class="level2">
+<h2 class="anchored" data-anchor-id="learning-how-to-solve-bandits">Learning how to solve bandits</h2>
+<p>The clearest demonstration of this uses the simplest possible tasks: two-armed bandits (<a href="1.1-Bandits.html" class="quarto-xref"><span>Sampling and Bandits</span></a>). A task is defined by a single number <span class="math inline">p</span>: the first arm returns a reward of 1 with probability <span class="math inline">p</span>, the second one with probability <span class="math inline">1 - p</span>. Drawing <span class="math inline">p</span> randomly gives a whole distribution of bandit problems, on which the meta agent is trained.</p>
+<div id="fig-metabandit" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-metabandit-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="img/metarl-twoarmed.gif" class="lightbox" data-gallery="quarto-lightbox-gallery-5" title="Figure&nbsp;27.5: Left: a classical bandit algorithm on a two-armed bandit. Right: the meta agent on the same problem. Source: https://hackernoon.com/learning-policies-for-learning-policies-meta-reinforcement-learning-rl%C2%B2-in-tensorflow-b15b592a2ddf"><img src="img/metarl-twoarmed.gif" class="img-fluid figure-img" style="width:45.0%"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-metabandit-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;27.5: Left: a classical bandit algorithm on a two-armed bandit. Right: the meta agent on the same problem. Source: <a href="https://hackernoon.com/learning-policies-for-learning-policies-meta-reinforcement-learning-rl%C2%B2-in-tensorflow-b15b592a2ddf" class="uri">https://hackernoon.com/learning-policies-for-learning-policies-meta-reinforcement-learning-rl%C2%B2-in-tensorflow-b15b592a2ddf</a>
+</figcaption>
+</figure>
+</div>
+<p>Confronted with a bandit it has never seen, the trained agent samples both arms a few times, and then sticks to the one that worked best. Nobody programmed that. There is no <span class="math inline">\epsilon</span> decreasing over time, no confidence interval as in UCB: the network simply applies the strategy that maximizes the return over that particular distribution of bandits, and this strategy happens to look very much like the algorithms we derived by hand in <a href="1.1-Bandits.html" class="quarto-xref"><span>Sampling and Bandits</span></a>.</p>
+<p>The lesson is worth stating twice: the meta agent does not learn to solve each bandit, it learns <strong>how</strong> to solve bandits. Its weights after training do not contain the solution to any particular problem; they contain a procedure that finds the solution.</p>
+</section>
+<section id="other-approaches" class="level2">
+<h2 class="anchored" data-anchor-id="other-approaches">Other approaches</h2>
+<p>RL<span class="math inline">^2</span> keeps the weights frozen at test time and puts everything in the memory. The other main family does the opposite: it allows a few gradient steps on the new task, but arranges in advance for these steps to be unusually effective.</p>
+<p><strong>MAML</strong> <span class="citation" data-cites="Finn2017">(<em>Model-Agnostic Meta-Learning</em>, <a href="references.html#ref-Finn2017" role="doc-biblioref">Finn et al., 2017</a>)</span> searches for an initialization <span class="math inline">\theta</span> of the weights such that, for any task sampled from the distribution, <strong>one or a few</strong> gradient steps on that task are enough to obtain a good policy. Instead of a set of weights that is good on average, which is what multi-task learning would give, one looks for a set of weights that is well <strong>placed</strong>: close to the optimum of every task, so that a short descent reaches any of them. Training requires differentiating through the gradient steps of the inner loop, which is expensive but works. As the name indicates, nothing in the method is specific to RL: the same idea applies to supervised learning.</p>
+<p><strong>PEARL</strong> <span class="citation" data-cites="Rakelly2019">(<a href="references.html#ref-Rakelly2019" role="doc-biblioref">Rakelly et al., 2019</a>)</span> sits in between. The agent infers from a few transitions a <strong>context variable</strong> <span class="math inline">\mathbf{z}</span>, a compact description of “which task am I in”, and conditions its policy on it: <span class="math inline">\pi_\theta(s, a \, | \, \mathbf{z})</span>. Because the inference of <span class="math inline">\mathbf{z}</span> is separated from the policy, PEARL can be trained off-policy with a replay buffer, which makes it much more sample-efficient than RL<span class="math inline">^2</span> and MAML, which are both on-policy.</p>
+<p>Meta RL is finally one of the few advanced topics that already work on real robots, precisely because fast adaptation is what a robot actually needs. <span class="citation" data-cites="Belkhale2021">Belkhale et al. (<a href="references.html#ref-Belkhale2021" role="doc-biblioref">2021</a>)</span> use a model-based meta learner on a quadcopter carrying payloads suspended by a cable: the mass and the length of the cable change the dynamics completely and are not known in advance, so the drone adapts its dynamics model online, within a couple of seconds of flight.</p>
+<div class="quarto-video ratio ratio-16x9"><iframe data-external="1" src="https://www.youtube.com/embed/AP5FgKjFpvQ" title="Model-Based Meta-Reinforcement Learning for Flight with Suspended Payloads" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe></div>
+<div class="callout callout-style-default callout-tip no-icon callout-titled" title="Additional resources">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Additional resources
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><span class="citation" data-cites="Beck2023">Beck et al. (<a href="references.html#ref-Beck2023" role="doc-biblioref">2023</a>)</span> is a complete survey of meta RL and of its numerous variants. <span class="citation" data-cites="Botvinick2019">Botvinick et al. (<a href="references.html#ref-Botvinick2019" role="doc-biblioref">2019</a>)</span> discusses the fast/slow distinction from the point of view of neuroscience and is a pleasant read. See also <a href="https://lilianweng.github.io/lil-log/2019/06/23/meta-reinforcement-learning.html" class="uri">https://lilianweng.github.io/lil-log/2019/06/23/meta-reinforcement-learning.html</a> for a well-illustrated introduction.</p>
+</div>
+</div>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
+<div id="ref-Beck2023" class="csl-entry" role="listitem">
+Beck, J., Vuorio, R., Liu, E. Z., Xiong, Z., Zintgraf, L., Finn, C., et al. (2023). A <span>Survey</span> of <span>Meta-Reinforcement Learning</span>. doi:<a href="https://doi.org/10.48550/arXiv.2301.08028">10.48550/arXiv.2301.08028</a>.
+</div>
+<div id="ref-Belkhale2021" class="csl-entry" role="listitem">
+Belkhale, S., Li, R., Kahn, G., McAllister, R., Calandra, R., and Levine, S. (2021). Model-<span>Based Meta-Reinforcement Learning</span> for <span>Flight</span> with <span>Suspended Payloads</span>. <em>IEEE Robotics and Automation Letters</em>, 1–1. doi:<a href="https://doi.org/10.1109/LRA.2021.3057046">10.1109/LRA.2021.3057046</a>.
+</div>
+<div id="ref-Botvinick2019" class="csl-entry" role="listitem">
+Botvinick, M., Ritter, S., Wang, J. X., Kurth-Nelson, Z., Blundell, C., and Hassabis, D. (2019). Reinforcement <span>Learning</span>, <span>Fast</span> and <span>Slow</span>. <em>Trends in Cognitive Sciences</em> 23, 408–422. doi:<a href="https://doi.org/10.1016/j.tics.2019.02.006">10.1016/j.tics.2019.02.006</a>.
+</div>
+<div id="ref-Duan2016a" class="csl-entry" role="listitem">
+Duan, Y., Schulman, J., Chen, X., Bartlett, P. L., Sutskever, I., and Abbeel, P. (2016). <span>RL</span>$^2$: <span>Fast Reinforcement Learning</span> via <span>Slow Reinforcement Learning</span>. <em>arXiv:1611.02779 [cs, stat]</em>. Available at: <a href="https://arxiv.org/abs/1611.02779">https://arxiv.org/abs/1611.02779</a> [Accessed February 5, 2021].
+</div>
+<div id="ref-Finn2017" class="csl-entry" role="listitem">
+Finn, C., Abbeel, P., and Levine, S. (2017). Model-<span>Agnostic Meta-Learning</span> for <span>Fast Adaptation</span> of <span>Deep Networks</span>. <em>arXiv:1703.03400 [cs]</em>. Available at: <a href="https://arxiv.org/abs/1703.03400">https://arxiv.org/abs/1703.03400</a> [Accessed February 6, 2021].
+</div>
+<div id="ref-Rakelly2019" class="csl-entry" role="listitem">
+Rakelly, K., Zhou, A., Quillen, D., Finn, C., and Levine, S. (2019). Efficient <span>Off-Policy Meta-Reinforcement Learning</span> via <span>Probabilistic Context Variables</span>. <em>arXiv:1903.08254 [cs, stat]</em>. Available at: <a href="https://arxiv.org/abs/1903.08254">https://arxiv.org/abs/1903.08254</a> [Accessed February 5, 2021].
+</div>
+<div id="ref-Wang2017" class="csl-entry" role="listitem">
+Wang, J. X., Kurth-Nelson, Z., Tirumala, D., Soyer, H., Leibo, J. Z., Munos, R., et al. (2017). Learning to reinforcement learn. <em>arXiv:1611.05763 [cs, stat]</em>. Available at: <a href="https://arxiv.org/abs/1611.05763">https://arxiv.org/abs/1611.05763</a> [Accessed February 5, 2021].
+</div>
+<div id="ref-Yu2019" class="csl-entry" role="listitem">
+Yu, T., Quillen, D., He, Z., Julian, R., Hausman, K., Finn, C., et al. (2019). Meta-<span>World</span>: <span>A Benchmark</span> and <span>Evaluation</span> for <span>Multi-Task</span> and <span>Meta Reinforcement Learning</span>. <em>arXiv:1910.10897 [cs, stat]</em>. Available at: <a href="https://arxiv.org/abs/1910.10897">https://arxiv.org/abs/1910.10897</a> [Accessed October 30, 2019].
+</div>
+</div>
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -420,13 +639,14 @@ ul.task-list li input[type="checkbox"] {
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy
@@ -768,7 +988,7 @@ ul.task-list li input[type="checkbox"] {
     }
   });
   </script>
-<nav class="page-navigation">
+<nav class="page-navigation column-body">
   <div class="nav-page nav-page-previous">
       <a href="../src/5.3-OfflineRL.html" class="pagination-link" aria-label="Offline RL">
         <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">Offline RL</span></span>
@@ -794,6 +1014,38 @@ ul.task-list li input[type="checkbox"] {
     </div>
   </div>
 </footer>
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
 
 
 

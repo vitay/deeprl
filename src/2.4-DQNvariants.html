@@ -2,17 +2,23 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.29">
+<meta name="generator" content="quarto-1.10.18">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>DQN variants (Rainbow) – Deep Reinforcement Learning</title>
 <style>
-code{white-space: pre-wrap;}
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -57,10 +63,10 @@ div.csl-indent {
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-bcbce66894bfa8e7e94e40e0186b9bb8.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-bb62276ab45c84d9efd712f51ff97b5a.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-ea27fabe3da5290357830f0bd5288bdb.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-3998d32367fd34ee6440c4fab252e735.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script src="../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
 <link href="../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
 <link href="../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
@@ -121,7 +127,7 @@ const typesetMath = (el) => {
     var macros = [];
     for (var i = 0; i < mathElements.length; i++) {
       var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
         window.katex.render(texText.data, mathElements[i], {
           displayMode: mathElements[i].classList.contains('display'),
           throwOnError: false,
@@ -139,7 +145,7 @@ window.Quarto = {
 
 </head>
 
-<body class="nav-sidebar floating quarto-light">
+<body class="nav-sidebar docked quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -158,9 +164,9 @@ window.Quarto = {
   </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="../">Deep Reinforcement Learning</a> 
@@ -252,11 +258,6 @@ window.Quarto = {
   <a href="../src/2.5-DistributedLearning.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Distributed learning</span></a>
   </div>
 </li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../src/2.6-Misc.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Misc.</span></a>
-  </div>
-</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -275,8 +276,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/3.2-ActorCritic.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Advantage Actor-Critic (A3C)</span></a>
+  <a href="../src/3.2-ActorCritic.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Advantage Actor-Critic (A3C)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -307,11 +307,6 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../src/3.8-EntropyRL.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Maximum Entropy RL (SAC)</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../src/3.9-Misc.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Misc.</span></a>
   </div>
 </li>
       </ul>
@@ -350,11 +345,6 @@ window.Quarto = {
   <a href="../src/4.5-AlphaGo.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">AlphaGo</span></a>
   </div>
 </li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../src/4.6-Misc.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Misc.</span></a>
-  </div>
-</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -383,7 +373,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/5.4-Meta.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Meta learning</span></a>
+  <a href="../src/5.4-Meta.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Meta reinforcement learning</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -420,7 +410,7 @@ window.Quarto = {
 </nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
+<main class="content column-body" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
@@ -429,7 +419,7 @@ window.Quarto = {
 
 
 
-<div class="quarto-title-meta">
+<div class="quarto-title-meta column-body">
 
     
   
@@ -443,15 +433,15 @@ window.Quarto = {
 
 <section id="sec-doubleqlearning" class="level2">
 <h2 class="anchored" data-anchor-id="sec-doubleqlearning">Double DQN</h2>
-<p>In DQN, the experience replay memory and the target network were decisive in allowing the CNN to learn the tasks through RL. Their drawback is that they drastically slow down learning and increase the sample complexity. Additionally, DQN has stability issues: the same network may not converge the same way in different runs. One first improvement on DQN was proposed by <span class="citation" data-cites="vanHasselt2015">van Hasselt et al. (<a href="references.html#ref-vanHasselt2015" role="doc-biblioref">2015</a>)</span> and called <strong>double DQN</strong>.</p>
-<p>The idea is that the target value <span class="math inline">y = r(s, a, s') + \gamma \, \max_{a'} Q_{\theta'}(s', a')</span> is frequently over-estimating the true return because of the maximum operator. Especially at the beginning of learning when Q-values are far from being correct, if an action is over-estimated (<span class="math inline">Q_{\theta'}(s', a)</span> is higher that its true value) and selected by the target network as the next greedy action, the learned Q-value <span class="math inline">Q_{\theta}(s, a)</span> will also become over-estimated, what will propagate to all previous actions on the long-term. <span class="citation" data-cites="vanHasselt2010">van Hasselt (<a href="references.html#ref-vanHasselt2010" role="doc-biblioref">2010</a>)</span> showed that this over-estimation is inevitable in regular Q-learning and proposed <strong>double learning</strong>.</p>
+<p>In DQN, the experience replay memory and the target network were decisive in allowing the CNN to learn the tasks through RL. Their drawback is that they drastically slow down learning and increase the sample complexity. Additionally, DQN has stability issues: the same network may not converge the same way in different runs. One first improvement on DQN was proposed by <span class="citation" data-cites="vanHasselt2015"><span class="nocase">van Hasselt et al.</span> (<a href="references.html#ref-vanHasselt2015" role="doc-biblioref">2015</a>)</span> and called <strong>double DQN</strong>.</p>
+<p>The idea is that the target value <span class="math inline">y = r(s, a, s') + \gamma \, \max_{a'} Q_{\theta'}(s', a')</span> is frequently over-estimating the true return because of the maximum operator. Especially at the beginning of learning when Q-values are far from being correct, if an action is over-estimated (<span class="math inline">Q_{\theta'}(s', a)</span> is higher that its true value) and selected by the target network as the next greedy action, the learned Q-value <span class="math inline">Q_{\theta}(s, a)</span> will also become over-estimated, what will propagate to all previous actions on the long-term. <span class="citation" data-cites="vanHasselt2010"><span class="nocase">van Hasselt</span> (<a href="references.html#ref-vanHasselt2010" role="doc-biblioref">2010</a>)</span> showed that this over-estimation is inevitable in regular Q-learning and proposed <strong>double learning</strong>.</p>
 <div id="fig-doubleqdn" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-doubleqdn-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <a href="img/ddqn-results2.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;9.1: Overestimation of Q-values with DQN on a few Atari games. The true Q-value can be estimated by counting the rewards until the end of the episode. Source @vanHasselt2015."><img src="img/ddqn-results2.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-doubleqdn-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;9.1: Overestimation of Q-values with DQN on a few Atari games. The true Q-value can be estimated by counting the rewards until the end of the episode. Source <span class="citation" data-cites="vanHasselt2015">van Hasselt et al. (<a href="references.html#ref-vanHasselt2015" role="doc-biblioref">2015</a>)</span>.
+Figure&nbsp;9.1: Overestimation of Q-values with DQN on a few Atari games. The true Q-value can be estimated by counting the rewards until the end of the episode. Source <span class="citation" data-cites="vanHasselt2015"><span class="nocase">van Hasselt et al.</span> (<a href="references.html#ref-vanHasselt2015" role="doc-biblioref">2015</a>)</span>.
 </figcaption>
 </figure>
 </div>
@@ -467,7 +457,7 @@ Figure&nbsp;9.1: Overestimation of Q-values with DQN on a few Atari games. The t
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Double DQN algorithm
+<span class="screen-reader-only">Note</span>Double DQN algorithm
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -559,11 +549,11 @@ Figure&nbsp;9.4: The advantages have a much smaller variability than the Q-value
 <a href="img/duelling.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5" title="Figure&nbsp;9.5: Duelling network architecture. Top: classical feedforward architecture to predict Q-values. Bottom: Duelling networks predicting state values and advantage functions to form the Q-values. Source: @Wang2016."><img src="img/duelling.png" class="img-fluid figure-img" style="width:60.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-duelling-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;9.5: Duelling network architecture. Top: classical feedforward architecture to predict Q-values. Bottom: Duelling networks predicting state values and advantage functions to form the Q-values. Source: <span class="citation" data-cites="Wang2016">Wang et al. (<a href="references.html#ref-Wang2016" role="doc-biblioref">2016</a>)</span>.
+Figure&nbsp;9.5: Duelling network architecture. Top: classical feedforward architecture to predict Q-values. Bottom: Duelling networks predicting state values and advantage functions to form the Q-values. Source: <span class="citation" data-cites="Wang2016"><span class="nocase">Wang et al.</span> (<a href="references.html#ref-Wang2016" role="doc-biblioref">2016</a>)</span>.
 </figcaption>
 </figure>
 </div>
-<p><span class="citation" data-cites="Wang2016">Wang et al. (<a href="references.html#ref-Wang2016" role="doc-biblioref">2016</a>)</span> incorporated the idea of <em>advantage updating</em> in a double DQN architecture with prioritized replay (<a href="#fig-duelling" class="quarto-xref">Figure&nbsp;<span>9.5</span></a>). As in DQN, the last layer represents the Q-values of the possible actions and has to minimize the mse loss:</p>
+<p><span class="citation" data-cites="Wang2016"><span class="nocase">Wang et al.</span> (<a href="references.html#ref-Wang2016" role="doc-biblioref">2016</a>)</span> incorporated the idea of <em>advantage updating</em> in a double DQN architecture with prioritized replay (<a href="#fig-duelling" class="quarto-xref">Figure&nbsp;<span>9.5</span></a>). As in DQN, the last layer represents the Q-values of the possible actions and has to minimize the mse loss:</p>
 <p><span class="math display">
     \mathcal{L}(\theta) = \mathbb{E}_\pi([r(s, a, s') + \gamma \, Q_{\theta', \alpha', \beta'}(s', \text{argmax}_{a'} Q_{\theta, \alpha, \beta} (s', a')) - Q_{\theta, \alpha, \beta}(s, a)]^2)
 </span></p>
@@ -575,7 +565,7 @@ Figure&nbsp;9.5: Duelling network architecture. Top: classical feedforward archi
 <p><span class="math display">
     Q_{\theta, \alpha, \beta}(s, a) = V_{\theta, \beta}(s) + (A_{\theta, \alpha}(s, a) - \max_a A_{\theta, \alpha}(s, a))
 </span></p>
-<p>By doing this, the advantages are still free, but the state value will have to take the correct value. <span class="citation" data-cites="Wang2016">Wang et al. (<a href="references.html#ref-Wang2016" role="doc-biblioref">2016</a>)</span> found that it is actually better to replace the <span class="math inline">\max</span> operator by the mean of the advantages. In this case, the advantages only need to change as fast as their mean, instead of having to compensate quickly for any change in the greedy action as the policy improves:</p>
+<p>By doing this, the advantages are still free, but the state value will have to take the correct value. <span class="citation" data-cites="Wang2016"><span class="nocase">Wang et al.</span> (<a href="references.html#ref-Wang2016" role="doc-biblioref">2016</a>)</span> found that it is actually better to replace the <span class="math inline">\max</span> operator by the mean of the advantages. In this case, the advantages only need to change as fast as their mean, instead of having to compensate quickly for any change in the greedy action as the policy improves:</p>
 <p><span class="math display">
     Q_{\theta, \alpha, \beta}(s, a) = V_{\theta, \beta}(s) + (A_{\theta, \alpha}(s, a) - \frac{1}{|\mathcal{A}|} \sum_a A_{\theta, \alpha}(s, a))
 </span></p>
@@ -586,7 +576,7 @@ Figure&nbsp;9.5: Duelling network architecture. Top: classical feedforward archi
 <a href="img/dueling-result.png" class="lightbox" data-gallery="quarto-lightbox-gallery-6" title="Figure&nbsp;9.6: Relative improvement of Duelling DQN over DDQN-PER on Atari games. Source: @Wang2016."><img src="img/dueling-result.png" class="img-fluid figure-img" style="width:70.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-dueling-results-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;9.6: Relative improvement of Duelling DQN over DDQN-PER on Atari games. Source: <span class="citation" data-cites="Wang2016">Wang et al. (<a href="references.html#ref-Wang2016" role="doc-biblioref">2016</a>)</span>.
+Figure&nbsp;9.6: Relative improvement of Duelling DQN over DDQN-PER on Atari games. Source: <span class="citation" data-cites="Wang2016"><span class="nocase">Wang et al.</span> (<a href="references.html#ref-Wang2016" role="doc-biblioref">2016</a>)</span>.
 </figcaption>
 </figure>
 </div>
@@ -748,7 +738,7 @@ Figure&nbsp;9.12: Results of Noisy DQN. Source: <span class="citation" data-cite
 <h2 class="anchored" data-anchor-id="rainbow-dqn">Rainbow DQN</h2>
 <p>As we have seen. the original formulation of DQN <span class="citation" data-cites="Mnih2015">(<a href="references.html#ref-Mnih2015" role="doc-biblioref">Mnih et al., 2015</a>)</span> has seen many improvements over the years.</p>
 <ul>
-<li><strong>Double DQN</strong> <span class="citation" data-cites="vanHasselt2015">(<a href="references.html#ref-vanHasselt2015" role="doc-biblioref">van Hasselt et al., 2015</a>)</span> separates the selection of the greedy action in the next state from its evaluation in order to prevent over-estimation of Q-values:</li>
+<li><strong>Double DQN</strong> <span class="citation" data-cites="vanHasselt2015">(<a href="references.html#ref-vanHasselt2015" role="doc-biblioref"><span class="nocase">van Hasselt et al.</span>, 2015</a>)</span> separates the selection of the greedy action in the next state from its evaluation in order to prevent over-estimation of Q-values:</li>
 </ul>
 <p><span class="math display">\mathcal{L}(\theta) = \mathbb{E}_\mathcal{D} [(r + \gamma \, Q_{\theta'}(s´, \text{argmax}_{a'} Q_{\theta}(s', a')) - Q_\theta(s, a))^2]</span></p>
 <ul>
@@ -756,7 +746,7 @@ Figure&nbsp;9.12: Results of Noisy DQN. Source: <span class="citation" data-cite
 </ul>
 <p><span class="math display">P(k) = \frac{(|\delta_k| + \epsilon)^\alpha}{\sum_k (|\delta_k| + \epsilon)^\alpha}</span></p>
 <ul>
-<li><strong>Dueling DQN</strong> <span class="citation" data-cites="Wang2016">(<a href="references.html#ref-Wang2016" role="doc-biblioref">Wang et al., 2016</a>)</span> splits learning of Q-values into learning of advantages and state values:</li>
+<li><strong>Dueling DQN</strong> <span class="citation" data-cites="Wang2016">(<a href="references.html#ref-Wang2016" role="doc-biblioref"><span class="nocase">Wang et al.</span>, 2016</a>)</span> splits learning of Q-values into learning of advantages and state values:</li>
 </ul>
 <p><span class="math display">Q_\theta(s, a) = V_\alpha(s) + A_\beta(s, a)</span></p>
 <ul>
@@ -766,19 +756,19 @@ Figure&nbsp;9.12: Results of Noisy DQN. Source: <span class="citation" data-cite
 <ul>
 <li><strong>n-step returns</strong> <span class="citation" data-cites="Sutton2017">(<a href="references.html#ref-Sutton2017" role="doc-biblioref">Sutton and Barto, 2017</a>)</span> reduce the bias of the estimation by taking the next <span class="math inline">n</span> rewards into account, at the cost of a slightly higher variance.</li>
 </ul>
-<p><span class="math display">\mathcal{L}(\theta) = \mathbb{E}_\mathcal{D} [(\sum_{k=1}^n r_{t+k} + \gamma \max_a Q_\theta(s_{t+n+1}, a) - Q_\theta(s_t, a_t))^2</span></p>
+<p><span class="math display">\mathcal{L}(\theta) = \mathbb{E}_\mathcal{D} [(\sum_{k=0}^{n-1} \gamma^k \, r_{t+k+1} + \gamma^n \, \max_a Q_\theta(s_{t+n}, a) - Q_\theta(s_t, a_t))^2]</span></p>
 <ul>
 <li><strong>Noisy DQN</strong> <span class="citation" data-cites="Fortunato2017">(<a href="references.html#ref-Fortunato2017" role="doc-biblioref">Fortunato et al., 2017</a>)</span> ensures exploration by adding noise to the parameters of the network instead of a softmax / <span class="math inline">\epsilon</span>-greedy action selection over the Q-values.</li>
 </ul>
 <p>All these improvements exceed the performance of vanilla DQN on most if not all Atari game. But which ones are the most important?</p>
-<p><span class="citation" data-cites="Hessel2017">Hessel et al. (<a href="references.html#ref-Hessel2017" role="doc-biblioref">2017</a>)</span> designed a <strong>Rainbow DQN</strong> integrating all these improvements. Not only does the combined network outperform all the DQN variants, but each of its components is important for its performance as shown by ablation studies (apart from double learning and duelling networks), see <a href="#fig-rainbow" class="quarto-xref">Figure&nbsp;<span>9.13</span></a>.</p>
+<p><span class="citation" data-cites="Hessel2017"><span class="nocase">Hessel et al.</span> (<a href="references.html#ref-Hessel2017" role="doc-biblioref">2017</a>)</span> designed a <strong>Rainbow DQN</strong> integrating all these improvements. Not only does the combined network outperform all the DQN variants, but each of its components is important for its performance as shown by ablation studies (apart from double learning and duelling networks), see <a href="#fig-rainbow" class="quarto-xref">Figure&nbsp;<span>9.13</span></a>.</p>
 <div id="fig-rainbow" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-rainbow-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <a href="img/rainbow.png" class="lightbox" data-gallery="quarto-lightbox-gallery-13" title="Figure&nbsp;9.13: Performance of the Rainbow DQN compared to other DQN variants (left) and ablation studies. Figures Source: @Hessel2017."><img src="img/rainbow.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-rainbow-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;9.13: Performance of the Rainbow DQN compared to other DQN variants (left) and ablation studies. Figures Source: <span class="citation" data-cites="Hessel2017">Hessel et al. (<a href="references.html#ref-Hessel2017" role="doc-biblioref">2017</a>)</span>.
+Figure&nbsp;9.13: Performance of the Rainbow DQN compared to other DQN variants (left) and ablation studies. Figures Source: <span class="citation" data-cites="Hessel2017"><span class="nocase">Hessel et al.</span> (<a href="references.html#ref-Hessel2017" role="doc-biblioref">2017</a>)</span>.
 </figcaption>
 </figure>
 </div>
@@ -801,7 +791,7 @@ Figure&nbsp;9.14: Architecture of DRQN. Source: <span class="citation" data-cite
 </figure>
 </div>
 <p>Building on previous ideas from the Schmidhuber’s group <span class="citation" data-cites="Bakker2001 Wierstra2007">(<a href="references.html#ref-Bakker2001" role="doc-biblioref">Bakker, 2001</a>; <a href="references.html#ref-Wierstra2007" role="doc-biblioref">Wierstra et al., 2007</a>)</span>, <span class="citation" data-cites="Hausknecht2015">Hausknecht and Stone (<a href="references.html#ref-Hausknecht2015" role="doc-biblioref">2015</a>)</span> replaced one of the fully-connected layers of the DQN network by a LSTM layer while using single frames as inputs. The resulting <strong>deep recurrent q-learning</strong> (DRQN) network became able to solve POMDPs thanks to the learning abilities of LSTMs: the LSTM layer learn to remember which part of the sensory information will be useful to take decisions later.</p>
-<p>However, LSTMs are not a magical solution either. They are trained using <strong>truncated BPTT</strong>, i.e.&nbsp;on a limited history of states. Long-term dependencies exceeding the truncation horizon cannot be learned. Additionally, all states in that horizon (i.e.&nbsp;all frames) have to be stored in the ERM to train the network, increasing drastically its size. Firthermore, the training time (but not inference time) is orders of magnitude slower than with a comparable feedforward network. Despite these limitations, DRQN is a much more elegant solution to the partial observability problem, letting the network decide which horizon it needs to solve long-term dependencies.</p>
+<p>However, LSTMs are not a magical solution either. They are trained using <strong>truncated BPTT</strong>, i.e.&nbsp;on a limited history of states. Long-term dependencies exceeding the truncation horizon cannot be learned. Additionally, all states in that horizon (i.e.&nbsp;all frames) have to be stored in the ERM to train the network, increasing drastically its size. Furthermore, the training time (but not inference time) is orders of magnitude slower than with a comparable feedforward network. Despite these limitations, DRQN is a much more elegant solution to the partial observability problem, letting the network decide which horizon it needs to solve long-term dependencies.</p>
 <div id="fig-drqn-results" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-drqn-results-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -816,43 +806,43 @@ Figure&nbsp;9.15: Performance of DRWN compared to DQN. Source: <span class="cita
 
 <div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
 <div id="ref-Baird1993" class="csl-entry" role="listitem">
-Baird, L. C. (1993). Advantage updating. Wright-Patterson Air Force Base Available at: <a href="http://leemon.com/papers/1993b.pdf">http://leemon.com/papers/1993b.pdf</a>.
+Baird, L. C. (1993). Advantage updating. Wright-Patterson Air Force Base.
 </div>
 <div id="ref-Bakker2001" class="csl-entry" role="listitem">
-Bakker, B. (2001). Reinforcement <span>Learning</span> with <span>Long Short-Term Memory</span>. in <em>Advances in <span>Neural Information Processing Systems</span> 14 (<span>NIPS</span> 2001)</em>, 1475–1482. Available at: <a href="https://papers.nips.cc/paper/1953-reinforcement-learning-with-long-short-term-memory">https://papers.nips.cc/paper/1953-reinforcement-learning-with-long-short-term-memory</a>.
+Bakker, B. (2001). Reinforcement <span>Learning</span> with <span>Long Short-Term Memory</span>. in <em>Advances in <span>Neural Information Processing Systems</span> 14 (<span>NIPS</span> 2001)</em>, 1475–1482.
 </div>
 <div id="ref-Bellemare2017" class="csl-entry" role="listitem">
-Bellemare, M. G., Dabney, W., and Munos, R. (2017). A <span>Distributional Perspective</span> on <span>Reinforcement Learning</span>. Available at: <a href="http://arxiv.org/abs/1707.06887">http://arxiv.org/abs/1707.06887</a>.
+Bellemare, M. G., Dabney, W., and Munos, R. (2017). A <span>Distributional Perspective</span> on <span>Reinforcement Learning</span>. <em>arXiv:1707.06887 [cs]</em>. Available at: <a href="https://arxiv.org/abs/1707.06887">https://arxiv.org/abs/1707.06887</a>.
 </div>
 <div id="ref-Dabney2017" class="csl-entry" role="listitem">
-Dabney, W., Rowland, M., Bellemare, M. G., and Munos, R. (2017). Distributional <span>Reinforcement Learning</span> with <span>Quantile Regression</span>. Available at: <a href="http://arxiv.org/abs/1710.10044">http://arxiv.org/abs/1710.10044</a> [Accessed June 28, 2019].
+Dabney, W., Rowland, M., Bellemare, M. G., and Munos, R. (2017). Distributional <span>Reinforcement Learning</span> with <span>Quantile Regression</span>. <em>arXiv:1710.10044 [cs, stat]</em>. Available at: <a href="https://arxiv.org/abs/1710.10044">https://arxiv.org/abs/1710.10044</a> [Accessed June 28, 2019].
 </div>
 <div id="ref-Fortunato2017" class="csl-entry" role="listitem">
-Fortunato, M., Azar, M. G., Piot, B., Menick, J., Osband, I., Graves, A., et al. (2017). Noisy <span>Networks</span> for <span>Exploration</span>. Available at: <a href="http://arxiv.org/abs/1706.10295">http://arxiv.org/abs/1706.10295</a> [Accessed March 2, 2020].
+Fortunato, M., Azar, M. G., Piot, B., Menick, J., Osband, I., Graves, A., et al. (2017). Noisy <span>Networks</span> for <span>Exploration</span>. <em>arXiv:1706.10295 [cs, stat]</em>. Available at: <a href="https://arxiv.org/abs/1706.10295">https://arxiv.org/abs/1706.10295</a> [Accessed March 2, 2020].
 </div>
 <div id="ref-Hausknecht2015" class="csl-entry" role="listitem">
-Hausknecht, M., and Stone, P. (2015). Deep <span>Recurrent Q-Learning</span> for <span>Partially Observable MDPs</span>. Available at: <a href="http://arxiv.org/abs/1507.06527">http://arxiv.org/abs/1507.06527</a>.
+Hausknecht, M., and Stone, P. (2015). Deep <span>Recurrent Q-Learning</span> for <span>Partially Observable MDPs</span>. <em>arXiv:1507.06527 [cs]</em>. Available at: <a href="https://arxiv.org/abs/1507.06527">https://arxiv.org/abs/1507.06527</a>.
 </div>
 <div id="ref-Hessel2017" class="csl-entry" role="listitem">
-Hessel, M., Modayil, J., van Hasselt, H., Schaul, T., Ostrovski, G., Dabney, W., et al. (2017). Rainbow: <span>Combining Improvements</span> in <span>Deep Reinforcement Learning</span>. Available at: <a href="http://arxiv.org/abs/1710.02298">http://arxiv.org/abs/1710.02298</a>.
+<span class="nocase">Hessel, M., Modayil, J., van Hasselt, H., Schaul, T., Ostrovski, G., Dabney, W., et al.</span> (2017). Rainbow: <span>Combining Improvements</span> in <span>Deep Reinforcement Learning</span>. <em>arXiv:1707.06887 [cs]</em>. Available at: <a href="https://arxiv.org/abs/1707.06887">https://arxiv.org/abs/1707.06887</a>.
 </div>
 <div id="ref-Mnih2015" class="csl-entry" role="listitem">
 Mnih, V., Kavukcuoglu, K., Silver, D., Rusu, A. A., Veness, J., Bellemare, M. G., et al. (2015). Human-level control through deep reinforcement learning. <em>Nature</em> 518, 529–533. doi:<a href="https://doi.org/10.1038/nature14236">10.1038/nature14236</a>.
 </div>
 <div id="ref-Schaul2015" class="csl-entry" role="listitem">
-Schaul, T., Quan, J., Antonoglou, I., and Silver, D. (2015). Prioritized <span>Experience Replay</span>. Available at: <a href="http://arxiv.org/abs/1511.05952">http://arxiv.org/abs/1511.05952</a>.
+Schaul, T., Quan, J., Antonoglou, I., and Silver, D. (2015). Prioritized <span>Experience Replay</span>. <em>arXiv:1511.05952 [cs]</em>. Available at: <a href="https://arxiv.org/abs/1511.05952">https://arxiv.org/abs/1511.05952</a>.
 </div>
 <div id="ref-Sutton2017" class="csl-entry" role="listitem">
-Sutton, R. S., and Barto, A. G. (2017). <em>Reinforcement <span>Learning</span>: <span>An Introduction</span></em>. 2nd ed. Cambridge, MA: MIT Press Available at: <a href="http://incompleteideas.net/book/the-book-2nd.html">http://incompleteideas.net/book/the-book-2nd.html</a>.
+Sutton, R. S., and Barto, A. G. (2017). <em>Reinforcement <span>Learning</span>: <span>An Introduction</span></em>. 2nd ed. Cambridge, MA: MIT Press.
 </div>
 <div id="ref-vanHasselt2010" class="csl-entry" role="listitem">
-van Hasselt, H. (2010). Double <span class="nocase">Q-learning</span>. in <em>Proceedings of the 23rd <span>International Conference</span> on <span>Neural Information Processing Systems</span> - <span>Volume</span> 2</em> (Curran Associates Inc.), 2613–2621. Available at: <a href="https://dl.acm.org/citation.cfm?id=2997187">https://dl.acm.org/citation.cfm?id=2997187</a>.
+<span class="nocase">van Hasselt, H.</span> (2010). Double <span class="nocase">Q-learning</span>. in <em>Proceedings of the 23rd <span>International Conference</span> on <span>Neural Information Processing Systems</span> - <span>Volume</span> 2</em> (Curran Associates Inc.), 2613–2621.
 </div>
 <div id="ref-vanHasselt2015" class="csl-entry" role="listitem">
-van Hasselt, H., Guez, A., and Silver, D. (2015). Deep <span>Reinforcement Learning</span> with <span class="nocase">Double Q-learning</span>. Available at: <a href="http://arxiv.org/abs/1509.06461">http://arxiv.org/abs/1509.06461</a>.
+<span class="nocase">van Hasselt, H., Guez, A., and Silver, D.</span> (2015). Deep <span>Reinforcement Learning</span> with <span class="nocase">Double Q-learning</span>. <em>arXiv:1509.06461 [cs]</em>. Available at: <a href="https://arxiv.org/abs/1509.06461">https://arxiv.org/abs/1509.06461</a>.
 </div>
 <div id="ref-Wang2016" class="csl-entry" role="listitem">
-Wang, Z., Schaul, T., Hessel, M., van Hasselt, H., Lanctot, M., and de Freitas, N. (2016). Dueling <span>Network Architectures</span> for <span>Deep Reinforcement Learning</span>. Available at: <a href="http://arxiv.org/abs/1511.06581">http://arxiv.org/abs/1511.06581</a> [Accessed November 21, 2019].
+<span class="nocase">Wang, Z., Schaul, T., Hessel, M., van Hasselt, H., Lanctot, M., and de Freitas, N.</span> (2016). Dueling <span>Network Architectures</span> for <span>Deep Reinforcement Learning</span>. <em>arXiv:1511.06581 [cs]</em>. Available at: <a href="https://arxiv.org/abs/1511.06581">https://arxiv.org/abs/1511.06581</a> [Accessed November 21, 2019].
 </div>
 <div id="ref-Wierstra2007" class="csl-entry" role="listitem">
 Wierstra, D., Foerster, A., Peters, J., and Schmidhuber, J. (2007). <span>“Solving <span>Deep Memory POMDPs</span> with <span>Recurrent Policy Gradients</span>,”</span> in (Springer, Berlin, Heidelberg), 697–706. doi:<a href="https://doi.org/10.1007/978-3-540-74690-4_71">10.1007/978-3-540-74690-4_71</a>.
@@ -912,13 +902,14 @@ Wierstra, D., Foerster, A., Peters, J., and Schmidhuber, J. (2007). <span>“Sol
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy
@@ -1260,7 +1251,7 @@ Wierstra, D., Foerster, A., Peters, J., and Schmidhuber, J. (2007). <span>“Sol
     }
   });
   </script>
-<nav class="page-navigation">
+<nav class="page-navigation column-body">
   <div class="nav-page nav-page-previous">
       <a href="../src/2.3-DQN.html" class="pagination-link" aria-label="Deep Q-network (DQN)">
         <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">Deep Q-network (DQN)</span></span>

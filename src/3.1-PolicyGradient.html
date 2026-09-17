@@ -2,17 +2,23 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.29">
+<meta name="generator" content="quarto-1.10.18">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>Policy Gradient methods – Deep Reinforcement Learning</title>
 <style>
-code{white-space: pre-wrap;}
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -50,17 +56,17 @@ div.csl-indent {
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
 <link href="../src/3.2-ActorCritic.html" rel="next">
-<link href="../src/2.6-Misc.html" rel="prev">
+<link href="../src/2.5-DistributedLearning.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-bcbce66894bfa8e7e94e40e0186b9bb8.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-bb62276ab45c84d9efd712f51ff97b5a.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-ea27fabe3da5290357830f0bd5288bdb.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-3998d32367fd34ee6440c4fab252e735.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script src="../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
 <link href="../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
 <link href="../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
@@ -121,7 +127,7 @@ const typesetMath = (el) => {
     var macros = [];
     for (var i = 0; i < mathElements.length; i++) {
       var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
         window.katex.render(texText.data, mathElements[i], {
           displayMode: mathElements[i].classList.contains('display'),
           throwOnError: false,
@@ -139,7 +145,7 @@ window.Quarto = {
 
 </head>
 
-<body class="nav-sidebar floating quarto-light">
+<body class="nav-sidebar docked quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -158,9 +164,9 @@ window.Quarto = {
   </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="../">Deep Reinforcement Learning</a> 
@@ -252,11 +258,6 @@ window.Quarto = {
   <a href="../src/2.5-DistributedLearning.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Distributed learning</span></a>
   </div>
 </li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../src/2.6-Misc.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Misc.</span></a>
-  </div>
-</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -275,8 +276,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/3.2-ActorCritic.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Advantage Actor-Critic (A3C)</span></a>
+  <a href="../src/3.2-ActorCritic.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Advantage Actor-Critic (A3C)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -307,11 +307,6 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../src/3.8-EntropyRL.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Maximum Entropy RL (SAC)</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../src/3.9-Misc.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Misc.</span></a>
   </div>
 </li>
       </ul>
@@ -350,11 +345,6 @@ window.Quarto = {
   <a href="../src/4.5-AlphaGo.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">AlphaGo</span></a>
   </div>
 </li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../src/4.6-Misc.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Misc.</span></a>
-  </div>
-</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -383,7 +373,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/5.4-Meta.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Meta learning</span></a>
+  <a href="../src/5.4-Meta.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Meta reinforcement learning</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -420,7 +410,7 @@ window.Quarto = {
 </nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
+<main class="content column-body" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
@@ -429,7 +419,7 @@ window.Quarto = {
 
 
 
-<div class="quarto-title-meta">
+<div class="quarto-title-meta column-body">
 
     
   
@@ -451,10 +441,10 @@ window.Quarto = {
 <div id="fig-policysearchmodel" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-policysearchmodel-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/policysearch.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;12.1: In policy search, the function approximator outputs direcly the policy \pi_\theta(s, a), not the Q-values."><img src="img/policysearch.png" class="img-fluid figure-img"></a>
+<a href="img/policysearch.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;11.1: In policy search, the function approximator outputs directly the policy \pi_\theta(s, a), not the Q-values."><img src="img/policysearch.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-policysearchmodel-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;12.1: In policy search, the function approximator outputs direcly the policy <span class="math inline">\pi_\theta(s, a)</span>, not the Q-values.
+Figure&nbsp;11.1: In policy search, the function approximator outputs directly the policy <span class="math inline">\pi_\theta(s, a)</span>, not the Q-values.
 </figcaption>
 </figure>
 </div>
@@ -462,15 +452,15 @@ Figure&nbsp;12.1: In policy search, the function approximator outputs direcly th
 <h2 class="anchored" data-anchor-id="policy-search">Policy search</h2>
 <p><strong>Policy search</strong> methods directly learn to estimate the policy <span class="math inline">\pi_\theta</span> with a parameterized function estimator. The goal of the neural network is to maximize an objective function representing the <strong>return</strong> (sum of rewards, noted <span class="math inline">R(\tau)</span> for simplicity) of the trajectories <span class="math inline">\tau = (s_0, a_0, s_1, a_1, \ldots, s_T, a_T)</span> selected by the policy <span class="math inline">\pi_\theta</span>:</p>
 <p><span class="math display">
-    J(\theta) = \mathbb{E}_{\tau \sim \rho_\theta}[R(\tau)] = \mathbb{E}_{\tau \sim \rho_\theta}[\sum_{t=0}^T \gamma^t \, r(s_t, a_t, s_{t+1}) ]
+    \mathcal{J}(\theta) = \mathbb{E}_{\tau \sim \rho_\theta}[R(\tau)] = \mathbb{E}_{\tau \sim \rho_\theta}[\sum_{t=0}^T \gamma^t \, r(s_t, a_t, s_{t+1}) ]
 </span></p>
 <div id="fig-policysearch" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-policysearch-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/policysearch.svg" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Figure&nbsp;12.2: We search for a policy that only generates trajectories associated wizh a high return."><img src="img/policysearch.svg" class="img-fluid figure-img" style="width:60.0%"></a>
+<a href="img/policysearch.svg" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Figure&nbsp;11.2: We search for a policy that only generates trajectories associated with a high return."><img src="img/policysearch.svg" class="img-fluid figure-img" style="width:60.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-policysearch-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;12.2: We search for a policy that only generates trajectories associated wizh a high return.
+Figure&nbsp;11.2: We search for a policy that only generates trajectories associated with a high return.
 </figcaption>
 </figure>
 </div>
@@ -481,11 +471,11 @@ Figure&nbsp;12.2: We search for a policy that only generates trajectories associ
 </span></p>
 <p><span class="math inline">p_0 (s_0)</span> is the initial probability of starting in <span class="math inline">s_0</span> (independent from the policy) and <span class="math inline">p(s_{t+1} | s_t, a_t)</span> is the transition probability defining the MDP. Having the probability distribution of the trajectories, we can expand the mathematical expectation in the objective function:</p>
 <p><span class="math display">
-    J(\theta) = \int_\tau \rho_\theta (\tau) \, R(\tau) \, d\tau
+    \mathcal{J}(\theta) = \int_\tau \rho_\theta (\tau) \, R(\tau) \, d\tau
 </span></p>
 <p>Monte Carlo sampling could be used to estimate the objective function. One basically would have to sample multiple trajectories <span class="math inline">\{\tau_i\}</span> and average the obtained returns:</p>
 <p><span class="math display">
-    J(\theta) \approx \frac{1}{N} \, \sum_{i=1}^N  R(\tau_i)
+    \mathcal{J}(\theta) \approx \frac{1}{N} \, \sum_{i=1}^N  R(\tau_i)
 </span></p>
 <p>However, this approach would suffer from several problems:</p>
 <ol type="1">
@@ -493,13 +483,13 @@ Figure&nbsp;12.2: We search for a policy that only generates trajectories associ
 <li>For stability reasons, only small changes can be made to the policy at each iteration, so it would necessitate a lot of episodes (<strong>sample complexity</strong>).</li>
 <li>For continuing tasks (<span class="math inline">T = \infty</span>), the return can not be estimated as the episode never ends.</li>
 </ol>
-<p>The policy search methods presented in this section are called <strong>policy gradient methods</strong>. As we are going to apply gradient ascent on the weights <span class="math inline">\theta</span> in order to maximize <span class="math inline">J(\theta)</span>, all we actually need is the gradient <span class="math inline">\nabla_\theta J(\theta)</span> of the objective function w.r.t the weights:</p>
+<p>The policy search methods presented in this section are called <strong>policy gradient methods</strong>. As we are going to apply gradient ascent on the weights <span class="math inline">\theta</span> in order to maximize <span class="math inline">\mathcal{J}(\theta)</span>, all we actually need is the gradient <span class="math inline">\nabla_\theta \mathcal{J}(\theta)</span> of the objective function w.r.t the weights:</p>
 <p><span class="math display">
-    \nabla_\theta J(\theta) = \frac{\partial J(\theta)}{\partial \theta}
+    \nabla_\theta \mathcal{J}(\theta) = \frac{\partial \mathcal{J}(\theta)}{\partial \theta}
 </span></p>
 <p>Once a suitable estimation of this <strong>policy gradient</strong> is obtained, gradient ascent is straightforward:</p>
 <p><span class="math display">
-    \theta \leftarrow \theta + \eta \, \nabla_\theta J(\theta)
+    \theta \leftarrow \theta + \eta \, \nabla_\theta \mathcal{J}(\theta)
 </span></p>
 <p>The rest of this section basically presents methods allowing to estimate the policy gradient (REINFORCE, DPG) and to improve the sample complexity. See:</p>
 <ul>
@@ -515,7 +505,7 @@ Figure&nbsp;12.2: We search for a policy that only generates trajectories associ
 <h3 class="anchored" data-anchor-id="estimating-the-policy-gradient">Estimating the policy gradient</h3>
 <p><span class="citation" data-cites="Williams1992">Williams (<a href="references.html#ref-Williams1992" role="doc-biblioref">1992</a>)</span> proposed a useful estimate of the policy gradient. Considering that the return <span class="math inline">R(\tau)</span> of a trajectory does not depend on the parameters <span class="math inline">\theta</span>, one can simplify the policy gradient in the following way:</p>
 <p><span class="math display">
-    \nabla_\theta J(\theta) = \nabla_\theta \int_\tau \rho_\theta (\tau) \, R(\tau) \, d\tau =  \int_\tau (\nabla_\theta \rho_\theta (\tau)) \, R(\tau) \, d\tau
+    \nabla_\theta \mathcal{J}(\theta) = \nabla_\theta \int_\tau \rho_\theta (\tau) \, R(\tau) \, d\tau =  \int_\tau (\nabla_\theta \rho_\theta (\tau)) \, R(\tau) \, d\tau
 </span></p>
 <p>We now use the <strong>log-trick</strong>, a simple identity based on the fact that:</p>
 <p><span class="math display">
@@ -527,11 +517,11 @@ Figure&nbsp;12.2: We search for a policy that only generates trajectories associ
 </span></p>
 <p>The policy gradient becomes:</p>
 <p><span class="math display">
-    \nabla_\theta J(\theta) =  \int_\tau \rho_\theta (\tau) \, \nabla_\theta \log \rho_\theta (\tau) \, R(\tau) \, d\tau
+    \nabla_\theta \mathcal{J}(\theta) =  \int_\tau \rho_\theta (\tau) \, \nabla_\theta \log \rho_\theta (\tau) \, R(\tau) \, d\tau
 </span></p>
 <p>which now has the form of a mathematical expectation:</p>
 <p><span class="math display">
-    \nabla_\theta J(\theta) =  \mathbb{E}_{\tau \sim \rho_\theta}[ \nabla_\theta \log \rho_\theta (\tau) \, R(\tau) ]
+    \nabla_\theta \mathcal{J}(\theta) =  \mathbb{E}_{\tau \sim \rho_\theta}[ \nabla_\theta \log \rho_\theta (\tau) \, R(\tau) ]
 </span></p>
 <p>This means that we can obtain an estimate of the policy gradient by simply sampling different trajectories <span class="math inline">\{\tau_i\}</span> and averaging <span class="math inline">\nabla_\theta \log \rho_\theta (\tau_i) \, R(\tau_i)</span> (Monte Carlo sampling).</p>
 <p>Let’s now look further at how the gradient of the log-likelihood of a trajectory <span class="math inline">\log \pi_\theta (\tau)</span> look like. Through its definition, the log-likelihood of a trajectory is:</p>
@@ -545,7 +535,7 @@ Figure&nbsp;12.2: We search for a policy that only generates trajectories associ
 <p><span class="math inline">\nabla_\theta \log \pi_\theta(s_t, a_t)</span> is called the <strong>score function</strong>.</p>
 <p>This is the main reason why policy gradient algorithms are used: the gradient is independent from the MDP dynamics, allowing <strong>model-free</strong> learning. The policy gradient is then given by:</p>
 <p><span class="math display">
-    \nabla_\theta J(\theta) =  \mathbb{E}_{\tau \sim \rho_\theta}[\sum_{t=0}^T \nabla_\theta \log \pi_\theta(s_t, a_t) \, R(\tau) ] =  \mathbb{E}_{\tau \sim \rho_\theta}[ \sum_{t=0}^T \nabla_\theta \log \pi_\theta(s_t, a_t) \, (\sum_{t=0}^T \gamma^t r_{t+1})]
+    \nabla_\theta \mathcal{J}(\theta) =  \mathbb{E}_{\tau \sim \rho_\theta}[\sum_{t=0}^T \nabla_\theta \log \pi_\theta(s_t, a_t) \, R(\tau) ] =  \mathbb{E}_{\tau \sim \rho_\theta}[ \sum_{t=0}^T \nabla_\theta \log \pi_\theta(s_t, a_t) \, (\sum_{t=0}^T \gamma^t r_{t+1})]
 </span></p>
 <p>Estimating the policy gradient now becomes straightforward using Monte Carlo sampling. The resulting algorithm is called the <strong>REINFORCE</strong> algorithm <span class="citation" data-cites="Williams1992">(<a href="references.html#ref-Williams1992" role="doc-biblioref">Williams, 1992</a>)</span>:</p>
 <div class="callout callout-style-default callout-note no-icon callout-titled">
@@ -554,7 +544,7 @@ Figure&nbsp;12.2: We search for a policy that only generates trajectories associ
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-REINFORCE algorithm
+<span class="screen-reader-only">Note</span>REINFORCE algorithm
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -564,13 +554,13 @@ REINFORCE algorithm
 <li><p>Estimate the policy gradient as an average over the trajectories:</p></li>
 </ul>
 <p><span class="math display">
-    \nabla_\theta J(\theta) \approx \frac{1}{N} \sum_{i=1}^N \sum_{t=0}^T \nabla_\theta \log \pi_\theta(s_t, a_t) \, R(\tau_i)
+    \nabla_\theta \mathcal{J}(\theta) \approx \frac{1}{N} \sum_{i=1}^N \sum_{t=0}^T \nabla_\theta \log \pi_\theta(s_t, a_t) \, R(\tau_i)
 </span></p>
 <ul>
 <li>Update the policy using gradient ascent:</li>
 </ul>
 <p><span class="math display">
-    \theta \leftarrow \theta + \eta \, \nabla_\theta J(\theta)
+    \theta \leftarrow \theta + \eta \, \nabla_\theta \mathcal{J}(\theta)
 </span></p>
 </div>
 </div>
@@ -612,7 +602,7 @@ REINFORCE algorithm
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-REINFORCE algorithm with baseline
+<span class="screen-reader-only">Note</span>REINFORCE algorithm with baseline
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -623,17 +613,17 @@ REINFORCE algorithm with baseline
   \hat{R} = \frac{1}{N} \sum_{i=1}^N R(\tau_i)
 </span></p></li>
 <li><p>Estimate the policy gradient as an average over the trajectories: <span class="math display">
-  \nabla_\theta J(\theta) \approx \frac{1}{N} \sum_{i=1}^N \sum_{t=0}^T \nabla_\theta \log \pi_\theta(s_t, a_t) \, ( R(\tau_i) - \hat{R})
+  \nabla_\theta \mathcal{J}(\theta) \approx \frac{1}{N} \sum_{i=1}^N \sum_{t=0}^T \nabla_\theta \log \pi_\theta(s_t, a_t) \, ( R(\tau_i) - \hat{R})
 </span></p></li>
 <li><p>Update the policy using gradient ascent: <span class="math display">
-  \theta \leftarrow \theta + \eta \, \nabla_\theta J(\theta)
+  \theta \leftarrow \theta + \eta \, \nabla_\theta \mathcal{J}(\theta)
 </span></p></li>
 </ul>
 </div>
 </div>
 <p>This obviously solves the reward scaling problem, and reduces the variance of the gradients. But are we allowed to do this (i.e.&nbsp;does it introduce a bias to the gradient)? <span class="citation" data-cites="Williams1992">Williams (<a href="references.html#ref-Williams1992" role="doc-biblioref">1992</a>)</span> showed that subtracting a constant <span class="math inline">b</span> from the returns still leads to an unbiased estimate of the gradient:</p>
 <p><span class="math display">
-    \nabla_\theta J(\theta) =  \mathbb{E}_{\tau \sim \rho_\theta}[\nabla_\theta \log \rho_\theta (\tau) \, (R(\tau) -b) ]
+    \nabla_\theta \mathcal{J}(\theta) =  \mathbb{E}_{\tau \sim \rho_\theta}[\nabla_\theta \log \rho_\theta (\tau) \, (R(\tau) -b) ]
 </span></p>
 <p>The proof is actually quite simple:</p>
 <p><span class="math display">
@@ -656,50 +646,50 @@ REINFORCE algorithm with baseline
 <h2 class="anchored" data-anchor-id="policy-gradient-theorem">Policy Gradient theorem</h2>
 <p>Let’s have another look at the REINFORCE estimate of the policy gradient after sampling:</p>
 <p><span class="math display">
-   \nabla_\theta J(\theta) \approx \frac{1}{N} \sum_{i=1}^N \sum_{t=0}^T \nabla_\theta \log \pi_\theta(s_t, a_t) \, R(\tau_i) = \frac{1}{N} \sum_{i=1}^N (\sum_{t=0}^T \nabla_\theta \log \pi_\theta(s_t, a_t) ) \, (\sum_{t'=0}^T \gamma^{t'} \, r(s_{t'}, a_{t'}, s_{t'+1}) )
+   \nabla_\theta \mathcal{J}(\theta) \approx \frac{1}{N} \sum_{i=1}^N \sum_{t=0}^T \nabla_\theta \log \pi_\theta(s_t, a_t) \, R(\tau_i) = \frac{1}{N} \sum_{i=1}^N (\sum_{t=0}^T \nabla_\theta \log \pi_\theta(s_t, a_t) ) \, (\sum_{t'=0}^T \gamma^{t'} \, r(s_{t'}, a_{t'}, s_{t'+1}) )
 </span></p>
 <p>For each transition <span class="math inline">(s_t, a_t)</span>, the gradient of its log-likelihood (<em>score function</em>) <span class="math inline">\nabla_\theta \log \pi_\theta(s_t, a_t) )</span> is multiplied by the return of the whole episode <span class="math inline">R(\tau) = \sum_{t'=0}^T \gamma^{t'} \, r(s_{t'}, a_{t'}, s_{t'+1})</span>. However, the <strong>causality principle</strong> dictates that the reward received at <span class="math inline">t=0</span> does not depend on actions taken in the future, so we can simplify the return for each transition:</p>
 <p><span class="math display">
-\nabla_\theta J(\theta) \approx \frac{1}{N} \sum_{i=1}^N (\sum_{t=0}^T \nabla_\theta \log \pi_\theta(s_t, a_t)  \, \sum_{t'=t}^T \gamma^{t'-t} \, r(s_{t'}, a_{t'}, s_{t'+1}) )
+\nabla_\theta \mathcal{J}(\theta) \approx \frac{1}{N} \sum_{i=1}^N (\sum_{t=0}^T \nabla_\theta \log \pi_\theta(s_t, a_t)  \, \sum_{t'=t}^T \gamma^{t'-t} \, r(s_{t'}, a_{t'}, s_{t'+1}) )
 </span></p>
 <p>The quantity <span class="math inline">R_t = \sum_{t'=t}^T \gamma^{t'-t} \, r(s_{t'}, a_{t'}, s_{t'+1})</span> is the return (or <strong>reward to-go</strong>) after the transition <span class="math inline">(s_t, a_t)</span>, i.e.&nbsp;the discounted sum of future rewards. Quite obviously, the Q-value of that action is the mathematical expectation of this quantity.</p>
 <p><span class="math display">
-\nabla_\theta J(\theta) \approx \frac{1}{N} \sum_{i=1}^N \sum_{t=0}^T \nabla_\theta \log \pi_\theta(s_t, a_t) \, R_t
+\nabla_\theta \mathcal{J}(\theta) \approx \frac{1}{N} \sum_{i=1}^N \sum_{t=0}^T \nabla_\theta \log \pi_\theta(s_t, a_t) \, R_t
 </span></p>
 <div id="fig-rewardtogo" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-rewardtogo-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/rewardtogo.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Figure&nbsp;12.3: The reward to-go is the sum of rewards gathered during a single trajectory after a transition (s, a). The Q-value of the action (s, a) is the expectation of the reward to-go. Source: S. Levine’s lecture http://rll.berkeley.edu/deeprlcourse/."><img src="img/rewardtogo.png" class="img-fluid figure-img" style="width:50.0%"></a>
+<a href="img/rewardtogo.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Figure&nbsp;11.3: The reward to-go is the sum of rewards gathered during a single trajectory after a transition (s, a). The Q-value of the action (s, a) is the expectation of the reward to-go. Source: S. Levine’s lecture http://rll.berkeley.edu/deeprlcourse/."><img src="img/rewardtogo.png" class="img-fluid figure-img" style="width:50.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-rewardtogo-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;12.3: The reward to-go is the sum of rewards gathered during a single trajectory after a transition <span class="math inline">(s, a)</span>. The Q-value of the action <span class="math inline">(s, a)</span> is the expectation of the reward to-go. Source: S. Levine’s lecture <a href="http://rll.berkeley.edu/deeprlcourse/" class="uri">http://rll.berkeley.edu/deeprlcourse/</a>.
+Figure&nbsp;11.3: The reward to-go is the sum of rewards gathered during a single trajectory after a transition <span class="math inline">(s, a)</span>. The Q-value of the action <span class="math inline">(s, a)</span> is the expectation of the reward to-go. Source: S. Levine’s lecture <a href="http://rll.berkeley.edu/deeprlcourse/" class="uri">http://rll.berkeley.edu/deeprlcourse/</a>.
 </figcaption>
 </figure>
 </div>
 <p><span class="citation" data-cites="Sutton1999">Sutton et al. (<a href="references.html#ref-Sutton1999" role="doc-biblioref">1999</a>)</span> showed that the policy gradient can be estimated by replacing the return of the sampled trajectory with the Q-value of each action, what leads to the <strong>policy gradient theorem</strong>:</p>
 <p><span class="math display">
-    \nabla_\theta J(\theta) =  \mathbb{E}_{s \sim \rho_\theta, a \sim \pi_\theta}[\nabla_\theta \log \pi_\theta(s, a) \, Q^{\pi_\theta}(s, a)]
+    \nabla_\theta \mathcal{J}(\theta) =  \mathbb{E}_{s \sim \rho_\theta, a \sim \pi_\theta}[\nabla_\theta \log \pi_\theta(s, a) \, Q^{\pi_\theta}(s, a)]
 </span></p>
 <p>where <span class="math inline">\rho_\theta</span> is the distribution of states reachable under the policy <span class="math inline">\pi_\theta</span>. Because the actual return <span class="math inline">R(\tau)</span> is replaced by its expectation <span class="math inline">Q^{\pi_\theta}(s, a)</span>, the policy gradient is now a mathematical expectation over <strong>single transitions</strong> instead of complete trajectories, allowing <strong>bootstrapping</strong> as in temporal difference methods.</p>
 <p>One clearly sees that REINFORCE is actually a special case of the policy gradient theorem, where the Q-value of an action replaces the return obtained during the corresponding trajectory.</p>
 <p>The problem is of course that the true Q-value of the actions is as unknown as the policy. However, <span class="citation" data-cites="Sutton1999">Sutton et al. (<a href="references.html#ref-Sutton1999" role="doc-biblioref">1999</a>)</span> showed that it is possible to estimate the Q-values with a function approximator <span class="math inline">Q_\varphi(s, a)</span> with parameters <span class="math inline">\varphi</span> and obtain an unbiased estimation:</p>
 <p><span class="math display">
-    \nabla_\theta J(\theta) =  \mathbb{E}_{s \sim \rho_\theta, a \sim \pi_\theta}[\nabla_\theta \log \pi_\theta(s, a) \, Q_\varphi(s, a))]
+    \nabla_\theta \mathcal{J}(\theta) =  \mathbb{E}_{s \sim \rho_\theta, a \sim \pi_\theta}[\nabla_\theta \log \pi_\theta(s, a) \, Q_\varphi(s, a))]
 </span></p>
-<p>Formally, the Q-value approximator must respect the Compatible Function Approximation Theorem, which states that the value approximator must be compatible with the policy (<span class="math inline">\nabla_\varphi Q_\varphi(s, a) = \nabla_\theta \log \pi_\theta(s, a)</span>) and minimize the mean-square error with the true Q-values <span class="math inline">\mathbb{E}_{s \sim \rho^\pi, a \sim \pi_\theta} [(Q^{\pi_\theta}(s, a) - Q_\varphi(s, a))^2]</span>. In the algorithms presented in this section, these conditions are either met or neglected.</p>
+<p>Formally, the Q-value approximator must respect the Compatible Function Approximation Theorem, which states that the value approximator must be compatible with the policy (<span class="math inline">\nabla_\varphi Q_\varphi(s, a) = \nabla_\theta \log \pi_\theta(s, a)</span>) and minimize the mean-square error with the true Q-values <span class="math inline">\mathbb{E}_{s \sim \rho_\theta, a \sim \pi_\theta} [(Q^{\pi_\theta}(s, a) - Q_\varphi(s, a))^2]</span>. In the algorithms presented in this section, these conditions are either met or neglected.</p>
 <p>The resulting algorithm belongs to the <strong>actor-critic</strong> class, in the sense that:</p>
 <ul>
 <li>The <strong>actor</strong> <span class="math inline">\pi_\theta(s, a)</span> learns to approximate the policy by using the policy gradient.</li>
 <li>The <strong>critic</strong> <span class="math inline">Q_\varphi(s, a)</span> learns to estimate the Q-values of the actions generated by the policy.</li>
 </ul>
-<p><a href="3.2-ActorCritic.html#fig-actorcriticpolicy" class="quarto-xref">Figure&nbsp;<span>1</span></a> shows the architecture of the algorithm. The only problem left is to provide the critic with the true Q-values (Bellman targets).</p>
+<p><a href="3.2-ActorCritic.html#fig-actorcriticpolicy" class="quarto-xref">Figure&nbsp;<span>12.1</span></a> shows the architecture of the algorithm. The only problem left is to provide the critic with the true Q-values (Bellman targets).</p>
 <div id="fig-actorcriticpolicy" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-actorcriticpolicy-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/policygradient.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="Figure&nbsp;12.4: Architecture of the policy gradient (PG) method."><img src="img/policygradient.png" class="img-fluid figure-img" style="width:80.0%"></a>
+<a href="img/policygradient.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="Figure&nbsp;11.4: Architecture of the policy gradient (PG) method."><img src="img/policygradient.png" class="img-fluid figure-img" style="width:80.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-actorcriticpolicy-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;12.4: Architecture of the policy gradient (PG) method.
+Figure&nbsp;11.4: Architecture of the policy gradient (PG) method.
 </figcaption>
 </figure>
 </div>
@@ -714,7 +704,7 @@ Figure&nbsp;12.4: Architecture of the policy gradient (PG) method.
 Peters, J., and Schaal, S. (2008). Reinforcement learning of motor skills with policy gradients. <em>Neural Networks</em> 21, 682–697. doi:<a href="https://doi.org/10.1016/j.neunet.2008.02.003">10.1016/j.neunet.2008.02.003</a>.
 </div>
 <div id="ref-Sutton1999" class="csl-entry" role="listitem">
-Sutton, R. S., McAllester, D., Singh, S., and Mansour, Y. (1999). Policy gradient methods for reinforcement learning with function approximation. in <em>Proceedings of the 12th <span>International Conference</span> on <span>Neural Information Processing Systems</span></em> (MIT Press), 1057–1063. Available at: <a href="https://dl.acm.org/citation.cfm?id=3009806">https://dl.acm.org/citation.cfm?id=3009806</a>.
+Sutton, R. S., McAllester, D., Singh, S., and Mansour, Y. (1999). Policy gradient methods for reinforcement learning with function approximation. in <em>Proceedings of the 12th <span>International Conference</span> on <span>Neural Information Processing Systems</span></em> (MIT Press), 1057–1063.
 </div>
 <div id="ref-Williams1992" class="csl-entry" role="listitem">
 Williams, R. J. (1992). Simple statistical gradient-following algorithms for connectionist reinforcement learning. <em>Machine Learning</em> 8, 229–256.
@@ -774,13 +764,14 @@ Williams, R. J. (1992). Simple statistical gradient-following algorithms for con
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy
@@ -1122,15 +1113,15 @@ Williams, R. J. (1992). Simple statistical gradient-following algorithms for con
     }
   });
   </script>
-<nav class="page-navigation">
+<nav class="page-navigation column-body">
   <div class="nav-page nav-page-previous">
-      <a href="../src/2.6-Misc.html" class="pagination-link" aria-label="Misc.">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">Misc.</span></span>
+      <a href="../src/2.5-DistributedLearning.html" class="pagination-link" aria-label="Distributed learning">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">Distributed learning</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
       <a href="../src/3.2-ActorCritic.html" class="pagination-link" aria-label="Advantage Actor-Critic (A3C)">
-        <span class="nav-page-text">Advantage Actor-Critic (A3C)</span> <i class="bi bi-arrow-right-short"></i>
+        <span class="nav-page-text"><span class="chapter-title">Advantage Actor-Critic (A3C)</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

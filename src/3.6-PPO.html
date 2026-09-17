@@ -2,17 +2,23 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.29">
+<meta name="generator" content="quarto-1.10.18">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>Policy optimization (TRPO, PPO) – Deep Reinforcement Learning</title>
 <style>
-code{white-space: pre-wrap;}
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -57,10 +63,10 @@ div.csl-indent {
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-bcbce66894bfa8e7e94e40e0186b9bb8.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-bb62276ab45c84d9efd712f51ff97b5a.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-ea27fabe3da5290357830f0bd5288bdb.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-3998d32367fd34ee6440c4fab252e735.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script src="../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
 <link href="../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
 <link href="../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
@@ -121,7 +127,7 @@ const typesetMath = (el) => {
     var macros = [];
     for (var i = 0; i < mathElements.length; i++) {
       var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
         window.katex.render(texText.data, mathElements[i], {
           displayMode: mathElements[i].classList.contains('display'),
           throwOnError: false,
@@ -139,7 +145,7 @@ window.Quarto = {
 
 </head>
 
-<body class="nav-sidebar floating quarto-light">
+<body class="nav-sidebar docked quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -149,7 +155,7 @@ window.Quarto = {
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
         <a class="flex-grow-1 no-decor" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-          <h1 class="quarto-secondary-nav-title"><span class="chapter-title">Policy optimization (TRPO, PPO)</span></h1>
+          <h1 class="quarto-secondary-nav-title"><span id="sec-ppo" class="quarto-section-identifier"><span class="chapter-title">Policy optimization (TRPO, PPO)</span></span></h1>
         </a>     
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
         <i class="bi bi-search"></i>
@@ -158,9 +164,9 @@ window.Quarto = {
   </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="../">Deep Reinforcement Learning</a> 
@@ -252,11 +258,6 @@ window.Quarto = {
   <a href="../src/2.5-DistributedLearning.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Distributed learning</span></a>
   </div>
 </li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../src/2.6-Misc.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Misc.</span></a>
-  </div>
-</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -275,8 +276,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/3.2-ActorCritic.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Advantage Actor-Critic (A3C)</span></a>
+  <a href="../src/3.2-ActorCritic.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Advantage Actor-Critic (A3C)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -307,11 +307,6 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../src/3.8-EntropyRL.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Maximum Entropy RL (SAC)</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../src/3.9-Misc.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Misc.</span></a>
   </div>
 </li>
       </ul>
@@ -350,11 +345,6 @@ window.Quarto = {
   <a href="../src/4.5-AlphaGo.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">AlphaGo</span></a>
   </div>
 </li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../src/4.6-Misc.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Misc.</span></a>
-  </div>
-</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -383,7 +373,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/5.4-Meta.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Meta learning</span></a>
+  <a href="../src/5.4-Meta.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Meta reinforcement learning</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -418,20 +408,21 @@ window.Quarto = {
   <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary">Summary</a></li>
   </ul></li>
   <li><a href="#sec-PPO" id="toc-sec-PPO" class="nav-link" data-scroll-target="#sec-PPO">Proximal Policy Optimization (PPO)</a></li>
+  <li><a href="#application-openai-five" id="toc-application-openai-five" class="nav-link" data-scroll-target="#application-openai-five">Application: OpenAI Five</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
+<main class="content column-body" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title d-none d-lg-block"><span class="chapter-title">Policy optimization (TRPO, PPO)</span></h1>
+<h1 class="title d-none d-lg-block"><span id="sec-ppo" class="quarto-section-identifier"><span class="chapter-title">Policy optimization (TRPO, PPO)</span></span></h1>
 </div>
 
 
 
-<div class="quarto-title-meta">
+<div class="quarto-title-meta column-body">
 
     
   
@@ -468,40 +459,40 @@ window.Quarto = {
 <p>One can already recognize the main motivation behind natural gradients: finding a weight update that moves the policy in the right direction (getting more rewards) while keeping the change in the policy distribution as small as possible (to keep the assumption correct).</p>
 <p>Let’s now define the following objective function:</p>
 <p><span class="math display">
-    J_{\theta_\text{old}}(\theta) = \eta(\theta_\text{old}) + \mathbb{E}_{s \sim \rho_{\pi_{\theta_\text{old}}}, a \sim \pi_\theta} [A_{\pi_{\theta_\text{old}}}(s, a)]
+    \mathcal{J}_{\theta_\text{old}}(\theta) = \eta(\theta_\text{old}) + \mathbb{E}_{s \sim \rho_{\pi_{\theta_\text{old}}}, a \sim \pi_\theta} [A_{\pi_{\theta_\text{old}}}(s, a)]
 </span></p>
-<p>It is easy to see that <span class="math inline">J_{\theta_\text{old}}(\theta_\text{old}) = \eta(\theta_\text{old})</span> by definition of the advantage, and that its gradient w.r.t to <span class="math inline">\theta</span> taken in <span class="math inline">\theta_\text{old}</span> is the same as the one of <span class="math inline">\eta(\theta_\text{old})</span>:</p>
+<p>It is easy to see that <span class="math inline">\mathcal{J}_{\theta_\text{old}}(\theta_\text{old}) = \eta(\theta_\text{old})</span> by definition of the advantage, and that its gradient w.r.t to <span class="math inline">\theta</span> taken in <span class="math inline">\theta_\text{old}</span> is the same as the one of <span class="math inline">\eta(\theta_\text{old})</span>:</p>
 <p><span class="math display">
-    \nabla_\theta J_{\theta_\text{old}}(\theta)|_{\theta = \theta_\text{old}} = \nabla_\theta \eta(\theta)|_{\theta = \theta_\text{old}}
+    \nabla_\theta \mathcal{J}_{\theta_\text{old}}(\theta)|_{\theta = \theta_\text{old}} = \nabla_\theta \eta(\theta)|_{\theta = \theta_\text{old}}
 </span></p>
-<p>This means that, at least locally, one maximization step of <span class="math inline">J_{\theta_\text{old}}(\theta)</span> goes in the same direction as maximizing <span class="math inline">\eta(\theta)</span> if we do not go too far. <span class="math inline">J</span> is called a <strong>surrogate objective function</strong>: it is not what we want to optimize, but it leads to the same result. TRPO belongs to the class of <strong>minorization-majorization</strong> algorithms (MM, we first find a local lower bound and then maximize it, iteratively).</p>
+<p>This means that, at least locally, one maximization step of <span class="math inline">\mathcal{J}_{\theta_\text{old}}(\theta)</span> goes in the same direction as maximizing <span class="math inline">\eta(\theta)</span> if we do not go too far. <span class="math inline">\mathcal{J}</span> is called a <strong>surrogate objective function</strong>: it is not what we want to optimize, but it leads to the same result. TRPO belongs to the class of <strong>minorization-majorization</strong> algorithms (MM, we first find a local lower bound and then maximize it, iteratively).</p>
 <p>Let’s now suppose that we can find its maximum, i.e.&nbsp;a policy <span class="math inline">\pi'</span> that maximizes the advantage of each state-action pair over <span class="math inline">\pi_{\theta_\text{old}}</span>. There would be no guarantee that <span class="math inline">\pi'</span> and <span class="math inline">\pi_{\theta_\text{old}}</span> are close enough so that the assumption stands. We could therefore make only a small step in its direction and hope for the best:</p>
 <p><span id="eq-linesearch"><span class="math display">
     \pi_\theta(s, a) = (1-\alpha) \, \pi_{\theta_\text{old}}(s, a) + \alpha \, \pi'(s,a)
 \tag{16.1}</span></span></p>
-<p>This is the conservative policy iteration method of <span class="citation" data-cites="Kakade2002">Kakade and Langford (<a href="references.html#ref-Kakade2002" role="doc-biblioref">2002</a>)</span>, where a bound on the difference between <span class="math inline">\eta(\pi_{\theta_\text{old}})</span> and <span class="math inline">J_{\theta_\text{old}}(\theta)</span> can be derived.</p>
+<p>This is the conservative policy iteration method of <span class="citation" data-cites="Kakade2002">Kakade and Langford (<a href="references.html#ref-Kakade2002" role="doc-biblioref">2002</a>)</span>, where a bound on the difference between <span class="math inline">\eta(\pi_{\theta_\text{old}})</span> and <span class="math inline">\mathcal{J}_{\theta_\text{old}}(\theta)</span> can be derived.</p>
 <p><span class="citation" data-cites="Schulman2015">Schulman et al. (<a href="references.html#ref-Schulman2015" role="doc-biblioref">2015</a>)</span> propose to penalize instead the objective function by the KL divergence between the new and old policies. There are basically two ways to penalize an optimization problem:</p>
 <ol type="1">
 <li>Adding a hard constraint on the KL divergence, leading to a constrained optimization problem (where Lagrange methods can be applied):</li>
 </ol>
 <p><span class="math display">
-    \text{maximize}_\theta \qquad J_{\theta_\text{old}}(\theta) \\
-    \qquad \text{subject to} \qquad D_{KL}(\pi_{\theta_\text{old}} || \pi_\theta) \leq \delta
+    \text{maximize}_\theta \qquad \mathcal{J}_{\theta_\text{old}}(\theta) \\
+    \qquad \text{subject to} \qquad D_\text{KL}(\pi_{\theta_\text{old}} || \pi_\theta) \leq \delta
 </span></p>
 <ol start="2" type="1">
 <li>Regularizing the objective function with the KL divergence:</li>
 </ol>
 <p><span class="math display">
-    \text{maximize}_\theta \qquad L(\theta) = J_{\theta_\text{old}}(\pi_\theta) - C \,  D_{KL}(\pi_{\theta_\text{old}} || \pi_\theta)
+    \text{maximize}_\theta \qquad \mathcal{L}(\theta) = \mathcal{J}_{\theta_\text{old}}(\pi_\theta) - C \,  D_\text{KL}(\pi_{\theta_\text{old}} || \pi_\theta)
 </span></p>
-<p>In the first case, we force the KL divergence to stay below a certain threshold. In the second case, we penalize solutions that would maximize <span class="math inline">J_{\theta_\text{old}}(\theta)</span> but would be too different from the previous policy. In both cases, we want to find a policy <span class="math inline">\pi_\theta</span> maximizing the expected return (the objective), but which is still close (in terms of KL divergence) from the current one. Both methods are however sensible to the choice of the parameters <span class="math inline">\delta</span> and <span class="math inline">C</span>.</p>
-<p>Formally, the KL divergence <span class="math inline">D_{KL}(\pi_{\theta_\text{old}} || \pi_\theta)</span> should be the maximum KL divergence over the state space:</p>
+<p>In the first case, we force the KL divergence to stay below a certain threshold. In the second case, we penalize solutions that would maximize <span class="math inline">\mathcal{J}_{\theta_\text{old}}(\theta)</span> but would be too different from the previous policy. In both cases, we want to find a policy <span class="math inline">\pi_\theta</span> maximizing the expected return (the objective), but which is still close (in terms of KL divergence) from the current one. Both methods are however sensible to the choice of the parameters <span class="math inline">\delta</span> and <span class="math inline">C</span>.</p>
+<p>Formally, the KL divergence <span class="math inline">D_\text{KL}(\pi_{\theta_\text{old}} || \pi_\theta)</span> should be the maximum KL divergence over the state space:</p>
 <p><span class="math display">
-    D^\text{max}_{KL}(\pi_{\theta_\text{old}} || \pi_\theta) = \max_s D_{KL}(\pi_{\theta_\text{old}}(s, .) || \pi_\theta(s, .))
+    D^\text{max}_{KL}(\pi_{\theta_\text{old}} || \pi_\theta) = \max_s D_\text{KL}(\pi_{\theta_\text{old}}(s, .) || \pi_\theta(s, .))
 </span></p>
 <p>This maximum KL divergence over the state space would be very hard to compute. Empirical evaluations showed however that it is safe to use the mean KL divergence, or even to sample it:</p>
 <p><span class="math display">
-    \bar{D}_{KL}(\pi_{\theta_\text{old}} || \pi_\theta) = \mathbb{E}_s [D_{KL}(\pi_{\theta_\text{old}}(s, .) || \pi_\theta(s, .))] \approx \frac{1}{N} \sum_{i=1}^N D_{KL}(\pi_{\theta_\text{old}}(s_i, .) || \pi_\theta(s_i, .))
+    \bar{D}_{KL}(\pi_{\theta_\text{old}} || \pi_\theta) = \mathbb{E}_s [D_\text{KL}(\pi_{\theta_\text{old}}(s, .) || \pi_\theta(s, .))] \approx \frac{1}{N} \sum_{i=1}^N D_\text{KL}(\pi_{\theta_\text{old}}(s_i, .) || \pi_\theta(s_i, .))
 </span></p>
 </section>
 <section id="trust-regions" class="level3">
@@ -509,26 +500,26 @@ window.Quarto = {
 <div id="fig-trustregion" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-trustregion-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/trustregion.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;16.1: Graphical illustration of trust regions. From the current parameters \theta_\text{old}, we search for the maximum \theta^* of the real objective \eta(\theta). The unconstrained objective J_{\theta_\text{old}}(\theta) is locally similar to \eta(\theta) but quickly diverge as \pi_\theta and \pi_{\theta_\text{old}} become very different. The surrogate objective L(\theta) = J_{\theta_\text{old}} (\theta) - C \,  D_{KL}(\pi_{\theta_\text{old}} || \pi_\theta) is always smaller than \eta(\theta) and has a maximum close to \theta^* which keeps \pi_\theta and \pi_{\theta_\text{old}} close from each other in terms of KL divergence. The region around \theta_\text{old} where big optimization steps can be taken without changing the policy too much is called the trust region."><img src="img/trustregion.png" class="img-fluid figure-img" style="width:70.0%"></a>
+<a href="img/trustregion.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;16.1: Graphical illustration of trust regions. From the current parameters \theta_\text{old}, we search for the maximum \theta^* of the real objective \eta(\theta). The unconstrained objective \mathcal{J}_{\theta_\text{old}}(\theta) is locally similar to \eta(\theta) but quickly diverge as \pi_\theta and \pi_{\theta_\text{old}} become very different. The surrogate objective \mathcal{L}(\theta) = \mathcal{J}_{\theta_\text{old}} (\theta) - C \,  D_\text{KL}(\pi_{\theta_\text{old}} || \pi_\theta) is always smaller than \eta(\theta) and has a maximum close to \theta^* which keeps \pi_\theta and \pi_{\theta_\text{old}} close from each other in terms of KL divergence. The region around \theta_\text{old} where big optimization steps can be taken without changing the policy too much is called the trust region."><img src="img/trustregion.png" class="img-fluid figure-img" style="width:70.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-trustregion-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;16.1: Graphical illustration of trust regions. From the current parameters <span class="math inline">\theta_\text{old}</span>, we search for the maximum <span class="math inline">\theta^*</span> of the real objective <span class="math inline">\eta(\theta)</span>. The unconstrained objective <span class="math inline">J_{\theta_\text{old}}(\theta)</span> is locally similar to <span class="math inline">\eta(\theta)</span> but quickly diverge as <span class="math inline">\pi_\theta</span> and <span class="math inline">\pi_{\theta_\text{old}}</span> become very different. The surrogate objective <span class="math inline">L(\theta) = J_{\theta_\text{old}} (\theta) - C \,  D_{KL}(\pi_{\theta_\text{old}} || \pi_\theta)</span> is always smaller than <span class="math inline">\eta(\theta)</span> and has a maximum close to <span class="math inline">\theta^*</span> which keeps <span class="math inline">\pi_\theta</span> and <span class="math inline">\pi_{\theta_\text{old}}</span> close from each other in terms of KL divergence. The region around <span class="math inline">\theta_\text{old}</span> where big optimization steps can be taken without changing the policy too much is called the trust region.
+Figure&nbsp;16.1: Graphical illustration of trust regions. From the current parameters <span class="math inline">\theta_\text{old}</span>, we search for the maximum <span class="math inline">\theta^*</span> of the real objective <span class="math inline">\eta(\theta)</span>. The unconstrained objective <span class="math inline">\mathcal{J}_{\theta_\text{old}}(\theta)</span> is locally similar to <span class="math inline">\eta(\theta)</span> but quickly diverge as <span class="math inline">\pi_\theta</span> and <span class="math inline">\pi_{\theta_\text{old}}</span> become very different. The surrogate objective <span class="math inline">\mathcal{L}(\theta) = \mathcal{J}_{\theta_\text{old}} (\theta) - C \,  D_\text{KL}(\pi_{\theta_\text{old}} || \pi_\theta)</span> is always smaller than <span class="math inline">\eta(\theta)</span> and has a maximum close to <span class="math inline">\theta^*</span> which keeps <span class="math inline">\pi_\theta</span> and <span class="math inline">\pi_{\theta_\text{old}}</span> close from each other in terms of KL divergence. The region around <span class="math inline">\theta_\text{old}</span> where big optimization steps can be taken without changing the policy too much is called the trust region.
 </figcaption>
 </figure>
 </div>
-<p>Before diving further into how these optimization problems can be solved, let’s wonder why the algorithm is called <strong>trust region policy optimization</strong> using the regularized objective. <a href="#fig-trustregion" class="quarto-xref">Figure&nbsp;<span>16.1</span></a> illustrates the idea. The “real” objective function <span class="math inline">\eta(\theta)</span> should be maximized (with gradient descent or similar) starting from the parameters <span class="math inline">\theta_\text{old}</span>. We cannot estimate the objective function directly, so we build a surrogate objective function <span class="math inline">L(\theta) = J_{\theta_\text{old}} (\theta) - C \,  D_{KL}(\pi_{\theta_\text{old}} || \pi_\theta)</span>. We know that:</p>
+<p>Before diving further into how these optimization problems can be solved, let’s wonder why the algorithm is called <strong>trust region policy optimization</strong> using the regularized objective. <a href="#fig-trustregion" class="quarto-xref">Figure&nbsp;<span>16.1</span></a> illustrates the idea. The “real” objective function <span class="math inline">\eta(\theta)</span> should be maximized (with gradient descent or similar) starting from the parameters <span class="math inline">\theta_\text{old}</span>. We cannot estimate the objective function directly, so we build a surrogate objective function <span class="math inline">\mathcal{L}(\theta) = \mathcal{J}_{\theta_\text{old}} (\theta) - C \,  D_\text{KL}(\pi_{\theta_\text{old}} || \pi_\theta)</span>. We know that:</p>
 <ol type="1">
 <li>The two objectives have the same value in <span class="math inline">\theta_\text{old}</span>: <span class="math display">
-L(\theta_\text{old}) = J_{\theta_\text{old}}(\theta_\text{old}) - C \,  D_{KL}(\pi_{\theta_\text{old}} || \pi_{\theta_\text{old}}) = \eta(\theta_\text{old})
+\mathcal{L}(\theta_\text{old}) = \mathcal{J}_{\theta_\text{old}}(\theta_\text{old}) - C \,  D_\text{KL}(\pi_{\theta_\text{old}} || \pi_{\theta_\text{old}}) = \eta(\theta_\text{old})
 </span></li>
 <li>Their gradient w.r.t <span class="math inline">\theta</span> are the same in <span class="math inline">\theta_\text{old}</span>: <span class="math display">
-\nabla_\theta L(\theta)|_{\theta = \theta_\text{old}} = \nabla_\theta \eta(\theta)|_{\theta = \theta_\text{old}}
+\nabla_\theta \mathcal{L}(\theta)|_{\theta = \theta_\text{old}} = \nabla_\theta \eta(\theta)|_{\theta = \theta_\text{old}}
 </span></li>
 <li>The surrogate objective is always smaller than the real objective, as the KL divergence is positive: <span class="math display">
-\eta(\theta) \geq J_{\theta_\text{old}}(\theta) - C \,  D_{KL}(\pi_{\theta_\text{old}} || \pi_\theta)
+\eta(\theta) \geq \mathcal{J}_{\theta_\text{old}}(\theta) - C \,  D_\text{KL}(\pi_{\theta_\text{old}} || \pi_\theta)
 </span></li>
 </ol>
-<p>Under these conditions, the surrogate objective is also called a <strong>lower bound</strong> of the primary objective. The interesting fact is that the value of <span class="math inline">\theta</span> that maximizes <span class="math inline">L(\theta)</span> is at the same time:</p>
+<p>Under these conditions, the surrogate objective is also called a <strong>lower bound</strong> of the primary objective. The interesting fact is that the value of <span class="math inline">\theta</span> that maximizes <span class="math inline">\mathcal{L}(\theta)</span> is at the same time:</p>
 <ul>
 <li>A big step in the parameter space towards the maximum of <span class="math inline">\eta(\theta)</span>, as <span class="math inline">\theta</span> and <span class="math inline">\theta_\text{old}</span> can be very different.</li>
 <li>A small step in the policy distribution space, as the KL divergence between the previous and the new policies is kept small.</li>
@@ -539,19 +530,19 @@ L(\theta_\text{old}) = J_{\theta_\text{old}}(\theta_\text{old}) - C \,  D_{KL}(\
 <h3 class="anchored" data-anchor-id="sample-based-formulation">Sample-based formulation</h3>
 <p>Although the theoretical proofs in <span class="citation" data-cites="Schulman2015">Schulman et al. (<a href="references.html#ref-Schulman2015" role="doc-biblioref">2015</a>)</span> used the regularized optimization method, the practical implementation uses the constrained optimization problem:</p>
 <p><span class="math display">
-    \text{maximize}_\theta \qquad J_{\theta_\text{old}}(\theta) = \eta(\theta_\text{old}) + \mathbb{E}_{s \sim \rho_{\pi_{\theta_\text{old}}}, a \sim \pi_\theta} [A_{\pi_{\theta_\text{old}}}(s, a)] \\
-    \qquad \text{subject to} \qquad D_{KL}(\pi_{\theta_\text{old}} || \pi_\theta) \leq \delta
+    \text{maximize}_\theta \qquad \mathcal{J}_{\theta_\text{old}}(\theta) = \eta(\theta_\text{old}) + \mathbb{E}_{s \sim \rho_{\pi_{\theta_\text{old}}}, a \sim \pi_\theta} [A_{\pi_{\theta_\text{old}}}(s, a)] \\
+    \qquad \text{subject to} \qquad D_\text{KL}(\pi_{\theta_\text{old}} || \pi_\theta) \leq \delta
 </span></p>
 <p>The first thing to notice is that <span class="math inline">\eta(\theta_\text{old})</span> does not depend on <span class="math inline">\theta</span>, so it is constant in the optimization problem. We only need to maximize the advantage of the actions taken by <span class="math inline">\pi_\theta</span> in each state visited by <span class="math inline">\pi_{\theta_\text{old}}</span>. The problem is that <span class="math inline">\pi_\theta</span> is what we search, so we can not sample actions from it. The solution is to use <strong>importance sampling</strong> to allow sampling actions from <span class="math inline">\pi_{\theta_\text{old}}</span>. This is possible as long as we correct the objective with the importance sampling weight:</p>
 <p><span class="math display">
     \text{maximize}_\theta \qquad \mathbb{E}_{s \sim \rho_{\pi_{\theta_\text{old}}}, a \sim \pi_{\theta_\text{old}}} [\frac{\pi_\theta(s, a)}{\pi_{\theta_\text{old}}(s, a)} \, A_{\pi_{\theta_\text{old}}}(s, a)] \\
-    \qquad \text{subject to} \qquad D_{KL}(\pi_{\theta_\text{old}} || \pi_\theta) \leq \delta
+    \qquad \text{subject to} \qquad D_\text{KL}(\pi_{\theta_\text{old}} || \pi_\theta) \leq \delta
 </span></p>
 <p>Now that states and actions are generated by the old policy, we can safely sample many trajectories using <span class="math inline">\pi_{\theta_\text{old}}</span> (<span class="citation" data-cites="Schulman2015">Schulman et al. (<a href="references.html#ref-Schulman2015" role="doc-biblioref">2015</a>)</span> proposes two methods called single path and Vine, but we ignore it here), compute the advantages of all state-action pairs (using real rewards along the trajectories), form the surrogate objective function and optimize it using second-order optimization methods.</p>
 <p>One last thing to notice is that the advantages <span class="math inline">A_{\pi_{\theta_\text{old}}}(s, a) = Q_{\pi_{\theta_\text{old}}}(s, a) - V_{\pi_{\theta_\text{old}}}(s)</span> depend on the value of the states encountered by <span class="math inline">\pi_{\theta_\text{old}}</span>. The state values do not depend on the policies, they are constant for each optimization step, so they can also be safely removed:</p>
 <p><span class="math display">
     \text{maximize}_\theta \qquad \mathbb{E}_{s \sim \rho_{\pi_{\theta_\text{old}}}, a \sim \pi_{\theta_\text{old}}} [\frac{\pi_\theta(s, a)}{\pi_{\theta_\text{old}}(s, a)} \, Q_{\pi_{\theta_\text{old}}}(s, a)] \\
-    \qquad \text{subject to} \qquad D_{KL}(\pi_{\theta_\text{old}} || \pi_\theta) \leq \delta
+    \qquad \text{subject to} \qquad D_\text{KL}(\pi_{\theta_\text{old}} || \pi_\theta) \leq \delta
 </span></p>
 <p>Here we go, that’s TRPO. It could seem a bit disappointing to come up with such a simple formulation (find a policy which maximizes the Q-value of sampled actions while being not too different from the previous one) after so many mathematical steps, but that is also the beauty of it: not only it works, but it is guaranteed to work. With TRPO, each optimization step brings the policy closer from an optimum, what is called <strong>monotonic improvement</strong>.</p>
 </section>
@@ -560,31 +551,31 @@ L(\theta_\text{old}) = J_{\theta_\text{old}}(\theta_\text{old}) - C \,  D_{KL}(\
 <p>Now, how do we solve the constrained optimization problem? And what is the link with natural gradients?</p>
 <p>To solve constrained optimization problems, we can form a Lagrange function with an additional parameter <span class="math inline">\lambda</span> and search for its maximum:</p>
 <p><span class="math display">
-    \mathcal{L}(\theta, \lambda) = J_{\theta_\text{old}}(\theta)  - \lambda \, (D_{KL}(\pi_{\theta_\text{old}} || \pi_\theta) - \delta)
+    \mathcal{L}(\theta, \lambda) = \mathcal{J}_{\theta_\text{old}}(\theta)  - \lambda \, (D_\text{KL}(\pi_{\theta_\text{old}} || \pi_\theta) - \delta)
 </span></p>
-<p>Notice how close the Lagrange function is from the regularized problem used in the theory. We can form a first-order approximation of <span class="math inline">J_{\theta_\text{old}}(\theta)</span>:</p>
+<p>Notice how close the Lagrange function is from the regularized problem used in the theory. We can form a first-order approximation of <span class="math inline">\mathcal{J}_{\theta_\text{old}}(\theta)</span>:</p>
 <p><span class="math display">
-    J_{\theta_\text{old}}(\theta) = \nabla_\theta J_{\theta_\text{old}}(\theta) \, (\theta- \theta_\text{old})
+    \mathcal{J}_{\theta_\text{old}}(\theta) = \nabla_\theta \mathcal{J}_{\theta_\text{old}}(\theta) \, (\theta- \theta_\text{old})
 </span></p>
-<p>as <span class="math inline">J_{\theta_\text{old}}(\theta_\text{old}) = 0</span>. <span class="math inline">g = \nabla_\theta J_{\theta_\text{old}}(\theta)</span> is the now familiar <strong>policy gradient</strong> with importance sampling. Higher-order terms do not matter, as they are going to be dominated by the KL divergence term.</p>
+<p>as <span class="math inline">\mathcal{J}_{\theta_\text{old}}(\theta_\text{old}) = 0</span>. <span class="math inline">g = \nabla_\theta \mathcal{J}_{\theta_\text{old}}(\theta)</span> is the now familiar <strong>policy gradient</strong> with importance sampling. Higher-order terms do not matter, as they are going to be dominated by the KL divergence term.</p>
 <p>We will use a second-order approximation of the KL divergence term using the Fisher Information Matrix:</p>
 <p><span class="math display">
-    D_{KL}(\pi_{\theta_\text{old}} || \pi_\theta) = (\theta- \theta_\text{old})^T \, F(\theta_\text{old}) \,  (\theta- \theta_\text{old})
+    D_\text{KL}(\pi_{\theta_\text{old}} || \pi_\theta) = (\theta- \theta_\text{old})^T \, F(\theta_\text{old}) \,  (\theta- \theta_\text{old})
 </span></p>
 <p>We get the following Lagrangian function:</p>
 <p><span class="math display">
-    \mathcal{L}(\theta, \lambda) = \nabla_\theta J_{\theta_\text{old}}(\theta) \, (\theta- \theta_\text{old})  - \lambda \, (\theta- \theta_\text{old})^T \, F(\theta_\text{old}) \,  (\theta- \theta_\text{old})
+    \mathcal{L}(\theta, \lambda) = \nabla_\theta \mathcal{J}_{\theta_\text{old}}(\theta) \, (\theta- \theta_\text{old})  - \lambda \, (\theta- \theta_\text{old})^T \, F(\theta_\text{old}) \,  (\theta- \theta_\text{old})
 </span></p>
 <p>which is quadratic in <span class="math inline">\Delta \theta = \theta- \theta_\text{old}</span>. It has therefore a unique maximum, characterized by a first-order derivative equal to 0:</p>
 <p><span class="math display">
-    \nabla_\theta J_{\theta_\text{old}}(\theta) = \lambda \, F(\theta_\text{old}) \,  \Delta \theta
+    \nabla_\theta \mathcal{J}_{\theta_\text{old}}(\theta) = \lambda \, F(\theta_\text{old}) \,  \Delta \theta
 </span></p>
 <p>or:</p>
 <p><span class="math display">
-    \Delta \theta  = \frac{1}{\lambda} \, F(\theta_\text{old})^{-1} \,  \nabla_\theta J_{\theta_\text{old}}(\theta)
+    \Delta \theta  = \frac{1}{\lambda} \, F(\theta_\text{old})^{-1} \,  \nabla_\theta \mathcal{J}_{\theta_\text{old}}(\theta)
 </span></p>
 <p>which is the <strong>natural gradient descent</strong>! The size of the step <span class="math inline">\frac{1}{\lambda}</span> still has to be determined, but it can also be replaced by a fixed hyperparameter.</p>
-<p>The main problem is now to compute and inverse the Fisher information matrix, which is quadratic with the number of parameters <span class="math inline">\theta</span>, i.e.&nbsp;with the number of weights in the NN. <span class="citation" data-cites="Schulman2015">Schulman et al. (<a href="references.html#ref-Schulman2015" role="doc-biblioref">2015</a>)</span> proposes to used <strong>conjugate gradients</strong> to iteratively approximate the Fisher, a second-order method which will not be presented here (see <a href="https://www.cs.cmu.edu/~quake-papers/painless-conjugate-gradient.pdf" class="uri">https://www.cs.cmu.edu/~quake-papers/painless-conjugate-gradient.pdf</a> for a detailed introduction). After the conjugate gradient optimization step, the constraint <span class="math inline">D_{KL}(\pi_{\theta_\text{old}} || \pi_\theta) \leq \delta</span> is however not ensured anymore, so a line search is made as in <a href="#eq-linesearch" class="quarto-xref">Equation&nbsp;<span>16.1</span></a> until that criteria is met.</p>
+<p>The main problem is now to compute and inverse the Fisher information matrix, which is quadratic with the number of parameters <span class="math inline">\theta</span>, i.e.&nbsp;with the number of weights in the NN. <span class="citation" data-cites="Schulman2015">Schulman et al. (<a href="references.html#ref-Schulman2015" role="doc-biblioref">2015</a>)</span> proposes to used <strong>conjugate gradients</strong> to iteratively approximate the Fisher, a second-order method which will not be presented here (see <a href="https://www.cs.cmu.edu/~quake-papers/painless-conjugate-gradient.pdf" class="uri">https://www.cs.cmu.edu/~quake-papers/painless-conjugate-gradient.pdf</a> for a detailed introduction). After the conjugate gradient optimization step, the constraint <span class="math inline">D_\text{KL}(\pi_{\theta_\text{old}} || \pi_\theta) \leq \delta</span> is however not ensured anymore, so a line search is made as in <a href="#eq-linesearch" class="quarto-xref">Equation&nbsp;<span>16.1</span></a> until that criteria is met.</p>
 </section>
 <section id="summary" class="level3">
 <h3 class="anchored" data-anchor-id="summary">Summary</h3>
@@ -595,13 +586,13 @@ L(\theta_\text{old}) = J_{\theta_\text{old}}(\theta_\text{old}) - C \,  D_{KL}(\
 <li>It works well when the NN has only fully-connected layers, but empirically performs poorly on tasks requiring convolutional layers or recurrent layers.</li>
 <li>The use of conjugate gradients makes the implementation much more complicated and less flexible than regular SGD.</li>
 </ul>
-<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout callout-style-default callout-tip no-icon callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
-<i class="callout-icon"></i>
+<i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Additional resources
+<span class="screen-reader-only">Tip</span>Additional resources
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -621,13 +612,13 @@ Additional resources
 <p>Proximal Policy Optimization (PPO) was proposed by <span class="citation" data-cites="Schulman2017">Schulman et al. (<a href="references.html#ref-Schulman2017" role="doc-biblioref">2017</a>)</span> to overcome the problems of TRPO (complexity, inability to share parameters or to use complex NN architectures) while increasing the range of tasks learnable by the system (compared to DQN) and improving the sample complexity (compared to online PG methods, which perform only one update per step).</p>
 <p>For that, they investigated various surrogate objectives (lower bounds) that could be solved using first-order optimization techniques (gradient descent). Let’s rewrite the surrogate loss of TRPO in the following manner:</p>
 <p><span class="math display">
-    L^\text{CPI}(\theta) = \mathbb{E}_{t} [\frac{\pi_\theta(s_t, a_t)}{\pi_{\theta_\text{old}}(s_t, a_t)} \, A_{\pi_{\theta_\text{old}}}(s_t, a_t)] = \mathbb{E}_{t} [\rho_t(\theta) \, A_{\pi_{\theta_\text{old}}}(s_t, a_t)]
+    \mathcal{L}^\text{CPI}(\theta) = \mathbb{E}_{t} [\frac{\pi_\theta(s_t, a_t)}{\pi_{\theta_\text{old}}(s_t, a_t)} \, A_{\pi_{\theta_\text{old}}}(s_t, a_t)] = \mathbb{E}_{t} [\rho_t(\theta) \, A_{\pi_{\theta_\text{old}}}(s_t, a_t)]
 </span></p>
-<p>by making the dependency over time explicit and noting the importance sampling weight <span class="math inline">\rho_t(\theta)</span>. The superscript CPI refers to conservative policy iteration <span class="citation" data-cites="Kakade2002">(<a href="references.html#ref-Kakade2002" role="doc-biblioref">Kakade and Langford, 2002</a>)</span>. Without a constraint, the maximization of <span class="math inline">L^\text{CPI}</span> would lead to an excessively large policy updates. The authors searched how to modify the objective, in order to penalize changes to the policy that make <span class="math inline">\rho_t(\theta)</span> very different from 1, i.e.&nbsp;where the KL divergence between the new and old policies would become high. They ended up with the following surrogate loss:</p>
+<p>by making the dependency over time explicit and noting the importance sampling weight <span class="math inline">\rho_t(\theta)</span>. The superscript CPI refers to conservative policy iteration <span class="citation" data-cites="Kakade2002">(<a href="references.html#ref-Kakade2002" role="doc-biblioref">Kakade and Langford, 2002</a>)</span>. Without a constraint, the maximization of <span class="math inline">\mathcal{L}^\text{CPI}</span> would lead to an excessively large policy updates. The authors searched how to modify the objective, in order to penalize changes to the policy that make <span class="math inline">\rho_t(\theta)</span> very different from 1, i.e.&nbsp;where the KL divergence between the new and old policies would become high. They ended up with the following surrogate loss:</p>
 <p><span class="math display">
-    L^\text{CLIP}(\theta) = \mathbb{E}_{t} [ \min (\rho_t(\theta) \, A_{\pi_{\theta_\text{old}}}(s_t, a_t), \text{clip}(\rho_t(\theta) , 1- \epsilon, 1+\epsilon) \,  A_{\pi_{\theta_\text{old}}}(s_t, a_t)]
+    \mathcal{L}^\text{CLIP}(\theta) = \mathbb{E}_{t} [ \min (\rho_t(\theta) \, A_{\pi_{\theta_\text{old}}}(s_t, a_t), \text{clip}(\rho_t(\theta) , 1- \epsilon, 1+\epsilon) \,  A_{\pi_{\theta_\text{old}}}(s_t, a_t)]
 </span></p>
-<p>The left part of the min operator is the surrogate objective of TRPO <span class="math inline">L^\text{CPI}(\theta)</span>. The right part restricts the importance sampling weight between <span class="math inline">1-\epsilon</span> and <span class="math inline">1 +\epsilon</span>. Let’s consider two cases (depicted on <a href="#fig-ppo" class="quarto-xref">Figure&nbsp;<span>16.2</span></a>):</p>
+<p>The left part of the min operator is the surrogate objective of TRPO <span class="math inline">\mathcal{L}^\text{CPI}(\theta)</span>. The right part restricts the importance sampling weight between <span class="math inline">1-\epsilon</span> and <span class="math inline">1 +\epsilon</span>. Let’s consider two cases (depicted on <a href="#fig-ppo" class="quarto-xref">Figure&nbsp;<span>16.2</span></a>):</p>
 <div id="fig-ppo" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-ppo-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -650,7 +641,7 @@ Figure&nbsp;16.2: Illustration of the effect of clipping the importance sampling
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-PPO algorithm
+<span class="screen-reader-only">Note</span>PPO algorithm
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -669,7 +660,7 @@ PPO algorithm
 <li><p>Train the actor to maximize the clipped surrogate objective.</p></li>
 </ul>
 <p><span class="math display">
-      L^\text{CLIP}(\theta) = \mathbb{E}_{t} [ \min (\rho_t(\theta) \, A_{\pi_{\theta_\text{old}}}(s_t, a_t), \text{clip}(\rho_t(\theta) , 1- \epsilon, 1+\epsilon) \,  A_{\pi_{\theta_\text{old}}}(s_t, a_t)]
+      \mathcal{L}^\text{CLIP}(\theta) = \mathbb{E}_{t} [ \min (\rho_t(\theta) \, A_{\pi_{\theta_\text{old}}}(s_t, a_t), \text{clip}(\rho_t(\theta) , 1- \epsilon, 1+\epsilon) \,  A_{\pi_{\theta_\text{old}}}(s_t, a_t)]
   </span></p>
 <ul>
 <li>Train the critic to minimize the mse using TD learning.</li>
@@ -681,13 +672,13 @@ PPO algorithm
 </div>
 <p>The main advantage of PPO with respect to TRPO is its simplicity: the clipped objective can be directly maximized using first-order methods like stochastic gradient descent or Adam. It does not depend on assumptions about the parameter space: CNNs and RNNs can be used for the policy. It is sample-efficient, as several epochs of parameter updates are performed between two transition samplings: the policy network therefore needs less fresh samples that strictly on-policy algorithms to converge.</p>
 <p>The only drawbacks of PPO is that there no convergence guarantee (although in practice it converges more often than other state-of-the-art methods) and that the right value for <span class="math inline">\epsilon</span> has to be determined. PPO has improved the state-of-the-art on Atari games and Mujoco robotic tasks. It has become the go-to method for continuous control problems.</p>
-<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout callout-style-default callout-tip no-icon callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
-<i class="callout-icon"></i>
+<i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Additional resources
+<span class="screen-reader-only">Tip</span>Additional resources
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -697,17 +688,80 @@ Additional resources
 </div>
 </div>
 <div class="quarto-video ratio ratio-16x9"><iframe data-external="1" src="https://www.youtube.com/embed/jwSbzNHGflM" title="PPO" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe></div>
+</section>
+<section id="application-openai-five" class="level2">
+<h2 class="anchored" data-anchor-id="application-openai-five">Application: OpenAI Five</h2>
+<p>The most spectacular application of PPO is <strong>OpenAI Five</strong> <span class="citation" data-cites="OpenAI2019">(<a href="references.html#ref-OpenAI2019" role="doc-biblioref">OpenAI et al., 2019</a>)</span>, a team of five agents playing the multiplayer game <strong>Dota 2</strong>, which beat the world champions in 2019.</p>
+<div class="quarto-video ratio ratio-16x9"><iframe data-external="1" src="https://www.youtube.com/embed/eHipy_j29Xw" title="OpenAI Five" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe></div>
+<p>Dota 2 is considerably harder than the board games on which RL had succeeded before, for reasons that are worth listing, as they are exactly the difficulties discussed in this book:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Feature</th>
+<th>Chess</th>
+<th>Go</th>
+<th>Dota 2</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Total number of moves</td>
+<td>40</td>
+<td>150</td>
+<td>20000</td>
+</tr>
+<tr class="even">
+<td>Number of possible actions</td>
+<td>35</td>
+<td>250</td>
+<td>1000</td>
+</tr>
+<tr class="odd">
+<td>Number of inputs</td>
+<td>70</td>
+<td>400</td>
+<td>20000</td>
+</tr>
+</tbody>
+</table>
+<p>A game lasts 45 minutes, i.e.&nbsp;around 20000 decisions, so the credit assignment problem is extreme: the action responsible for a defeat may have been taken half an hour earlier. The game is also <strong>partially observable</strong>, as each player only sees the part of the map close to their units, which is why the network relies on a LSTM layer (<a href="2.2-DeepNetworks.html" class="quarto-xref"><span>Deep learning</span></a>). Finally, five agents must <strong>cooperate</strong> without communicating explicitly.</p>
+<div id="fig-dota-architecture" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-dota-architecture-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="img/ppo-dota-architecture.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Figure&nbsp;16.3: Distributed architecture of OpenAI Five. Rollout workers generate games, optimizers compute PPO gradients on them and average them. Source: https://openai.com/research/openai-five"><img src="img/ppo-dota-architecture.png" class="img-fluid figure-img" style="width:90.0%"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-dota-architecture-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;16.3: Distributed architecture of OpenAI Five. Rollout workers generate games, optimizers compute PPO gradients on them and average them. Source: <a href="https://openai.com/research/openai-five" class="uri">https://openai.com/research/openai-five</a>
+</figcaption>
+</figure>
+</div>
+<p>The algorithm itself is PPO, distributed over an impressive amount of hardware: 128,000 preemptible CPU cores generating games and 256 P100 GPUs computing the gradients, which corresponds to roughly 180 years of gameplay per day. The agents are trained by <strong>self-play</strong>: each worker plays 80% of its games against the current version of the network, and 20% against older versions, which prevents the agents from over-specializing against their current selves and forgetting how to beat strategies they had already mastered.</p>
+<p>Two details are instructive. First, the reward is <strong>hand-designed</strong> using human heuristics (net worth, kills, deaths, assists, last hits), and not simply winning or losing: with a reward this sparse, nothing would ever be learned. This is reward engineering of the kind discussed in <a href="5.2-Inverse.html" class="quarto-xref"><span>Inverse Reinforcement Learning</span></a>. Second, the discount factor <span class="math inline">\gamma</span> is <strong>annealed</strong> during training, from 0.998 (a half-life of 46 seconds) to 0.9997 (a half-life of five minutes): the agents first learn to fight locally, and only later learn to care about the long-term outcome of the game.</p>
+<div id="fig-dota-facts" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-dota-facts-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="img/ppo-dota-facts.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="Figure&nbsp;16.4: Some numbers about OpenAI Five. Source: https://openai.com/research/openai-five"><img src="img/ppo-dota-facts.png" class="img-fluid figure-img" style="width:80.0%"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-dota-facts-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;16.4: Some numbers about OpenAI Five. Source: <a href="https://openai.com/research/openai-five" class="uri">https://openai.com/research/openai-five</a>
+</figcaption>
+</figure>
+</div>
+<p>The honest conclusion of this project is double. It shows that a standard algorithm such as PPO scales, with no fundamental change, to problems of a complexity that seemed out of reach. But it also shows at what cost: the amount of computation involved is out of reach of anybody but a handful of labs, and the main difficulty reported by the authors was not the RL algorithm itself, but coordinating the hardware. <span class="citation" data-cites="OpenAI2019">OpenAI et al. (<a href="references.html#ref-OpenAI2019" role="doc-biblioref">2019</a>)</span> describes the whole system in detail and is an interesting read on what deep RL looks like at that scale.</p>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
 <div id="ref-Kakade2002" class="csl-entry" role="listitem">
-Kakade, S., and Langford, J. (2002). Approximately <span>Optimal Approximate Reinforcement Learning</span>. <em>Proc. 19th International Conference on Machine Learning</em>, 267–274. Available at: <a href="http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.7.7601">http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.7.7601</a>.
+Kakade, S., and Langford, J. (2002). Approximately <span>Optimal Approximate Reinforcement Learning</span>. <em>Proc. 19th International Conference on Machine Learning</em>, 267–274.
+</div>
+<div id="ref-OpenAI2019" class="csl-entry" role="listitem">
+OpenAI, Berner, C., Brockman, G., Chan, B., Cheung, V., Dębiak, P., et al. (2019). Dota 2 with <span>Large Scale Deep Reinforcement Learning</span>. doi:<a href="https://doi.org/10.48550/arXiv.1912.06680">10.48550/arXiv.1912.06680</a>.
 </div>
 <div id="ref-Schulman2017" class="csl-entry" role="listitem">
-Schulman, J., Chen, X., and Abbeel, P. (2017). Equivalence <span>Between Policy Gradients</span> and <span>Soft Q-Learning</span>. Available at: <a href="http://arxiv.org/abs/1704.06440">http://arxiv.org/abs/1704.06440</a> [Accessed June 12, 2019].
+Schulman, J., Chen, X., and Abbeel, P. (2017). Equivalence <span>Between Policy Gradients</span> and <span>Soft Q-Learning</span>. <em>arXiv:1704.06440 [cs]</em>. Available at: <a href="https://arxiv.org/abs/1704.06440">https://arxiv.org/abs/1704.06440</a> [Accessed June 12, 2019].
 </div>
 <div id="ref-Schulman2015" class="csl-entry" role="listitem">
-Schulman, J., Moritz, P., Levine, S., Jordan, M., and Abbeel, P. (2015). High-<span>Dimensional Continuous Control Using Generalized Advantage Estimation</span>. Available at: <a href="http://arxiv.org/abs/1506.02438">http://arxiv.org/abs/1506.02438</a>.
+Schulman, J., Moritz, P., Levine, S., Jordan, M., and Abbeel, P. (2015). High-<span>Dimensional Continuous Control Using Generalized Advantage Estimation</span>. <em>arXiv:1506.02438 [cs]</em>. Available at: <a href="https://arxiv.org/abs/1506.02438">https://arxiv.org/abs/1506.02438</a>.
 </div>
 </div>
 </section>
@@ -764,13 +818,14 @@ Schulman, J., Moritz, P., Levine, S., Jordan, M., and Abbeel, P. (2015). High-<s
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy
@@ -1112,7 +1167,7 @@ Schulman, J., Moritz, P., Levine, S., Jordan, M., and Abbeel, P. (2015). High-<s
     }
   });
   </script>
-<nav class="page-navigation">
+<nav class="page-navigation column-body">
   <div class="nav-page nav-page-previous">
       <a href="../src/3.5-NaturalGradient.html" class="pagination-link" aria-label="Natural gradients">
         <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">Natural gradients</span></span>

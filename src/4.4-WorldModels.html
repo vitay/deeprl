@@ -2,17 +2,23 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.29">
+<meta name="generator" content="quarto-1.10.18">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>World models, Dreamer – Deep Reinforcement Learning</title>
 <style>
-code{white-space: pre-wrap;}
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -57,10 +63,10 @@ div.csl-indent {
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-bcbce66894bfa8e7e94e40e0186b9bb8.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-bb62276ab45c84d9efd712f51ff97b5a.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-ea27fabe3da5290357830f0bd5288bdb.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-3998d32367fd34ee6440c4fab252e735.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script src="../site_libs/quarto-contrib/videojs/video.min.js"></script>
 <link href="../site_libs/quarto-contrib/videojs/video-js.css" rel="stylesheet">
 <script src="../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
@@ -123,7 +129,7 @@ const typesetMath = (el) => {
     var macros = [];
     for (var i = 0; i < mathElements.length; i++) {
       var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
         window.katex.render(texText.data, mathElements[i], {
           displayMode: mathElements[i].classList.contains('display'),
           throwOnError: false,
@@ -141,7 +147,7 @@ window.Quarto = {
 
 </head>
 
-<body class="nav-sidebar floating quarto-light">
+<body class="nav-sidebar docked quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -151,7 +157,7 @@ window.Quarto = {
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
         <a class="flex-grow-1 no-decor" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-          <h1 class="quarto-secondary-nav-title"><span class="chapter-title">World models, Dreamer</span></h1>
+          <h1 class="quarto-secondary-nav-title"><span id="sec-worldmodels" class="quarto-section-identifier"><span class="chapter-title">World models, Dreamer</span></span></h1>
         </a>     
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
         <i class="bi bi-search"></i>
@@ -160,9 +166,9 @@ window.Quarto = {
   </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="../">Deep Reinforcement Learning</a> 
@@ -254,11 +260,6 @@ window.Quarto = {
   <a href="../src/2.5-DistributedLearning.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Distributed learning</span></a>
   </div>
 </li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../src/2.6-Misc.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Misc.</span></a>
-  </div>
-</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -277,8 +278,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/3.2-ActorCritic.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Advantage Actor-Critic (A3C)</span></a>
+  <a href="../src/3.2-ActorCritic.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Advantage Actor-Critic (A3C)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -309,11 +309,6 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../src/3.8-EntropyRL.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Maximum Entropy RL (SAC)</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../src/3.9-Misc.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Misc.</span></a>
   </div>
 </li>
       </ul>
@@ -352,11 +347,6 @@ window.Quarto = {
   <a href="../src/4.5-AlphaGo.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">AlphaGo</span></a>
   </div>
 </li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../src/4.6-Misc.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Misc.</span></a>
-  </div>
-</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -385,7 +375,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/5.4-Meta.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Meta learning</span></a>
+  <a href="../src/5.4-Meta.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Meta reinforcement learning</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -417,21 +407,26 @@ window.Quarto = {
   <li><a href="#results" id="toc-results" class="nav-link" data-scroll-target="#results">Results</a></li>
   </ul></li>
   <li><a href="#deep-planning-network---planet" id="toc-deep-planning-network---planet" class="nav-link" data-scroll-target="#deep-planning-network---planet">Deep Planning Network - PlaNet</a></li>
-  <li><a href="#dreamer" id="toc-dreamer" class="nav-link" data-scroll-target="#dreamer">Dreamer</a></li>
+  <li><a href="#dreamer" id="toc-dreamer" class="nav-link" data-scroll-target="#dreamer">Dreamer</a>
+  <ul class="collapse">
+  <li><a href="#dreamerv2" id="toc-dreamerv2" class="nav-link" data-scroll-target="#dreamerv2">DreamerV2</a></li>
+  <li><a href="#daydreamer" id="toc-daydreamer" class="nav-link" data-scroll-target="#daydreamer">DayDreamer</a></li>
+  <li><a href="#dreamerv3" id="toc-dreamerv3" class="nav-link" data-scroll-target="#dreamerv3">DreamerV3</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
+<main class="content column-body" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title d-none d-lg-block"><span class="chapter-title">World models, Dreamer</span></h1>
+<h1 class="title d-none d-lg-block"><span id="sec-worldmodels" class="quarto-section-identifier"><span class="chapter-title">World models, Dreamer</span></span></h1>
 </div>
 
 
 
-<div class="quarto-title-meta">
+<div class="quarto-title-meta column-body">
 
     
   
@@ -447,10 +442,10 @@ window.Quarto = {
 <h2 class="anchored" data-anchor-id="world-models">World models</h2>
 <p>The core idea of <strong>world models</strong> <span class="citation" data-cites="Ha2018">(<a href="references.html#ref-Ha2018" role="doc-biblioref">Ha and Schmidhuber, 2018</a>)</span> is to explicitly separate the <strong>world model</strong> (what will happen next) from the <strong>controller</strong> (how to act). The neural networks used in deep RL are usually small, as rewards do not contain enough information to train huge networks. However, unsupervised data (without any label nor reward) is plenty and could be leveraged to learn useful representations. A huge <strong>world model</strong> can be efficiently trained by self-supervised / unsupervised methods, while a small <strong>controller</strong> should not need too many trials if its input representations are good.</p>
 <p><span class="citation" data-cites="Ha2018">Ha and Schmidhuber (<a href="references.html#ref-Ha2018" role="doc-biblioref">2018</a>)</span> used the Vizdoom Take Cover environment (<a href="http://vizdoom.cs.put.edu.pl/" class="uri">http://vizdoom.cs.put.edu.pl/</a>) to demonstrate the power of world models, as well as a car racing environment.</p>
-<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout callout-style-default callout-tip no-icon callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
-<i class="callout-icon"></i>
+<i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
 Tip
@@ -473,10 +468,10 @@ Tip
 <div id="fig-wmarchitecture" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-wmarchitecture-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/wm-overview.svg" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;23.1: Architecture of world models. Source: https://worldmodels.github.io/"><img src="img/wm-overview.svg" class="img-fluid figure-img"></a>
+<a href="img/wm-overview.svg" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;22.1: Architecture of world models. Source: https://worldmodels.github.io/"><img src="img/wm-overview.svg" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-wmarchitecture-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;23.1: Architecture of world models. Source: <a href="https://worldmodels.github.io/" class="uri">https://worldmodels.github.io/</a>
+Figure&nbsp;22.1: Architecture of world models. Source: <a href="https://worldmodels.github.io/" class="uri">https://worldmodels.github.io/</a>
 </figcaption>
 </figure>
 </div>
@@ -485,23 +480,23 @@ Figure&nbsp;23.1: Architecture of world models. Source: <a href="https://worldmo
 <div id="fig-wmvision" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-wmvision-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/wm-vae.svg" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Figure&nbsp;23.2: Vision module. Source: https://worldmodels.github.io/"><img src="img/wm-vae.svg" class="img-fluid figure-img"></a>
+<a href="img/wm-vae.svg" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Figure&nbsp;22.2: Vision module. Source: https://worldmodels.github.io/"><img src="img/wm-vae.svg" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-wmvision-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;23.2: Vision module. Source: <a href="https://worldmodels.github.io/" class="uri">https://worldmodels.github.io/</a>
+Figure&nbsp;22.2: Vision module. Source: <a href="https://worldmodels.github.io/" class="uri">https://worldmodels.github.io/</a>
 </figcaption>
 </figure>
 </div>
 <p><strong>Memory module</strong></p>
 <p>The sequence of latent representations <span class="math inline">\mathbf{z}_0, \ldots \mathbf{z}_t</span> in a game is fed to a LSTM layer (RNN) together with the actions <span class="math inline">a_t</span> to compress what happens over time.</p>
-<p>A <strong>Mixture Density Network</strong> (MDN, <span class="citation" data-cites="Bishop1994">Bishop (<a href="references.html#ref-Bishop1994" role="doc-biblioref">1994</a>)</span>) is used to predict the <strong>distribution</strong> of the next latent representations <span class="math inline">P(\mathbf{z}_{t+1} | a_t, \mathbf{h}_t, \ldots \mathbf{z}_t)</span>. In short, MDN allows to perform probabilistic regression, but predicting both the mean and the variance of the data, instead of just its mean as in vanilla least sqaures regression. Most MDN methods use a mixture of Gaussian distributions to model the target distribution.</p>
+<p>A <strong>Mixture Density Network</strong> (MDN, <span class="citation" data-cites="Bishop1994">Bishop (<a href="references.html#ref-Bishop1994" role="doc-biblioref">1994</a>)</span>) is used to predict the <strong>distribution</strong> of the next latent representations <span class="math inline">P(\mathbf{z}_{t+1} | a_t, \mathbf{h}_t, \ldots \mathbf{z}_t)</span>. In short, MDN allows to perform probabilistic regression, but predicting both the mean and the variance of the data, instead of just its mean as in vanilla least squares regression. Most MDN methods use a mixture of Gaussian distributions to model the target distribution.</p>
 <div id="fig-wmmemory" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-wmmemory-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/wm-mdn_rnn.svg" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Figure&nbsp;23.3: Memory module. Source: https://worldmodels.github.io/"><img src="img/wm-mdn_rnn.svg" class="img-fluid figure-img"></a>
+<a href="img/wm-mdn_rnn.svg" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Figure&nbsp;22.3: Memory module. Source: https://worldmodels.github.io/"><img src="img/wm-mdn_rnn.svg" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-wmmemory-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;23.3: Memory module. Source: <a href="https://worldmodels.github.io/" class="uri">https://worldmodels.github.io/</a>
+Figure&nbsp;22.3: Memory module. Source: <a href="https://worldmodels.github.io/" class="uri">https://worldmodels.github.io/</a>
 </figcaption>
 </figure>
 </div>
@@ -511,13 +506,13 @@ Figure&nbsp;23.3: Memory module. Source: <a href="https://worldmodels.github.io/
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-RNN-MDN
+<span class="screen-reader-only">Tip</span>RNN-MDN
 </div>
 </div>
 <div class="callout-body-container callout-body">
 <p>The RNN-MDN architecture has been used successfully in the past for sequence generation problems such as generating handwriting and sketches (Sketch-RNN, <span class="citation" data-cites="Ha2017">Ha and Eck (<a href="references.html#ref-Ha2017" role="doc-biblioref">2017</a>)</span>).</p>
 <p>Check a demo here: <a href="https://magenta.tensorflow.org/sketch-rnn-demo" class="uri">https://magenta.tensorflow.org/sketch-rnn-demo</a></p>
-<div class="quarto-video"><video id="video_shortcode_videojs_video1" class="video-js vjs-default-skin vjs-fluid" controls="" preload="auto" data-setup="{}" title=""><source src="https://worldmodels.github.io/assets/mp4/sketch_rnn_insect.mp4"></video></div>
+<div class="quarto-video"><video id="video_shortcode_videojs_video1" class="video-js vjs-default-skin vjs-big-play-centered vjs-fluid" controls="" preload="auto" data-setup="{}" title=""><source src="https://worldmodels.github.io/assets/mp4/sketch_rnn_insect.mp4"></video></div>
 </div>
 </div>
 <p><strong>Controller module</strong></p>
@@ -527,10 +522,10 @@ RNN-MDN
 <div id="fig-wmcontroller" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-wmcontroller-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/wm-schematic.svg" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="Figure&nbsp;23.4: Controller module. Source: https://worldmodels.github.io/"><img src="img/wm-schematic.svg" class="img-fluid figure-img"></a>
+<a href="img/wm-schematic.svg" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="Figure&nbsp;22.4: Controller module. Source: https://worldmodels.github.io/"><img src="img/wm-schematic.svg" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-wmcontroller-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;23.4: Controller module. Source: <a href="https://worldmodels.github.io/" class="uri">https://worldmodels.github.io/</a>
+Figure&nbsp;22.4: Controller module. Source: <a href="https://worldmodels.github.io/" class="uri">https://worldmodels.github.io/</a>
 </figcaption>
 </figure>
 </div>
@@ -541,7 +536,7 @@ Figure&nbsp;23.4: Controller module. Source: <a href="https://worldmodels.github
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-World models
+<span class="screen-reader-only">Note</span>World models
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -582,17 +577,17 @@ World models
 <section id="results" class="level3">
 <h3 class="anchored" data-anchor-id="results">Results</h3>
 <p>Performance in car racing:</p>
-<div class="quarto-video"><video id="video_shortcode_videojs_video2" class="video-js vjs-default-skin vjs-fluid" controls="" preload="auto" data-setup="{}" title="World-models - Performance"><source src="https://worldmodels.github.io/assets/mp4/carracing_mistake_short.mp4"></video></div>
+<div class="quarto-video"><video id="video_shortcode_videojs_video2" class="video-js vjs-default-skin vjs-big-play-centered vjs-fluid" controls="" preload="auto" data-setup="{}" title="World-models - Performance"><source src="https://worldmodels.github.io/assets/mp4/carracing_mistake_short.mp4"></video></div>
 <p>Below is the input of the VAE and the reconstruction. The reconstruction does not have to be perfect as long as the latent space is informative.</p>
-<div class="quarto-video"><video id="video_shortcode_videojs_video3" class="video-js vjs-default-skin vjs-fluid" controls="" preload="auto" data-setup="{}" title="World-models - VAE"><source src="https://worldmodels.github.io/assets/mp4/carracing_vae_compare.mp4"></video></div>
+<div class="quarto-video"><video id="video_shortcode_videojs_video3" class="video-js vjs-default-skin vjs-big-play-centered vjs-fluid" controls="" preload="auto" data-setup="{}" title="World-models - VAE"><source src="https://worldmodels.github.io/assets/mp4/carracing_vae_compare.mp4"></video></div>
 <p>Having access to a full rollout of the future leads to more stable driving:</p>
 <div id="fig-wmresults" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-wmresults-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/wm-results.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5" title="Figure&nbsp;23.5: Performance of World models on the car racing environemnt. Source: https://worldmodels.github.io/"><img src="img/wm-results.png" class="img-fluid figure-img"></a>
+<a href="img/wm-results.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5" title="Figure&nbsp;22.5: Performance of World models on the car racing environemnt. Source: https://worldmodels.github.io/"><img src="img/wm-results.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-wmresults-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;23.5: Performance of World models on the car racing environemnt. Source: <a href="https://worldmodels.github.io/" class="uri">https://worldmodels.github.io/</a>
+Figure&nbsp;22.5: Performance of World models on the car racing environemnt. Source: <a href="https://worldmodels.github.io/" class="uri">https://worldmodels.github.io/</a>
 </figcaption>
 </figure>
 </div>
@@ -609,10 +604,10 @@ Figure&nbsp;23.5: Performance of World models on the car racing environemnt. Sou
 <div id="fig-planet" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-planet-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/planet-model.png" class="lightbox" data-gallery="quarto-lightbox-gallery-6" title="Figure&nbsp;23.6: Latent dynamics model of PlaNet. Source: https://planetrl.github.io/"><img src="img/planet-model.png" class="img-fluid figure-img"></a>
+<a href="img/planet-model.png" class="lightbox" data-gallery="quarto-lightbox-gallery-6" title="Figure&nbsp;22.6: Latent dynamics model of PlaNet. Source: https://planetrl.github.io/"><img src="img/planet-model.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-planet-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;23.6: Latent dynamics model of PlaNet. Source: <a href="https://planetrl.github.io/" class="uri">https://planetrl.github.io/</a>
+Figure&nbsp;22.6: Latent dynamics model of PlaNet. Source: <a href="https://planetrl.github.io/" class="uri">https://planetrl.github.io/</a>
 </figcaption>
 </figure>
 </div>
@@ -637,16 +632,16 @@ Figure&nbsp;23.6: Latent dynamics model of PlaNet. Source: <a href="https://plan
 <div id="fig-planet-training" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-planet-training-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/dreamer-model.gif" class="lightbox" data-gallery="quarto-lightbox-gallery-7" title="Figure&nbsp;23.7: Training the latent dynamics model of PlaNet. Source: https://ai.googleblog.com/2020/03/introducing-dreamer-scalable.html"><img src="img/dreamer-model.gif" class="img-fluid figure-img"></a>
+<a href="img/dreamer-model.gif" class="lightbox" data-gallery="quarto-lightbox-gallery-7" title="Figure&nbsp;22.7: Training the latent dynamics model of PlaNet. Source: https://ai.googleblog.com/2020/03/introducing-dreamer-scalable.html"><img src="img/dreamer-model.gif" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-planet-training-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;23.7: Training the latent dynamics model of PlaNet. Source: <a href="https://ai.googleblog.com/2020/03/introducing-dreamer-scalable.html" class="uri">https://ai.googleblog.com/2020/03/introducing-dreamer-scalable.html</a>
+Figure&nbsp;22.7: Training the latent dynamics model of PlaNet. Source: <a href="https://ai.googleblog.com/2020/03/introducing-dreamer-scalable.html" class="uri">https://ai.googleblog.com/2020/03/introducing-dreamer-scalable.html</a>
 </figcaption>
 </figure>
 </div>
 <p><strong>Inference</strong></p>
 <p>From a single observation <span class="math inline">o_t</span> encoded into <span class="math inline">s_t</span>, we can generate 10000 rollouts using <strong>random sampling</strong>. In these rollouts, the action sequences are varied randomly, generating as many random sequences as needed. The return of each rollout can be estimated using the reward model. A belief over the action sequences is updated using the <strong>cross-entropy method</strong> (CEM, <span class="citation" data-cites="Szita2006">Szita and Lörincz (<a href="references.html#ref-Szita2006" role="doc-biblioref">2006</a>)</span>) in order to restrict the search.</p>
-<p>After the 10000 rollouts are executed (in imagination), the sequence with the highest return is selected and its first action is executed. At the next time step, planning starts from scratch: this is the key idea of Model Predictive Control. There is no actor in PlaNet, only a transition model used for planning. The reason PlaNet works is that planning is done in the latent space, hich has a much lower dimensionality than the observations (e.g.&nbsp;images).</p>
+<p>After the 10000 rollouts are executed (in imagination), the sequence with the highest return is selected and its first action is executed. At the next time step, planning starts from scratch: this is the key idea of Model Predictive Control. There is no actor in PlaNet, only a transition model used for planning. The reason PlaNet works is that planning is done in the latent space, which has a much lower dimensionality than the observations (e.g.&nbsp;images).</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><a href="img/planet-planning.png" class="lightbox" data-gallery="quarto-lightbox-gallery-8" title="Source: https://ai.googleblog.com/2019/02/introducing-planet-deep-planning.html"><img src="img/planet-planning.png" class="img-fluid figure-img" alt="Source: https://ai.googleblog.com/2019/02/introducing-planet-deep-planning.html"></a></p>
@@ -660,10 +655,10 @@ Figure&nbsp;23.7: Training the latent dynamics model of PlaNet. Source: <a href=
 <div id="fig-planetresults" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-planetresults-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/planet-results.gif" class="lightbox" data-gallery="quarto-lightbox-gallery-9" title="Figure&nbsp;23.8: Top row: agent behavior on the 6 Mujoco tasks. Bottom row: predcited frames by the agent. Source: https://ai.googleblog.com/2019/02/introducing-planet-deep-planning.html"><img src="img/planet-results.gif" class="img-fluid figure-img"></a>
+<a href="img/planet-results.gif" class="lightbox" data-gallery="quarto-lightbox-gallery-9" title="Figure&nbsp;22.8: Top row: agent behavior on the 6 Mujoco tasks. Bottom row: predcited frames by the agent. Source: https://ai.googleblog.com/2019/02/introducing-planet-deep-planning.html"><img src="img/planet-results.gif" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-planetresults-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;23.8: Top row: agent behavior on the 6 Mujoco tasks. Bottom row: predcited frames by the agent. Source: <a href="https://ai.googleblog.com/2019/02/introducing-planet-deep-planning.html" class="uri">https://ai.googleblog.com/2019/02/introducing-planet-deep-planning.html</a>
+Figure&nbsp;22.8: Top row: agent behavior on the 6 Mujoco tasks. Bottom row: predcited frames by the agent. Source: <a href="https://ai.googleblog.com/2019/02/introducing-planet-deep-planning.html" class="uri">https://ai.googleblog.com/2019/02/introducing-planet-deep-planning.html</a>
 </figcaption>
 </figure>
 </div>
@@ -674,10 +669,10 @@ Figure&nbsp;23.8: Top row: agent behavior on the 6 Mujoco tasks. Bottom row: pre
 <div id="fig-dreamer-principle" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-dreamer-principle-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/dreamer-principle.png" class="lightbox" data-gallery="quarto-lightbox-gallery-10" title="Figure&nbsp;23.9: Dreamer first learns the World model (RSSM), then trains a model-free agent in its imagination to maximize the rewards, before being used to interact with the environment. Source: https://ai.googleblog.com/2020/03/introducing-dreamer-scalable.html"><img src="img/dreamer-principle.png" class="img-fluid figure-img"></a>
+<a href="img/dreamer-principle.png" class="lightbox" data-gallery="quarto-lightbox-gallery-10" title="Figure&nbsp;22.9: Dreamer first learns the World model (RSSM), then trains a model-free agent in its imagination to maximize the rewards, before being used to interact with the environment. Source: https://ai.googleblog.com/2020/03/introducing-dreamer-scalable.html"><img src="img/dreamer-principle.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-dreamer-principle-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;23.9: Dreamer first learns the World model (RSSM), then trains a model-free agent in its imagination to maximize the rewards, before being used to interact with the environment. Source: <a href="https://ai.googleblog.com/2020/03/introducing-dreamer-scalable.html" class="uri">https://ai.googleblog.com/2020/03/introducing-dreamer-scalable.html</a>
+Figure&nbsp;22.9: Dreamer first learns the World model (RSSM), then trains a model-free agent in its imagination to maximize the rewards, before being used to interact with the environment. Source: <a href="https://ai.googleblog.com/2020/03/introducing-dreamer-scalable.html" class="uri">https://ai.googleblog.com/2020/03/introducing-dreamer-scalable.html</a>
 </figcaption>
 </figure>
 </div>
@@ -685,10 +680,10 @@ Figure&nbsp;23.9: Dreamer first learns the World model (RSSM), then trains a mod
 <div id="fig-dreamer-rssm" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-dreamer-rssm-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/dreamer-model.gif" class="lightbox" data-gallery="quarto-lightbox-gallery-11" title="Figure&nbsp;23.10: Latent dynamics model of Dreamer, exactly the same as PlaNet. Source: https://ai.googleblog.com/2020/03/introducing-dreamer-scalable.html"><img src="img/dreamer-model.gif" class="img-fluid figure-img"></a>
+<a href="img/dreamer-model.gif" class="lightbox" data-gallery="quarto-lightbox-gallery-11" title="Figure&nbsp;22.10: Latent dynamics model of Dreamer, exactly the same as PlaNet. Source: https://ai.googleblog.com/2020/03/introducing-dreamer-scalable.html"><img src="img/dreamer-model.gif" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-dreamer-rssm-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;23.10: Latent dynamics model of Dreamer, exactly the same as PlaNet. Source: <a href="https://ai.googleblog.com/2020/03/introducing-dreamer-scalable.html" class="uri">https://ai.googleblog.com/2020/03/introducing-dreamer-scalable.html</a>
+Figure&nbsp;22.10: Latent dynamics model of Dreamer, exactly the same as PlaNet. Source: <a href="https://ai.googleblog.com/2020/03/introducing-dreamer-scalable.html" class="uri">https://ai.googleblog.com/2020/03/introducing-dreamer-scalable.html</a>
 </figcaption>
 </figure>
 </div>
@@ -696,10 +691,10 @@ Figure&nbsp;23.10: Latent dynamics model of Dreamer, exactly the same as PlaNet.
 <div id="fig-dreamer-mf" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-dreamer-mf-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/dreamer-actor.gif" class="lightbox" data-gallery="quarto-lightbox-gallery-12" title="Figure&nbsp;23.11: The actor-critic agent is trained in imagination using rollouts generated by the RSSM model. Source: https://ai.googleblog.com/2020/03/introducing-dreamer-scalable.html"><img src="img/dreamer-actor.gif" class="img-fluid figure-img"></a>
+<a href="img/dreamer-actor.gif" class="lightbox" data-gallery="quarto-lightbox-gallery-12" title="Figure&nbsp;22.11: The actor-critic agent is trained in imagination using rollouts generated by the RSSM model. Source: https://ai.googleblog.com/2020/03/introducing-dreamer-scalable.html"><img src="img/dreamer-actor.gif" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-dreamer-mf-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;23.11: The actor-critic agent is trained in imagination using rollouts generated by the RSSM model. Source: <a href="https://ai.googleblog.com/2020/03/introducing-dreamer-scalable.html" class="uri">https://ai.googleblog.com/2020/03/introducing-dreamer-scalable.html</a>
+Figure&nbsp;22.11: The actor-critic agent is trained in imagination using rollouts generated by the RSSM model. Source: <a href="https://ai.googleblog.com/2020/03/introducing-dreamer-scalable.html" class="uri">https://ai.googleblog.com/2020/03/introducing-dreamer-scalable.html</a>
 </figcaption>
 </figure>
 </div>
@@ -712,10 +707,10 @@ Figure&nbsp;23.11: The actor-critic agent is trained in imagination using rollou
 <div id="fig-dreamer-arch" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-dreamer-arch-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/dreamer-architecture.png" class="lightbox" data-gallery="quarto-lightbox-gallery-13" title="Figure&nbsp;23.12: Complete Dreamer architecture. Source: https://ai.googleblog.com/2020/03/introducing-dreamer-scalable.html"><img src="img/dreamer-architecture.png" class="img-fluid figure-img"></a>
+<a href="img/dreamer-architecture.png" class="lightbox" data-gallery="quarto-lightbox-gallery-13" title="Figure&nbsp;22.12: Complete Dreamer architecture. Source: https://ai.googleblog.com/2020/03/introducing-dreamer-scalable.html"><img src="img/dreamer-architecture.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-dreamer-arch-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;23.12: Complete Dreamer architecture. Source: <a href="https://ai.googleblog.com/2020/03/introducing-dreamer-scalable.html" class="uri">https://ai.googleblog.com/2020/03/introducing-dreamer-scalable.html</a>
+Figure&nbsp;22.12: Complete Dreamer architecture. Source: <a href="https://ai.googleblog.com/2020/03/introducing-dreamer-scalable.html" class="uri">https://ai.googleblog.com/2020/03/introducing-dreamer-scalable.html</a>
 </figcaption>
 </figure>
 </div>
@@ -724,10 +719,10 @@ Figure&nbsp;23.12: Complete Dreamer architecture. Source: <a href="https://ai.go
 <div id="fig-dreamer-results" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-dreamer-results-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/dreamer-results.png" class="lightbox" data-gallery="quarto-lightbox-gallery-15" title="Figure&nbsp;23.13: Results of Dreamer on various Mujoco tasks, compared to SotA control methods. Source: https://ai.googleblog.com/2020/03/introducing-dreamer-scalable.html"><img src="img/dreamer-results.png" class="img-fluid figure-img"></a>
+<a href="img/dreamer-results.png" class="lightbox" data-gallery="quarto-lightbox-gallery-15" title="Figure&nbsp;22.13: Results of Dreamer on various Mujoco tasks, compared to SotA control methods. Source: https://ai.googleblog.com/2020/03/introducing-dreamer-scalable.html"><img src="img/dreamer-results.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-dreamer-results-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;23.13: Results of Dreamer on various Mujoco tasks, compared to SotA control methods. Source: <a href="https://ai.googleblog.com/2020/03/introducing-dreamer-scalable.html" class="uri">https://ai.googleblog.com/2020/03/introducing-dreamer-scalable.html</a>
+Figure&nbsp;22.13: Results of Dreamer on various Mujoco tasks, compared to SotA control methods. Source: <a href="https://ai.googleblog.com/2020/03/introducing-dreamer-scalable.html" class="uri">https://ai.googleblog.com/2020/03/introducing-dreamer-scalable.html</a>
 </figcaption>
 </figure>
 </div>
@@ -736,14 +731,22 @@ Figure&nbsp;23.13: Results of Dreamer on various Mujoco tasks, compared to SotA 
 <div id="fig-dreamer-atari" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-dreamer-atari-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/dreamer-resultsatari.png" class="lightbox" data-gallery="quarto-lightbox-gallery-17" title="Figure&nbsp;23.14: Results of Dreamer on Atari gameSource: https://dreamrl.github.io/"><img src="img/dreamer-resultsatari.png" class="img-fluid figure-img"></a>
+<a href="img/dreamer-resultsatari.png" class="lightbox" data-gallery="quarto-lightbox-gallery-17" title="Figure&nbsp;22.14: Results of Dreamer on Atari games. Source: https://dreamrl.github.io/"><img src="img/dreamer-resultsatari.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-dreamer-atari-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;23.14: Results of Dreamer on Atari gameSource: <a href="https://dreamrl.github.io/" class="uri">https://dreamrl.github.io/</a>
+Figure&nbsp;22.14: Results of Dreamer on Atari games. Source: <a href="https://dreamrl.github.io/" class="uri">https://dreamrl.github.io/</a>
 </figcaption>
 </figure>
 </div>
-<p>A recent extension of Dreamer, DayDreamer <span class="citation" data-cites="Wu2022">(<a href="references.html#ref-Wu2022" role="doc-biblioref">Wu et al., 2022</a>)</span>, allows physical robots to learn complex tasks in a few hours.</p>
+<section id="dreamerv2" class="level3">
+<h3 class="anchored" data-anchor-id="dreamerv2">DreamerV2</h3>
+<p>The main change introduced by DreamerV2 <span class="citation" data-cites="Hafner2022">(<a href="references.html#ref-Hafner2022" role="doc-biblioref">Hafner et al., 2022</a>)</span> is in the representation used by the RSSM. In PlaNet and Dreamer, the stochastic part of the latent state is a Gaussian distribution, as in a regular VAE. DreamerV2 replaces it by a set of <strong>categorical</strong> variables (32 variables with 32 classes each), sampled with straight-through gradients so that backpropagation still works through the sampling operation.</p>
+<p>Categorical latents turn out to be much better suited to video games than Gaussians: the future of a game is often genuinely multi-modal (an enemy appears or it does not), and a categorical distribution can represent that, while a unimodal Gaussian has to average over the alternatives and produce blurry predictions. Note the parallel with the argument for stochastic policies in <a href="3.8-EntropyRL.html" class="quarto-xref"><span>Maximum Entropy RL (SAC)</span></a>: whenever the quantity to be modeled is multi-modal, a Gaussian is the wrong tool.</p>
+<p>With this single change, DreamerV2 became the first agent to reach human-level performance on the Atari benchmark of 55 tasks by learning behaviors <strong>purely inside a world model</strong>, surpassing the final performance of the top single-GPU agents IQN and Rainbow at the same computational budget and wall-clock time. This mattered beyond the score itself: until then, model-based methods were considered competitive only on continuous control tasks with simple dynamics, not on pixel-based games.</p>
+</section>
+<section id="daydreamer" class="level3">
+<h3 class="anchored" data-anchor-id="daydreamer">DayDreamer</h3>
+<p>An extension of Dreamer, DayDreamer <span class="citation" data-cites="Wu2022">(<a href="references.html#ref-Wu2022" role="doc-biblioref">Wu et al., 2022</a>)</span>, allows <strong>physical</strong> robots to learn complex tasks in a few hours, without a simulator. The sample efficiency of learning in imagination is what makes this possible: the expensive resource is real-world interaction, and the world model turns a small number of real transitions into a large number of imagined ones.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><a href="img/daydreamer.png" class="lightbox" data-gallery="quarto-lightbox-gallery-18" title="DayDreamer. Source: @Wu2022 and https://danijar.com/daydreamer"><img src="img/daydreamer.png" class="img-fluid figure-img" alt="DayDreamer. Source: Wu et al. (2022) and https://danijar.com/daydreamer"></a></p>
@@ -751,23 +754,98 @@ Figure&nbsp;23.14: Results of Dreamer on Atari gameSource: <a href="https://drea
 </figure>
 </div>
 <div class="quarto-video ratio ratio-16x9"><iframe data-external="1" src="https://www.youtube.com/embed/xAXvfVTgqr0" title="DayDreamer" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe></div>
+</section>
+<section id="dreamerv3" class="level3">
+<h3 class="anchored" data-anchor-id="dreamerv3">DreamerV3</h3>
+<p>DreamerV3 <span class="citation" data-cites="Hafner2024">(<a href="references.html#ref-Hafner2024" role="doc-biblioref">Hafner et al., 2024</a>)</span> is not primarily a new architecture: the RSSM world model and the actor-critic trained in imagination are those of DreamerV2. What it addresses is a different and rather uncomfortable problem, which applies to every algorithm presented in this book:</p>
+<blockquote class="blockquote">
+<p>deep RL algorithms work, but only after someone has spent a lot of time tuning them for the task at hand.</p>
+</blockquote>
+<p>Reward scales differ by orders of magnitude between domains, rewards can be dense or extremely sparse, observations can be images or proprioceptive vectors, episodes can last a hundred or a million steps. Each of these usually requires its own reward clipping, its own normalization, its own learning rates. This tuning cost is invisible in published benchmark curves but is what actually prevents RL from being applied to new problems.</p>
+<p>DreamerV3 fixes a <strong>single configuration of hyperparameters</strong> and makes the algorithm robust enough to work with it everywhere, using three families of techniques: transformations, balancing and normalization.</p>
+<p><strong>Symlog transformations</strong></p>
+<p>The magnitudes of rewards, values and observations vary enormously across domains. Instead of normalizing them per domain, DreamerV3 squashes them through the <strong>symlog</strong> function, a symmetric logarithm which compresses large magnitudes while staying linear around zero:</p>
+<p><span class="math display">
+    \text{symlog}(x) = \text{sign}(x) \, \ln(|x| + 1) \qquad \qquad \text{symexp}(x) = \text{sign}(x) \, (\exp(|x|) - 1)
+</span></p>
+<p>symexp is its inverse, used to decode predictions back into the original scale. Inputs are fed to the networks as <span class="math inline">\text{symlog}(x)</span>, and the reward and value predictors are trained to predict <span class="math inline">\text{symlog}</span> of their targets. A reward of 1 and a reward of 1000 then produce gradients of comparable magnitude, so the same learning rate works for both.</p>
+<p><strong>Two-hot discrete regression</strong></p>
+<p>Predicting rewards and values by regression (mse) is fragile when the targets are sparse or span several orders of magnitude: a handful of very large returns dominate the loss. DreamerV3 instead turns the regression into a <strong>classification</strong> problem. The output layer is a softmax over a fixed set of exponentially spaced bins, and the target is a <strong>two-hot</strong> vector: all the probability mass is put on the two bins surrounding the true value, split between them in proportion to the distance.</p>
+<p>This should look familiar: it is the same device as the categorical output of C51 (<a href="2.4-DQNvariants.html#sec-distributionalrl" class="quarto-xref"><span>Categorical DQN</span></a>). The motivation differs, though — C51 predicts a distribution because the <em>distribution itself</em> is of interest, while DreamerV3 uses it because classification losses are far better behaved than mse when the scale of the target is unknown in advance.</p>
+<p><strong>Balancing the world model loss</strong></p>
+<p>The world model is trained with a reconstruction term and a KL term between the representations inferred from observations and those predicted by the dynamics. Two adjustments keep this balanced across domains:</p>
+<ul>
+<li><strong>Free bits</strong>: the KL term is clipped below a small threshold (one nat), so that once the dynamics are predicted well enough the optimizer stops pushing on the KL and concentrates on reconstruction. Without it, on domains with easily predictable dynamics, the KL collapses and the latent state stops carrying information.</li>
+<li><strong>KL balancing</strong>: the representation and dynamics sides of the KL are scaled by different coefficients, so that the dynamics model is encouraged to move towards the representations more than the reverse.</li>
+</ul>
+<p>The actor’s returns are additionally normalized by a running estimate of the range between low and high percentiles of recent returns, which keeps the entropy regularizer in a sensible ratio to the returns whether rewards are dense or very sparse.</p>
+<p><strong>Results</strong></p>
+<p>With this single configuration, DreamerV3 outperforms specialized methods across more than 150 tasks drawn from very different domains: continuous control from states and from pixels, Atari, ProcGen, DMLab, BSuite, and Minecraft.</p>
+<div id="fig-dreamerv3-tasks" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-dreamerv3-tasks-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="img/dreamerv3-tasks.png" class="lightbox" data-gallery="quarto-lightbox-gallery-19" title="Figure&nbsp;22.15: The domains covered by DreamerV3 with a single configuration. Source: @Hafner2024."><img src="img/dreamerv3-tasks.png" class="img-fluid figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-dreamerv3-tasks-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;22.15: The domains covered by DreamerV3 with a single configuration. Source: <span class="citation" data-cites="Hafner2024">Hafner et al. (<a href="references.html#ref-Hafner2024" role="doc-biblioref">2024</a>)</span>.
+</figcaption>
+</figure>
+</div>
+<p><a href="#fig-dreamerv3-results" class="quarto-xref">Figure&nbsp;<span>22.16</span></a> compares DreamerV3 against the best specialized agent on each benchmark. The grey bars are <strong>tuned experts</strong> (each tuned for its own domain), the colored ones use a <strong>unified configuration</strong>. Dreamer matches or beats the tuned experts nearly everywhere, and on DMLab it does so while using ten times less data than R2D2+ and IMPALA.</p>
+<div id="fig-dreamerv3-results" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-dreamerv3-results-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="img/dreamerv3-results.png" class="lightbox" data-gallery="quarto-lightbox-gallery-20" title="Figure&nbsp;22.16: Left: performance on eight benchmark suites against domain-specific baselines. Right: return on the Minecraft diamond task, with the successive items collected along the way. Source: @Hafner2024."><img src="img/dreamerv3-results.png" class="img-fluid figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-dreamerv3-results-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;22.16: Left: performance on eight benchmark suites against domain-specific baselines. Right: return on the Minecraft diamond task, with the successive items collected along the way. Source: <span class="citation" data-cites="Hafner2024">Hafner et al. (<a href="references.html#ref-Hafner2024" role="doc-biblioref">2024</a>)</span>.
+</figcaption>
+</figure>
+</div>
+<p>Another useful property is that DreamerV3 <strong>scales monotonically</strong>: increasing the size of the model improves not only the final performance but also the data efficiency. This is not generally true of deep RL algorithms, where bigger networks often just become harder to train.</p>
+<p><strong>Minecraft</strong></p>
+<p>The headline result is that DreamerV3 is the first algorithm to <strong>collect diamonds in Minecraft from scratch</strong>, without human demonstrations and without a curriculum. This had been a standing challenge in the field, because it combines nearly everything that makes RL hard: an open world generated afresh for each episode (so the policy cannot memorize a map), pixel observations, and an extremely sparse reward at the end of a long chain of prerequisites — you need to collect wood, craft a table, craft a wooden pickaxe, mine stone, craft a stone pickaxe, mine iron, smelt it, craft an iron pickaxe, and only then can you mine a diamond.</p>
+<p>The right panel of <a href="#fig-dreamerv3-results" class="quarto-xref">Figure&nbsp;<span>22.16</span></a> shows this progression: each step of the curve corresponds to the agent reliably obtaining one more item in the chain. Reaching the diamond requires the agent to pursue a strategy whose payoff is tens of thousands of steps away, which is exactly what planning in a learned world model is supposed to buy us.</p>
+<div class="callout callout-style-default callout-tip no-icon callout-titled" title="Additional resources">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Additional resources
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li><a href="https://danijar.com/project/dreamerv3/" class="uri">https://danijar.com/project/dreamerv3/</a></li>
+<li><a href="https://danijar.com/project/dreamerv2/" class="uri">https://danijar.com/project/dreamerv2/</a></li>
+<li><a href="https://danijar.com/daydreamer" class="uri">https://danijar.com/daydreamer</a></li>
+</ul>
+</div>
+</div>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
 <div id="ref-Bishop1994" class="csl-entry" role="listitem">
-Bishop, C. M. (1994). Mixture <span>Density Networks</span>. Birmingham, UK: Neural Computing Research Group, Aston University Available at: <a href="https://publications.aston.ac.uk/id/eprint/373/1/NCRG_94_004.pdf">https://publications.aston.ac.uk/id/eprint/373/1/NCRG_94_004.pdf</a> [Accessed November 12, 2024].
+Bishop, C. M. (1994). Mixture <span>Density Networks</span>. Birmingham, UK: Neural Computing Research Group, Aston University.
 </div>
 <div id="ref-Ha2017" class="csl-entry" role="listitem">
-Ha, D., and Eck, D. (2017). A <span>Neural Representation</span> of <span>Sketch Drawings</span>. Available at: <a href="http://arxiv.org/abs/1704.03477">http://arxiv.org/abs/1704.03477</a> [Accessed January 17, 2021].
+Ha, D., and Eck, D. (2017). A <span>Neural Representation</span> of <span>Sketch Drawings</span>. <em>arXiv:1704.03477 [cs, stat]</em>. Available at: <a href="https://arxiv.org/abs/1704.03477">https://arxiv.org/abs/1704.03477</a> [Accessed January 17, 2021].
 </div>
 <div id="ref-Ha2018" class="csl-entry" role="listitem">
-Ha, D., and Schmidhuber, J. (2018). World <span>Models</span>. doi:<a href="https://doi.org/10.5281/zenodo.1207631">10.5281/zenodo.1207631</a>.
+Ha, D., and Schmidhuber, J. (2018). World <span>Models</span>. <em>arXiv:1803.10122 [cs]</em>. doi:<a href="https://doi.org/10.5281/zenodo.1207631">10.5281/zenodo.1207631</a>.
 </div>
 <div id="ref-Hafner2020" class="csl-entry" role="listitem">
-Hafner, D., Lillicrap, T., Ba, J., and Norouzi, M. (2020). Dream to <span>Control</span>: <span>Learning Behaviors</span> by <span>Latent Imagination</span>. Available at: <a href="http://arxiv.org/abs/1912.01603">http://arxiv.org/abs/1912.01603</a> [Accessed March 24, 2020].
+Hafner, D., Lillicrap, T., Ba, J., and Norouzi, M. (2020). Dream to <span>Control</span>: <span>Learning Behaviors</span> by <span>Latent Imagination</span>. <em>arXiv:1912.01603 [cs]</em>. Available at: <a href="https://arxiv.org/abs/1912.01603">https://arxiv.org/abs/1912.01603</a> [Accessed March 24, 2020].
 </div>
 <div id="ref-Hafner2019" class="csl-entry" role="listitem">
-Hafner, D., Lillicrap, T., Fischer, I., Villegas, R., Ha, D., Lee, H., et al. (2019). Learning <span>Latent Dynamics</span> for <span>Planning</span> from <span>Pixels</span>. Available at: <a href="http://arxiv.org/abs/1811.04551">http://arxiv.org/abs/1811.04551</a> [Accessed January 24, 2020].
+Hafner, D., Lillicrap, T., Fischer, I., Villegas, R., Ha, D., Lee, H., et al. (2019). Learning <span>Latent Dynamics</span> for <span>Planning</span> from <span>Pixels</span>. <em>arXiv:1811.04551 [cs, stat]</em>. Available at: <a href="https://arxiv.org/abs/1811.04551">https://arxiv.org/abs/1811.04551</a> [Accessed January 24, 2020].
+</div>
+<div id="ref-Hafner2022" class="csl-entry" role="listitem">
+Hafner, D., Lillicrap, T., Norouzi, M., and Ba, J. (2022). Mastering <span>Atari</span> with <span>Discrete World Models</span>. Available at: <a href="https://arxiv.org/abs/2010.02193">https://arxiv.org/abs/2010.02193</a> [Accessed July 28, 2022].
+</div>
+<div id="ref-Hafner2024" class="csl-entry" role="listitem">
+Hafner, D., Pasukonis, J., Ba, J., and Lillicrap, T. (2024). Mastering <span>Diverse Domains</span> through <span>World Models</span>. doi:<a href="https://doi.org/10.48550/arXiv.2301.04104">10.48550/arXiv.2301.04104</a>.
 </div>
 <div id="ref-Hansen2001" class="csl-entry" role="listitem">
 Hansen, N., and Ostermeier, A. (2001). Completely <span>Derandomized Self-Adaptation</span> in <span>Evolution Strategies</span>. <em>Evolutionary Computation</em> 9, 159–195. doi:<a href="https://doi.org/10.1162/106365601750190398">10.1162/106365601750190398</a>.
@@ -779,6 +857,7 @@ Szita, I., and Lörincz, A. (2006). Learning <span>Tetris Using</span> the <span
 Wu, P., Escontrela, A., Hafner, D., Goldberg, K., and Abbeel, P. (2022). <span>DayDreamer</span>: <span>World Models</span> for <span>Physical Robot Learning</span>. doi:<a href="https://doi.org/10.48550/arXiv.2206.14176">10.48550/arXiv.2206.14176</a>.
 </div>
 </div>
+</section>
 </section>
 
 </main> <!-- /main -->
@@ -833,13 +912,14 @@ Wu, P., Escontrela, A., Hafner, D., Goldberg, K., and Abbeel, P. (2022). <span>D
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy
@@ -1181,7 +1261,7 @@ Wu, P., Escontrela, A., Hafner, D., Goldberg, K., and Abbeel, P. (2022). <span>D
     }
   });
   </script>
-<nav class="page-navigation">
+<nav class="page-navigation column-body">
   <div class="nav-page nav-page-previous">
       <a href="../src/4.3-Planning.html" class="pagination-link" aria-label="Planning (MPC, TDM)">
         <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">Planning (MPC, TDM)</span></span>

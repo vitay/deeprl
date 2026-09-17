@@ -2,17 +2,23 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.29">
+<meta name="generator" content="quarto-1.10.18">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>Inverse Reinforcement Learning – Deep Reinforcement Learning</title>
 <style>
-code{white-space: pre-wrap;}
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -57,10 +63,13 @@ div.csl-indent {
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-bcbce66894bfa8e7e94e40e0186b9bb8.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-bb62276ab45c84d9efd712f51ff97b5a.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-ea27fabe3da5290357830f0bd5288bdb.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-3998d32367fd34ee6440c4fab252e735.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -90,10 +99,53 @@ div.csl-indent {
 }</script>
 <style>html{ scroll-behavior: smooth; }</style>
 
+  <script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+ var mathElements = document.getElementsByClassName("math");
+ var macros = [];
+ for (var i = 0; i < mathElements.length; i++) {
+  var texText = mathElements[i].firstChild;
+  if (mathElements[i].tagName == "SPAN") {
+   katex.render(texText.data, mathElements[i], {
+    displayMode: mathElements[i].classList.contains('display'),
+    throwOnError: false,
+    macros: macros,
+    fleqn: false
+   });
+}}});
+  </script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css">
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
-<body class="nav-sidebar floating quarto-light">
+<body class="nav-sidebar docked quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -103,7 +155,7 @@ div.csl-indent {
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
         <a class="flex-grow-1 no-decor" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-          <h1 class="quarto-secondary-nav-title"><span class="chapter-title">Inverse Reinforcement Learning</span></h1>
+          <h1 class="quarto-secondary-nav-title"><span id="sec-inverse" class="quarto-section-identifier"><span class="chapter-title">Inverse Reinforcement Learning</span></span></h1>
         </a>     
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
         <i class="bi bi-search"></i>
@@ -112,9 +164,9 @@ div.csl-indent {
   </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="../">Deep Reinforcement Learning</a> 
@@ -206,11 +258,6 @@ div.csl-indent {
   <a href="../src/2.5-DistributedLearning.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Distributed learning</span></a>
   </div>
 </li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../src/2.6-Misc.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Misc.</span></a>
-  </div>
-</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -229,8 +276,7 @@ div.csl-indent {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/3.2-ActorCritic.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Advantage Actor-Critic (A3C)</span></a>
+  <a href="../src/3.2-ActorCritic.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Advantage Actor-Critic (A3C)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -261,11 +307,6 @@ div.csl-indent {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../src/3.8-EntropyRL.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Maximum Entropy RL (SAC)</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../src/3.9-Misc.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Misc.</span></a>
   </div>
 </li>
       </ul>
@@ -304,11 +345,6 @@ div.csl-indent {
   <a href="../src/4.5-AlphaGo.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">AlphaGo</span></a>
   </div>
 </li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../src/4.6-Misc.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Misc.</span></a>
-  </div>
-</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -337,7 +373,7 @@ div.csl-indent {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/5.4-Meta.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Meta learning</span></a>
+  <a href="../src/5.4-Meta.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Meta reinforcement learning</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -358,20 +394,36 @@ div.csl-indent {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#rl-maximizes-the-reward-function-you-give-it" id="toc-rl-maximizes-the-reward-function-you-give-it" class="nav-link active" data-scroll-target="#rl-maximizes-the-reward-function-you-give-it">RL maximizes the reward function you give it</a></li>
+  <li><a href="#reward-functions-need-careful-engineering" id="toc-reward-functions-need-careful-engineering" class="nav-link" data-scroll-target="#reward-functions-need-careful-engineering">Reward functions need careful engineering</a></li>
+  <li><a href="#learning-the-reward-function-from-demonstrations" id="toc-learning-the-reward-function-from-demonstrations" class="nav-link" data-scroll-target="#learning-the-reward-function-from-demonstrations">Learning the reward function from demonstrations</a></li>
+  <li><a href="#the-problem-is-ill-posed" id="toc-the-problem-is-ill-posed" class="nav-link" data-scroll-target="#the-problem-is-ill-posed">The problem is ill-posed</a></li>
+  <li><a href="#feature-based-rewards" id="toc-feature-based-rewards" class="nav-link" data-scroll-target="#feature-based-rewards">Feature-based rewards</a></li>
+  <li><a href="#maximum-entropy-irl" id="toc-maximum-entropy-irl" class="nav-link" data-scroll-target="#maximum-entropy-irl">Maximum entropy IRL</a></li>
+  <li><a href="#adversarial-imitation-learning" id="toc-adversarial-imitation-learning" class="nav-link" data-scroll-target="#adversarial-imitation-learning">Adversarial imitation learning</a></li>
+  <li><a href="#learning-from-preferences" id="toc-learning-from-preferences" class="nav-link" data-scroll-target="#learning-from-preferences">Learning from preferences</a>
+  <ul class="collapse">
+  <li><a href="#from-games-to-language-models" id="toc-from-games-to-language-models" class="nav-link" data-scroll-target="#from-games-to-language-models">From games to language models</a></li>
+  </ul></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
+<main class="content column-body" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title d-none d-lg-block"><span class="chapter-title">Inverse Reinforcement Learning</span></h1>
+<h1 class="title d-none d-lg-block"><span id="sec-inverse" class="quarto-section-identifier"><span class="chapter-title">Inverse Reinforcement Learning</span></span></h1>
 </div>
 
 
 
-<div class="quarto-title-meta">
+<div class="quarto-title-meta column-body">
 
     
   
@@ -383,19 +435,217 @@ div.csl-indent {
 </header>
 
 
-<p><strong>work in progress</strong></p>
-<p>Hindsight experience replay: <span class="citation" data-cites="Andrychowicz2017">Andrychowicz et al. (<a href="references.html#ref-Andrychowicz2017" role="doc-biblioref">2017</a>)</span></p>
-<p>Goal-conditioned inverse RL: <span class="citation" data-cites="Ding2019">Ding et al. (<a href="references.html#ref-Ding2019" role="doc-biblioref">2019</a>)</span></p>
+<p>Reinforcement learning is an optimization method: it maximizes the reward function that you give it. Nothing more, nothing less. This sounds obvious, but it has a consequence that is easy to underestimate: if the reward function does not describe exactly what you want, the agent will not do what you want, and it will be <strong>your</strong> fault, not the algorithm’s.</p>
+<p>This chapter is about that problem and about one family of answers to it: instead of writing the reward function by hand, learn it from examples of the desired behavior.</p>
+<section id="rl-maximizes-the-reward-function-you-give-it" class="level2">
+<h2 class="anchored" data-anchor-id="rl-maximizes-the-reward-function-you-give-it">RL maximizes the reward function you give it</h2>
+<p>A classical illustration is the boat racing game <em>Coast Runners</em>, where an agent was trained to win a race. The natural reward signal is the score of the game, which increases when the boat passes through turbo blocks placed along the circuit. A human player collects them on the way while racing towards the finish line.</p>
+<p>The trained agent discovered something better. Some turbos respawn quickly, so instead of finishing the race, the optimal behavior is to turn around in circles in a small lagoon and collect the same three turbos again and again. The agent obtains a much higher score than any human player, while never finishing a single race, repeatedly catching fire and driving in the wrong direction.</p>
+<div class="quarto-video ratio ratio-16x9"><iframe data-external="1" src="https://www.youtube.com/embed/tlOIHko8ySg" title="Coast Runners - reward hacking" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe></div>
+<p>The agent is not broken: it found a very good solution to the problem we actually gave it, which was “maximize the score”, not “win the race”. This failure mode is called <strong>reward hacking</strong> (or reward gaming, or specification gaming), and it is extremely common as soon as the reward function is a proxy for the real objective.</p>
+</section>
+<section id="reward-functions-need-careful-engineering" class="level2">
+<h2 class="anchored" data-anchor-id="reward-functions-need-careful-engineering">Reward functions need careful engineering</h2>
+<p>Designing a reward function that does what you want becomes an art. Two forces pull in opposite directions:</p>
+<ul>
+<li>RL algorithms work much better with <strong>dense</strong> rewards than with sparse ones (<a href="5.1-Intrinsic.html" class="quarto-xref"><span>Intrinsic motivation</span></a>), so it is tempting to add intermediary rewards to guide the agent.</li>
+<li>Every intermediary reward that you add is an opportunity for the agent to hack it, as it is by definition not the true objective.</li>
+</ul>
+<p>You quickly end up covering so many special cases that the reward function becomes unusable: <em>go as fast as you can, but not in a curve, except if you are on a closed circuit, but not if it rains…</em> And each added term has to be weighted against the others, which introduces hyperparameters that have no obvious value.</p>
+<div class="quarto-video ratio ratio-16x9"><iframe data-external="1" src="https://www.youtube.com/embed/8QnD8ZM0YCo" title="Reward engineering" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe></div>
+<p><span class="citation" data-cites="Popov2017">Popov et al. (<a href="references.html#ref-Popov2017" role="doc-biblioref">2017</a>)</span> give a striking example of this. Their task is to stack one Lego brick on another with a robotic arm, which is conceptually simple, and they solve it with DDPG, which at this point of the book we know how to implement. The reward function they had to design in order to make it work is anything but simple: it is composed of several terms for approaching, grasping, lifting and aligning the brick, each one shaped and weighted by hand.</p>
+<div id="fig-legoreward" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-legoreward-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="img/lego_reward.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;25.1: The reward function used to learn the Lego stacking task. Designing it was arguably harder than implementing the RL algorithm itself. Source: @Popov2017."><img src="img/lego_reward.png" class="img-fluid figure-img" style="width:90.0%"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-legoreward-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;25.1: The reward function used to learn the Lego stacking task. Designing it was arguably harder than implementing the RL algorithm itself. Source: <span class="citation" data-cites="Popov2017">Popov et al. (<a href="references.html#ref-Popov2017" role="doc-biblioref">2017</a>)</span>.
+</figcaption>
+</figure>
+</div>
+<p>It is fair to say that, in that paper, writing the reward function was harder than implementing DDPG. This is not an isolated case: in many applied projects, most of the engineering effort goes into the reward function rather than into the algorithm.</p>
+</section>
+<section id="learning-the-reward-function-from-demonstrations" class="level2">
+<h2 class="anchored" data-anchor-id="learning-the-reward-function-from-demonstrations">Learning the reward function from demonstrations</h2>
+<p>If the reward function is the hard part, perhaps it should be learned rather than written. This is the goal of <strong>inverse reinforcement learning</strong> (IRL): given demonstrations of an expert behaving well, find the reward function that this expert seems to be maximizing.</p>
+<div id="fig-inverserl" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-inverserl-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="img/inverseRL.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Figure&nbsp;25.2: In inverse RL, we observe an expert behaving and try to recover the reward function that explains its behavior. Source: http://www.miubiq.cs.titech.ac.jp/modeling-risk-anticipation-and-defensive-driving-on-residential-roads-using-inverse-reinforcement-learning/"><img src="img/inverseRL.png" class="img-fluid figure-img" style="width:55.0%"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-inverserl-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;25.2: In inverse RL, we observe an expert behaving and try to recover the reward function that explains its behavior. Source: <a href="http://www.miubiq.cs.titech.ac.jp/modeling-risk-anticipation-and-defensive-driving-on-residential-roads-using-inverse-reinforcement-learning/" class="uri">http://www.miubiq.cs.titech.ac.jp/modeling-risk-anticipation-and-defensive-driving-on-residential-roads-using-inverse-reinforcement-learning/</a>
+</figcaption>
+</figure>
+</div>
+<p>The name is well chosen: regular RL goes from a reward function to a policy, IRL goes from a policy (observed through its trajectories) back to a reward function. Once the reward function has been recovered, we can simply apply any of the algorithms of this book to obtain the optimal policy.</p>
+<div class="callout callout-style-default callout-tip no-icon callout-titled" title="IRL is not imitation learning">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>IRL is not imitation learning
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>It is important not to confuse the two, as they use the same data but do very different things with it.</p>
+<p><strong>Imitation learning</strong> (or behavioral cloning, see <a href="5.3-OfflineRL.html" class="quarto-xref"><span>Offline RL</span></a>) learns the policy directly: it treats the demonstrations as a supervised learning dataset of (state, action) pairs and trains a network to reproduce the expert’s actions. It is simple and often works, but it only learns <strong>what</strong> the expert does, not <strong>why</strong>.</p>
+<p><strong>Inverse RL</strong> learns the reward function, i.e.&nbsp;the <strong>intention</strong> behind the behavior, and only then derives a policy from it.</p>
+<p>The difference matters as soon as something changes. An imitation policy is tied to the states it has seen and to the body and the environment of the expert: put it in a slightly different situation and it has nothing to say. A reward function is a much more compact and much more <strong>transferable</strong> description of a task. “Reach the red cube without knocking over the blue one” stays valid if the robot has different arms, if the table is higher, or if the dynamics change; the sequence of joint angles that the expert used does not.</p>
+<p>This is the central argument in favor of IRL: among all the ways of describing a task, the reward function is arguably the most succinct and the most robust.</p>
+</div>
+</div>
+</section>
+<section id="the-problem-is-ill-posed" class="level2">
+<h2 class="anchored" data-anchor-id="the-problem-is-ill-posed">The problem is ill-posed</h2>
+<p>Unfortunately, IRL is much harder than it looks. <span class="citation" data-cites="Ng2000">Ng and Russell (<a href="references.html#ref-Ng2000" role="doc-biblioref">2000</a>)</span>, who formalized the problem, immediately noted that it is <strong>ill-posed</strong>: many different reward functions explain the same observed behavior equally well.</p>
+<p>The most obvious one is <span class="math inline">r(s, a, s') = 0</span> everywhere. If all rewards are zero, then all policies have a return of zero, so all policies are optimal, including the expert’s. A degenerate solution, but a valid one: it perfectly “explains” the demonstrations.</p>
+<p>Less trivially, multiplying a reward function by a positive constant does not change the optimal policy either. And there is a whole family of additive transformations that leave it unchanged, characterized by <span class="citation" data-cites="Ng1999">Ng et al. (<a href="references.html#ref-Ng1999" role="doc-biblioref">1999</a>)</span>: for any function <span class="math inline">\Phi(s)</span> of the state, called a <strong>potential</strong>, the transformed reward</p>
+<p><span class="math display">
+    r'(s, a, s') = r(s, a, s') + \gamma \, \Phi(s') - \Phi(s)
+</span></p>
+<p>has exactly the same optimal policy as <span class="math inline">r</span>. The intuition is that the added term telescopes along a trajectory: summing it over an episode leaves only the potentials of the first and last states, so it changes the return of every trajectory by the same amount and therefore changes no comparison between them.</p>
+<div class="callout callout-style-default callout-tip no-icon callout-titled" title="Potential-based reward shaping">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Potential-based reward shaping
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>This result is worth remembering outside of IRL, because it is the principled answer to the reward engineering problem of the previous section. If your reward is too sparse and you want to add intermediary rewards to guide the agent, doing it with a potential <span class="math inline">\Phi(s)</span> guarantees that you are <strong>not</strong> changing the task: the agent cannot hack a potential-based bonus, because collecting it repeatedly requires coming back to a lower-potential state, which costs exactly what it gained.</p>
+<p>The Coast Runners agent could loop over the turbos precisely because the bonus was not potential-based. Had the score been shaped as “progress along the circuit”, i.e.&nbsp;as the difference of a potential, going backwards would have given a negative reward exactly cancelling the forward one.</p>
+</div>
+</div>
+<p>Even excluding all these cases, an infinity of reward functions remain compatible with a finite set of demonstrations, simply because the demonstrations only tell us about the states the expert actually visited.</p>
+<p>Every IRL algorithm is therefore, at its core, a way of choosing <strong>which</strong> of the compatible reward functions to return. The different methods differ mostly by the criterion they use for that choice.</p>
+</section>
+<section id="feature-based-rewards" class="level2">
+<h2 class="anchored" data-anchor-id="feature-based-rewards">Feature-based rewards</h2>
+<p>A first and very common restriction is to constrain the shape of the reward function. Instead of allowing an arbitrary value in each state, the reward is written as a <strong>linear combination of features</strong>:</p>
+<p><span class="math display">
+    \hat{r}(s) = \sum_{i=1}^K w_i \, \phi_i(s) = \mathbf{w}^T \, \phi(s)
+</span></p>
+<p>where <span class="math inline">\phi(s)</span> is a feature vector describing the state (<a href="2.1-FunctionApproximation.html" class="quarto-xref"><span>Function approximation</span></a>) and <span class="math inline">\mathbf{w}</span> the weights to be learned. For an autonomous car, the features could be the distance to the center of the lane, the speed, the distance to the car in front, whether the blinker matches the direction taken, and so on. The IRL problem then reduces to finding the <span class="math inline">K</span> weights, which is a much smaller problem than finding one value per state, and which has the pleasant side effect of being interpretable: after learning, one can read the weights and see what the expert seems to care about.</p>
+<p>A key quantity for these methods is the <strong>expected feature count</strong>, i.e.&nbsp;the discounted sum of the features encountered along a trajectory:</p>
+<p><span class="math display">
+    \mu(\pi) = \mathbb{E}_{\tau \sim \rho_\pi} [\sum_{t=0}^{T} \gamma^t \, \phi(s_t)]
+</span></p>
+<p>Because the reward is linear in the features, the expected return of a policy is simply <span class="math inline">\mathbf{w}^T \, \mu(\pi)</span>. Two policies with the same expected feature counts therefore have the same return <strong>for any</strong> weight vector. This gives a concrete objective, proposed by <span class="citation" data-cites="Abbeel2004">Abbeel and Ng (<a href="references.html#ref-Abbeel2004" role="doc-biblioref">2004</a>)</span> under the name <strong>apprenticeship learning</strong>: find a policy whose feature counts match those of the expert, measured on the demonstrations.</p>
+<p><span class="math display">
+    || \mu(\pi) - \mu(\pi_\text{expert}) || \leq \epsilon
+</span></p>
+<p>If the features are well chosen, matching them means solving the same task, and one does not even need to identify the “true” weights: any policy matching the feature counts is guaranteed to be at least as good as the expert under the unknown reward function. Note however that this only pushes the difficulty one step further, as we now have to choose the features <span class="math inline">\phi(s)</span> by hand, which is a bit like designing the reward function.</p>
+</section>
+<section id="maximum-entropy-irl" class="level2">
+<h2 class="anchored" data-anchor-id="maximum-entropy-irl">Maximum entropy IRL</h2>
+<p>Feature matching still leaves a lot of ambiguity: many policies, and many weight vectors, produce the same feature counts. <span class="citation" data-cites="Ziebart2008">Ziebart et al. (<a href="references.html#ref-Ziebart2008" role="doc-biblioref">2008</a>)</span> resolve it with an argument that we have already met in <a href="3.8-EntropyRL.html" class="quarto-xref"><span>Maximum Entropy RL (SAC)</span></a>: among all the distributions over trajectories that match the observed feature counts, choose the one with the <strong>maximum entropy</strong>, i.e.&nbsp;the one that commits to nothing beyond what the data actually says.</p>
+<p>This leads to modelling the expert as being only <strong>approximately</strong> optimal, with the probability of a trajectory increasing exponentially with its return:</p>
+<p><span class="math display">
+    \rho(\tau) \propto \exp \left( \sum_{t=0}^T \gamma^t \, \hat{r}(s_t) \right)
+</span></p>
+<p>The expert takes good trajectories with a high probability and bad ones with a low probability, but it is not assumed to be perfect. This is a far more realistic model of a human demonstrator, and it is also numerically much better behaved: the reward weights can now be found by maximizing the likelihood of the demonstrations under this distribution, which is a well-defined optimization problem instead of a search among infinitely many equally valid answers.</p>
+<p>Maximum entropy IRL became the basis of most modern methods, and it is worth noticing how the same principle appears twice in this book for two different purposes: in <a href="3.8-EntropyRL.html" class="quarto-xref"><span>Maximum Entropy RL (SAC)</span></a>, maximizing entropy made the agent explore; here, it makes the explanation of someone else’s behavior as non-committal as possible.</p>
+</section>
+<section id="adversarial-imitation-learning" class="level2">
+<h2 class="anchored" data-anchor-id="adversarial-imitation-learning">Adversarial imitation learning</h2>
+<p>All the methods above share an expensive structure: they alternate between guessing a reward function and solving the corresponding RL problem to see whether the resulting policy resembles the expert. There are two nested loops, and the inner one is a complete RL training.</p>
+<p><span class="citation" data-cites="Ho2016">Ho and Ermon (<a href="references.html#ref-Ho2016" role="doc-biblioref">2016</a>)</span> observed that this detour can be avoided. They showed that maximum entropy IRL followed by RL is mathematically equivalent to matching the <strong>occupancy measure</strong> of the expert, i.e.&nbsp;the distribution of the <span class="math inline">(s, a)</span> pairs visited. If all we want is a policy, we do not need to pass through the reward function at all: we only need a way to make two distributions of state-action pairs similar.</p>
+<p>This is exactly the problem that <strong>generative adversarial networks</strong> solve, and the resulting algorithm is called <strong>Generative Adversarial Imitation Learning</strong> (GAIL). It uses two networks:</p>
+<ul>
+<li>A <strong>discriminator</strong> <span class="math inline">D_\omega(s, a)</span>, trained as a classifier to distinguish the <span class="math inline">(s, a)</span> pairs coming from the expert demonstrations from those generated by the agent.</li>
+<li>The <strong>policy</strong> <span class="math inline">\pi_\theta</span>, trained by regular RL (TRPO in the original paper, PPO in most implementations) using the discriminator as its reward function:</li>
+</ul>
+<p><span class="math display">
+    r(s, a) = - \log (1 - D_\omega(s, a))
+</span></p>
+<p>The policy is therefore rewarded for producing transitions that the discriminator believes come from the expert. As the policy improves, the discriminator has to become sharper, which in turn provides a more demanding reward, and so on. At convergence, the discriminator can no longer tell the two apart, which means the occupancy measures match.</p>
+<p>GAIL works remarkably well and scales to problems where classical IRL does not. But notice what we have given up: the reward function. The discriminator is <em>not</em> a usable reward function, because it is entangled with the dynamics of the environment in which the demonstrations were collected. Move the agent to an environment with different dynamics and the discriminator becomes meaningless, so we have lost precisely the transferability that motivated IRL in the first place.</p>
+<p><strong>Adversarial Inverse Reinforcement Learning</strong> <span class="citation" data-cites="Fu2018">(AIRL, <a href="references.html#ref-Fu2018" role="doc-biblioref">Fu et al., 2018</a>)</span> recovers it. It keeps the adversarial structure of GAIL, but constrains the shape of the discriminator so that the recovered reward is <strong>disentangled</strong> from the dynamics. The reward obtained can then be transferred to an environment where the dynamics have changed, and re-optimized there, which GAIL cannot do.</p>
+</section>
+<section id="learning-from-preferences" class="level2">
+<h2 class="anchored" data-anchor-id="learning-from-preferences">Learning from preferences</h2>
+<p>There is one assumption that all the methods above make and that is easy to overlook: they require an expert <strong>able to perform the task</strong>. This is a strong requirement. A human can explain what a good backflip looks like, but very few can teleoperate a simulated robot into performing one. For many tasks, we can <strong>judge</strong> a behavior much more easily than we can <strong>produce</strong> it.</p>
+<p><span class="citation" data-cites="Christiano2017">Christiano et al. (<a href="references.html#ref-Christiano2017" role="doc-biblioref">2017</a>)</span> build on that observation. Instead of demonstrations, the human is shown two short video clips of the agent’s behavior, one or two seconds each, and simply answers: which of the two is better? From these binary comparisons, a <strong>reward model</strong> <span class="math inline">\hat{r}_\psi(s, a)</span> is fitted, by assuming that the probability of preferring a segment grows with its predicted return:</p>
+<p><span class="math display">
+    P(\tau^1 \succ \tau^2) = \frac{\exp \sum_{t} \hat{r}_\psi(s^1_t, a^1_t)}{\exp \sum_{t} \hat{r}_\psi(s^1_t, a^1_t) + \exp \sum_{t} \hat{r}_\psi(s^2_t, a^2_t)}
+</span></p>
+<p>The reward model is trained to maximize the likelihood of the observed human choices, and the agent is trained by regular RL on the predicted reward. Both are learned at the same time: the agent explores, the human labels some of the resulting pairs, the reward model improves, the agent improves, and so on.</p>
+<p>Two things make this practical. First, the human only has to compare, which is fast and requires no expertise. Second, the comparisons are only requested on a tiny fraction of the interactions, typically less than one percent, as the reward model generalizes to everything in between. With about an hour of a non-expert human’s time, the agent learns behaviors that had never been specified by any reward function, including the famous backflip. <span class="citation" data-cites="Ibarz2018">Ibarz et al. (<a href="references.html#ref-Ibarz2018" role="doc-biblioref">2018</a>)</span> later combined preferences and demonstrations on Atari games, showing that the two sources of information are complementary.</p>
+<section id="from-games-to-language-models" class="level3">
+<h3 class="anchored" data-anchor-id="from-games-to-language-models">From games to language models</h3>
+<p>This is where the chapter meets something the reader has certainly used. The alignment of large language models such as ChatGPT, mentioned in the introduction of this book, is exactly the procedure above, applied to text:</p>
+<ol type="1">
+<li>A pretrained language model generates several answers to a prompt.</li>
+<li>Human annotators <strong>rank</strong> these answers from best to worst.</li>
+<li>A <strong>reward model</strong> is trained on these comparisons, exactly as above.</li>
+<li>The language model is fine-tuned by RL, using PPO (<a href="3.6-PPO.html#sec-PPO" class="quarto-xref"><span>Proximal Policy Optimization (PPO)</span></a>), to maximize the reward model while staying close to the pretrained model.</li>
+</ol>
+<p>This is called <strong>Reinforcement Learning from Human Feedback</strong> (RLHF), and it is what turns a model that merely predicts plausible text into one that answers questions usefully and refuses harmful requests <span class="citation" data-cites="Ouyang2022">(<a href="references.html#ref-Ouyang2022" role="doc-biblioref">Ouyang et al., 2022</a>)</span>. It is worth emphasizing that the technique was not invented for language models: <span class="citation" data-cites="Christiano2017">Christiano et al. (<a href="references.html#ref-Christiano2017" role="doc-biblioref">2017</a>)</span> introduced it five years before ChatGPT, on Atari games and simulated robots, as an answer to the reward specification problem that opens this chapter. This is a good example of why it is worth understanding the classical RL literature: the ideas travel.</p>
+<p>Step 4 is expensive: it requires a reward model, a value network and a full PPO training loop. <span class="citation" data-cites="Rafailov2023">Rafailov et al. (<a href="references.html#ref-Rafailov2023" role="doc-biblioref">2023</a>)</span> showed that the RLHF objective actually admits a closed-form solution, so that the optimal policy can be expressed directly in terms of the preference data. The resulting algorithm, <strong>Direct Preference Optimization</strong> (DPO), removes both the reward model and the RL loop, replacing them by a single supervised-style loss on pairs of preferred and rejected answers. It is far simpler and cheaper, which explains its wide adoption, although the question of whether it fully matches PPO-based RLHF in quality is at the time of writing still debated.</p>
+<p>Let us finish with a word of caution that brings us back to the beginning of the chapter. The reward model is trained on a finite number of human comparisons, so it is only an <strong>approximation</strong> of what humans actually prefer. Optimizing it too hard therefore leads to exactly the phenomenon we started with: the agent finds behaviors that score very well under the reward model while being judged poorly by real humans. Learning the reward function does not make reward hacking disappear, it moves it one level up. This is why RLHF implementations always constrain the fine-tuned model to stay close to its starting point, usually through a KL penalty, which is one more instance of the trust region idea of <a href="3.6-PPO.html#sec-PPO" class="quarto-xref"><span>Proximal Policy Optimization (PPO)</span></a>.</p>
+<div class="callout callout-style-default callout-tip no-icon callout-titled" title="Additional resources">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Additional resources
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li><span class="citation" data-cites="Arora2019">Arora and Doshi (<a href="references.html#ref-Arora2019" role="doc-biblioref">2019</a>)</span> is a detailed survey of inverse RL: challenges, methods and progress.</li>
+<li><span class="citation" data-cites="Ng2000">Ng and Russell (<a href="references.html#ref-Ng2000" role="doc-biblioref">2000</a>)</span> is the founding paper, and is still very readable.</li>
+</ul>
+</div>
+</div>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
-<div id="ref-Andrychowicz2017" class="csl-entry" role="listitem">
-Andrychowicz, M., Wolski, F., Ray, A., Schneider, J., Fong, R., Welinder, P., et al. (2017). Hindsight <span>Experience Replay</span>. Available at: <a href="http://arxiv.org/abs/1707.01495">http://arxiv.org/abs/1707.01495</a>.
+<div id="ref-Abbeel2004" class="csl-entry" role="listitem">
+Abbeel, P., and Ng, A. Y. (2004). Apprenticeship learning via inverse reinforcement learning. in <em>Proceedings of the twenty-first international conference on <span>Machine</span> learning</em> <span>ICML</span> ’04. (New York, NY, USA: Association for Computing Machinery), 1. doi:<a href="https://doi.org/10.1145/1015330.1015430">10.1145/1015330.1015430</a>.
 </div>
-<div id="ref-Ding2019" class="csl-entry" role="listitem">
-Ding, Y., Florensa, C., Phielipp, M., and Abbeel, P. (2019). Goal-conditioned <span>Imitation Learning</span>. in (Long Beach, California: PMLR), 8. Available at: <a href="https://openreview.net/pdf?id=HkglHcSj2N">https://openreview.net/pdf?id=HkglHcSj2N</a>.
+<div id="ref-Arora2019" class="csl-entry" role="listitem">
+Arora, S., and Doshi, P. (2019). A <span>Survey</span> of <span>Inverse Reinforcement Learning</span>: <span>Challenges</span>, <span>Methods</span> and <span>Progress</span>. <em>arXiv:1806.06877 [cs, stat]</em>. Available at: <a href="https://arxiv.org/abs/1806.06877">https://arxiv.org/abs/1806.06877</a> [Accessed January 31, 2020].
+</div>
+<div id="ref-Christiano2017" class="csl-entry" role="listitem">
+Christiano, P. F., Leike, J., Brown, T., Martic, M., Legg, S., and Amodei, D. (2017). Deep <span>Reinforcement Learning</span> from <span>Human Preferences</span>. in <em>Advances in <span>Neural Information Processing Systems</span></em> (Curran Associates, Inc.).
+</div>
+<div id="ref-Fu2018" class="csl-entry" role="listitem">
+Fu, J., Luo, K., and Levine, S. (2018). Learning <span>Robust Rewards</span> with <span>Adversarial Inverse Reinforcement Learning</span>. doi:<a href="https://doi.org/10.48550/arXiv.1710.11248">10.48550/arXiv.1710.11248</a>.
+</div>
+<div id="ref-Ho2016" class="csl-entry" role="listitem">
+Ho, J., and Ermon, S. (2016). Generative <span>Adversarial Imitation Learning</span>. doi:<a href="https://doi.org/10.48550/arXiv.1606.03476">10.48550/arXiv.1606.03476</a>.
+</div>
+<div id="ref-Ibarz2018" class="csl-entry" role="listitem">
+Ibarz, B., Leike, J., Pohlen, T., Irving, G., Legg, S., and Amodei, D. (2018). Reward learning from human preferences and demonstrations in <span>Atari</span>. <em>arXiv:1811.06521 [cs, stat]</em>. Available at: <a href="https://arxiv.org/abs/1811.06521">https://arxiv.org/abs/1811.06521</a> [Accessed May 16, 2020].
+</div>
+<div id="ref-Ng1999" class="csl-entry" role="listitem">
+Ng, A. Y., Harada, D., and Russell, S. J. (1999). Policy <span>Invariance Under Reward Transformations</span>: <span>Theory</span> and <span>Application</span> to <span>Reward Shaping</span>. in <em>Proceedings of the <span>Sixteenth International Conference</span> on <span>Machine Learning</span></em> <span>ICML</span> ’99. (San Francisco, CA, USA: Morgan Kaufmann Publishers Inc.), 278–287.
+</div>
+<div id="ref-Ng2000" class="csl-entry" role="listitem">
+Ng, A. Y., and Russell, S. J. (2000). Algorithms for <span>Inverse Reinforcement Learning</span>. in <em>Proceedings of the <span>Seventeenth International Conference</span> on <span>Machine Learning</span></em> <span>ICML</span> ’00. (San Francisco, CA, USA: Morgan Kaufmann Publishers Inc.), 663–670.
+</div>
+<div id="ref-Ouyang2022" class="csl-entry" role="listitem">
+Ouyang, L., Wu, J., Jiang, X., Almeida, D., Wainwright, C. L., Mishkin, P., et al. (2022). Training language models to follow instructions with human feedback. doi:<a href="https://doi.org/10.48550/arXiv.2203.02155">10.48550/arXiv.2203.02155</a>.
+</div>
+<div id="ref-Popov2017" class="csl-entry" role="listitem">
+Popov, I., Heess, N., Lillicrap, T., Hafner, R., Barth-Maron, G., Vecerik, M., et al. (2017). Data-efficient <span>Deep Reinforcement Learning</span> for <span>Dexterous Manipulation</span>. <em>arXiv:1704.03073 [cs]</em>. Available at: <a href="https://arxiv.org/abs/1704.03073">https://arxiv.org/abs/1704.03073</a>.
+</div>
+<div id="ref-Rafailov2023" class="csl-entry" role="listitem">
+Rafailov, R., Sharma, A., Mitchell, E., Manning, C. D., Ermon, S., and Finn, C. (2023). Direct <span>Preference Optimization</span>: <span>Your Language Model</span> is <span>Secretly</span> a <span>Reward Model</span>. in <em>Advances in <span>Neural Information Processing Systems</span></em> (Curran Associates, Inc.), 53728–53741. doi:<a href="https://doi.org/10.52202/075280-2338">10.52202/075280-2338</a>.
+</div>
+<div id="ref-Ziebart2008" class="csl-entry" role="listitem">
+Ziebart, B. D., Maas, A., Bagnell, J. A., and Dey, A. K. (2008). Maximum <span>Entropy Inverse Reinforcement Learning</span>. in <em><span>AAAI Conference</span> on <span>Artificial Intelligence</span></em>, 6.
 </div>
 </div>
+</section>
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -449,13 +699,14 @@ Ding, Y., Florensa, C., Phielipp, M., and Abbeel, P. (2019). Goal-conditioned <s
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy
@@ -797,7 +1048,7 @@ Ding, Y., Florensa, C., Phielipp, M., and Abbeel, P. (2019). Goal-conditioned <s
     }
   });
   </script>
-<nav class="page-navigation">
+<nav class="page-navigation column-body">
   <div class="nav-page nav-page-previous">
       <a href="../src/5.1-Intrinsic.html" class="pagination-link" aria-label="Intrinsic motivation">
         <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">Intrinsic motivation</span></span>
@@ -823,6 +1074,38 @@ Ding, Y., Florensa, C., Phielipp, M., and Abbeel, P. (2019). Goal-conditioned <s
     </div>
   </div>
 </footer>
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
 
 
 

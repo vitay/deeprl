@@ -2,17 +2,23 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.29">
+<meta name="generator" content="quarto-1.10.18">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>Temporal Difference learning – Deep Reinforcement Learning</title>
 <style>
-code{white-space: pre-wrap;}
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -57,10 +63,10 @@ div.csl-indent {
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-bcbce66894bfa8e7e94e40e0186b9bb8.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-bb62276ab45c84d9efd712f51ff97b5a.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-ea27fabe3da5290357830f0bd5288bdb.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-3998d32367fd34ee6440c4fab252e735.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script src="../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
 <link href="../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
 <link href="../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
@@ -121,7 +127,7 @@ const typesetMath = (el) => {
     var macros = [];
     for (var i = 0; i < mathElements.length; i++) {
       var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
         window.katex.render(texText.data, mathElements[i], {
           displayMode: mathElements[i].classList.contains('display'),
           throwOnError: false,
@@ -139,7 +145,7 @@ window.Quarto = {
 
 </head>
 
-<body class="nav-sidebar floating quarto-light">
+<body class="nav-sidebar docked quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -149,7 +155,7 @@ window.Quarto = {
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
         <a class="flex-grow-1 no-decor" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-          <h1 class="quarto-secondary-nav-title"><span class="chapter-title">Temporal Difference learning</span></h1>
+          <h1 class="quarto-secondary-nav-title"><span id="sec-td" class="quarto-section-identifier"><span class="chapter-title">Temporal Difference learning</span></span></h1>
         </a>     
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
         <i class="bi bi-search"></i>
@@ -158,9 +164,9 @@ window.Quarto = {
   </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="../">Deep Reinforcement Learning</a> 
@@ -252,11 +258,6 @@ window.Quarto = {
   <a href="../src/2.5-DistributedLearning.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Distributed learning</span></a>
   </div>
 </li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../src/2.6-Misc.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Misc.</span></a>
-  </div>
-</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -275,8 +276,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/3.2-ActorCritic.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Advantage Actor-Critic (A3C)</span></a>
+  <a href="../src/3.2-ActorCritic.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Advantage Actor-Critic (A3C)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -307,11 +307,6 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../src/3.8-EntropyRL.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Maximum Entropy RL (SAC)</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../src/3.9-Misc.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Misc.</span></a>
   </div>
 </li>
       </ul>
@@ -350,11 +345,6 @@ window.Quarto = {
   <a href="../src/4.5-AlphaGo.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">AlphaGo</span></a>
   </div>
 </li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../src/4.6-Misc.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Misc.</span></a>
-  </div>
-</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -383,7 +373,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/5.4-Meta.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Meta learning</span></a>
+  <a href="../src/5.4-Meta.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Meta reinforcement learning</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -409,7 +399,12 @@ window.Quarto = {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#temporal-difference" id="toc-temporal-difference" class="nav-link active" data-scroll-target="#temporal-difference">Temporal difference</a></li>
+  <li><a href="#temporal-difference" id="toc-temporal-difference" class="nav-link active" data-scroll-target="#temporal-difference">Temporal difference</a>
+  <ul class="collapse">
+  <li><a href="#sarsa" id="toc-sarsa" class="nav-link" data-scroll-target="#sarsa">SARSA</a></li>
+  </ul></li>
+  <li><a href="#q-learning" id="toc-q-learning" class="nav-link" data-scroll-target="#q-learning">Q-learning</a></li>
+  <li><a href="#summary-of-td-methods" id="toc-summary-of-td-methods" class="nav-link" data-scroll-target="#summary-of-td-methods">Summary of TD methods</a></li>
   <li><a href="#actor-critic-methods" id="toc-actor-critic-methods" class="nav-link" data-scroll-target="#actor-critic-methods">Actor-critic methods</a></li>
   <li><a href="#advantage-estimation" id="toc-advantage-estimation" class="nav-link" data-scroll-target="#advantage-estimation">Advantage estimation</a>
   <ul class="collapse">
@@ -421,16 +416,16 @@ window.Quarto = {
 </nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
+<main class="content column-body" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title d-none d-lg-block"><span class="chapter-title">Temporal Difference learning</span></h1>
+<h1 class="title d-none d-lg-block"><span id="sec-td" class="quarto-section-identifier"><span class="chapter-title">Temporal Difference learning</span></span></h1>
 </div>
 
 
 
-<div class="quarto-title-meta">
+<div class="quarto-title-meta column-body">
 
     
   
@@ -481,7 +476,7 @@ Figure&nbsp;5.1: Temporal difference algorithms update values after a single tra
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-TD(0) policy evaluation
+<span class="screen-reader-only">Note</span>TD(0) policy evaluation
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -499,7 +494,7 @@ TD(0) policy evaluation
 <li>Update the state-value function of <span class="math inline">s_t</span>:</li>
 </ul>
 <p><span class="math display">
-      V(s_t) = V(s_t) + \alpha \, \delta_t
+      V(s_t) \leftarrow V(s_t) + \alpha \, \delta_t
   </span></p>
 <ul>
 <li><strong>if</strong> <span class="math inline">s_{t+1}</span> is terminal: <strong>break</strong></li>
@@ -513,7 +508,7 @@ TD(0) policy evaluation
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Bias-variance trade-off of TD
+<span class="screen-reader-only">Tip</span>Bias-variance trade-off of TD
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -529,11 +524,10 @@ Bias-variance trade-off of TD
 <p><span class="math display">
     Q(s, a) \leftarrow Q(s, a) + \alpha (r(s, a, s') + \gamma \, Q(s', a') - Q(s, a))
 </span></p>
-<p>When learning Q-values directly, the question is which next action <span class="math inline">a'</span> should be used in the update rule: the action that will actually be taken for the next transition (defined by <span class="math inline">\pi(s', a')</span>), or the greedy action (<span class="math inline">a^* = \text{argmax}_a Q(s', a)</span>).</p>
-<p>This relates to the <em>on-policy / off-policy</em> distinction already seen for MC methods:</p>
-<ul>
-<li><strong>On-policy</strong> TD learning is called <strong>SARSA</strong> (state-action-reward-state-action). It uses the next action sampled from the policy <span class="math inline">\pi(s', a')</span> to update the current transition. This selected action could be noted <span class="math inline">\pi(s')</span> for simplicity. It is required that this next action will actually be performed for the next transition. The policy must be <span class="math inline">\epsilon</span>-soft, for example <span class="math inline">\epsilon</span>-greedy or softmax:</li>
-</ul>
+<p>When learning Q-values directly, the question is which next action <span class="math inline">a'</span> should be used in the update rule: the action that will actually be taken for the next transition (defined by <span class="math inline">\pi(s', a')</span>), or the greedy action (<span class="math inline">a^* = \text{argmax}_a Q(s', a)</span>). This relates to the <em>on-policy / off-policy</em> distinction already seen for MC methods.</p>
+<section id="sarsa" class="level3">
+<h3 class="anchored" data-anchor-id="sarsa">SARSA</h3>
+<p><strong>On-policy</strong> TD learning is called <strong>SARSA</strong> (state-action-reward-state-action). It uses the next action sampled from the policy <span class="math inline">\pi(s', a')</span> to update the current transition. This selected action could be noted <span class="math inline">\pi(s')</span> for simplicity. It is required that this next action will actually be performed for the next transition. The policy must be <span class="math inline">\epsilon</span>-soft, for example <span class="math inline">\epsilon</span>-greedy or softmax:</p>
 <p><span class="math display">
     Q(s, a) \leftarrow Q(s, a) + \alpha (r(s, a, s') + \gamma \, Q(s', \pi(s')) - Q(s, a))
 </span></p>
@@ -543,7 +537,7 @@ Bias-variance trade-off of TD
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-SARSA
+<span class="screen-reader-only">Note</span>SARSA
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -556,7 +550,7 @@ SARSA
 <li><p>Select <span class="math inline">a_{t+1}</span> using the current <strong>stochastic</strong> policy <span class="math inline">\pi</span>.</p></li>
 <li><p>Update the action-value function of <span class="math inline">(s_t, a_t)</span>:</p></li>
 </ul>
-<p><span class="math display"> Q(s_t, a_t) = Q(s_t, a_t) + \alpha \, (r_{t+1} + \gamma \, Q(s_{t+1}, a_{t+1})  - Q(s_t, a_t)) </span></p>
+<p><span class="math display"> Q(s_t, a_t) \leftarrow Q(s_t, a_t) + \alpha \, (r_{t+1} + \gamma \, Q(s_{t+1}, a_{t+1})  - Q(s_t, a_t)) </span></p>
 <ul>
 <li>Improve the stochastic policy, e.g:</li>
 </ul>
@@ -572,9 +566,11 @@ SARSA
 </ul>
 </div>
 </div>
-<ul>
-<li><strong>Off-policy</strong> TD learning is called <strong>Q-learning</strong> <span class="citation" data-cites="Watkins1989">(<a href="references.html#ref-Watkins1989" role="doc-biblioref">Watkins, 1989</a>)</span>. The greedy action in the next state (the one with the highest Q-value) is used to update the current transition. It does not mean that the greedy action will actually have to be selected for the next transition. The learned policy can therefore also be deterministic:</li>
-</ul>
+</section>
+</section>
+<section id="q-learning" class="level2">
+<h2 class="anchored" data-anchor-id="q-learning">Q-learning</h2>
+<p><strong>Off-policy</strong> TD learning is called <strong>Q-learning</strong> <span class="citation" data-cites="Watkins1989">(<a href="references.html#ref-Watkins1989" role="doc-biblioref">Watkins, 1989</a>)</span>. The greedy action in the next state (the one with the highest Q-value) is used to update the current transition. It does not mean that the greedy action will actually have to be selected for the next transition. The learned policy can therefore also be deterministic:</p>
 <p><span class="math display">
     Q(s, a) \leftarrow Q(s, a) + \alpha (r(s, a, s') + \gamma \, \max_{a'} Q(s', a') - Q(s, a))
 </span></p>
@@ -584,7 +580,7 @@ SARSA
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Note
+<span class="screen-reader-only">Note</span>Q-learning
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -597,7 +593,7 @@ Note
 <li><p>Apply <span class="math inline">a_t</span>, observe <span class="math inline">r_{t+1}</span> and <span class="math inline">s_{t+1}</span>.</p></li>
 <li><p>Update the action-value function of <span class="math inline">(s_t, a_t)</span>:</p></li>
 </ul>
-<p><span class="math display">Q(s_t, a_t) = Q(s_t, a_t) + \alpha \, (r_{t+1} + \gamma \, \max_a Q(s_{t+1}, a) - Q(s_t, a_t))</span></p>
+<p><span class="math display">Q(s_t, a_t) \leftarrow Q(s_t, a_t) + \alpha \, (r_{t+1} + \gamma \, \max_a Q(s_{t+1}, a) - Q(s_t, a_t))</span></p>
 <ul>
 <li>Improve greedily the learned policy:</li>
 </ul>
@@ -623,6 +619,29 @@ Note
     Q^\pi(s, a) \leftarrow Q^\pi(s, a) + \alpha (r(s, a, s') + \gamma \, \max_{a'} Q^\pi(s', a') - Q^\pi(s, a))
 </span></p>
 <p>As we only sample <strong>transitions</strong> using <span class="math inline">b</span> and not episodes, there is no need to correct the returns. The returns use estimates <span class="math inline">Q^\pi</span>, which depend on <span class="math inline">\pi</span> and not <span class="math inline">b</span>. The immediate reward <span class="math inline">r_{t+1}</span> is stochastic, but is the same whether you sample <span class="math inline">a_t</span> from <span class="math inline">\pi</span> or from <span class="math inline">b</span>.</p>
+</section>
+<section id="summary-of-td-methods" class="level2">
+<h2 class="anchored" data-anchor-id="summary-of-td-methods">Summary of TD methods</h2>
+<p>Before moving on, it is worth summarizing what temporal difference brings compared to the Monte Carlo methods of <a href="1.4-MC.html" class="quarto-xref"><span>Monte Carlo methods</span></a>:</p>
+<ul>
+<li><p>TD learns value functions from <strong>single transitions</strong> <span class="math inline">(s, a, r, s')</span> instead of complete episodes. This is the main practical difference, and it has a major consequence: while MC only applies to episodic tasks, TD also works on <strong>continuing tasks</strong>, which never terminate.</p></li>
+<li><p>Like MC, TD methods are <strong>model-free</strong>: nothing about <span class="math inline">p(s' | s, a)</span> and <span class="math inline">r(s, a, s')</span> needs to be known, one only needs to sample transitions.</p></li>
+<li><p>Like DP, TD uses <strong>bootstrapping</strong>: an estimate is updated using other estimates. This is where its bias comes from, and also why it converges so much faster than MC.</p></li>
+<li><p>The <strong>exploration-exploitation</strong> dilemma is dealt with in the same two ways as in MC:</p>
+<ul>
+<li><strong>On-policy</strong> TD (SARSA) follows the learned stochastic policy, and learns the value of the action that was actually taken next:</li>
+</ul>
+<p><span class="math display">
+      Q(s, a) \leftarrow Q(s, a) + \alpha \, (r(s, a, s') + \gamma \, Q(s', a') - Q(s, a))
+  </span></p>
+<ul>
+<li><strong>Off-policy</strong> TD (Q-learning) follows a behavior policy but learns the value of the <strong>greedy</strong> action, i.e.&nbsp;of a deterministic policy that is not the one generating the data:</li>
+</ul>
+<p><span class="math display">
+      Q(s, a) \leftarrow Q(s, a) + \alpha \, (r(s, a, s') + \gamma \, \max_{a'} Q(s', a') - Q(s, a))
+  </span></p></li>
+</ul>
+<p>Q-learning is the go-to method of tabular RL, and the rest of this book is to a large extent about making it work when the Q-values can no longer be stored in a table.</p>
 </section>
 <section id="actor-critic-methods" class="level2">
 <h2 class="anchored" data-anchor-id="actor-critic-methods">Actor-critic methods</h2>
@@ -662,7 +681,7 @@ p(s_t, a_t) \leftarrow p(s_t, a_t) + \beta \, \delta_t \\
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Actor-critic algorithm with preferences
+<span class="screen-reader-only">Note</span>Actor-critic algorithm with preferences
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -774,21 +793,51 @@ Figure&nbsp;5.6: The decaying factor <span class="math inline">\lambda</span> co
 </figcaption>
 </figure>
 </div>
-<p>A parameter <span class="math inline">\lambda</span> between 0 and 1 (decaying factor) controls how far back in time a single TD error influences past actions. This is important when the policy is mostly exploratory: initial actions may be mostly random and finally find the the reward by chance. They should learn less from the reward than the last one, otherwise they would be systematically reproduced. There are many possible implementations of eligibility traces (Watkin’s, Peng, Tree Backup, etc. See the Chapter 12 of <span class="citation" data-cites="Sutton2017">Sutton and Barto (<a href="references.html#ref-Sutton2017" role="doc-biblioref">2017</a>)</span>). Generally, one distinguished a forward and a backward view of eligibility traces.</p>
+<p>A parameter <span class="math inline">\lambda</span> between 0 and 1 (decaying factor) controls how far back in time a single TD error influences past actions. This is important when the policy is mostly exploratory: initial actions may be mostly random and finally find the reward by chance. They should learn less from the reward than the last one, otherwise they would be systematically reproduced. There are many possible implementations of eligibility traces (Watkin’s, Peng, Tree Backup, etc. See the Chapter 12 of <span class="citation" data-cites="Sutton2017">Sutton and Barto (<a href="references.html#ref-Sutton2017" role="doc-biblioref">2017</a>)</span>). Generally, one distinguished a forward and a backward view of eligibility traces.</p>
 <ul>
-<li>The <strong>forward view</strong> considers that one transition <span class="math inline">(s_t, a_t)</span> gathers the TD errors made at future time steps <span class="math inline">t'</span> and discounts them with the parameter <span class="math inline">\lambda</span>:</li>
+<li>The <strong>forward view</strong> solves the question left open by the n-step return, i.e.&nbsp;how to choose <span class="math inline">n</span>, by deciding not to choose: all n-step returns are <strong>averaged</strong>, with a weight decreasing geometrically with <span class="math inline">n</span>. This defines the <span class="math inline">\lambda</span>-<strong>return</strong>:</li>
 </ul>
 <p><span class="math display">
-    R_t^\lambda =  \sum_{k=0}^T (\gamma \lambda)^{k} \delta_{t+k}
+    R^\lambda_t = (1 - \lambda) \, \sum_{n=1}^\infty \lambda^{n-1} \, R^n_t
 </span></p>
-<p>From this equation, <span class="math inline">\gamma</span> and <span class="math inline">\lambda</span> seem to play a relatively similar role, but remember that <span class="math inline">\gamma</span> is also used inside the TD error, so they control different aspects of learning. The drawback of this approach is that the future transitions and their respective TD errors must be known when updating the transition, so this prevents online learning (the episode must be terminated to apply the updates, like in MC).</p>
+<p>The term <span class="math inline">(1 - \lambda)</span> is only there to normalize the weights, as the coefficients <span class="math inline">\lambda^{n-1}</span> sum to <span class="math inline">\frac{1}{1-\lambda}</span>:</p>
+<p><span class="math display">
+    \sum_{n=1}^\infty \lambda^{n-1} = \dfrac{1}{1 - \lambda}
+</span></p>
+<p>so the weights <span class="math inline">(1-\lambda) \lambda^{n-1}</span> sum to one and the <span class="math inline">\lambda</span>-return is a true weighted average of the n-step returns. Short returns (close to TD) get a high weight, long ones (close to MC) a small one, which is what we want: long returns have a high variance and should not dominate.</p>
+<div id="fig-eligibilityweights" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-eligibilityweights-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="img/eligibility-forward.png" class="lightbox" data-gallery="quarto-lightbox-gallery-7" title="Figure&nbsp;5.7: The weights of the successive n-step returns in the \lambda-return decay geometrically. Source: @Sutton1998."><img src="img/eligibility-forward.png" class="img-fluid figure-img" style="width:60.0%"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-eligibilityweights-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5.7: The weights of the successive n-step returns in the <span class="math inline">\lambda</span>-return decay geometrically. Source: <span class="citation" data-cites="Sutton1998">Sutton and Barto (<a href="references.html#ref-Sutton1998" role="doc-biblioref">1998</a>)</span>.
+</figcaption>
+</figure>
+</div>
+<p>To see what <span class="math inline">\lambda</span> does, one can split the infinite sum at the end of the episode at time <span class="math inline">T</span>. All n-step returns with <span class="math inline">n \geq T - t</span> are simply the Monte Carlo return <span class="math inline">R_t</span>, as there is nothing left to bootstrap from:</p>
+<p><span class="math display">
+    R^\lambda_t = (1 - \lambda) \, \sum_{n=1}^{T-t-1} \lambda^{n-1} \, R^n_t + \lambda^{T-t-1} \, R_t
+</span></p>
+<p><span class="math inline">\lambda</span> therefore directly controls the bias-variance trade-off, exactly as <span class="math inline">n</span> did, but continuously:</p>
+<ul>
+<li>If <span class="math inline">\lambda = 0</span>, all the weight goes to the first term and the <span class="math inline">\lambda</span>-return is <span class="math inline">R^1_t = r_{t+1} + \gamma \, V(s_{t+1})</span>, i.e.&nbsp;plain TD: high bias, low variance.</li>
+<li>If <span class="math inline">\lambda = 1</span>, all the weight goes to the last term and the <span class="math inline">\lambda</span>-return is the MC return <span class="math inline">R_t = \sum_{k=0}^\infty \gamma^k \, r_{t+k+1}</span>: low bias, high variance.</li>
+</ul>
+<p>Everything in between interpolates smoothly between the two, which is why TD(<span class="math inline">\lambda</span>) is usually written as a family of algorithms indexed by <span class="math inline">\lambda</span>, with TD(0) and MC as its two extremes.</p>
+<p>Subtracting the current estimate from the <span class="math inline">\lambda</span>-return gives the <span class="math inline">\lambda</span>-<strong>advantage</strong>, which takes a much simpler form:</p>
+<p><span class="math display">
+    A^\lambda_t = R^\lambda_t - V(s_t) = \sum_{k=0}^\infty (\gamma \lambda)^{k} \, \delta_{t+k}
+</span></p>
+<p>i.e.&nbsp;the discounted sum of all future TD errors. This is a remarkably convenient expression, as it only needs TD errors and no returns at all. We will meet it again under the name of <strong>generalized advantage estimation</strong> (<a href="#sec-GAE" class="quarto-xref"><span>Generalized Advantage Estimation (GAE)</span></a>). Note that <span class="math inline">\gamma</span> and <span class="math inline">\lambda</span> seem to play a similar role in that formula, but they do not: <span class="math inline">\gamma</span> is also used inside each TD error <span class="math inline">\delta_{t+k}</span>, so it defines the horizon of the value function itself, while <span class="math inline">\lambda</span> only weights how far back a prediction error is propagated.</p>
+<p>The drawback of the forward view is visible in the formulas: the future transitions and their TD errors must be known when updating a transition, so the episode must be terminated before applying the updates, exactly as in MC. This prevents online learning.</p>
 <div id="fig-eligibilityforward" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-eligibilityforward-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/eligibility-forward-view.png" class="lightbox" data-gallery="quarto-lightbox-gallery-7" title="Figure&nbsp;5.7: Forward view of the eligibility trace. Source: @Sutton1998."><img src="img/eligibility-forward-view.png" class="img-fluid figure-img"></a>
+<a href="img/eligibility-forward-view.png" class="lightbox" data-gallery="quarto-lightbox-gallery-8" title="Figure&nbsp;5.8: Forward view of the eligibility trace. Source: @Sutton1998."><img src="img/eligibility-forward-view.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-eligibilityforward-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;5.7: Forward view of the eligibility trace. Source: <span class="citation" data-cites="Sutton1998">Sutton and Barto (<a href="references.html#ref-Sutton1998" role="doc-biblioref">1998</a>)</span>.
+Figure&nbsp;5.8: Forward view of the eligibility trace. Source: <span class="citation" data-cites="Sutton1998">Sutton and Barto (<a href="references.html#ref-Sutton1998" role="doc-biblioref">1998</a>)</span>.
 </figcaption>
 </figure>
 </div>
@@ -797,7 +846,7 @@ Figure&nbsp;5.7: Forward view of the eligibility trace. Source: <span class="cit
 </ul>
 <p><span class="math display">
     e(s, a) = \begin{cases} e(s, a) + 1 \quad \text{if} \quad s=s_t \quad \text{and} \quad a=a_t \\
-                            \lambda \, e(s, a) \quad \text{otherwise.}
+                            \gamma \, \lambda \, e(s, a) \quad \text{otherwise.}
               \end{cases}
 </span></p>
 <p>The Q-value of <strong>all</strong> transitions <span class="math inline">(s, a)</span> (not only the one just executed) is then updated proportionally to the corresponding trace and the current TD error:</p>
@@ -807,10 +856,10 @@ Figure&nbsp;5.7: Forward view of the eligibility trace. Source: <span class="cit
 <div id="fig-eligibilitybackwards" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-eligibilitybackwards-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/eligibility-backwards.png" class="lightbox" data-gallery="quarto-lightbox-gallery-8" title="Figure&nbsp;5.8: Backward view of the eligibility trace. Source: @Sutton1998."><img src="img/eligibility-backwards.png" class="img-fluid figure-img"></a>
+<a href="img/eligibility-backwards.png" class="lightbox" data-gallery="quarto-lightbox-gallery-9" title="Figure&nbsp;5.9: Backward view of the eligibility trace. Source: @Sutton1998."><img src="img/eligibility-backwards.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-eligibilitybackwards-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;5.8: Backward view of the eligibility trace. Source: <span class="citation" data-cites="Sutton1998">Sutton and Barto (<a href="references.html#ref-Sutton1998" role="doc-biblioref">1998</a>)</span>.
+Figure&nbsp;5.9: Backward view of the eligibility trace. Source: <span class="citation" data-cites="Sutton1998">Sutton and Barto (<a href="references.html#ref-Sutton1998" role="doc-biblioref">1998</a>)</span>.
 </figcaption>
 </figure>
 </div>
@@ -822,7 +871,7 @@ Figure&nbsp;5.8: Backward view of the eligibility trace. Source: <span class="ci
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-TD(<span class="math inline">\lambda</span>) algorithm: policy evaluation
+<span class="screen-reader-only">Note</span>TD(<span class="math inline">\lambda</span>) algorithm: policy evaluation
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -833,7 +882,7 @@ TD(<span class="math inline">\lambda</span>) algorithm: policy evaluation
 <li><p>Compute the TD error in <span class="math inline">s_t</span>:</p></li>
 </ul>
 <p><span class="math display">
-      \delta_t = r_{t+1} + \gamma \, V_k(s_{t+1}) - V_k(s_t)
+      \delta_t = r_{t+1} + \gamma \, V(s_{t+1}) - V(s_t)
   </span></p>
 <ul>
 <li>Increment the trace of <span class="math inline">s_t</span>:</li>
@@ -847,7 +896,7 @@ TD(<span class="math inline">\lambda</span>) algorithm: policy evaluation
 <li>Update the state value function:</li>
 </ul>
 <p><span class="math display">
-      V_{k+1}(s) = V_k(s) + \alpha \, \delta_t \, e_t(s)
+      V(s) \leftarrow V(s) + \alpha \, \delta_t \, e_t(s)
   </span></p>
 <ul>
 <li>Decay the eligibility trace:</li>
@@ -860,12 +909,21 @@ TD(<span class="math inline">\lambda</span>) algorithm: policy evaluation
 </ul>
 </div>
 </div>
+<p>To summarize what eligibility traces bring:</p>
+<ul>
+<li>They are a very useful way to <strong>speed learning up</strong> in TD methods, by propagating a reward backwards over many transitions at once instead of one per episode.</li>
+<li>They give a continuous control over the bias-variance trade-off through <span class="math inline">\lambda</span>, rather than the discrete choice of <span class="math inline">n</span>.</li>
+<li>The modification applies to all TD methods: TD(<span class="math inline">\lambda</span>) for state values, SARSA(<span class="math inline">\lambda</span>) and Q(<span class="math inline">\lambda</span>) for action values.</li>
+<li>Their main drawback is <strong>memory</strong>: a trace has to be maintained for every state-action pair, not only the one just visited, and all of them have to be updated at each step. Clever implementations limit this by ignoring the traces that have decayed close to zero.</li>
+<li>The value of <span class="math inline">\lambda</span> has to be chosen carefully for each problem. In particular, when the initial actions of an episode are mostly random and found the reward by chance, a high <span class="math inline">\lambda</span> would reinforce them although they deserve no credit.</li>
+<li>Finally, if the problem is not strictly Markov, i.e.&nbsp;if it is a POMDP, eligibility traces can actually <strong>help</strong>, precisely because they update a whole history of transitions rather than a single state that does not contain all the necessary information.</li>
+</ul>
 </section>
 <section id="sec-GAE" class="level3">
 <h3 class="anchored" data-anchor-id="sec-GAE">Generalized Advantage Estimation (GAE)</h3>
 <p>Let’s recall the n-step advantage:</p>
 <p><span class="math display">
-    A^{n}_t = \sum_{k=0}^{n-1} \gamma^{k} \, r_{t+k+1} + \gamma^n \, V^\pi(s_{t+n+1}) - V^\pi(s_t)
+    A^{n}_t = \sum_{k=0}^{n-1} \gamma^{k} \, r_{t+k+1} + \gamma^n \, V^\pi(s_{t+n}) - V^\pi(s_t)
 </span></p>
 <p>It is easy to show recursively that it depends on the TD error <span class="math inline">\delta_t = r_{t+1} + \gamma \, V^\pi(s_{t+1}) - V^\pi(s_t)</span> of the <span class="math inline">n</span> next steps:</p>
 <p><span class="math display">
@@ -877,7 +935,7 @@ TD(<span class="math inline">\lambda</span>) algorithm: policy evaluation
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Proof with <span class="math inline">n=2</span>:
+<span class="screen-reader-only">Note</span>Proof with <span class="math inline">n=2</span>:
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -893,14 +951,14 @@ A^2_t &amp;= r_{t+1} + \gamma \, r_{t+2} + \gamma^2 \, V(s_{t+2}) - V(s_{t}) \\
 </span></p>
 </div>
 </div>
-<p>In other words, the prediction error over <span class="math inline">n</span> steps is the (discounted) sum of the prediction errors between two successive steps. Now, what is the optimal value of <span class="math inline">n</span>? GAE decides not to choose and to simply average all n-step advantages and to weight them with a discount parameter <span class="math inline">\lambda</span>.</p>
+<p>In other words, the prediction error over <span class="math inline">n</span> steps is the (discounted) sum of the prediction errors between two successive steps. Now, what is the optimal value of <span class="math inline">n</span>? GAE decides not to choose and to simply average all n-step advantages, weighting them with a decaying parameter <span class="math inline">\lambda</span>, exactly as the <span class="math inline">\lambda</span>-return averaged the n-step returns. GAE is in fact nothing else than the <span class="math inline">\lambda</span>-advantage introduced above, rediscovered in the context of deep RL.</p>
 <p>This defines the <strong>Generalized Advantage Estimator</strong> <span class="math inline">A^{\text{GAE}(\gamma, \lambda)}_t</span>:</p>
 <p><span class="math display">
-    A^{\text{GAE}(\gamma, \lambda)}_t = (1-\lambda) \, \sum_{l=0}^\infty \lambda^l A^l_t = \sum_{l=0}^\infty (\gamma \lambda)^l \delta_{t+l}
+    A^{\text{GAE}(\gamma, \lambda)}_t = (1-\lambda) \, \sum_{n=1}^\infty \lambda^{n-1} \, A^n_t = \sum_{l=0}^\infty (\gamma \lambda)^l \, \delta_{t+l}
 </span></p>
-<p>The GAE is simply a forward eligibility trace over distant n-step advantages: the 1-step advantage is more important the the 1000-step advantage (too much variance).</p>
+<p>The GAE is simply a forward eligibility trace over distant n-step advantages: the 1-step advantage is more important than the 1000-step advantage (too much variance).</p>
 <ul>
-<li>When <span class="math inline">\lambda=0</span>, we have <span class="math inline">A^{\text{GAE}(\gamma, 0)}_t = A^{0}_t = \delta_t</span>, i.e.&nbsp;the TD advantage (high bias, low variance).</li>
+<li>When <span class="math inline">\lambda=0</span>, we have <span class="math inline">A^{\text{GAE}(\gamma, 0)}_t = A^{1}_t = \delta_t</span>, i.e.&nbsp;the TD advantage (high bias, low variance).</li>
 <li>When <span class="math inline">\lambda=1</span>, we have (at the limit) <span class="math inline">A^{\text{GAE}(\gamma, 1)}_t = R_t</span>, i.e.&nbsp;the MC advantage (low bias, high variance).</li>
 </ul>
 <p>Choosing the right value of <span class="math inline">\lambda</span> between 0 and 1 allows to control the bias/variance trade-off.</p>
@@ -910,13 +968,13 @@ A^2_t &amp;= r_{t+1} + \gamma \, r_{t+2} + \gamma^2 \, V(s_{t+2}) - V(s_{t}) \\
 
 <div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
 <div id="ref-Schulman2015a" class="csl-entry" role="listitem">
-Schulman, J., Levine, S., Abbeel, P., Jordan, M., and Moritz, P. (2015). Trust <span>Region Policy Optimization</span>. in <em>Proceedings of the 31 st <span>International Conference</span> on <span>Machine Learning</span></em>, 1889–1897. Available at: <a href="http://proceedings.mlr.press/v37/schulman15.html">http://proceedings.mlr.press/v37/schulman15.html</a>.
+Schulman, J., Levine, S., Abbeel, P., Jordan, M., and Moritz, P. (2015). Trust <span>Region Policy Optimization</span>. in <em>Proceedings of the 31 st <span>International Conference</span> on <span>Machine Learning</span></em>, 1889–1897.
 </div>
 <div id="ref-Sutton1998" class="csl-entry" role="listitem">
 Sutton, R. S., and Barto, A. G. (1998). <em>Reinforcement <span>Learning</span>: <span>An</span> introduction</em>. Cambridge, MA: MIT press.
 </div>
 <div id="ref-Sutton2017" class="csl-entry" role="listitem">
-Sutton, R. S., and Barto, A. G. (2017). <em>Reinforcement <span>Learning</span>: <span>An Introduction</span></em>. 2nd ed. Cambridge, MA: MIT Press Available at: <a href="http://incompleteideas.net/book/the-book-2nd.html">http://incompleteideas.net/book/the-book-2nd.html</a>.
+Sutton, R. S., and Barto, A. G. (2017). <em>Reinforcement <span>Learning</span>: <span>An Introduction</span></em>. 2nd ed. Cambridge, MA: MIT Press.
 </div>
 <div id="ref-Watkins1989" class="csl-entry" role="listitem">
 Watkins, C. J. (1989). Learning from delayed rewards.
@@ -977,13 +1035,14 @@ Watkins, C. J. (1989). Learning from delayed rewards.
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy
@@ -1325,7 +1384,7 @@ Watkins, C. J. (1989). Learning from delayed rewards.
     }
   });
   </script>
-<nav class="page-navigation">
+<nav class="page-navigation column-body">
   <div class="nav-page nav-page-previous">
       <a href="../src/1.4-MC.html" class="pagination-link" aria-label="Monte Carlo methods">
         <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">Monte Carlo methods</span></span>

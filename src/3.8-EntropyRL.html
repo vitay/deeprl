@@ -2,17 +2,23 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.29">
+<meta name="generator" content="quarto-1.10.18">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>Maximum Entropy RL (SAC) – Deep Reinforcement Learning</title>
 <style>
-code{white-space: pre-wrap;}
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -49,7 +55,7 @@ div.csl-indent {
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../src/3.9-Misc.html" rel="next">
+<link href="../src/4.1-ModelBased.html" rel="next">
 <link href="../src/3.7-ACER.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -57,10 +63,10 @@ div.csl-indent {
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-bcbce66894bfa8e7e94e40e0186b9bb8.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-bb62276ab45c84d9efd712f51ff97b5a.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-ea27fabe3da5290357830f0bd5288bdb.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-3998d32367fd34ee6440c4fab252e735.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script src="../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
 <link href="../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
 <link href="../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
@@ -121,7 +127,7 @@ const typesetMath = (el) => {
     var macros = [];
     for (var i = 0; i < mathElements.length; i++) {
       var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
         window.katex.render(texText.data, mathElements[i], {
           displayMode: mathElements[i].classList.contains('display'),
           throwOnError: false,
@@ -139,7 +145,7 @@ window.Quarto = {
 
 </head>
 
-<body class="nav-sidebar floating quarto-light">
+<body class="nav-sidebar docked quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -158,9 +164,9 @@ window.Quarto = {
   </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="../">Deep Reinforcement Learning</a> 
@@ -252,11 +258,6 @@ window.Quarto = {
   <a href="../src/2.5-DistributedLearning.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Distributed learning</span></a>
   </div>
 </li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../src/2.6-Misc.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Misc.</span></a>
-  </div>
-</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -275,8 +276,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/3.2-ActorCritic.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Advantage Actor-Critic (A3C)</span></a>
+  <a href="../src/3.2-ActorCritic.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Advantage Actor-Critic (A3C)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -307,11 +307,6 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../src/3.8-EntropyRL.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">Maximum Entropy RL (SAC)</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../src/3.9-Misc.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Misc.</span></a>
   </div>
 </li>
       </ul>
@@ -350,11 +345,6 @@ window.Quarto = {
   <a href="../src/4.5-AlphaGo.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">AlphaGo</span></a>
   </div>
 </li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../src/4.6-Misc.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Misc.</span></a>
-  </div>
-</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -383,7 +373,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/5.4-Meta.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Meta learning</span></a>
+  <a href="../src/5.4-Meta.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Meta reinforcement learning</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -409,14 +399,22 @@ window.Quarto = {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#entropy-regularization" id="toc-entropy-regularization" class="nav-link active" data-scroll-target="#entropy-regularization">Entropy regularization</a></li>
+  <li><a href="#why-learn-a-stochastic-policy" id="toc-why-learn-a-stochastic-policy" class="nav-link active" data-scroll-target="#why-learn-a-stochastic-policy">Why learn a stochastic policy?</a></li>
+  <li><a href="#entropy-regularization" id="toc-entropy-regularization" class="nav-link" data-scroll-target="#entropy-regularization">Entropy regularization</a></li>
   <li><a href="#soft-q-learning" id="toc-soft-q-learning" class="nav-link" data-scroll-target="#soft-q-learning">Soft Q-learning</a></li>
-  <li><a href="#soft-actor-critic-sac" id="toc-soft-actor-critic-sac" class="nav-link" data-scroll-target="#soft-actor-critic-sac">Soft Actor-Critic (SAC)</a></li>
+  <li><a href="#soft-actor-critic-sac" id="toc-soft-actor-critic-sac" class="nav-link" data-scroll-target="#soft-actor-critic-sac">Soft Actor-Critic (SAC)</a>
+  <ul class="collapse">
+  <li><a href="#the-critic" id="toc-the-critic" class="nav-link" data-scroll-target="#the-critic">The critic</a></li>
+  <li><a href="#the-actor" id="toc-the-actor" class="nav-link" data-scroll-target="#the-actor">The actor</a></li>
+  <li><a href="#practical-improvements" id="toc-practical-improvements" class="nav-link" data-scroll-target="#practical-improvements">Practical improvements</a></li>
+  <li><a href="#sac-vs.-td3" id="toc-sac-vs.-td3" class="nav-link" data-scroll-target="#sac-vs.-td3">SAC vs.&nbsp;TD3</a></li>
+  <li><a href="#results" id="toc-results" class="nav-link" data-scroll-target="#results">Results</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
+<main class="content column-body" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
@@ -425,7 +423,7 @@ window.Quarto = {
 
 
 
-<div class="quarto-title-meta">
+<div class="quarto-title-meta column-body">
 
     
   
@@ -437,40 +435,110 @@ window.Quarto = {
 </header>
 
 
-<p>All the methods seen sofar focus on finding a policy (or value functions) that maximizes the obtained return. This corresponds to the <strong>exploitation</strong> part of RL: we care only about the optimal policy. The <strong>exploration</strong> is ensured by external mechanisms, such as <span class="math inline">\epsilon</span>-greedy or softmax policies in value based methods, or adding exploratory noise to the actions as in DDPG. Exploration mechanisms typically add yet another free parameter (<span class="math inline">\epsilon</span>, softmax temperature, etc) that additionally need to be scheduled (more exploration at the beginning of learning than at the end).</p>
-<p>The idea behind <strong>maximum entropy RL</strong> is to let the algorithm learn by itself how much exploration it needs to learn appropriately. There are several approaches to this problem (see for example <span class="citation" data-cites="Machado2018">(<a href="references.html#ref-Machado2018" role="doc-biblioref">Machado et al., 2018</a>)</span> for an approach using successor representations), we focus first on methods using <strong>entropy regularization</strong>, a concept already seen briefly in A3C, before looking at soft methods such as Soft Q-learning and SAC.</p>
+<p>All the methods seen so far focus on finding a policy (or value functions) that maximizes the obtained return. This corresponds to the <strong>exploitation</strong> part of RL: we care only about the optimal policy, which is deterministic and greedy by definition:</p>
+<p><span class="math display">\pi^*(s) = \text{argmax}_a \, Q^*(s, a)</span></p>
+<p><strong>Exploration</strong> is ensured by external mechanisms: <span class="math inline">\epsilon</span>-greedy or softmax policies over the Q-values in value-based methods, additive exploratory noise in DDPG, or stochastic policies that progressively become deterministic in A3C and PPO. Each of these mechanisms adds yet another free parameter (<span class="math inline">\epsilon</span>, the softmax temperature, the noise variance) which additionally needs to be scheduled: more exploration at the beginning of learning than at the end.</p>
+<p>The idea behind <strong>maximum entropy RL</strong> is to let the algorithm learn by itself how much exploration it needs, by making exploration part of the objective function instead of an external add-on. There are several approaches to this problem (see for example <span class="citation" data-cites="Machado2018">Machado et al. (<a href="references.html#ref-Machado2018" role="doc-biblioref">2018</a>)</span> for an approach using successor representations); we focus first on <strong>entropy regularization</strong>, a concept already seen briefly in A3C, before looking at soft methods such as soft Q-learning and SAC.</p>
+<section id="why-learn-a-stochastic-policy" class="level2">
+<h2 class="anchored" data-anchor-id="why-learn-a-stochastic-policy">Why learn a stochastic policy?</h2>
+<p>The solution to the Bellman equations is deterministic by definition, so why would we want to learn a stochastic policy in the first place?</p>
+<p>A first answer is that we rarely have a MDP: most interesting problems are POMDPs, where the states are indirectly inferred through observations. <span class="citation" data-cites="Todorov2008">Todorov (<a href="references.html#ref-Todorov2008" role="doc-biblioref">2008</a>)</span> showed that a stochastic policy emerges as the optimal answer when one considers the connection between optimal control and probabilistic inference <span class="citation" data-cites="Toussaint2009">(see also <a href="references.html#ref-Toussaint2009" role="doc-biblioref">Toussaint, 2009</a>)</span>.</p>
+<p>Consider a two-opponents game like chess: if you have a deterministic policy, you will always play the same moves in the same configuration. In particular, you will always play the same opening moves. Your strategy becomes predictable for your opponent, who can adapt accordingly. Having a variety of opening moves (as long as they are not too stupid) is obviously a better strategy on the long term. This is due to the fact that chess is actually a POMDP: the opponent’s strategy and beliefs are not accessible.</p>
+<p>A second answer is that there is often <strong>more than one way</strong> to collect rewards, especially when they are sparse. If exploration decreases too soon, the agent will “overfit” one of the paths leading to the reward. If that path is suddenly blocked, the agent has to re-learn its policy from scratch. It would be much more efficient if the agent had learned <em>all</em> the possible paths, even if some of them are slightly less optimal.</p>
+<div id="fig-softpaths" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-softpaths-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="img/sac_ex1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;18.1: Two ways of reaching the reward. A hard RL agent will commit to one of them, a soft agent will keep both available. Source: https://bair.berkeley.edu/blog/2017/10/06/soft-q-learning/"><img src="img/sac_ex1.png" class="img-fluid figure-img" style="width:50.0%"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-softpaths-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;18.1: Two ways of reaching the reward. A hard RL agent will commit to one of them, a soft agent will keep both available. Source: <a href="https://bair.berkeley.edu/blog/2017/10/06/soft-q-learning/" class="uri">https://bair.berkeley.edu/blog/2017/10/06/soft-q-learning/</a>
+</figcaption>
+</figure>
+</div>
+<p>In other words, learning a deterministic policy only provides a single solution to the problem, while learning a stochastic policy forces the agent to learn <strong>many</strong> optimal solutions to the same problem. The agent is somehow forced to extract as much information as possible from the experienced transitions, potentially reducing the sample complexity.</p>
+<p>This requires however a policy that is <strong>multimodal</strong>, i.e.&nbsp;that can assign a high probability to several distinct regions of the action space. Softmax policies over discrete actions can do that:</p>
+<p><span class="math display">
+    \pi(s, a) = \frac{\exp Q(s, a) / \tau}{ \sum_b \exp Q(s, b) / \tau}
+</span></p>
+<p>but the continuous Gaussian policies of <a href="3.2-ActorCritic.html#sec-continuousspaces" class="quarto-xref"><span>Continuous action spaces</span></a> cannot: they sample actions around the single mean <span class="math inline">\mu_\theta(s)</span>, and the variance <span class="math inline">\sigma_\theta(s)</span> decreases towards 0 during learning. A Gaussian policy is <strong>unimodal</strong> by construction, so it has to commit to one of the two paths above.</p>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div id="fig-unimodal" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-unimodal-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="img/sac-unimodal.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Figure&nbsp;18.2: Unimodal Gaussian policy. Source: https://bair.berkeley.edu/blog/2017/10/06/soft-q-learning/"><img src="img/sac-unimodal.png" class="img-fluid figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-unimodal-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;18.2: Unimodal Gaussian policy. Source: <a href="https://bair.berkeley.edu/blog/2017/10/06/soft-q-learning/" class="uri">https://bair.berkeley.edu/blog/2017/10/06/soft-q-learning/</a>
+</figcaption>
+</figure>
+</div>
+</div><div class="column" style="width:50%;">
+<div id="fig-multimodal" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-multimodal-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="img/sac-multimodal.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Figure&nbsp;18.3: Multimodal policy."><img src="img/sac-multimodal.png" class="img-fluid figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-multimodal-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;18.3: Multimodal policy.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>What we would need is a softmax (Gibbs / Boltzmann) distribution over the <strong>continuous</strong> action space, but its normalization term would require integrating over the whole action space: intractable. Maximum entropy RL provides a way around this.</p>
+</section>
 <section id="entropy-regularization" class="level2">
 <h2 class="anchored" data-anchor-id="entropy-regularization">Entropy regularization</h2>
 <p><strong>Entropy regularization</strong> <span class="citation" data-cites="Williams1991">(<a href="references.html#ref-Williams1991" role="doc-biblioref">Williams and Peng, 1991</a>)</span> adds a regularization term to the objective function:</p>
 <p><span class="math display">
-    J(\theta) =  \mathbb{E}_{s_t \sim \rho^\pi, a_t \sim \pi_\theta}[ R(s_t, a_t) + \beta \,  H(\pi_\theta(s_t))]
+    \mathcal{J}(\theta) =  \mathbb{E}_{s_t \sim \rho_\theta, a_t \sim \pi_\theta}[ R(s_t, a_t) + \alpha \,  H(\pi_\theta(s_t))]
 </span></p>
-<p>We will neglect here how the objective function is sampled (policy gradient, etc.) and focus on the second part.</p>
-<p>The entropy of a discrete policy <span class="math inline">\pi_\theta</span> in a state <span class="math inline">s_t</span> is defined by the expected value of the <strong>self-information</strong> of each action :</p>
+<p>We will neglect here how the objective function is sampled (policy gradient, etc.) and focus on the second part. The parameter <span class="math inline">\alpha</span> is called the <strong>temperature</strong> of the regularization; it is the same mechanism as the <span class="math inline">\beta</span> parameter used for the entropy bonus of A3C, but <span class="math inline">\alpha</span> is the notation used in the maximum entropy RL literature and we stick to it in this section.</p>
+<p>The entropy of a discrete policy <span class="math inline">\pi_\theta</span> in a state <span class="math inline">s_t</span> is defined by the expected value of the <strong>self-information</strong> of each action:</p>
 <p><span class="math display">
     H(\pi_\theta(s_t)) = \mathbb{E}_{a \sim \pi_\theta(s_t, a)} [- \log \pi_\theta(s_t, a)] = - \sum_a \pi_\theta(s_t, a) \, \log \pi_\theta(s_t, a)
+</span></p>
+<p>and by the corresponding integral for a continuous action space:</p>
+<p><span class="math display">
+    H(\pi_\theta(s_t)) = - \int_a \pi_\theta(s_t, a) \, \log \pi_\theta(s_t, a) \, da
 </span></p>
 <div id="fig-selfinformation" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-selfinformation-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/selfinformation.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;18.1: The self-information - \log P(X=x) of an outcome x decreases with its probability: when an outcome is very likely (P close to 1), observing it is not surprising and does not provide much information. When an outcome is rare (P close to 0), observing it is very surprising and carries a lot of information."><img src="img/selfinformation.png" class="img-fluid figure-img"></a>
+<a href="img/selfinformation.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="Figure&nbsp;18.4: The self-information - \log P(X=x) of an outcome x decreases with its probability: when an outcome is very likely (P close to 1), observing it is not surprising and does not provide much information. When an outcome is rare (P close to 0), observing it is very surprising and carries a lot of information."><img src="img/selfinformation.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-selfinformation-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;18.1: The self-information <span class="math inline">- \log P(X=x)</span> of an outcome <span class="math inline">x</span> decreases with its probability: when an outcome is very likely (P close to 1), observing it is not surprising and does not provide much information. When an outcome is rare (P close to 0), observing it is very surprising and carries a lot of information.
+Figure&nbsp;18.4: The self-information <span class="math inline">- \log P(X=x)</span> of an outcome <span class="math inline">x</span> decreases with its probability: when an outcome is very likely (P close to 1), observing it is not surprising and does not provide much information. When an outcome is rare (P close to 0), observing it is very surprising and carries a lot of information.
 </figcaption>
 </figure>
 </div>
-<div class="callout callout-style-default callout-note callout-titled">
+<p>The entropy of the policy measures its “randomness”:</p>
+<ul>
+<li>if the policy is fully deterministic (the same action is systematically selected), the entropy is zero as it carries no information: pure <strong>exploitation</strong>.</li>
+<li>if the policy is completely random (all actions are equally surprising), the entropy is maximal: pure <strong>exploration</strong>.</li>
+</ul>
+<div id="fig-entropybinomial" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-entropybinomial-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="img/entropy-binomial.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5" title="Figure&nbsp;18.5: Entropy of a binomial distribution. It is maximal when both outcomes are equiprobable."><img src="img/entropy-binomial.png" class="img-fluid figure-img" style="width:50.0%"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-entropybinomial-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;18.5: Entropy of a binomial distribution. It is maximal when both outcomes are equiprobable.
+</figcaption>
+</figure>
+</div>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
-<i class="callout-icon"></i>
+<i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
 Note
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Computing the entropy of a continuous policy distribution is more complex in the general case, but using a Gaussian policy (see Section <a href="3.2-ActorCritic.html#sec-continuousspaces" class="quarto-xref"><span>Continuous action spaces</span></a>) allows to compute it easily. If the policy is a normal distribution <span class="math inline">\pi_\theta(s, a) = \mathcal{N}(\mu_\theta(s), \sigma^2_\theta(s))</span> parameterized by the mean vector <span class="math inline">\mu_\theta(s)</span> and the variance vector <span class="math inline">\sigma_\theta(s)</span> of size <span class="math inline">n</span>, the pdf is given by:</p>
+<p>Computing the entropy of a continuous policy distribution is complex in the general case, but using a Gaussian policy (see <a href="3.2-ActorCritic.html#sec-continuousspaces" class="quarto-xref"><span>Continuous action spaces</span></a>) allows to compute it easily. If the policy is a normal distribution <span class="math inline">\pi_\theta(s, a) = \mathcal{N}(\mu_\theta(s), \sigma^2_\theta(s))</span> parameterized by the mean vector <span class="math inline">\mu_\theta(s)</span> and the variance vector <span class="math inline">\sigma_\theta(s)</span> of size <span class="math inline">n</span>, the pdf is given by:</p>
 <p><span class="math display">
     \pi_\theta(s, a) = \frac{1}{\sqrt{2\pi\sigma^2_\theta(s)}} \, \exp -\frac{(a - \mu_\theta(s))^2}{2\sigma_\theta(s)^2}
 </span></p>
@@ -480,40 +548,31 @@ Note
 </span></p>
 </div>
 </div>
-<p>The entropy of the policy measures its “randomness”:</p>
-<ul>
-<li>if the policy is fully deterministic (the same action is systematically selected), the entropy is zero as it carries no information.</li>
-<li>if the policy is completely random (all actions are equally surprising), the entropy is maximal.</li>
-</ul>
-<p>By adding the entropy as a regularization term directly to the objective function, we force the policy to be as non-deterministic as possible, i.e.&nbsp;to explore as much as possible, while still getting as many rewards as possible. The parameter <span class="math inline">\beta</span> controls the level of regularization: we do not want the entropy to dominate either, as a purely random policy does not bring much reward. If <span class="math inline">\beta</span> is chosen too low, the entropy won’t play a significant role in the optimization and we may obtain a suboptimal deterministic policy early during training as there was not enough exploration. If <span class="math inline">\beta</span> is too high, the policy will be random and suboptimal.</p>
-<p>Besides exploration, why would we want to learn a stochastic policy, while the solution to the Bellman equations is deterministic by definition? A first answer is that we rarely have a MDP: most interesting problems are POMDP, where the states are indirectly inferred through observations, which can be probabilistic. <span class="citation" data-cites="Todorov2008">Todorov (<a href="references.html#ref-Todorov2008" role="doc-biblioref">2008</a>)</span> showed that a stochastic policy emerges as the optimal answer when we consider the connection between optimal control and probabilistic inference <span class="citation" data-cites="Toussaint2009">(see also <a href="references.html#ref-Toussaint2009" role="doc-biblioref">Toussaint, 2009</a>)</span>.</p>
-<p>Consider a two-opponents game like chess: if you have a deterministic policy, you will always play the same moves in the same configuration. In particular, you will always play the same opening moves. Your game strategy becomes predictable for your opponent, who can adapt accordingly. Having a variety of opening moves (as long as they are not too stupid) is obviously a better strategy on the long term. This is due to the fact that chess is actually a POMDP: the opponent’s strategy and beliefs are not accessible.</p>
-<p>Another way to view the interest of entropy regularization is to realize that learning a deterministic policy only leads to a single optimal solution to the problem. Learning a stochastic policy forces the agent to learn <strong>many</strong> optimal solutions to the same problem: the agent is somehow forced to learn as much information as possible for the experienced transitions, potentially reducing the sample complexity.</p>
-<p>Entropy regularization is nowadays used very commonly used in deep RL networks <span class="citation" data-cites="ODonoghue2016">(e.g. <a href="references.html#ref-ODonoghue2016" role="doc-biblioref">O’Donoghue et al., 2016</a>)</span>, as it is “only” an additional term to set in the objective function passed to the NN, adding a single hyperparameter <span class="math inline">\beta</span>.</p>
+<p>By adding the entropy as a regularization term directly to the objective function, we force the policy to be as non-deterministic as possible, i.e.&nbsp;to explore as much as possible, while still getting as many rewards as possible. The temperature <span class="math inline">\alpha</span> controls the level of regularization: we do not want the entropy to dominate either, as a purely random policy does not bring much reward. If <span class="math inline">\alpha</span> is chosen too low, the entropy will not play a significant role in the optimization and we may obtain a suboptimal deterministic policy early during training, as there was not enough exploration. If <span class="math inline">\alpha</span> is too high, the policy will be random and suboptimal. Note that it is always possible to fall back to “hard” RL by setting <span class="math inline">\alpha = 0</span>.</p>
+<p>Entropy regularization is nowadays used very commonly in deep RL networks <span class="citation" data-cites="ODonoghue2016">(e.g. <a href="references.html#ref-ODonoghue2016" role="doc-biblioref">O’Donoghue et al., 2016</a>)</span>, as it is “only” an additional term in the objective function passed to the NN, adding a single hyperparameter <span class="math inline">\alpha</span>.</p>
 </section>
 <section id="soft-q-learning" class="level2">
 <h2 class="anchored" data-anchor-id="soft-q-learning">Soft Q-learning</h2>
-<p>Entropy regularization greedily maximizes the entropy of the policy in each state (the objective is the return plus the entropy in the current state). Building on the maximum entropy RL framework <span class="citation" data-cites="Ziebart2008 Schulman2017a Nachum2017">(<a href="references.html#ref-Nachum2017" role="doc-biblioref">Nachum et al., 2017</a>; <a href="references.html#ref-Schulman2017a" role="doc-biblioref">Schulman et al., 2017</a>; <a href="references.html#ref-Ziebart2008" role="doc-biblioref">Ziebart et al., 2008</a>)</span>, <span class="citation" data-cites="Haarnoja2017">Haarnoja et al. (<a href="references.html#ref-Haarnoja2017" role="doc-biblioref">2017</a>)</span> proposed a version of <strong>soft-Q-learning</strong> by extending the definition of the objective:</p>
+<p>Entropy regularization greedily maximizes the entropy of the policy in each state: the objective is the return plus the entropy in the <em>current</em> state. Building on the maximum entropy RL framework <span class="citation" data-cites="Ziebart2008 Schulman2017a Nachum2017">(<a href="references.html#ref-Nachum2017" role="doc-biblioref">Nachum et al., 2017</a>; <a href="references.html#ref-Schulman2017a" role="doc-biblioref">Schulman et al., 2017</a>; <a href="references.html#ref-Ziebart2008" role="doc-biblioref">Ziebart et al., 2008</a>)</span>, <span class="citation" data-cites="Haarnoja2017">Haarnoja et al. (<a href="references.html#ref-Haarnoja2017" role="doc-biblioref">2017</a>)</span> proposed a version of <strong>soft Q-learning</strong> by extending the definition of the objective over complete trajectories:</p>
 <p><span class="math display">
-    J(\theta) =  \sum_t \mathbb{E}_{s_t \sim \rho^\pi, a_t \sim \pi_\theta}[ r(s_t, a_t) + \beta \,  H(\pi_\theta(s_t))]
+    \mathcal{J}(\theta) =  \sum_t \gamma^t \, \mathbb{E}_{s_t \sim \rho_\theta, a_t \sim \pi_\theta}[ r(s_t, a_t, s_{t+1}) + \alpha \,  H(\pi_\theta(s_t))]
 </span></p>
-<p>In this formulation based on trajectories, the agent seeks a policy that maximizes the entropy of the complete trajectories rather than the entropy of the policy in each state. This is a very important distinction: the agent does not only search a policy with a high entropy, but a policy that brings into states with a high entropy, i.e.&nbsp;where the agent is the most uncertain. This allows for very efficient exploration strategies, where the agent will try to reduce its uncertainty about the world and gather a lot more information than when simply searching for a good policy.</p>
-<p>Note that it is always possible to fall back to classical Q-learning by setting <span class="math inline">\beta=0</span> and that it is possible to omit this hyperparameter by scaling the rewards with <span class="math inline">\frac{1}{\beta}</span>. The discount rate <span class="math inline">\gamma</span> is omitted here for simplicity, but it should be added back when the task has an infinite horizon.</p>
-<p>In soft Q-learning, the policy can be defined by a softmax over the soft Q-values <span class="math inline">Q_\text{soft}(s, a)</span>, where <span class="math inline">\beta</span> plays the role of the temperature parameter:</p>
+<p>In this formulation, the agent seeks a policy that maximizes the entropy of the complete trajectories rather than the entropy of the policy in each state. This is a very important distinction: the agent does not only search for a policy with a high entropy, but for a policy that <strong>brings it into states with a high entropy</strong>, i.e.&nbsp;where the agent is the most uncertain. This allows for very efficient exploration strategies, where the agent tries to reduce its uncertainty about the world and gathers a lot more information than when simply searching for a good policy.</p>
+<p>The agent can then decide by itself how the exploration-exploitation trade-off is solved in each state: if a single action leads to high rewards, the policy may become deterministic there; if several actions lead to equivalent rewards, the policy stays stochastic.</p>
+<p>In soft Q-learning, the policy is defined by a softmax over the <strong>soft Q-values</strong> <span class="math inline">Q^\text{soft}_\theta(s, a)</span>, where <span class="math inline">\alpha</span> plays the role of the temperature parameter:</p>
 <p><span class="math display">
-    \pi(s, a) \propto \exp(Q_\text{soft}(s_t, a_t) / \beta)
+    \pi_\theta(s, a) = \dfrac{\exp  \dfrac{Q^\text{soft}_\theta (s, a)}{\alpha}}{\sum_b \exp \dfrac{Q^\text{soft}_\theta (s, b)}{\alpha}} \propto \exp \dfrac{Q^\text{soft}_\theta (s, a)}{\alpha}
 </span></p>
-<p>Note that <span class="math inline">-Q_\text{soft}(s_t, a_t) / \beta</span> plays the role of the energy of the policy (as in Boltzmann machines), hence the name of the paper (<em>Reinforcement Learning with Deep Energy-Based Policies</em>). We will ignore this analogy here. The normalization term of the softmax (the log-partition function in energy-based models) is also omitted as it later disappears from the equations anyway.</p>
-<p>The soft Q-values are defined by the following Bellman-like equation:</p>
+<p>Note that <span class="math inline">-Q^\text{soft}_\theta(s, a) / \alpha</span> plays the role of the energy of the policy (as in Boltzmann machines), hence the name of the paper (<em>Reinforcement Learning with Deep Energy-Based Policies</em>). We will ignore this analogy here. The normalization term of the softmax (the log-partition function in energy-based models) is intractable for continuous action spaces, as one would need to integrate over the whole action space, but it will disappear from the equations anyway.</p>
+<p><strong>Soft values</strong> are the equivalent of the “hard” value functions for this new objective. The soft value of an action depends on the immediate reward and the soft value of the next state, giving a soft Bellman equation:</p>
 <p><span class="math display">
-    Q_\text{soft}(s_t, a_t) = r(s_t, a_t) + \gamma \, \mathbb{E}_{s_{t+1} \in \rho} [V_\text{soft}(s_{t+1})]
+    Q^\text{soft}_\theta(s_t, a_t) = \mathbb{E}_{s_{t+1} \sim \rho_\theta} [r(s_t, a_t, s_{t+1}) + \gamma \, V^\text{soft}_\theta(s_{t+1})]
 </span></p>
-<p>This is the regular Bellman equation that can be turned into an update rule for the soft Q-values (minimizing the mse between the l.h.s and the r.h.s). The soft value of a state is given by:</p>
+<p>while the soft value of a state is the expected soft Q-value over the available actions, <strong>plus the entropy of the policy</strong> in that state:</p>
 <p><span class="math display">
-    V_\text{soft}(s_t) = \mathbb{E}_{a_{t} \in \pi} [Q_\text{soft}(s_{t}, a_{t}) - \log \, \pi(s_t, a_t)]
+    V^\text{soft}_\theta(s_t) = \mathbb{E}_{a_{t} \sim \pi_\theta} [Q^\text{soft}_\theta(s_{t}, a_{t})] + H(\pi_\theta(s_t)) = \mathbb{E}_{a_{t} \sim \pi_\theta} [Q^\text{soft}_\theta(s_{t}, a_{t}) -  \alpha \, \log \, \pi_\theta(s_t, a_t)]
 </span></p>
-<p>The notation in <span class="citation" data-cites="Haarnoja2017">Haarnoja et al. (<a href="references.html#ref-Haarnoja2017" role="doc-biblioref">2017</a>)</span> is much more complex than that (the paper includes the theoretical proofs), but it boils down to this in <span class="citation" data-cites="Haarnoja2018a">Haarnoja et al. (<a href="references.html#ref-Haarnoja2018a" role="doc-biblioref">2018</a>)</span>. When definition of the soft Q-value is applied repeatedly with the definition of the soft V-value, it converges to the optimal solution of the soft Q-learning objective, at least in the tabular case.</p>
-<p>The soft V-value of a state is the expectation of the Q-values in that state (as in regular RL) minus the log probability of each action. This last term measures the entropy of the policy in each state (when expanding the expectation over the policy, we obtain <span class="math inline">- \pi \log \pi</span>, which is the entropy).</p>
+<p>The second form comes from expanding the expectation over the policy: <span class="math inline">- \pi \log \pi</span> <em>is</em> the entropy. <span class="citation" data-cites="Haarnoja2017">Haarnoja et al. (<a href="references.html#ref-Haarnoja2017" role="doc-biblioref">2017</a>)</span> showed that these soft value functions are the solution of the entropy-regularized objective, and that applying the soft Bellman equation repeatedly converges to the optimal solution, at least in the tabular case.</p>
 <p>In a nutshell, the soft Q-learning algorithm is:</p>
 <div class="callout callout-style-default callout-note no-icon callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -521,7 +580,7 @@ Note
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Soft Q-learning
+<span class="screen-reader-only">Note</span>Soft Q-learning
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -529,128 +588,263 @@ Soft Q-learning
 <li><p>Sample transitions <span class="math inline">(s, a, r, s')</span> and store them in a replay memory.</p></li>
 <li><p>For each transition <span class="math inline">(s, a, r, s')</span> in a minibatch of the replay memory:</p>
 <ul>
-<li><p>Estimate <span class="math inline">V_\text{soft}(s')</span> by sampling several actions: <span class="math display">
-  V_\text{soft}(s_t) = \mathbb{E}_{a_{t} \in \pi} [Q_\text{soft}(s_{t}, a_{t}) - \log \, \pi(s_t, a_t)]
+<li><p>Estimate <span class="math inline">V^\text{soft}_\theta(s')</span> by sampling several actions: <span class="math display">
+  V^\text{soft}_\theta(s_t) = \mathbb{E}_{a_{t} \sim \pi_\theta} [Q^\text{soft}_\theta(s_{t}, a_{t}) -  \alpha \, \log \, \pi_\theta(s_t, a_t)]
   </span></p></li>
 <li><p>Update the soft Q-value of <span class="math inline">(s,a)</span>: <span class="math display">
-  Q_\text{soft}(s_t, a_t) = r(s_t, a_t) + \gamma \, \mathbb{E}_{s_{t+1} \in \rho} [V_\text{soft}(s_{t+1})]
+  Q^\text{soft}_\theta(s_t, a_t) = \mathbb{E}_{s_{t+1} \sim \rho_\theta} [r(s_t, a_t, s_{t+1}) + \gamma \, V^\text{soft}_\theta(s_{t+1})]
   </span></p></li>
 <li><p>Update the policy (if not using the softmax over soft Q-values directly).</p></li>
 </ul></li>
 </ul>
 </div>
 </div>
-<p>The main drawback of this approach is that several actions have to be sampled in the next state in order to estimate its current soft V-value, what makes it hard to implement in practice. The policy also has to be sampled from the Q-values, what is not practical for continuous action spaces.</p>
-<p>But the real interesting thing is the policies that are learned in multi-goal settings, as in <a href="#fig-softql" class="quarto-xref">Figure&nbsp;<span>18.2</span></a>. The agent starts in the middle of the environment and can obtain one of the four rewards (north, south, west, east). A regular RL agent would very quickly select only one of the rewards and stick to it. With soft Q-learning, the policy stays stochastic and the four rewards can be obtained even after convergence. This indicates that the soft agent has learned much more about its environment than its hard equivalent, thanks to its maximum entropy formulation.</p>
+<p>The main drawback of this approach is that several actions have to be sampled in the next state in order to estimate its soft V-value, which makes it hard to implement in practice (<span class="citation" data-cites="Haarnoja2017">Haarnoja et al. (<a href="references.html#ref-Haarnoja2017" role="doc-biblioref">2017</a>)</span> uses variational inference to do it). Sampling the policy from the Q-values is also impractical for continuous action spaces.</p>
+<p>But the really interesting thing is the policies that are learned in multi-goal settings, as in <a href="#fig-softql" class="quarto-xref">Figure&nbsp;<span>18.6</span></a>. The agent starts in the middle of the environment and can obtain one of the four rewards (north, south, west, east). A regular RL agent would very quickly select only one of the rewards and stick to it. With soft Q-learning, the policy stays stochastic and the four rewards can be obtained even after convergence. This indicates that the soft agent has learned much more about its environment than its hard equivalent, thanks to its maximum entropy formulation.</p>
 <div id="fig-softql" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-softql-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="img/softQL.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Figure&nbsp;18.2: Policy learned by Soft Q-learning in a multi-goal setting. Source: @Haarnoja2017."><img src="img/softQL.png" class="img-fluid figure-img"></a>
+<a href="img/softQL.png" class="lightbox" data-gallery="quarto-lightbox-gallery-6" title="Figure&nbsp;18.6: Policy learned by soft Q-learning in a multi-goal setting. Source: @Haarnoja2017."><img src="img/softQL.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-softql-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;18.2: Policy learned by Soft Q-learning in a multi-goal setting. Source: <span class="citation" data-cites="Haarnoja2017">Haarnoja et al. (<a href="references.html#ref-Haarnoja2017" role="doc-biblioref">2017</a>)</span>.
+Figure&nbsp;18.6: Policy learned by soft Q-learning in a multi-goal setting. Source: <span class="citation" data-cites="Haarnoja2017">Haarnoja et al. (<a href="references.html#ref-Haarnoja2017" role="doc-biblioref">2017</a>)</span>.
 </figcaption>
 </figure>
 </div>
 </section>
 <section id="soft-actor-critic-sac" class="level2">
 <h2 class="anchored" data-anchor-id="soft-actor-critic-sac">Soft Actor-Critic (SAC)</h2>
-<p><span class="citation" data-cites="Haarnoja2018a">Haarnoja et al. (<a href="references.html#ref-Haarnoja2018a" role="doc-biblioref">2018</a>)</span> proposed the <strong>Soft Actor-Critic</strong> (SAC), an off-policy actor-critic which allows to have a stochastic actor (contrary to DDPG) while being more optimal and sample efficient than on-policy methods such as A3C or PPO. It is also less sensible to hyperparameters than all these methods.</p>
-<p>SAC builds on soft Q-learning to achieve these improvements. It relies on three different function approximators:</p>
+<p><strong>Soft Actor-Critic</strong> <span class="citation" data-cites="Haarnoja2018b Haarnoja2018a">(SAC, <a href="references.html#ref-Haarnoja2018b" role="doc-biblioref">Haarnoja et al., 2018a</a>, <a href="references.html#ref-Haarnoja2018a" role="doc-biblioref">2018b</a>)</span> makes the maximum entropy framework practical. It is an <strong>off-policy actor-critic</strong> architecture which, contrary to DDPG and TD3, learns a <strong>stochastic</strong> policy, while being more sample efficient than on-policy methods such as A3C or PPO and much less sensitive to hyperparameters than all of them.</p>
+<section id="the-critic" class="level3">
+<h3 class="anchored" data-anchor-id="the-critic">The critic</h3>
+<p>The trick is to avoid estimating the soft V-values by sampling, by injecting the definition of <span class="math inline">V^\text{soft}_\theta</span> into the soft Bellman equation:</p>
+<p><span class="math display">
+    Q^\text{soft}_\theta(s_t, a_t) = \mathbb{E}_{s_{t+1} \sim \rho_\theta} [r(s_t, a_t, s_{t+1}) + \gamma \, \mathbb{E}_{a_{t+1} \sim \pi_\theta} [Q^\text{soft}_\theta(s_{t+1}, a_{t+1}) -  \alpha \, \log \, \pi_\theta(s_{t+1}, a_{t+1})]]
+</span></p>
+<p>This now only depends on soft Q-values. If we want to train a <strong>critic</strong> <span class="math inline">Q_\varphi(s, a)</span> to estimate the true soft Q-value <span class="math inline">Q^\text{soft}_\theta(s, a)</span>, we just need to sample <span class="math inline">(s_t, a_t, r_{t+1}, s_{t+1})</span> transitions and minimize:</p>
+<p><span class="math display">
+    \mathcal{L}(\varphi) = \mathbb{E}_{s_t, a_t, s_{t+1} \sim \mathcal{D}} [(r_{t+1} + \gamma \, (Q_\varphi(s_{t+1}, a_{t+1}) - \alpha \, \log \pi_\theta(s_{t+1}, a_{t+1})) - Q_\varphi(s_{t}, a_{t}) )^2]
+</span></p>
+<p>The only difference with a SARSA critic is that the negative log-likelihood of the next action is added to the target. Crucially, <span class="math inline">s_t</span>, <span class="math inline">a_t</span> and <span class="math inline">r_{t+1}</span> can come from a replay buffer <span class="math inline">\mathcal{D}</span>, while <span class="math inline">a_{t+1}</span> only has to be <strong>sampled</strong> from the current policy <span class="math inline">\pi_\theta</span> — it does not have to be taken. This is what makes SAC an <strong>off-policy</strong> algorithm with a <strong>stochastic</strong> policy, a combination that neither A3C/PPO (on-policy, stochastic) nor DDPG/TD3 (off-policy, deterministic) achieve.</p>
+</section>
+<section id="the-actor" class="level3">
+<h3 class="anchored" data-anchor-id="the-actor">The actor</h3>
+<p>But how do we train the actor? The optimal policy is a softmax over the soft Q-values, but its log-partition function <span class="math inline">Z(s)</span> is intractable for continuous action spaces:</p>
+<p><span class="math display">
+    \pi_\theta(s, a) = \dfrac{\exp  \dfrac{Q_\varphi (s, a)}{\alpha}}{\sum_b \exp \dfrac{Q_\varphi (s, b)}{\alpha}} = \dfrac{1}{Z(s)} \, \exp \dfrac{Q_\varphi (s, a)}{\alpha}
+</span></p>
+<p>The trick is to make a <strong>parameterized actor</strong> <span class="math inline">\pi_\theta</span> (a Gaussian policy, using the reparameterization trick of <a href="3.2-ActorCritic.html#sec-continuousspaces" class="quarto-xref"><span>Continuous action spaces</span></a>) learn to be as close as possible to this softmax, by minimizing the Kullback-Leibler divergence between the two:</p>
+<p><span class="math display">
+    \mathcal{L}(\theta) = \mathbb{E}_{s \sim \mathcal{D}} [D_\text{KL} (\pi_\theta(s, \cdot) \, || \, \dfrac{1}{Z(s)} \, \exp \dfrac{Q_\varphi (s, \cdot)}{\alpha})]
+</span></p>
+<p>As <span class="math inline">Z(s)</span> does not depend on <span class="math inline">\theta</span>, it disappears when taking the gradient, leaving a remarkably simple update:</p>
+<p><span class="math display">
+   \nabla_\theta \, \mathcal{L}(\theta) = \mathbb{E}_{s \sim \mathcal{D}, a \sim \pi_\theta} [\alpha \, \nabla_\theta \log \pi_\theta(s, a) - \nabla_\theta Q_\varphi (s, a)]
+</span></p>
+<p>The actor therefore only has to implement a Gaussian policy, and we can train it using the soft Q-values of the critic.</p>
+</section>
+<section id="practical-improvements" class="level3">
+<h3 class="anchored" data-anchor-id="practical-improvements">Practical improvements</h3>
+<p>Two additional mechanisms, introduced in <span class="citation" data-cites="Haarnoja2018a">Haarnoja et al. (<a href="references.html#ref-Haarnoja2018a" role="doc-biblioref">2018b</a>)</span>, make SAC robust in practice:</p>
 <ul>
-<li>a soft state value function <span class="math inline">V_\varphi(s)</span>.</li>
-<li>a soft Q-value function <span class="math inline">Q_\psi(s,a)</span>.</li>
-<li>a stochastic policy <span class="math inline">\pi_\theta(s, a)</span>.</li>
+<li><strong>Clipped double learning.</strong> As in TD3 (<a href="2.4-DQNvariants.html#sec-doubleqlearning" class="quarto-xref"><span>Double DQN</span></a>), SAC uses two critics <span class="math inline">Q_{\varphi_1}</span> and <span class="math inline">Q_{\varphi_2}</span> trained on the same target, and takes the <em>lesser of two evils</em> (the minimum) when computing the target, in order to reduce the overestimation of Q-values:</li>
 </ul>
-<p>The paper uses a different notation for the parameters <span class="math inline">\theta, \varphi, \psi</span>, but I choose to be consistent with the rest of this document.</p>
-<p>The soft state-value function <span class="math inline">V_\varphi(s)</span> is learned vy turning the definition of the soft V-value into a loss function:</p>
 <p><span class="math display">
-    \mathcal{L}(\varphi) = \mathbb{E}_{s_t \in \mathcal{D}} [\mathbb{E}_{a_{t} \in \pi} [(Q_\psi(s_{t}, a_{t}) - \log \, \pi_\theta(s_t, a_t)] - V_\varphi(s_t) )^2]
+    y = r_{t+1} + \gamma \, (\min_{i=1,2} Q_{\varphi'_i}(s_{t+1}, a_{t+1}) - \alpha \, \log \pi_\theta(s_{t+1}, a_{t+1}))
 </span></p>
-<p>In practice, we only need the gradient of this loss function to train the corresponding neural network. The expectation over the policy inside the loss function can be replaced by a single sample action <span class="math inline">a</span> using the current policy <span class="math inline">\pi_\theta</span> (but not <span class="math inline">a_{t+1}</span> in the replay memory <span class="math inline">\mathcal{D}</span>, which is only used for the states <span class="math inline">s_t</span>).</p>
+<ul>
+<li><strong>Automatic temperature tuning.</strong> The temperature <span class="math inline">\alpha</span> is the main remaining hyperparameter, and the right value depends on the task, on the reward scale, and even on the stage of training. Instead of fixing it, SAC solves a constrained problem where the expected entropy of the policy must stay above a target value <span class="math inline">\bar{H}</span> (typically <span class="math inline">-\dim(\mathcal{A})</span>). The corresponding Lagrange multiplier is <span class="math inline">\alpha</span> itself, and it can be learned by gradient descent on:</li>
+</ul>
 <p><span class="math display">
-    \nabla_\varphi \mathcal{L}(\varphi) = \nabla_\varphi V_\varphi(s_t) \, (V_\varphi(s_t) - Q_\psi(s_{t}, a) + \log \, \pi_\theta(s_t, a) )
+    \mathcal{L}(\alpha) = \mathbb{E}_{s \sim \mathcal{D}, a \sim \pi_\theta} [- \alpha \, (\log \pi_\theta(s, a) + \bar{H})]
 </span></p>
-<p>The soft Q-values <span class="math inline">Q_\psi(s_{t}, a_{t})</span> can be trained from the replay memory <span class="math inline">\mathcal{D}</span> on <span class="math inline">(s_t, a_t, r_{t+1} , s_{t+1})</span> transitions by minimizing the mse:</p>
-<p><span class="math display">
-    \mathcal{L}(\psi) = \mathbb{E}_{s_t, a_t \in \mathcal{D}} [(r_{t+1} + \gamma \, V_\varphi(s_{t+1}) - Q_\psi(s_t, a_t))^2]
-</span></p>
-<p>Finally, the policy <span class="math inline">\pi_\theta</span> can be trained to maximize the obtained returns. There are many ways to do that, but <span class="citation" data-cites="Haarnoja2018a">Haarnoja et al. (<a href="references.html#ref-Haarnoja2018a" role="doc-biblioref">2018</a>)</span> proposes to minimize the Kullback-Leibler (KL) divergence between the current policy <span class="math inline">\pi_\theta</span> and a softmax function over the soft Q-values:</p>
-<p><span class="math display">
-    \mathcal{L}(\theta) = \mathbb{E}_{s_t \in \mathcal{D}} [D_\text{KL}(\pi_\theta(s, \cdot) | \frac{\exp Q_\psi(s_t, \cdot)}{Z(s_t)})]
-</span></p>
-<p>where <span class="math inline">Z</span> is the partition function to normalize the softmax. Fortunately, it disappears when using the reparameterization trick and taking the gradient of this loss (see the paper for details).</p>
-<p>There are additional tricks to make it more efficient and robust, such as target networks or the use of two independent function approximators for the soft Q-values in order to reduce the bias, but the gist of the algorithm is the following:</p>
+<p>so the exploration level becomes fully automatic: <span class="math inline">\alpha</span> increases when the policy becomes too deterministic and decreases when it is too random.</p>
 <div class="callout callout-style-default callout-note no-icon callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-SAC algorithm
+<span class="screen-reader-only">Note</span>SAC algorithm
 </div>
 </div>
 <div class="callout-body-container callout-body">
 <ul>
-<li><p>Sample a transition <span class="math inline">(s_t, a_t, r_{t+1}, a_{t+1})</span> using the current policy <span class="math inline">\pi_\theta</span> and store it in the replay memory <span class="math inline">\mathcal{D}</span>.</p></li>
-<li><p>For each transition <span class="math inline">(s_t, a_t, r_{t+1}, a_{t+1})</span> of a minibatch of <span class="math inline">\mathcal{D}</span>:</p>
+<li><p>Initialize the actor <span class="math inline">\pi_\theta</span>, the critics <span class="math inline">Q_{\varphi_1}, Q_{\varphi_2}</span> and their target networks <span class="math inline">Q_{\varphi'_1}, Q_{\varphi'_2}</span>, the temperature <span class="math inline">\alpha</span> and the replay buffer <span class="math inline">\mathcal{D}</span>.</p></li>
+<li><p>for <span class="math inline">t \in [0, T_\text{max}]</span>:</p>
 <ul>
-<li><p>Sample an action <span class="math inline">a \in \pi_\theta(s_t, \cdot)</span> from the current policy.</p></li>
-<li><p>Update the soft state-value function <span class="math inline">V_\varphi(s_t)</span>:</p></li>
+<li><p>Select an action <span class="math inline">a_t \sim \pi_\theta(s_t, \cdot)</span>, observe <span class="math inline">r_{t+1}</span> and <span class="math inline">s_{t+1}</span>, and store <span class="math inline">(s_t, a_t, r_{t+1}, s_{t+1})</span> in <span class="math inline">\mathcal{D}</span>.</p></li>
+<li><p>For each transition <span class="math inline">(s_k, a_k, r_k, s'_k)</span> of a minibatch sampled from <span class="math inline">\mathcal{D}</span>:</p>
+<ul>
+<li><p>Sample the next action from the <strong>current</strong> policy: <span class="math inline">a'_k \sim \pi_\theta(s'_k, \cdot)</span>.</p></li>
+<li><p>Compute the target using the target critics:</p></li>
 </ul>
 <p><span class="math display">
-      \nabla_\varphi \mathcal{L}(\varphi) = \nabla_\varphi V_\varphi(s_t) \, (V_\varphi(s_t) - Q_\psi(s_{t}, a) + \log \, \pi_\theta(s_t, a) )
+      y_k = r_k + \gamma \, (\min_{i=1,2} Q_{\varphi'_i}(s'_k, a'_k) - \alpha \, \log \pi_\theta(s'_k, a'_k))
+  </span></p></li>
+<li><p>Update both critics by minimizing:</p></li>
+</ul>
+<p><span class="math display">
+      \mathcal{L}(\varphi_i) = \frac{1}{K} \sum_k (y_k - Q_{\varphi_i}(s_k, a_k))^2 \qquad i = 1, 2
   </span></p>
 <ul>
-<li>Update the soft Q-value function <span class="math inline">Q_\psi(s_t, a_t)</span>:</li>
+<li>Sample <span class="math inline">a_k \sim \pi_\theta(s_k, \cdot)</span> and update the actor:</li>
 </ul>
 <p><span class="math display">
-      \nabla_\psi \mathcal{L}(\psi) = - \nabla_\psi Q_\psi(s_t, a_t) \, (r_{t+1} + \gamma \, V_\varphi(s_{t+1}) - Q_\psi(s_t, a_t))
+      \nabla_\theta \mathcal{L}(\theta) = \frac{1}{K} \sum_k (\alpha \, \nabla_\theta \log \pi_\theta(s_k, a_k) - \nabla_\theta \min_{i=1,2} Q_{\varphi_i} (s_k, a_k))
   </span></p>
 <ul>
-<li>Update the policy <span class="math inline">\pi_\theta(s_t, \cdot)</span>:</li>
+<li>Update the temperature:</li>
 </ul>
 <p><span class="math display">
-      \nabla_\theta \mathcal{L}(\theta) = \nabla_\theta D_\text{KL}(\pi_\theta(s, \cdot) | \frac{\exp Q_\psi(s_t, \cdot)}{Z(s_t)})
+      \nabla_\alpha \mathcal{L}(\alpha) = - \frac{1}{K} \sum_k (\log \pi_\theta(s_k, a_k) + \bar{H})
+  </span></p>
+<ul>
+<li>Update the target critics:</li>
+</ul>
+<p><span class="math display">
+      \varphi'_i \leftarrow \tau \, \varphi_i + (1-\tau) \, \varphi'_i \qquad i = 1, 2
   </span></p></li>
 </ul>
 </div>
 </div>
-<p>SAC was compared to DDPG, PPO, soft Q-learning and others on a set of gym and humanoid robotics tasks (with 21 joints!). It outperforms all these methods in both the final performance and the sample complexity, the difference being even more obvious for the complex tasks. The exploration bonus given by the maximum entropy allows the agent to discover better policies than its counterparts. SAC is an actor-critic architecture (the critic computing both V and Q) working off-policy (using an experience replay memory, so re-using past experiences) allowing to learn stochastic policies, even in high dimensional spaces.</p>
+<div class="callout callout-style-default callout-tip no-icon callout-titled" title="A note on the original formulation">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>A note on the original formulation
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The first version of SAC <span class="citation" data-cites="Haarnoja2018b">(<a href="references.html#ref-Haarnoja2018b" role="doc-biblioref">Haarnoja et al., 2018a</a>)</span> additionally learned a separate soft state-value function <span class="math inline">V_\psi(s)</span>, giving three function approximators (a policy, a soft Q-value and a soft V-value), and used a fixed temperature. The follow-up paper <span class="citation" data-cites="Haarnoja2018a">(<a href="references.html#ref-Haarnoja2018a" role="doc-biblioref">Haarnoja et al., 2018b</a>)</span> showed that the V-critic is not needed — it can be recovered from the Q-critic and the policy, as done above — and added clipped double learning and the automatic temperature tuning. Modern implementations all follow the second formulation, which is the one presented here. You will still find the three-network version in many tutorials.</p>
+</div>
+</div>
+</section>
+<section id="sac-vs.-td3" class="level3">
+<h3 class="anchored" data-anchor-id="sac-vs.-td3">SAC vs.&nbsp;TD3</h3>
+<p>SAC and TD3 (<a href="3.4-DPG.html" class="quarto-xref"><span>Deep Deterministic Policy Gradient (DDPG)</span></a>) were published around the same time and share several mechanisms, but differ in important ways:</p>
+<ul>
+<li>Both use <strong>clipped double learning</strong> to fight the overestimation of Q-values.</li>
+<li>TD3 learns a <strong>deterministic</strong> policy and needs additive exploratory noise, as well as noisy Bellman targets to avoid overfitting particular actions. SAC learns a <strong>stochastic</strong> policy, so the targets are already stochastic: no target noise is needed.</li>
+<li>In SAC the next action <span class="math inline">a_{t+1}</span> comes from the current policy, so there is no need for a target actor network (only target critics).</li>
+<li>TD3 delays the actor updates to let the critics catch up; SAC does not need to.</li>
+</ul>
+<p>See <a href="https://spinningup.openai.com/en/latest/algorithms/sac.html" class="uri">https://spinningup.openai.com/en/latest/algorithms/sac.html</a> for a detailed comparison.</p>
+</section>
+<section id="results" class="level3">
+<h3 class="anchored" data-anchor-id="results">Results</h3>
+<p>SAC was compared to DDPG, PPO, TD3, soft Q-learning and others on a set of gym and humanoid robotics tasks (with 21 joints!). It outperforms these methods in both the final performance and the sample complexity, the difference being even more obvious for the complex tasks. The exploration bonus given by the maximum entropy allows the agent to discover better policies than its counterparts.</p>
+<div id="fig-sacresults" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-sacresults-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="img/sac_results.png" class="lightbox" data-gallery="quarto-lightbox-gallery-7" title="Figure&nbsp;18.7: Performance of SAC on Mujoco tasks. Source: @Haarnoja2018a."><img src="img/sac_results.png" class="img-fluid figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-sacresults-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;18.7: Performance of SAC on Mujoco tasks. Source: <span class="citation" data-cites="Haarnoja2018a">Haarnoja et al. (<a href="references.html#ref-Haarnoja2018a" role="doc-biblioref">2018b</a>)</span>.
+</figcaption>
+</figure>
+</div>
+<p>The enhanced exploration strategy does not only improve the returns: it produces robust and varied strategies that can cope with changes in the environment. Although trained on a flat surface, the learned stochastic policies generalize to complex terrains.</p>
+<div id="fig-sacant" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-sacant-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="img/sac_ant.gif" class="lightbox" data-gallery="quarto-lightbox-gallery-8" title="Figure&nbsp;18.8: The rich stochastic policy learned by SAC generalizes to unseen terrains. Source: https://bair.berkeley.edu/blog/2017/10/06/soft-q-learning/"><img src="img/sac_ant.gif" class="img-fluid figure-img" style="width:60.0%"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-sacant-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;18.8: The rich stochastic policy learned by SAC generalizes to unseen terrains. Source: <a href="https://bair.berkeley.edu/blog/2017/10/06/soft-q-learning/" class="uri">https://bair.berkeley.edu/blog/2017/10/06/soft-q-learning/</a>
+</figcaption>
+</figure>
+</div>
+<p>Its low sample complexity makes SAC usable to train a real-world robot in less than two hours:</p>
+<div class="quarto-video ratio ratio-16x9"><iframe data-external="1" src="https://www.youtube.com/embed/FmMPHL3TcrE" title="SAC - real-world robotics" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe></div>
+<p>When trained to stack Lego bricks, the robotic arm explores the whole state-action space instead of committing to a single trajectory, which makes it much more robust to external perturbations after training:</p>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div id="fig-saclego1" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-saclego1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="img/sac_lego1.gif" class="lightbox" data-gallery="quarto-lightbox-gallery-9" title="Figure&nbsp;18.9: Training. Source: https://bair.berkeley.edu/blog/2017/10/06/soft-q-learning/"><img src="img/sac_lego1.gif" class="img-fluid figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-saclego1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;18.9: Training. Source: <a href="https://bair.berkeley.edu/blog/2017/10/06/soft-q-learning/" class="uri">https://bair.berkeley.edu/blog/2017/10/06/soft-q-learning/</a>
+</figcaption>
+</figure>
+</div>
+</div><div class="column" style="width:50%;">
+<div id="fig-saclego2" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-saclego2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="img/sac_lego2.gif" class="lightbox" data-gallery="quarto-lightbox-gallery-10" title="Figure&nbsp;18.10: Robustness to perturbations after training."><img src="img/sac_lego2.gif" class="img-fluid figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-saclego2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;18.10: Robustness to perturbations after training.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>In summary, SAC is an actor-critic architecture working <strong>off-policy</strong> (using an experience replay memory, so re-using past experiences) while learning <strong>stochastic</strong> policies, even in high-dimensional continuous action spaces. Together with TD3, it is nowadays the go-to method for continuous control: TD3 is less computationally expensive, SAC is more sample efficient and less brittle.</p>
+<div class="callout callout-style-default callout-tip no-icon callout-titled" title="Additional resources">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Additional resources
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li><a href="https://spinningup.openai.com/en/latest/algorithms/sac.html" class="uri">https://spinningup.openai.com/en/latest/algorithms/sac.html</a></li>
+<li><a href="https://bair.berkeley.edu/blog/2017/10/06/soft-q-learning" class="uri">https://bair.berkeley.edu/blog/2017/10/06/soft-q-learning</a></li>
+<li><a href="https://ai.googleblog.com/2019/01/soft-actor-critic-deep-reinforcement.html" class="uri">https://ai.googleblog.com/2019/01/soft-actor-critic-deep-reinforcement.html</a></li>
+<li><span class="citation" data-cites="Levine2018">Levine (<a href="references.html#ref-Levine2018" role="doc-biblioref">2018</a>)</span> provides the general connection between RL and probabilistic inference: <a href="https://arxiv.org/abs/1805.00909" class="uri">https://arxiv.org/abs/1805.00909</a></li>
+</ul>
+</div>
+</div>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
 <div id="ref-Haarnoja2017" class="csl-entry" role="listitem">
-Haarnoja, T., Tang, H., Abbeel, P., and Levine, S. (2017). Reinforcement <span>Learning</span> with <span>Deep Energy-Based Policies</span>. Available at: <a href="http://arxiv.org/abs/1702.08165">http://arxiv.org/abs/1702.08165</a> [Accessed February 13, 2019].
+Haarnoja, T., Tang, H., Abbeel, P., and Levine, S. (2017). Reinforcement <span>Learning</span> with <span>Deep Energy-Based Policies</span>. <em>arXiv:1702.08165 [cs]</em>. Available at: <a href="https://arxiv.org/abs/1702.08165">https://arxiv.org/abs/1702.08165</a> [Accessed February 13, 2019].
+</div>
+<div id="ref-Haarnoja2018b" class="csl-entry" role="listitem">
+Haarnoja, T., Zhou, A., Abbeel, P., and Levine, S. (2018a). Soft <span>Actor-Critic</span>: <span>Off-Policy Maximum Entropy Deep Reinforcement Learning</span> with a <span>Stochastic Actor</span>. <em>arXiv:1801.01290 [cs]</em>. Available at: <a href="https://arxiv.org/abs/1801.01290">https://arxiv.org/abs/1801.01290</a>.
 </div>
 <div id="ref-Haarnoja2018a" class="csl-entry" role="listitem">
-Haarnoja, T., Zhou, A., Hartikainen, K., Tucker, G., Ha, S., Tan, J., et al. (2018). Soft <span>Actor-Critic Algorithms</span> and <span>Applications</span>. Available at: <a href="http://arxiv.org/abs/1812.05905">http://arxiv.org/abs/1812.05905</a> [Accessed February 5, 2019].
+Haarnoja, T., Zhou, A., Hartikainen, K., Tucker, G., Ha, S., Tan, J., et al. (2018b). Soft <span>Actor-Critic Algorithms</span> and <span>Applications</span>. <em>arXiv:1812.05905 [cs, stat]</em>. Available at: <a href="https://arxiv.org/abs/1812.05905">https://arxiv.org/abs/1812.05905</a> [Accessed February 5, 2019].
+</div>
+<div id="ref-Levine2018" class="csl-entry" role="listitem">
+Levine, S. (2018). Reinforcement <span>Learning</span> and <span>Control</span> as <span>Probabilistic Inference</span>: <span>Tutorial</span> and <span>Review</span>. <em>arXiv:1805.00909 [cs, stat]</em>. Available at: <a href="https://arxiv.org/abs/1805.00909">https://arxiv.org/abs/1805.00909</a> [Accessed December 18, 2020].
 </div>
 <div id="ref-Machado2018" class="csl-entry" role="listitem">
-Machado, M. C., Bellemare, M. G., and Bowling, M. (2018). Count-<span>Based Exploration</span> with the <span>Successor Representation</span>. Available at: <a href="http://arxiv.org/abs/1807.11622">http://arxiv.org/abs/1807.11622</a> [Accessed February 23, 2019].
+Machado, M. C., Bellemare, M. G., and Bowling, M. (2018). Count-<span>Based Exploration</span> with the <span>Successor Representation</span>. <em>arXiv:1807.11622 [cs, stat]</em>. Available at: <a href="https://arxiv.org/abs/1807.11622">https://arxiv.org/abs/1807.11622</a> [Accessed February 23, 2019].
 </div>
 <div id="ref-Nachum2017" class="csl-entry" role="listitem">
-Nachum, O., Norouzi, M., Xu, K., and Schuurmans, D. (2017). Bridging the <span>Gap Between Value</span> and <span>Policy Based Reinforcement Learning</span>. Available at: <a href="http://arxiv.org/abs/1702.08892">http://arxiv.org/abs/1702.08892</a> [Accessed June 12, 2019].
+Nachum, O., Norouzi, M., Xu, K., and Schuurmans, D. (2017). Bridging the <span>Gap Between Value</span> and <span>Policy Based Reinforcement Learning</span>. <em>arXiv:1702.08892 [cs, stat]</em>. Available at: <a href="https://arxiv.org/abs/1702.08892">https://arxiv.org/abs/1702.08892</a> [Accessed June 12, 2019].
 </div>
 <div id="ref-ODonoghue2016" class="csl-entry" role="listitem">
-O’Donoghue, B., Munos, R., Kavukcuoglu, K., and Mnih, V. (2016). Combining policy gradient and <span class="nocase">Q-learning</span>. Available at: <a href="http://arxiv.org/abs/1611.01626">http://arxiv.org/abs/1611.01626</a> [Accessed February 13, 2019].
+O’Donoghue, B., Munos, R., Kavukcuoglu, K., and Mnih, V. (2016). Combining policy gradient and <span class="nocase">Q-learning</span>. <em>arXiv:1611.01626 [cs, math, stat]</em>. Available at: <a href="https://arxiv.org/abs/1611.01626">https://arxiv.org/abs/1611.01626</a> [Accessed February 13, 2019].
 </div>
 <div id="ref-Schulman2017a" class="csl-entry" role="listitem">
-Schulman, J., Wolski, F., Dhariwal, P., Radford, A., and Klimov, O. (2017). Proximal <span>Policy Optimization Algorithms</span>. Available at: <a href="http://arxiv.org/abs/1707.06347">http://arxiv.org/abs/1707.06347</a>.
+Schulman, J., Wolski, F., Dhariwal, P., Radford, A., and Klimov, O. (2017). Proximal <span>Policy Optimization Algorithms</span>. <em>arXiv:1707.06347 [cs]</em>. Available at: <a href="https://arxiv.org/abs/1707.06347">https://arxiv.org/abs/1707.06347</a>.
 </div>
 <div id="ref-Todorov2008" class="csl-entry" role="listitem">
 Todorov, E. (2008). General duality between optimal control and estimation. in <em>2008 47th <span>IEEE Conference</span> on <span>Decision</span> and <span>Control</span></em>, 4286–4292. doi:<a href="https://doi.org/10.1109/CDC.2008.4739438">10.1109/CDC.2008.4739438</a>.
 </div>
 <div id="ref-Toussaint2009" class="csl-entry" role="listitem">
-Toussaint, M. (2009). Robot <span>Trajectory Optimization Using Approximate Inference</span>. in <em>Proceedings of the 26th <span>Annual International Conference</span> on <span>Machine Learning</span></em> <span>ICML</span> ’09. (New York, NY, USA: ACM), 1049–1056. doi:<a href="https://doi.org/10.1145/1553374.1553508">10.1145/1553374.1553508</a>.
+Toussaint, M. (2009). Robot <span>Trajectory Optimization Using Approximate Inference</span>. in <em>Proceedings of the 26th <span>Annual International Conference</span> on <span>Machine Learning</span></em> <span>ICML</span> ’09. (Montreal, Quebec, Canada: ACM), 1049–1056. doi:<a href="https://doi.org/10.1145/1553374.1553508">10.1145/1553374.1553508</a>.
 </div>
 <div id="ref-Williams1991" class="csl-entry" role="listitem">
 Williams, R. J., and Peng, J. (1991). Function optimization using connectionist reinforcement learning algorithms. <em>Connection Science</em> 3, 241–268.
 </div>
 <div id="ref-Ziebart2008" class="csl-entry" role="listitem">
-Ziebart, B. D., Maas, A., Bagnell, J. A., and Dey, A. K. (2008). Maximum <span>Entropy Inverse Reinforcement Learning</span>. in, 6.
+Ziebart, B. D., Maas, A., Bagnell, J. A., and Dey, A. K. (2008). Maximum <span>Entropy Inverse Reinforcement Learning</span>. in <em><span>AAAI Conference</span> on <span>Artificial Intelligence</span></em>, 6.
 </div>
 </div>
+</section>
 </section>
 
 </main> <!-- /main -->
@@ -705,13 +899,14 @@ Ziebart, B. D., Maas, A., Bagnell, J. A., and Dey, A. K. (2008). Maximum <span>E
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy
@@ -1053,15 +1248,15 @@ Ziebart, B. D., Maas, A., Bagnell, J. A., and Dey, A. K. (2008). Maximum <span>E
     }
   });
   </script>
-<nav class="page-navigation">
+<nav class="page-navigation column-body">
   <div class="nav-page nav-page-previous">
       <a href="../src/3.7-ACER.html" class="pagination-link" aria-label="Actor-Critic with Experience Replay (ACER)">
         <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">Actor-Critic with Experience Replay (ACER)</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../src/3.9-Misc.html" class="pagination-link" aria-label="Misc.">
-        <span class="nav-page-text"><span class="chapter-title">Misc.</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../src/4.1-ModelBased.html" class="pagination-link" aria-label="Model-based RL">
+        <span class="nav-page-text"><span class="chapter-title">Model-based RL</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

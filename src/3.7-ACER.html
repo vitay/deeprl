@@ -2,17 +2,23 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.29">
+<meta name="generator" content="quarto-1.10.18">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>Actor-Critic with Experience Replay (ACER) – Deep Reinforcement Learning</title>
 <style>
-code{white-space: pre-wrap;}
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -57,10 +63,10 @@ div.csl-indent {
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-bcbce66894bfa8e7e94e40e0186b9bb8.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-bb62276ab45c84d9efd712f51ff97b5a.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-ea27fabe3da5290357830f0bd5288bdb.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-3998d32367fd34ee6440c4fab252e735.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -118,7 +124,7 @@ const typesetMath = (el) => {
     var macros = [];
     for (var i = 0; i < mathElements.length; i++) {
       var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
         window.katex.render(texText.data, mathElements[i], {
           displayMode: mathElements[i].classList.contains('display'),
           throwOnError: false,
@@ -136,7 +142,7 @@ window.Quarto = {
 
 </head>
 
-<body class="nav-sidebar floating quarto-light">
+<body class="nav-sidebar docked quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -155,9 +161,9 @@ window.Quarto = {
   </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="../">Deep Reinforcement Learning</a> 
@@ -249,11 +255,6 @@ window.Quarto = {
   <a href="../src/2.5-DistributedLearning.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Distributed learning</span></a>
   </div>
 </li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../src/2.6-Misc.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Misc.</span></a>
-  </div>
-</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -272,8 +273,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/3.2-ActorCritic.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Advantage Actor-Critic (A3C)</span></a>
+  <a href="../src/3.2-ActorCritic.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Advantage Actor-Critic (A3C)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -304,11 +304,6 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../src/3.8-EntropyRL.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Maximum Entropy RL (SAC)</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../src/3.9-Misc.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Misc.</span></a>
   </div>
 </li>
       </ul>
@@ -347,11 +342,6 @@ window.Quarto = {
   <a href="../src/4.5-AlphaGo.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">AlphaGo</span></a>
   </div>
 </li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../src/4.6-Misc.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Misc.</span></a>
-  </div>
-</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -380,7 +370,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/5.4-Meta.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Meta learning</span></a>
+  <a href="../src/5.4-Meta.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Meta reinforcement learning</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -413,7 +403,7 @@ window.Quarto = {
 </nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
+<main class="content column-body" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
@@ -422,7 +412,7 @@ window.Quarto = {
 
 
 
-<div class="quarto-title-meta">
+<div class="quarto-title-meta column-body">
 
     
   
@@ -434,7 +424,7 @@ window.Quarto = {
 </header>
 
 
-<p>The natural gradient methods presented previously (TRPO, PPO) are stochastic actor-critic methods, therefore strictly on-policy. Off-policy methods such as DQN or DDPG allow to reuse past transitions through the usage of an <strong>experience replay memory</strong>, potentially reducing the sample complexity at the cost of a higher variance and worse stability. <span class="citation" data-cites="Wang2017">Wang et al. (<a href="references.html#ref-Wang2017" role="doc-biblioref">2017</a>)</span> proposed an off-policy actor-critic architecture using variance reduction techniques, the off-policy Retrace algorithm <span class="citation" data-cites="Munos2016">(<a href="references.html#ref-Munos2016" role="doc-biblioref">Munos et al., 2016</a>)</span>, parallel training of multiple actor-learners <span class="citation" data-cites="Mnih2016">(<a href="references.html#ref-Mnih2016" role="doc-biblioref">Mnih et al., 2016</a>)</span>, truncated importance sampling with bias correction, stochastic duelling network architectures <span class="citation" data-cites="Wang2016">(<a href="references.html#ref-Wang2016" role="doc-biblioref">Wang et al., 2016</a>)</span>, and efficient trust region policy optimization. It can be seen as the off-policy counterpart to A3C.</p>
+<p>The natural gradient methods presented previously (TRPO, PPO) are stochastic actor-critic methods, therefore strictly on-policy. Off-policy methods such as DQN or DDPG allow to reuse past transitions through the usage of an <strong>experience replay memory</strong>, potentially reducing the sample complexity at the cost of a higher variance and worse stability. <span class="citation" data-cites="Wang2017">Wang et al. (<a href="references.html#ref-Wang2017" role="doc-biblioref">2017</a>)</span> proposed an off-policy actor-critic architecture using variance reduction techniques, the off-policy Retrace algorithm <span class="citation" data-cites="Munos2016">(<a href="references.html#ref-Munos2016" role="doc-biblioref">Munos et al., 2016</a>)</span>, parallel training of multiple actor-learners <span class="citation" data-cites="Mnih2016">(<a href="references.html#ref-Mnih2016" role="doc-biblioref">Mnih et al., 2016</a>)</span>, truncated importance sampling with bias correction, stochastic duelling network architectures <span class="citation" data-cites="Wang2016">(<a href="references.html#ref-Wang2016" role="doc-biblioref"><span class="nocase">Wang et al.</span>, 2016</a>)</span>, and efficient trust region policy optimization. It can be seen as the off-policy counterpart to A3C.</p>
 <p>The first aspect of ACER is that it interleaves on-policy learning with off-policy: the agent samples a trajectory <span class="math inline">\tau</span>, learns from it on-policy, stores it in the replay buffer, samples <span class="math inline">n</span> trajectories from the replay buffer and learns off-policy from each of them:</p>
 <div class="callout callout-style-default callout-note no-icon callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -442,7 +432,7 @@ window.Quarto = {
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-ACER algorithm
+<span class="screen-reader-only">Note</span>ACER algorithm
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -463,7 +453,7 @@ ACER algorithm
 <h3 class="anchored" data-anchor-id="retrace-evaluation">Retrace evaluation</h3>
 <p>ACER comes in two flavors: one for discrete action spaces, one for continuous spaces. The discrete version is simpler, so let’s focus on this one. As any policy-gradient method, ACER tries to estimate the policy gradient for each transition of a trajectory, but using importance sampling <span class="citation" data-cites="Degris2012">(<a href="references.html#ref-Degris2012" role="doc-biblioref">Degris et al., 2012</a>)</span>:</p>
 <p><span class="math display">
-    \nabla_\theta J(\theta)  = \mathbb{E}_{s_t, a_t \sim \rho_b} [\frac{\pi_\theta(s_t, a_t)}{b(s_t, a_t)} \, Q_\varphi(s_t, a_t) \, \nabla_\theta \log \pi_\theta(s_t, a_t)]
+    \nabla_\theta \mathcal{J}(\theta)  = \mathbb{E}_{s_t, a_t \sim \rho_b} [\frac{\pi_\theta(s_t, a_t)}{b(s_t, a_t)} \, Q_\varphi(s_t, a_t) \, \nabla_\theta \log \pi_\theta(s_t, a_t)]
 </span></p>
 <p>The problem is now to train the critic <span class="math inline">Q_\varphi(s_t, a_t)</span> by computing the correct target. ACER learning builds on the Retrace algorithm <span class="citation" data-cites="Munos2016">(<a href="references.html#ref-Munos2016" role="doc-biblioref">Munos et al., 2016</a>)</span>:</p>
 <p><span class="math display">
@@ -499,7 +489,7 @@ ACER algorithm
 <li><p>The <strong>actor</strong> <span class="math inline">\pi_\theta</span> takes a state <span class="math inline">s</span> as input and outputs a vector of probabilities <span class="math inline">\pi_\theta</span> for each available action.</p></li>
 <li><p>The <strong>critic</strong> <span class="math inline">Q_\varphi</span> takes a state <span class="math inline">s</span> as input and outputs a vector of Q-values.</p></li>
 </ul>
-<p>This is different from the architecture of A3C, where the critic “only” had to output the value of a state <span class="math inline">V_\varphi(s)</span>: it is now a vector of Q-values. Note that the actor and the critic can share most of their parameters: the network only needs to output two different vectors <span class="math inline">\pi_\theta(s)</span> and <span class="math inline">Q_\varphi(s)</span> for each input state <span class="math inline">s</span>. This makes a “two heads” NN, similar to the <strong>duelling architecture</strong> of <span class="citation" data-cites="Wang2016">(<a href="references.html#ref-Wang2016" role="doc-biblioref">Wang et al., 2016</a>)</span>.</p>
+<p>This is different from the architecture of A3C, where the critic “only” had to output the value of a state <span class="math inline">V_\varphi(s)</span>: it is now a vector of Q-values. Note that the actor and the critic can share most of their parameters: the network only needs to output two different vectors <span class="math inline">\pi_\theta(s)</span> and <span class="math inline">Q_\varphi(s)</span> for each input state <span class="math inline">s</span>. This makes a “two heads” NN, similar to the <strong>duelling architecture</strong> of <span class="citation" data-cites="Wang2016">(<a href="references.html#ref-Wang2016" role="doc-biblioref"><span class="nocase">Wang et al.</span>, 2016</a>)</span>.</p>
 <p>The target Q-value <span class="math inline">Q^\text{ret}(s, a)</span> can be found recursively by iterating backwards over the episode:</p>
 <div class="callout callout-style-default callout-note no-icon callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -507,7 +497,7 @@ ACER algorithm
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Retrace evaluation
+<span class="screen-reader-only">Note</span>Retrace evaluation
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -537,7 +527,7 @@ Retrace evaluation
 </div>
 <p>As the target value <span class="math inline">Q^\text{ret}(s, a)</span> use multiple “real” rewards <span class="math inline">r_{t+1}</span>, it is actually less biased than the critic <span class="math inline">Q_\varphi(s, a)</span>. It is then better to use it to update the actor:</p>
 <p><span class="math display">
-    \nabla_\theta J(\theta)  = \mathbb{E}_{s_t, a_t \sim \rho_b} [\frac{\pi_\theta(s_t, a_t)}{b(s_t, a_t)} \, Q^\text{ret}(s_t, a_t) \, \nabla_\theta \log \pi_\theta(s_t, a_t)]
+    \nabla_\theta \mathcal{J}(\theta)  = \mathbb{E}_{s_t, a_t \sim \rho_b} [\frac{\pi_\theta(s_t, a_t)}{b(s_t, a_t)} \, Q^\text{ret}(s_t, a_t) \, \nabla_\theta \log \pi_\theta(s_t, a_t)]
 </span></p>
 <p>The critic just has to minimize the mse with the target value:</p>
 <p><span class="math display">
@@ -548,7 +538,7 @@ Retrace evaluation
 <h3 class="anchored" data-anchor-id="importance-weight-truncation-with-bias-correction">Importance weight truncation with bias correction</h3>
 <p>When updating the actor, we rely on the importance sampling weight <span class="math inline">\rho_t = \frac{\pi_\theta(s_t, a_t)}{b(s_t, a_t)}</span> which can vary a lot and destabilize learning.</p>
 <p><span class="math display">
-    \nabla_\theta J(\theta)  = \mathbb{E}_{s_t, a_t \sim \rho_b} [\rho_t \, Q^\text{ret}(s_t, a_t) \, \nabla_\theta \log \pi_\theta(s_t, a_t)]
+    \nabla_\theta \mathcal{J}(\theta)  = \mathbb{E}_{s_t, a_t \sim \rho_b} [\rho_t \, Q^\text{ret}(s_t, a_t) \, \nabla_\theta \log \pi_\theta(s_t, a_t)]
 </span></p>
 <p>PPO solved this problem by clipping the importance sampling weight between <span class="math inline">1- \epsilon</span> and <span class="math inline">1+\epsilon</span>. ACER uses a similar strategy, but only using an upper bound <span class="math inline">c = 10</span> on the weight:</p>
 <p><span class="math display">
@@ -558,7 +548,7 @@ Retrace evaluation
 <p>The solution in ACER is to add a <strong>bias correcting term</strong>, that corrects the policy gradient when an action has a weight higher than <span class="math inline">c</span>:</p>
 <p><span class="math display">
 \begin{aligned}
-    \nabla_\theta J(\theta)  = &amp; \mathbb{E}_{s_t \sim \rho_b} [\mathbb{E}_{a_t \sim b} [\bar{\rho}_t \, Q^\text{ret}(s_t, a_t) \, \nabla_\theta \log \pi_\theta(s_t, a_t)] \\
+    \nabla_\theta \mathcal{J}(\theta)  = &amp; \mathbb{E}_{s_t \sim \rho_b} [\mathbb{E}_{a_t \sim b} [\bar{\rho}_t \, Q^\text{ret}(s_t, a_t) \, \nabla_\theta \log \pi_\theta(s_t, a_t)] \\
     &amp; + \mathbb{E}_{a \sim \pi_\theta}[(\frac{\rho_t(a) - c}{\rho_t(a)})^+ \, Q_\varphi(s_t, a) \, \nabla_\theta \log \pi_\theta(s_t, a)]] \\
 \end{aligned}
 </span></p>
@@ -582,26 +572,26 @@ Retrace evaluation
 <p>This is what you do when you apply the softmax action selection on Q-values: the distribution is the Gibbs (or Boltzmann) distribution and the Q-values are its statistics. In the discrete case, they take a categorical (or multinouilli) distribution: <span class="math inline">\Phi_\theta(s)</span> is the probability for each action to be taken and the distribution selects one of them. Think of a dice with one side per action and probabilities governed by the policy. In the continuous case, it could be anything, for example a normal distribution.</p>
 <p>Let’s rewrite the policy gradient with that formulation (we omit here the bias correction, but ACER uses it), but only w.r.t the output of the actor <span class="math inline">\Phi_\theta(s_t)</span> for a state <span class="math inline">s_t</span>:</p>
 <p><span class="math display">
-    \hat{g_t}^\text{ACER} = \nabla_{\Phi_\theta(s_t)} J(\theta)  = \bar{\rho}_t \, (Q^\text{ret}(s_t, a_t) - V_\phi(s_t) ) \, \nabla_{\Phi_\theta(s_t)} \log f(a_t | \Phi_\theta(s_t))
+    \hat{g_t}^\text{ACER} = \nabla_{\Phi_\theta(s_t)} \mathcal{J}(\theta)  = \bar{\rho}_t \, (Q^\text{ret}(s_t, a_t) - V_\phi(s_t) ) \, \nabla_{\Phi_\theta(s_t)} \log f(a_t | \Phi_\theta(s_t))
 </span></p>
 <p>To compute the policy gradient, we would only need to apply the chain rule:</p>
 <p><span class="math display">
-    \nabla_\theta J(\theta) = \mathbb{E}_{s_t, a_t \sim \rho_b} [ \hat{g_t}^\text{ACER} \, \nabla_\theta \Phi_\theta(s_t) ]
+    \nabla_\theta \mathcal{J}(\theta) = \mathbb{E}_{s_t, a_t \sim \rho_b} [ \hat{g_t}^\text{ACER} \, \nabla_\theta \Phi_\theta(s_t) ]
 </span></p>
 <p>The variance of <span class="math inline">\hat{g_t}^\text{ACER}</span> is too high. ACER defines the following TRPO problem: we search for a gradient <span class="math inline">z</span> solution of:</p>
 <p><span class="math display">
     \min_z ||\hat{g_t}^\text{ACER} - z ||^2 \\
-    \text{s.t.} \quad \nabla_{\Phi_\theta(s_t)} D_{KL}( f(\cdot | \Phi_{\theta'}(s_t) ) || f(\cdot | \Phi_{\theta'}(s_t)) )^T \times z &lt; \delta
+    \text{s.t.} \quad \nabla_{\Phi_\theta(s_t)} D_\text{KL}( f(\cdot | \Phi_{\theta'}(s_t) ) || f(\cdot | \Phi_{\theta'}(s_t)) )^T \times z &lt; \delta
 </span></p>
 <p>The exact meaning of the constraint is hard to grasp, but here some intuition: the change of policy <span class="math inline">z</span> (remember that <span class="math inline">\hat{g_t}^\text{ACER}</span> is defined w.r.t the output of the actor) should be as orthogonal as possible (within a margin <span class="math inline">\delta</span>) to the change of the <strong>Kullback-Leibler</strong> divergence between the policy defined by the actor (<span class="math inline">\theta</span>) and the one defined by the <strong>target actor</strong> (<span class="math inline">\theta'</span>). In other words, we want to update the actor, but without making the new policy too different from its past values (the target actor).</p>
 <p>The advantage of this formulation is that the objective function is quadratic in <span class="math inline">z</span> and the constraint is linear. We can therefore very easily find its solution using KKT optimization:</p>
 <p><span class="math display">
     z^* = \hat{g_t}^\text{ACER} - \max(0, \frac{k^T \, \hat{g_t}^\text{ACER} - \delta}{||k||^2}) \, k
 </span></p>
-<p>where <span class="math inline">k = \nabla_{\Phi_\theta(s_t)} D_{KL}( f(\cdot | \Phi_{\theta'}(s_t) ) || f(\cdot | \Phi_{\theta'}(s_t)) )</span>.</p>
+<p>where <span class="math inline">k = \nabla_{\Phi_\theta(s_t)} D_\text{KL}( f(\cdot | \Phi_{\theta'}(s_t) ) || f(\cdot | \Phi_{\theta'}(s_t)) )</span>.</p>
 <p>Having obtained <span class="math inline">z^*</span>, we can safely update the parameters of the actor in the direction of:</p>
 <p><span class="math display">
-    \nabla_\theta J(\theta) = \mathbb{E}_{s_t, a_t \sim \rho_b} [ z^* \, \nabla_\theta \Phi_\theta(s_t) ]
+    \nabla_\theta \mathcal{J}(\theta) = \mathbb{E}_{s_t, a_t \sim \rho_b} [ z^* \, \nabla_\theta \Phi_\theta(s_t) ]
 </span></p>
 <p>As noted in the paper:</p>
 <blockquote class="blockquote">
@@ -615,22 +605,22 @@ Retrace evaluation
 
 <div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
 <div id="ref-Degris2012" class="csl-entry" role="listitem">
-Degris, T., White, M., and Sutton, R. S. (2012). Linear <span>Off-Policy Actor-Critic</span>. in <em>Proceedings of the 2012 <span>International Conference</span> on <span>Machine Learning</span></em> Available at: <a href="http://arxiv.org/abs/1205.4839">http://arxiv.org/abs/1205.4839</a>.
+Degris, T., White, M., and Sutton, R. S. (2012). Linear <span>Off-Policy Actor-Critic</span>. in <em>Proceedings of the 2012 <span>International Conference</span> on <span>Machine Learning</span></em>.
 </div>
 <div id="ref-Mnih2016" class="csl-entry" role="listitem">
-Mnih, V., Badia, A. P., Mirza, M., Graves, A., Lillicrap, T. P., Harley, T., et al. (2016). Asynchronous <span>Methods</span> for <span>Deep Reinforcement Learning</span>. in <em>Proc. <span>ICML</span></em> Available at: <a href="http://arxiv.org/abs/1602.01783">http://arxiv.org/abs/1602.01783</a>.
+Mnih, V., Badia, A. P., Mirza, M., Graves, A., Lillicrap, T. P., Harley, T., et al. (2016). Asynchronous <span>Methods</span> for <span>Deep Reinforcement Learning</span>. in <em>Proc. <span>ICML</span></em>.
 </div>
 <div id="ref-Munos2016" class="csl-entry" role="listitem">
-Munos, R., Stepleton, T., Harutyunyan, A., and Bellemare, M. G. (2016). Safe and <span>Efficient Off-Policy Reinforcement Learning</span>. Available at: <a href="http://arxiv.org/abs/1606.02647">http://arxiv.org/abs/1606.02647</a>.
+Munos, R., Stepleton, T., Harutyunyan, A., and Bellemare, M. G. (2016). Safe and <span>Efficient Off-Policy Reinforcement Learning</span>.
 </div>
 <div id="ref-Oh2018" class="csl-entry" role="listitem">
-Oh, J., Guo, Y., Singh, S., and Lee, H. (2018). Self-<span>Imitation Learning</span>. Available at: <a href="http://arxiv.org/abs/1806.05635">http://arxiv.org/abs/1806.05635</a>.
+Oh, J., Guo, Y., Singh, S., and Lee, H. (2018). Self-<span>Imitation Learning</span>.
 </div>
 <div id="ref-Wang2017" class="csl-entry" role="listitem">
-Wang, J. X., Kurth-Nelson, Z., Tirumala, D., Soyer, H., Leibo, J. Z., Munos, R., et al. (2017). Learning to reinforcement learn. Available at: <a href="http://arxiv.org/abs/1611.05763">http://arxiv.org/abs/1611.05763</a> [Accessed February 5, 2021].
+Wang, J. X., Kurth-Nelson, Z., Tirumala, D., Soyer, H., Leibo, J. Z., Munos, R., et al. (2017). Learning to reinforcement learn. <em>arXiv:1611.05763 [cs, stat]</em>. Available at: <a href="https://arxiv.org/abs/1611.05763">https://arxiv.org/abs/1611.05763</a> [Accessed February 5, 2021].
 </div>
 <div id="ref-Wang2016" class="csl-entry" role="listitem">
-Wang, Z., Schaul, T., Hessel, M., van Hasselt, H., Lanctot, M., and de Freitas, N. (2016). Dueling <span>Network Architectures</span> for <span>Deep Reinforcement Learning</span>. Available at: <a href="http://arxiv.org/abs/1511.06581">http://arxiv.org/abs/1511.06581</a> [Accessed November 21, 2019].
+<span class="nocase">Wang, Z., Schaul, T., Hessel, M., van Hasselt, H., Lanctot, M., and de Freitas, N.</span> (2016). Dueling <span>Network Architectures</span> for <span>Deep Reinforcement Learning</span>. <em>arXiv:1511.06581 [cs]</em>. Available at: <a href="https://arxiv.org/abs/1511.06581">https://arxiv.org/abs/1511.06581</a> [Accessed November 21, 2019].
 </div>
 </div>
 </section>
@@ -687,13 +677,14 @@ Wang, Z., Schaul, T., Hessel, M., van Hasselt, H., Lanctot, M., and de Freitas, 
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy
@@ -1035,7 +1026,7 @@ Wang, Z., Schaul, T., Hessel, M., van Hasselt, H., Lanctot, M., and de Freitas, 
     }
   });
   </script>
-<nav class="page-navigation">
+<nav class="page-navigation column-body">
   <div class="nav-page nav-page-previous">
       <a href="../src/3.6-PPO.html" class="pagination-link" aria-label="Policy optimization (TRPO, PPO)">
         <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">Policy optimization (TRPO, PPO)</span></span>
